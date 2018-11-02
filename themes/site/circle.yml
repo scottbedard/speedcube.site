@@ -1,0 +1,31 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: circleci/node:8.11-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          key: -v3-{{ checksum "package.json" }}
+      - run: 
+          name: Yarn
+          command: |
+            yarn
+      - run:
+          name: Test
+          command: |
+            yarn test:unit
+      - run:
+          name: Codecov
+          command: |
+            ./node_modules/.bin/codecov
+      - save_cache:
+          key: -v3-{{ checksum "package.json" }}
+          paths:
+            - "yarn.lock"
+            - "node_modules"
+workflows:
+  version: 2
+  tests:
+    jobs:
+      - test

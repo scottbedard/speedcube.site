@@ -1,0 +1,17 @@
+//
+// tailwind preflight
+//
+@tailwind preflight;
+
+//
+// built in utils
+//
+@tailwind utilities;
+
+//
+// custom utils
+//
+@import './utils/cursor';
+@import './utils/position';
+@import './utils/transforms';
+@import './utils/transitions';

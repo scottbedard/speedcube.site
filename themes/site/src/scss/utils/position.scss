@@ -1,0 +1,14 @@
+.pin-center {
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.pin-t-half { top: 50% }
+.pin-r-half { right: 50% }
+.pin-b-half { bottom: 50% }
+.pin-l-half { left: 50% }
+.pin-t-full { top: 100% }
+.pin-r-full { right: 100% }
+.pin-b-full { bottom: 100% }
+.pin-l-full { left: 100% }

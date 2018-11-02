@@ -1,0 +1,15 @@
+@for $i from 0 through 100 {
+    .-tx-#{$i} { transform: translateX(-#{$i / 4}rem) }
+    .-ty-#{$i} { transform: translateY(-#{$i / 4}rem) }
+    .tx-#{$i} { transform: translateX(#{$i / 4}rem) }
+    .ty-#{$i} { transform: translateY(#{$i / 4}rem) }
+}
+
+.-tx-full { transform: translateX(-100%) }
+.-tx-half { transform: translateX(-50%) }
+.-ty-full { transform: translateY(-100%) }
+.-ty-half { transform: translateY(-50%) }
+.tx-full { transform: translateX(100%) }
+.tx-half { transform: translateX(50%) }
+.ty-full { transform: translateY(100%) }
+.ty-half { transform: translateY(50%) }
