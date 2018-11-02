@@ -20,4 +20,5 @@ composer.lock
 nbproject
 
 # october
-plugins/october
+plugins/*
+!plugins/speedcube
