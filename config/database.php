@@ -54,11 +54,11 @@ return [
 
         'mysql' => [
             'driver'    => 'mysql',
-            'host'      => 'localhost',
+            'host'      => env('DB_HOST', 'localhost'),
             'port'      => 3306,
-            'database'  => 'database',
-            'username'  => 'root',
-            'password'  => '',
+            'database'  => env('DB_DATABASE', 'speedcube.test'),
+            'username'  => env('DB_USERNAME', 'homestead'),
+            'password'  => env('DB_PASSWORD', 'secret'),
             'charset'   => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix'    => '',
