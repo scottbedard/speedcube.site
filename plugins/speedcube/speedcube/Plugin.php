@@ -11,6 +11,14 @@ use System\Classes\PluginBase;
 class Plugin extends PluginBase
 {
     /**
+     * @var array Plugin dependencies
+     */
+    public $require = [
+        'GivingTeam.Auth',
+        'RainLab.User',
+    ];
+
+    /**
      * Returns information about this plugin.
      *
      * @return array
@@ -53,10 +61,10 @@ class Plugin extends PluginBase
     public function registerPermissions()
     {
         return [
-            // 'speedcube.speedcube.some_permission' => [
-            //     'tab' => 'Speedcube',
-            //     'label' => 'Some permission'
-            // ],
+            'speedcube.speedcube.access_solves' => [
+                'tab' => 'Speedcube',
+                'label' => 'Manage solves'
+            ],
         ];
     }
 
@@ -68,13 +76,21 @@ class Plugin extends PluginBase
     public function registerNavigation()
     {
         return [
-            // 'speedcube' => [
-            //     'label'       => 'Speedcube',
-            //     'url'         => Backend::url('speedcube/speedcube/mycontroller'),
-            //     'icon'        => 'icon-leaf',
-            //     'permissions' => ['speedcube.speedcube.*'],
-            //     'order'       => 500,
-            // ],
+            'speedcube' => [
+                'icon' => 'icon-cube',
+                'label' => 'Speedcube',
+                'order' => 500,
+                'permissions' => ['speedcube.speedcube.*'],
+                'sideMenu' => [
+                    'solves' => [
+                        'icon' => 'icon-clock-o',
+                        'label' => 'Solves',
+                        'permissions' => ['speedcube.speedcube.access_solves'],
+                        'url' => Backend::url('speedcube/speedcube/solves'),
+                    ],
+                ],
+                'url' => Backend::url('speedcube/speedcube/solves'),
+            ],
         ];
     }
 }

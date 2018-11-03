@@ -1,0 +1,15 @@
+{
+    "name": "Speedcube",
+    "type": "october-plugin",
+    "autoload": {
+        "psr-4": {
+            "Speedcube\\Speedcube\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "fzaninotto/faker": "~1.7",
+        "mockery/mockery": "~1.0",
+        "phpunit/phpunit": "~5.7"
+    },
+    "require": {}
+}
