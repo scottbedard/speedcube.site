@@ -54,6 +54,7 @@
                             :value="remember">
                             <v-checkbox
                                 v-model="remember"
+                                data-remember
                                 :disabled="signinIsLoading">
                                 Remember
                             </v-checkbox>

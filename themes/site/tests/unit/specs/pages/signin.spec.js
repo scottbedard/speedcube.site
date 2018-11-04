@@ -42,14 +42,16 @@ describe('signin page', function() {
 
         input('foo@bar.com', vm.$el.querySelector('[data-email] input'));
         input('abc123', vm.$el.querySelector('[data-password] input'));
+        click(vm.$el.querySelector('[data-remember]'));
 
         expect(vm.$store.state.signin.form).to.deep.equal({
             email: 'foo@bar.com',
             password: 'abc123',
+            remember: true,
         });
     });
 
-    it('logs the user in when the form is submitted', function() {
+    it('logs the user in when the form is submitted', function(done) {
         vm = mount({
             beforeCreate() {
                 preventInitialization(this);
@@ -60,19 +62,24 @@ describe('signin page', function() {
                 form: {
                     email: 'foo@bar.com',
                     password: 'abc123',
+                    remember: false,
                 },
             },
         });
 
         submit(vm.$el.querySelector('form'));
 
-        expect(axios.post).to.have.been.calledWithMatch(
-            '/api/givingteam/auth/signin',
-            {
-                login: 'foo@bar.com',
-                password: 'abc123',
-                remember: false,
-            }
-        );
+        setTimeout(() => {
+            expect(axios.post).to.have.been.calledWithMatch(
+                '/api/givingteam/auth/signin',
+                {
+                    login: 'foo@bar.com',
+                    password: 'abc123',
+                    remember: false,
+                }
+            );
+
+            done();
+        }, 10);
     });
 });
