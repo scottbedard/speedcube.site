@@ -33,7 +33,7 @@ export default {
         if (checked) {
             displayBindings.class.push('bg-blue-dark border-blue-dark');
         } else {
-            displayBindings.class.push('bg-white border-grey');
+            displayBindings.class.push('bg-white border-grey focus:border-grey-dark');
         }
 
         // disabled
@@ -43,15 +43,31 @@ export default {
             bindings.class.push('cursor-pointer');
         }
 
-        // click handler
+        //
+        // click
+        //
         bindings.on.click = function(e) {
-            // toggle the checkbox
             toggle(context);
         }
 
+        //
+        // keydown
+        //
         displayBindings.on.keydown = function(e) {
-            if (isKey(e, 'spacebar')) {
+            if (isKey(e, 'enter')) {
+                // submit on enter
+                walkEventPath(e, el => {
+                    if (el.tagName === 'FORM') {
+                        // we're firing a non-standard checkbox submit event in
+                        // order to side-step a firefox bug, see here for more info
+                        // https://bugzilla.mozilla.org/show_bug.cgi?id=1477286
+                        el.dispatchEvent(new Event('checkbox-submit'));
+                    }
+                });
+            } else if (isKey(e, 'spacebar')) {
+                // toggle the checkbox on spacebar
                 toggle(context);
+
                 e.preventDefault();
             }
         }
@@ -65,7 +81,7 @@ export default {
             {...bindings}>
             <div
                 aria-checked={checked ? 'true' : 'false'}
-                class="border h-5 outline-none p-px rounded trans-bg trans-border w-5 focus:border-grey-dark"
+                class="border h-5 outline-none p-px rounded trans-bg trans-border trans-shadow w-5 focus:shadow"
                 role="checkbox"
                 tabindex={disabled ? null : 0}
                 {...displayBindings}>
@@ -83,7 +99,7 @@ export default {
                         stroke="white"
                         style={{
                             animation: checked 
-                                ? 'checkbox 125ms ease-in 200ms 1 normal forwards'
+                                ? 'checkbox 100ms ease-in 100ms 1 normal forwards'
                                 : null,
                         }}
                     />

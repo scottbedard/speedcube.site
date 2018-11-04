@@ -55,3 +55,9 @@ $easing: ease-in-out;
         background $duration $easing, 
         color $duration $easing;
 }
+
+.trans-border.trans-shadow {
+    transition:
+        border $duration $easing,
+        box-shadow $duration $easing;
+}

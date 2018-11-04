@@ -22,17 +22,6 @@
 import { bindAll } from 'spyfu-vue-functional';
 import { isFunction } from 'lodash-es';
 
-// icon
-function iconEl(h, context) {
-    const { icon } = context.props;
-
-    if (icon) {
-        return <i class={`fa fa-${icon} pointer-events-none pl-4`} />;
-    }
-
-    return undefined;
-}
-
 export default {
     render(h, context) {
         const bindings = bindAll(context);
@@ -66,17 +55,16 @@ export default {
             delete bindings.on.input;
         }
 
-        return <div class="v-input" {...bindings}>
-            <div class="bg-white cursor-text flex items-center justify-center rounded shadow text-grey">
-                {iconEl(h, context)}
-                <input
-                    class="bg-transparent p-4 w-full focus:outline-none"
-                    domPropsValue={value}
-                    placeholder={placeholder}
-                    type={type}
-                    {...inputBindings}
-                />
-            </div>
+        return <div
+            class="v-input border border-grey-light h-12 rounded trans-border trans-shadow focus-within:border-grey focus-within:shadow"
+            {...bindings}>
+            <input
+                class="bg-transparent h-full outline-none px-4 w-full"
+                domPropsValue={value}
+                placeholder={placeholder}
+                type={type}
+                {...inputBindings}
+            />
         </div>;
     },
     functional: true,
@@ -84,9 +72,6 @@ export default {
         autofocus: {
             default: false,
             type: Boolean,
-        },
-        icon: {
-            type: String,
         },
         placeholder: {
             type: String,

@@ -1,5 +1,12 @@
 <template>
-    <form @submit.prevent="onSubmit">
+    <!--
+        we're listening for a seperate checkbox submit event in
+        order to side-step a firefox bug, see here for more info
+        https://bugzilla.mozilla.org/show_bug.cgi?id=1477286
+    -->
+    <form
+        @checkbox-submit="onSubmit"
+        @submit.prevent="onSubmit">
         <slot />
     </form>
 </template>
@@ -12,10 +19,20 @@ export default {
         };
     },
     methods: {
+        focus(name) {
+            const field = this.fields.find(field => field.name === name);
+
+            if (field) {
+                field.focus();
+            }
+        },
         onSubmit(e) {
             this.validate().then(() => {
-                // passed validation
+                // passed
                 this.$emit('submit', e);
+            }, (err) => {
+                // failed
+                this.focus(err.data.field);
             });
         },
         registerField(vm) {
@@ -30,11 +47,12 @@ export default {
         },
         validate() {
             // validate all fields
-            const formData = this.fields.reduce((acc, field) => ({
+            const data = this.fields.reduce((acc, field) => ({
                 ...acc, [field.name]: field.value,
             }), {});
+            
 
-            return Promise.all(this.fields.map(field => field.validate(formData)));
+            return Promise.all(this.fields.map(f => f.validate(data)));
         },
     },
     name: 'v-form',

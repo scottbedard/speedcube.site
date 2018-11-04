@@ -20,7 +20,6 @@
                         v-model="email"
                         autofocus
                         data-email
-                        icon="envelope"
                         placeholder="Email Address"
                         type="email"
                     />
@@ -38,7 +37,6 @@
                     <v-input
                         v-model="password"
                         data-password
-                        icon="key"
                         placeholder="Password"
                         type="password"
                     />

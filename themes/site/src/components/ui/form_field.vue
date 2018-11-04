@@ -10,9 +10,10 @@
         :data-valid="isValid">
         <!-- label -->
         <label
-            class="block font-bold mb-1 text-grey-dark text-sm"
+            class="block cursor-pointer font-bold mb-1 text-grey-dark text-sm"
             v-if="label"
             v-text="label"
+            @click="focus"
         />
 
         <!-- input -->
@@ -97,6 +98,13 @@ export default {
                 }
             }
         },
+        focus() {
+            const input = this.$el.querySelector('input');
+
+            if (input) {
+                input.focus();
+            }
+        },
         register() {
             // register the field with the parent form
             const form = findAncestor(this, 'v-form');
@@ -130,14 +138,20 @@ export default {
 
                     this.displayError(rule);
 
-                    return Promise.reject(new Error(`Validator for rule "${rule.name}" failed on field "${this.name}".`));
+                    const err = new Error(
+                        `Validator for rule "${rule.name}" failed on field "${this.name}".`
+                    );
+
+                    err.data = {
+                        rule,
+                        field: this.name,
+                    };
+
+                    return Promise.reject(err);
                 }
 
                 return result;
-            })).then(() => {
-                // passed validation
-                this.error = '';
-            });
+            }));
         },
     },
     props: {
