@@ -50,7 +50,7 @@ export default {
         }
 
         return <div
-            class="v-input border border-grey-light h-12 rounded trans-border trans-opacity trans-shadow focus-within:border-grey focus-within:shadow"
+            class="v-input border border-grey-light h-12 rounded trans-border trans-opacity focus-within:border-grey"
             {...bindings}>
             <input
                 class="bg-transparent h-full outline-none px-4 w-full"

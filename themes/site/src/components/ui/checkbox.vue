@@ -79,7 +79,7 @@ export default {
             {...bindings}>
             <div
                 aria-checked={checked ? 'true' : 'false'}
-                class="border h-5 outline-none p-px rounded trans-bg trans-border trans-shadow w-5 focus:shadow"
+                class="border h-5 outline-none p-px rounded trans-bg trans-border trans-shadow w-5"
                 role="checkbox"
                 tabindex={disabled ? null : 0}
                 {...displayBindings}>
