@@ -21,7 +21,7 @@ export default {
 
         // padding
         if (padded) {
-            bindings.class.push('p-4');
+            bindings.class.push('p-6');
         }
 
         return <div class="v-card bg-white rounded shadow" {...bindings}>

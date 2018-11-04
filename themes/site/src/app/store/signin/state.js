@@ -6,6 +6,7 @@ export default function () {
         form: {
             email: '',
             password: '',
+            remember: false,
         },
     };
 }

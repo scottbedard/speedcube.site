@@ -3,8 +3,10 @@ import cardComponent from './ui/card.vue';
 import checkboxComponent from './ui/checkbox.vue';
 import collapseTransitionComponent from './transitions/collapse.vue';
 import fadeTransitionComponent from './transitions/fade.vue';
-import gridComponent from './containers/grid.vue';
+import formComponent from './ui/form.vue';
+import formFieldComponent from './ui/form_field.vue';
 import gridCellComponent from './containers/grid_cell.vue';
+import gridComponent from './containers/grid.vue';
 import inputComponent from './ui/input.vue';
 import marginComponent from './containers/margin.vue';
 
@@ -28,5 +30,7 @@ export default {
     'v-button': buttonComponent,
     'v-card': cardComponent,
     'v-checkbox': checkboxComponent,
+    'v-form': formComponent,
+    'v-form-field': formFieldComponent,
     'v-input': inputComponent,
 };

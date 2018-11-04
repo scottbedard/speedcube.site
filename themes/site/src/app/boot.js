@@ -2,6 +2,11 @@ import Vue from 'vue';
 import globalComponents from '@/components/global';
 
 //
+// directives
+//
+import './directives/autofocus';
+
+//
 // plugins
 //
 import './plugins/router';

@@ -8,6 +8,7 @@ export default {
     ...simpleSetters({
         setEmail: 'form.email',
         setPassword: 'form.password',
+        setRemember: 'form.remember',
     }),
 
     // module reset

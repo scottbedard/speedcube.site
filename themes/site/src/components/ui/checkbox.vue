@@ -31,7 +31,7 @@ export default {
 
         // checked
         if (checked) {
-            displayBindings.class.push('bg-blue border-blue');
+            displayBindings.class.push('bg-blue-dark border-blue-dark');
         } else {
             displayBindings.class.push('bg-white border-grey');
         }
@@ -89,7 +89,7 @@ export default {
                     />
                 </svg>
             </div>
-            <div class="ml-2">
+            <div class="font-bold ml-2 text-grey-dark select-none text-sm">
                 {context.slots().default}
             </div>
         </div>;

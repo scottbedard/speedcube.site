@@ -37,7 +37,16 @@ export default {
     render(h, context) {
         const bindings = bindAll(context);
         const inputBindings = { class: [], on: {} };
-        const { icon, placeholder, type, value } = context.props;
+        const { autofocus, icon, placeholder, type, value } = context.props;
+
+        // autofocus
+        if (autofocus) {
+            if (!inputBindings.directives) {
+                inputBindings.directives = [];
+            }
+            
+            inputBindings.directives.push({ name: 'autofocus' });
+        }
 
         // icon
         if (icon) {
@@ -72,6 +81,10 @@ export default {
     },
     functional: true,
     props: {
+        autofocus: {
+            default: false,
+            type: Boolean,
+        },
         icon: {
             type: String,
         },
