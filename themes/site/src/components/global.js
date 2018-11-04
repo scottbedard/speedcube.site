@@ -1,5 +1,6 @@
 import buttonComponent from './ui/button.vue';
 import cardComponent from './ui/card.vue';
+import checkboxComponent from './ui/checkbox.vue';
 import collapseTransitionComponent from './transitions/collapse.vue';
 import fadeTransitionComponent from './transitions/fade.vue';
 import gridComponent from './containers/grid.vue';
@@ -26,5 +27,6 @@ export default {
     //
     'v-button': buttonComponent,
     'v-card': cardComponent,
+    'v-checkbox': checkboxComponent,
     'v-input': inputComponent,
 };

@@ -1,45 +1,56 @@
 $duration: 150ms;
 $easing: ease-in-out;
 
-//
-// single transitions
-//
-.transition-bg {
+.trans {
+    transition: all $duration $easing;
+}
+
+.trans-bg {
     transition: background $duration $easing;
 }
 
-.transition-border-color {
+.trans-border {
+    transition: border $duration $easing;
+}
+
+.trans-border-color {
     transition: border-color $duration $easing;
 }
 
-.transition-color {
+.trans-color {
     transition: color $duration $easing;
 }
 
-.transition-height {
+.trans-height {
     transition: height $duration $easing;
 }
 
-.transition-opacity {
+.trans-opacity {
     transition: opacity $duration $easing;
 }
 
-.transition-padding {
+.trans-padding {
     transition: padding $duration $easing;
 }
 
-.transition-shadow {
+.trans-shadow {
     transition: box-shadow $duration $easing;
 }
 
-.transition-width {
+.trans-width {
     transition: width $duration $easing;
 }
 
 //
 // transition pairs
 //
-.transition-bg.transition-color {
+.trans-bg.trans-border {
+    transition:
+        background $duration $easing,
+        border $duration $easing;
+}
+
+.trans-bg.trans-color {
     transition: 
         background $duration $easing, 
         color $duration $easing;

@@ -3,6 +3,10 @@
         /deep/ .v-input > div {
             box-shadow: none;
             background-color: config('colors.grey-lighter');
+
+            input:-webkit-autofill {
+                -webkit-box-shadow: 0 0 0 30px config('colors.grey-lighter') inset;
+            }
         }
     }
 </style>

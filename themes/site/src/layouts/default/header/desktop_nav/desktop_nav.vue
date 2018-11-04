@@ -1,17 +1,32 @@
 <template>
-    <nav>
-        <!-- home -->
-        <router-link
-            class="no-underline text-grey-darker transition-color hover:text-grey-darkest"
-            :to="{ name: 'home' }">
-            Home
-        </router-link>
+    <nav class="flex h-full">
+        <!-- user -->
+        <template v-if="isAuthenticated">
+            user
+        </template>
 
-        <!-- about -->
-        <router-link
-            class="ml-8 no-underline text-grey-darker transition-color hover:text-grey-darkest"
-            :to="{ name: 'components' }">
-            Components
-        </router-link>
+        <!-- guest -->
+        <template v-else>
+            <!-- sign in -->
+            <v-desktop-link :to="{ name: 'signin' }">
+                Sign in
+            </v-desktop-link>
+        </template>
     </nav>
 </template>
+
+<script>
+import { mapGetters } from 'vuex';
+import desktopLinkComponent from './desktop_link/desktop_link.vue';
+
+export default {
+    components: {
+        'v-desktop-link': desktopLinkComponent,
+    },
+    computed: {
+        ...mapGetters('user', [
+            'isAuthenticated',
+        ]),
+    },
+};
+</script>
