@@ -13,7 +13,7 @@
 
 <script>
 import { bindAll } from 'spyfu-vue-functional';
-import { isKey, queryElementThen, walkEventPath } from '@/app/utils/dom';
+import { isKey, walkEventPath } from '@/app/utils/dom';
 
 // toggle the state of a checkbox
 // this will do nothing if the checkbox is disabled
@@ -46,17 +46,15 @@ export default {
         //
         // click
         //
-        bindings.on.click = function(e) {
-            toggle(context);
-        }
+        bindings.on.click = () => toggle(context);
 
         //
         // keydown
         //
-        displayBindings.on.keydown = function(e) {
+        displayBindings.on.keydown = function (e) {
             if (isKey(e, 'enter')) {
                 // submit on enter
-                walkEventPath(e, el => {
+                walkEventPath(e, (el) => {
                     if (el.tagName === 'FORM') {
                         // we're firing a non-standard checkbox submit event in
                         // order to side-step a firefox bug, see here for more info
@@ -70,7 +68,7 @@ export default {
 
                 e.preventDefault();
             }
-        }
+        };
 
         // delete the change binding, we're handing
         // this ourselves in the toggle function
@@ -98,7 +96,7 @@ export default {
                         stroke-width="3"
                         stroke="white"
                         style={{
-                            animation: checked 
+                            animation: checked
                                 ? 'checkbox 100ms ease-in 100ms 1 normal forwards'
                                 : null,
                         }}

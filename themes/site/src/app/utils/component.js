@@ -1,8 +1,8 @@
 /**
  * Bind an external event to a component.
  *
- * @param  {Vue}            vm 
- * @param  {HTMLElement}    target 
+ * @param  {Vue}            vm
+ * @param  {HTMLElement}    target
  * @param  {...any}         options
  * @return {void}
  */

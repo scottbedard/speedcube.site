@@ -33,7 +33,7 @@ export default {
             if (!inputBindings.directives) {
                 inputBindings.directives = [];
             }
-            
+
             inputBindings.directives.push({ name: 'autofocus' });
         }
 

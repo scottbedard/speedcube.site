@@ -88,7 +88,7 @@ export default {
             this.$store.dispatch('user/signin', {
                 login: this.email,
                 password: this.password,
-                remember: false, // <- @todo: support remembered logins
+                remember: this.remember,
             }).then(() => {
                 // success
                 this.$router.push({ name: 'home' });

@@ -20,7 +20,7 @@ export default {
     },
     methods: {
         focus(name) {
-            const field = this.fields.find(field => field.name === name);
+            const field = this.fields.find(f => f.name === name);
 
             if (field) {
                 field.focus();
@@ -50,7 +50,7 @@ export default {
             const data = this.fields.reduce((acc, field) => ({
                 ...acc, [field.name]: field.value,
             }), {});
-            
+
 
             return Promise.all(this.fields.map(f => f.validate(data)));
         },

@@ -138,9 +138,7 @@ export default {
 
                     this.displayError(rule);
 
-                    const err = new Error(
-                        `Validator for rule "${rule.name}" failed on field "${this.name}".`
-                    );
+                    const err = new Error(`Validator for rule "${rule.name}" failed on field "${this.name}".`);
 
                     err.data = {
                         rule,
