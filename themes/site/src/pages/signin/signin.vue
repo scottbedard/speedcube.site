@@ -22,6 +22,7 @@
                         data-email
                         placeholder="Email Address"
                         type="email"
+                        :disabled="signinIsLoading"
                     />
                 </v-form-field>
 
@@ -39,26 +40,33 @@
                         data-password
                         placeholder="Password"
                         type="password"
+                        :disabled="signinIsLoading"
                     />
                 </v-form-field>
 
                 <!-- submit -->
                 <v-grid class="mt-6">
+                    <!-- remember -->
                     <v-grid-cell sm="6">
                         <v-form-field
                             class="mb-6 w-full"
                             name="remember"
                             :value="remember">
-                            <v-checkbox v-model="remember">
+                            <v-checkbox
+                                v-model="remember"
+                                :disabled="signinIsLoading">
                                 Remember
                             </v-checkbox>
                         </v-form-field>
                     </v-grid-cell>
+
+                    <!-- submit -->
                     <v-grid-cell class="sm:text-right" sm="6">
                         <v-button
                             class="w-full sm:w-auto"
                             primary
-                            type="submit">
+                            type="submit"
+                            :disabled="signinIsLoading">
                             Submit
                         </v-button>
                     </v-grid-cell>
@@ -69,6 +77,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { mapTwoWayState } from 'spyfu-vuex-helpers';
 
 export default {
@@ -77,6 +86,9 @@ export default {
         this.$store.commit('signin/reset');
     },
     computed: {
+        ...mapState('user', [
+            'signinIsLoading',
+        ]),
         ...mapTwoWayState('signin', {
             'form.email': 'setEmail',
             'form.password': 'setPassword',

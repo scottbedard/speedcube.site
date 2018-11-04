@@ -33,12 +33,12 @@ export default {
         if (checked) {
             displayBindings.class.push('bg-blue-dark border-blue-dark');
         } else {
-            displayBindings.class.push('bg-white border-grey focus:border-grey-dark');
+            displayBindings.class.push('bg-white border-grey-light focus:border-grey');
         }
 
         // disabled
         if (disabled) {
-            bindings.class.push('opacity-50');
+            bindings.class.push('opacity-60');
         } else {
             bindings.class.push('cursor-pointer');
         }

@@ -61,3 +61,10 @@ $easing: ease-in-out;
         border $duration $easing,
         box-shadow $duration $easing;
 }
+
+.trans-border.trans-opacity.trans-shadow {
+    transition:
+        border $duration $easing,
+        box-shadow $duration $easing
+        opacity $duration $easing;
+}

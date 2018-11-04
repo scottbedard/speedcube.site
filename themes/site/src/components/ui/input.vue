@@ -26,7 +26,7 @@ export default {
     render(h, context) {
         const bindings = bindAll(context);
         const inputBindings = { class: [], on: {} };
-        const { autofocus, icon, placeholder, type, value } = context.props;
+        const { autofocus, disabled, placeholder, type, value } = context.props;
 
         // autofocus
         if (autofocus) {
@@ -37,15 +37,9 @@ export default {
             inputBindings.directives.push({ name: 'autofocus' });
         }
 
-        // icon
-        if (icon) {
-            bindings.on.click = function (e) {
-                const input = e.target.querySelector('input');
-
-                if (input) {
-                    input.focus();
-                }
-            };
+        // disabled
+        if (disabled) {
+            bindings.class.push('opacity-60 pointer-events-none');
         }
 
         // interface with v-model
@@ -56,10 +50,11 @@ export default {
         }
 
         return <div
-            class="v-input border border-grey-light h-12 rounded trans-border trans-shadow focus-within:border-grey focus-within:shadow"
+            class="v-input border border-grey-light h-12 rounded trans-border trans-opacity trans-shadow focus-within:border-grey focus-within:shadow"
             {...bindings}>
             <input
                 class="bg-transparent h-full outline-none px-4 w-full"
+                disabled={disabled}
                 domPropsValue={value}
                 placeholder={placeholder}
                 type={type}
@@ -70,6 +65,10 @@ export default {
     functional: true,
     props: {
         autofocus: {
+            default: false,
+            type: Boolean,
+        },
+        disabled: {
             default: false,
             type: Boolean,
         },
