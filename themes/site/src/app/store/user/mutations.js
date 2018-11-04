@@ -6,5 +6,6 @@ import { simpleSetters } from 'spyfu-vuex-helpers';
 export default {
     ...simpleSetters({
         setSigninIsLoading: 'signinIsLoading',
+        setUser: 'user',
     }),
 };

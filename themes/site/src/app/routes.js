@@ -17,6 +17,18 @@ export default [
             },
 
             //
+            // create account
+            //
+            {
+                meta: {
+                    auth: false,
+                },
+                name: 'create-account',
+                path: '/create-account',
+                component: () => import('@/pages/create_account/create_account.vue' /* webpackChunkName: "createAccount" */),
+            },
+
+            //
             // home
             //
             {

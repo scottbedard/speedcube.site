@@ -3,3 +3,14 @@
 *:after {
     box-sizing: border-box;
 }
+
+a {
+    color: config('colors.blue');
+    text-decoration: none;
+    transition: color 150ms ease-in-out;
+
+    &:hover {
+        color: config('colors.blue-dark');
+        text-decoration: underline;
+    }
+}

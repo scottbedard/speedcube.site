@@ -2,10 +2,15 @@
     <v-margin padded>
         <v-card class="max-w-sm mx-auto" padded>
             <!-- title -->
-            <h1 class="font-light mb-6 text-center">
+            <h1 class="font-light mb-2 text-center">
                 Sign In
             </h1>
 
+            <div class="mb-6 text-center text-grey-dark text-sm">
+                Don't have an account? No problem, <router-link :to="{ name: 'create-account' }">click here to create one</router-link>.
+            </div>
+
+            <!-- form -->
             <v-form @submit="onSubmit">
                 <!-- email -->
                 <v-form-field
