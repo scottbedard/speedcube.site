@@ -5,6 +5,7 @@
             <!-- logo -->
             <router-link
                 class="no-underline text-grey-darkest"
+                data-logo
                 :to="{ name: 'home' }">
                 <strong>speedcube.site</strong>
             </router-link>
