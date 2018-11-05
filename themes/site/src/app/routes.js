@@ -55,7 +55,7 @@ export default [
             {
                 name: 'signout',
                 path: '/signout',
-                component: () => import('@/pages/signout/signout.vue', /* webpackChunkName: "signout" */),
+                component: () => import('@/pages/signout/signout.vue' /* webpackChunkName: "signout" */),
             },
         ],
         path: '',

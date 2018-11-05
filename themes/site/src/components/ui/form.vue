@@ -40,6 +40,7 @@ export default {
             if (!this.fields.includes(vm)) {
                 this.fields.push(vm);
 
+                /* eslint-disable-next-line no-param-reassign */
                 vm.form = this;
             }
         },

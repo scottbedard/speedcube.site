@@ -43,7 +43,7 @@ const vuetober = document.head.querySelector('meta[name=vuetober]');
 
 if (vuetober) {
     const data = JSON.parse(vuetober.content);
-    
+
     initialize(store, data);
 }
 

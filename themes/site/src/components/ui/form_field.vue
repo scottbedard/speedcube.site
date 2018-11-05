@@ -182,7 +182,7 @@ export default {
         formErrors(errors) {
             this.error = '';
 
-            Object.keys(errors || {}).forEach(fieldName => {
+            Object.keys(errors || {}).forEach((fieldName) => {
                 if (fieldName === this.name) {
                     this.error = errors[fieldName];
 

@@ -88,7 +88,7 @@ export default {
             if (this.isExpanded) {
                 this.collapse();
             }
-        }
+        },
     },
 };
 </script>

@@ -1,4 +1,4 @@
-export default function(store, initialState) {
+export default function (store, initialState) {
     const { user } = initialState;
 
     // set the user
