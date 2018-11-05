@@ -19,6 +19,7 @@ class Utils
                 ? self::camelCaseKeys($val) 
                 : $val;
         }
+
         return $result;
     }
     

@@ -1,9 +1,10 @@
-import { postSignin } from '@/app/repositories/user';
+import { getSignout, postSignin } from '@/app/repositories/user';
 
 //
 // actions
 //
 export default {
+    // authenticate a user
     signin({ commit }, payload) {
         commit('setSigninIsLoading', true);
 
@@ -11,13 +12,27 @@ export default {
 
         request.then((response) => {
             // success
-            console.log('hooray', response.data);
-        }, (err) => {
-            // failure
-            console.error('crap', err);
+            commit('setUser', response.data);
         }).finally(() => {
             // complete
             commit('setSigninIsLoading', false);
+        });
+
+        return request;
+    },
+
+    // sign a user out
+    signout({ commit }) {
+        commit('setSignoutIsLoading', true);
+
+        const request = getSignout();
+
+        request.then(() => {
+            // success
+            commit('setUser', {});
+        }).finally(() => {
+            // complete
+            commit('setSignoutIsLoading', false);
         });
 
         return request;

@@ -2,7 +2,7 @@
     <nav class="flex h-full">
         <!-- user -->
         <template v-if="isAuthenticated">
-            <div>Welcome back</div>
+            <v-user />
         </template>
 
         <!-- guest -->
@@ -18,10 +18,12 @@
 <script>
 import { mapGetters } from 'vuex';
 import desktopLinkComponent from './desktop_link/desktop_link.vue';
+import userComponent from './user/user.vue';
 
 export default {
     components: {
         'v-desktop-link': desktopLinkComponent,
+        'v-user': userComponent,
     },
     computed: {
         ...mapGetters('user', [

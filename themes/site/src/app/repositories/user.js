@@ -1,6 +1,15 @@
 import axios from 'axios';
 
 /**
+ * Sign a user out.
+ *
+ * @return {Promise}
+ */
+export function getSignout() {
+    return axios.get('/api/givingteam/auth/signout');
+}
+
+/**
  * Register a user.
  *
  * @param  {object} payload
