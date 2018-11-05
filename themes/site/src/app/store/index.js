@@ -1,5 +1,4 @@
 import browser from './browser';
-import signin from './signin';
 import user from './user';
 
 //
@@ -7,6 +6,5 @@ import user from './user';
 //
 export default {
     browser,
-    signin,
     user,
 };

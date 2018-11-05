@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Vuex from 'vuex';
 import initialize from './app/store/initialize';
-import modules from './app/store';
+import modules from './app/store/index';
 import rootComponent from './root.vue';
 import routes from './app/routes';
 import { beforeEach, afterEach } from './app/guards';
