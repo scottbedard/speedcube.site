@@ -2,6 +2,7 @@ import buttonComponent from './ui/button.vue';
 import cardComponent from './ui/card.vue';
 import checkboxComponent from './ui/checkbox.vue';
 import collapseTransitionComponent from './transitions/collapse.vue';
+import errorMessageComponent from './ui/error_message.vue';
 import fadeTransitionComponent from './transitions/fade.vue';
 import formComponent from './ui/form.vue';
 import formFieldComponent from './ui/form_field.vue';
@@ -30,6 +31,7 @@ export default {
     'v-button': buttonComponent,
     'v-card': cardComponent,
     'v-checkbox': checkboxComponent,
+    'v-error-message': errorMessageComponent,
     'v-form': formComponent,
     'v-form-field': formFieldComponent,
     'v-input': inputComponent,

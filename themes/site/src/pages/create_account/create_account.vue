@@ -116,7 +116,7 @@ export default {
             }).then((response) => {
                 // success
                 this.$store.commit('user/setUser', response.data);
-                
+
                 this.$router.push({ name: 'home' });
             }, () => {
                 // failed

@@ -2,7 +2,7 @@
     <nav class="flex h-full">
         <!-- user -->
         <template v-if="isAuthenticated">
-            user
+            <div>Welcome back</div>
         </template>
 
         <!-- guest -->

@@ -11,7 +11,9 @@
             </div>
 
             <!-- form -->
-            <v-form @submit="onSubmit">
+            <v-form
+                :errors="errors"
+                @submit="onSubmit">
                 <!-- email -->
                 <v-form-field
                     label="Email Address"
@@ -27,7 +29,7 @@
                         data-email
                         placeholder="Email Address"
                         type="email"
-                        :disabled="signinIsLoading"
+                        :disabled="isLoading"
                     />
                 </v-form-field>
 
@@ -45,7 +47,7 @@
                         data-password
                         placeholder="Password"
                         type="password"
-                        :disabled="signinIsLoading"
+                        :disabled="isLoading"
                     />
                 </v-form-field>
 
@@ -60,7 +62,7 @@
                             <v-checkbox
                                 v-model="remember"
                                 data-remember
-                                :disabled="signinIsLoading">
+                                :disabled="isLoading">
                                 Remember
                             </v-checkbox>
                         </v-form-field>
@@ -72,7 +74,7 @@
                             class="w-full sm:w-auto"
                             primary
                             type="submit"
-                            :disabled="signinIsLoading">
+                            :disabled="isLoading">
                             Submit
                         </v-button>
                     </v-grid-cell>
@@ -83,23 +85,15 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { mapTwoWayState } from 'spyfu-vuex-helpers';
-
 export default {
-    mounted() {
-        // reset the signin store
-        this.$store.commit('signin/reset');
-    },
-    computed: {
-        ...mapState('user', [
-            'signinIsLoading',
-        ]),
-        ...mapTwoWayState('signin', {
-            'form.email': 'setEmail',
-            'form.password': 'setPassword',
-            'form.remember': 'setRemember',
-        }),
+    data() {
+        return {
+            errors: {},
+            isLoading: false,
+            email: '',
+            password: '',
+            remember: false,
+        };
     },
     methods: {
         onSubmit() {
@@ -110,9 +104,11 @@ export default {
             }).then(() => {
                 // success
                 this.$router.push({ name: 'home' });
-            }, (err) => {
+            }, () => {
                 // failed
-                console.log('Authentication failed:', err.response.data.message);
+                this.errors = {
+                    password: 'Invalid email address / password combination',
+                };
             });
         },
     },

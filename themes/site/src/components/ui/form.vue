@@ -39,6 +39,8 @@ export default {
             // register the field vm if it isn't already
             if (!this.fields.includes(vm)) {
                 this.fields.push(vm);
+
+                vm.form = this;
             }
         },
         unregisterField(vm) {
@@ -56,5 +58,11 @@ export default {
         },
     },
     name: 'v-form',
+    props: {
+        errors: {
+            default: () => {},
+            type: Object,
+        },
+    },
 };
 </script>

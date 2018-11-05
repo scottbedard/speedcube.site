@@ -21,11 +21,11 @@
 
         <!-- error -->
         <v-collapse-transition>
-            <div
+            <v-error-message
                 v-if="!isValid"
-                v-text="error"
-                class="pt-2 text-red text-sm"
-            />
+                class="pt-2 text-red text-sm">
+                {{ error }}
+            </v-error-message>
         </v-collapse-transition>
     </div>
 </template>
@@ -53,6 +53,7 @@ const defaultErrors = {
 export default {
     data() {
         return {
+            form: null,
             error: '',
         };
     },
@@ -63,6 +64,9 @@ export default {
         this.register();
     },
     computed: {
+        formErrors() {
+            return this.form ? this.form.errors : {};
+        },
         isValid() {
             return this.error.length === 0;
         },
@@ -172,6 +176,19 @@ export default {
         },
         value: {
             required: true,
+        },
+    },
+    watch: {
+        formErrors(errors) {
+            this.error = '';
+
+            Object.keys(errors || {}).forEach(fieldName => {
+                if (fieldName === this.name) {
+                    this.error = errors[fieldName];
+
+                    this.focus();
+                }
+            });
         },
     },
 };
