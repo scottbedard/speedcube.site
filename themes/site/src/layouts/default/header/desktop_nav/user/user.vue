@@ -20,13 +20,13 @@
             class="flex items-center"
             href="#"
             @click.prevent="expand">
+            <i class="fa fa-angle-down mr-2 text-grey trans-color"></i>
             <div class="inline-block bg-white flex h-10 items-center justify-center rounded-full text-grey-dark trans-color w-10">
                 <i class="fa fa-user-o text-xl"></i>
             </div>
-            <i class="fa fa-angle-down ml-2 text-grey trans-color"></i>
         </a>
 
-        <v-collapse-transition>
+        <v-fade-transition>
             <div
                 v-if="isExpanded"
                 class="absolute pin-r pin-t-full w-70">
@@ -44,6 +44,11 @@
                     </div>
 
                     <div class="text-sm px-6 pb-6">
+                        <!-- account -->
+                        <v-user-link :to="{ name: 'account:profile' }">
+                            My Account
+                        </v-user-link>
+
                         <!-- sign out -->
                         <v-user-link :to="{ name: 'signout' }">
                             Sign out
@@ -51,7 +56,7 @@
                     </div>
                 </v-card>
             </div>
-        </v-collapse-transition>
+        </v-fade-transition>
     </div>
 </template>
 
@@ -89,6 +94,9 @@ export default {
                 this.collapse();
             }
         },
+    },
+    watch: {
+        $route: 'collapse',
     },
 };
 </script>

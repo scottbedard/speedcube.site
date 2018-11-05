@@ -1,5 +1,5 @@
 <template>
-    <header class="bg-grey-lighter">
+    <header class="bg-grey-lighter border-blue border-t-2">
         <v-margin class="flex h-16 items-center justify-between" padded>
 
             <!-- logo -->

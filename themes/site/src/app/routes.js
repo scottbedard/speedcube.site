@@ -8,6 +8,35 @@ export default [
     {
         children: [
             //
+            // account
+            //
+            {
+                children: [
+                    {
+                        meta: {
+                            auth: true,
+                        },
+                        name: 'account:profile',
+                        path: 'profile',
+                        component: () => import('@/pages/account/profile/profile.vue' /* webpackChunkName: "accountProfile" */),
+                    },
+                    {
+                        meta: {
+                            auth: true,
+                        },
+                        name: 'account:security',
+                        path: 'security',
+                        component: () => import('@/pages/account/security/security.vue' /* webpackChunkName: "accountSecurity" */),
+                    },
+                ],
+                meta: {
+                    auth: true,
+                },
+                path: '/account',
+                component: () => import('@/pages/account/account.vue' /* webpackChunkName: "account" */),
+            },
+
+            //
             // components
             //
             {

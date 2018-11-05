@@ -35,3 +35,17 @@ export function postRegister(payload) {
 export function postSignin(payload) {
     return axios.post('/api/givingteam/auth/signin', payload);
 }
+
+/**
+ * Update a user.
+ *
+ * @param  {object} payload
+ *         - {string?}  name
+ *         - {string?}  email
+ *         - {string?}  password
+ *         - {string?}  password_confirmation
+ * @return {Promise}
+ */
+export function postUser(payload) {
+    return axios.post('/api/givingteam/auth/user', payload);
+}

@@ -1,4 +1,4 @@
-import { getSignout, postSignin } from '@/app/repositories/user';
+import { getSignout, postSignin, postUser } from '@/app/repositories/user';
 
 //
 // actions
@@ -33,6 +33,18 @@ export default {
         }).finally(() => {
             // complete
             commit('setSignoutIsLoading', false);
+        });
+
+        return request;
+    },
+
+    // update a user
+    update({ commit }, payload) {
+        const request = postUser(payload);
+
+        request.then((response) => {
+            // success
+            commit('setUser', response.data);
         });
 
         return request;

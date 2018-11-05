@@ -4,10 +4,10 @@ export default {
         const { mode } = context.props;
 
         return <transition
-            enter-active-class="transition-opacity"
+            enter-active-class="trans-opacity"
             enter-class="opacity-0"
             enter-to-class="opacity-100"
-            leave-active-class="transition-opacity"
+            leave-active-class="trans-opacity"
             leave-class="opacity-100"
             leave-to-class="opacity-0"
             mode={mode}>

@@ -1,9 +1,16 @@
+<style lang="scss" scoped>
+    a + a {
+        margin-top: 0.5rem;
+    }
+</style>
+
 <script>
 export default {
     render(h, context) {
         const { to } = context.props;
 
         return <router-link
+            class="block hover:underline"
             to={to}>
             {context.slots().default}
         </router-link>;

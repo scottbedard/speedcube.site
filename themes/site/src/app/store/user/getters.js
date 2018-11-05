@@ -1,3 +1,5 @@
+import { isUndefined } from 'lodash-es';
+
 //
 // getters
 //
@@ -5,6 +7,6 @@ export default {
 
     // determine if the user is authenticated
     isAuthenticated(state) {
-        return state.user.id || false;
+        return !isUndefined(state.user.id);
     },
 };

@@ -1,26 +1,28 @@
+import { isBoolean } from 'lodash-es';
+
+//
 // global navigation guards
 // https://router.vuejs.org/guide/advanced/navigation-guards.html
+//
+export default function (store) {
+    return {
+        beforeEach(to, from, next) {
+            // prevent guests from accessing authenticated pages
+            if (isBoolean(to.meta.auth) && to.meta.auth && !store.getters['user/isAuthenticated']) {
+                next({
+                    name: 'signin',
+                    query: {
+                        returnTo: to.name,
+                    },
+                });
 
-/**
- * Global before each route guard.
- *
- * @param  {object}     to
- * @param  {object}     from
- * @param  {Function}   next
- * @return {void}
- */
-export function beforeEach(to, from, next) {
-    // this is a good place to check the user's auth and redirect if necessary
-    next();
-}
+                return;
+            }
 
-/**
- * Global after each route guard.
- *
- * @param  {object}     to
- * @param  {object}     from
- * @return {void}
- */
-export function afterEach(/* to, from */) {
-    // this is a good place to page views to an analytics platform
+            next();
+        },
+        afterEach(/* to, from */) {
+            // this is a good place to page views to an analytics platform
+        },
+    };
 }

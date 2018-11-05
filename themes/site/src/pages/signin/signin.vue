@@ -103,7 +103,7 @@ export default {
                 remember: this.remember,
             }).then(() => {
                 // success
-                this.$router.push({ name: 'home' });
+                this.$router.push({ name: this.$route.query.returnTo || 'home' });
             }, () => {
                 // failed
                 this.errors = {

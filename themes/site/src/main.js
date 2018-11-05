@@ -5,7 +5,7 @@ import initialize from './app/store/initialize';
 import modules from './app/store/index';
 import rootComponent from './root.vue';
 import routes from './app/routes';
-import { beforeEach, afterEach } from './app/guards';
+import guards from './app/guards';
 
 //
 // boot up our application
@@ -18,6 +18,14 @@ import './app/boot';
 Vue.config.productionTip = false;
 
 //
+// create a store
+//
+const store = new Vuex.Store({
+    modules,
+    strict: process.env.NODE_ENV !== 'production',
+});
+
+//
 // create a router
 //
 const router = new VueRouter({
@@ -25,16 +33,10 @@ const router = new VueRouter({
     routes,
 });
 
+const { beforeEach, afterEach } = guards(store);
+
 router.beforeEach(beforeEach);
 router.afterEach(afterEach);
-
-//
-// create a store
-//
-const store = new Vuex.Store({
-    modules,
-    strict: process.env.NODE_ENV !== 'production',
-});
 
 //
 // initialize our store with state from the dom
