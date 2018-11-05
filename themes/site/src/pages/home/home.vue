@@ -1,6 +1,5 @@
 <template>
     <v-margin class="text-center py-20" padded>
-        <h1 class="font-light mb-4">Welcome to your new Vuetober SPA</h1>
-        <h2 class="font-light">It's time to build something amazing!</h2>
+        <h1 class="font-light">This site is a work in progress, check back later.</h1>
     </v-margin>
 </template>
