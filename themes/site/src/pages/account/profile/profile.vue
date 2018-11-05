@@ -19,6 +19,7 @@
                         v-model="name"
                         autofocus
                         placeholder="Anonymous"
+                        :disabled="isLoading"
                     />
                 </v-form-field>
 
@@ -35,6 +36,7 @@
                         v-model="email"
                         type="email"
                         placeholder="Email Address"
+                        :disabled="isLoading"
                     />
                 </v-form-field>
 
@@ -42,7 +44,8 @@
                     <v-button
                         class="w-full sm:w-auto"
                         primary
-                        type="submit">
+                        type="submit"
+                        :disabled="isLoading">
                         Update
                     </v-button>
                 </div>
@@ -56,9 +59,8 @@ import accountHeaderComponent from '../account_header/account_header.vue';
 
 export default {
     data() {
-        console.log(this.$store);
-
         return {
+            isLoading: false,
             email: this.$store.state.user.user.email,
             name: this.$store.state.user.user.name,
         };
@@ -68,9 +70,20 @@ export default {
     },
     methods: {
         onSubmit() {
+            this.isLoading = true;
+
             this.$store.dispatch('user/update', {
                 name: this.name,
                 email: this.email,
+            }).then(() => {
+                // success
+                this.$alert('done');
+            }, () => {
+                // failed
+                console.log('failed');
+            }).finally(() => {
+                // complete
+                this.isLoading = false;
             });
         },
     },

@@ -9,6 +9,7 @@ import './directives/autofocus';
 //
 // plugins
 //
+import './plugins/alert';
 import './plugins/router';
 import './plugins/vuex';
 
