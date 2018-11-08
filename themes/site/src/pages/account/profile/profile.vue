@@ -7,7 +7,7 @@
 
         <v-card padded>
             <v-form
-                class="max-w-sm mx-auto"
+                class="max-w-sm mx-auto py-4"
                 @submit="onSubmit">
 
                 <!-- name -->

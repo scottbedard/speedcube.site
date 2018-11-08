@@ -5,7 +5,7 @@
             Account
         </v-account-header>
 
-        <v-card>
+        <v-card class="text-sm">
             <v-account-link
                 icon="fa-user-circle"
                 :to="{ name: 'account:profile' }">
