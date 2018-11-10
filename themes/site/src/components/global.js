@@ -11,6 +11,7 @@ import gridCellComponent from './containers/grid_cell.vue';
 import gridComponent from './containers/grid.vue';
 import inputComponent from './ui/input.vue';
 import marginComponent from './containers/margin.vue';
+import puzzleComponent from './puzzle/puzzle.vue';
 
 export default {
     //
@@ -19,6 +20,11 @@ export default {
     'v-grid': gridComponent,
     'v-grid-cell': gridCellComponent,
     'v-margin': marginComponent,
+
+    //
+    // puzzle
+    //
+    'v-puzzle': puzzleComponent,
 
     //
     // transitions

@@ -8,6 +8,18 @@ export default [
     {
         children: [
             //
+            // 3x3
+            //
+            {
+                meta: {
+                    cubeSize: 3,
+                },
+                name: 'puzzle:3',
+                path:'3x3',
+                component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
+            },
+
+            //
             // account
             //
             {
