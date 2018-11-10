@@ -8,6 +8,18 @@ export default [
     {
         children: [
             //
+            // 2x2
+            //
+            {
+                meta: {
+                    cubeSize: 2,
+                },
+                name: 'puzzle:2',
+                path:'2x2',
+                component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
+            },
+
+            //
             // 3x3
             //
             {
@@ -16,6 +28,30 @@ export default [
                 },
                 name: 'puzzle:3',
                 path:'3x3',
+                component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
+            },
+
+            //
+            // 4x4
+            //
+            {
+                meta: {
+                    cubeSize: 4,
+                },
+                name: 'puzzle:4',
+                path:'4x4',
+                component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
+            },
+
+            //
+            // 5x5
+            //
+            {
+                meta: {
+                    cubeSize: 5,
+                },
+                name: 'puzzle:5',
+                path:'5x5',
                 component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
             },
 
