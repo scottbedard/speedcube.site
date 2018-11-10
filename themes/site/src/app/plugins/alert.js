@@ -4,7 +4,7 @@ import Vue from 'vue';
 // alert
 //
 function alert(message, options = {}) {
-    this.$store.dispatch('alerts/add', message, options);
+    this.$store.dispatch('alerts/add', { message, options });
 }
 
 //

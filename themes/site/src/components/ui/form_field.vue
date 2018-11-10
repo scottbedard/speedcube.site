@@ -2,12 +2,19 @@
     .v-form-field + .v-form-field {
         margin-top: 1.5rem;
     }
+
+    .v-form-field[data-invalid] {
+        /deep/ .v-input {
+            border-color: config('colors.red-lighter') !important;
+        }
+    }
 </style>
 
 <template>
     <div
         class="v-form-field"
-        :data-valid="isValid">
+        :data-invalid="!isValid || undefined">
+
         <!-- label -->
         <label
             class="block cursor-pointer font-bold mb-1 text-grey-dark text-sm"
@@ -21,9 +28,7 @@
 
         <!-- error -->
         <v-collapse-transition>
-            <v-error-message
-                v-if="!isValid"
-                class="pt-2 text-red text-sm">
+            <v-error-message v-if="!isValid" class="mt-2">
                 {{ error }}
             </v-error-message>
         </v-collapse-transition>

@@ -3,14 +3,6 @@
         &:hover {
             text-decoration: none;
         }
-
-        &:hover .fa-angle-down {
-            color: config('colors.grey-dark');
-        }
-
-        &:hover .fa-user-o {
-            color: config('colors.grey-darker');
-        }
     }
 </style>
 
@@ -20,8 +12,8 @@
             class="flex items-center"
             href="#"
             @click.prevent="expand">
-            <i class="fa fa-angle-down mr-2 text-grey trans-color"></i>
-            <div class="inline-block bg-white flex h-10 items-center justify-center rounded-full text-grey-dark trans-color w-10">
+            <i class="fa fa-angle-down mr-2 text-primary-lightest trans-color"></i>
+            <div class="inline-block bg-white flex h-10 items-center justify-center rounded-full text-primary trans-color w-10">
                 <i class="fa fa-user-o text-xl"></i>
             </div>
         </a>

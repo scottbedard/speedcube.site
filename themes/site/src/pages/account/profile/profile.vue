@@ -56,6 +56,7 @@
 
 <script>
 import accountHeaderComponent from '../account_header/account_header.vue';
+import successAlertComponent from './alerts/success.vue';
 
 export default {
     data() {
@@ -77,10 +78,10 @@ export default {
                 email: this.email,
             }).then(() => {
                 // success
-                this.$alert('done');
+                this.$alert('Your contact information has been updated.', { type: 'success' });
             }, () => {
                 // failed
-                console.log('failed');
+                this.$alert('Failed to update contact information.', { type: 'error' });
             }).finally(() => {
                 // complete
                 this.isLoading = false;

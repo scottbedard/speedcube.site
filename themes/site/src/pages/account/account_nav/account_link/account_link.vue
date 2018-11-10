@@ -20,18 +20,18 @@ export default {
             'trans-border',
             'trans-color',
             'hover:no-underline',
-            'hover:text-blue-dark',
+            'hover:text-primary',
         ];
-        
+
         // active / inactive
         if (currentRoute === to.name) {
-            classes.push('border-blue text-blue');
+            classes.push('border-primary text-primary-light');
         } else {
-            classes.push('border-grey-lighter text-grey-dark');
+            classes.push('border-grey-lighter text-grey');
         }
 
         return <router-link class={classes} to={to}>
-            <i class={['fa mr-4 text-center text-md w-5', icon]} />
+            <i class={['fa mr-4 text-center text-lg w-5', icon]} />
             {context.slots().default}
         </router-link>;
     },

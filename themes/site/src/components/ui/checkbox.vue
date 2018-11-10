@@ -1,6 +1,10 @@
 <style lang="scss" scoped>
     .v-checkbox:hover [aria-checked=false][tabindex] {
-        border-color: config('colors.grey-dark');
+        border-color: config('colors.primary-light');
+    }
+
+    path {
+        stroke: config('colors.primary-lightest');
     }
 </style>
 
@@ -31,9 +35,9 @@ export default {
 
         // checked
         if (checked) {
-            displayBindings.class.push('bg-blue-dark border-blue-dark');
+            displayBindings.class.push('bg-primary border-primary');
         } else {
-            displayBindings.class.push('bg-white border-grey-light focus:border-grey');
+            displayBindings.class.push('bg-white border-grey-light focus:border-primary-light');
         }
 
         // disabled
@@ -94,7 +98,6 @@ export default {
                         stroke-dasharray="50"
                         stroke-dashoffset="50"
                         stroke-width="3"
-                        stroke="white"
                         style={{
                             animation: checked
                                 ? 'checkbox 100ms ease-in 100ms 1 normal forwards'

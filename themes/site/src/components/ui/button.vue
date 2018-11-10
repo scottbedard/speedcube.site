@@ -20,7 +20,7 @@ export default {
 
         // primary
         if (primary) {
-            bindings.class.push('bg-blue-darker text-grey-lightest hover:bg-blue-darkest hover:text-white');
+            bindings.class.push('bg-primary text-primary-lightest hover:bg-primary-dark hover:text-white');
         } else {
             bindings.class.push('bg-grey-light text-grey-darker hover:bg-grey hover:text-grey-darkest');
         }

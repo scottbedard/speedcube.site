@@ -1,6 +1,9 @@
 $duration: 150ms;
 $easing: ease-in-out;
 
+//
+// single transitions
+//
 .trans {
     transition: all $duration $easing;
 }
@@ -37,6 +40,10 @@ $easing: ease-in-out;
     transition: box-shadow $duration $easing;
 }
 
+.trans-transform {
+    transition: transform $duration $easing;
+}
+
 .trans-width {
     transition: width $duration $easing;
 }
@@ -67,4 +74,10 @@ $easing: ease-in-out;
         border $duration $easing,
         box-shadow $duration $easing
         opacity $duration $easing;
+}
+
+.trans-opacity.trans-transform {
+    transition: 
+        opacity $duration $easing, 
+        transform $duration $easing;
 }
