@@ -5,21 +5,22 @@
     }
 
     .inner {
-        position: relative;
-        width: 0px;
-        left: 50%;
         transform-style: preserve-3d;
         transform: rotateX(-20deg);
+    }
+
+    .inner > div {
+        backface-visibility: hidden;
     }
 </style>
 
 <template>
     <div class="v-puzzle">
-        <div class="inner">
+        <div class="inner relative pin-l-half w-0">
             <template v-for="face in faces">
                 <div
                     v-for="(sticker, index) in cube.state[face]"
-                    class="sticker absolute"
+                    class="absolute"
                     :key="`${face}-${index}`"
                     :style="{
                         left: `-${halfEdgePx}`,
@@ -28,12 +29,10 @@
                         width: edgePx,
                     }">
                     <div
-                        v-text="index"
-                        class="absolute border"
                         :style="{
+                            backgroundColor: color(face, index),
                             height: stickerPx,
-                            left: stickerLeftPx(index),
-                            top: stickerTopPx(index),
+                            transform: `translateX(${stickerLeftPx(index)}) translateY(${stickerTopPx(index)})`,
                             width: stickerPx,
                         }"
                     />
@@ -44,6 +43,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Cube from 'bedard-cube';
 
 export default {
@@ -61,10 +61,24 @@ export default {
         
     },
     computed: {
+        ...mapState('browser', [
+            'dimensions',
+        ]),
+        color() {
+            return (face, index) => this.colors[this.cube.state[face][index]];
+        },
         edgeSize() {
+            let maxSize;
+
+            if (this.size === 2) maxSize = 260;
+            else if (this.size === 3) maxSize = 280;
+            else if (this.size === 4) maxSize = 300;
+            else if (this.size === 5) maxSize = 320;
+            else maxSize = 340;
+
             // the pixel dimension for one edge of the cube
             // in other words, the "total height" of the cube
-            return 300;
+            return Math.min(maxSize, this.dimensions.width - 120);
         },
         edgePx() {
             return `${this.edgeSize}px`;
@@ -120,6 +134,9 @@ export default {
         },
     },
     props: {
+        colors: {
+            type: Array,
+        },
         size: {
             required: true,
             type: Number,

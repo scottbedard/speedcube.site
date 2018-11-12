@@ -56,6 +56,18 @@ export default [
             },
 
             //
+            // 10x10
+            //
+            {
+                meta: {
+                    cubeSize: 10,
+                },
+                name: 'puzzle:10',
+                path:'10x10',
+                component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
+            },
+
+            //
             // account
             //
             {
