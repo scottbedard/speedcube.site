@@ -1,18 +1,26 @@
 <template>
     <v-margin padded>
-        <div class="relative">
-            <div class="absolute pt-20 w-full">
-                <v-puzzle
-                    :colors="colors"
-                    :size="size"
-                />
-            </div>
+        <form @submit.prevent="executeTurn" class="flex">
+            <v-input v-model="turn" />
+        </form>
+
+        <div class="py-20 w-full">
+            <v-puzzle
+                :colors="colors"
+                :size="size"
+                ref="puzzle"
+            />
         </div>
     </v-margin>
 </template>
 
 <script>
 export default {
+    data() {
+        return {
+            turn: 'F',
+        };
+    },
     computed: {
         colors() {
             return [
@@ -26,6 +34,11 @@ export default {
         },
         size() {
             return this.$route.meta.cubeSize;
+        },
+    },
+    methods: {
+        executeTurn() {
+            this.$refs.puzzle.turn(this.turn);
         },
     },
 };

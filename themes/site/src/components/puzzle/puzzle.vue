@@ -1,136 +1,109 @@
-<style lang="scss" scoped>
-    .v-puzzle {
-        perspective: 800px;
-        perspective-origin: 50% 100px;
-    }
 
-    .inner {
-        transform-style: preserve-3d;
-        transform: rotateX(-20deg);
-    }
-
-    .inner > div {
-        backface-visibility: hidden;
-    }
-</style>
 
 <template>
-    <div class="v-puzzle">
-        <div class="inner relative pin-l-half w-0">
-            <template v-for="face in faces">
-                <div
-                    v-for="(sticker, index) in cube.state[face]"
-                    class="absolute"
-                    :key="`${face}-${index}`"
-                    :style="{
-                        left: `-${halfEdgePx}`,
-                        transform: transform(face, index),
-                        height: edgePx,
-                        width: edgePx,
-                    }">
-                    <div
-                        :style="{
-                            backgroundColor: color(face, index),
-                            height: stickerPx,
-                            transform: `translateX(${stickerLeftPx(index)}) translateY(${stickerTopPx(index)})`,
-                            width: stickerPx,
-                        }"
-                    />
-                </div>
-            </template>
-        </div>
+    <div class="v-puzzle border border-red max-w-sm mx-auto">
+        <pre>width: {{ width }}</pre> 
     </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import Cube from 'bedard-cube';
 
+// @todo: optimize this import statement to only pull in
+//        the pieces of three.js that we're actually using
+import * as THREE from 'three';
+
+// helper functionas to convert between radians and degrees
+function degreesToRadians(degrees) {
+    return degrees * (Math.PI / 180);
+}
+
+function radiansToDegrees(radians) {
+  return radians * (180 / Math.PI);
+}
+
 export default {
-    beforeDestroy() {
-        
-    },
     data() {
         return {
-            currentTurn: null,
             cube: new Cube(this.size),
-            paused: false,
+            height: 0,
+            width: 0,
         };
     },
     mounted() {
-        
+        this.trackParentDimensions();
+        this.init();
+        this.draw();
     },
     computed: {
-        ...mapState('browser', [
-            'dimensions',
-        ]),
-        color() {
-            return (face, index) => this.colors[this.cube.state[face][index]];
-        },
-        edgeSize() {
-            let maxSize;
-
-            if (this.size === 2) maxSize = 260;
-            else if (this.size === 3) maxSize = 280;
-            else if (this.size === 4) maxSize = 300;
-            else if (this.size === 5) maxSize = 320;
-            else maxSize = 340;
-
-            // the pixel dimension for one edge of the cube
-            // in other words, the "total height" of the cube
-            return Math.min(maxSize, this.dimensions.width - 120);
-        },
-        edgePx() {
-            return `${this.edgeSize}px`;
-        },
-        halfEdgeSize() {
-            return this.edgeSize / 2;
-        },
-        halfEdgePx() {
-            return `${this.halfEdgeSize}px`;
-        },
-        stickerLeftPx() {
-            return i => `${(i % this.size) * this.stickerSize}px`;
-        },
-        stickerTopPx() {
-            return i => `${Math.floor((i / this.size)) * this.stickerSize}px`;
-        },
-        stickerSize() {
-            return this.edgeSize / this.size;
-        },
-        stickerPx() {
-            return `${this.stickerSize}px`;
-        },
-        faces() {
-            return ['u', 'l', 'f', 'r', 'b', 'd'];
-        },
-        stickersPerFace() {
-            return this.size ** 2;
-        },
-        transform() {
-            return (face, index) => {
-                const rotations = [
-                    `rotateX(0deg)`,
-                    `rotateY(0deg)`,
-                    `rotateZ(0deg)`,
-                ];
-
-                rotations.push(this.positionSticker(face));
-
-                return rotations.join(' ');
-            }
-        },
+        // ...
     },
     methods: {
-        positionSticker(face) {
-            switch (face) {
-                case 'u': return `translateY(-50%) rotateX(90deg)`;
-                case 'l': return `translateX(-50%) rotateY(-90deg)`;
-                case 'f': return `translateZ(${this.halfEdgePx})`;
-                case 'r': return `translateX(50%) rotateY(90deg)`;
-                case 'b': return `translateZ(-${this.halfEdgePx}) rotateY(180deg)`;
-                case 'd': return `translateY(${this.halfEdgePx}) rotateX(-90deg)`
+        draw() {
+            var geometry = new THREE.PlaneGeometry(25, 25);
+            var material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide });
+            var obj = new THREE.Object3D;
+            var plane = new THREE.Mesh(geometry, material);
+
+            this.scene.add(obj);
+            obj.add(plane);
+
+            plane.translateY(50);
+            plane.rotation.x = degreesToRadians(90);
+
+            this.$el.appendChild(this.renderer.domElement);
+
+            const animate = () => {
+                obj.rotation.x += 0.025;
+
+                this.renderer.render(this.scene, this.camera);
+
+                requestAnimationFrame(animate);
             }
+
+            animate();
+        },
+        init() {
+            // create a scene
+            this.scene = new THREE.Scene();
+
+            // create and position a camera
+            this.camera = new THREE.PerspectiveCamera(20, 1, 1, 1000);
+            this.camera.position.set(0, 10, 500);
+            this.camera.lookAt(0, 0, 0);
+
+            // create a renderer
+            this.renderer = new THREE.WebGLRenderer({
+                antialias: true,
+            });
+
+            this.resizeRenderer();
+
+            // add an axis helper
+            this.scene.add(new THREE.AxesHelper(200));
+        },
+        renderFrame() {
+            this.renderer.render(this.scene, this.camera);
+        },
+        resizeRenderer() {
+            this.renderer.setSize(this.width, this.width);
+        },
+        trackParentDimensions() {
+            const sync = () => {
+                this.height = this.$el.offetHeight;
+                this.width = this.$el.offsetWidth;
+            }
+
+            sync();
+
+            window.addEventListener('resize', sync);
+
+            this.$on('hook:destroyed', () => {
+                window.removeEventListener('resize', sync);
+            });
+        },
+        turn(turn) {
+            console.log ('ok', turn);
         },
     },
     props: {
@@ -141,6 +114,10 @@ export default {
             required: true,
             type: Number,
         },
+    },
+    watch: {
+        height: 'resizeRenderer',
+        width: 'resizeRenderer',
     },
 };
 </script>
