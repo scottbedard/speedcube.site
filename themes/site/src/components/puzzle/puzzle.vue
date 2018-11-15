@@ -1,9 +1,7 @@
 
 
 <template>
-    <div class="v-puzzle border border-red max-w-sm mx-auto">
-        <pre>width: {{ width }}</pre> 
-    </div>
+    <div class="v-puzzle max-w-sm mx-auto"></div>
 </template>
 
 <script>
@@ -42,21 +40,39 @@ export default {
         draw() {
             var geometry = new THREE.PlaneGeometry(25, 25);
             var material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide });
+
+            // create a 3d object and attach it to our scene
+            // this will be what we rotate to display the current turn
             var obj = new THREE.Object3D;
-            var plane = new THREE.Mesh(geometry, material);
-
             this.scene.add(obj);
-            obj.add(plane);
 
-            plane.translateY(50);
-            plane.rotation.x = degreesToRadians(90);
+            // create a plane for each sticker on the cube
+            var p1 = new THREE.Mesh(geometry, material);
+            var p2 = new THREE.Mesh(geometry, material);
+            var p3 = new THREE.Mesh(geometry, material);
 
-            this.$el.appendChild(this.renderer.domElement);
+            // translate the stickers to their normal position
+            // orient all stickers according to their current face
+            p1.translateZ(50);
+            p1.translateX(-30);
 
+            p2.translateZ(50);
+
+            p3.translateZ(50);
+            p3.translateX(30);
+
+            // attach any stickers that are part of the current turn to our 3d obj
+            obj.add(p2);
+            obj.add(p3);
+
+            // attach any uneffected stickers to our scene
+            this.scene.add(p1);
+
+            // start animating
             const animate = () => {
-                obj.rotation.x += 0.025;
-
-                this.renderer.render(this.scene, this.camera);
+                obj.rotation.x += 0.0125;
+                
+                this.renderFrame();
 
                 requestAnimationFrame(animate);
             }
@@ -69,7 +85,7 @@ export default {
 
             // create and position a camera
             this.camera = new THREE.PerspectiveCamera(20, 1, 1, 1000);
-            this.camera.position.set(0, 10, 500);
+            this.camera.position.set(0, 20, 500);
             this.camera.lookAt(0, 0, 0);
 
             // create a renderer
@@ -81,6 +97,9 @@ export default {
 
             // add an axis helper
             this.scene.add(new THREE.AxesHelper(200));
+            
+            // attach our canvas to the dom
+            this.$el.appendChild(this.renderer.domElement);
         },
         renderFrame() {
             this.renderer.render(this.scene, this.camera);
