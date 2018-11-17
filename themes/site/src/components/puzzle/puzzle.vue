@@ -5,51 +5,56 @@
 </template>
 
 <script>
-import Cube from 'bedard-cube';
-
 // @todo: optimize this import statement to only pull in
 //        the pieces of three.js that we're actually using
 import * as THREE from 'three';
 
-// helper functionas to convert between radians and degrees
-function degreesToRadians(degrees) {
-    return degrees * (Math.PI / 180);
-}
+import Cube from 'bedard-cube';
 
-function radiansToDegrees(radians) {
-  return radians * (180 / Math.PI);
-}
+import {
+    degToRad,
+    sticker
+} from './helpers';
 
 export default {
+    created() {
+        this.cube = new Cube(this.size, {
+            useObjects: true,
+        });
+    },
     data() {
         return {
-            cube: new Cube(this.size),
             height: 0,
             width: 0,
         };
     },
     mounted() {
+        // track our parent elements dimensions to make
+        // the cube resize when the screen changes.
         this.trackParentDimensions();
+
+        // instantiate the tools needed to render our cube
         this.init();
+
+        // and finally, render the cube
         this.draw();
     },
     computed: {
-        // ...
+        
     },
     methods: {
         draw() {
-            var geometry = new THREE.PlaneGeometry(25, 25);
-            var material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide });
-
             // create a 3d object and attach it to our scene
             // this will be what we rotate to display the current turn
-            var obj = new THREE.Object3D;
+            const obj = new THREE.Object3D();
             this.scene.add(obj);
 
             // create a plane for each sticker on the cube
-            var p1 = new THREE.Mesh(geometry, material);
-            var p2 = new THREE.Mesh(geometry, material);
-            var p3 = new THREE.Mesh(geometry, material);
+            const p1 = sticker(25, this.stickerRadius, '#ff0');
+            const p2 = sticker(25, this.stickerRadius, '#f0f');
+            const p3 = sticker(25, this.stickerRadius, '#0ff');
+
+            // console.log ('p2', p2);
 
             // translate the stickers to their normal position
             // orient all stickers according to their current face
@@ -71,11 +76,11 @@ export default {
             // start animating
             const animate = () => {
                 obj.rotation.x += 0.0125;
-                
+
                 this.renderFrame();
 
                 requestAnimationFrame(animate);
-            }
+            };
 
             animate();
         },
@@ -97,7 +102,7 @@ export default {
 
             // add an axis helper
             this.scene.add(new THREE.AxesHelper(200));
-            
+
             // attach our canvas to the dom
             this.$el.appendChild(this.renderer.domElement);
         },
@@ -111,7 +116,7 @@ export default {
             const sync = () => {
                 this.height = this.$el.offetHeight;
                 this.width = this.$el.offsetWidth;
-            }
+            };
 
             sync();
 
@@ -122,15 +127,29 @@ export default {
             });
         },
         turn(turn) {
-            console.log ('ok', turn);
+            console.log('ok', turn);
         },
     },
     props: {
         colors: {
+            default() {
+                return [
+                    '#ffeb3b', // U -> yellow
+                    '#ff9800', // L -> orange
+                    '#03a9f4', // F -> blue
+                    '#f44336', // R -> red
+                    '#4caf50', // B -> green
+                    '#eeeeee', // D -> white
+                ];
+            },
             type: Array,
         },
         size: {
             required: true,
+            type: Number,
+        },
+        stickerRadius: {
+            default: 4,
             type: Number,
         },
     },
