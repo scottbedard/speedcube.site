@@ -7,26 +7,6 @@ import {
 } from 'three';
 
 /**
- * Convert degrees to radians.
- *
- * @param  {number} degrees
- * @return {number}
- */
-export function degToRad(degrees) {
-    return degrees * (Math.PI / 180);
-}
-
-/**
- * Convert radians to degrees.
- *
- * @param  {number} degrees
- * @return {number}
- */
-export function radToDeg(radians) {
-    return radians * (180 / Math.PI);
-}
-
-/**
  * Create rounded-rectangle meshes.
  * 
  * @param  {number}         size    dimensions of the sticker
@@ -34,7 +14,7 @@ export function radToDeg(radians) {
  * @param  {number|string}  color   hex color value
  * @return {Mesh}
  */
-export function sticker(size, radius, color) {
+export function createMesh(size, radius, color) {
     const shape = new Shape();
     const offset = (size / 2) * -1;
     const offsetSize = offset + size;
@@ -53,4 +33,46 @@ export function sticker(size, radius, color) {
         new ShapeBufferGeometry(shape), 
         new MeshBasicMaterial({ color, side: DoubleSide }),
     );
+}
+
+/**
+ * Convert degrees to radians.
+ *
+ * @param  {number} degrees
+ * @return {number}
+ */
+export function degToRad(degrees) {
+    return degrees * (Math.PI / 180);
+}
+
+/**
+ * Determine what column a sticker is part of.
+ *
+ * @param  {number} size
+ * @param  {number} index
+ * @return {number}
+ */
+export function getCol(size, index) {
+    return index % size;
+}
+
+/**
+ * Determine what row a sticker is part of.
+ *
+ * @param  {number} size
+ * @param  {number} index
+ * @return {number}
+ */
+export function getRow(size, index) {
+    return Math.floor(index / size);
+}
+
+/**
+ * Convert radians to degrees.
+ *
+ * @param  {number} degrees
+ * @return {number}
+ */
+export function radToDeg(radians) {
+    return radians * (180 / Math.PI);
 }

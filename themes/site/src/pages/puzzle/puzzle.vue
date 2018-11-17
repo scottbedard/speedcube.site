@@ -6,7 +6,6 @@
 
         <div class="py-20 w-full">
             <v-puzzle
-                :colors="colors"
                 :size="size"
                 ref="puzzle"
             />
@@ -22,16 +21,6 @@ export default {
         };
     },
     computed: {
-        colors() {
-            return [
-                'red',
-                'green',
-                'blue',
-                'orange',
-                'black',
-                'yellow',
-            ];
-        },
         size() {
             return this.$route.meta.cubeSize;
         },

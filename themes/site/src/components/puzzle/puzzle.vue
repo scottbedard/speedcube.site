@@ -1,7 +1,9 @@
 
 
 <template>
-    <div class="v-puzzle max-w-sm mx-auto"></div>
+    <div class="v-puzzle max-w-sm mx-auto">
+        <pre>{{ $data }}</pre>
+    </div>
 </template>
 
 <script>
@@ -13,7 +15,9 @@ import Cube from 'bedard-cube';
 
 import {
     degToRad,
-    sticker
+    getCol,
+    getRow,
+    createMesh
 } from './helpers';
 
 export default {
@@ -33,64 +37,34 @@ export default {
         // the cube resize when the screen changes.
         this.trackParentDimensions();
 
-        // instantiate the tools needed to render our cube
-        this.init();
+        // create the canvas that we'll render the cube in
+        this.createCanvas();
+
+        // create and position the stickers for our cube
+        this.createStickers();
 
         // and finally, render the cube
         this.draw();
     },
     computed: {
-        
+        cubeSize() {
+            return this.stickerSize * this.size;
+        },
+        halfCubeSize() {
+            return this.cubeSize / 2;
+        },
+        stickerSize() {
+            return (this.width / this.size) * .15;
+        },
     },
     methods: {
-        draw() {
-            // create a 3d object and attach it to our scene
-            // this will be what we rotate to display the current turn
-            const obj = new THREE.Object3D();
-            this.scene.add(obj);
-
-            // create a plane for each sticker on the cube
-            const p1 = sticker(25, this.stickerRadius, '#ff0');
-            const p2 = sticker(25, this.stickerRadius, '#f0f');
-            const p3 = sticker(25, this.stickerRadius, '#0ff');
-
-            // console.log ('p2', p2);
-
-            // translate the stickers to their normal position
-            // orient all stickers according to their current face
-            p1.translateZ(50);
-            p1.translateX(-30);
-
-            p2.translateZ(50);
-
-            p3.translateZ(50);
-            p3.translateX(30);
-
-            // attach any stickers that are part of the current turn to our 3d obj
-            obj.add(p2);
-            obj.add(p3);
-
-            // attach any uneffected stickers to our scene
-            this.scene.add(p1);
-
-            // start animating
-            const animate = () => {
-                obj.rotation.x += 0.0125;
-
-                this.renderFrame();
-
-                requestAnimationFrame(animate);
-            };
-
-            animate();
-        },
-        init() {
+        createCanvas() {
             // create a scene
             this.scene = new THREE.Scene();
 
             // create and position a camera
-            this.camera = new THREE.PerspectiveCamera(20, 1, 1, 1000);
-            this.camera.position.set(0, 20, 500);
+            this.camera = new THREE.PerspectiveCamera(60, 1, 1, 1000);
+            this.camera.position.set(0, 65, 100);
             this.camera.lookAt(0, 0, 0);
 
             // create a renderer
@@ -105,6 +79,96 @@ export default {
 
             // attach our canvas to the dom
             this.$el.appendChild(this.renderer.domElement);
+        },
+        createStickers() {
+            this.cube.stickers(sticker => {
+                console.log(this.colors[sticker.value]);
+                sticker.mesh = createMesh(this.stickerSize, this.stickerRadius, this.colors[sticker.value]);
+            });
+        },
+        draw() {
+            // position the stickers
+            this.positionStickers();
+
+            // // create a 3d object and attach it to our scene
+            // // this will be what we rotate to display the current turn
+            // const obj = new THREE.Object3D();
+            // this.scene.add(obj);
+
+            // // create a plane for each sticker on the cube
+            // const p1 = createMesh(25, this.stickerRadius, '#ff0');
+            // const p2 = createMesh(25, this.stickerRadius, '#f0f');
+            // const p3 = createMesh(25, this.stickerRadius, '#0ff');
+
+            // // console.log ('p2', p2);
+
+            // // translate the stickers to their normal position
+            // // orient all stickers according to their current face
+            // p1.translateZ(50);
+            // p1.translateX(-30);
+
+            // p2.translateZ(50);
+
+            // p3.translateZ(50);
+            // p3.translateX(30);
+
+            // // attach any uneffected stickers to our scene
+            // this.scene.add(p1);
+            // this.scene.add(p2);
+
+            // // attach any stickers that are part of the current turn to our 3d obj
+            // obj.add(p2);
+            // obj.add(p3);
+
+            // start animating
+            const animate = () => {
+                // obj.rotation.x += 0.0125;
+
+                this.renderFrame();
+
+                // requestAnimationFrame(animate);
+            };
+
+            animate();
+        },
+        positionStickers() {
+            // attach all stickers to the scene
+            this.cube.stickers(sticker => this.scene.add(sticker.mesh));
+
+            // up
+            this.cube.state.u.forEach(sticker => {
+                sticker.mesh.translateY(this.halfCubeSize);
+                sticker.mesh.rotateX(degToRad(-90));
+            });
+
+            // left
+            this.cube.state.l.forEach(sticker => {
+                sticker.mesh.translateX(-this.halfCubeSize);
+                sticker.mesh.rotateY(degToRad(-90));
+            });
+
+            // front
+            this.cube.state.f.forEach(sticker => {
+                sticker.mesh.translateZ(this.halfCubeSize);
+            });
+
+            // right
+            this.cube.state.r.forEach(sticker => {
+                sticker.mesh.translateX(this.halfCubeSize);
+                sticker.mesh.rotateY(degToRad(90));
+            });
+
+            // back
+            this.cube.state.b.forEach(sticker => {
+                sticker.mesh.translateZ(-this.halfCubeSize);
+                sticker.mesh.rotateY(degToRad(180));
+            });
+
+            // down
+            this.cube.state.d.forEach(sticker => {
+                sticker.mesh.translateY(-this.halfCubeSize);
+                sticker.mesh.rotateX(degToRad(90));
+            });
         },
         renderFrame() {
             this.renderer.render(this.scene, this.camera);
