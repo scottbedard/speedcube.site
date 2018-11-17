@@ -54,7 +54,7 @@ export default {
             return this.cubeSize / 2;
         },
         stickerSize() {
-            return (this.width / this.size) * .15;
+            return (this.width / this.size) * .175;
         },
     },
     methods: {
@@ -82,7 +82,6 @@ export default {
         },
         createStickers() {
             this.cube.stickers(sticker => {
-                console.log(this.colors[sticker.value]);
                 sticker.mesh = createMesh(this.stickerSize, this.stickerRadius, this.colors[sticker.value]);
             });
         },
@@ -122,7 +121,13 @@ export default {
 
             // start animating
             const animate = () => {
-                // obj.rotation.x += 0.0125;
+                // const speed = 0.0125;
+
+                // obj.rotation.x += speed;
+
+                // this.scene.rotation.x += speed;
+                // this.scene.rotation.y += speed;
+                // this.scene.rotation.z += speed;
 
                 this.renderFrame();
 
@@ -213,7 +218,7 @@ export default {
             type: Number,
         },
         stickerRadius: {
-            default: 4,
+            default: 2,
             type: Number,
         },
     },
