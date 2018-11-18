@@ -132,49 +132,45 @@ export default {
             // position the stickers
             this.positionStickers();
 
-            // // create a 3d object and attach it to our scene
-            // // this will be what we rotate to display the current turn
-            // const obj = new THREE.Object3D();
-            // this.scene.add(obj);
+            // create a 3d object and attach it to our scene
+            // this will be what we rotate to display the current turn
+            const obj = new THREE.Object3D();
+            this.scene.add(obj);
 
-            // // create a plane for each sticker on the cube
-            // const p1 = createMesh(25, this.stickerRadius, '#ff0');
-            // const p2 = createMesh(25, this.stickerRadius, '#f0f');
-            // const p3 = createMesh(25, this.stickerRadius, '#0ff');
+            // attach any stickers that are part of the current turn to our 3d obj
+            // in this example, we'll make a R turn
+            this.cube.state.r
+                .forEach(sticker => obj.add(sticker.mesh));
 
-            // // console.log ('p2', p2);
+            this.cube.state.u
+                .filter((sticker, i) => getCol(this.size, i) === this.size - 1)
+                .forEach(sticker => obj.add(sticker.mesh));
 
-            // // translate the stickers to their normal position
-            // // orient all stickers according to their current face
-            // p1.translateZ(50);
-            // p1.translateX(-30);
+            this.cube.state.b
+                .filter((sticker, i) => getCol(this.size, i) === 0)
+                .forEach(sticker => obj.add(sticker.mesh));
 
-            // p2.translateZ(50);
+            this.cube.state.d
+                .filter((sticker, i) => getCol(this.size, i) === this.size - 1)
+                .forEach(sticker => obj.add(sticker.mesh));
 
-            // p3.translateZ(50);
-            // p3.translateX(30);
-
-            // // attach any uneffected stickers to our scene
-            // this.scene.add(p1);
-            // this.scene.add(p2);
-
-            // // attach any stickers that are part of the current turn to our 3d obj
-            // obj.add(p2);
-            // obj.add(p3);
+            this.cube.state.f
+                .filter((sticker, i) => getCol(this.size, i) === this.size - 1)
+                .forEach(sticker => obj.add(sticker.mesh));
 
             // start animating
             const animate = () => {
-                // const speed = 0.0125;
+                const speed = -0.0125;
 
                 // this.scene.rotation.x += speed;
                 // this.scene.rotation.y += speed;
                 // this.scene.rotation.z += speed;
 
-                // obj.rotation.x += speed;
+                obj.rotation.x += speed;
 
                 this.renderFrame();
 
-                // requestAnimationFrame(animate);
+                requestAnimationFrame(animate);
             };
 
             animate();
@@ -284,11 +280,11 @@ export default {
             type: Number,
         },
         stickerRadius: {
-            default: 0.15,
+            default: 0,
             type: Number,
         },
         stickerScale: {
-            default: 0.9,
+            default: 0.85,
             type: Number,
         },
     },
