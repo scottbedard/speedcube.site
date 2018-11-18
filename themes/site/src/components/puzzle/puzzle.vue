@@ -1,11 +1,10 @@
-
-
 <template>
     <div
         class="v-puzzle mx-auto"
         :style="{
             maxWidth: `${maxWidth}px`,
         }">
+        <pre>{{ $data }}</pre>
     </div>
 </template>
 
@@ -35,8 +34,20 @@ export default {
     },
     data() {
         return {
-            height: 0,
+            // the current turn being animated
+            currentTurn: undefined,
+
+            // progress of the current turn (0 to 1)
+            currentTurnProgress: 0,
+
+            // this determines if the requestAnimationFrame loop is running
+            isTurning: false,
+
+            // the width of our parent element
             width: 0,
+
+            // turns waiting to be executed
+            queue: [],
         };
     },
     mounted() {
@@ -51,7 +62,8 @@ export default {
         this.createStickers();
 
         // and finally, render the cube
-        this.draw();
+        this.positionStickers();
+        this.renderFrame();
     },
     computed: {
         colMap() {
@@ -77,6 +89,56 @@ export default {
         },
     },
     methods: {
+        animateNextTurn() {
+            // do nothing if the cube is already being turned
+            if (this.isTurning || this.queue.length === 0) {
+                return;
+            }
+
+            // otherwise create a new turn and start animating it
+            this.isTurning = true;
+
+            const turnObj = this.getTurnObject();
+            const currentTurn = this.queue.shift();
+
+            this.scene.add(turnObj);
+
+            // update our turn progress according to our turn speed
+            this.processTurn();
+
+            // create a requestAnimationFrame loop to update our canvas
+            const animate = () => {
+
+                // render the next frame, or get ready for the next turn
+                if (this.currentTurnProgress === 1) {
+                    this.currentTurnProgress = 0;
+                    this.isTurning = false;
+                    this.animateNextTurn();
+                } else {
+                    requestAnimationFrame(animate);
+                }
+            }
+
+            animate();
+    
+            // // otherwise start animating the current turn
+            // this.cube.turn = new THREE.Object3D();
+            // this.scene.add(this.cube.turn);
+
+            // this.cube.state.f.forEach(sticker => {
+            //     this.cube.turn.add(sticker.mesh);
+            // });
+
+            // const animate = () => {
+            //     this.rotateStickers();
+
+            //     if (this.isTurning) {
+            //         requestAnimationFrame(animate);
+            //     }
+            // }
+
+            // animate();
+        },
         createCanvas() {
             // create a scene
             this.scene = new THREE.Scene();
@@ -91,10 +153,11 @@ export default {
                 antialias: true,
             });
 
-            this.resizeRenderer();
+            // set the initial size of our canvas
+            this.resize();
 
-            // // add an axis helper
-            // this.scene.add(new THREE.AxesHelper(200));
+            // add an axis helper
+            this.scene.add(new THREE.AxesHelper(600));
 
             // attach our canvas to the dom
             this.$el.appendChild(this.renderer.domElement);
@@ -126,87 +189,20 @@ export default {
                 /* eslint-enable no-param-reassign */
             });
         },
-        draw() {
-            // position the stickers
-            this.positionStickers();
-
-            // create a 3d object and attach it to our scene
-            // this will be what we rotate to display the current turn
-            const obj = new THREE.Object3D();
-            this.scene.add(obj);
-
-            const obj2 = new THREE.Object3D();
-            this.scene.add(obj2);
-
-            // attach any stickers that are part of the current turn to our 3d obj
-            // in this example, we'll make a R turn
-            this.cube.state.r
-                .forEach(sticker => obj.add(sticker.mesh));
-
-            this.cube.state.u
-                .filter((sticker, i) => getCol(this.size, i) === this.size - 1)
-                .forEach(sticker => obj.add(sticker.mesh));
-
-            this.cube.state.b
-                .filter((sticker, i) => getCol(this.size, i) === 0)
-                .forEach(sticker => obj.add(sticker.mesh));
-
-            this.cube.state.d
-                .filter((sticker, i) => getCol(this.size, i) === this.size - 1)
-                .forEach(sticker => obj.add(sticker.mesh));
-
-            this.cube.state.f
-                .filter((sticker, i) => getCol(this.size, i) === this.size - 1)
-                .forEach(sticker => obj.add(sticker.mesh));
-
-            // and just for fun, an L turn
-            this.cube.state.l
-                .forEach(sticker => obj2.add(sticker.mesh));
-
-            this.cube.state.u
-                .filter((sticker, i) => getCol(this.size, i) === 0)
-                .forEach(sticker => obj2.add(sticker.mesh));
-
-            this.cube.state.b
-                .filter((sticker, i) => getCol(this.size, i) === this.size - 1)
-                .forEach(sticker => obj2.add(sticker.mesh));
-
-            this.cube.state.d
-                .filter((sticker, i) => getCol(this.size, i) === 0)
-                .forEach(sticker => obj2.add(sticker.mesh));
-
-            this.cube.state.f
-                .filter((sticker, i) => getCol(this.size, i) === 0)
-                .forEach(sticker => obj2.add(sticker.mesh));
+        getTurnObject() {
+            const turn = new THREE.Object3D();
             
-
-            // start animating
-            const animate = () => {
-                const speed = -0.0125;
-
-                this.scene.rotation.x += speed;
-                this.scene.rotation.y += speed;
-                this.scene.rotation.z += speed;
-
-                obj.rotation.x += speed;
-                obj2.rotation.x -= speed;
-
-                this.renderFrame();
-            };
-
-            const interval = setInterval(() => {
-                requestAnimationFrame(animate);
-            }, 1000 / 60);
-
-            this.$on('hook:destroyed', () => clearInterval(interval));
+            return turn;
         },
         positionStickers() {
             // attach all stickers to the scene
             this.cube.stickers(sticker => this.scene.add(sticker.mesh));
 
+            const offset = -(this.halfCubeSize - this.halfStickerSize);
+
             const translateSticker = (sticker, i) => {
-                const x = -(this.halfCubeSize - this.halfStickerSize) + (this.colMap[i] * this.stickerSize);
-                const y = -(this.halfCubeSize - this.halfStickerSize) + (this.rowMap[i] * this.stickerSize);
+                const x = offset + (this.colMap[i] * this.stickerSize);
+                const y = offset + (this.rowMap[i] * this.stickerSize);
 
                 if (x) {
                     sticker.mesh.translateX(x);
@@ -262,17 +258,26 @@ export default {
                 translateSticker(sticker, index);
             });
         },
+        processTurn() {
+            const fps = 60;
+            
+            for (let i = 0; i <= fps; i++) {
+                const progress = i / fps;
+                const timeout = progress * this.speed;
+
+                setTimeout(() => {
+                    this.currentTurnProgress = progress;
+                }, timeout);
+            }
+        },
         renderFrame() {
             this.renderer.render(this.scene, this.camera);
         },
-        resizeRenderer() {
+        resize() {
             this.renderer.setSize(this.width, this.width);
         },
         trackParentDimensions() {
-            const sync = () => {
-                this.height = this.$el.offetHeight;
-                this.width = this.$el.offsetWidth;
-            };
+            const sync = () => this.width = this.$el.offsetWidth;
 
             sync();
 
@@ -283,7 +288,9 @@ export default {
             });
         },
         turn(turn) {
-            console.log('ok', turn);
+            this.queue.push(turn);
+
+            this.animateNextTurn();
         },
     },
     props: {
@@ -304,6 +311,10 @@ export default {
             required: true,
             type: Number,
         },
+        speed: {
+            default: 3000,
+            type: Number,
+        },
         stickerRadius: {
             default: 0.1,
             type: Number,
@@ -314,8 +325,7 @@ export default {
         },
     },
     watch: {
-        height: 'resizeRenderer',
-        width: 'resizeRenderer',
+        width: 'resize',
     },
 };
 </script>
