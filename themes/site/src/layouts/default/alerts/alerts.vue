@@ -20,7 +20,7 @@
                     :type="alert.type">
                     {{ alert.message }}
                 </v-alert>
-                
+
                 <!-- components -->
                 <component
                     v-else

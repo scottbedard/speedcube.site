@@ -15,7 +15,7 @@ export default [
                     cubeSize: 2,
                 },
                 name: 'puzzle:2',
-                path:'2x2',
+                path: '2x2',
                 component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
             },
 
@@ -27,7 +27,7 @@ export default [
                     cubeSize: 3,
                 },
                 name: 'puzzle:3',
-                path:'3x3',
+                path: '3x3',
                 component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
             },
 
@@ -39,7 +39,7 @@ export default [
                     cubeSize: 4,
                 },
                 name: 'puzzle:4',
-                path:'4x4',
+                path: '4x4',
                 component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
             },
 
@@ -51,7 +51,7 @@ export default [
                     cubeSize: 5,
                 },
                 name: 'puzzle:5',
-                path:'5x5',
+                path: '5x5',
                 component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
             },
 
@@ -63,7 +63,19 @@ export default [
                     cubeSize: 10,
                 },
                 name: 'puzzle:10',
-                path:'10x10',
+                path: '10x10',
+                component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
+            },
+
+            //
+            // 50x50
+            //
+            {
+                meta: {
+                    cubeSize: 30,
+                },
+                name: 'puzzle:max',
+                path: 'max',
                 component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
             },
 

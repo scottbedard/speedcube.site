@@ -23,9 +23,9 @@ export default {
             id,
             message,
         };
-        
+
         commit('addAlert', alert);
-        
+
         setTimeout(() => {
             if (!state.isPaused) {
                 const expired = state.alerts.find(obj => obj.id === id);
@@ -41,12 +41,12 @@ export default {
     // resume all alerts
     //
     resume(state) {
-        state.alerts.forEach(alert => {
+        state.alerts.forEach((alert) => {
             setTimeout(() => {
                 if (!state.isPaused) {
                     commit('removeAlert', expired);
                 }
             }, alert.duration);
-        })
+        });
     },
 };
