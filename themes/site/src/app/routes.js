@@ -68,6 +68,18 @@ export default [
             },
 
             //
+            // 50x50
+            //
+            {
+                meta: {
+                    cubeSize: 30,
+                },
+                name: 'puzzle:max',
+                path: 'max',
+                component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
+            },
+
+            //
             // account
             //
             {

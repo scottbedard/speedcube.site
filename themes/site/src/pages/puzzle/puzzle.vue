@@ -5,7 +5,8 @@
             <router-link :to="{ name: 'puzzle:3' }">3x3</router-link> -
             <router-link :to="{ name: 'puzzle:4' }">4x4</router-link> -
             <router-link :to="{ name: 'puzzle:5' }">5x5</router-link> -
-            <router-link :to="{ name: 'puzzle:10' }">10x10</router-link>
+            <router-link :to="{ name: 'puzzle:10' }">10x10</router-link> -
+            <router-link :to="{ name: 'puzzle:max' }">max</router-link>
         </div>
 
         <form @submit.prevent="executeTurn" class="flex">
