@@ -48,13 +48,13 @@ export default {
         },
     },
     watch: {
-        '$route': function() {
+        $route() {
             this.isLoading = true;
 
             this.$nextTick(() => {
                 this.isLoading = false;
             });
         },
-    }
+    },
 };
 </script>

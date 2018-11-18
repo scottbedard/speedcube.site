@@ -1,11 +1,3 @@
-import {
-    DoubleSide,
-    Mesh,
-    MeshBasicMaterial,
-    Shape,
-    ShapeBufferGeometry,
-} from 'three';
-
 /**
  * Convert degrees to radians.
  *

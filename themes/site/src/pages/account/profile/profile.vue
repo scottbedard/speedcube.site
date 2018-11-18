@@ -56,7 +56,6 @@
 
 <script>
 import accountHeaderComponent from '../account_header/account_header.vue';
-import successAlertComponent from './alerts/success.vue';
 
 export default {
     data() {

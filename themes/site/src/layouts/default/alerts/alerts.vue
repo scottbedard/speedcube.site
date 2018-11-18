@@ -33,7 +33,7 @@
 
 <script>
 import { isString } from 'lodash-es';
-import { mapActions, mapState } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
     computed: {

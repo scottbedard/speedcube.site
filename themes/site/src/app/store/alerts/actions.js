@@ -15,7 +15,9 @@ export default {
     // add an alert
     //
     add({ commit, state }, { message, options }) {
-        const id = alertId++;
+        const id = alertId + 1;
+
+        alertId = id;
 
         const alert = {
             ...defaultOptions,
@@ -40,11 +42,11 @@ export default {
     //
     // resume all alerts
     //
-    resume(state) {
+    resume({ commit, state }) {
         state.alerts.forEach((alert) => {
             setTimeout(() => {
                 if (!state.isPaused) {
-                    commit('removeAlert', expired);
+                    commit('removeAlert', alert);
                 }
             }, alert.duration);
         });

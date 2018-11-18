@@ -55,9 +55,7 @@ export default {
     },
     computed: {
         colMap() {
-            return new Array(this.size ** 2).fill(undefined).map((val, i) => {
-                return getCol(this.size, i);
-            });
+            return new Array(this.size ** 2).fill(undefined).map((val, i) => getCol(this.size, i));
         },
         cubeSize() {
             return this.stickerSize * this.size;
@@ -72,9 +70,7 @@ export default {
             return Math.min(768, Math.max(420, this.size * 100));
         },
         rowMap() {
-            return new Array(this.size ** 2).fill(undefined).map((val, i) => {
-                return getRow(this.size, i);
-            });
+            return new Array(this.size ** 2).fill(undefined).map((val, i) => getRow(this.size, i));
         },
         stickerSize() {
             return this.width / this.size;
@@ -114,18 +110,20 @@ export default {
             shape.quadraticCurveTo(offset, offsetSize, offset + radius, offsetSize);
             shape.lineTo(offsetSize - radius, offsetSize);
             shape.quadraticCurveTo(offsetSize, offsetSize, offsetSize, offsetSize - radius);
-            shape.lineTo(offsetSize, offset + radius );
+            shape.lineTo(offsetSize, offset + radius);
             shape.quadraticCurveTo(offsetSize, offset, offsetSize - radius, offset);
             shape.lineTo(offset + radius, offset);
             shape.quadraticCurveTo(offset, offset, offset, offset + radius);
 
-            this.cube.stickers(sticker => {
+            this.cube.stickers((sticker) => {
+                /* eslint-disable no-param-reassign */
                 sticker.mesh = new THREE.Mesh(
-                    new THREE.ShapeBufferGeometry(shape), 
+                    new THREE.ShapeBufferGeometry(shape),
                     new THREE.MeshBasicMaterial({ color: this.colors[sticker.value], side: THREE.DoubleSide }),
                 );
 
                 sticker.mesh.scale.set(this.stickerScale, this.stickerScale, 1);
+                /* eslint-enable no-param-reassign */
             });
         },
         draw() {
@@ -186,11 +184,11 @@ export default {
                 if (x) {
                     sticker.mesh.translateX(x);
                 }
-                
+
                 if (y) {
                     sticker.mesh.translateY(y);
                 }
-            }
+            };
 
             // up
             this.cube.state.u.forEach((sticker, index) => {
