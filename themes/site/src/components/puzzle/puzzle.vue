@@ -83,7 +83,7 @@ export default {
 
             // create and position a camera
             this.camera = new THREE.PerspectiveCamera(60, 1, 1, 10000);
-            this.camera.position.set(0, 400, this.stickerSize * this.size * 2);
+            this.camera.position.set(0, 400, this.stickerSize * this.size * 1.8);
             this.camera.lookAt(0, 0, 0);
 
             // create a renderer
@@ -93,8 +93,8 @@ export default {
 
             this.resizeRenderer();
 
-            // add an axis helper
-            this.scene.add(new THREE.AxesHelper(200));
+            // // add an axis helper
+            // this.scene.add(new THREE.AxesHelper(200));
 
             // attach our canvas to the dom
             this.$el.appendChild(this.renderer.domElement);
@@ -135,6 +135,9 @@ export default {
             const obj = new THREE.Object3D();
             this.scene.add(obj);
 
+            const obj2 = new THREE.Object3D();
+            this.scene.add(obj2);
+
             // attach any stickers that are part of the current turn to our 3d obj
             // in this example, we'll make a R turn
             this.cube.state.r
@@ -156,22 +159,46 @@ export default {
                 .filter((sticker, i) => getCol(this.size, i) === this.size - 1)
                 .forEach(sticker => obj.add(sticker.mesh));
 
+            // and just for fun, an L turn
+            this.cube.state.l
+                .forEach(sticker => obj2.add(sticker.mesh));
+
+            this.cube.state.u
+                .filter((sticker, i) => getCol(this.size, i) === 0)
+                .forEach(sticker => obj2.add(sticker.mesh));
+
+            this.cube.state.b
+                .filter((sticker, i) => getCol(this.size, i) === this.size - 1)
+                .forEach(sticker => obj2.add(sticker.mesh));
+
+            this.cube.state.d
+                .filter((sticker, i) => getCol(this.size, i) === 0)
+                .forEach(sticker => obj2.add(sticker.mesh));
+
+            this.cube.state.f
+                .filter((sticker, i) => getCol(this.size, i) === 0)
+                .forEach(sticker => obj2.add(sticker.mesh));
+            
+
             // start animating
             const animate = () => {
                 const speed = -0.0125;
 
-                // this.scene.rotation.x += speed;
-                // this.scene.rotation.y += speed;
-                // this.scene.rotation.z += speed;
+                this.scene.rotation.x += speed;
+                this.scene.rotation.y += speed;
+                this.scene.rotation.z += speed;
 
                 obj.rotation.x += speed;
+                obj2.rotation.x -= speed;
 
                 this.renderFrame();
-
-                requestAnimationFrame(animate);
             };
 
-            animate();
+            const interval = setInterval(() => {
+                requestAnimationFrame(animate);
+            }, 1000 / 60);
+
+            this.$on('hook:destroyed', () => clearInterval(interval));
         },
         positionStickers() {
             // attach all stickers to the scene
@@ -278,11 +305,11 @@ export default {
             type: Number,
         },
         stickerRadius: {
-            default: 0,
+            default: 0.1,
             type: Number,
         },
         stickerScale: {
-            default: 0.85,
+            default: 0.9,
             type: Number,
         },
     },
