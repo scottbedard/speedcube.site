@@ -18,7 +18,9 @@ import Cube from 'bedard-cube';
 import {
     degToRad,
     getCol,
+    getEffectedStickers,
     getRow,
+    getTurnAxisAndDegrees,
 } from './helpers';
 
 // cache some degree calculations
@@ -99,7 +101,16 @@ export default {
             this.isTurning = true;
 
             const turnObj = this.getTurnObject();
-            const currentTurn = this.queue.shift();
+            const currentTurn = this.cube.parseTurn(this.queue.shift());
+
+            // determine what axis we're turning and how much
+            const { axis, degrees } = getTurnAxisAndDegrees(currentTurn);
+
+            // attach effected stickers to the turn object,
+            // then attach that turn object to our scene
+            const stickers = getEffectedStickers(this.cube, currentTurn, this.rowMap, this.colMap)
+
+            stickers.forEach(sticker => turnObj.add(sticker.mesh));
 
             this.scene.add(turnObj);
 
@@ -108,6 +119,9 @@ export default {
 
             // create a requestAnimationFrame loop to update our canvas
             const animate = () => {
+                turnObj.rotation[axis] = degToRad(this.currentTurnProgress * degrees);
+
+                this.renderFrame();
 
                 // render the next frame, or get ready for the next turn
                 if (this.currentTurnProgress === 1) {
@@ -120,24 +134,6 @@ export default {
             }
 
             animate();
-    
-            // // otherwise start animating the current turn
-            // this.cube.turn = new THREE.Object3D();
-            // this.scene.add(this.cube.turn);
-
-            // this.cube.state.f.forEach(sticker => {
-            //     this.cube.turn.add(sticker.mesh);
-            // });
-
-            // const animate = () => {
-            //     this.rotateStickers();
-
-            //     if (this.isTurning) {
-            //         requestAnimationFrame(animate);
-            //     }
-            // }
-
-            // animate();
         },
         createCanvas() {
             // create a scene
@@ -312,7 +308,7 @@ export default {
             type: Number,
         },
         speed: {
-            default: 3000,
+            default: 2000,
             type: Number,
         },
         stickerRadius: {

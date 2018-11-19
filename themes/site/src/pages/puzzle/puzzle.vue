@@ -34,7 +34,7 @@ export default {
     data() {
         return {
             isLoading: false,
-            turn: 'F',
+            turn: 'D',
         };
     },
     computed: {
