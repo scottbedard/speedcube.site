@@ -4,7 +4,9 @@
         :style="{
             maxWidth: `${maxWidth}px`,
         }">
-        <pre>{{ $data }}</pre>
+        <v-button class="mb-8" @click="scramble">
+            Scramble
+        </v-button>
     </div>
 </template>
 
@@ -125,6 +127,8 @@ export default {
 
                 // render the next frame, or get ready for the next turn
                 if (this.currentTurnProgress === 1) {
+                    this.cube.turn([currentTurn]);
+                    this.positionStickers();
                     this.currentTurnProgress = 0;
                     this.isTurning = false;
                     this.animateNextTurn();
@@ -191,67 +195,70 @@ export default {
             return turn;
         },
         positionStickers() {
-            // attach all stickers to the scene
-            this.cube.stickers(sticker => this.scene.add(sticker.mesh));
+            this.refreshScene();
 
             const offset = -(this.halfCubeSize - this.halfStickerSize);
 
-            const translateSticker = (sticker, i) => {
+            const position = (sticker, x, y, z) => {
+                sticker.mesh.position.x = x;
+                sticker.mesh.position.y = y;
+                sticker.mesh.position.z = z;
+            }
+
+            const rotate = (sticker, x, y, z) => {
+                sticker.mesh.rotation.x = degToRad(x);
+                sticker.mesh.rotation.y = degToRad(y);
+                sticker.mesh.rotation.z = degToRad(z);
+            }
+
+            const translate = (sticker, i) => {
                 const x = offset + (this.colMap[i] * this.stickerSize);
                 const y = offset + (this.rowMap[i] * this.stickerSize);
 
-                if (x) {
-                    sticker.mesh.translateX(x);
-                }
-
-                if (y) {
-                    sticker.mesh.translateY(y);
-                }
+                if (x) sticker.mesh.translateX(x);
+                if (y) sticker.mesh.translateY(y);
             };
 
             // up
             this.cube.state.u.forEach((sticker, index) => {
-                sticker.mesh.translateY(this.halfCubeSize);
-                sticker.mesh.rotateX(deg90);
-                translateSticker(sticker, index);
+                rotate(sticker, 90, 0, 0);
+                position(sticker, 0, this.halfCubeSize, 0);
+                translate(sticker, index);
             });
 
             // left
             this.cube.state.l.forEach((sticker, index) => {
-                sticker.mesh.translateX(-this.halfCubeSize);
-                sticker.mesh.rotateY(degNeg90);
-                sticker.mesh.rotateX(deg180);
-                translateSticker(sticker, index);
+                rotate(sticker, 180, 90, 0);
+                position(sticker, -this.halfCubeSize, 0, 0);
+                translate(sticker, index);
             });
 
             // front
             this.cube.state.f.forEach((sticker, index) => {
-                sticker.mesh.translateZ(this.halfCubeSize);
-                sticker.mesh.rotateX(deg180);
-                translateSticker(sticker, index);
+                rotate(sticker, 180, 0, 0);
+                position(sticker, 0, 0, this.halfCubeSize);
+                translate(sticker, index);
             });
 
             // right
             this.cube.state.r.forEach((sticker, index) => {
-                sticker.mesh.translateX(this.halfCubeSize);
-                sticker.mesh.rotateY(degToRad(90));
-                sticker.mesh.rotateX(deg180);
-                translateSticker(sticker, index);
+                rotate(sticker, 180, -90, 0);
+                position(sticker, this.halfCubeSize, 0, 0);
+                translate(sticker, index);
             });
 
             // back
             this.cube.state.b.forEach((sticker, index) => {
-                sticker.mesh.translateZ(-this.halfCubeSize);
-                sticker.mesh.rotateX(deg180);
-                sticker.mesh.rotateY(deg180);
-                translateSticker(sticker, index);
+                rotate(sticker, 0, 0, 180);
+                position(sticker, 0, 0, -this.halfCubeSize);
+                translate(sticker, index);
             });
 
             // // down
             this.cube.state.d.forEach((sticker, index) => {
-                sticker.mesh.translateY(-this.halfCubeSize);
-                sticker.mesh.rotateX(degNeg90);
-                translateSticker(sticker, index);
+                rotate(sticker, -90, 0, 0);
+                position(sticker, 0, -this.halfCubeSize, 0);
+                translate(sticker, index);
             });
         },
         processTurn() {
@@ -269,8 +276,20 @@ export default {
         renderFrame() {
             this.renderer.render(this.scene, this.camera);
         },
+        refreshScene() {
+            // remove everything from the scene
+            while(this.scene.children.length > 0){ 
+                this.scene.remove(this.scene.children[0]); 
+            }
+
+            // add all stickers to the scene
+            this.cube.stickers(sticker => this.scene.add(sticker.mesh));
+        },
         resize() {
             this.renderer.setSize(this.width, this.width);
+        },
+        scramble() {
+            this.turn(this.cube.generateScrambleString());
         },
         trackParentDimensions() {
             const sync = () => this.width = this.$el.offsetWidth;
@@ -283,8 +302,8 @@ export default {
                 window.removeEventListener('resize', sync);
             });
         },
-        turn(turn) {
-            this.queue.push(turn);
+        turn(turns) {
+            this.queue.push(...turns.split(' ').map(turn => turn.trim()));
 
             this.animateNextTurn();
         },
@@ -308,7 +327,7 @@ export default {
             type: Number,
         },
         speed: {
-            default: 2000,
+            default: 100,
             type: Number,
         },
         stickerRadius: {
