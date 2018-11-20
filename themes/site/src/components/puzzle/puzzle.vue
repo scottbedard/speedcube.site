@@ -14,7 +14,7 @@
 // @todo: optimize this import statement to only pull in
 //        the pieces of three.js that we're actually using
 import * as THREE from 'three';
-
+import Color from 'color';
 import Cube from 'bedard-cube';
 
 import {
@@ -184,15 +184,33 @@ export default {
             shape.lineTo(offset + radius, offset);
             shape.quadraticCurveTo(offset, offset, offset, offset + radius);
 
-            this.cube.stickers((sticker) => {
-                /* eslint-disable no-param-reassign */
-                sticker.mesh = new THREE.Mesh(
-                    new THREE.ShapeBufferGeometry(shape),
-                    new THREE.MeshBasicMaterial({ color: this.colors[sticker.value], side: THREE.DoubleSide }),
-                );
+            const points = shape.getPoints();
+            const geometryPoints = new THREE.BufferGeometry().setFromPoints(points);
 
-                sticker.mesh.scale.set(this.stickerScale, this.stickerScale, 1);
-                /* eslint-enable no-param-reassign */
+            this.cube.stickers((sticker) => {
+                const color = Color(this.colors[sticker.value]);
+
+                const geometry = new THREE.ShapeBufferGeometry(shape);
+
+                const material = new THREE.MeshBasicMaterial({
+                    color: color.hex(),
+                    side: THREE.DoubleSide,
+                });
+
+                const mesh = new THREE.Mesh(geometry, material);
+
+                mesh.scale.set(this.stickerScale, this.stickerScale, 1);
+
+                // attach an outline to our mesh
+                const outline = new THREE.Line(geometryPoints, new THREE.LineBasicMaterial({ 
+                    color: color.darken(0.25).hex(),
+                    linewidth: 10,
+                }));
+
+                mesh.add(outline);
+
+                /* eslint-disable-next-line no-param-reassign */
+                sticker.mesh = mesh;
             });
         },
         getTurnObject() {
