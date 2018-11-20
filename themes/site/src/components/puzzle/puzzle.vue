@@ -31,6 +31,9 @@ const deg90 = degToRad(90);
 const deg180 = degToRad(180);
 
 export default {
+    beforeDestroy() {
+        this.isDestroying = true;
+    },
     created() {
         this.cube = new Cube(this.size, {
             useObjects: true,
@@ -43,6 +46,9 @@ export default {
 
             // progress of the current turn (0 to 1)
             currentTurnProgress: 0,
+
+            // this flag is used before destruction to prevent memory leaks
+            isDestroying: false,
 
             // this determines if the requestAnimationFrame loop is running
             isTurning: false,
@@ -94,8 +100,8 @@ export default {
     },
     methods: {
         animateNextTurn() {
-            // do nothing if the cube is already being turned
-            if (this.isTurning || this.queue.length === 0) {
+            // do nothing if the cube is already being turned, or is being destroyed
+            if (this.isDestroying || this.isTurning || this.queue.length === 0) {
                 return;
             }
 
