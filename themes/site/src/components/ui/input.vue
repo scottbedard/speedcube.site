@@ -4,7 +4,7 @@
         // chained together. using this mixin allows us to side
         // step the issue without repeating placeholder css.
         @mixin placeholder {
-            color: config('colors.grey-darker');
+            // color: config('colors.primary-lightest');
         }
 
         &:-ms-input-placeholder { @include placeholder } // <- IE >= 10
@@ -13,7 +13,7 @@
         &::-webkit-input-placeholder { @include placeholder } // <- Chrome, Opera, Safari
 
         &:-webkit-autofill {
-            -webkit-box-shadow: 0 0 0 30px white inset;
+            // -webkit-box-shadow: 0 0 0 30px white inset;
         }
     }
 </style>
@@ -50,10 +50,10 @@ export default {
         }
 
         return <div
-            class="v-input border border-grey-light h-12 rounded trans-border trans-opacity focus-within:border-primary-lighter"
+            class="v-input border-b-2 border-grey-dark h-12 focus-within:border-primary"
             {...bindings}>
             <input
-                class="bg-transparent h-full outline-none px-4 w-full"
+                class="bg-transparent h-full outline-none text-grey-lighter text-lg w-full"
                 disabled={disabled}
                 domPropsValue={value}
                 placeholder={placeholder}

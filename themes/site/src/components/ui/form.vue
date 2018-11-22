@@ -8,6 +8,10 @@
         @checkbox-submit="onSubmit"
         @submit.prevent="onSubmit">
         <slot />
+
+        <div class="pt-12 text-right">
+            <slot name="actions" />
+        </div>
     </form>
 </template>
 

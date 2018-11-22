@@ -1,10 +1,10 @@
 <style lang="scss" scoped>
     .v-checkbox:hover [aria-checked=false][tabindex] {
-        border-color: config('colors.primary-light');
+        border-color: config('colors.primary');
     }
 
     path {
-        stroke: config('colors.primary-lightest');
+        stroke: config('colors.grey-lightest');
     }
 </style>
 
@@ -35,9 +35,9 @@ export default {
 
         // checked
         if (checked) {
-            displayBindings.class.push('bg-primary border-primary');
+            displayBindings.class.push('border-primary bg-primary');
         } else {
-            displayBindings.class.push('bg-white border-grey-light focus:border-primary-light');
+            displayBindings.class.push('border-grey-dark');
         }
 
         // disabled
@@ -83,7 +83,7 @@ export default {
             {...bindings}>
             <div
                 aria-checked={checked ? 'true' : 'false'}
-                class="border h-5 outline-none p-px rounded trans-bg trans-border trans-shadow w-5"
+                class="border-2 h-6 outline-none p-px rounded trans-bg trans-border trans-shadow w-6 focus:border-primary"
                 role="checkbox"
                 tabindex={disabled ? null : 0}
                 {...displayBindings}>
@@ -97,7 +97,7 @@ export default {
                         fill="none"
                         stroke-dasharray="50"
                         stroke-dashoffset="50"
-                        stroke-width="3"
+                        stroke-width="4"
                         style={{
                             animation: checked
                                 ? 'checkbox 100ms ease-in 100ms 1 normal forwards'
@@ -106,7 +106,7 @@ export default {
                     />
                 </svg>
             </div>
-            <div class="font-bold ml-2 text-grey-dark select-none text-sm">
+            <div class="font-bold ml-2 text-grey-dark tracking-wide select-none text-sm uppercase">
                 {context.slots().default}
             </div>
         </div>;

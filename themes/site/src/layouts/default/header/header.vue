@@ -1,13 +1,13 @@
 <template>
-    <header class="bg-primary-light border-primary-darkest border-t-2">
-        <v-margin class="flex h-16 items-center justify-between" padded>
+    <header>
+        <v-margin class="flex h-20 items-center justify-between" padded>
 
             <!-- logo -->
             <router-link
                 class="no-underline text-primary-lightest trans-color hover:text-white"
                 data-logo
                 :to="{ name: 'home' }">
-                <strong>scs</strong>
+                <strong>speedcube.site</strong>
             </router-link>
 
             <div class="h-full">

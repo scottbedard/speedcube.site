@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-black v-puzzle mx-auto"
+        class="v-puzzle mx-auto"
         :style="{ maxWidth: `${maxWidth}px` }">
         <canvas
             ref="canvas"

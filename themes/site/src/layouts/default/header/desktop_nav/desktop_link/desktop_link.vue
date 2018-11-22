@@ -1,6 +1,6 @@
 <template functional>
     <router-link
-        class="flex items-center no-underline px-4 text-grey-dark trans-bg trans-color hover:bg-grey-light hover:text-grey-darkest"
+        class="block font-bold ml-4 p-4 text-grey-light text-sm uppercase tracking-wide hover:no-underline hover:text-primary"
         :to="props.to">
         <slot />
     </router-link>

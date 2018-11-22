@@ -1,11 +1,25 @@
 <style lang="scss" scoped>
     .v-form-field + .v-form-field {
-        margin-top: 1.5rem;
+        margin-top: 2rem;
     }
 
     .v-form-field[data-invalid] {
         /deep/ .v-input {
-            border-color: config('colors.red-lighter') !important;
+            border-color: config('colors.red-light') !important;
+
+            input {
+                // these selectors aren't standardized, and are buggy when
+                // chained together. using this mixin allows us to side
+                // step the issue without repeating placeholder css.
+                @mixin placeholder {
+                    color: config('colors.red-light');
+                }
+
+                &:-ms-input-placeholder { @include placeholder } // <- IE >= 10
+                &:-moz-placeholder { @include placeholder } // <- Firefix < 18
+                &::-moz-placeholder { @include placeholder } // <- Firefox >= 19
+                &::-webkit-input-placeholder { @include placeholder } // <- Chrome, Opera, Safari
+            }
         }
     }
 </style>
@@ -17,7 +31,7 @@
 
         <!-- label -->
         <label
-            class="block cursor-pointer font-bold mb-1 text-grey-dark text-sm"
+            class="block cursor-pointer font mb-2 text-grey-dark"
             v-if="label"
             v-text="label"
             @click="focus"

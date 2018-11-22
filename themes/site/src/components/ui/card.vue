@@ -24,7 +24,7 @@ export default {
             bindings.class.push('p-6');
         }
 
-        return <div class="v-card bg-white rounded shadow" {...bindings}>
+        return <div class="v-card text-grey-darkest" {...bindings}>
             {context.slots().default}
         </div>;
     },

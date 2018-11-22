@@ -1,5 +1,5 @@
 <template>
-    <nav class="flex h-full">
+    <nav class="flex h-full items-center">
         <!-- user -->
         <template v-if="isAuthenticated">
             <v-user />
@@ -9,7 +9,12 @@
         <template v-else>
             <!-- sign in -->
             <v-desktop-link :to="{ name: 'signin' }">
-                Sign in
+                Sign In
+            </v-desktop-link>
+
+            <!-- sign up -->
+            <v-desktop-link :to="{ name: 'create-account' }">
+                Create Account
             </v-desktop-link>
         </template>
     </nav>

@@ -1,58 +1,53 @@
 <template>
     <v-margin padded>
-        <v-card class="max-w-sm mx-auto" padded>
-            <!-- title -->
-            <h1 class="font-light mb-2 text-center">
-                Sign In
-            </h1>
+        <!-- title -->
+        <h1 class="mb-16 text-center">
+            Welcome back, please sign in below
+        </h1>
 
-            <div class="mb-6 text-center text-grey-dark text-sm">
-                Don't have an account? No problem, <router-link :to="{ name: 'create-account' }">click here to create one</router-link>.
-            </div>
+        <!-- form -->
+        <v-form
+            class="max-w-sm mx-auto"
+            :errors="errors"
+            @submit="onSubmit">
+            <!-- email -->
+            <v-form-field
+                name="email"
+                rules="required|email"
+                :error-messages="{
+                    required: 'Your email address is required',
+                }"
+                :value="email">
+                <v-input
+                    v-model="email"
+                    autofocus
+                    data-email
+                    placeholder="Email address"
+                    type="email"
+                    :disabled="isLoading"
+                />
+            </v-form-field>
 
-            <!-- form -->
-            <v-form
-                :errors="errors"
-                @submit="onSubmit">
-                <!-- email -->
-                <v-form-field
-                    label="Email Address"
-                    name="email"
-                    rules="required|email"
-                    :error-messages="{
-                        required: 'Your email address is required',
-                    }"
-                    :value="email">
-                    <v-input
-                        v-model="email"
-                        autofocus
-                        data-email
-                        placeholder="Email Address"
-                        type="email"
-                        :disabled="isLoading"
-                    />
-                </v-form-field>
+            <!-- password -->
+            <v-form-field
+                name="password"
+                rules="required"
+                :error-messages="{
+                    required: 'Please enter your password',
+                }"
+                :value="password">
+                <v-input
+                    v-model="password"
+                    data-password
+                    placeholder="Password"
+                    type="password"
+                    :disabled="isLoading"
+                />
+            </v-form-field>
 
-                <!-- password -->
-                <v-form-field
-                    label="Password"
-                    name="password"
-                    rules="required"
-                    :error-messages="{
-                        required: 'Please enter your password',
-                    }"
-                    :value="password">
-                    <v-input
-                        v-model="password"
-                        data-password
-                        placeholder="Password"
-                        type="password"
-                        :disabled="isLoading"
-                    />
-                </v-form-field>
-
-                <!-- submit -->
-                <v-grid class="mt-6">
+            <!-- submit -->
+            <div slot="actions">
+                <v-grid>
                     <!-- remember -->
                     <v-grid-cell sm="6">
                         <v-form-field
@@ -75,12 +70,12 @@
                             primary
                             type="submit"
                             :disabled="isLoading">
-                            Submit
+                            Sign In
                         </v-button>
                     </v-grid-cell>
                 </v-grid>
-            </v-form>
-        </v-card>
+            </div>
+        </v-form>
     </v-margin>
 </template>
 

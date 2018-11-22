@@ -10,7 +10,7 @@ export default {
         if (size === 'sm') {
             bindings.class.push('v-button-sm p-2 text-xs');
         } else if (size === 'md') {
-            bindings.class.push('v-button-md p-4 text-sm');
+            bindings.class.push('v-button-md px-8 py-4 text-sm');
         }
 
         // disabled
@@ -20,13 +20,13 @@ export default {
 
         // primary
         if (primary) {
-            bindings.class.push('bg-primary text-primary-lightest hover:bg-primary-dark hover:text-white');
+            bindings.class.push('border-grey-dark text-grey-dark focus:border-primary focus:text-primary hover:border-primary hover:text-primary');
         } else {
             bindings.class.push('bg-grey-light text-grey-darker hover:bg-grey hover:text-grey-darkest');
         }
 
         return <button
-            class="cursor-pointer font-bold rounded tracking-wide trans-bg trans-color trans-opacity uppercase focus:outline-none"
+            class="border-2 cursor-pointer font-bold rounded tracking-wide uppercase focus:outline-none"
             {...bindings}>
             {context.slots().default}
         </button>;
