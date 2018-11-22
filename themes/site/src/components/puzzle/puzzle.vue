@@ -204,7 +204,7 @@ export default {
                 // attach an outline to our mesh
                 const outline = new THREE.Line(geometryPoints, new THREE.LineBasicMaterial({ 
                     color: color.darken(0.25).hex(),
-                    linewidth: 10,
+                    linewidth: 1,
                 }));
 
                 mesh.add(outline);
