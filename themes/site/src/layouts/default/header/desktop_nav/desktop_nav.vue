@@ -2,6 +2,11 @@
     <nav class="flex h-full items-center">
         <!-- user -->
         <template v-if="isAuthenticated">
+            <div class="pr-8">
+                <v-desktop-link :to="{ name: 'puzzle:3' }">
+                    Solve
+                </v-desktop-link>
+            </div>
             <v-user />
         </template>
 

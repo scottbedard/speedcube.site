@@ -1,6 +1,6 @@
 <template>
     <v-margin padded>
-        <div class="mb-8">
+        <div class="">
             <router-link :to="{ name: 'puzzle:2' }">2x2</router-link> -
             <router-link :to="{ name: 'puzzle:3' }">3x3</router-link> -
             <router-link :to="{ name: 'puzzle:4' }">4x4</router-link> -
@@ -9,7 +9,7 @@
             <router-link :to="{ name: 'puzzle:max' }">max</router-link>
         </div>
 
-        <div class="py-20 w-full">
+        <div>
             <v-fade-transition>
                 <div v-if="isLoading" key="loading">
                     <v-spinner />
@@ -19,6 +19,9 @@
                         :size="size"
                         ref="puzzle"
                     />
+                    <div class="text-center">
+                        <v-button primary @click="scramble">Scramble</v-button>
+                    </div>
                 </div>
             </v-fade-transition>
         </div>
@@ -42,6 +45,9 @@ export default {
         executeTurn() {
             this.$refs.puzzle.turn(this.turn);
             this.turn = '';
+        },
+        scramble() {
+            this.$refs.puzzle.scramble();
         },
     },
     watch: {

@@ -72,7 +72,7 @@ export default [
             //
             {
                 meta: {
-                    cubeSize: 30,
+                    cubeSize: 15,
                 },
                 name: 'puzzle:max',
                 path: 'max',
