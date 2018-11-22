@@ -9,10 +9,6 @@
             <router-link :to="{ name: 'puzzle:max' }">max</router-link>
         </div>
 
-        <form @submit.prevent="executeTurn" class="flex">
-            <v-input v-model="turn" />
-        </form>
-
         <div class="py-20 w-full">
             <v-fade-transition>
                 <div v-if="isLoading" key="loading">
@@ -45,6 +41,7 @@ export default {
     methods: {
         executeTurn() {
             this.$refs.puzzle.turn(this.turn);
+            this.turn = '';
         },
     },
     watch: {

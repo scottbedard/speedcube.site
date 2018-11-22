@@ -1,13 +1,7 @@
 <template>
     <div
-        class="v-puzzle mx-auto"
-        :style="{
-            maxWidth: `${maxWidth}px`,
-        }">
-        <v-button class="mb-8" @click="scramble">
-            Scramble
-        </v-button>
-
+        class="bg-black v-puzzle mx-auto"
+        :style="{ maxWidth: `${maxWidth}px` }">
         <canvas
             ref="canvas"
             :height="`${width}px`"
@@ -162,9 +156,12 @@ export default {
 
             // create a renderer
             this.renderer = new THREE.WebGLRenderer({
+                alpha: true,
                 antialias: true,
                 canvas: this.$refs.canvas,
             });
+
+            this.renderer.setClearColor(0x000000, 0);
 
             // set the initial size of our canvas
             this.resize();
@@ -210,7 +207,7 @@ export default {
 
                 // attach an outline to our mesh
                 const outline = new THREE.Line(geometryPoints, new THREE.LineBasicMaterial({ 
-                    color: color.darken(0.25).hex(),
+                    color: color.darken(0.1).hex(),
                     linewidth: 1,
                 }));
 
