@@ -1,8 +1,8 @@
 <template>
     <v-margin padded>
         <!-- title -->
-        <h1 class="mb-6 text-center">
-            Let's get you signed up
+        <h1 class="mb-4 text-center">
+            Let's get you signed up!
         </h1>
 
         <p class="leading-normal mb-16 font-bold text-center text-grey">

@@ -2,7 +2,7 @@
     <v-margin padded>
         <!-- title -->
         <h1 class="mb-16 text-center">
-            Welcome back, please sign in below
+            Welcome back, please sign in.
         </h1>
 
         <!-- form -->

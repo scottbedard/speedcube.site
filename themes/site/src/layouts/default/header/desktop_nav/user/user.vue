@@ -2,53 +2,61 @@
     a {
         &:hover {
             text-decoration: none;
+
+            i {
+                color: config('colors.primary');
+            }
+
+            div {
+                border-color: config('colors.primary');
+            }
         }
     }
 </style>
 
 <template>
     <div class="flex items-center relative" @click.stop>
+        <!-- user icon -->
         <a
             class="flex items-center"
             href="#"
             @click.prevent="expand">
-            <i class="fa fa-angle-down mr-2 text-primary-lightest trans-color"></i>
-            <div class="inline-block bg-white flex h-10 items-center justify-center rounded-full text-primary trans-color w-10">
-                <i class="fa fa-user-o text-xl"></i>
+            <i class="fa fa-angle-down mr-2 text-grey"></i>
+            <div class="border-2 border-grey-dark inline-block flex h-10 items-center justify-center rounded-full w-10">
+                <i class="fa fa-user-o text-grey-dark"></i>
             </div>
         </a>
 
-        <v-fade-transition>
-            <div
-                v-if="isExpanded"
-                class="absolute pin-r pin-t-full w-70">
-                <v-card>
-                    <!-- profile -->
-                    <div class="p-6">
-                        <div
-                            v-text="user.name || 'Anonymous'"
-                            class="font-bold mb-px"
-                        />
-                        <div
-                            v-text="user.email"
-                            class="text-grey-dark text-sm"
-                        />
-                    </div>
+        <!-- dropdown -->
+        <div
+            v-if="isExpanded"
+            class="user-dropdown absolute pin-r pin-t rounded w-70">
+            <v-card>
+                <!-- profile -->
+                <div class="p-6">
+                    <div
+                        v-text="user.name || 'Anonymous'"
+                        class="font-bold mb-px"
+                    />
+                    <div
+                        v-text="user.email"
+                        class="text-grey-dark text-sm"
+                    />
+                </div>
 
-                    <div class="text-sm px-6 pb-6">
-                        <!-- account -->
-                        <v-user-link :to="{ name: 'account:profile' }">
-                            My Account
-                        </v-user-link>
+                <div class="pb-6 text-sm">
+                    <!-- account -->
+                    <v-user-link :to="{ name: 'account:profile' }">
+                        My Account
+                    </v-user-link>
 
-                        <!-- sign out -->
-                        <v-user-link :to="{ name: 'signout' }">
-                            Sign out
-                        </v-user-link>
-                    </div>
-                </v-card>
-            </div>
-        </v-fade-transition>
+                    <!-- sign out -->
+                    <v-user-link :to="{ name: 'signout' }">
+                        Sign out
+                    </v-user-link>
+                </div>
+            </v-card>
+        </div>
     </div>
 </template>
 
