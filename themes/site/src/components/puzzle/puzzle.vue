@@ -7,6 +7,12 @@
         <v-button class="mb-8" @click="scramble">
             Scramble
         </v-button>
+
+        <canvas
+            ref="canvas"
+            :height="`${width}px`"
+            :width="`${width}px`"
+        />
     </div>
 </template>
 
@@ -77,7 +83,7 @@ export default {
     },
     computed: {
         colMap() {
-            return new Array(this.size ** 2).fill(undefined).map((val, i) => getCol(this.size, i));
+            return new Array(this.size ** 2).fill().map((val, i) => getCol(this.size, i));
         },
         cubeSize() {
             return this.stickerSize * this.size;
@@ -89,10 +95,10 @@ export default {
             return this.stickerSize / 2;
         },
         maxWidth() {
-            return Math.min(768, Math.max(420, this.size * 100));
+            return Math.min(768, Math.max(380, this.size * 100));
         },
         rowMap() {
-            return new Array(this.size ** 2).fill(undefined).map((val, i) => getRow(this.size, i));
+            return new Array(this.size ** 2).fill().map((val, i) => getRow(this.size, i));
         },
         stickerSize() {
             return this.width / this.size;
@@ -108,7 +114,7 @@ export default {
             // otherwise create a new turn and start animating it
             this.isTurning = true;
 
-            const turnObj = this.getTurnObject();
+            const turnObj = new THREE.Object3D();
             const currentTurn = this.cube.parseTurn(this.queue.shift());
 
             // determine what axis we're turning and how much
@@ -150,13 +156,14 @@ export default {
             this.scene = new THREE.Scene();
 
             // create and position a camera
-            this.camera = new THREE.PerspectiveCamera(60, 1, 1, 10000);
-            this.camera.position.set(0, 400, this.stickerSize * this.size * 1.8);
+            this.camera = new THREE.PerspectiveCamera(60, 1, 1, 2000);
+            this.camera.position.set(0, this.cubeSize * .9, this.cubeSize * 1.5);
             this.camera.lookAt(0, 0, 0);
 
             // create a renderer
             this.renderer = new THREE.WebGLRenderer({
                 antialias: true,
+                canvas: this.$refs.canvas,
             });
 
             // set the initial size of our canvas
@@ -212,11 +219,6 @@ export default {
                 /* eslint-disable-next-line no-param-reassign */
                 sticker.mesh = mesh;
             });
-        },
-        getTurnObject() {
-            const turn = new THREE.Object3D();
-            
-            return turn;
         },
         positionStickers() {
             this.refreshScene();
