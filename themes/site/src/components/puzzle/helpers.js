@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * Convert degrees to radians.
  *

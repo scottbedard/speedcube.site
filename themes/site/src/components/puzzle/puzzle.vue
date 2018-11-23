@@ -11,6 +11,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 // @todo: optimize this import statement to only pull in
 //        the pieces of three.js that we're actually using
 import * as THREE from 'three';
