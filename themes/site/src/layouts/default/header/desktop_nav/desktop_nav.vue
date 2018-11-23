@@ -21,6 +21,11 @@
             <v-desktop-link :to="{ name: 'create-account' }">
                 Create Account
             </v-desktop-link>
+
+            <!-- solve -->
+            <v-desktop-link :to="{ name: 'puzzle:3' }">
+                Solve
+            </v-desktop-link>
         </template>
     </nav>
 </template>
