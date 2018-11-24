@@ -18,10 +18,45 @@ import Cube from 'bedard-cube';
 
 import {
     attachStickers,
+    degToRad,
+    getTurnAxisAndDegrees,
+    getTurnObject,
     initCanvas,
     positionStickers,
     resizeRenderer,
 } from './canvas';
+
+// update the cube state and run the animations for
+// for the next turn in the queue. this function
+// recursively calls itself until the queue is empty.
+function executeNextTurn(vm) {
+    if (vm.isDestroying || vm.isTurning || vm.queue.length === 0) {
+        return;
+    }
+    
+    const currentTurn = vm.cube.parseTurn(vm.queue.shift());
+    const turn = getTurnObject(vm, currentTurn);
+    const { axis, degrees } = getTurnAxisAndDegrees(currentTurn);
+
+    function play() {
+        turn.rotation[axis] = degToRad(vm.currentTurnProgress * degrees);
+
+        if (vm.currentTurnProgress === 1) {
+            vm.cube.turn([currentTurn]);
+            vm.currentTurnProgress = 0;
+            vm.isTurning = false;
+            positionStickers(vm);
+            executeNextTurn(vm);
+        } else if (!vm.isDestroying) {
+            requestAnimationFrame(play);
+        }
+    }
+
+    vm.isTurning = true;
+    
+    updateTurnProgress(vm);
+    play();
+}
 
 // instantiate a cube, but don't track it with vue's
 // reactivity system. we'll manage this ourselves.
@@ -47,16 +82,49 @@ function trackDimensions(vm) {
     vm.$on('hook:destroyed', () => window.removeEventListener('resize', sync));
 }
 
+// increment the current turn progress from 0 to 1
+function updateTurnProgress(vm) {
+    const fps = 60;
+    
+    for (let i = 0; i <= fps; i++) {
+        const progress = i / fps;
+        const timeout = progress * vm.turnDuration;
+
+        setTimeout(() => {
+            vm.currentTurnProgress = progress;
+        }, timeout);
+    }
+}
+
 //
 // cube
 //
 export default {
+    beforeDestroy() {
+        this.isDestroying = true;
+    },
     created() {
         // instantiate our cube state
         instantiateCube(this);
     },
     data() {
         return {
+            // the current turn being animated
+            currentTurn: undefined,
+
+            // the progress of the current turn 0 to 1
+            currentTurnProgress: 0,
+
+            // this shuts off animations to prevent memory leaks
+            isDestroying: false,
+
+            // determines if a turn is currently being animated
+            isTurning: false,
+
+            // turns waiting to be executed
+            queue: [],
+
+            // the width of our containing element
             width: 0,
         };
     },
@@ -112,7 +180,12 @@ export default {
     },
     methods: {
         scramble() {
-            this.cube.scramble();
+            this.turn(this.cube.generateScrambleString());
+        },
+        turn(turns) {
+            this.queue.push(...turns.split(' ').map(turn => turn.trim()));
+
+            executeNextTurn(this);
         },
     },
     props: {
@@ -134,7 +207,7 @@ export default {
             type: Number,
         },
         stickerInnerDarkening: {
-            default: 0.1,
+            default: 0.4,
             type: Number,
         },
         stickerRadius: {
@@ -142,7 +215,11 @@ export default {
             type: Number,
         },
         stickerScale: {
-            default: 0.95,
+            default: 0.925,
+            type: Number,
+        },
+        turnDuration: {
+            default: 100,
             type: Number,
         },
     },
