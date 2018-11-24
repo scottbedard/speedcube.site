@@ -208,7 +208,7 @@ export default {
             type: Number,
         },
         stickerInnerDarkness: {
-            default: 0.4,
+            default: 0,
             type: Number,
         },
         stickerRadius: {

@@ -1,23 +1,16 @@
 <template>
-    <div>
-        <!-- account -->
-        <v-account-header>
-            Account
-        </v-account-header>
-
-        <v-card class="text-sm">
-            <v-account-link
-                icon="fa-user-circle"
-                :to="{ name: 'account:profile' }">
-                Profile
-            </v-account-link>
-            <v-account-link
-                icon="fa-lock"
-                :to="{ name: 'account:security' }">
-                Security
-            </v-account-link>
-        </v-card>
-    </div>
+    <nav>
+        <v-account-link
+            icon="fa-user-circle"
+            :to="{ name: 'account:profile' }">
+            Profile
+        </v-account-link>
+        <v-account-link
+            icon="fa-lock"
+            :to="{ name: 'account:security' }">
+            Security
+        </v-account-link>
+    </nav>
 </template>
 
 <script>

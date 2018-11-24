@@ -1,13 +1,13 @@
 <style lang="scss" scoped>
     .v-card {
-        /deep/ .v-input > div {
-            box-shadow: none;
-            background-color: config('colors.grey-lighter');
+        // /deep/ .v-input > div {
+        //     box-shadow: none;
+        //     background-color: config('colors.grey-lighter');
 
-            input:-webkit-autofill {
-                -webkit-box-shadow: 0 0 0 30px config('colors.grey-lighter') inset;
-            }
-        }
+        //     input:-webkit-autofill {
+        //         -webkit-box-shadow: 0 0 0 30px config('colors.grey-lighter') inset;
+        //     }
+        // }
     }
 </style>
 
@@ -24,7 +24,7 @@ export default {
             bindings.class.push('p-6');
         }
 
-        return <div class="v-card bg-grey-lightest text-primary-darkest" {...bindings}>
+        return <div class="v-card bg-grey-darkest border-2 border-primary rounded text-grey-lightest" {...bindings}>
             {context.slots().default}
         </div>;
     },

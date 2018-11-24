@@ -1,14 +1,12 @@
 <template>
     <div>
-        <!-- header -->
-        <v-account-header>
-            Contact Information
-        </v-account-header>
+        <div class="max-w-sm mx-auto py-4">
+            <!-- header -->
+            <v-account-header>
+                Contact Information
+            </v-account-header>
 
-        <v-card padded>
-            <v-form
-                class="max-w-sm mx-auto py-4"
-                @submit="onSubmit">
+            <v-form @submit="onSubmit">
 
                 <!-- name -->
                 <v-form-field
@@ -40,7 +38,8 @@
                     />
                 </v-form-field>
 
-                <div class="mt-6 text-right">
+                <!-- actions -->
+                <div slot="actions">
                     <v-button
                         class="w-full sm:w-auto"
                         primary
@@ -50,7 +49,7 @@
                     </v-button>
                 </div>
             </v-form>
-        </v-card>
+        </div>
     </div>
 </template>
 

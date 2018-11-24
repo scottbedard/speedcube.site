@@ -1,36 +1,23 @@
-<style lang="scss" scoped>
-    a + a {
-        border-top: 1px solid config('colors.grey-lighter');
-    }
-</style>
-
 <script>
+import { bindClasses } from 'spyfu-vue-functional';
+
 export default {
     render(h, context) {
         const { icon, to } = context.props;
         const currentRoute = context.parent.$route.name;
-
-        const classes = [
-            'block',
-            'border-l-2',
-            'flex',
-            'h-12',
-            'items-center',
-            'px-4',
-            'trans-border',
-            'trans-color',
-            'hover:no-underline',
-            'hover:text-primary',
-        ];
+        const bindings = bindClasses(context);
 
         // active / inactive
         if (currentRoute === to.name) {
-            classes.push('border-primary text-primary-light');
+            bindings.class.push('border-primary text-primary hover:text-primary');
         } else {
-            classes.push('border-grey-lighter text-grey');
+            bindings.class.push('border-grey-darker text-grey hover:text-grey-darker');
         }
 
-        return <router-link class={classes} to={to}>
+        return <router-link 
+            class="block border-l-2 flex items-center trans-color p-4 hover:no-underline" 
+            to={to}
+            {...bindings}>
             <i class={['fa mr-4 text-center text-lg w-5', icon]} />
             {context.slots().default}
         </router-link>;

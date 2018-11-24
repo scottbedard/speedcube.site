@@ -9,9 +9,9 @@ export default {
 
         // types
         if (type === 'success') {
-            bindings.class.push('bg-green-lightest');
+            bindings.class.push('border-green');
         } else if (type === 'error') {
-            bindings.class.push('bg-red-lightest');
+            bindings.class.push('border-red');
         }
 
         return <v-card>
