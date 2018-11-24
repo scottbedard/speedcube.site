@@ -219,7 +219,7 @@ export default {
             default: 0.05,
             type: Number,
         },
-        stickerInnerDarkness: {
+        stickerInnerOpacity: {
             default: 0,
             type: Number,
         },
@@ -238,7 +238,7 @@ export default {
     },
     watch: {
         stickerElevation: 'redraw',
-        stickerInnerDarkness: 'redraw',
+        stickerInnerOpacity: 'redraw',
         stickerRadius: 'redraw',
         stickerScale: 'redraw',
         turnDuration: 'redraw',

@@ -1,12 +1,12 @@
 /* eslint-disable */
 /* eslint-disable no-param-reassign */
-import Color from 'color';
-
 import {
     AmbientLight,
     BackSide,
     Mesh,
+    MeshBasicMaterial,
     MeshLambertMaterial,
+    MeshPhongMaterial,
     Object3D,
     PerspectiveCamera,
     PointLight,
@@ -47,14 +47,16 @@ export function attachStickers(vm) {
         sticker.display = new Object3D();
         sticker.display.name = 'sticker';
 
-        const outerMaterial = new MeshLambertMaterial({
+        const outerMaterial = new MeshPhongMaterial({
             color: vm.colors[sticker.value],
             side: FrontSide,
         });
 
         const innerMaterial = new MeshLambertMaterial({
-            color: Color(vm.colors[sticker.value]).darken(vm.stickerInnerDarkness).hex(),
+            color: vm.colors[sticker.value],
             side: BackSide,
+            transparent: true,
+            opacity: vm.stickerInnerOpacity,
         });
 
         const outerMesh = new Mesh(geometry, outerMaterial);

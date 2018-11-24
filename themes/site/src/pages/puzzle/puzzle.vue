@@ -21,7 +21,7 @@
                         :sticker-elevation="stickerElevation"
                         :sticker-radius="stickerRadius"
                         :sticker-scale="stickerScale"
-                        :sticker-inner-darkness="stickerInnerDarkness"
+                        :sticker-inner-opacity="stickerInnerOpacity"
                         ref="puzzle"
                     />
 
@@ -66,7 +66,7 @@
                                 <v-input 
                                     v-model.number="stickerScale"
                                     type="range" 
-                                    min="0.1" 
+                                    min="0.05" 
                                     max="1" 
                                     step="0.005"
                                 />
@@ -74,11 +74,11 @@
 
                             <!-- sticker inner darkness -->
                             <v-form-field
-                                name="stickerScale"
-                                label="Inner darkness"
+                                name="stickerInnerOpacity"
+                                label="Inner brightness"
                                 :value="stickerScale">
                                 <v-input 
-                                    v-model.number="stickerInnerDarkness"
+                                    v-model.number="stickerInnerOpacity"
                                     type="range" 
                                     min="0" 
                                     max="1" 
@@ -97,9 +97,9 @@
 export default {
     data() {
         return {
-            stickerInnerDarkness: 0.2,
+            stickerInnerOpacity: 0.3,
             stickerElevation: 0.03,
-            stickerRadius: 0.25,
+            stickerRadius: 0.1,
             stickerScale: 0.9,
             isLoading: false,
         };
