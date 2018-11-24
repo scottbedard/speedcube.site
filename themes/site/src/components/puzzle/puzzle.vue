@@ -134,7 +134,7 @@ export default {
             type: Number,
         },
         stickerInnerDarkening: {
-            default: 0.15,
+            default: 0.1,
             type: Number,
         },
         stickerRadius: {

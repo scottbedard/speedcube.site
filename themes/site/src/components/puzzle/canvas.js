@@ -91,12 +91,11 @@ export function initCanvas(vm) {
         canvas: vm.$refs.canvas,
     });
 
-    // vm.renderer.setClearColor(0x000000, 0);
     vm.renderer.setPixelRatio(window.devicePixelRatio);
 
     // camera
     vm.camera = new PerspectiveCamera(60, 1, 1, 10000);
-    vm.camera.position.set(0, vm.cubeSize * 1, vm.cubeSize * 2);
+    vm.camera.position.set(0, vm.cubeSize * .85, vm.cubeSize * 1.75);
     vm.camera.lookAt(0, 0, 0);
 
     // scene
@@ -108,7 +107,7 @@ export function initCanvas(vm) {
 
     vm.scene.add(ambientLight);
     vm.scene.add(pointLight);
-    pointLight.position.set(0, vm.cubeSize, vm.cubeSize);
+    pointLight.position.set(0, vm.cubeSize * 2, vm.cubeSize * 2);
 }
 
 /**
