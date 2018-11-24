@@ -22,6 +22,7 @@
                         :sticker-radius="stickerRadius"
                         :sticker-scale="stickerScale"
                         :sticker-inner-opacity="stickerInnerOpacity"
+                        :turn-duration="turnDuration"
                         ref="puzzle"
                     />
 
@@ -93,6 +94,20 @@
                                     step="0.005"
                                 />
                             </v-form-field>
+
+                            <!-- turning speed -->
+                            <v-form-field
+                                name="turnDuration"
+                                label="Turn duration"
+                                :value="turnDuration">
+                                <v-input 
+                                    v-model.number="turnDuration"
+                                    type="range" 
+                                    min="50" 
+                                    max="1000" 
+                                    step="1"
+                                />
+                            </v-form-field>
                         </v-form>
                     </div>
                 </div>
@@ -118,6 +133,7 @@ export default {
             stickerRadius: 0.1,
             stickerScale: 0.9,
             isLoading: false,
+            turnDuration: 100,
         };
     },
     computed: {

@@ -47,7 +47,7 @@ export function attachStickers(vm) {
         sticker.display = new Object3D();
         sticker.display.name = 'sticker';
 
-        const outerMaterial = new MeshPhongMaterial({
+        const outerMaterial = new MeshLambertMaterial({
             color: vm.colors[sticker.value],
             side: FrontSide,
         });

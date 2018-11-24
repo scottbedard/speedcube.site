@@ -16,9 +16,11 @@
             // -webkit-box-shadow: 0 0 0 30px white inset;
         }
 
+        //
         // color pickers
+        //
         &[type=color] {
-            -webkit-appearance: none;
+            appearance: none;
             border: none;
             height: 2rem;
             width: 2rem;
@@ -31,6 +33,97 @@
                 border: none;
             }
         }
+
+        //
+        // ranges
+        //
+        &[type=range] {
+            appearance: none;
+
+            &:focus {
+                outline: none
+            }
+
+            // webkit
+            &::-webkit-slider-thumb {
+                appearance: none;
+                background: config('colors.primary');
+                border-radius: 50%;
+                cursor: pointer;
+                height: 16px;
+                margin-top: -5px;
+                width: 16px;
+            }
+
+            &::-webkit-slider-runnable-track {
+                background: config('colors.grey-darker');
+                border-radius: 2rem;
+                cursor: pointer;
+                height: 6px;
+                transition: background 150ms ease-in-out;
+                width: 100%;
+            }
+
+            &:focus::-webkit-slider-runnable-track {
+                background: config('colors.grey-dark');
+            }
+
+            // mozilla
+            &::-moz-range-thumb {
+                background: config('colors.primary');
+                border-radius: 50%;
+                border: 0;
+                cursor: pointer;
+                height: 16px;
+                width: 16px;
+            }
+
+            &::-moz-range-track {
+                background: config('colors.grey-darker');
+                border-radius: 2rem;
+                cursor: pointer;
+                height: 6px;
+                transition: background 150ms ease-in-out;
+                width: 100%;
+            }
+
+            // microsoft
+            &::-ms-track {
+                background: transparent;
+                border-color: transparent;
+                color: transparent;
+                cursor: pointer;
+                height: 6px;
+                width: 100%;
+            }
+
+            &::-ms-fill-lower {
+                background: config('colors.grey-darker');
+                border-radius: 50px;
+                border: 0px;
+            }
+
+            &::-ms-fill-upper {
+                background: config('colors.grey-darker');
+                border-radius: 50px;
+                border: 0px;
+            }
+
+            &::-ms-thumb {
+                background: config('colors.primary');
+                border-radius: 37px;
+                border: 0px solid rgba(0, 0, 0, 0);
+                cursor: pointer;
+                height: 16px;
+                height: 6px;
+                width: 16px;
+            }
+
+            &:focus::-ms-fill-lower {
+                background: config('colors.grey-dark');
+            }
+        }
+
     }
 </style>
 
@@ -68,6 +161,8 @@ export default {
         // types
         if (type === 'color') {
             bindings.class.push('');
+        } else if (type === 'range') {
+            // ...
         } else {
             bindings.class.push('border-b-2 border-grey-dark h-12 focus-within:border-primary');
         }
