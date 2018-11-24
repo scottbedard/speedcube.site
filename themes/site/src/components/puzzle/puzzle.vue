@@ -14,6 +14,7 @@
 
 <script>
 /* eslint-disable no-param-reassign */
+/* eslint-disable no-use-before-define */
 import Cube from 'bedard-cube';
 
 import {
@@ -33,7 +34,7 @@ function executeNextTurn(vm) {
     if (vm.isDestroying || vm.isTurning || vm.queue.length === 0) {
         return;
     }
-    
+
     const currentTurn = vm.cube.parseTurn(vm.queue.shift());
     const turn = getTurnObject(vm, currentTurn);
     const { axis, degrees } = getTurnAxisAndDegrees(currentTurn);
@@ -52,11 +53,10 @@ function executeNextTurn(vm) {
         } else {
             requestAnimationFrame(play);
         }
-
     }
 
     vm.isTurning = true;
-    
+
     updateTurnProgress(vm);
     play();
 }
@@ -88,8 +88,8 @@ function trackDimensions(vm) {
 // increment the current turn progress from 0 to 1
 function updateTurnProgress(vm) {
     const fps = 60;
-    
-    for (let i = 0; i <= fps; i++) {
+
+    for (let i = 0; i <= fps; i += 1) {
         const progress = i / fps;
         const timeout = progress * vm.turnDuration;
 
@@ -204,7 +204,7 @@ export default {
             type: Number,
         },
         stickerInnerDarkening: {
-            default: .2,
+            default: 0.2,
             type: Number,
         },
         stickerRadius: {
