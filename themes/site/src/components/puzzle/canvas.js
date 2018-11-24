@@ -1,24 +1,21 @@
 /* eslint-disable */
 /* eslint-disable no-param-reassign */
-
 import {
     AmbientLight,
-    DoubleSide,
-    AxesHelper,
+    BackSide,
     Mesh,
-    Color,
-    MeshBasicMaterial,
-    SpotLightHelper,
     MeshLambertMaterial,
-    SpotLight,
     Object3D,
     PerspectiveCamera,
     PointLight,
     Scene,
     Shape,
     ShapeBufferGeometry,
+    FrontSide,
     WebGLRenderer,
 } from 'three';
+
+import Color from 'color';
 
 /**
  * Create an Object3D for each sticker.
@@ -45,24 +42,40 @@ export function attachStickers(vm) {
     // create a geometry for our rounded rectangle stickers
     const geometry = new ShapeBufferGeometry(shape);
 
-    // geometry.computeFaceNormals();
-    // geometry.computeVertexNormals();
-
     // attach an Object3D to each sticker
     vm.cube.stickers(sticker => {
         sticker.display = new Object3D();
+        sticker.display.name = 'sticker';
 
-        const material = new MeshLambertMaterial({
-            color: 0x00afaf,
-            // emissive: 0xff0000,
-            // emissiveIntensity: .9,
-            side: DoubleSide
+        const outerMaterial = new MeshLambertMaterial({
+            color: vm.colors[sticker.value],
+            side: FrontSide,
         });
 
-        const mesh = new Mesh(geometry, material);
+        const innerMaterial = new MeshLambertMaterial({
+            color: Color(vm.colors[sticker.value]).darken(vm.stickerInnerDarkening).hex(),
+            side: BackSide,
+        });
 
-        sticker.display.add(mesh);
+        const outerMesh = new Mesh(geometry, outerMaterial);
+        const innerMesh = new Mesh(geometry, innerMaterial);
+
+        outerMesh.scale.set(vm.stickerScale, vm.stickerScale, 1);
+        innerMesh.scale.set(vm.stickerScale, vm.stickerScale, 1);
+
+        sticker.display.add(outerMesh);
+        sticker.display.add(innerMesh);
     });
+}
+
+/**
+ * Convert degrees to radians.
+ *
+ * @param  {number} degrees
+ * @return {number}
+ */
+export function degToRad(degrees) {
+    return degrees * (Math.PI / 180);
 }
 
 /**
@@ -71,32 +84,31 @@ export function attachStickers(vm) {
  * @param {Vue} vm
  */
 export function initCanvas(vm) {
-    // const renderer = new THREE.WebGLRenderer({ canvas: vm.$refs.canvas, antialias: true });
-    // const scene = new THREE.Scene();
-    // const camera = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 300, 10000);
-    // renderer.setSize(window.innerWidth, window.innerHeight);
-
     // renderer
     vm.renderer = new WebGLRenderer({
-        canvas: vm.$refs.canvas,
+        alpha: true,
         antialias: true,
+        canvas: vm.$refs.canvas,
     });
 
-    vm.renderer.setClearColor(0x000000);
+    // vm.renderer.setClearColor(0x000000, 0);
     vm.renderer.setPixelRatio(window.devicePixelRatio);
 
     // camera
-    vm.camera = new PerspectiveCamera(25, 1, 300, 10000);
+    vm.camera = new PerspectiveCamera(60, 1, 1, 10000);
+    vm.camera.position.set(0, vm.cubeSize * 1, vm.cubeSize * 2);
+    vm.camera.lookAt(0, 0, 0);
 
     // scene
     vm.scene = new Scene();
 
     // lights
-    vm.scene.add(new AmbientLight(0xffffff, 0.5));
-    vm.scene.add(new PointLight(0xffffff, 0.5));
+    const ambientLight = new AmbientLight(0xffffff, 0.6);
+    const pointLight = new PointLight(0xffffff, 0.6);
 
-    // add an axis helper
-    vm.scene.add(new AxesHelper(600));
+    vm.scene.add(ambientLight);
+    vm.scene.add(pointLight);
+    pointLight.position.set(0, vm.cubeSize, vm.cubeSize);
 }
 
 /**
@@ -105,22 +117,45 @@ export function initCanvas(vm) {
  * @param {Vue} vm
  */
 export function positionStickers(vm) {
-    // remove everything from the scene and re-add the stickers
-    while(vm.scene.children.length > 0) {
-        vm.scene.remove(vm.scene.children[0]);
+    // refresh the scene by removing and re-adding all sticker objects
+    vm.scene.children
+        .filter(child => child.name === 'sticker')
+        .forEach(child => vm.scene.remove(child));
+
+    vm.cube.stickers(sticker => vm.scene.add(sticker.display));
+    
+    // helper function to place a sticker
+    const origin = { x: 0, y: 0, z: 0 };
+    const offset = -vm.halfCubeSize + vm.halfStickerSize;
+
+    function rpt(sticker, i, rotation, position) {
+        position = { ...origin, ...position };
+        rotation = { ...origin, ...rotation };
+
+        // rotate
+        sticker.display.rotation.x = degToRad(rotation.x);
+        sticker.display.rotation.y = degToRad(rotation.y);
+        sticker.display.rotation.z = degToRad(rotation.z);
+
+        // position
+        sticker.display.position.x = position.x;
+        sticker.display.position.y = position.y;
+        sticker.display.position.z = position.z;
+
+        // translate
+        const x = offset + (vm.colMap[i] * vm.stickerSize);
+        const y = offset - (vm.rowMap[i] * vm.stickerSize) * -1;
+        if (x) sticker.display.translateX(x);
+        if (y) sticker.display.translateY(y * -1);
     }
 
-    // add all stickers to the scene
-    // vm.cube.stickers(sticker => vm.scene.add(sticker.mesh));
-    const testSticker = vm.cube.state.u[0].display;
-
-    console.log(testSticker);
-
-    vm.scene.add(testSticker);
-
-    testSticker.position.x = 0;
-    testSticker.position.y = 0;
-    testSticker.position.z = 0;
+    // rotate, position, and translate all stickers
+    vm.cube.state.u.forEach((s, i) => rpt(s, i, { x: -90 }, { y: vm.halfCubeSize }));
+    vm.cube.state.l.forEach((s, i) => rpt(s, i, { y: -90 }, { x: -vm.halfCubeSize }));
+    vm.cube.state.f.forEach((s, i) => rpt(s, i, {}, { z: vm.halfCubeSize }));
+    vm.cube.state.r.forEach((s, i) => rpt(s, i, { y: 90 }, { x: vm.halfCubeSize }));
+    vm.cube.state.b.forEach((s, i) => rpt(s, i, { y: 180 }, { z: -vm.halfCubeSize }));
+    vm.cube.state.d.forEach((s, i) => rpt(s, i, { x: 90 }, { y: -vm.halfCubeSize }));
 }
 
 /**

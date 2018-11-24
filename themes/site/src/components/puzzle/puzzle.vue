@@ -5,7 +5,6 @@
             maxWidth: `${maxWidth}px`,
         }">
         <canvas
-            class="border border-red"
             ref="canvas"
             :height="`${width}px`"
             :width="`${width}px`"
@@ -16,7 +15,6 @@
 <script>
 /* eslint-disable no-param-reassign */
 import Cube from 'bedard-cube';
-import * as THREE from 'three';
 
 import {
     attachStickers,
@@ -31,13 +29,10 @@ function instantiateCube(vm) {
     vm.cube = new Cube(vm.size, { useObjects: true });
 }
 
-// // render a frame
-// function render(vm) {
-//     // @todo: move this to a resize listener
-//     vm.renderer.setSize(vm.width, vm.width);
-
-//     vm.renderer.render(vm.scene, vm.camera);
-// }
+// render a frame
+function render(vm) {
+    vm.renderer.render(vm.scene, vm.camera);
+}
 
 // track the dimensions of our containing element so the
 // cube can responsively adjust to a changing window.
@@ -50,59 +45,6 @@ function trackDimensions(vm) {
 
     window.addEventListener('resize', sync);
     vm.$on('hook:destroyed', () => window.removeEventListener('resize', sync));
-}
-
-// temp
-function temp(vm) {
-
-
-    // material
-    const material = new THREE.MeshLambertMaterial({
-        color: 0xff00f4,
-    });
-
-    // geometry
-    const geometry = new THREE.BoxGeometry(100, 100, 100);
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.z = -1000;
-    mesh.position.x = -100;
-    vm.scene.add(mesh);
-
-    // // shape
-    // const shape = new THREE.Shape();
-    // const offset = -(vm.stickerSize / 2);
-    // const offsetSize = offset + vm.stickerSize;
-    // const radius = vm.stickerSize * vm.stickerRadius;
-
-    // shape.moveTo(offset, offset + radius);
-    // shape.lineTo(offset, offsetSize - radius);
-    // shape.quadraticCurveTo(offset, offsetSize, offset + radius, offsetSize);
-    // shape.lineTo(offsetSize - radius, offsetSize);
-    // shape.quadraticCurveTo(offsetSize, offsetSize, offsetSize, offsetSize - radius);
-    // shape.lineTo(offsetSize, offset + radius);
-    // shape.quadraticCurveTo(offsetSize, offset, offsetSize - radius, offset);
-    // shape.lineTo(offset + radius, offset);
-    // shape.quadraticCurveTo(offset, offset, offset, offset + radius);
-
-    // // create a geometry for our rounded rectangle stickers
-    // const geo2 = new THREE.ShapeBufferGeometry(shape);
-
-    // const mesh2 = new THREE.Mesh(geo2, material);
-
-    // mesh2.position.z = -5000;
-    // mesh2.position.x = 200;
-    // scene.add(mesh2);
-
-    function animate() {
-        mesh.rotation.x += 0.005;
-        mesh.rotation.y += 0.005;
-        
-        vm.renderer.render(vm.scene, vm.camera)
-
-        requestAnimationFrame(animate);
-    }
-
-    animate();
 }
 
 //
@@ -125,24 +67,43 @@ export default {
         // initialize our canvas essentials so we can start rendering
         initCanvas(this);
 
-        temp(this);
+        // attach 3d objects for each of our stickers
+        attachStickers(this);
 
-        // // attach 3d objects for each of our stickers
-        // attachStickers(this);
+        // position the stickers
+        positionStickers(this);
 
-        // // position the stickers
-        // positionStickers(this);
+        // temp animation loop
+        const animate = () => {
+            render(this);
 
-        // render(this);
+            requestAnimationFrame(animate);
+        }
+
+        animate();
     },
     computed: {
+        colMap() {
+            return new Array(this.size ** 2).fill().map((val, i) => i % this.size);
+        },
         cubeSize() {
             // return the pixel size of our cube
             return this.stickerSize * this.size;
         },
+        halfCubeSize() {
+            // return half the size of our cube
+            return this.cubeSize / 2;
+        },
+        halfStickerSize() {
+            // return half the size of a sticker
+            return this.stickerSize / 2;
+        },
         maxWidth() {
             // return a max width for the cube based on it's size
             return Math.min(768, Math.max(380, this.size * 100));
+        },
+        rowMap() {
+            return new Array(this.size ** 2).fill().map((val, i) => Math.floor(i / this.size));
         },
         stickerSize() {
             // return the pixel size of a sticker
@@ -155,12 +116,33 @@ export default {
         },
     },
     props: {
+        colors: {
+            default() {
+                return [
+                    '#ffeb3b', // U -> yellow
+                    '#ff9800', // L -> orange
+                    '#03a9f4', // F -> blue
+                    '#f44336', // R -> red
+                    '#4caf50', // B -> green
+                    '#eeeeee', // D -> white
+                ];
+            },
+            type: Array,
+        },
         size: {
             required: true,
             type: Number,
         },
+        stickerInnerDarkening: {
+            default: 0.15,
+            type: Number,
+        },
         stickerRadius: {
             default: 0.1,
+            type: Number,
+        },
+        stickerScale: {
+            default: 0.95,
             type: Number,
         },
     },
