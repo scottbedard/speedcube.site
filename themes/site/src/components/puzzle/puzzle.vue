@@ -61,6 +61,17 @@ function executeNextTurn(vm) {
     play();
 }
 
+function initialize(vm) {
+    // initialize our canvas essentials so we can start rendering
+    initCanvas(vm);
+
+    // attach 3d objects for each of our stickers
+    attachStickers(vm);
+
+    // position the stickers
+    positionStickers(vm);
+}
+
 // instantiate a cube, but don't track it with vue's
 // reactivity system. we'll manage this ourselves.
 function instantiateCube(vm) {
@@ -136,14 +147,7 @@ export default {
         // resize when our container's dimensions change
         trackDimensions(this);
 
-        // initialize our canvas essentials so we can start rendering
-        initCanvas(this);
-
-        // attach 3d objects for each of our stickers
-        attachStickers(this);
-
-        // position the stickers
-        positionStickers(this);
+        initialize(this);
 
         requestAnimationFrame(() => render(this));
     },
@@ -177,10 +181,8 @@ export default {
     },
     methods: {
         redraw() {
-            this.$nextTick(() => {
-                positionStickers(this);
-                render(this);
-            });
+            initialize(this);
+            render(this);
         },
         scramble() {
             this.turn(this.cube.generateScrambleString());
@@ -231,7 +233,11 @@ export default {
         },
     },
     watch: {
+        stickerElevation: 'redraw',
+        stickerInnerDarkness: 'redraw',
         stickerRadius: 'redraw',
+        stickerScale: 'redraw',
+        turnDuration: 'redraw',
         width() {
             // resize the renderer when our dimensions change
             if (this.renderer) {
