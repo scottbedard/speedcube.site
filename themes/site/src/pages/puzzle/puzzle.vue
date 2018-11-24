@@ -15,6 +15,8 @@
                     <v-spinner />
                 </div>
                 <div v-else key="puzzle">
+
+                    <!-- puzzle -->
                     <v-puzzle
                         :colors="colors"
                         :size="size"
@@ -26,8 +28,15 @@
                         ref="puzzle"
                     />
 
+                    <!-- controller -->
+                    <v-puzzle-controller
+                        :size="size"
+                        @abort="reset"
+                        @turn="turn"
+                    />
+
                     <div class="text-center">
-                        <v-button primary @click="turn">Scramble</v-button>
+                        <v-button primary @click="scramble">Scramble</v-button>
 
                         <!-- customization -->
                         <v-form class="max-w-sm mx-auto mt-8">
@@ -144,23 +153,23 @@ export default {
     methods: {
         executeTurn() {
             this.$refs.puzzle.turn(this.turn);
-            this.turn = '';
         },
-        scramble() {
-            this.$refs.puzzle.scramble();
-        },
-        turn() {
-            this.$refs.puzzle.scramble('F');
-        },
-    },
-    watch: {
-        $route() {
+        reset() {
             this.isLoading = true;
 
             this.$nextTick(() => {
                 this.isLoading = false;
             });
         },
+        scramble() {
+            this.$refs.puzzle.scramble();
+        },
+        turn(turn) {
+            this.$refs.puzzle.turn(turn);
+        },
+    },
+    watch: {
+        $route: 'reset',
     },
 };
 </script>

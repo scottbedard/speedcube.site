@@ -162,7 +162,7 @@ export function getEffectedStickers(vm, parsedTurn) {
  */
 export function getTurnAxisAndDegrees(parsedTurn) {
     let axis, degrees;
-    const { double, face, prime } = parsedTurn;
+    const { double, face, prime, whole } = parsedTurn;
 
     // helper function to get turn degrees. note that the
     // clockwise / counter-clickwise degrees might seem
@@ -170,24 +170,29 @@ export function getTurnAxisAndDegrees(parsedTurn) {
     // context of our scene's world axis, not the face.
     const deg = (cw, ccw) => double ? 180 : (prime ? ccw : cw);
 
-    if (face === 'u') {
-        axis = 'y';
+    if (whole) {
+        axis = face;
         degrees = deg(-90, 90);
-    } else if (face === 'l') {
-        axis = 'x';
-        degrees = deg(90, -90);
-    } else if (face === 'f') {
-        axis = 'z';
-        degrees = deg(-90, 90);
-    } else if (face === 'r') {
-        axis = 'x';
-        degrees = deg(-90, 90);
-    } else if (face === 'b') {
-        axis = 'z';
-        degrees = deg(90, -90);
-    } else if (face === 'd') {
-        axis = 'y';
-        degrees = deg(90, -90);
+    } else {
+        if (face === 'u') {
+            axis = 'y';
+            degrees = deg(-90, 90);
+        } else if (face === 'l') {
+            axis = 'x';
+            degrees = deg(90, -90);
+        } else if (face === 'f') {
+            axis = 'z';
+            degrees = deg(-90, 90);
+        } else if (face === 'r') {
+            axis = 'x';
+            degrees = deg(-90, 90);
+        } else if (face === 'b') {
+            axis = 'z';
+            degrees = deg(90, -90);
+        } else if (face === 'd') {
+            axis = 'y';
+            degrees = deg(90, -90);
+        }  
     }
 
     return { axis, degrees };
@@ -204,7 +209,13 @@ export function getTurnObject(vm, parsedTurn) {
 
     obj.name = 'turn';
 
-    getEffectedStickers(vm, parsedTurn).forEach((s) => obj.add(s.display));
+    if (parsedTurn.whole) {
+        // if the entire cube is being turned, add all stickers to the turn object
+        vm.cube.stickers((s) => obj.add(s.display));
+    } else {
+        // otherwise add only the stickers being effected by the turn
+        getEffectedStickers(vm, parsedTurn).forEach((s) => obj.add(s.display));
+    }
 
     vm.scene.add(obj);
 

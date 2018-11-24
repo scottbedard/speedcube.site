@@ -13,6 +13,7 @@ import gridComponent from './containers/grid.vue';
 import inputComponent from './ui/input.vue';
 import marginComponent from './containers/margin.vue';
 import puzzleComponent from './puzzle/puzzle.vue';
+import puzzleControllerComponent from './puzzle/controller.vue';
 
 export default {
     //
@@ -26,6 +27,7 @@ export default {
     // puzzle
     //
     'v-puzzle': puzzleComponent,
+    'v-puzzle-controller': puzzleControllerComponent,
 
     //
     // transitions
