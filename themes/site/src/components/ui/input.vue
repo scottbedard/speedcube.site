@@ -15,6 +15,22 @@
         &:-webkit-autofill {
             // -webkit-box-shadow: 0 0 0 30px white inset;
         }
+
+        // color pickers
+        &[type=color] {
+            -webkit-appearance: none;
+            border: none;
+            height: 2rem;
+            width: 2rem;
+
+            &::-webkit-color-swatch-wrapper {
+                padding: 0;
+            }
+
+            &::-webkit-color-swatch {
+                border: none;
+            }
+        }
     }
 </style>
 
@@ -49,8 +65,15 @@ export default {
             delete bindings.on.input;
         }
 
+        // types
+        if (type === 'color') {
+            bindings.class.push('');
+        } else {
+            bindings.class.push('border-b-2 border-grey-dark h-12 focus-within:border-primary');
+        }
+
         return <div
-            class="v-input border-b-2 border-grey-dark h-12 focus-within:border-primary"
+            class="v-input"
             {...bindings}>
             <input
                 class="bg-transparent h-full outline-none text-grey-lighter text-lg w-full"

@@ -237,6 +237,7 @@ export default {
         },
     },
     watch: {
+        colors: 'redraw',
         stickerElevation: 'redraw',
         stickerInnerOpacity: 'redraw',
         stickerRadius: 'redraw',

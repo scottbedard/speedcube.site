@@ -3,6 +3,7 @@ import buttonComponent from './ui/button.vue';
 import cardComponent from './ui/card.vue';
 import checkboxComponent from './ui/checkbox.vue';
 import collapseTransitionComponent from './transitions/collapse.vue';
+import cubeColorPickerComponent from './ui/cube_color_picker.vue';
 import errorMessageComponent from './ui/error_message.vue';
 import fadeTransitionComponent from './transitions/fade.vue';
 import formComponent from './ui/form.vue';
@@ -39,6 +40,7 @@ export default {
     'v-button': buttonComponent,
     'v-card': cardComponent,
     'v-checkbox': checkboxComponent,
+    'v-cube-color-picker': cubeColorPickerComponent,
     'v-error-message': errorMessageComponent,
     'v-form': formComponent,
     'v-form-field': formFieldComponent,

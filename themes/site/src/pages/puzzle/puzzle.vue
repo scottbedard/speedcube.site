@@ -15,8 +15,8 @@
                     <v-spinner />
                 </div>
                 <div v-else key="puzzle">
-
                     <v-puzzle
+                        :colors="colors"
                         :size="size"
                         :sticker-elevation="stickerElevation"
                         :sticker-radius="stickerRadius"
@@ -30,6 +30,14 @@
 
                         <!-- customization -->
                         <v-form class="max-w-sm mx-auto mt-8">
+                            <!-- colors -->
+                            <v-form-field
+                                name="colors"
+                                label="Colors"
+                                :value="colors">
+                                <v-cube-color-picker class="mt-2" v-model="colors" />
+                            </v-form-field>
+
                             <!-- sticker radius -->
                             <v-form-field
                                 name="stickerRadius"
@@ -97,6 +105,14 @@
 export default {
     data() {
         return {
+            colors: [
+                '#ffeb3b', // U -> yellow
+                '#ff9800', // L -> orange
+                '#03a9f4', // F -> blue
+                '#f44336', // R -> red
+                '#4caf50', // B -> green
+                '#eeeeee', // D -> white
+            ],
             stickerInnerOpacity: 0.3,
             stickerElevation: 0.03,
             stickerRadius: 0.1,
