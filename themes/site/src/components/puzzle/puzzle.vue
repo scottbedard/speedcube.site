@@ -204,7 +204,7 @@ export default {
             type: Number,
         },
         stickerElevation: {
-            default: 1,
+            default: 0.05,
             type: Number,
         },
         stickerInnerDarkness: {
