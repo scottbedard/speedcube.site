@@ -203,8 +203,12 @@ export default {
             required: true,
             type: Number,
         },
-        stickerInnerDarkening: {
-            default: 0.2,
+        stickerElevation: {
+            default: 1,
+            type: Number,
+        },
+        stickerInnerDarkness: {
+            default: 0.4,
             type: Number,
         },
         stickerRadius: {
@@ -212,7 +216,7 @@ export default {
             type: Number,
         },
         stickerScale: {
-            default: 0.925,
+            default: 0.9,
             type: Number,
         },
         turnDuration: {

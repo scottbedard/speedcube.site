@@ -53,7 +53,7 @@ export function attachStickers(vm) {
         });
 
         const innerMaterial = new MeshLambertMaterial({
-            color: Color(vm.colors[sticker.value]).darken(vm.stickerInnerDarkening).hex(),
+            color: Color(vm.colors[sticker.value]).darken(vm.stickerInnerDarkness).hex(),
             side: BackSide,
         });
 
@@ -226,7 +226,7 @@ export function initCanvas(vm) {
 
     // camera
     vm.camera = new PerspectiveCamera(60, 1, 1, 10000);
-    vm.camera.position.set(0, vm.cubeSize * .85, vm.cubeSize * 1.75);
+    vm.camera.position.set(0, vm.cubeSize * 1.2, vm.cubeSize * 1.75);
     vm.camera.lookAt(0, 0, 0);
 
     // scene
@@ -280,12 +280,13 @@ export function positionStickers(vm) {
     }
 
     // rotate, position, and translate all stickers
-    vm.cube.state.u.forEach((s, i) => rpt(s, i, { x: -90 }, { y: vm.halfCubeSize }));
-    vm.cube.state.l.forEach((s, i) => rpt(s, i, { y: -90 }, { x: -vm.halfCubeSize }));
-    vm.cube.state.f.forEach((s, i) => rpt(s, i, {}, { z: vm.halfCubeSize }));
-    vm.cube.state.r.forEach((s, i) => rpt(s, i, { y: 90 }, { x: vm.halfCubeSize }));
-    vm.cube.state.b.forEach((s, i) => rpt(s, i, { y: 180 }, { z: -vm.halfCubeSize }));
-    vm.cube.state.d.forEach((s, i) => rpt(s, i, { x: 90 }, { y: -vm.halfCubeSize }));
+    const elevation = vm.stickerSize * vm.stickerElevation;
+    vm.cube.state.u.forEach((s, i) => rpt(s, i, { x: -90 }, { y: vm.halfCubeSize + elevation }));
+    vm.cube.state.l.forEach((s, i) => rpt(s, i, { y: -90 }, { x: -vm.halfCubeSize - elevation }));
+    vm.cube.state.f.forEach((s, i) => rpt(s, i, {}, { z: vm.halfCubeSize + elevation }));
+    vm.cube.state.r.forEach((s, i) => rpt(s, i, { y: 90 }, { x: vm.halfCubeSize + elevation }));
+    vm.cube.state.b.forEach((s, i) => rpt(s, i, { y: 180 }, { z: -vm.halfCubeSize - elevation }));
+    vm.cube.state.d.forEach((s, i) => rpt(s, i, { x: 90 }, { y: -vm.halfCubeSize - elevation }));
 }
 
 /**
