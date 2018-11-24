@@ -18,11 +18,24 @@
 
                     <v-puzzle
                         :size="size"
+                        :sticker-radius="stickerRadius"
                         ref="puzzle"
                     />
 
                     <div class="text-center">
                         <v-button primary @click="turn">Scramble</v-button>
+
+
+                        <div class="max-w-sm mx-auto">
+                            <pre class="my-8 text-left">{{ $data }}</pre>
+                            <v-input 
+                                v-model.number="stickerRadius"
+                                type="range" 
+                                min="0" 
+                                max="1" 
+                                step="0.005"
+                            />
+                        </div>
                     </div>
                 </div>
             </v-fade-transition>
@@ -34,6 +47,7 @@
 export default {
     data() {
         return {
+            stickerRadius: 0,
             isLoading: false,
         };
     },

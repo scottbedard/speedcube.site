@@ -176,6 +176,12 @@ export default {
         },
     },
     methods: {
+        redraw() {
+            this.$nextTick(() => {
+                positionStickers(this);
+                render(this);
+            });
+        },
         scramble() {
             this.turn(this.cube.generateScrambleString());
         },
@@ -225,6 +231,7 @@ export default {
         },
     },
     watch: {
+        stickerRadius: 'redraw',
         width() {
             // resize the renderer when our dimensions change
             if (this.renderer) {

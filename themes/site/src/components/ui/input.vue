@@ -26,7 +26,7 @@ export default {
     render(h, context) {
         const bindings = bindAll(context);
         const inputBindings = { class: [], on: {} };
-        const { autofocus, disabled, placeholder, type, value } = context.props;
+        const { autofocus, disabled, max, min, placeholder, step, type, value } = context.props;
 
         // autofocus
         if (autofocus) {
@@ -56,8 +56,11 @@ export default {
                 class="bg-transparent h-full outline-none text-grey-lighter text-lg w-full"
                 disabled={disabled}
                 domPropsValue={value}
+                max={max}
+                min={min}
                 placeholder={placeholder}
                 type={type}
+                step={step}
                 {...inputBindings}
             />
         </div>;
@@ -72,8 +75,17 @@ export default {
             default: false,
             type: Boolean,
         },
+        max: {
+            type: [Number, String],
+        },
+        min: {
+            type: [Number, String],
+        },
         placeholder: {
             type: String,
+        },
+        step: {
+            type: [Number, String],
         },
         type: {
             type: String,
