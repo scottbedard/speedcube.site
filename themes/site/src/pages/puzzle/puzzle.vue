@@ -15,12 +15,14 @@
                     <v-spinner />
                 </div>
                 <div v-else key="puzzle">
+
                     <v-puzzle
                         :size="size"
                         ref="puzzle"
                     />
+
                     <div class="text-center">
-                        <v-button primary @click="scramble">Scramble</v-button>
+                        <v-button primary @click="turn">Scramble</v-button>
                     </div>
                 </div>
             </v-fade-transition>
@@ -33,7 +35,6 @@ export default {
     data() {
         return {
             isLoading: false,
-            turn: 'D',
         };
     },
     computed: {
@@ -48,6 +49,9 @@ export default {
         },
         scramble() {
             this.$refs.puzzle.scramble();
+        },
+        turn() {
+            this.$refs.puzzle.scramble('F');
         },
     },
     watch: {
