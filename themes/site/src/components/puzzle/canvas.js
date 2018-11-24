@@ -199,7 +199,7 @@ export function getTurnAxisAndDegrees(parsedTurn) {
  */
 export function getTurnObject(vm, parsedTurn) {
     const obj = new Object3D();
-    
+
     obj.name = 'turn';
 
     getEffectedStickers(vm, parsedTurn).forEach((s) => obj.add(s.display));
@@ -233,8 +233,8 @@ export function initCanvas(vm) {
     vm.scene = new Scene();
 
     // lights
-    const ambientLight = new AmbientLight(0xffffff, 0.6);
-    const pointLight = new PointLight(0xffffff, 0.6);
+    const ambientLight = new AmbientLight(0xffffff, 0.5);
+    const pointLight = new PointLight(0xffffff, 0.7);
 
     vm.scene.add(ambientLight);
     vm.scene.add(pointLight);

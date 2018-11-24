@@ -41,15 +41,18 @@ function executeNextTurn(vm) {
     function play() {
         turn.rotation[axis] = degToRad(vm.currentTurnProgress * degrees);
 
+        render(vm);
+
         if (vm.currentTurnProgress === 1) {
             vm.cube.turn([currentTurn]);
             vm.currentTurnProgress = 0;
             vm.isTurning = false;
             positionStickers(vm);
             executeNextTurn(vm);
-        } else if (!vm.isDestroying) {
+        } else {
             requestAnimationFrame(play);
         }
+
     }
 
     vm.isTurning = true;
@@ -101,6 +104,7 @@ function updateTurnProgress(vm) {
 //
 export default {
     beforeDestroy() {
+        this.queue = [];
         this.isDestroying = true;
     },
     created() {
@@ -141,14 +145,7 @@ export default {
         // position the stickers
         positionStickers(this);
 
-        // temp animation loop
-        const animate = () => {
-            render(this);
-
-            requestAnimationFrame(animate);
-        }
-
-        animate();
+        requestAnimationFrame(() => render(this));
     },
     computed: {
         colMap() {
@@ -207,7 +204,7 @@ export default {
             type: Number,
         },
         stickerInnerDarkening: {
-            default: 0.4,
+            default: .2,
             type: Number,
         },
         stickerRadius: {
