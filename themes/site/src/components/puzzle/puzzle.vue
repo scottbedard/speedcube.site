@@ -80,6 +80,8 @@ function instantiateCube(vm) {
 
 // render a frame
 function render(vm) {
+    resizeRenderer(vm);
+    
     vm.renderer.render(vm.scene, vm.camera);
 }
 
@@ -147,9 +149,11 @@ export default {
         // resize when our container's dimensions change
         trackDimensions(this);
 
+        // get the cube ready to be drawn
         initialize(this);
 
-        requestAnimationFrame(() => render(this));
+        // draw the first frame
+        this.$nextTick(() => render(this));
     },
     computed: {
         colMap() {
