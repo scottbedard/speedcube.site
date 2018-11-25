@@ -8,7 +8,7 @@ export default {
 
         // append size classes
         if (size === 'sm') {
-            bindings.class.push('v-button-sm p-2 text-xs');
+            bindings.class.push('v-button-sm px-4 py-2 text-xs');
         } else if (size === 'md') {
             bindings.class.push('v-button-md px-8 py-4 text-sm');
         }

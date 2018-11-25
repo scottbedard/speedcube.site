@@ -31,7 +31,7 @@
 
         <!-- label -->
         <label
-            class="block cursor-pointer font-bold text-grey-dark text-sm tracking-wide"
+            class="block cursor-pointer font-bold mb-2 text-grey-dark text-sm tracking-wide"
             v-if="label"
             v-text="label"
             @click="focus"

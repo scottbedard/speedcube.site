@@ -22,8 +22,10 @@
         &[type=color] {
             appearance: none;
             border: none;
-            height: 2rem;
-            width: 2rem;
+            cursor: pointer;
+            height: 1.5rem;
+            padding: 0;
+            width: 1.5rem;
 
             &::-webkit-color-swatch-wrapper {
                 padding: 0;

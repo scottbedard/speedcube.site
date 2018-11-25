@@ -36,24 +36,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import sidebarComponent from './sidebar/sidebar.vue';
 
 export default {
     data() {
         return {
-            colors: [
-                '#ffeb3b', // U -> yellow
-                '#ff9800', // L -> orange
-                '#03a9f4', // F -> blue
-                '#f44336', // R -> red
-                '#4caf50', // B -> green
-                '#eeeeee', // D -> white
-            ],
-            stickerInnerOpacity: 0.3,
-            stickerElevation: 0.03,
-            stickerRadius: 0.1,
-            stickerScale: 0.9,
             isLoading: false,
             turnDuration: 100,
         };
@@ -62,6 +50,13 @@ export default {
         'v-sidebar': sidebarComponent,
     },
     computed: {
+        ...mapState('user', {
+            colors: state => state.config.colors,
+            stickerElevation: state => state.config.stickerElevation,
+            stickerInnerOpacity: state => state.config.stickerInnerOpacity,
+            stickerRadius: state => state.config.stickerRadius,
+            stickerScale: state => state.config.stickerScale,
+        }),
         ...mapGetters('user', [
             'isAuthenticated',
         ]),

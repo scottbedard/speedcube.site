@@ -1,31 +1,37 @@
 <template>
-    <div class="flex justify-center">
+    <div class="v-cube-color-picker flex">
         <v-input
+            class="mr-2"
             type="color"
             :value="value[0]"
             @change="onColorChange(0, $event)"
         />
         <v-input
+            class="mr-2"
             type="color"
             :value="value[1]"
             @change="onColorChange(1, $event)"
         />
         <v-input
+            class="mr-2"
             type="color"
             :value="value[2]"
             @change="onColorChange(2, $event)"
         />
         <v-input
+            class="mr-2"
             type="color"
             :value="value[3]"
             @change="onColorChange(3, $event)"
         />
         <v-input
+            class="mr-2"
             type="color"
             :value="value[4]"
             @change="onColorChange(4, $event)"
         />
         <v-input
+            class="mr-2"
             type="color"
             :value="value[5]"
             @change="onColorChange(5, $event)"

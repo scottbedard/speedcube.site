@@ -9,7 +9,9 @@
         @submit.prevent="onSubmit">
         <slot />
 
-        <div class="pt-12 text-right">
+        <div
+            v-if="$slots.actions"
+            class="pt-12 text-right">
             <slot name="actions" />
         </div>
     </form>

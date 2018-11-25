@@ -2,20 +2,22 @@
     <div>
         <!-- sidebar links -->
         <nav>
-            <v-sidebar-link icon="fa-paint-brush" @click.prevent="select('appearance')">
+            <v-sidebar-link
+                icon="fa-paint-brush"
+                @click.prevent="select('appearance')">
                 Appearance
             </v-sidebar-link>
-            <v-sidebar-link icon="fa-gamepad" @click.prevent="select('controls')">
+            <!-- <v-sidebar-link icon="fa-gamepad" @click.prevent="select('controls')">
                 Controls
-            </v-sidebar-link>
+            </v-sidebar-link> -->
         </nav>
 
         <!-- selected section -->
         <div class="absolute pin-l pin-t px-4 text-sm">
             <v-fade-transition>
                 <!-- appearance -->
-                <v-sidebar-card v-if="selected === 'appearance'" @close="close">
-                    <v-appearance />
+                <v-sidebar-card v-if="selected === 'appearance'">
+                    <v-appearance @close="close" />
                 </v-sidebar-card>
 
                 <!-- controls -->
