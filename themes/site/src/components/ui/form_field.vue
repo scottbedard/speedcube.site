@@ -31,13 +31,13 @@
 
         <!-- label -->
         <label
-            class="block cursor-pointer font text-grey-dark text-sm tracking-wide"
+            class="block cursor-pointer font-bold text-grey-dark text-sm tracking-wide"
             v-if="label"
             v-text="label"
             @click="focus"
         />
 
-        <!-- input -->
+        <!-- content -->
         <slot />
 
         <!-- error -->

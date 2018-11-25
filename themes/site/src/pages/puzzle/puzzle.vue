@@ -1,131 +1,44 @@
 <template>
-    <v-margin padded>
-        <div class="">
-            <router-link :to="{ name: 'puzzle:2' }">2x2</router-link> -
-            <router-link :to="{ name: 'puzzle:3' }">3x3</router-link> -
-            <router-link :to="{ name: 'puzzle:4' }">4x4</router-link> -
-            <router-link :to="{ name: 'puzzle:5' }">5x5</router-link> -
-            <router-link :to="{ name: 'puzzle:10' }">10x10</router-link> -
-            <router-link :to="{ name: 'puzzle:max' }">max</router-link>
-        </div>
+    <v-page>
+        <v-margin class="relative" padded>
+            <!-- sidebar -->
+            <aside class="absolute hidden pin-l pin-t px-4 md:block">
+                <v-sidebar />
+            </aside>
 
-        <div>
-            <v-fade-transition>
-                <div v-if="isLoading" key="loading">
-                    <v-spinner />
-                </div>
-                <div v-else key="puzzle">
+            <!-- puzzle -->
+            <v-puzzle
+                :colors="colors"
+                :size="size"
+                :sticker-elevation="stickerElevation"
+                :sticker-radius="stickerRadius"
+                :sticker-scale="stickerScale"
+                :sticker-inner-opacity="stickerInnerOpacity"
+                :turn-duration="turnDuration"
+                ref="puzzle"
+            />
 
-                    <!-- puzzle -->
-                    <v-puzzle
-                        :colors="colors"
-                        :size="size"
-                        :sticker-elevation="stickerElevation"
-                        :sticker-radius="stickerRadius"
-                        :sticker-scale="stickerScale"
-                        :sticker-inner-opacity="stickerInnerOpacity"
-                        :turn-duration="turnDuration"
-                        ref="puzzle"
-                    />
+            <!-- controller -->
+            <v-puzzle-controller
+                :size="size"
+                @abort="reset"
+                @turn="turn"
+            />
 
-                    <!-- controller -->
-                    <v-puzzle-controller
-                        :size="size"
-                        @abort="reset"
-                        @turn="turn"
-                    />
-
-                    <div class="text-center">
-                        <v-button primary @click="scramble">Scramble</v-button>
-
-                        <!-- customization -->
-                        <v-form class="max-w-sm mx-auto mt-8">
-                            <!-- colors -->
-                            <v-form-field
-                                name="colors"
-                                label="Colors"
-                                :value="colors">
-                                <v-cube-color-picker class="mt-2" v-model="colors" />
-                            </v-form-field>
-
-                            <!-- sticker radius -->
-                            <v-form-field
-                                name="stickerRadius"
-                                label="Sticker radius"
-                                :value="stickerRadius">
-                                <v-input 
-                                    v-model.number="stickerRadius"
-                                    type="range" 
-                                    min="0" 
-                                    max="0.5" 
-                                    step="0.005"
-                                />
-                            </v-form-field>
-
-                            <!-- sticker elevation -->
-                            <v-form-field
-                                name="stickerElevation"
-                                label="Sticker elevation"
-                                :value="stickerElevation">
-                                <v-input 
-                                    v-model.number="stickerElevation"
-                                    type="range" 
-                                    min="0" 
-                                    max="1" 
-                                    step="0.005"
-                                />
-                            </v-form-field>
-
-                            <!-- sticker scale -->
-                            <v-form-field
-                                name="stickerScale"
-                                label="Sticker scaling"
-                                :value="stickerScale">
-                                <v-input 
-                                    v-model.number="stickerScale"
-                                    type="range" 
-                                    min="0.05" 
-                                    max="1" 
-                                    step="0.005"
-                                />
-                            </v-form-field>
-
-                            <!-- sticker inner darkness -->
-                            <v-form-field
-                                name="stickerInnerOpacity"
-                                label="Inner brightness"
-                                :value="stickerScale">
-                                <v-input 
-                                    v-model.number="stickerInnerOpacity"
-                                    type="range" 
-                                    min="0" 
-                                    max="1" 
-                                    step="0.005"
-                                />
-                            </v-form-field>
-
-                            <!-- turning speed -->
-                            <v-form-field
-                                name="turnDuration"
-                                label="Turn duration"
-                                :value="turnDuration">
-                                <v-input 
-                                    v-model.number="turnDuration"
-                                    type="range" 
-                                    min="50" 
-                                    max="1000" 
-                                    step="1"
-                                />
-                            </v-form-field>
-                        </v-form>
-                    </div>
-                </div>
-            </v-fade-transition>
-        </div>
-    </v-margin>
+            <!-- scramble -->
+            <div class="text-center">
+                <v-button primary @click="scramble">
+                    Scramble
+                </v-button>
+            </div>
+        </v-margin>
+    </v-page>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import sidebarComponent from './sidebar/sidebar.vue';
+
 export default {
     data() {
         return {
@@ -145,7 +58,13 @@ export default {
             turnDuration: 100,
         };
     },
+    components: {
+        'v-sidebar': sidebarComponent,
+    },
     computed: {
+        ...mapGetters('user', [
+            'isAuthenticated',
+        ]),
         size() {
             return this.$route.meta.cubeSize;
         },

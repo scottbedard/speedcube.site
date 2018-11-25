@@ -6,13 +6,14 @@ export default {
         const bindings = bindAll(context);
         const { padded } = context.props;
 
+        // padded
         if (padded) {
-            bindings.class.push('px-4');
+            bindings.class.push('px-4 md:px-8');
         }
 
-        return <div {...bindings}>
+        return <main class="trans-padding" role="main" {...bindings}>
             {context.slots().default}
-        </div>;
+        </main>;
     },
     functional: true,
     props: {

@@ -37,6 +37,9 @@
         //
         // ranges
         //
+        $thumbDiameter: 12px;
+        $trackHeight: 4px;
+
         &[type=range] {
             appearance: none;
 
@@ -50,16 +53,16 @@
                 background: config('colors.primary');
                 border-radius: 50%;
                 cursor: pointer;
-                height: 16px;
-                margin-top: -5px;
-                width: 16px;
+                height: $thumbDiameter;
+                margin-top: -$thumbDiameter / 3;
+                width: $thumbDiameter;
             }
 
             &::-webkit-slider-runnable-track {
                 background: config('colors.grey-darker');
                 border-radius: 2rem;
                 cursor: pointer;
-                height: 6px;
+                height: $trackHeight;
                 transition: background 150ms ease-in-out;
                 width: 100%;
             }
@@ -74,15 +77,15 @@
                 border-radius: 50%;
                 border: 0;
                 cursor: pointer;
-                height: 16px;
-                width: 16px;
+                height: $thumbDiameter;
+                width: $thumbDiameter;
             }
 
             &::-moz-range-track {
                 background: config('colors.grey-darker');
                 border-radius: 2rem;
                 cursor: pointer;
-                height: 6px;
+                height: $trackHeight;
                 transition: background 150ms ease-in-out;
                 width: 100%;
             }
@@ -93,7 +96,7 @@
                 border-color: transparent;
                 color: transparent;
                 cursor: pointer;
-                height: 6px;
+                height: $trackHeight;
                 width: 100%;
             }
 
@@ -114,9 +117,9 @@
                 border-radius: 37px;
                 border: 0px solid rgba(0, 0, 0, 0);
                 cursor: pointer;
-                height: 16px;
-                height: 6px;
-                width: 16px;
+                height: $thumbDiameter;
+                height: $trackHeight;
+                width: $thumbDiameter;
             }
 
             &:focus::-ms-fill-lower {

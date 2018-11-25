@@ -30,7 +30,7 @@
         <!-- dropdown -->
         <div
             v-if="isExpanded"
-            class="user-dropdown absolute pin-r pin-t rounded w-70">
+            class="user-dropdown absolute pin-r pin-t rounded w-70 z-10">
             <v-card>
                 <!-- profile -->
                 <div class="p-6">

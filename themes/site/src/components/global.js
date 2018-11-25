@@ -12,6 +12,7 @@ import gridCellComponent from './containers/grid_cell.vue';
 import gridComponent from './containers/grid.vue';
 import inputComponent from './ui/input.vue';
 import marginComponent from './containers/margin.vue';
+import pageComponent from './containers/page.vue';
 import puzzleComponent from './puzzle/puzzle.vue';
 import puzzleControllerComponent from './puzzle/controller.vue';
 
@@ -22,6 +23,7 @@ export default {
     'v-grid': gridComponent,
     'v-grid-cell': gridCellComponent,
     'v-margin': marginComponent,
+    'v-page': pageComponent,
 
     //
     // puzzle
