@@ -3,6 +3,7 @@
 namespace Speedcube\Speedcube;
 
 use Backend;
+use RainLab\User\Models\User;
 use System\Classes\PluginBase;
 
 /**
@@ -34,23 +35,35 @@ class Plugin extends PluginBase
     }
 
     /**
-     * Register method, called when the plugin is first registered.
-     *
-     * @return void
-     */
-    public function register()
-    {
-
-    }
-
-    /**
      * Boot method, called right before the request route.
      *
      * @return array
      */
     public function boot()
     {
+        $this->extendRainLabUser();
+    }
 
+    /**
+     * Extend RainLab.User
+     * 
+     * @return void
+     */
+    protected function extendRainLabUser()
+    {
+        // extend the user model
+        User::extend(function($model) {
+            $model->hasMany['configs'] = 'SpeedCube\SpeedCube\Models\Config';
+        });
+    }
+
+    /**
+     * Register method, called when the plugin is first registered.
+     *
+     * @return void
+     */
+    public function register()
+    {
     }
 
     /**

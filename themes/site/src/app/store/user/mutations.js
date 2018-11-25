@@ -1,3 +1,4 @@
+import { isUndefined } from 'lodash-es';
 import { simpleSetters } from 'spyfu-vuex-helpers';
 
 //
@@ -5,11 +6,13 @@ import { simpleSetters } from 'spyfu-vuex-helpers';
 //
 export default {
     ...simpleSetters({
+        setConfig: 'config',
         setConfigColors: 'config.colors',
         setConfigStickerElevation: 'config.stickerElevation',
         setConfigStickerInnerOpacity: 'config.stickerInnerOpacity',
         setConfigStickerRadius: 'config.stickerRadius',
         setConfigStickerScale: 'config.stickerScale',
+        setConfigs: 'user.configs',
         setSigninIsLoading: 'signinIsLoading',
         setSignoutIsLoading: 'signoutIsLoading',
         setUser: 'user',

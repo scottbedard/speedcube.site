@@ -10,6 +10,10 @@ function onStart()
     // get the current user
     $user = (new AccountManager)->getAuthenticatedUser();
 
+    if ($user) {
+        $user->load('configs');
+    }
+
     $this['vuetober'] = Utils::camelCaseKeys([
         'env' => app()->env,
         'token' => Session::token(),

@@ -1,4 +1,10 @@
-import { getSignout, postSignin, postUser } from '@/app/repositories/user';
+import {
+    getSignout,
+    postSignin,
+    postUser,
+} from '@/app/repositories/user';
+
+import { getConfigs } from '@/app/repositories/config';
 
 //
 // actions
@@ -8,17 +14,23 @@ export default {
     signin({ commit }, payload) {
         commit('setSigninIsLoading', true);
 
-        const request = postSignin(payload);
+        const authRequest = postSignin(payload);
 
-        request.then((response) => {
+        authRequest.then((response) => {
             // success
             commit('setUser', response.data);
+
+            // load related user data
+            return Promise.all([
+                // configurations
+                getConfigs().then((res) => commit('setConfigs', res.data.configs)),
+            ]);
         }).finally(() => {
             // complete
             commit('setSigninIsLoading', false);
         });
 
-        return request;
+        return authRequest;
     },
 
     // sign a user out

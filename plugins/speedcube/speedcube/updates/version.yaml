@@ -4,3 +4,7 @@
 1.0.2:
   - Create solves controller and model
   - 1.0.2/create_solves_table.php
+
+1.0.3:
+  - Create configuration models
+  - 1.0.3/create_configs_table.php

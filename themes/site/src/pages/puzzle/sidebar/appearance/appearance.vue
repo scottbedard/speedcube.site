@@ -4,7 +4,8 @@
         <h4>Appearance</h4>
 
         <!-- form -->
-        <v-form>
+        <v-form @submit="onSubmit">
+
             <!-- colors -->
             <v-form-field
                 name="colors"
@@ -100,18 +101,23 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import { mapTwoWayState } from 'spyfu-vuex-helpers';
+import { postConfig } from '@/app/repositories/config';
 
 export default {
     data() {
         return {
-            // ...
+            isLoading: false,
         };
     },
     computed: {
         ...mapGetters('user', [
             'isAuthenticated',
+            'puzzleConfig',
+        ]),
+        ...mapState('user', [
+            'config',
         ]),
         ...mapTwoWayState('user', {
             'config.colors': 'setConfigColors',
@@ -123,8 +129,34 @@ export default {
     },
     methods: {
         onCancelClick() {
+            this.$store.commit('user/setConfig', this.puzzleConfig(this.configKey));
+
             this.$emit('close');
         },
+        onSubmit() {
+            // if the user is not authenticated, close the form
+            if (!this.isAuthenticated) {
+                this.$emit('close');
+
+                return;
+            }
+
+            // otherwise persist their config to the server
+            this.isLoading = true;
+
+            postConfig(this.configKey, this.config).then((response) => {
+                // success
+                this.$store.commit('user/setConfigs', response.data.configs);
+
+                this.$emit('close');
+            }).finally(() => {
+                // complete
+                this.isLoading = false;
+            });
+        },
     },
+    props: [
+        'configKey',
+    ],
 };
 </script>

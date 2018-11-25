@@ -17,7 +17,10 @@
             <v-fade-transition>
                 <!-- appearance -->
                 <v-sidebar-card v-if="selected === 'appearance'">
-                    <v-appearance @close="close" />
+                    <v-appearance
+                        :config-key="configKey"
+                        @close="close"
+                    />
                 </v-sidebar-card>
 
                 <!-- controls -->
@@ -55,5 +58,8 @@ export default {
             this.selected = key;
         },
     },
+    props: [
+        'configKey',
+    ],
 };
 </script>

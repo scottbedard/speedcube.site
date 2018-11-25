@@ -3,7 +3,7 @@
         <v-margin class="relative" padded>
             <!-- sidebar -->
             <aside class="absolute hidden pin-l pin-t px-4 md:block">
-                <v-sidebar />
+                <v-sidebar :config-key="configKey" />
             </aside>
 
             <!-- puzzle -->
@@ -40,6 +40,9 @@ import { mapState, mapGetters } from 'vuex';
 import sidebarComponent from './sidebar/sidebar.vue';
 
 export default {
+    created() {
+        this.setConfigForPuzzle();
+    },
     data() {
         return {
             isLoading: false,
@@ -59,7 +62,11 @@ export default {
         }),
         ...mapGetters('user', [
             'isAuthenticated',
+            'puzzleConfig',
         ]),
+        configKey() {
+            return `cube${this.size}`;
+        },
         size() {
             return this.$route.meta.cubeSize;
         },
@@ -74,6 +81,11 @@ export default {
             this.$nextTick(() => {
                 this.isLoading = false;
             });
+        },
+        setConfigForPuzzle() {
+            const puzzleConfig = this.$store.getters['user/puzzleConfig'];
+
+            this.$store.commit('user/setConfig', puzzleConfig(this.configKey));
         },
         scramble() {
             this.$refs.puzzle.scramble();
