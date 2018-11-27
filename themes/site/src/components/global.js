@@ -15,6 +15,7 @@ import marginComponent from './containers/margin.vue';
 import pageComponent from './containers/page.vue';
 import puzzleComponent from './puzzle/puzzle.vue';
 import puzzleControllerComponent from './puzzle/controller.vue';
+import spinnerComponent from './ui/spinner.vue';
 
 export default {
     //
@@ -49,4 +50,5 @@ export default {
     'v-form': formComponent,
     'v-form-field': formFieldComponent,
     'v-input': inputComponent,
+    'v-spinner': spinnerComponent,
 };
