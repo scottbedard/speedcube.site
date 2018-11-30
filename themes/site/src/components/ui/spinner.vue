@@ -22,8 +22,12 @@ export default {
 
         // size
         let sizePx = '36px'; // md
-        if (size === 'sm') sizePx = '24px'; // sm
-        else if (size === 'lg') sizePx = '48px'; // lg
+
+        if (size === 'sm') {
+            sizePx = '24px';
+        } else if (size === 'lg') {
+            sizePx = '48px';
+        }
 
         return <span class="v-spinner" style={{ height: sizePx, width: sizePx }}>
             <svg
@@ -38,13 +42,13 @@ export default {
                 xmlnsA="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
                 y="0px">
-                    <path
-                        d="M142.114,105.059 c-4.002-4.376-5.601-10.721-3.64-16.765c1.318-4.052,4.011-7.271,7.39-9.312"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="5.28"
-                    />
+                <path
+                    d="M142.114,105.059 c-4.002-4.376-5.601-10.721-3.64-16.765c1.318-4.052,4.011-7.271,7.39-9.312"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="5.28"
+                />
             </svg>
         </span>;
     },
