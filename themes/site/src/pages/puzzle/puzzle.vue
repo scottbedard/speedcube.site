@@ -17,6 +17,7 @@
                 :sticker-inner-opacity="stickerInnerOpacity"
                 :turn-duration="turnDuration"
                 ref="puzzle"
+                @complete="onSolveComplete"
             />
 
             <!-- controller -->
@@ -43,7 +44,7 @@
 import sidebarComponent from './sidebar/sidebar.vue';
 import { inspectionDuration } from './config';
 import { mapState, mapGetters } from 'vuex';
-import { postCreateSolve } from '@/app/repositories/solves';
+import { postCreateSolve, postSolveComplete } from '@/app/repositories/solves';
 
 export default {
     created() {
@@ -51,6 +52,8 @@ export default {
     },
     data() {
         return {
+            completeIsLoading: false,
+            history: [],
             isTurnable: false,
             isLoading: false,
             turnDuration: 100,
@@ -80,6 +83,10 @@ export default {
     },
     methods: {
         beginInspection() {
+            // reset history, we'll be recording from here
+            // through the end of the solve
+            this.history = [];
+
             // begin the solve's inspection time
             console.log('inspecting');
 
@@ -87,6 +94,11 @@ export default {
         },
         beginSolve() {
             console.log('solve');
+        },
+        onSolveComplete() {
+            this.completeIsLoading = true;
+
+            postSolveComplete(this.history);
         },
         reset() {
             this.isLoading = true;

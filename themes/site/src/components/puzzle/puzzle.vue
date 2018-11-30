@@ -4,6 +4,7 @@
         :style="{
             maxWidth: `${maxWidth}px`,
         }">
+        <pre>{{ isSolved }}</pre>
         <canvas
             ref="canvas"
             :height="`${width}px`"
@@ -50,7 +51,9 @@ function executeNextTurn(vm) {
             vm.cube.turn([currentTurn]);
             vm.currentTurnProgress = 0;
             vm.isTurning = false;
+
             positionStickers(vm);
+            setSolvedState(vm);
             executeNextTurn(vm);
         } else {
             requestAnimationFrame(play);
@@ -85,6 +88,15 @@ function render(vm) {
     resizeRenderer(vm);
     
     vm.renderer.render(vm.scene, vm.camera);
+}
+
+// set the solved state
+function setSolvedState(vm) {
+    if (!vm.cube) {
+        vm.isSolved = false;
+    } else {
+        vm.isSolved = vm.cube.isSolved();
+    }
 }
 
 // track the dimensions of our containing element so the
@@ -136,6 +148,10 @@ export default {
 
             // this shuts off animations to prevent memory leaks
             isDestroying: false,
+
+            // determines if the cube is solved. this is
+            // re-calculated after each turn
+            isSolved: false,
 
             // determines if a turn is currently being animated
             isTurning: false,
@@ -198,6 +214,8 @@ export default {
             });
 
             this.redraw();
+
+            setSolvedState(this);
         },
         scramble() {
             this.turn(this.cube.generateScrambleString());
@@ -263,6 +281,9 @@ export default {
         stickerRadius: 'redraw',
         stickerScale: 'redraw',
         turnDuration: 'redraw',
+        isSolved() {
+            this.$emit('complete');
+        },
         queue(queue) {
             if (queue.length === 0) {
                 this.$emit('idle');
