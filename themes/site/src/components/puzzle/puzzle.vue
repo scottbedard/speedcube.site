@@ -17,6 +17,8 @@
 /* eslint-disable no-use-before-define */
 import Cube from 'bedard-cube';
 
+import { forOwn } from 'lodash-es';
+
 import {
     attachStickers,
     degToRad,
@@ -188,6 +190,15 @@ export default {
             initialize(this);
             render(this);
         },
+        setCubeState(state) {
+            forOwn(state, (values, face) => {
+                values.forEach((value, index) => {
+                    this.cube.state[face][index].value = value;
+                });
+            });
+
+            this.redraw();
+        },
         scramble() {
             this.turn(this.cube.generateScrambleString());
         },
@@ -252,6 +263,11 @@ export default {
         stickerRadius: 'redraw',
         stickerScale: 'redraw',
         turnDuration: 'redraw',
+        queue(queue) {
+            if (queue.length === 0) {
+                this.$emit('idle');
+            }
+        },
         width() {
             // resize the renderer when our dimensions change
             if (this.renderer) {

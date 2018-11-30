@@ -7,6 +7,10 @@
 
     path {
         stroke: config('colors.primary');
+
+        &[data-color="grey-dark"] {
+            stroke: config('colors.grey-dark');
+        }
     }
 
     @keyframes spin {
@@ -18,7 +22,7 @@
 <script>
 export default {
     render(h, context) {
-        const { size } = context.props;
+        const { color, size } = context.props;
 
         // size
         let sizePx = '36px'; // md
@@ -29,7 +33,9 @@ export default {
             sizePx = '48px';
         }
 
-        return <span class="v-spinner" style={{ height: sizePx, width: sizePx }}>
+        return <span
+            class="v-spinner"
+            style={{ height: sizePx, width: sizePx }}>
             <svg
                 x="0px"
                 xmlns="http://www.w3.org/2000/svg"
@@ -44,6 +50,7 @@ export default {
                 y="0px">
                 <path
                     d="M142.114,105.059 c-4.002-4.376-5.601-10.721-3.64-16.765c1.318-4.052,4.011-7.271,7.39-9.312"
+                    data-color={color}
                     fill="none"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -54,6 +61,10 @@ export default {
     },
     functional: true,
     props: {
+        color: {
+            default: 'primary',
+            type: String,
+        },
         size: {
             default: 'md',
             type: String,

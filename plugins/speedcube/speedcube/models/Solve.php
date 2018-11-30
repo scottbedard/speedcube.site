@@ -11,7 +11,7 @@ class Solve extends Model
      * @var array Attributes
      */
     public $attributes = [
-        'config' => '{"colors":"default"}',
+        'config' => '{}',
         'scramble' => '',
         'solution' => '[]',
     ];
@@ -79,7 +79,24 @@ class Solve extends Model
     protected function generateScramble()
     {
         $cube = base_path('themes/site/node_modules/bedard-cube/cli.js');
+        $size = escapeshellarg($this->size);
 
-        $this->scramble = exec("node {$cube} scramble {$this->size}", $output);
+        $this->scramble = exec("node {$cube} scramble {$size}");
+    }
+
+    /**
+     * Get the scrambled state of the cube.
+     * 
+     * @return array
+     */
+    public function getScrambledState()
+    {
+        $cube = base_path('themes/site/node_modules/bedard-cube/cli.js');
+        $size = escapeshellarg($this->size);
+        $scramble = escapeshellarg($this->scramble);
+
+        $state = exec("node {$cube} turn {$size} {$scramble}");
+
+        return json_decode($state, true);
     }
 }

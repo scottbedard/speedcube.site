@@ -10,8 +10,10 @@ Route::prefix('api/speedcube/speedcube')
         // non-authenticated routes
         // any user may access these
         //
+
+        // solves
         Route::post('solves', 'Speedcube\Speedcube\Http\Controllers\SolvesController@create');
-        
+
         //
         // authenticated routes
         // to access these endpoints, the user must be signed in
