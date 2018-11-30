@@ -21,9 +21,9 @@
                 :value="stickerRadius">
                 <v-input 
                     v-model.number="stickerRadius"
-                    type="range" 
-                    min="0" 
-                    max="0.5" 
+                    type="range"
+                    min="0"
+                    max="0.5"
                     step="0.005"
                 />
             </v-form-field>

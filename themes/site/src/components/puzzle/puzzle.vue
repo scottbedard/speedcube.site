@@ -211,6 +211,14 @@ export default {
             },
             type: Array,
         },
+        maskColor: {
+            default: '#6a7685',
+            type: String,
+        },
+        masked: {
+            default: false,
+            type: Boolean,
+        },
         size: {
             required: true,
             type: Number,
@@ -238,6 +246,7 @@ export default {
     },
     watch: {
         colors: 'redraw',
+        masked: 'redraw',
         stickerElevation: 'redraw',
         stickerInnerOpacity: 'redraw',
         stickerRadius: 'redraw',

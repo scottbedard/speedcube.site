@@ -37,6 +37,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import { postCreateSolve } from '@/app/repositories/solves';
 import sidebarComponent from './sidebar/sidebar.vue';
 
 export default {
@@ -88,7 +89,11 @@ export default {
             this.$store.commit('user/setConfig', puzzleConfig(this.configKey));
         },
         scramble() {
-            this.$refs.puzzle.scramble();
+            const request = postCreateSolve({ size: this.size });
+            
+            request.then((response) => {
+                console.log('hello', response.data);
+            });
         },
         turn(turn) {
             this.$refs.puzzle.turn(turn);

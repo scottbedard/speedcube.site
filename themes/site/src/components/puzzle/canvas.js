@@ -47,13 +47,15 @@ export function attachStickers(vm) {
         sticker.display = new Object3D();
         sticker.display.name = 'sticker';
 
+        const color = vm.masked ? vm.maskColor : vm.colors[sticker.value];
+
         const outerMaterial = new MeshLambertMaterial({
-            color: vm.colors[sticker.value],
+            color: color,
             side: FrontSide,
         });
 
         const innerMaterial = new MeshLambertMaterial({
-            color: vm.colors[sticker.value],
+            color: color,
             side: BackSide,
             transparent: true,
             opacity: vm.stickerInnerOpacity,
