@@ -1434,9 +1434,9 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bedard-cube@^0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/bedard-cube/-/bedard-cube-0.5.1.tgz#4c7b37a976fbb72d8559a4b522c824b39f61a927"
+bedard-cube@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/bedard-cube/-/bedard-cube-0.5.2.tgz#10fd207c5281aecfa5cffdd1b30c55c7475c7775"
 
 better-assert@~1.0.0:
   version "1.0.2"

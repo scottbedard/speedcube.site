@@ -38,7 +38,7 @@ function executeNextTurn(vm) {
         return;
     }
 
-    const currentTurn = vm.cube.parseTurn(vm.queue.shift());
+    const currentTurn = vm.cube.parseTurn(vm.queue.slice().shift());
     const turn = getTurnObject(vm, currentTurn);
     const { axis, degrees } = getTurnAxisAndDegrees(currentTurn);
 
@@ -48,12 +48,15 @@ function executeNextTurn(vm) {
         render(vm);
 
         if (vm.currentTurnProgress === 1) {
-            vm.cube.turn([currentTurn]);
             vm.currentTurnProgress = 0;
             vm.isTurning = false;
 
+            // update the turn and shift the current turn off the queue
+            vm.cube.turn([currentTurn]);
+            vm.queue.shift();
+
+            // reposition the stickers and execute the next turn
             positionStickers(vm);
-            setSolvedState(vm);
             executeNextTurn(vm);
         } else {
             requestAnimationFrame(play);
@@ -88,15 +91,6 @@ function render(vm) {
     resizeRenderer(vm);
     
     vm.renderer.render(vm.scene, vm.camera);
-}
-
-// set the solved state
-function setSolvedState(vm) {
-    if (!vm.cube) {
-        vm.isSolved = false;
-    } else {
-        vm.isSolved = vm.cube.isSolved();
-    }
 }
 
 // track the dimensions of our containing element so the
@@ -149,10 +143,6 @@ export default {
             // this shuts off animations to prevent memory leaks
             isDestroying: false,
 
-            // determines if the cube is solved. this is
-            // re-calculated after each turn
-            isSolved: false,
-
             // determines if a turn is currently being animated
             isTurning: false,
 
@@ -189,6 +179,14 @@ export default {
             // return half the size of a sticker
             return this.stickerSize / 2;
         },
+        isSolved() {
+            // determine if the cube is solved. to do this, we'll
+            // create a pseudo-dependency on the turn queue in order
+            // to re-calculate this value when the queue changes.
+            this.queue;
+
+            return !this.cube || this.cube.isSolved();
+        },
         maxWidth() {
             // return a max width for the cube based on it's size
             return Math.min(768, Math.max(380, this.size * 100));
@@ -214,8 +212,6 @@ export default {
             });
 
             this.redraw();
-
-            setSolvedState(this);
         },
         scramble() {
             this.turn(this.cube.generateScrambleString());
@@ -281,9 +277,6 @@ export default {
         stickerRadius: 'redraw',
         stickerScale: 'redraw',
         turnDuration: 'redraw',
-        isSolved() {
-            this.$emit('complete');
-        },
         queue(queue) {
             if (queue.length === 0) {
                 this.$emit('idle');
