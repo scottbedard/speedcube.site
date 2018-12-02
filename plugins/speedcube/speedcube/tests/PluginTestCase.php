@@ -29,6 +29,8 @@ abstract class PluginTestCase extends BasePluginTestCase
     {
         $app = parent::createApplication();
 
+        require __DIR__.'/../routes.php';
+
         return $app;
     }
 
@@ -40,8 +42,6 @@ abstract class PluginTestCase extends BasePluginTestCase
     public function setUp()
     {
         parent::setUp();
-
-        include plugins_path('speedcube/speedcube/routes.php');
 
         // boot all plugins
         PluginManager::instance()->bootAll(true);
@@ -75,6 +75,7 @@ abstract class PluginTestCase extends BasePluginTestCase
     public function tearDown()
     {
         parent::tearDown();
+
         Mockery::close();
     }
 }

@@ -3,6 +3,7 @@
 
 use Speedcube\Speedcube\Http\Middleware\CamelCase;
 
+
 Route::prefix('api/speedcube/speedcube')
     ->middleware('web', 'Speedcube\Speedcube\Http\Middleware\CamelCase')
     ->group(function() {
@@ -10,6 +11,9 @@ Route::prefix('api/speedcube/speedcube')
         // non-authenticated routes
         // any user may access these
         //
+        
+        // scrambles
+        Route::post('scrambles', 'Speedcube\Speedcube\Http\Controllers\ScramblesController@create');
 
         // solves
         Route::post('solves', 'Speedcube\Speedcube\Http\Controllers\SolvesController@create');

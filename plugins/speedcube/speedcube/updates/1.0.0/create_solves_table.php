@@ -12,13 +12,12 @@ class CreateSolvesTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('user_id')->nullable()->unsigned()->index();
-            $table->text('config');
-            $table->tinyInteger('size')->unsigned()->index();
-            $table->text('scramble');
+            $table->integer('scramble_id')->nullable()->unsigned()->index();
             $table->integer('time')->default(0)->unsigned()->index();
+            $table->integer('moves')->default(0)->unsigned()->index();
+            $table->integer('moves_per_second')->default(0)->unsigned()->index();
             $table->text('solution');
-            $table->string('comment')->default('');
-            $table->boolean('is_solved')->default(false)->index();
+            $table->text('config');
             $table->timestamps();
         });
     }

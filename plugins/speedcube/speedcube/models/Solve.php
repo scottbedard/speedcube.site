@@ -1,5 +1,6 @@
 <?php namespace Speedcube\Speedcube\Models;
 
+use Speedcube\Speedcube\Exceptions\InvalidSolutionException;
 use Model;
 
 /**
@@ -12,14 +13,14 @@ class Solve extends Model
      */
     public $attributes = [
         'config' => '{}',
-        'scramble' => '',
-        'solution' => '[]',
+        'solution' => '',
     ];
 
     /**
      * @var array Attribute casting
      */
     protected $casts = [
+        'scramble_id' => 'integer',
         'size' => 'integer',
     ];
 
@@ -37,7 +38,9 @@ class Solve extends Model
      * @var array Fillable fields
      */
     protected $fillable = [
+        'scramble_id',
         'size',
+        'solution',
     ];
 
     /**
@@ -51,52 +54,36 @@ class Solve extends Model
     /**
      * @var array Relations
      */
-    public $hasOne = [];
-    public $hasMany = [];
-    public $belongsTo = [];
-    public $belongsToMany = [];
-    public $morphTo = [];
-    public $morphOne = [];
-    public $morphMany = [];
-    public $attachOne = [];
-    public $attachMany = [];
+    public $belongsTo = [
+        'scramble' => 'Speedcube\Speedcube\Models\Scramble',
+    ];
 
     /**
-     * Before create.
-     * 
-     * @return void
+     * Before create
      */
     public function beforeCreate()
     {
-        $this->generateScramble();
+        // verify that our solution is correct
+        if (!$this->testSolution()) {
+            throw new InvalidSolutionException;
+        }
     }
 
     /**
-     * Generate a scramble for the solve.
+     * Test the solution.
      * 
      * @return void
      */
-    protected function generateScramble()
+    protected function testSolution()
     {
-        $cube = base_path('themes/site/node_modules/bedard-cube/cli.js');
-        $size = escapeshellarg($this->size);
+        $scramble = $this->scramble;
 
-        $this->scramble = exec("node {$cube} scramble {$size}");
-    }
+        $sizeArg = escapeshellarg($scramble->getCubeSize());
+        $stateArg = escapeshellarg($scramble->scrambled_state);
+        $solutionArg = escapeshellarg($this->solution);
 
-    /**
-     * Get the scrambled state of the cube.
-     * 
-     * @return array
-     */
-    public function getScrambledState()
-    {
-        $cube = base_path('themes/site/node_modules/bedard-cube/cli.js');
-        $size = escapeshellarg($this->size);
-        $scramble = escapeshellarg($this->scramble);
+        $cubePath = base_path('themes/site/node_modules/bedard-cube/cli.js');
 
-        $state = exec("node {$cube} turn {$size} {$scramble}");
-
-        return json_decode($state, true);
+        return exec("node {$cubePath} test {$sizeArg} {$stateArg} {$solutionArg}") === '1';
     }
 }

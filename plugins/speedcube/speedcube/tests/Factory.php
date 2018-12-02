@@ -6,6 +6,8 @@ use Auth;
 use Faker;
 use Model;
 use RainLab\User\Models\User;
+use Speedcube\Speedcube\Models\Scramble;
+use Speedcube\Speedcube\Models\Solve;
 
 class Factory
 {
@@ -41,8 +43,9 @@ class Factory
         $seed = [];
 
         switch (get_class($model)) {
-            case 'RainLab\User\Models\User': $seed = self::getUserData($data); break;
-            case 'Speedcube\Speedcube\Models\Solve': $seed = self::getSolveData($data); break;
+            case 'RainLab\User\Models\User': $seed = self::user($data); break;
+            case 'Speedcube\Speedcube\Models\Scramble': $seed = self::scramble($data); break;
+            case 'Speedcube\Speedcube\Models\Solve': $seed = self::solve($data); break;
         }
         
         $mergedData = array_merge($seed, $data);
@@ -74,12 +77,19 @@ class Factory
     }
 
     /**
-     * RainLab\User\Models\User
-     *
-     * @param  array $data
-     * @return array
+     * Register a user
+     * 
+     * @return \RainLab\User\Models\User
      */
-    public static function getUserData(array $data = [])
+    public static function registerUser(array $data = [], $autoActivate = true)
+    {
+        return Auth::register(self::getUserData($data), $autoActivate);
+    }
+
+    /**
+     * User
+     */
+    public static function user(array $data = [])
     {
         $faker = Faker\Factory::create();
 
@@ -92,12 +102,22 @@ class Factory
     }
 
     /**
-     * Register a user
-     * 
-     * @return \RainLab\User\Models\User
+     * Scramble
      */
-    public static function registerUser(array $data = [], $autoActivate = true)
+    public static function scramble(array $data = [])
     {
-        return Auth::register(self::getUserData($data), $autoActivate);
+        return [
+            'puzzle' => 'cube3',
+        ];
+    }
+
+    /**
+     * Solve
+     */
+    public static function solve(array $data = [])
+    {
+        return [
+            // ...
+        ];
     }
 }

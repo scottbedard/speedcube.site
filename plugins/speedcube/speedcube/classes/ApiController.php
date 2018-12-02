@@ -18,6 +18,10 @@ class ApiController extends Controller
     {
         Log::error($err);
 
+        // if (env('APP_ENV') === 'testing') {
+        //     die($err);
+        // }
+
         return response([
             'status' => 'failed',
             'error' => $err->getMessage(),
