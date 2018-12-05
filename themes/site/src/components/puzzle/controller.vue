@@ -66,8 +66,7 @@ export default {
             } else if (e.key === 'Shift') {
                 this.addDepth();
             } else if (e.key === ' ') {
-                this.depth = 1;
-                this.deep = false;
+                this.$emit('space-up');
             } else {
                 // standard turns
                 const turn = this.config[getKeyFromEvent(e)];

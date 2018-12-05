@@ -4,7 +4,6 @@
         :style="{
             maxWidth: `${maxWidth}px`,
         }">
-        <pre>{{ isSolved }}</pre>
         <canvas
             ref="canvas"
             :height="`${width}px`"
