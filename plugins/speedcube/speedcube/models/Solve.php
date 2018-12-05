@@ -70,6 +70,16 @@ class Solve extends Model
     }
 
     /**
+     * Remove time offsets from the solution.
+     * 
+     * @return string
+     */
+    protected function getTimelessSolution()
+    {
+        return preg_replace('/\d+\:|!!/', '', $this->solution);
+    }
+
+    /**
      * Test the solution.
      * 
      * @return void
@@ -78,11 +88,10 @@ class Solve extends Model
     {
         $scramble = $this->scramble;
 
+        $cubePath = base_path('themes/site/node_modules/bedard-cube/cli.js');
         $sizeArg = escapeshellarg($scramble->getCubeSize());
         $stateArg = escapeshellarg($scramble->scrambled_state);
-        $solutionArg = escapeshellarg($this->solution);
-
-        $cubePath = base_path('themes/site/node_modules/bedard-cube/cli.js');
+        $solutionArg = escapeshellarg($this->getTimelessSolution());
 
         return exec("node {$cubePath} test {$sizeArg} {$stateArg} {$solutionArg}") === '1';
     }

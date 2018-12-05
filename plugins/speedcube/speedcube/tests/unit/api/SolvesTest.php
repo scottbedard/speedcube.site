@@ -9,7 +9,7 @@ use Speedcube\Speedcube\Tests\PluginTestCase;
 
 class SolvesApiTest extends PluginTestCase
 {
-    public function test_creating_a_solve()
+    public function test_creating_a_solve_3x3()
     {
         // create a dummy scramble
         $scramble = Factory::create(new Scramble);
@@ -19,9 +19,10 @@ class SolvesApiTest extends PluginTestCase
         // submit a solution for it
         $response = $this->post('/api/speedcube/speedcube/solves', [
             'scrambleId' => $scramble->id,
-            'solution' => 'R U- R-',
+            'solution' => '0:X 10:X- !! 20:R 30:U- 40:R-',
         ]);
 
+        // we should have one solution
         $this->assertEquals(1, Solve::count());
     }
 
@@ -35,7 +36,7 @@ class SolvesApiTest extends PluginTestCase
         // submit an incorrect solution for it
         $response = $this->post('/api/speedcube/speedcube/solves', [
             'scrambleId' => $scramble->id,
-            'solution' => 'U',
+            'solution' => '0:U',
         ]);
 
         $content = json_decode($response->getContent(), true);

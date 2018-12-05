@@ -3,13 +3,13 @@
         <v-margin class="relative" padded>
             <!-- sidebar -->
             <aside class="absolute hidden pin-l pin-t px-4 md:block">
-                <v-sidebar :config-key="configKey" />
+                <v-sidebar :config-key="puzzleId" />
             </aside>
 
             <!-- puzzle -->
             <v-puzzle
                 :colors="colors"
-                :masked="isLoading"
+                :masked="scrambleIsLoading"
                 :size="size"
                 :sticker-elevation="stickerElevation"
                 :sticker-radius="stickerRadius"
@@ -17,7 +17,7 @@
                 :sticker-inner-opacity="stickerInnerOpacity"
                 :turn-duration="turnDuration"
                 ref="puzzle"
-                @complete="onSolveComplete"
+                @solved="onSolved"
             />
 
             <!-- controller -->
@@ -31,7 +31,7 @@
             <div class="text-center">
                 <v-button
                     primary
-                    :loading="isLoading"
+                    :loading="scrambleIsLoading"
                     @click="scramble">
                     Scramble
                 </v-button>
@@ -44,7 +44,8 @@
 import sidebarComponent from './sidebar/sidebar.vue';
 import { inspectionDuration } from './config';
 import { mapState, mapGetters } from 'vuex';
-import { postCreateSolve, postSolveComplete } from '@/app/repositories/solves';
+import { postCreateScramble } from '@/app/repositories/scrambles';
+import { postCreateSolve } from '@/app/repositories/solves';
 
 export default {
     created() {
@@ -52,10 +53,12 @@ export default {
     },
     data() {
         return {
-            completeIsLoading: false,
             history: [],
             isTurnable: false,
-            isLoading: false,
+            scrambleId: 0,
+            scrambleIsLoading: false,
+            solveIsLoading: false,
+            startedAd: 0,
             turnDuration: 100,
         };
     },
@@ -74,7 +77,7 @@ export default {
             'isAuthenticated',
             'puzzleConfig',
         ]),
-        configKey() {
+        puzzleId() {
             return `cube${this.size}`;
         },
         size() {
@@ -86,6 +89,7 @@ export default {
             // reset history, we'll be recording from here
             // through the end of the solve
             this.history = [];
+            this.startedAt = Date.now();
 
             // begin the solve's inspection time
             console.log('inspecting');
@@ -93,52 +97,66 @@ export default {
             setTimeout(() => this.beginSolve(), inspectionDuration * 1000);
         },
         beginSolve() {
+            this.history.push('!!');
+            
             console.log('solve');
         },
-        onSolveComplete() {
+        getTimeOffset() {
+            return Date.now() - this.startedAt;
+        },
+        onSolved() {
             this.completeIsLoading = true;
 
-            postSolveComplete(this.history);
+            postCreateSolve({
+                scrambleId: this.scrambleId,
+                solution: this.history.join(' '),
+            });
         },
         reset() {
             this.isLoading = true;
 
             this.$nextTick(() => {
-                this.isLoading = false;
+                this.scrambleIsLoading = false;
             });
         },
         setConfigForPuzzle() {
             const puzzleConfig = this.$store.getters['user/puzzleConfig'];
 
-            this.$store.commit('user/setConfig', puzzleConfig(this.configKey));
+            this.$store.commit('user/setConfig', puzzleConfig(this.puzzleId));
         },
         scramble() {
-            this.isLoading = true;
+            this.scrambleIsLoading = true;
 
             // request a new solve from the server, and set the
             // cube state to the scrambled state of our solve
-            const request = postCreateSolve({ size: this.size });
+            const request = postCreateScramble(this.puzzleId);
 
-            // animate the cube being scrambled. we're only using
-            // this as a loading state, this isn't the real scramble
-            const scramble = new Promise((resolve) => {
-                this.$refs.puzzle.$once('idle', resolve);
-            });
+            // // animate the cube being scrambled. we're only using
+            // // this as a loading state, this isn't the real scramble
+            // const scramble = new Promise((resolve) => {
+            //     this.$refs.puzzle.$once('idle', resolve);
+            // });
 
-            this.$refs.puzzle.scramble();
+            // // this.$refs.puzzle.scramble();
 
             // begin the inspection when we're ready to go
-            Promise.all([request, scramble]).then(([response]) => {
+            Promise.all([request]).then(([response]) => {
                 // set the state of our scrambled puzzle
-                this.$refs.puzzle.setCubeState(response.data.state);
+                this.scrambleId = response.data.id;
+                this.$refs.puzzle.setCubeState(response.data.scrambledState);
 
                 // give the cube a sec to render, and away we go
                 setTimeout(() => {
-                    this.isLoading = false;
+                    this.scrambleIsLoading = false;
+                    this.beginInspection();
                 }, 100);
             });
         },
         turn(turn) {
+            const offset = this.getTimeOffset();
+
+            this.history.push(`${offset}:${turn}`);
+
             this.$refs.puzzle.turn(turn);
         },
     },

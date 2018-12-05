@@ -205,6 +205,8 @@ export default {
             render(this);
         },
         setCubeState(state) {
+            console.log ('fine', state);
+            
             forOwn(state, (values, face) => {
                 values.forEach((value, index) => {
                     this.cube.state[face][index].value = value;
@@ -277,6 +279,11 @@ export default {
         stickerRadius: 'redraw',
         stickerScale: 'redraw',
         turnDuration: 'redraw',
+        isSolved(isSolved, oldIsSolved) {
+            if (isSolved && !oldIsSolved) {
+                this.$emit('solved');
+            }
+        },
         queue(queue) {
             if (queue.length === 0) {
                 this.$emit('idle');

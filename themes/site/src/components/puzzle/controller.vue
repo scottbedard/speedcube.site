@@ -73,7 +73,9 @@ export default {
                 const turn = this.config[getKeyFromEvent(e)];
                 
                 if (turn) {
-                    this.$emit('turn', `${this.depth}${this.deep ? turn.toLowerCase() : turn.toUpperCase() }`);
+                    const depth = this.depth > 1 ? this.depth : '';
+
+                    this.$emit('turn', `${depth}${this.deep ? turn.toLowerCase() : turn.toUpperCase() }`);
                 }
             }
         },
