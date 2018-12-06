@@ -127,12 +127,8 @@ export default {
             return this.$route.meta.cubeSize;
         },
         time() {
-            if (this.isSolving) {
+            if (this.isSolving || this.isComplete) {
                 return this.now - this.solveStartedAt;
-            } else if (this.isComplete) {
-                const lastTurn = this.history[this.history.length - 1];
-                
-                return lastTurn.split(':').shift();
             }
             
             return 0;
@@ -176,6 +172,7 @@ export default {
             const request = postCreateSolve({
                 scrambleId: this.scrambleId,
                 solution: this.history.join(' '),
+                time: this.time,
             });
         },
         onSpaceUp() {
