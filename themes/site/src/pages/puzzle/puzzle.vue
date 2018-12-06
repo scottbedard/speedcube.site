@@ -23,30 +23,39 @@
             <!-- controller -->
             <v-puzzle-controller
                 :size="size"
+                @escape="onEscape"
                 @space-up="onSpaceUp"
                 @turn="turn"
             />
 
             <div class="text-center">
-                <!-- timer -->
-                <div v-if="isSolving || isComplete" key="timer">
-                    <v-timer :time="time" />
-                </div>
+                <v-collapse-transition>
+                    <!-- timer -->
+                    <div v-if="isSolving || isComplete" key="timer">
+                        <v-timer :time="time" />
+                        <v-fade-transition>
+                            <div v-if="isComplete" class="mt-4" key="loading">
+                                <v-tip>press spacebar to scramble</v-tip>
+                            </div>
+                            <div v-else class="mt-4" key="solving">
+                                <v-tip>press escape to end solve</v-tip>
+                            </div>
+                        </v-fade-transition>
+                    </div>
 
-                <!-- countdown -->
-                <div v-else-if="isInspecting" key="countdown">
-                    <v-countdown />
-                </div>
+                    <!-- countdown -->
+                    <div v-else-if="isInspecting" key="countdown">
+                        <v-countdown />
+                        <v-tip>press spacebar to start</v-tip>
+                    </div>
 
-                <!-- scramble -->
-                <div v-else-if="!isComplete" key="scramble">
-                    <v-button
-                        primary
-                        :loading="scrambleIsLoading"
-                        @click="scramble">
-                        Scramble
-                    </v-button>
-                </div>
+                    <!-- scramble button -->
+                    <div v-else-if="!isComplete && !scrambleIsLoading" key="scramble">
+                        <v-button @click="scramble">
+                            Scramble
+                        </v-button>
+                    </div>
+                </v-collapse-transition>
             </div>
         </v-margin>
     </v-page>
@@ -59,6 +68,7 @@ import { postCreateSolve } from '@/app/repositories/solves';
 import countdownComponent from './countdown/countdown.vue';
 import sidebarComponent from './sidebar/sidebar.vue';
 import timerComponent from './timer/timer.vue';
+import tipComponent from './tip/tip.vue';
 
 export default {
     created() {
@@ -107,6 +117,7 @@ export default {
         'v-countdown': countdownComponent,
         'v-sidebar': sidebarComponent,
         'v-timer': timerComponent,
+        'v-tip': tipComponent,
     },
     computed: {
         ...mapState('user', {
@@ -129,7 +140,7 @@ export default {
         time() {
             if (this.isSolving) {
                 return this.now - this.solveStartedAt;
-            } else if (this.isComplete) {
+            } else if (this.isComplete && this.history.length > 0) {
                 const lastTurn = this.history[this.history.length - 1];
 
                 return parseInt(lastTurn.split(':'), 10);
@@ -165,7 +176,16 @@ export default {
                 this.history.push('!!');
             }
         },
+        onEscape() {
+            this.reset();
+        },
         onSolved() {
+            // do nothing if we're not solving, meaning the
+            // cube was simply reset.
+            if (!this.isSolving) {
+                return;
+            }
+
             this.completeIsLoading = true;
             this.isComplete = true;
             this.isSolving = false;
@@ -178,7 +198,7 @@ export default {
         onSpaceUp() {
             if (this.isInspecting) {
                 this.beginSolve();
-            } else {
+            } else if (!this.isSolving) {
                 this.scramble();
             }
         },
@@ -186,6 +206,13 @@ export default {
             const puzzleConfig = this.$store.getters['user/puzzleConfig'];
 
             this.$store.commit('user/setConfig', puzzleConfig(this.puzzleId));
+        },
+        reset() {
+            this.stopTicking();
+
+            Object.assign(this.$data, this.$options.data.apply(this));
+
+            this.$refs.puzzle.reset();
         },
         scramble() {
             this.inspectionStartedAt = 0;
@@ -221,7 +248,15 @@ export default {
                 }, 100);
             });
         },
+        startTicking() {
+            this.tickInterval = setInterval(this.tick, 10);
+        },
+        stopTicking() {
+            clearInterval(this.tickInterval);
+        },
         tick() {
+            console.log('ticking');
+
             if (this.isSolving) {
                 this.now = Date.now();
             }
@@ -240,9 +275,9 @@ export default {
     watch: {
         isSolving(isSolving) {
             if (isSolving) {
-                this.tickInterval = setInterval(this.tick, 10);
+                this.startTicking();
             } else {
-                clearInterval(this.tickInterval);
+                this.stopTicking();
             }
         },
     },

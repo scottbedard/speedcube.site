@@ -128,8 +128,7 @@ export default {
         this.isDestroying = true;
     },
     created() {
-        // instantiate our cube state
-        instantiateCube(this);
+        this.reset();
     },
     data() {
         return {
@@ -203,6 +202,11 @@ export default {
         redraw() {
             initialize(this);
             render(this);
+        },
+        reset() {
+            // instantiate our cube state
+            instantiateCube(this);
+            this.redraw();
         },
         setCubeState(state) {
             console.log('fine', state);
