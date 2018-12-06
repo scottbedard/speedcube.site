@@ -53,12 +53,12 @@
 </template>
 
 <script>
-import countdownComponent from './countdown/countdown.vue';
-import sidebarComponent from './sidebar/sidebar.vue';
-import timerComponent from './timer/timer.vue';
 import { mapState, mapGetters } from 'vuex';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postCreateSolve } from '@/app/repositories/solves';
+import countdownComponent from './countdown/countdown.vue';
+import sidebarComponent from './sidebar/sidebar.vue';
+import timerComponent from './timer/timer.vue';
 
 export default {
     created() {
@@ -131,10 +131,10 @@ export default {
                 return this.now - this.solveStartedAt;
             } else if (this.isComplete) {
                 const lastTurn = this.history[this.history.length - 1];
-                
-                return parseInt(lastTurn.split(':'));
+
+                return parseInt(lastTurn.split(':'), 10);
             }
-            
+
             return 0;
         },
     },
@@ -170,7 +170,7 @@ export default {
             this.isComplete = true;
             this.isSolving = false;
 
-            const request = postCreateSolve({
+            postCreateSolve({
                 scrambleId: this.scrambleId,
                 solution: this.history.join(' '),
             });

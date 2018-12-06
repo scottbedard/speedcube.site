@@ -182,6 +182,7 @@ export default {
             // determine if the cube is solved. to do this, we'll
             // create a pseudo-dependency on the turn queue in order
             // to re-calculate this value when the queue changes.
+            /* eslint-disable-next-line no-unused-expressions */
             this.queue;
 
             return !this.cube || this.cube.isSolved();
