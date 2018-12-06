@@ -67,6 +67,30 @@ class Solve extends Model
         if (!$this->testSolution()) {
             throw new InvalidSolutionException;
         }
+
+        // store solve details
+        $this->setMoves();
+        $this->setTime();
+    }
+
+    /**
+     * Get the solution as an array.
+     * 
+     * @return Array
+     */
+    public function getTurns()
+    {
+        return explode(' ', $this->solution);
+    }
+
+    /**
+     * Get the last turn in the solution.
+     * 
+     * @return string
+     */
+    public function getLastTurn()
+    {
+        return array_values(array_slice($this->getTurns(), -1))[0];
     }
 
     /**
@@ -77,6 +101,44 @@ class Solve extends Model
     protected function getTimelessSolution()
     {
         return preg_replace('/\d+\:|!!/', '', $this->solution);
+    }
+
+    /**
+     * Parse a turn.
+     * 
+     * @return Array
+     */
+    protected function parseTurn($turn)
+    {
+        return [
+            'time' => (int) explode(':', $turn)[0],
+        ];
+    }
+
+    /**
+     * Set move data.
+     * 
+     * @return void
+     */
+    protected function setMoves()
+    {
+        // ...
+    }
+
+    /**
+     * Set the solve time.
+     * 
+     * @return void
+     */
+    protected function setTime()
+    {
+        $lastTurn = $this->getLastTurn();
+
+        if ($lastTurn) {
+            $parsedTurn = $this->parseTurn($lastTurn);
+
+            $this->time = $parsedTurn['time'];
+        }
     }
 
     /**

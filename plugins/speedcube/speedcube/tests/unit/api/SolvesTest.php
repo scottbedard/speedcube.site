@@ -21,9 +21,15 @@ class SolvesApiTest extends PluginTestCase
             'scrambleId' => $scramble->id,
             'solution' => '0:X 10:X- !! 20:R 30:U- 40:R-',
         ]);
+        $content = json_decode($response->getContent(), true);
 
         // we should have one solution
         $this->assertEquals(1, Solve::count());
+
+        // verify that the solve was saved correctly
+        $solve = Solve::find($content['solve']['id']);
+        
+        $this->assertEquals(40, $solve->time);
     }
 
     public function test_creating_invalid_solves_throw_an_error()
