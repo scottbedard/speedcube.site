@@ -88,6 +88,9 @@ export default {
             // this is true during the inspection phase
             isInspecting: false,
 
+            // setTimeout id for inspection
+            inspectionTimeout: 0,
+
             // this is true during the solving phase
             isSolving: false,
 
@@ -158,13 +161,15 @@ export default {
             this.inspectionStartedAt = Date.now();
 
             // start the solve after 15
-            this.inspectionTimeoutId = setTimeout(this.beginSolve, 15000);
+            this.inspectionTimeout = setTimeout(this.beginSolve, 15000);
         },
         beginSolve() {
             // do nothing if the solve has already started
             if (this.isSolving) {
                 return;
             }
+
+            clearTimeout(this.inspectionTimeout);
 
             // update our state
             this.solveStartedAt = Date.now();
@@ -255,15 +260,15 @@ export default {
             clearInterval(this.tickInterval);
         },
         tick() {
-            console.log('ticking');
-
             if (this.isSolving) {
                 this.now = Date.now();
             }
         },
         turn(turn) {
+            const isPuzzleRotation = /\d*[xyzXYZ]-?\d?/g.test(turn);
+
             // disallow any moves that aren't whole-cube turns
-            if (this.isInspecting && !/\d*[xyzXYZ]-?\d?/g.test(turn)) {
+            if (this.isInspecting && !isPuzzleRotation) {
                 return;
             }
 
