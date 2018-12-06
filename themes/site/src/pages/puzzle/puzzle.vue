@@ -190,6 +190,7 @@ export default {
             }
 
             const offset = this.getTimeOffset();
+            console.log ('ok', turn);
 
             this.history.push(`${offset}:${turn}`);
 

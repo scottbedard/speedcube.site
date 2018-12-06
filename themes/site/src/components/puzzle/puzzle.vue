@@ -88,7 +88,7 @@ function instantiateCube(vm) {
 // render a frame
 function render(vm) {
     resizeRenderer(vm);
-    
+
     vm.renderer.render(vm.scene, vm.camera);
 }
 
@@ -204,8 +204,8 @@ export default {
             render(this);
         },
         setCubeState(state) {
-            console.log ('fine', state);
-            
+            console.log('fine', state);
+
             forOwn(state, (values, face) => {
                 values.forEach((value, index) => {
                     this.cube.state[face][index].value = value;

@@ -4,33 +4,33 @@ import { bindExternalEvent } from '@/app/utils/component';
 
 const defaultKeymap = {
     // face turns
-    'J': 'U',
-    'F': 'U-',
-    'D': 'L',
-    'E': 'L-',
-    'H': 'F',
-    'G': 'F-',
-    'I': 'R',
-    'K': 'R-',
-    'W': 'B',
-    'O': 'B-',
-    'S': 'D',
-    'L': 'D-',
+    J: 'U',
+    F: 'U-',
+    D: 'L',
+    E: 'L-',
+    H: 'F',
+    G: 'F-',
+    I: 'R',
+    K: 'R-',
+    W: 'B',
+    O: 'B-',
+    S: 'D',
+    L: 'D-',
 
     // cube rotations
-    'A': 'Y-',
+    A: 'Y-',
     ';': 'Y',
-    'R': 'X',
-    'U': 'X',
-    'T': 'X',
-    'Y': 'X',
-    'V': 'X-',
-    'C': 'X-',
-    'N': 'X-',
-    'M': 'X-',
-    'Q': 'Z-',
-    'P': 'Z',
-}
+    R: 'X',
+    U: 'X',
+    T: 'X',
+    Y: 'X',
+    V: 'X-',
+    C: 'X-',
+    N: 'X-',
+    M: 'X-',
+    Q: 'Z-',
+    P: 'Z',
+};
 
 // helper function to translate key events to input values
 function getKeyFromEvent(e) {
@@ -66,7 +66,7 @@ export default {
             } else {
                 // standard turns
                 const turn = this.config[getKeyFromEvent(e)];
-                
+
                 if (turn) {
                     const depth = this.depth > 1 ? this.depth : '';
 

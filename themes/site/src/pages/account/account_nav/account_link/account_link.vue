@@ -14,8 +14,8 @@ export default {
             bindings.class.push('border-grey-darker text-grey hover:text-grey-darker');
         }
 
-        return <router-link 
-            class="block border-l-2 flex items-center trans-color p-4 hover:no-underline" 
+        return <router-link
+            class="block border-l-2 flex items-center trans-color p-4 hover:no-underline"
             to={to}
             {...bindings}>
             <i class={['fa mr-4 text-center text-lg w-5', icon]} />

@@ -19,7 +19,7 @@
                 name="stickerRadius"
                 label="Sticker Radius"
                 :value="stickerRadius">
-                <v-input 
+                <v-input
                     v-model.number="stickerRadius"
                     type="range"
                     min="0"
@@ -34,11 +34,11 @@
                 name="stickerElevation"
                 label="Sticker Elevation"
                 :value="stickerElevation">
-                <v-input 
+                <v-input
                     v-model.number="stickerElevation"
-                    type="range" 
-                    min="0" 
-                    max="1" 
+                    type="range"
+                    min="0"
+                    max="1"
                     step="0.01"
                 />
             </v-form-field>
@@ -48,11 +48,11 @@
                 name="stickerScale"
                 label="Sticker Scaling"
                 :value="stickerScale">
-                <v-input 
+                <v-input
                     v-model.number="stickerScale"
-                    type="range" 
-                    min="0.05" 
-                    max="1" 
+                    type="range"
+                    min="0.05"
+                    max="1"
                     step="0.005"
                 />
             </v-form-field>
@@ -62,11 +62,11 @@
                 name="stickerInnerOpacity"
                 label="Inner Brightness"
                 :value="stickerInnerOpacity">
-                <v-input 
+                <v-input
                     v-model.number="stickerInnerOpacity"
-                    type="range" 
-                    min="0" 
-                    max="1" 
+                    type="range"
+                    min="0"
+                    max="1"
                     step="0.01"
                 />
             </v-form-field>
@@ -75,7 +75,7 @@
             <p v-if="!isAuthenticated" class="font-bold leading-normal mt-6 text-xs">
                 Be aware, you aren't signed in. Any changes will be lost when the page is refreshed.
             </p>
-            
+
             <!--
                 we're not using the actions slot because this form
                 is using smaller padding then normal ones. we might

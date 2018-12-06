@@ -24,7 +24,7 @@ export default {
 
         let defaultConfig = {};
 
-        // find the default config if the user has one        
+        // find the default config if the user has one
         if (!isUndefined(state.user.configs)) {
             const config = state.user.configs.find(cfg => cfg.puzzle === 'default');
 
@@ -58,6 +58,6 @@ export default {
             }
 
             return { ...defaultConfig, ...puzzleConfig };
-        }
+        };
     },
 };

@@ -23,7 +23,7 @@ export default {
             // load related user data
             return Promise.all([
                 // configurations
-                getConfigs().then((res) => commit('setConfigs', res.data.configs)),
+                getConfigs().then(res => commit('setConfigs', res.data.configs)),
             ]);
         }).finally(() => {
             // complete
