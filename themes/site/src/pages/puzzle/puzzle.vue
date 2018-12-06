@@ -28,18 +28,18 @@
             />
 
             <div class="text-center">
-                <!-- countdown -->
-                <div v-if="isInspecting" key="countdown">
-                    <v-countdown  />
+                <!-- timer -->
+                <div v-if="isSolving || isComplete" key="timer">
+                    <v-timer :time="time" />
                 </div>
 
-                <!-- timer -->
-                <div v-else-if="isSolving" key="timer">
-                    <v-timer :started-at="solveStartedAt" />
+                <!-- countdown -->
+                <div v-else-if="isInspecting" key="countdown">
+                    <v-countdown />
                 </div>
 
                 <!-- scramble -->
-                <div v-else key="scramble">
+                <div v-else-if="!isComplete" key="scramble">
                     <v-button
                         primary
                         :loading="scrambleIsLoading"
@@ -66,15 +66,41 @@ export default {
     },
     data() {
         return {
+            // history of inspection and solve
             history: [],
+
+            // time the inspection phase started
             inspectionStartedAt: 0,
+
+            // this is true when the solve is complete
+            isComplete: false,
+
+            // this is true during the inspection phase
             isInspecting: false,
+
+            // this is true during the solving phase
             isSolving: false,
+
+            // the current timestamp. this is updated when solving.
+            now: Date.now(),
+
+            // id of the Scramble model being solved
             scrambleId: 0,
+
+            // loading state for fetching a scramble from the server
             scrambleIsLoading: false,
+
+            // loading state for submitting a solve to the server
             solveIsLoading: false,
+
+            // time the solving phase started
             solveStartedAt: 0,
-            turnDuration: 100,
+
+            // interval id for our timer
+            tickInterval: 0,
+
+            // the turn duration of the cube
+            turnDuration: 95,
         };
     },
     components: {
@@ -100,6 +126,17 @@ export default {
         size() {
             return this.$route.meta.cubeSize;
         },
+        time() {
+            if (this.isSolving) {
+                return this.now - this.solveStartedAt;
+            } else if (this.isComplete) {
+                const lastTurn = this.history[this.history.length - 1];
+                
+                return lastTurn.split(':').shift();
+            }
+            
+            return 0;
+        },
     },
     methods: {
         beginInspection() {
@@ -124,13 +161,16 @@ export default {
             this.isSolving = true;
 
             // push a history entry to indicate the solve started
-            this.history.push('!!');
+            if (this.history.length > 0) {
+                this.history.push('!!');
+            }
         },
         getTimeOffset() {
             return Date.now() - this.inspectionStartedAt;
         },
         onSolved() {
             this.completeIsLoading = true;
+            this.isComplete = true;
             this.isSolving = false;
 
             const request = postCreateSolve({
@@ -152,6 +192,7 @@ export default {
         },
         scramble() {
             this.inspectionStartedAt = 0;
+            this.isComplete = false;
             this.isInspecting = false;
             this.isSolving = false;
             this.solveStartedAt = 0;
@@ -183,6 +224,11 @@ export default {
                 }, 100);
             });
         },
+        tick() {
+            if (this.isSolving) {
+                this.now = Date.now();
+            }
+        },
         turn(turn) {
             // disallow any moves that aren't whole-cube turns
             if (this.isInspecting && !/\d*[xyzXYZ]-?\d?/g.test(turn)) {
@@ -190,11 +236,19 @@ export default {
             }
 
             const offset = this.getTimeOffset();
-            console.log ('ok', turn);
 
             this.history.push(`${offset}:${turn}`);
 
             this.$refs.puzzle.turn(turn);
+        },
+    },
+    watch: {
+        isSolving(isSolving) {
+            if (isSolving) {
+                this.tickInterval = setInterval(this.tick, 10);
+            } else {
+                clearInterval(this.tickInterval);
+            }
         },
     },
 };
