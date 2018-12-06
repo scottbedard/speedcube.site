@@ -184,6 +184,11 @@ export default {
             });
         },
         turn(turn) {
+            // disallow any moves that aren't whole-cube turns
+            if (this.isInspecting && !/\d*[xyzXYZ]-?\d?/g.test(turn)) {
+                return;
+            }
+
             const offset = this.getTimeOffset();
 
             this.history.push(`${offset}:${turn}`);

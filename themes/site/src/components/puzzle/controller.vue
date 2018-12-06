@@ -44,27 +44,23 @@ export default {
     },
     data() {
         return {
-            depth: 1,
-            deep: false,
+            // ...
         };
     },
     methods: {
-        addDepth() {
-            this.depth = Math.min(this.size, this.depth + 1);
-        },
         onKeydown(e) {
             e.preventDefault();
             e.stopPropagation();
         },
         onKeyup(e) {
             if (e.key === 'Alt') {
-
+                // ...
             } else if (e.key === 'Control' || e.key === 'Meta') {
-                this.deep = !this.deep;
+                // ...
             } else if (e.key === 'Escape') {
-                this.$emit('abort');
+                // ...
             } else if (e.key === 'Shift') {
-                this.addDepth();
+                // ...
             } else if (e.key === ' ') {
                 this.$emit('space-up');
             } else {
@@ -74,7 +70,7 @@ export default {
                 if (turn) {
                     const depth = this.depth > 1 ? this.depth : '';
 
-                    this.$emit('turn', `${depth}${this.deep ? turn.toLowerCase() : turn.toUpperCase() }`);
+                    this.$emit('turn', `${depth}${this.deep ? turn.toLowerCase() : turn.toUpperCase()}`);
                 }
             }
         },
