@@ -7,3 +7,7 @@ columns:
         label: ID
     size:
         label: Cube Size
+    time:
+        label: Time
+        type: partial
+        path: $/speedcube/speedcube/models/solve/_column_time.htm
