@@ -127,8 +127,12 @@ export default {
             return this.$route.meta.cubeSize;
         },
         time() {
-            if (this.isSolving || this.isComplete) {
+            if (this.isSolving) {
                 return this.now - this.solveStartedAt;
+            } else if (this.isComplete) {
+                const lastTurn = this.history[this.history.length - 1];
+                
+                return parseInt(lastTurn.split(':'));
             }
             
             return 0;
@@ -161,9 +165,6 @@ export default {
                 this.history.push('!!');
             }
         },
-        getTimeOffset() {
-            return Date.now() - this.inspectionStartedAt;
-        },
         onSolved() {
             this.completeIsLoading = true;
             this.isComplete = true;
@@ -172,7 +173,6 @@ export default {
             const request = postCreateSolve({
                 scrambleId: this.scrambleId,
                 solution: this.history.join(' '),
-                time: this.time,
             });
         },
         onSpaceUp() {
@@ -232,9 +232,7 @@ export default {
                 return;
             }
 
-            const offset = this.getTimeOffset();
-
-            this.history.push(`${offset}:${turn}`);
+            this.history.push(`${this.time}:${turn}`);
 
             this.$refs.puzzle.turn(turn);
         },
