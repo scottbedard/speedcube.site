@@ -254,7 +254,7 @@ export default {
             });
         },
         startTicking() {
-            this.tickInterval = setInterval(this.tick, 10);
+            this.tickInterval = setInterval(this.tick, 5);
         },
         stopTicking() {
             clearInterval(this.tickInterval);
