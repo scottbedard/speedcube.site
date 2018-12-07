@@ -21,6 +21,7 @@ class Solve extends Model
      * @var array Attribute casting
      */
     protected $casts = [
+        'average_speed' => 'integer',
         'cube_size' => 'integer',
         'scramble_id' => 'integer',
         'size' => 'integer',
@@ -74,7 +75,6 @@ class Solve extends Model
 
         // store solve details
         $this->setCubeSize();
-        $this->setMoves();
         $this->setTime();
     }
 
@@ -123,17 +123,7 @@ class Solve extends Model
     }
 
     /**
-     * Set move data.
-     * 
-     * @return void
-     */
-    protected function setMoves()
-    {
-        
-    }
-
-    /**
-     * Set the solve time.
+     * Set time and move data.
      * 
      * @return void
      */
@@ -146,5 +136,9 @@ class Solve extends Model
 
             $this->time = $parsedTurn['time'];
         }
+
+        $this->moves = Cube::countTurns($this->solution);
+
+        $this->average_speed = round($this->time / $this->moves);
     }
 }

@@ -35,6 +35,8 @@ class SolvesApiTest extends PluginTestCase
         
         $this->assertEquals(40, $solve->time);
         $this->assertEquals(2, $solve->cube_size);
+        $this->assertEquals(3, $solve->moves);
+        $this->assertEquals(13, $solve->average_speed);
     }
 
     public function test_creating_invalid_solves_throw_an_error()

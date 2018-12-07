@@ -5,7 +5,6 @@
 columns:
     id:
         label: ID
-        width: 50px
 
     user:
         label: User
@@ -14,12 +13,20 @@ columns:
         type: partial
 
     cube_size:
-        label: Size
+        label: Cube size
 
     time:
-        label: Time
+        label: Solve time
         type: partial
         path: $/speedcube/speedcube/models/solve/_column_time.htm
+
+    moves:
+        label: Turns
+
+    average_speed:
+        label: Average speed
+        type: partial
+        path: $/speedcube/speedcube/models/solve/_column_average_speed.htm
 
     created_at:
         label: Date

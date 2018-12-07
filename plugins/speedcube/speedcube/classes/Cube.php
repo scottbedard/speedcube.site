@@ -2,6 +2,7 @@
 
 namespace Speedcube\Speedcube\Classes;
 
+use Speedcube\Speedcube\Classes\Utils;
 use Speedcube\Speedcube\Models\Scramble;
 
 class Cube
@@ -12,9 +13,56 @@ class Cube
      * @param  string   $turns
      * @return int
      */
-    public static function countTurns()
+    public static function countTurns(string $turns)
     {
-        return 5;
+        $result = 0;
+        $rawTurns = explode(' ', self::removeTimestamps($turns));
+
+        $intersections = [
+            'u' => ['b', 'r', 'f', 'l'],
+            'l' => ['u', 'f', 'd', 'b'],
+            'f' => ['u', 'r', 'd', 'l'],
+            'r' => ['u', 'b', 'd', 'f'],
+            'b' => ['u', 'l', 'd', 'b'],
+            'd' => ['f', 'r', 'b', 'l'],
+        ];
+
+        $previousFace = '';
+
+        foreach ($rawTurns as $turn) {
+            $parsedTurn = self::parseTurn($turn);
+
+            if ($parsedTurn['whole'] || $previousFace === $parsedTurn['face']) {
+                continue;
+            }
+
+            $previousFace = $parsedTurn['face'];
+            $result += 1;
+        }
+        
+        return $result;
+    }
+
+    /**
+     * Parse a turn.
+     * 
+     * @param  string   $turn
+     * @return Array
+     */
+    public static function parseTurn(string $turn)
+    {
+        preg_match('/^[0-9]+/', $turn, $rawDepth);
+        preg_match('/[A-Za-z]/', $turn, $face);
+
+        $face = $face ? strtolower($face[0]) : '';
+
+        return [
+            'depth' => $rawDepth ? $rawDepth[0] : 1,
+            'face' => $face,
+            'double' => Utils::endsWith($turn, '2'),
+            'prime' => Utils::endsWith($turn, '-'),
+            'whole' => in_array($face, ['x', 'y', 'z']),
+        ];
     }
 
     /**

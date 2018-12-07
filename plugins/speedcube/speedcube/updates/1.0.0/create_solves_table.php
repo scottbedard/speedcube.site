@@ -16,7 +16,7 @@ class CreateSolvesTable extends Migration
             $table->tinyInteger('cube_size')->default(0)->unsigned()->index();
             $table->integer('time')->default(0)->unsigned()->index();
             $table->integer('moves')->default(0)->unsigned()->index();
-            $table->integer('moves_per_second')->default(0)->unsigned()->index();
+            $table->integer('average_speed')->default(0)->unsigned()->index();
             $table->text('solution');
             $table->text('config');
             $table->timestamps();

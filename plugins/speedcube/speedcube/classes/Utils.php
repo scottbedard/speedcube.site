@@ -22,6 +22,23 @@ class Utils
 
         return $result;
     }
+
+    /**
+     * Test if a string ends with another string.
+     * 
+     * @param  string   $haystack
+     * @param  needle   $needle
+     * @return boolean
+     */
+    public static function endsWith($haystack, $needle) {
+        $length = strlen($needle);
+
+        if ($length == 0) {
+            return true;
+        }
+
+        return (substr($haystack, -$length) === $needle);
+    }
     
     /**
      * Test if a string is JSON.
