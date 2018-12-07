@@ -12,7 +12,7 @@ class CreateScramblesTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('solve_id')->nullable()->unsigned()->index();
-            $table->string('puzzle', 10)->index();
+            $table->tinyInteger('cube_size')->unsigned()->index();
             $table->text('scramble');
             $table->text('scrambled_state');
             $table->timestamps();

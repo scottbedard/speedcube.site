@@ -5,9 +5,23 @@
 columns:
     id:
         label: ID
-    size:
-        label: Cube Size
+        width: 50px
+
+    user:
+        label: User
+        path: $/speedcube/speedcube/models/solve/_column_user.htm
+        sortable: false
+        type: partial
+
+    cube_size:
+        label: Size
+
     time:
         label: Time
         type: partial
         path: $/speedcube/speedcube/models/solve/_column_time.htm
+
+    created_at:
+        label: Date
+        type: timetense
+

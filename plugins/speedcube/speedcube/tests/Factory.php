@@ -107,7 +107,7 @@ class Factory
     public static function scramble(array $data = [])
     {
         return [
-            'puzzle' => 'cube3',
+            'cube_size' => 3,
         ];
     }
 

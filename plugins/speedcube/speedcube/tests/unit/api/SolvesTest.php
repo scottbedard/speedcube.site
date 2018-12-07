@@ -12,7 +12,10 @@ class SolvesApiTest extends PluginTestCase
     public function test_creating_a_solve_3x3()
     {
         // create a dummy scramble
-        $scramble = Factory::create(new Scramble);
+        $scramble = Factory::create(new Scramble, [
+            'cube_size' => 2,
+        ]);
+
         $scramble->scramble = 'R U R-';
         $scramble->save();
 
@@ -21,6 +24,7 @@ class SolvesApiTest extends PluginTestCase
             'scrambleId' => $scramble->id,
             'solution' => '0:X 10:X- !! 20:R 30:U- 40:R-',
         ]);
+
         $content = json_decode($response->getContent(), true);
 
         // we should have one solution
@@ -30,6 +34,7 @@ class SolvesApiTest extends PluginTestCase
         $solve = Solve::find($content['solve']['id']);
         
         $this->assertEquals(40, $solve->time);
+        $this->assertEquals(2, $solve->cube_size);
     }
 
     public function test_creating_invalid_solves_throw_an_error()

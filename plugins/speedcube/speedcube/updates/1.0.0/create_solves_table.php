@@ -13,6 +13,7 @@ class CreateSolvesTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->nullable()->unsigned()->index();
             $table->integer('scramble_id')->nullable()->unsigned()->index();
+            $table->tinyInteger('cube_size')->default(0)->unsigned()->index();
             $table->integer('time')->default(0)->unsigned()->index();
             $table->integer('moves')->default(0)->unsigned()->index();
             $table->integer('moves_per_second')->default(0)->unsigned()->index();

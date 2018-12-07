@@ -2,6 +2,7 @@
 
 namespace Speedcube\Speedcube\Http\Controllers;
 
+use Auth;
 use Exception;
 use Speedcube\Speedcube\Classes\ApiController;
 use Speedcube\Speedcube\Models\Solve;
@@ -18,9 +19,12 @@ class SolvesController extends ApiController
         $data = input();
 
         try {
+            $user = Auth::getUser();
+
             $solve = Solve::create([
                 'scramble_id' => $data['scrambleId'],
                 'solution' => $data['solution'],
+                'user_id' => $user ? $user->id : null,
             ]);
 
             // success

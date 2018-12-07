@@ -26,4 +26,9 @@ class Solves extends Controller
 
         BackendMenu::setContext('Speedcube.Speedcube', 'speedcube', 'solves');
     }
+
+    public function listExtendQuery($query)
+    {
+        $query->with('user');
+    }
 }

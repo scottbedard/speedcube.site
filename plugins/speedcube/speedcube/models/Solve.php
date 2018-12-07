@@ -20,6 +20,7 @@ class Solve extends Model
      * @var array Attribute casting
      */
     protected $casts = [
+        'cube_size' => 'integer',
         'scramble_id' => 'integer',
         'size' => 'integer',
     ];
@@ -41,6 +42,7 @@ class Solve extends Model
         'scramble_id',
         'size',
         'solution',
+        'user_id',
     ];
 
     /**
@@ -56,6 +58,7 @@ class Solve extends Model
      */
     public $belongsTo = [
         'scramble' => 'Speedcube\Speedcube\Models\Scramble',
+        'user' => 'RainLab\User\Models\User',
     ];
 
     /**
@@ -69,6 +72,7 @@ class Solve extends Model
         }
 
         // store solve details
+        $this->setCubeSize();
         $this->setMoves();
         $this->setTime();
     }
@@ -116,13 +120,25 @@ class Solve extends Model
     }
 
     /**
+     * Set cube size.
+     * 
+     * @return void
+     */
+    protected function setCubeSize()
+    {
+        if ($this->scramble) {
+            $this->cube_size = $this->scramble->cube_size;
+        }
+    }
+
+    /**
      * Set move data.
      * 
      * @return void
      */
     protected function setMoves()
     {
-        // ...
+        
     }
 
     /**
@@ -151,7 +167,7 @@ class Solve extends Model
         $scramble = $this->scramble;
 
         $cubePath = base_path('themes/site/node_modules/bedard-cube/cli.js');
-        $sizeArg = escapeshellarg($scramble->getCubeSize());
+        $sizeArg = escapeshellarg($scramble->cube_size);
         $stateArg = escapeshellarg($scramble->scrambled_state);
         $solutionArg = escapeshellarg($this->getTimelessSolution());
 

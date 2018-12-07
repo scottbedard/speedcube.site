@@ -18,7 +18,9 @@ class ScramblesController extends ApiController
         try{
             $params = input();
 
-            $scramble = Scramble::create($params);
+            $scramble = Scramble::create([
+                'cube_size' => $params['cubeSize'],
+            ]);
             
         } catch (Exception $err) {
             return $this->failed($err);
