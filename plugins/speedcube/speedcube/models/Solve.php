@@ -1,5 +1,6 @@
 <?php namespace Speedcube\Speedcube\Models;
 
+use Speedcube\Speedcube\Classes\Cube;
 use Speedcube\Speedcube\Exceptions\InvalidSolutionException;
 use Model;
 
@@ -67,7 +68,7 @@ class Solve extends Model
     public function beforeCreate()
     {
         // verify that our solution is correct
-        if (!$this->testSolution()) {
+        if (!Cube::testSolution($this->scramble, $this->solution)) {
             throw new InvalidSolutionException;
         }
 
@@ -95,16 +96,6 @@ class Solve extends Model
     public function getLastTurn()
     {
         return array_values(array_slice($this->getTurns(), -1))[0];
-    }
-
-    /**
-     * Remove time offsets from the solution.
-     * 
-     * @return string
-     */
-    protected function getTimelessSolution()
-    {
-        return preg_replace('/\d+\:|!!/', '', $this->solution);
     }
 
     /**
@@ -155,22 +146,5 @@ class Solve extends Model
 
             $this->time = $parsedTurn['time'];
         }
-    }
-
-    /**
-     * Test the solution.
-     * 
-     * @return void
-     */
-    protected function testSolution()
-    {
-        $scramble = $this->scramble;
-
-        $cubePath = base_path('themes/site/node_modules/bedard-cube/cli.js');
-        $sizeArg = escapeshellarg($scramble->cube_size);
-        $stateArg = escapeshellarg($scramble->scrambled_state);
-        $solutionArg = escapeshellarg($this->getTimelessSolution());
-
-        return exec("node {$cubePath} test {$sizeArg} {$stateArg} {$solutionArg}") === '1';
     }
 }
