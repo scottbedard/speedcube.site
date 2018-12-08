@@ -14,6 +14,7 @@ class Solve extends Model
      */
     public $attributes = [
         'config' => '{}',
+        'is_rated' => false,
         'solution' => '',
     ];
 
@@ -23,6 +24,7 @@ class Solve extends Model
     protected $casts = [
         'average_speed' => 'integer',
         'cube_size' => 'integer',
+        'is_rated' => 'boolean',
         'scramble_id' => 'integer',
         'size' => 'integer',
     ];
@@ -75,6 +77,7 @@ class Solve extends Model
 
         // store solve details
         $this->setCubeSize();
+        $this->setRated();
         $this->setTime();
     }
 
@@ -119,6 +122,18 @@ class Solve extends Model
     {
         if ($this->scramble) {
             $this->cube_size = $this->scramble->cube_size;
+        }
+    }
+
+    /**
+     * Set the rated attribute.
+     * 
+     * @return void
+     */
+    protected function setRated()
+    {
+        if (!self::where('scramble_id', $this->scramble_id)->exists()) {
+            $this->is_rated = true;
         }
     }
 

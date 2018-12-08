@@ -12,11 +12,12 @@ class CreateSolvesTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('user_id')->nullable()->unsigned()->index();
+            $table->boolean('is_rated')->default(false)->index();
             $table->integer('scramble_id')->nullable()->unsigned()->index();
             $table->tinyInteger('cube_size')->default(0)->unsigned()->index();
             $table->integer('time')->default(0)->unsigned()->index();
             $table->integer('moves')->default(0)->unsigned()->index();
-            $table->integer('average_speed')->default(0)->unsigned()->index();
+            $table->integer('average_speed')->default(0)->unsigned();
             $table->text('solution');
             $table->text('config');
             $table->timestamps();
