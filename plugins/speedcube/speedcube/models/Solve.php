@@ -139,6 +139,11 @@ class Solve extends Model
         return $query->orderBy('time', 'asc');
     }
 
+    public function scopeFewestMoves($query)
+    {
+        return $query->orderBy('moves', 'asc');
+    }
+
     public function scopeRated($query)
     {
         return $query->where('is_rated', true);

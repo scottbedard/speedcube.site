@@ -88,7 +88,7 @@ class SolvesApiTest extends PluginTestCase
     //
     // fastest all time
     //
-    public function test_fetching_fastest_solves_all_time()
+    public function test_fetching_fastest_solves()
     {
         // create some dummy scrambles
         $a = Factory::create(new Scramble, ['cube_size' => 3]);
@@ -128,10 +128,7 @@ class SolvesApiTest extends PluginTestCase
         ]);
         
         // fetch the fastest solves
-        $response = $this->get('/api/speedcube/speedcube/solves', [
-            'cube_size' => 3,
-        ]);
-
+        $response = $this->get('/api/speedcube/speedcube/solves?cubeSize=3&orderBy=time');
         $data = json_decode($response->getContent(), true);
         
         $this->assertEquals(2, count($data['solves']));

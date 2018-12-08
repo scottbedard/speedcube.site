@@ -46,11 +46,11 @@ class SolvesController extends ApiController
     {
         try {
             $data = input();
-            $size = array_key_exists('cubeSize', $data) ? $data['cubeSize'] : 3;
 
-            $solves = Solve::rated()
-                ->size($size)
-                ->fastest()
+            //
+            // base query
+            //
+            $query = Solve::rated()
                 ->select([
                     'average_speed',
                     'created_at',
@@ -61,11 +61,30 @@ class SolvesController extends ApiController
                     'user_id',
                 ])
                 ->limit(20)
-                ->withUserSummary()
-                ->get();
+                ->withUserSummary();
+
+            //
+            // size
+            //
+            if (array_key_exists('cubeSize', $data)) {
+                $query->size($data['cubeSize']);
+            }
+            
+            //
+            // order
+            //
+            if (array_key_exists('orderBy', $data)) {
+                $orderBy = $data['orderBy'];
+
+                if ($orderBy === 'time') {
+                    $query->fastest();
+                } elseif ($orderBy === 'moves') {
+                    $query->fewestMoves();
+                } 
+            }
 
             return $this->success([
-                'solves' => $solves,
+                'solves' => $query->get(),
             ]);
         } catch (Exception $e) {
             return $this->failed($e);
