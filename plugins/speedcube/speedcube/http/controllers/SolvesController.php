@@ -42,23 +42,32 @@ class SolvesController extends ApiController
      * 
      * @return Response
      */
-    public function fastestAllTime()
+    public function index()
     {
         try {
             $data = input();
-            $size = array_key_exists('cube_size', $data) ? $data['cube_size'] : 3;
+            $size = array_key_exists('cubeSize', $data) ? $data['cubeSize'] : 3;
 
             $solves = Solve::rated()
                 ->size($size)
                 ->fastest()
+                ->select([
+                    'average_speed',
+                    'created_at',
+                    'cube_size',
+                    'id',
+                    'moves',
+                    'time',
+                    'user_id',
+                ])
                 ->limit(20)
+                ->withUserSummary()
                 ->get();
 
             return $this->success([
                 'solves' => $solves,
             ]);
         } catch (Exception $e) {
-            dd($e->getMessage());
             return $this->failed($e);
         }
     }

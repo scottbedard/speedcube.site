@@ -2,12 +2,20 @@
     <nav class="flex h-full items-center">
         <!-- user -->
         <template v-if="isAuthenticated">
-            <div class="pr-8">
-                <v-desktop-link :to="{ name: 'puzzle:3' }">
-                    Solve
-                </v-desktop-link>
+            <!-- solve -->
+            <v-desktop-link :to="{ name: 'puzzle:3' }">
+                Solve
+            </v-desktop-link>
+
+            <!-- records -->
+            <v-desktop-link :to="{ name: 'records' }">
+                Records
+            </v-desktop-link>
+
+            <!-- user -->
+            <div class="ml-8">
+                <v-user />
             </div>
-            <v-user />
         </template>
 
         <!-- guest -->
@@ -25,6 +33,11 @@
             <!-- solve -->
             <v-desktop-link :to="{ name: 'puzzle:3' }">
                 Solve
+            </v-desktop-link>
+
+            <!-- records -->
+            <v-desktop-link :to="{ name: 'records' }">
+                Records
             </v-desktop-link>
         </template>
     </nav>

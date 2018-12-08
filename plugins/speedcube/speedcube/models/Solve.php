@@ -131,6 +131,15 @@ class Solve extends Model
         return $query->where('cube_size', $size);
     }
 
+    public function scopeWithUserSummary($query)
+    {
+        return $query->with([
+            'user' => function($user) {
+                $user->select(['id', 'name']);
+            },
+        ]);
+    }
+
     /**
      * Set cube size.
      * 

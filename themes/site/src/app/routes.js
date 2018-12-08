@@ -68,7 +68,7 @@ export default [
             },
 
             //
-            // 50x50
+            // max
             //
             {
                 meta: {
@@ -136,6 +136,15 @@ export default [
                 name: 'home',
                 path: '/',
                 component: () => import('@/pages/home/home.vue' /* webpackChunkName: "home" */),
+            },
+
+            //
+            // records
+            //
+            {
+                name: 'records',
+                path: '/records',
+                component: () => import('@/pages/records/records.vue' /* webpackChunkName: "records" */),
             },
 
             //
