@@ -21,3 +21,9 @@ export const isTouch = false;
 // key codes
 export const enterKeyCode = 13;
 export const spacebarKeyCode = 32;
+
+// our common string format for date values
+// tip: this format is useful because it's human readable and values
+//      can be compared with each other as strings. for example...
+//      '2018-01-01 12:00:00' > '2017-01-01 12:00:00' // true
+export const timestampFormat = 'YYYY-MM-DD HH:mm:ss';

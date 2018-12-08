@@ -16,6 +16,7 @@ import pageComponent from './containers/page.vue';
 import puzzleComponent from './puzzle/puzzle.vue';
 import puzzleControllerComponent from './puzzle/controller.vue';
 import spinnerComponent from './ui/spinner.vue';
+import tableComponent from './ui/table.vue';
 
 export default {
     //
@@ -51,4 +52,5 @@ export default {
     'v-form-field': formFieldComponent,
     'v-input': inputComponent,
     'v-spinner': spinnerComponent,
+    'v-table': tableComponent,
 };

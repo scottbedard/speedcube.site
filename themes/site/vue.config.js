@@ -71,5 +71,12 @@ module.exports = {
             },
         },
     },
+    pluginOptions: {
+        moment: {
+            locales: [
+                'en',
+            ],
+        }
+    },
     runtimeCompiler: isTesting,
 };

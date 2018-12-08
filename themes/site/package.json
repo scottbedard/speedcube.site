@@ -13,6 +13,7 @@
     "bedard-cube": "^0.5.2",
     "color": "^3.1.0",
     "lodash-es": "^4.17.11",
+    "moment": "^2.22.2",
     "spyfu-vue-functional": "^0.2.6",
     "spyfu-vuex-helpers": "^0.12.4",
     "three": "^0.98.0",

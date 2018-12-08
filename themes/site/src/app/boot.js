@@ -7,6 +7,11 @@ import globalComponents from '@/components/global';
 import './directives/autofocus';
 
 //
+// filters
+//
+import './filters/moment';
+
+//
 // plugins
 //
 import './plugins/alert';
