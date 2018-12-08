@@ -32,7 +32,7 @@
                 <v-collapse-transition>
                     <!-- timer -->
                     <div v-if="isSolving || isComplete" key="timer">
-                        <v-timer :time="time" />
+                        <v-timer :time="time - solveStartedAt" />
                         <v-fade-transition>
                             <div v-if="isComplete" class="mt-4" key="loading">
                                 <v-tip>press spacebar to scramble</v-tip>
@@ -106,9 +106,6 @@ export default {
             // loading state for submitting a solve to the server
             solveIsLoading: false,
 
-            // time the solving phase started
-            solveStartedAt: 0,
-
             // interval id for our timer
             tickInterval: 0,
 
@@ -140,9 +137,16 @@ export default {
         size() {
             return this.$route.meta.cubeSize;
         },
+        solveStartedAt() {
+            const startEvent = this.history.find(entry => entry.endsWith('#START'));
+
+            return startEvent
+                ? parseInt(startEvent.split('#')[0], 10)
+                : 0;
+        },
         time() {
-            if (this.isSolving) {
-                return this.now - this.solveStartedAt;
+            if (this.isInspecting || this.isSolving) {
+                return this.now - this.inspectionStartedAt;
             } else if (this.isComplete && this.history.length > 0) {
                 const lastTurn = this.history[this.history.length - 1];
 
@@ -172,13 +176,12 @@ export default {
             clearTimeout(this.inspectionTimeout);
 
             // update our state
-            this.solveStartedAt = Date.now();
             this.isInspecting = false;
             this.isSolving = true;
 
             // push a history entry to indicate the solve started
             if (this.history.length > 0) {
-                this.history.push('!!');
+                this.history.push(`${this.time}#START`);
             }
         },
         onEscape() {
@@ -198,6 +201,9 @@ export default {
             postCreateSolve({
                 scrambleId: this.scrambleId,
                 solution: this.history.join(' '),
+            }).finally(() => {
+                // complete
+                this.completeIsLoading = false;
             });
         },
         onSpaceUp() {
@@ -224,7 +230,6 @@ export default {
             this.isComplete = false;
             this.isInspecting = false;
             this.isSolving = false;
-            this.solveStartedAt = 0;
 
             // request a new solve from the server, and set the
             // cube state to the scrambled state of our solve
@@ -260,7 +265,7 @@ export default {
             clearInterval(this.tickInterval);
         },
         tick() {
-            if (this.isSolving) {
+            if (this.isInspecting || this.isSolving) {
                 this.now = Date.now();
             }
         },
@@ -278,10 +283,13 @@ export default {
         },
     },
     watch: {
-        isSolving(isSolving) {
-            if (isSolving) {
+        isInspecting(isInspecting) {
+            if (isInspecting) {
                 this.startTicking();
-            } else {
+            }
+        },
+        isSolving(isSolving) {
+            if (!isSolving) {
                 this.stopTicking();
             }
         },

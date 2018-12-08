@@ -27,6 +27,7 @@ class Solve extends Model
         'is_rated' => 'boolean',
         'scramble_id' => 'integer',
         'size' => 'integer',
+        'time' => 'integer',
     ];
 
     /**
@@ -82,13 +83,22 @@ class Solve extends Model
     }
 
     /**
-     * Get the solution as an array.
+     * Get the timestamp of the first occurance of a solve event.
      * 
-     * @return Array
+     * @param  string   $event
+     * @return integer
      */
-    public function getTurns()
+    public function getEventTimestamp($event)
     {
-        return explode(' ', $this->solution);
+        $turns = $this->getTurns();
+
+        foreach ($turns as $turn) {
+            if (preg_match('/\d+\#[a-zA-Z]+/', $turn)) {
+                return (int) explode('#', $turn)[0];
+            }
+        }
+
+        return 0;
     }
 
     /**
@@ -102,15 +112,23 @@ class Solve extends Model
     }
 
     /**
+     * Get the solution as an array.
+     * 
+     * @return Array
+     */
+    public function getTurns()
+    {
+        return explode(' ', $this->solution);
+    }
+
+    /**
      * Parse a turn.
      * 
      * @return Array
      */
-    protected function parseTurn($turn)
+    public function getTimestampForTurn($turn)
     {
-        return [
-            'time' => (int) explode(':', $turn)[0],
-        ];
+        return (int) explode(':', $turn)[0];
     }
 
     /**
@@ -171,13 +189,16 @@ class Solve extends Model
      */
     protected function setTime()
     {
+        $time = 0;
         $lastTurn = $this->getLastTurn();
+        $startAt = $this->getEventTimestamp('START');
 
         if ($lastTurn) {
-            $parsedTurn = $this->parseTurn($lastTurn);
-
-            $this->time = $parsedTurn['time'];
+            $lastTurnAt = $this->getTimestampForTurn($lastTurn);
+            $time = $lastTurnAt - $startAt;
         }
+
+        $this->time = $time;
 
         $this->moves = Cube::countTurns($this->solution);
 

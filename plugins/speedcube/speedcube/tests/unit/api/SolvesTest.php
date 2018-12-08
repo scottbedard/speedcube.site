@@ -15,17 +15,14 @@ class SolvesApiTest extends PluginTestCase
     public function test_creating_a_solve_3x3()
     {
         // create a dummy scramble
-        $scramble = Factory::create(new Scramble, [
-            'cube_size' => 2,
-        ]);
-
+        $scramble = Factory::create(new Scramble, ['cube_size' => 2]);
         $scramble->scramble = 'R U R-';
         $scramble->save();
 
         // submit a solution for it
         $response = $this->post('/api/speedcube/speedcube/solves', [
             'scrambleId' => $scramble->id,
-            'solution' => '0:X 10:X- !! 20:R 30:U- 40:R-',
+            'solution' => '100:X 200:X- 300#START 400:R 500:U- 600:R-',
         ]);
 
         $content = json_decode($response->getContent(), true);
@@ -36,10 +33,10 @@ class SolvesApiTest extends PluginTestCase
         // verify that the solve was saved correctly
         $solve = Solve::find($content['solve']['id']);
         
-        $this->assertEquals(40, $solve->time);
+        $this->assertEquals(300, $solve->time);
         $this->assertEquals(2, $solve->cube_size);
         $this->assertEquals(3, $solve->moves);
-        $this->assertEquals(13, $solve->average_speed);
+        $this->assertEquals(100, $solve->average_speed);
     }
 
     public function test_creating_invalid_solves_throws_error()
@@ -131,7 +128,7 @@ class SolvesApiTest extends PluginTestCase
         ]);
         
         // fetch the fastest solves
-        $response = $this->get('/api/speedcube/speedcube/solves/fastest-all-time', [
+        $response = $this->get('/api/speedcube/speedcube/solves', [
             'cube_size' => 3,
         ]);
 

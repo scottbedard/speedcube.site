@@ -73,7 +73,7 @@ class Cube
      */
     public static function removeTimestamps(string $turns)
     {
-        return preg_replace('/\d+\:|!!/', '', $turns);
+        return preg_replace('/\d+\:|\d+\#[a-zA-Z]+/', '', $turns);
     }
 
     /**
