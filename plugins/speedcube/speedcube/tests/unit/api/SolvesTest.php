@@ -9,6 +9,9 @@ use Speedcube\Speedcube\Tests\PluginTestCase;
 
 class SolvesApiTest extends PluginTestCase
 {
+    //
+    // create
+    //
     public function test_creating_a_solve_3x3()
     {
         // create a dummy scramble
@@ -83,5 +86,59 @@ class SolvesApiTest extends PluginTestCase
         
         $this->assertTrue($firstContent['solve']['isRated']);
         $this->assertFalse($secondContent['solve']['isRated']);
+    }
+
+    //
+    // fastest all time
+    //
+    public function test_fetching_fastest_solves_all_time()
+    {
+        // create some dummy scrambles
+        $a = Factory::create(new Scramble, ['cube_size' => 3]);
+        $a->scramble = 'R';
+        $a->save();
+
+        $b = Factory::create(new Scramble, ['cube_size' => 3]);
+        $b->scramble = 'R';
+        $b->save();
+
+        $c = Factory::create(new Scramble, ['cube_size' => 2]);
+        $c->scramble = 'R';
+        $c->save();
+
+        // create a solve for each scramble. solveB will be the fastest
+        // solveC is not rated, and should not be present in the results
+        $solveA = Factory::create(new Solve, [
+            'scramble_id' => $a->id,
+            'solution' => '200:R-',
+        ]);
+
+        $solveB = Factory::create(new Solve, [
+            'scramble_id' => $b->id,
+            'solution' => '100:R-',
+        ]);
+
+        // this solve is a duplicate of scramble b and should be unrated
+        Factory::create(new Solve, [
+            'scramble_id' => $b->id,
+            'solution' => '300:R-',
+        ]);
+
+        // this solve is for a scramble of a different size
+        Factory::create(new Solve, [
+            'scramble_id' => $c->id,
+            'solution' => '300:R-',
+        ]);
+        
+        // fetch the fastest solves
+        $response = $this->get('/api/speedcube/speedcube/solves/fastest-all-time', [
+            'cube_size' => 3,
+        ]);
+
+        $data = json_decode($response->getContent(), true);
+        
+        $this->assertEquals(2, count($data['solves']));
+        $this->assertEquals($solveB->id, $data['solves'][0]['id']);
+        $this->assertEquals($solveA->id, $data['solves'][1]['id']);
     }
 }

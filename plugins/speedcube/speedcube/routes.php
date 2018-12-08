@@ -17,6 +17,7 @@ Route::prefix('api/speedcube/speedcube')
 
         // solves
         Route::post('solves', 'Speedcube\Speedcube\Http\Controllers\SolvesController@create');
+        Route::get('solves/fastest-all-time', 'Speedcube\Speedcube\Http\Controllers\SolvesController@fastestAllTime');
 
         //
         // authenticated routes

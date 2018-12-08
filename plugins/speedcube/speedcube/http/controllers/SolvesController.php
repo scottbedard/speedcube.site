@@ -31,9 +31,35 @@ class SolvesController extends ApiController
             return $this->success([
                 'solve' => $solve->toArray(),
             ]);
-        } catch (Exception $err) {
+        } catch (Exception $e) {
             // failure
-            return $this->failed($err);
+            return $this->failed($e);
+        }
+    }
+
+    /**
+     * Get the fastest solves of all time.
+     * 
+     * @return Response
+     */
+    public function fastestAllTime()
+    {
+        try {
+            $data = input();
+            $size = array_key_exists('cube_size', $data) ? $data['cube_size'] : 3;
+
+            $solves = Solve::rated()
+                ->size($size)
+                ->fastest()
+                ->limit(20)
+                ->get();
+
+            return $this->success([
+                'solves' => $solves,
+            ]);
+        } catch (Exception $e) {
+            dd($e->getMessage());
+            return $this->failed($e);
         }
     }
 }

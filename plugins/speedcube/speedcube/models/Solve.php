@@ -114,6 +114,24 @@ class Solve extends Model
     }
 
     /**
+     * Scopes
+     */
+    public function scopeFastest($query)
+    {
+        return $query->orderBy('time', 'asc');
+    }
+
+    public function scopeRated($query)
+    {
+        return $query->where('is_rated', true);
+    }
+
+    public function scopeSize($query, int $size)
+    {
+        return $query->where('cube_size', $size);
+    }
+
+    /**
      * Set cube size.
      * 
      * @return void
