@@ -3,6 +3,7 @@
 namespace Speedcube\Speedcube\Tests;
 
 use Auth;
+use Carbon\Carbon;
 use Faker;
 use Model;
 use RainLab\User\Models\User;
@@ -98,6 +99,7 @@ class Factory
             'name' => $faker->firstName(rand(0, 1)) . ' ' . $faker->lastName,
             'password' => 'foobar',
             'password_confirmation' => 'foobar',
+            'created_at' => Carbon::now()->subDays(rand(0, 365)),
         ];
     }
 

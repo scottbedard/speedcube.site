@@ -3,6 +3,7 @@
         <v-table
             :data="tableData"
             :schema="schema"
+            @row-click="onRowClick"
         />
     </v-section>
 </template>
@@ -58,6 +59,14 @@ export default {
                 this.isLoading = false;
             });
         },
+        onRowClick({ row }) {
+            this.$router.push({
+                name: 'replay',
+                params: {
+                    id: row.id,
+                },
+            });
+        }
     },
     components: {
         'v-section': sectionComponent,

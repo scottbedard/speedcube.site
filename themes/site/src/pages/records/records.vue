@@ -7,7 +7,7 @@
             </h1> 
 
             <p class="font-thin text-grey text-xl">
-                The fastest and most efficient solves ever achieved.
+                These are the fastest solves ever performed.
             </p>
         </div>
 

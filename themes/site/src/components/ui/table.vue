@@ -13,7 +13,7 @@
 <script>
 /* eslint-disable no-use-before-define */
 import { bindAll } from 'spyfu-vue-functional';
-import { isObject } from 'lodash-es';
+import { isFunction, isObject } from 'lodash-es';
 
 function normalizeColumn(col) {
     return {
@@ -41,9 +41,21 @@ function headerCell(h, col) {
 //
 function tr(h, context, row, rowIndex) {
     const { schema } = context.props;
+    const bindings = {};
     const key = `row_${rowIndex}`;
 
-    return <tr key={key}>
+    // attach row-click listener
+    if (isFunction(context.listeners['row-click'])) {
+        bindings.class = 'cursor-pointer';
+
+        bindings.on = {
+            click(event) {
+                context.listeners['row-click']({ event, index: rowIndex, row });
+            },
+        };
+    }
+
+    return <tr key={key} {...bindings}>
         {schema.map((col, colIndex) => rowCell(h, row, rowIndex, col, colIndex))}
     </tr>;
 }

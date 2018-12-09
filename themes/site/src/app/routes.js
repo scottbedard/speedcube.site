@@ -148,6 +148,15 @@ export default [
             },
 
             //
+            // replay
+            //
+            {
+                name: 'replay',
+                path: '/replay/:id',
+                component: () => import('@/pages/replay/replay.vue' /* webpackChunkName: "replay" */),
+            },
+
+            //
             // signin
             //
             {

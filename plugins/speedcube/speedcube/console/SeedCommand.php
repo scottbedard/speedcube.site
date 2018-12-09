@@ -32,8 +32,8 @@ class SeedCommand extends Command
     {
         $this->output->writeln('Seeding all tables');
 
-        $this->seedUsers(10);
-        $this->seedSolves(25);
+        $this->seedUsers(100);
+        $this->seedSolves(1000);
     }
 
     /**
