@@ -28,6 +28,12 @@
                 <v-puzzle
                     ref="puzzle"
                     :size="solve.cubeSize"
+                    :colors="config.colors"
+                    :sticker-elevation="config.stickerElevation"
+                    :sticker-inner-opacity="config.stickerInnerOpacity"
+                    :sticker-radius="config.stickerRadius"
+                    :sticker-scale="config.stickerScale"
+                    :turn-duration="config.turnDuration"
                 />
             </div>
 
@@ -105,6 +111,9 @@ export default {
         };
     },
     computed: {
+        config() {
+            return this.isLoading ? {} : this.solve.config;
+        },
         solution() {
             if (!this.solve) {
                 return [];
