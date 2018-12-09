@@ -14,7 +14,7 @@ export default {
     mounted() {
         const tick = setInterval(this.tick, 1000);
 
-        this.$on('hook:destroyed', () => window.clearInterval(tick));
+        this.$on('hook:destroyed', () => clearInterval(tick));
     },
     methods: {
         tick() {

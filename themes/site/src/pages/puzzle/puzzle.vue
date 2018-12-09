@@ -65,9 +65,7 @@
 import { mapState, mapGetters } from 'vuex';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postCreateSolve } from '@/app/repositories/solves';
-import countdownComponent from './countdown/countdown.vue';
 import sidebarComponent from './sidebar/sidebar.vue';
-import timerComponent from './timer/timer.vue';
 import tipComponent from './tip/tip.vue';
 
 export default {
@@ -114,9 +112,7 @@ export default {
         };
     },
     components: {
-        'v-countdown': countdownComponent,
         'v-sidebar': sidebarComponent,
-        'v-timer': timerComponent,
         'v-tip': tipComponent,
     },
     computed: {

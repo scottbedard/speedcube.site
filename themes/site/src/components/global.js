@@ -3,6 +3,7 @@ import buttonComponent from './ui/button.vue';
 import cardComponent from './ui/card.vue';
 import checkboxComponent from './ui/checkbox.vue';
 import collapseTransitionComponent from './transitions/collapse.vue';
+import countdownComponent from './ui/countdown.vue';
 import cubeColorPickerComponent from './ui/cube_color_picker.vue';
 import errorMessageComponent from './ui/error_message.vue';
 import fadeTransitionComponent from './transitions/fade.vue';
@@ -17,6 +18,7 @@ import puzzleComponent from './puzzle/puzzle.vue';
 import puzzleControllerComponent from './puzzle/controller.vue';
 import spinnerComponent from './ui/spinner.vue';
 import tableComponent from './ui/table.vue';
+import timerComponent from './ui/timer.vue';
 
 export default {
     //
@@ -46,6 +48,7 @@ export default {
     'v-button': buttonComponent,
     'v-card': cardComponent,
     'v-checkbox': checkboxComponent,
+    'v-countdown': countdownComponent,
     'v-cube-color-picker': cubeColorPickerComponent,
     'v-error-message': errorMessageComponent,
     'v-form': formComponent,
@@ -53,4 +56,5 @@ export default {
     'v-input': inputComponent,
     'v-spinner': spinnerComponent,
     'v-table': tableComponent,
+    'v-timer': timerComponent,
 };
