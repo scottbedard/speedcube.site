@@ -24,10 +24,13 @@ class Solve extends Model
     protected $casts = [
         'average_speed' => 'integer',
         'cube_size' => 'integer',
+        'id' => 'integer',
         'is_rated' => 'boolean',
+        'moves' => 'integer',
         'scramble_id' => 'integer',
         'size' => 'integer',
         'time' => 'integer',
+        'user_id' => 'integer',
     ];
 
     /**

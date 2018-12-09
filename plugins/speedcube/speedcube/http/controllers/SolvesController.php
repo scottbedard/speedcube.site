@@ -38,6 +38,22 @@ class SolvesController extends ApiController
     }
 
     /**
+     * Find a solve.
+     * 
+     * @return Response
+     */
+    public function find($id)
+    {
+        $solve = Solve::withUserSummary()
+            ->with('scramble')
+            ->find($id);
+
+        return $this->success([
+            'solve' => $solve,
+        ]);
+    }
+
+    /**
      * Get the fastest solves of all time.
      * 
      * @return Response

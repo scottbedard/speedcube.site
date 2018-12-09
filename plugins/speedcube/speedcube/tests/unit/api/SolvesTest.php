@@ -86,7 +86,7 @@ class SolvesApiTest extends PluginTestCase
     }
 
     //
-    // fastest all time
+    // index
     //
     public function test_fetching_fastest_solves()
     {
@@ -134,5 +134,30 @@ class SolvesApiTest extends PluginTestCase
         $this->assertEquals(2, count($data['solves']));
         $this->assertEquals($solveB->id, $data['solves'][0]['id']);
         $this->assertEquals($solveA->id, $data['solves'][1]['id']);
+    }
+
+    //
+    // find
+    //
+    public function test_finding_a_solve()
+    {
+        $user = Factory::registerUser();
+
+        $scramble = Factory::create(new Scramble, ['cube_size' => 3]);
+        $scramble->scramble = 'R';
+        $scramble->save();
+
+        $solve = Factory::create(new Solve, [
+            'scramble_id' => $scramble->id,
+            'solution' => '1000:R-',
+            'user_id' => $user->id,
+        ]);
+        
+        $response = $this->get("/api/speedcube/speedcube/solves/{$solve->id}");
+        $data = json_decode($response->getContent(), true);
+        
+        $this->assertEquals($solve->id, $data['solve']['id']);
+        $this->assertEquals($solve->scramble->id, $data['solve']['scramble']['id']);
+        $this->assertEquals($solve->user->id, $data['solve']['user']['id']);
     }
 }

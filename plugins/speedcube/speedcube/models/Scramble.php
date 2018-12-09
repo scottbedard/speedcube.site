@@ -13,6 +13,15 @@ class Scramble extends Model
     public $table = 'speedcube_speedcube_scrambles';
 
     /**
+     * @var array Attribute casting
+     */
+    protected $casts = [
+        'cube_size' => 'integer',
+        'id' => 'integer',
+        'solve_id' => 'integer',
+    ];
+
+    /**
      * @var array Guarded fields
      */
     protected $guarded = ['*'];

@@ -16,8 +16,10 @@ Route::prefix('api/speedcube/speedcube')
         Route::post('scrambles', 'Speedcube\Speedcube\Http\Controllers\ScramblesController@create');
 
         // solves
+        Route::get('solves/{id}', 'Speedcube\Speedcube\Http\Controllers\SolvesController@find');
         Route::get('solves', 'Speedcube\Speedcube\Http\Controllers\SolvesController@index');
         Route::post('solves', 'Speedcube\Speedcube\Http\Controllers\SolvesController@create');
+
 
         //
         // authenticated routes
