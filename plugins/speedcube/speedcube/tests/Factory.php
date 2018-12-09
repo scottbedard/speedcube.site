@@ -83,7 +83,7 @@ class Factory
      */
     public static function registerUser(array $data = [], $autoActivate = true)
     {
-        return Auth::register(self::getUserData($data), $autoActivate);
+        return Auth::register(self::user($data), $autoActivate);
     }
 
     /**
@@ -91,11 +91,11 @@ class Factory
      */
     public static function user(array $data = [])
     {
-        $faker = Faker\Factory::create();
+        $faker = Faker\Factory::create('en_US');
 
         return [
-            'email' => $faker->email,
-            'name' => $faker->name,
+            'email' => $faker->safeEmail,
+            'name' => $faker->firstName(rand(0, 1)) . ' ' . $faker->lastName,
             'password' => 'foobar',
             'password_confirmation' => 'foobar',
         ];

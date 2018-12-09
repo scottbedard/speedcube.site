@@ -64,6 +64,7 @@ class Plugin extends PluginBase
      */
     public function register()
     {
+        $this->registerConsoleCommand('speedcube.seed', 'Speedcube\Speedcube\Console\SeedCommand');
     }
 
     /**

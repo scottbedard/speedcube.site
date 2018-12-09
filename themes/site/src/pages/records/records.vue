@@ -11,17 +11,10 @@
             </p>
         </div>
 
-        <v-grid padded>
-            <!-- fastest -->
-            <v-grid-cell md="6">
-                <v-fastest />
-            </v-grid-cell>
-
-            <!-- fewest moves -->
-            <v-grid-cell md="6">
-                Fewest moves
-            </v-grid-cell>
-        </v-grid>
+        <!-- fastest -->
+        <div class="max-w-sm mx-auto">
+            <v-fastest />
+        </div>
     </v-page>
 </template>
 

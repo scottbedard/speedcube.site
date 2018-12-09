@@ -1,9 +1,6 @@
 <template>
-    <v-section
-        title="Fastest"
-        :loading="isLoading">
+    <v-section :loading="isLoading">
         <v-table
-            class="max-w-sm mx-auto"
             :data="tableData"
             :schema="schema"
         />
@@ -52,6 +49,7 @@ export default {
 
             getSolves({
                 cubeSize: 3,
+                orderBy: 'time',
             }).then((response) => {
                 // success
                 this.solves = response.data.solves;

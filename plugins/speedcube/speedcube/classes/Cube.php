@@ -77,6 +77,21 @@ class Cube
     }
 
     /**
+     * Reverse a scramble.
+     * 
+     * @param  string   $turns
+     * @return string
+     */
+    public static function reverseScramble(string $turns)
+    {
+        return implode(' ', array_map(function($turn) {
+            if (Utils::endsWith($turn, '2')) return $turn;
+            if (Utils::endsWith($turn, '-')) return str_replace('-', '', $turn);
+            return $turn . '-';
+        }, array_reverse(explode(' ', $turns))));
+    }
+
+    /**
      * Test a scramble solution.
      * 
      * @param  \Speedcube\Speedcube\Models\Scramble $scramble
