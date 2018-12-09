@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+// get solve
+export function getSolve(id) {
+    return axios.get(`/api/speedcube/speedcube/solves/${id}`);
+}
+
 // get solves
 export function getSolves(params = {}) {
     return axios.get('/api/speedcube/speedcube/solves', { params });

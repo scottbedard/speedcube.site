@@ -7,7 +7,7 @@
 
         <!-- date -->
         <div class="text-grey-dark text-xs">
-            {{ props.row.createdAt | date('MMMM Do, YYYY') }}
+            {{ props.row.createdAt | datestamp }}
         </div>
     </div>
 </template>
