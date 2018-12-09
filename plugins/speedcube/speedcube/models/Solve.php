@@ -47,6 +47,7 @@ class Solve extends Model
      * @var array Fillable fields
      */
     protected $fillable = [
+        'config',
         'scramble_id',
         'size',
         'solution',
@@ -58,7 +59,6 @@ class Solve extends Model
      */
     protected $jsonable = [
         'config',
-        'solution',
     ];
 
     /**

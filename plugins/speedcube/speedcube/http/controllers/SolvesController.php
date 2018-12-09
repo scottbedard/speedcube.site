@@ -20,8 +20,10 @@ class SolvesController extends ApiController
 
         try {
             $user = Auth::getUser();
+            $config = array_key_exists('config', $data) ? $data['config'] : [];
 
             $solve = Solve::create([
+                'config' => $config,
                 'scramble_id' => $data['scrambleId'],
                 'solution' => $data['solution'],
                 'user_id' => $user ? $user->id : null,

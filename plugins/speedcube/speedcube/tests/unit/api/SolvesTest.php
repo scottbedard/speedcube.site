@@ -12,15 +12,18 @@ class SolvesApiTest extends PluginTestCase
     //
     // create
     //
-    public function test_creating_a_solve_3x3()
+    public function test_creating_a_solve()
     {
         // create a dummy scramble
-        $scramble = Factory::create(new Scramble, ['cube_size' => 2]);
+        $scramble = Factory::create(new Scramble, ['cube_size' => 3]);
         $scramble->scramble = 'R U R-';
         $scramble->save();
 
         // submit a solution for it
         $response = $this->post('/api/speedcube/speedcube/solves', [
+            'config' => [
+                'colors' => ['#000000', '#111111', '#222222', '#333333', '#444444', '#555555'],
+            ],
             'scrambleId' => $scramble->id,
             'solution' => '100:X 200:X- 300#START 400:R 500:U- 600:R-',
         ]);
@@ -34,9 +37,10 @@ class SolvesApiTest extends PluginTestCase
         $solve = Solve::find($content['solve']['id']);
         
         $this->assertEquals(300, $solve->time);
-        $this->assertEquals(2, $solve->cube_size);
+        $this->assertEquals(3, $solve->cube_size);
         $this->assertEquals(3, $solve->moves);
         $this->assertEquals(100, $solve->average_speed);
+        $this->assertEquals('#000000', $solve->config['colors'][0]);
     }
 
     public function test_creating_invalid_solves_throws_error()

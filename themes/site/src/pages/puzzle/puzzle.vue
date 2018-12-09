@@ -116,6 +116,9 @@ export default {
         'v-tip': tipComponent,
     },
     computed: {
+        ...mapState('user', [
+            'config',
+        ]),
         ...mapState('user', {
             colors: state => state.config.colors,
             stickerElevation: state => state.config.stickerElevation,
@@ -195,6 +198,7 @@ export default {
             this.isSolving = false;
 
             postCreateSolve({
+                config: this.config,
                 scrambleId: this.scrambleId,
                 solution: this.history.join(' '),
             }).finally(() => {
