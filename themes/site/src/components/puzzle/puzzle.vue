@@ -209,8 +209,6 @@ export default {
             this.redraw();
         },
         setCubeState(state) {
-            console.log('fine', state);
-
             forOwn(state, (values, face) => {
                 values.forEach((value, index) => {
                     this.cube.state[face][index].value = value;
@@ -278,6 +276,7 @@ export default {
     watch: {
         colors: 'redraw',
         masked: 'redraw',
+        size: 'reset',
         stickerElevation: 'redraw',
         stickerInnerOpacity: 'redraw',
         stickerRadius: 'redraw',

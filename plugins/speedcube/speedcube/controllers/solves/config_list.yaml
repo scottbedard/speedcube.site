@@ -12,7 +12,7 @@ modelClass: Speedcube\Speedcube\Models\Solve
 title: Manage Solves
 
 # Link URL for each record
-recordUrl: speedcube/speedcube/solves/update/:id
+recordOnClick: "window.location = '/replay/:id'"
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records
