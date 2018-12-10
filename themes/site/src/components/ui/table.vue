@@ -103,26 +103,57 @@ function rowCell(h, row, rowIndex, col, colIndex) {
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { data, schema } = context.props;
+        const { data, headers, loading, schema } = context.props;
+        const empty = data.length === 0;
 
-        return <table
-            class="v-table w-full"
-            {...bindings}>
-            <thead>
-                <tr>
-                    {schema.map(col => headerCell(h, col))}
-                </tr>
-            </thead>
-            <tbody>
-                {data.map((row, index) => tr(h, context, row, index))}
-            </tbody>
-        </table>;
+        return <div class="v-table">
+            <v-collapse-transition>
+
+                {/* loading */}
+                { loading &&
+                    <div class="text-center" key="loading">
+                        <v-spinner />
+                    </div>
+                }
+
+                {/* empty */}
+                { !loading && empty &&
+                    <div key="empty">
+                        {context.slots().empty}
+                    </div>
+                }
+
+                {/* table */}
+                { !loading && !empty &&
+                    <table class="w-full" key="table"
+                        {...bindings}>
+                        { (headers === undefined || headers === true) &&
+                            <thead>
+                                <tr>
+                                    {schema.map(col => headerCell(h, col))}
+                                </tr>
+                            </thead>
+                        }
+                        <tbody>
+                            {data.map((row, index) => tr(h, context, row, index))}
+                        </tbody>
+                    </table>
+                }
+            </v-collapse-transition>
+        </div>;
     },
     functional: true,
     props: {
         data: {
             default: () => [],
             type: Array,
+        },
+        headers: {
+            type: Boolean,
+        },
+        loading: {
+            default: false,
+            type: Boolean,
         },
         schema: {
             type: Array,

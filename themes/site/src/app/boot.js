@@ -10,6 +10,7 @@ import './directives/autofocus';
 // filters
 //
 import './filters/moment';
+import './filters/timer';
 
 //
 // plugins

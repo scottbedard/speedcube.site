@@ -2,7 +2,10 @@
     <v-page padded>
         
         <!-- loading -->
-        <div v-if="isLoading" key="loading">
+        <div
+            v-if="isLoading"
+            class="text-center"
+            key="loading">
             <v-spinner />
         </div>
 
@@ -16,7 +19,7 @@
             <!-- title -->
             <div class="text-center">
                 <h1 class="font-thin mb-4">
-                    {{ user.name }}'s <strong class="font-bold">{{ (solve.time / 1000).toFixed(2) }}</strong> solve
+                    {{ user.name }}'s <strong class="font-bold">{{ solve.time | shortTimer }}</strong> solve
                 </h1>
                 <div class="font-thin text-grey-dark">
                     {{ solve.createdAt | datestamp }}
@@ -69,6 +72,7 @@
 
 <script>
 import { getSolve } from '@/app/repositories/solves';
+import { formatTime } from '@/app/utils/string';
 
 export default {
     created() {

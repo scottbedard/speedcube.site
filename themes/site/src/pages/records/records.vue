@@ -2,7 +2,7 @@
     <v-page padded>
         <!-- title -->
         <div class="mb-12 text-center">
-            <h1 class="font-thin mb-4 tracking-wide">
+            <h1 class="font-thin mb-2 tracking-wide">
                 All Time Records
             </h1> 
 
@@ -11,19 +11,25 @@
             </p>
         </div>
 
-        <!-- fastest -->
-        <div class="max-w-sm mx-auto">
-            <v-fastest />
+        <!-- nav -->
+        <div class="mb-12 text-center">
+            <v-nav />
+        </div>
+        
+        <div class="max-w-xs mx-auto">
+            <v-event />
         </div>
     </v-page>
 </template>
 
 <script>
-import fastestComponent from './fastest/fastest.vue';
+import navComponent from './nav/nav.vue';
+import eventComponent from './event/event.vue';
 
 export default {
     components: {
-        'v-fastest': fastestComponent,
+        'v-nav': navComponent,
+        'v-event': eventComponent,
     },
 };
 </script>

@@ -1,11 +1,32 @@
 <template>
-    <v-section :loading="isLoading">
-        <v-table
-            :data="tableData"
-            :schema="schema"
-            @row-click="onRowClick"
-        />
-    </v-section>
+    <div>
+        <v-fade-transition>
+            <!-- loading -->
+            <div
+                v-if="isLoading"
+                class="text-center"
+                key="loading">
+                <v-spinner />
+            </div>
+
+            <!-- table -->
+            <div
+                v-else
+                key="table">
+                <v-table
+                    :data="tableData"
+                    :headers="false"
+                    :schema="schema"
+                    @row-click="onRowClick">
+                    <div
+                        class="text-center text-grey-darker"
+                        slot="empty">
+                        Nobody has completed a {{ event }} solve yet.
+                    </div>
+                </v-table>
+            </div>
+        </v-fade-transition>
+    </div>
 </template>
 
 <script>
@@ -25,6 +46,19 @@ export default {
         };
     },
     computed: {
+        cubeSize() {
+            switch (this.event) {
+                case '2x2': return 2;
+                case '3x3': return 3;
+                case '4x4': return 4;
+                case '5x5': return 5;
+            }
+
+            return 0;
+        },
+        event() {
+            return this.$route.query.event || '3x3';
+        },
         schema() {
             return [
                 {
@@ -49,7 +83,7 @@ export default {
             this.isLoading = true;
 
             getSolves({
-                cubeSize: 3,
+                cubeSize: this.cubeSize,
                 orderBy: 'time',
             }).then((response) => {
                 // success
@@ -66,10 +100,13 @@ export default {
                     id: row.id,
                 },
             });
-        }
+        },
     },
     components: {
         'v-section': sectionComponent,
     },
+    watch: {
+        $route: 'fetchSolves',
+    }
 };
 </script>
