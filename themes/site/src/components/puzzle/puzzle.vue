@@ -54,6 +54,11 @@ function executeNextTurn(vm) {
             vm.cube.turn([currentTurn]);
             vm.queue.shift();
 
+            // test if the cube is solved, and if so emit an event
+            if (vm.isSolved && vm.queue.length === 0) {
+                onSolved(vm);
+            }
+
             // reposition the stickers and execute the next turn
             positionStickers(vm);
             executeNextTurn(vm);
@@ -83,6 +88,11 @@ function initialize(vm) {
 // reactivity system. we'll manage this ourselves.
 function instantiateCube(vm) {
     vm.cube = new Cube(vm.size, { useObjects: true });
+}
+
+// called when the cube is solved
+function onSolved(vm) {
+    vm.$emit('solved');
 }
 
 // render a frame
@@ -179,7 +189,7 @@ export default {
         },
         isSolved() {
             // determine if the cube is solved. to do this, we'll
-            // create a pseudo-dependency on the turn queue in order
+            // explicitely create a dependency on the turn queue
             // to re-calculate this value when the queue changes.
             /* eslint-disable-next-line no-unused-expressions */
             this.queue;
@@ -282,11 +292,6 @@ export default {
         stickerRadius: 'redraw',
         stickerScale: 'redraw',
         turnDuration: 'redraw',
-        isSolved(isSolved, oldIsSolved) {
-            if (isSolved && !oldIsSolved) {
-                this.$emit('solved');
-            }
-        },
         queue(queue) {
             if (queue.length === 0) {
                 this.$emit('idle');

@@ -193,6 +193,10 @@ export default {
                 return;
             }
 
+            // attach an event completing the solve
+            this.history.push(`${this.time}#END`);
+
+            // close our the state tracking the solve
             this.completeIsLoading = true;
             this.isComplete = true;
             this.isSolving = false;

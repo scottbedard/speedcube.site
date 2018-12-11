@@ -97,7 +97,13 @@ class Solve extends Model
 
         foreach ($turns as $turn) {
             if (preg_match('/\d+\#[a-zA-Z]+/', $turn)) {
-                return (int) explode('#', $turn)[0];
+                $parts = explode('#', $turn);
+                $time = $parts[0];
+                $name = $parts[1];
+
+                if ($name === $event) {
+                    return (int) $time;
+                }
             }
         }
 
@@ -200,16 +206,10 @@ class Solve extends Model
         $time = 0;
         $lastTurn = $this->getLastTurn();
         $startAt = $this->getEventTimestamp('START');
+        $endAt = $this->getEventTimestamp('END') - $startAt;
 
-        if ($lastTurn) {
-            $lastTurnAt = $this->getTimestampForTurn($lastTurn);
-            $time = $lastTurnAt - $startAt;
-        }
-
-        $this->time = $time;
-
+        $this->time = $endAt;
         $this->moves = Cube::countTurns($this->solution);
-
         $this->average_speed = round($this->time / $this->moves);
     }
 }

@@ -66,14 +66,14 @@ class Cube
     }
 
     /**
-     * Remove time data from a set of turns.
+     * Remove time data and events from a set of turns.
      * 
      * @param  string   $turns
      * @return string
      */
     public static function removeTimestamps(string $turns)
     {
-        return preg_replace('/\d+\:|\d+\#[a-zA-Z]+/', '', $turns);
+        return trim(preg_replace('/\d+\:|\d+\#[a-zA-Z]+/', '', $turns));
     }
 
     /**

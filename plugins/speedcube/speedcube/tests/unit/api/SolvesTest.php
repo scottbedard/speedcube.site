@@ -25,7 +25,7 @@ class SolvesApiTest extends PluginTestCase
                 'colors' => ['#000000', '#111111', '#222222', '#333333', '#444444', '#555555'],
             ],
             'scrambleId' => $scramble->id,
-            'solution' => '100:X 200:X- 300#START 400:R 500:U- 600:R-',
+            'solution' => '100:X 200:X- 300#START 400:R 500:U- 550:R- 600#END',
         ]);
 
         $content = json_decode($response->getContent(), true);
@@ -111,24 +111,24 @@ class SolvesApiTest extends PluginTestCase
         // solveC is not rated, and should not be present in the results
         $solveA = Factory::create(new Solve, [
             'scramble_id' => $a->id,
-            'solution' => '200:R-',
+            'solution' => '0#START 100:R- 200#END',
         ]);
 
         $solveB = Factory::create(new Solve, [
             'scramble_id' => $b->id,
-            'solution' => '100:R-',
+            'solution' => '0#START 100:R- 150#END',
         ]);
 
         // this solve is a duplicate of scramble b and should be unrated
         Factory::create(new Solve, [
             'scramble_id' => $b->id,
-            'solution' => '300:R-',
+            'solution' => '0#START 100:R- 200#END',
         ]);
 
         // this solve is for a scramble of a different size
         Factory::create(new Solve, [
             'scramble_id' => $c->id,
-            'solution' => '300:R-',
+            'solution' => '0#START 100:R- 200#END',
         ]);
         
         // fetch the fastest solves
