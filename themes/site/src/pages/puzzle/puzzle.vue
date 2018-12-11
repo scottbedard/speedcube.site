@@ -32,7 +32,7 @@
                 <v-collapse-transition>
                     <!-- timer -->
                     <div v-if="isSolving || isComplete" key="timer">
-                        <v-timer :time="time - solveStartedAt" />
+                        <v-timer :time="time" />
                         <v-fade-transition>
                             <div v-if="isComplete" class="mt-4" key="loading">
                                 <v-tip>press spacebar to scramble</v-tip>
@@ -65,6 +65,7 @@
 import { mapState, mapGetters } from 'vuex';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postCreateSolve } from '@/app/repositories/solves';
+import { cleanTimeout } from '@/app/utils/component';
 import sidebarComponent from './sidebar/sidebar.vue';
 import tipComponent from './tip/tip.vue';
 
@@ -74,6 +75,9 @@ export default {
     },
     data() {
         return {
+            // final time property when completed
+            completeTime: 0,
+
             // history of inspection and solve
             history: [],
 
@@ -86,7 +90,7 @@ export default {
             // this is true during the inspection phase
             isInspecting: false,
 
-            // setTimeout id for inspection
+            // cleanTimeout id for inspection
             inspectionTimeout: 0,
 
             // this is true during the solving phase
@@ -100,6 +104,9 @@ export default {
 
             // loading state for fetching a scramble from the server
             scrambleIsLoading: false,
+
+            // timestamp for the start of the solve
+            solveStartedAt: 0,
 
             // loading state for submitting a solve to the server
             solveIsLoading: false,
@@ -136,23 +143,21 @@ export default {
         size() {
             return this.$route.meta.cubeSize;
         },
-        solveStartedAt() {
-            const startEvent = this.history.find(entry => entry.endsWith('#START'));
-
-            return startEvent
-                ? parseInt(startEvent.split('#')[0], 10)
-                : 0;
-        },
         time() {
-            if (this.isInspecting || this.isSolving) {
+            if (this.isInspecting) {
                 return this.now - this.inspectionStartedAt;
+            } else if (this.isSolving) {
+                return this.now - this.solveStartedAt;
             } else if (this.isComplete && this.history.length > 0) {
-                const lastTurn = this.history[this.history.length - 1];
-
-                return parseInt(lastTurn.split(':'), 10);
+                return this.completeTime;
             }
 
             return 0;
+            // if (this.isInspecting || this.isSolving) {
+            //     return this.now - this.solveStartedAt;
+            // }
+
+            // return this.now - this.inspectionStartedAt;
         },
     },
     methods: {
@@ -163,8 +168,14 @@ export default {
             this.isInspecting = true;
             this.inspectionStartedAt = Date.now();
 
-            // start the solve after 15
-            this.inspectionTimeout = setTimeout(this.beginSolve, 15000);
+            // start the solve for this scramble after 15
+            const scrambleId = this.scrambleId;
+
+            this.inspectionTimeout = cleanTimeout(this, () => {
+                if (this.scrambleId === scrambleId) {
+                    this.beginSolve();
+                }
+            }, 15000);
         },
         beginSolve() {
             // do nothing if the solve has already started
@@ -172,16 +183,19 @@ export default {
                 return;
             }
 
-            clearTimeout(this.inspectionTimeout);
 
-            // update our state
-            this.isInspecting = false;
-            this.isSolving = true;
+            clearTimeout(this.inspectionTimeout);
+            
+            this.solveStartedAt = Date.now();
 
             // push a history entry to indicate the solve started
             if (this.history.length > 0) {
                 this.history.push(`${this.time}#START`);
             }
+
+            // update our state
+            this.isInspecting = false;
+            this.isSolving = true;
         },
         onEscape() {
             this.reset();
@@ -194,10 +208,13 @@ export default {
             }
 
             // attach an event completing the solve
-            this.history.push(`${this.time}#END`);
+            const completeTime = this.time;
+
+            this.history.push(`${completeTime}#END`);
 
             // close our the state tracking the solve
             this.completeIsLoading = true;
+            this.completeTime = completeTime;
             this.isComplete = true;
             this.isSolving = false;
 
@@ -212,7 +229,7 @@ export default {
         },
         onSpaceUp() {
             if (this.isInspecting) {
-                this.beginSolve();
+                this.beginSolve(this.scrambleId);
             } else if (!this.isSolving) {
                 this.scramble();
             }
@@ -225,15 +242,17 @@ export default {
         reset() {
             this.stopTicking();
 
+            this.inspectionStartedAt = 0;
+            this.isComplete = false;
+            this.isInspecting = false;
+            this.isSolving = false;
+
             Object.assign(this.$data, this.$options.data.apply(this));
 
             this.$refs.puzzle.reset();
         },
         scramble() {
-            this.inspectionStartedAt = 0;
-            this.isComplete = false;
-            this.isInspecting = false;
-            this.isSolving = false;
+            this.reset();
 
             // request a new solve from the server, and set the
             // cube state to the scrambled state of our solve
@@ -256,7 +275,7 @@ export default {
                 this.$refs.puzzle.setCubeState(response.data.scrambledState);
 
                 // give the cube a sec to render, and away we go
-                setTimeout(() => {
+                cleanTimeout(this, () => {
                     this.scrambleIsLoading = false;
                     this.beginInspection();
                 }, 100);

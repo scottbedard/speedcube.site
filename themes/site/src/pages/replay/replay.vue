@@ -73,6 +73,7 @@
 <script>
 import { getSolve } from '@/app/repositories/solves';
 import { formatTime } from '@/app/utils/string';
+import { cleanTimeout } from '@/app/utils/component';
 
 export default {
     created() {
@@ -183,7 +184,7 @@ export default {
 
             // and queue each turn in the solve
             this.solution.forEach(({ time, turn }) => {
-                setTimeout(() => this.$refs.puzzle.turn(turn), time);
+                cleanTimeout(this, () => this.$refs.puzzle.turn(turn), time);
             });
         },
         reset() {
@@ -195,7 +196,7 @@ export default {
             this.isComplete = false;
             this.isInspecting = true;
 
-            setTimeout(() => {
+            cleanTimeout(this, () => {
                 this.isInspecting = false;
 
                 this.startSolve();
@@ -207,7 +208,7 @@ export default {
 
             this.startTicking();
 
-            setTimeout(() => {
+            cleanTimeout(this, () => {
                 this.isSolving = false;
 
                 this.completeSolve();

@@ -18,6 +18,7 @@
 import Cube from 'bedard-cube';
 
 import { forOwn } from 'lodash-es';
+import { cleanTimeout } from '@/app/utils/component';
 
 import {
     attachStickers,
@@ -123,7 +124,7 @@ function updateTurnProgress(vm) {
         const progress = i / fps;
         const timeout = progress * vm.turnDuration;
 
-        setTimeout(() => {
+        cleanTimeout(vm, () => {
             vm.currentTurnProgress = progress;
         }, timeout);
     }

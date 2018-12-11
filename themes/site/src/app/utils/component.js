@@ -13,6 +13,21 @@ export function bindExternalEvent(vm, target, ...options) {
 }
 
 /**
+ * Create a timeout that is cleaned up when the vm is destroyed.
+ *
+ * @param {Vue}         vm 
+ * @param {Function}    callback 
+ * @param {number}      timeout 
+ */
+export function cleanTimeout(vm, callback, timeout) {
+    const timeoutId = setTimeout(callback, timeout);
+
+    vm.$once('hook:destroyed', () => clearTimeout(timeoutId));
+
+    return timeoutId;
+}
+
+/**
  * Find an ancestor component.
  *
  * @param  {Vue}            vm
