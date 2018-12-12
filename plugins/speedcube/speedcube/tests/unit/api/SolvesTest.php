@@ -2,6 +2,7 @@
 
 namespace Speedcube\Speedcube\Tests\Unit\Api;
 
+use Auth;
 use Speedcube\Speedcube\Models\Scramble;
 use Speedcube\Speedcube\Models\Solve;
 use Speedcube\Speedcube\Tests\Factory;
@@ -21,75 +22,108 @@ class SolvesApiTest extends PluginTestCase
     //
     // create
     //
-    public function test_creating_a_solve()
+    public function test_completing_a_solve_as_guest()
     {
         // create a dummy scramble
         $scramble = self::createScramble('R U R-');
 
-        // submit a solution for it
-        $response = $this->post('/api/speedcube/speedcube/solves', [
+        // submit a request to complete a solve for it
+        $response = $this->post("/api/speedcube/speedcube/solves", [
             'config' => [
                 'colors' => ['#000000', '#111111', '#222222', '#333333', '#444444', '#555555'],
             ],
             'scrambleId' => $scramble->id,
-            'solution' => '100:X 200:X- 300#START 400:R 500:U- 550:R- 600#END',
+            'solution' => '0#START 100:R 200:U- 300:R- 400#END',
         ]);
 
-        $content = json_decode($response->getContent(), true);
+        $response->assertStatus(200);
 
-        // we should have one solution
+        $data = json_decode($response->getContent(), true);
+
+        // one solve should now exist in our database
+        $solve = Solve::find($data['solve']['id']);
+
         $this->assertEquals(1, Solve::count());
-
-        // verify that the solve was saved correctly
-        $solve = Solve::find($content['solve']['id']);
-        
-        $this->assertEquals(300, $solve->time); // 600 end - 300 start
+        $this->assertNull($solve->user_id);
         $this->assertEquals(3, $solve->cube_size);
         $this->assertEquals(3, $solve->moves);
-        $this->assertEquals(100, $solve->average_speed);
+        $this->assertEquals(133, $solve->average_speed);
         $this->assertEquals('#000000', $solve->config['colors'][0]);
+        $this->assertEquals('solved', $solve->result);
     }
 
-    public function test_creating_invalid_solves_throws_error()
+    public function test_completing_a_solve_as_a_user()
+    {
+        $user = Factory::registerUser();
+
+        Auth::login($user);
+        
+        $scramble = self::createScramble('R U R-');
+
+        $solve = Factory::create(new Solve, [
+            'scramble_id' => $scramble->id,
+            'user_id' => $user->id,
+        ]);
+
+        $response = $this->post("/api/speedcube/speedcube/solves", [
+            'config' => [
+                'colors' => ['#000000', '#111111', '#222222', '#333333', '#444444', '#555555'],
+            ],
+            'scrambleId' => $scramble->id,
+            'solution' => '0#START 100:R 200:U- 300:R- 400#END',
+        ]);
+
+        $response->assertStatus(200);
+
+        $data = json_decode($response->getContent(), true);
+
+        // one solve should now exist in our database
+        $solve = Solve::find($data['solve']['id']);
+
+        $this->assertEquals(1, Solve::count());
+        $this->assertEquals($user->id, $solve->user_id);
+    }
+    
+    public function test_completing_a_solve_with_an_incorrect_solution()
     {
         // generate a scramble and submit an incorrect solution for it
         $scramble = self::createScramble('R');
 
         $response = $this->post('/api/speedcube/speedcube/solves', [
             'scrambleId' => $scramble->id,
-            'solution' => '100#START 200:U 300#END',
+            'solution' => '0#START 100:F 200#END',
         ]);
 
-        $content = json_decode($response->getContent(), true);
+        $data = json_decode($response->getContent(), true);
         
-        $this->assertEquals('failed', $content['status']);
+        $this->assertEquals('dnf', $data['solve']['result']);
     }
 
-    public function test_creating_multiple_solves_for_same_scramble_throws_error()
-    {
-        $scramble = self::createScramble('R');
+    // public function test_creating_multiple_solves_for_same_scramble_throws_error()
+    // {
+    //     $scramble = self::createScramble('R');
 
-        $first = $this->post('/api/speedcube/speedcube/solves', [
-            'scrambleId' => $scramble->id,
-            'solution' => '0:R-',
-        ]);
+    //     $first = $this->post('/api/speedcube/speedcube/solves', [
+    //         'scrambleId' => $scramble->id,
+    //         'solution' => '0:R-',
+    //     ]);
 
-        $second = $this->post('/api/speedcube/speedcube/solves', [
-            'scrambleId' => $scramble->id,
-            'solution' => '0:R-',
-        ]);
+    //     $second = $this->post('/api/speedcube/speedcube/solves', [
+    //         'scrambleId' => $scramble->id,
+    //         'solution' => '0:R-',
+    //     ]);
 
-        // both requests should return a 200
-        $first->assertStatus(200);
-        $second->assertStatus(200);
+    //     // both requests should return a 200
+    //     $first->assertStatus(200);
+    //     $second->assertStatus(200);
 
-        // but only the first solve should be rated
-        $firstContent = json_decode($first->getContent(), true);
-        $secondContent = json_decode($second->getContent(), true);
+    //     // but only the first solve should be rated
+    //     $firstContent = json_decode($first->getContent(), true);
+    //     $secondContent = json_decode($second->getContent(), true);
         
-        $this->assertTrue($firstContent['solve']['isRated']);
-        $this->assertFalse($secondContent['solve']['isRated']);
-    }
+    //     $this->assertTrue($firstContent['solve']['isRated']);
+    //     $this->assertFalse($secondContent['solve']['isRated']);
+    // }
 
     //
     // index

@@ -71,19 +71,25 @@ class Solve extends Model
     ];
 
     /**
-     * Before create
+     * Complete a solve.
+     *
+     * @return void
      */
-    public function beforeCreate()
+    public function complete($solution)
     {
-        // // verify that our solution is correct
-        // if (!Cube::testSolution($this->scramble, $this->solution)) {
-        //     throw new InvalidSolutionException;
-        // }
+        // set the cube solution
+        $this->solution = $solution;
 
-        // // store solve details
-        // $this->setCubeSize();
-        // $this->setRated();
-        // $this->setTime();
+        // verify that our solution is correct
+        if (Cube::testSolution($this->scramble, $solution)) {
+            $this->setCubeSize();
+            $this->setTime();
+            $this->result = 'solved';
+        } else {
+            $this->result = 'dnf';
+        }
+
+        $this->save();
     }
 
     /**
@@ -186,18 +192,6 @@ class Solve extends Model
     }
 
     /**
-     * Set the rated attribute.
-     * 
-     * @return void
-     */
-    protected function setRated()
-    {
-        if (!self::where('scramble_id', $this->scramble_id)->exists()) {
-            $this->is_rated = true;
-        }
-    }
-
-    /**
      * Set time and move data.
      * 
      * @return void
@@ -211,6 +205,9 @@ class Solve extends Model
 
         $this->time = $endAt;
         $this->moves = Cube::countTurns($this->solution);
-        $this->average_speed = round($this->time / $this->moves);
+
+        if ($this->moves > 0) {
+            $this->average_speed = round($this->time / $this->moves);
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace Speedcube\Speedcube\Http\Controllers;
 use Auth;
 use Exception;
 use Speedcube\Speedcube\Classes\ApiController;
+use Speedcube\Speedcube\Models\Scramble;
 use Speedcube\Speedcube\Models\Solve;
 
 class SolvesController extends ApiController
@@ -16,18 +17,25 @@ class SolvesController extends ApiController
      */
     public function create()
     {
-        $data = input();
-
         try {
-            $user = Auth::getUser();
+            $data = input();
             $config = array_key_exists('config', $data) ? $data['config'] : [];
+            $solution = array_key_exists('solution', $data) ? $data['solution'] : '';
 
-            $solve = Solve::create([
-                'config' => $config,
-                'scramble_id' => $data['scrambleId'],
-                'solution' => $data['solution'],
-                'user_id' => $user ? $user->id : null,
-            ]);
+            $user = Auth::getUser();
+
+            // find the scramble being solved
+            $scramble = Scramble::find($data['scrambleId']);
+
+            // find or create a solve for this scramble
+            $solve = $user
+                ? $scramble->solves()->where('user_id', $user->id)->firstOrFail()
+                : new Solve(['scramble_id' => $scramble->id]);
+
+            // complete the solve
+            $solve->config = $config;
+
+            $solve->complete($solution);
 
             // success
             return $this->success([
