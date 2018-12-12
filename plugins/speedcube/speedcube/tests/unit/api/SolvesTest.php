@@ -9,15 +9,22 @@ use Speedcube\Speedcube\Tests\PluginTestCase;
 
 class SolvesApiTest extends PluginTestCase
 {
+    // helper function to create an easily solved scramble
+    public static function createScramble($turns = '') {
+        $scramble = Factory::create(new Scramble, ['cube_size' => 3]);
+        $scramble->scramble = $turns;
+        $scramble->save();
+
+        return $scramble;
+    }
+
     //
     // create
     //
     public function test_creating_a_solve()
     {
         // create a dummy scramble
-        $scramble = Factory::create(new Scramble, ['cube_size' => 3]);
-        $scramble->scramble = 'R U R-';
-        $scramble->save();
+        $scramble = self::createScramble('R U R-');
 
         // submit a solution for it
         $response = $this->post('/api/speedcube/speedcube/solves', [
@@ -45,15 +52,12 @@ class SolvesApiTest extends PluginTestCase
 
     public function test_creating_invalid_solves_throws_error()
     {
-        // create a dummy scramble
-        $scramble = Factory::create(new Scramble);
-        $scramble->scramble = 'R';
-        $scramble->save();
+        // generate a scramble and submit an incorrect solution for it
+        $scramble = self::createScramble('R');
 
-        // submit an incorrect solution for it
         $response = $this->post('/api/speedcube/speedcube/solves', [
             'scrambleId' => $scramble->id,
-            'solution' => '0:U',
+            'solution' => '100#START 200:U 300#END',
         ]);
 
         $content = json_decode($response->getContent(), true);
@@ -63,9 +67,7 @@ class SolvesApiTest extends PluginTestCase
 
     public function test_creating_multiple_solves_for_same_scramble_throws_error()
     {
-        $scramble = Factory::create(new Scramble);
-        $scramble->scramble = 'R';
-        $scramble->save();
+        $scramble = self::createScramble('R');
 
         $first = $this->post('/api/speedcube/speedcube/solves', [
             'scrambleId' => $scramble->id,

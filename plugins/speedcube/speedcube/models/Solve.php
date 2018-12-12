@@ -16,6 +16,7 @@ class Solve extends Model
         'config' => '{}',
         'is_rated' => false,
         'solution' => '',
+        'result' => 'pending',
     ];
 
     /**
@@ -74,15 +75,15 @@ class Solve extends Model
      */
     public function beforeCreate()
     {
-        // verify that our solution is correct
-        if (!Cube::testSolution($this->scramble, $this->solution)) {
-            throw new InvalidSolutionException;
-        }
+        // // verify that our solution is correct
+        // if (!Cube::testSolution($this->scramble, $this->solution)) {
+        //     throw new InvalidSolutionException;
+        // }
 
-        // store solve details
-        $this->setCubeSize();
-        $this->setRated();
-        $this->setTime();
+        // // store solve details
+        // $this->setCubeSize();
+        // $this->setRated();
+        // $this->setTime();
     }
 
     /**

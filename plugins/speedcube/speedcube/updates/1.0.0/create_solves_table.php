@@ -20,6 +20,7 @@ class CreateSolvesTable extends Migration
             $table->integer('average_speed')->default(0)->unsigned();
             $table->text('solution');
             $table->text('config');
+            $table->enum('result', ['dnf', 'error', 'invalid', 'pending', 'solved'])->default('pending')->index();
             $table->timestamps();
         });
     }
