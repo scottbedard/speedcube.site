@@ -36,7 +36,7 @@ class SolvesApiTest extends PluginTestCase
         // verify that the solve was saved correctly
         $solve = Solve::find($content['solve']['id']);
         
-        $this->assertEquals(300, $solve->time);
+        $this->assertEquals(300, $solve->time); // 600 end - 300 start
         $this->assertEquals(3, $solve->cube_size);
         $this->assertEquals(3, $solve->moves);
         $this->assertEquals(100, $solve->average_speed);
@@ -153,7 +153,7 @@ class SolvesApiTest extends PluginTestCase
 
         $solve = Factory::create(new Solve, [
             'scramble_id' => $scramble->id,
-            'solution' => '1000:R-',
+            'solution' => '500#START 1000:R- 1500#END',
             'user_id' => $user->id,
         ]);
         

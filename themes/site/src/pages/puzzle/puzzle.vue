@@ -32,7 +32,7 @@
                 <v-collapse-transition>
                     <!-- timer -->
                     <div v-if="isSolving || isComplete" key="timer">
-                        <v-timer :time="time" />
+                        <v-timer :time="displayTime" />
                         <v-fade-transition>
                             <div v-if="isComplete" class="mt-4" key="loading">
                                 <v-tip>press spacebar to scramble</v-tip>
@@ -105,8 +105,8 @@ export default {
             // loading state for fetching a scramble from the server
             scrambleIsLoading: false,
 
-            // timestamp for the start of the solve
-            solveStartedAt: 0,
+            // time value at the start of a solve
+            solveStartTime: 0,
 
             // loading state for submitting a solve to the server
             solveIsLoading: false,
@@ -137,6 +137,9 @@ export default {
             'isAuthenticated',
             'puzzleConfig',
         ]),
+        displayTime() {
+            return this.time - this.solveStartTime;
+        },
         puzzleId() {
             return `cube${this.size}`;
         },
@@ -144,20 +147,11 @@ export default {
             return this.$route.meta.cubeSize;
         },
         time() {
-            if (this.isInspecting) {
+            if (this.isInspecting || this.isSolving) {
                 return this.now - this.inspectionStartedAt;
-            } else if (this.isSolving) {
-                return this.now - this.solveStartedAt;
-            } else if (this.isComplete && this.history.length > 0) {
-                return this.completeTime;
             }
-
-            return 0;
-            // if (this.isInspecting || this.isSolving) {
-            //     return this.now - this.solveStartedAt;
-            // }
-
-            // return this.now - this.inspectionStartedAt;
+            
+            return this.completeTime;
         },
     },
     methods: {
@@ -183,15 +177,13 @@ export default {
                 return;
             }
 
-
             clearTimeout(this.inspectionTimeout);
-            
-            this.solveStartedAt = Date.now();
 
-            // push a history entry to indicate the solve started
-            if (this.history.length > 0) {
-                this.history.push(`${this.time}#START`);
-            }
+            // log the start of the solve
+            const solveStartTime = this.time;
+            
+            this.solveStartTime = solveStartTime;
+            this.history.push(`${solveStartTime}#START`);
 
             // update our state
             this.isInspecting = false;
