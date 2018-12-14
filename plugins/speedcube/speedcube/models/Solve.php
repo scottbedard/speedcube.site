@@ -1,5 +1,6 @@
 <?php namespace Speedcube\Speedcube\Models;
 
+use Carbon\Carbon;
 use Speedcube\Speedcube\Classes\Cube;
 use Speedcube\Speedcube\Exceptions\InvalidSolutionException;
 use Model;
@@ -14,8 +15,9 @@ class Solve extends Model
      */
     public $attributes = [
         'config' => '{}',
-        'is_rated' => false,
+        'is_rated' => true,
         'solution' => '',
+        'status' => 'pending',
     ];
 
     /**
@@ -70,19 +72,54 @@ class Solve extends Model
     ];
 
     /**
-     * Before create
+     * Abort a solve.
+     * 
+     * @return void
      */
-    public function beforeCreate()
+    public function abort($solution = '')
     {
+        $this->solution = $solution;
+        $this->status = 'dnf';
+
+        $this->save();
+    }
+
+    /**
+     * Close solves that are older than one day.
+     *
+     * @return void
+     */
+    public static function closeAbandoned()
+    {
+        $abandoned = self::abandoned()->get();
+
+        $abandoned->each(function($solve) {
+            $solve->status = 'dnf';
+
+            $solve->save();
+        });
+    }
+
+    /**
+     * Complete a solve.
+     *
+     * @return void
+     */
+    public function complete($solution)
+    {
+        // set the cube solution
+        $this->solution = $solution;
+
         // verify that our solution is correct
-        if (!Cube::testSolution($this->scramble, $this->solution)) {
-            throw new InvalidSolutionException;
+        if (Cube::testSolution($this->scramble, $solution)) {
+            $this->setCubeSize();
+            $this->setTime();
+            $this->status = 'complete';
+        } else {
+            $this->status = 'dnf';
         }
 
-        // store solve details
-        $this->setCubeSize();
-        $this->setRated();
-        $this->setTime();
+        $this->save();
     }
 
     /**
@@ -143,14 +180,36 @@ class Solve extends Model
     /**
      * Scopes
      */
+    public function scopeAbandoned($query)
+    {
+        $cutoff = Carbon::now()->subDays(1);
+
+        return $query->pending()->where('created_at', '<', $cutoff);
+    }
+
     public function scopeFastest($query)
     {
         return $query->orderBy('time', 'asc');
     }
 
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', 'complete');
+    }
+
     public function scopeFewestMoves($query)
     {
         return $query->orderBy('moves', 'asc');
+    }
+
+    public function scopeNotPending($query)
+    {
+        return $query->where('status', '<>', 'pending');
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
     }
 
     public function scopeRated($query)
@@ -185,18 +244,6 @@ class Solve extends Model
     }
 
     /**
-     * Set the rated attribute.
-     * 
-     * @return void
-     */
-    protected function setRated()
-    {
-        if (!self::where('scramble_id', $this->scramble_id)->exists()) {
-            $this->is_rated = true;
-        }
-    }
-
-    /**
      * Set time and move data.
      * 
      * @return void
@@ -210,6 +257,9 @@ class Solve extends Model
 
         $this->time = $endAt;
         $this->moves = Cube::countTurns($this->solution);
-        $this->average_speed = round($this->time / $this->moves);
+
+        if ($this->moves > 0) {
+            $this->average_speed = round($this->time / $this->moves);
+        }
     }
 }

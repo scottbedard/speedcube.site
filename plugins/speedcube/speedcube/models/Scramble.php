@@ -47,7 +47,7 @@ class Scramble extends Model
 
     /**
      * Before create.
-     * 
+     *
      * @return void
      */
     public function beforeCreate()
@@ -57,7 +57,7 @@ class Scramble extends Model
 
     /**
      * Generate a scramble.
-     * 
+     *
      * @return string
      */
     public function generateScramble()
@@ -70,7 +70,7 @@ class Scramble extends Model
 
     /**
      * Generate a scramble.
-     * 
+     *
      * @return void
      */
     public function setScrambleAttribute($scramble)

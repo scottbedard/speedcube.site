@@ -68,21 +68,6 @@ class Plugin extends PluginBase
     }
 
     /**
-     * Registers any back-end permissions used by this plugin.
-     *
-     * @return array
-     */
-    public function registerPermissions()
-    {
-        return [
-            'speedcube.speedcube.access_solves' => [
-                'tab' => 'Speedcube',
-                'label' => 'Manage solves'
-            ],
-        ];
-    }
-
-    /**
      * Registers back-end navigation items for this plugin.
      *
      * @return array
@@ -106,5 +91,34 @@ class Plugin extends PluginBase
                 'url' => Backend::url('speedcube/speedcube/solves'),
             ],
         ];
+    }
+
+    /**
+     * Registers any back-end permissions used by this plugin.
+     *
+     * @return array
+     */
+    public function registerPermissions()
+    {
+        return [
+            'speedcube.speedcube.access_solves' => [
+                'tab' => 'Speedcube',
+                'label' => 'Manage solves'
+            ],
+        ];
+    }
+
+    /**
+     * Register scheduled tasks.
+     *
+     * @return void
+     */
+    public function registerSchedule($schedule)
+    {
+        // close abandoned solves once per day
+        $schedule
+            ->call(function() { Solve::closeAbandoned(); })
+            ->daily()
+            ->thenPing(env('HB_CLOSE_ABANDONED_SOLVES'));
     }
 }

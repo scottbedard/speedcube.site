@@ -1,6 +1,6 @@
 <?php
 
-namespace Speedcube\Speedcube\Tests\Classes;
+namespace Speedcube\Speedcube\Tests\Unit\Classes;
 
 use Speedcube\Speedcube\Classes\Cube;
 use Speedcube\Speedcube\Tests\PluginTestCase;

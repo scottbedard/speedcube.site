@@ -3,6 +3,7 @@
 namespace Speedcube\Speedcube\Tests;
 
 use App;
+use Auth;
 use Illuminate\Foundation\AliasLoader;
 use Mail;
 use Mockery;
@@ -60,6 +61,9 @@ abstract class PluginTestCase extends BasePluginTestCase
             return \RainLab\User\Classes\AuthManager::instance();
         });
 
+        // Log the user out
+        Auth::logout();
+
         // october's "pretend" method doesn't quite reach the level
         // of testability we're after. so we'll use the built in
         // "fake" method instead. the only downside to doing this
@@ -77,5 +81,7 @@ abstract class PluginTestCase extends BasePluginTestCase
         parent::tearDown();
 
         Mockery::close();
+
+        // Auth::logout();
     }
 }
