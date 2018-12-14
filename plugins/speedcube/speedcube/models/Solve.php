@@ -14,9 +14,9 @@ class Solve extends Model
      */
     public $attributes = [
         'config' => '{}',
-        'is_rated' => false,
+        'is_rated' => true,
         'solution' => '',
-        'result' => 'pending',
+        'status' => 'pending',
     ];
 
     /**
@@ -84,9 +84,9 @@ class Solve extends Model
         if (Cube::testSolution($this->scramble, $solution)) {
             $this->setCubeSize();
             $this->setTime();
-            $this->result = 'solved';
+            $this->status = 'complete';
         } else {
-            $this->result = 'dnf';
+            $this->status = 'dnf';
         }
 
         $this->save();
@@ -155,9 +155,19 @@ class Solve extends Model
         return $query->orderBy('time', 'asc');
     }
 
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', 'complete');
+    }
+
     public function scopeFewestMoves($query)
     {
         return $query->orderBy('moves', 'asc');
+    }
+
+    public function scopeNotPending($query)
+    {
+        return $query->where('status', '<>', 'pending');
     }
 
     public function scopeRated($query)

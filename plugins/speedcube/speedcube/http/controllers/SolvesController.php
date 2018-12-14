@@ -2,6 +2,7 @@
 
 namespace Speedcube\Speedcube\Http\Controllers;
 
+use ApplicationException;
 use Auth;
 use Exception;
 use Speedcube\Speedcube\Classes\ApiController;
@@ -17,34 +18,35 @@ class SolvesController extends ApiController
      */
     public function create()
     {
-        try {
-            $data = input();
-            $config = array_key_exists('config', $data) ? $data['config'] : [];
-            $solution = array_key_exists('solution', $data) ? $data['solution'] : '';
+        $user = Auth::getUser();
 
-            $user = Auth::getUser();
+        $data = input();
+        $config = array_get($data, 'config', []);
+        $scrambleId = array_get($data, 'scrambleId', 0);
+        $solution = array_get($data, 'solution', '');
 
-            // find the scramble being solved
-            $scramble = Scramble::find($data['scrambleId']);
-
-            // find or create a solve for this scramble
-            $solve = $user
-                ? $scramble->solves()->where('user_id', $user->id)->firstOrFail()
-                : new Solve(['scramble_id' => $scramble->id]);
-
-            // complete the solve
-            $solve->config = $config;
-
-            $solve->complete($solution);
-
-            // success
-            return $this->success([
-                'solve' => $solve->toArray(),
-            ]);
-        } catch (Exception $e) {
-            // failure
-            return $this->failed($e);
+        // throw an error if the scramble has already been solved
+        if (Solve::notPending()->where('scramble_id', $scrambleId)->exists()) {
+            throw new ApplicationException("Duplicate solve submitted for scramble #{$scrambleId}");
         }
+
+        // find the scramble being solved
+        $scramble = Scramble::find($scrambleId);
+
+        // find or create a solve for this scramble
+        $solve = $user
+            ? $scramble->solves()->where('user_id', $user->id)->firstOrFail()
+            : new Solve(['scramble_id' => $scramble->id]);
+
+        // complete the solve
+        $solve->config = $config;
+
+        $solve->complete($solution);
+
+        // success
+        return $this->success([
+            'solve' => $solve->toArray(),
+        ]);
     }
 
     /**
@@ -72,11 +74,13 @@ class SolvesController extends ApiController
     {
         try {
             $data = input();
+            $take = min(50, array_key_exists('take', $data) ? (int) $data['take'] : 10);
 
             //
             // base query
             //
-            $query = Solve::rated()
+            $query = Solve::completed()
+                ->rated()
                 ->select([
                     'average_speed',
                     'created_at',
@@ -86,7 +90,7 @@ class SolvesController extends ApiController
                     'time',
                     'user_id',
                 ])
-                ->limit(20)
+                ->limit($take)
                 ->withUserSummary();
 
             //

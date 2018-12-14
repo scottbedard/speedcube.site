@@ -11,9 +11,13 @@ use Speedcube\Speedcube\Tests\PluginTestCase;
 class SolvesApiTest extends PluginTestCase
 {
     // helper function to create an easily solved scramble
-    public static function createScramble($turns = '') {
-        $scramble = Factory::create(new Scramble, ['cube_size' => 3]);
+    public static function createScramble($turns = '', $cubeSize = 3) {
+        $scramble = Factory::create(new Scramble, [
+            'cube_size' => $cubeSize,
+        ]);
+
         $scramble->scramble = $turns;
+
         $scramble->save();
 
         return $scramble;
@@ -49,7 +53,7 @@ class SolvesApiTest extends PluginTestCase
         $this->assertEquals(3, $solve->moves);
         $this->assertEquals(133, $solve->average_speed);
         $this->assertEquals('#000000', $solve->config['colors'][0]);
-        $this->assertEquals('solved', $solve->result);
+        $this->assertEquals('complete', $solve->status);
     }
 
     public function test_completing_a_solve_as_a_user()
@@ -96,79 +100,60 @@ class SolvesApiTest extends PluginTestCase
 
         $data = json_decode($response->getContent(), true);
         
-        $this->assertEquals('dnf', $data['solve']['result']);
+        $this->assertEquals('dnf', $data['solve']['status']);
     }
 
-    // public function test_creating_multiple_solves_for_same_scramble_throws_error()
-    // {
-    //     $scramble = self::createScramble('R');
+    public function test_creating_multiple_solves_for_same_scramble_throws_error()
+    {
+        $scramble = self::createScramble('R');
 
-    //     $first = $this->post('/api/speedcube/speedcube/solves', [
-    //         'scrambleId' => $scramble->id,
-    //         'solution' => '0:R-',
-    //     ]);
+        // the first solve should be work fine
+        $responseA = $this->post('/api/speedcube/speedcube/solves', [
+            'scrambleId' => $scramble->id,
+            'solution' => '0#START 100:R- 200#END',
+        ]);
 
-    //     $second = $this->post('/api/speedcube/speedcube/solves', [
-    //         'scrambleId' => $scramble->id,
-    //         'solution' => '0:R-',
-    //     ]);
+        $responseA->assertStatus(200);
 
-    //     // both requests should return a 200
-    //     $first->assertStatus(200);
-    //     $second->assertStatus(200);
+        // and subsequent solves should fail
+        $responseB = $this->post('/api/speedcube/speedcube/solves', [
+            'scrambleId' => $scramble->id,
+            'solution' => '0#START 100:R- 200#END',
+        ]);
 
-    //     // but only the first solve should be rated
-    //     $firstContent = json_decode($first->getContent(), true);
-    //     $secondContent = json_decode($second->getContent(), true);
-        
-    //     $this->assertTrue($firstContent['solve']['isRated']);
-    //     $this->assertFalse($secondContent['solve']['isRated']);
-    // }
+        $responseB->assertStatus(500);
+    }
 
     //
     // index
     //
     public function test_fetching_fastest_solves()
     {
+        $user = Factory::registerUser();
+
         // create some dummy scrambles
-        $a = Factory::create(new Scramble, ['cube_size' => 3]);
-        $a->scramble = 'R';
-        $a->save();
+        $scrambleA = self::createScramble('R');
+        $scrambleB = self::createScramble('R');
+        $scrambleC = self::createScramble('R');
 
-        $b = Factory::create(new Scramble, ['cube_size' => 3]);
-        $b->scramble = 'R';
-        $b->save();
-
-        $c = Factory::create(new Scramble, ['cube_size' => 2]);
-        $c->scramble = 'R';
-        $c->save();
-
-        // create a solve for each scramble. solveB will be the fastest
-        // solveC is not rated, and should not be present in the results
+        // create a solve for each scramble, with solveB being the fastest
         $solveA = Factory::create(new Solve, [
-            'scramble_id' => $a->id,
-            'solution' => '0#START 100:R- 200#END',
+            'scramble_id' => $scrambleA->id,
+            'user_id' => $user->id,
         ]);
+
+        $solveA->complete('0#START 100:R- 300#END');
 
         $solveB = Factory::create(new Solve, [
-            'scramble_id' => $b->id,
-            'solution' => '0#START 100:R- 150#END',
+            'scramble_id' => $scrambleA->id,
+            'user_id' => $user->id,
         ]);
 
-        // this solve is a duplicate of scramble b and should be unrated
-        Factory::create(new Solve, [
-            'scramble_id' => $b->id,
-            'solution' => '0#START 100:R- 200#END',
-        ]);
+        $solveB->complete('0#START 100:R- 200#END');
 
-        // this solve is for a scramble of a different size
-        Factory::create(new Solve, [
-            'scramble_id' => $c->id,
-            'solution' => '0#START 100:R- 200#END',
-        ]);
-        
         // fetch the fastest solves
         $response = $this->get('/api/speedcube/speedcube/solves?cubeSize=3&orderBy=time');
+
         $data = json_decode($response->getContent(), true);
         
         $this->assertEquals(2, count($data['solves']));
