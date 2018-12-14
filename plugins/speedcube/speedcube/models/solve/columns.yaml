@@ -28,6 +28,12 @@ columns:
         type: partial
         path: $/speedcube/speedcube/models/solve/_column_average_speed.htm
 
+    status:
+        label: Status
+        type: partial
+        path: $/speedcube/speedcube/models/solve/_column_status.htm
+        width: 60px
+
     created_at:
         label: Date
         type: timetense

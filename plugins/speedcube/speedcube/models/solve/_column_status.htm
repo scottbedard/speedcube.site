@@ -1,0 +1,16 @@
+<?php
+$color = [
+    'dnf' => '#999',
+    'complete' => '#4caf50',
+    'pending' => '#ddd',
+    'invalid' => '#ffb74d',
+    'error' => '#f44336',
+][$record->status];
+?>
+
+<i
+    class="icon-circle"
+    data-toggle="tooltip"
+    title="<?= strtoupper($record->status) ?>"
+    style="color: <?= $color ?>">
+</i>
