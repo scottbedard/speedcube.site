@@ -24,7 +24,7 @@ class SolvesApiTest extends PluginTestCase
     }
 
     //
-    // create
+    // complete
     //
     public function test_completing_a_solve_as_guest()
     {
@@ -122,6 +122,25 @@ class SolvesApiTest extends PluginTestCase
         ]);
 
         $responseB->assertStatus(500);
+    }
+
+    public function test_aborting_a_solve()
+    {
+        $scramble = self::createScramble('R');
+
+        $response = $this->post('/api/speedcube/speedcube/solves', [
+            'abort' => true,
+            'scrambleId' => $scramble->id,
+            'solution' => '0#START 100:F 200#END',
+        ]);
+
+        $response->assertStatus(200);
+
+        $data = json_decode($response->getContent(), true);
+
+        $solve = Solve::find($data['solve']['id']);
+
+        $this->assertEquals('dnf', $solve->status);
     }
 
     //

@@ -12,15 +12,16 @@ use Speedcube\Speedcube\Models\Solve;
 class SolvesController extends ApiController
 {
     /**
-     * Create a solve.
+     * Complete a solve.
      * 
      * @return Response
      */
-    public function create()
+    public function complete()
     {
         $user = Auth::getUser();
 
         $data = input();
+        $abort = array_get($data, 'abort', false);
         $config = array_get($data, 'config', []);
         $scrambleId = array_get($data, 'scrambleId', 0);
         $solution = array_get($data, 'solution', '');
@@ -31,17 +32,22 @@ class SolvesController extends ApiController
         }
 
         // find the scramble being solved
-        $scramble = Scramble::find($scrambleId);
-
-        // find or create a solve for this scramble
+        $scramble = Scramble::findOrFail($scrambleId);
+        
+        // find or instantiate the solve
         $solve = $user
             ? $scramble->solves()->where('user_id', $user->id)->firstOrFail()
             : new Solve(['scramble_id' => $scramble->id]);
-
-        // complete the solve
+        
+        // cache the solve configuration
         $solve->config = $config;
 
-        $solve->complete($solution);
+        // abort or complete the solve
+        if ($abort) {
+            $solve->abort($solution);
+        } else {
+            $solve->complete($solution);
+        }
 
         // success
         return $this->success([

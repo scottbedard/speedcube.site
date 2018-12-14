@@ -71,6 +71,19 @@ class Solve extends Model
     ];
 
     /**
+     * Abort a solve.
+     * 
+     * @return void
+     */
+    public function abort($solution = '')
+    {
+        $this->solution = $solution;
+        $this->status = 'dnf';
+
+        $this->save();
+    }
+
+    /**
      * Complete a solve.
      *
      * @return void

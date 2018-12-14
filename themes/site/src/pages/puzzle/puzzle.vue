@@ -64,7 +64,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { postCreateScramble } from '@/app/repositories/scrambles';
-import { postCreateSolve } from '@/app/repositories/solves';
+import { postSolve } from '@/app/repositories/solves';
 import { cleanTimeout } from '@/app/utils/component';
 import sidebarComponent from './sidebar/sidebar.vue';
 import tipComponent from './tip/tip.vue';
@@ -146,6 +146,9 @@ export default {
         size() {
             return this.$route.meta.cubeSize;
         },
+        solution() {
+            return this.history.join(' ');
+        },
         time() {
             if (this.isInspecting || this.isSolving) {
                 return this.now - this.inspectionStartedAt;
@@ -155,6 +158,15 @@ export default {
         },
     },
     methods: {
+        abortSolve() {
+            // abort a solve
+            postSolve({
+                abort: true,
+                config: this.config,
+                scrambleId: this.scrambleId,
+                solution: this.solution,
+            });
+        },
         beginInspection() {
             // reset history, we'll be recording from here
             // through the end of the solve
@@ -190,6 +202,11 @@ export default {
             this.isSolving = true;
         },
         onEscape() {
+            // abort and solve that is currently in progress
+            if (this.isInspecting || this.isSolving) {
+                this.abortSolve();
+            }
+
             this.reset();
         },
         onSolved() {
@@ -210,10 +227,10 @@ export default {
             this.isComplete = true;
             this.isSolving = false;
 
-            postCreateSolve({
+            postSolve({
                 config: this.config,
                 scrambleId: this.scrambleId,
-                solution: this.history.join(' '),
+                solution: this.solution,
             }).finally(() => {
                 // complete
                 this.completeIsLoading = false;
