@@ -187,6 +187,11 @@ class Solve extends Model
         return $query->pending()->where('created_at', '<', $cutoff);
     }
 
+    public function scopeDnf($query)
+    {
+        return $query->where('status', 'dnf');
+    }
+
     public function scopeFastest($query)
     {
         return $query->orderBy('time', 'asc');
@@ -202,6 +207,16 @@ class Solve extends Model
         return $query->orderBy('moves', 'asc');
     }
 
+    public function scopeLastMonth($query)
+    {
+        return $query->where(function($q) {
+            $startOfMonth = Carbon::now()->startOfMonth();
+            
+            return $q
+                ->where('created_at', '>=', $startOfMonth->subDays(1)->startOfMonth())
+                ->where('created_at', '<', $startOfMonth);
+        });
+    }
     public function scopeNotPending($query)
     {
         return $query->where('status', '<>', 'pending');
@@ -220,6 +235,11 @@ class Solve extends Model
     public function scopeSize($query, int $size)
     {
         return $query->where('cube_size', $size);
+    }
+
+    public function scopeThisMonth($query)
+    {
+        return $query->where('created_at', '>=', Carbon::now()->startOfMonth());
     }
 
     public function scopeWithUserSummary($query)

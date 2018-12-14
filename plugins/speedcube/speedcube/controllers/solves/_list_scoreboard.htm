@@ -1,0 +1,40 @@
+<?php
+$solvesThisMonthClass = '';
+
+if ($solvesThisMonth > $solvesLastMonth) {
+    $solvesThisMonthClass = 'positive';
+}
+?>
+
+<div class="scoreboard">
+    <div data-control="toolbar">
+        <div
+            data-control="chart-pie"
+            class="scoreboard-item control-chart">
+            <ul>
+                <li
+                    data-color="#95b753"
+                    data-value="<?= $solvesThisMonth ?>">
+                    Completed <span><?= number_format($solvesThisMonth) ?></span>
+                </li>
+                <li
+                    data-color="#999"
+                    data-value="<?= $dnfThisMonth ?>">
+                    DNF <span><?= number_format($dnfThisMonth) ?></span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="scoreboard-item title-value">
+            <h4>Completed Solves</h4>
+            <p class="<?= $solvesThisMonthClass ?>"><?= $solvesThisMonth ?></p>
+            <p class="description"><?= $solvesLastMonth ?> last month</p>
+        </div>
+
+        <div class="scoreboard-item title-value">
+            <h4>Top User</h4>
+            <p class="oc-icon-star"><?= $mostSolves->user->name ?></p>
+            <p class="description"><?= $mostSolves->total ?> completed <?= str_plural('solve', $mostSolves->total) ?></p>
+        </div>
+    </div>
+</div>
