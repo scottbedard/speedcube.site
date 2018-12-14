@@ -9,7 +9,10 @@ columns:
     user:
         label: User
         path: $/speedcube/speedcube/models/solve/_column_user.htm
-        sortable: false
+        relation: user
+        searchable: true
+        select: name
+        sortable: true
         type: partial
 
     cube_size:
