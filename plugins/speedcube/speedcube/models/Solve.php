@@ -1,5 +1,6 @@
 <?php namespace Speedcube\Speedcube\Models;
 
+use Carbon\Carbon;
 use Speedcube\Speedcube\Classes\Cube;
 use Speedcube\Speedcube\Exceptions\InvalidSolutionException;
 use Model;
@@ -84,6 +85,22 @@ class Solve extends Model
     }
 
     /**
+     * Close solves that are older than one day.
+     *
+     * @return void
+     */
+    public static function closeAbandoned()
+    {
+        $abandoned = self::abandoned()->get();
+
+        $abandoned->each(function($solve) {
+            $solve->status = 'dnf';
+
+            $solve->save();
+        });
+    }
+
+    /**
      * Complete a solve.
      *
      * @return void
@@ -163,6 +180,13 @@ class Solve extends Model
     /**
      * Scopes
      */
+    public function scopeAbandoned($query)
+    {
+        $cutoff = Carbon::now()->subDays(1);
+
+        return $query->pending()->where('created_at', '<', $cutoff);
+    }
+
     public function scopeFastest($query)
     {
         return $query->orderBy('time', 'asc');
@@ -181,6 +205,11 @@ class Solve extends Model
     public function scopeNotPending($query)
     {
         return $query->where('status', '<>', 'pending');
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
     }
 
     public function scopeRated($query)
