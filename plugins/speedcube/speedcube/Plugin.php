@@ -118,6 +118,7 @@ class Plugin extends PluginBase
         // close abandoned solves once per day
         $schedule
             ->call(function() { Solve::closeAbandoned(); })
-            ->daily();
+            ->daily()
+            ->thenPing(env('HB_CLOSE_ABANDONED_SOLVES'));
     }
 }
