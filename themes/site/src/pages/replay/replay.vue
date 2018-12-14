@@ -1,6 +1,6 @@
 <template>
     <v-page padded>
-        
+
         <!-- loading -->
         <div
             v-if="isLoading"
@@ -54,7 +54,7 @@
                             </div>
                         </v-fade-transition>
                     </div>
-                    
+
                     <!-- inspection -->
                     <div v-else-if="isInspecting" key="inspection">
                         <v-countdown />
@@ -72,7 +72,6 @@
 
 <script>
 import { getSolve } from '@/app/repositories/solves';
-import { formatTime } from '@/app/utils/string';
 import { cleanTimeout } from '@/app/utils/component';
 
 export default {
@@ -123,11 +122,11 @@ export default {
             if (!this.solve) {
                 return [];
             }
-            
+
             return this.turns
-                .filter(turn => !turn.match(/\d+\#[a-zA-Z]+/))
-                .map(rawTurn => {
-                    const [ time, turn ] = rawTurn.split(':');
+                .filter(turn => !turn.match(/\d+#[a-zA-Z]+/))
+                .map((rawTurn) => {
+                    const [time, turn] = rawTurn.split(':');
                     return {
                         time: parseInt(time, 10),
                         turn,
@@ -135,7 +134,7 @@ export default {
                 });
         },
         startTime() {
-            const event = this.turns.find(turn => turn.match(/\d+\#START/));
+            const event = this.turns.find(turn => turn.match(/\d+#START/));
 
             return event
                 ? parseInt(event.split('#')[0], 10)
@@ -145,11 +144,11 @@ export default {
             if (this.isComplete) {
                 return this.solve.time;
             }
-            
+
             if (this.isSolving) {
                 return this.now - this.solveStartedAt;
             }
-            
+
             return 0;
         },
         turns() {

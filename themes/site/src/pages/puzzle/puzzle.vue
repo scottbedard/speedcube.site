@@ -153,7 +153,7 @@ export default {
             if (this.isInspecting || this.isSolving) {
                 return this.now - this.inspectionStartedAt;
             }
-            
+
             return this.completeTime;
         },
     },
@@ -175,7 +175,7 @@ export default {
             this.inspectionStartedAt = Date.now();
 
             // start the solve for this scramble after 15
-            const scrambleId = this.scrambleId;
+            const { scrambleId } = this;
 
             this.inspectionTimeout = cleanTimeout(this, () => {
                 if (this.scrambleId === scrambleId) {
@@ -193,7 +193,7 @@ export default {
 
             // log the start of the solve
             const solveStartTime = this.time;
-            
+
             this.solveStartTime = solveStartTime;
             this.history.push(`${solveStartTime}#START`);
 

@@ -30,10 +30,10 @@
 </template>
 
 <script>
+import { getSolves } from '@/app/repositories/solves';
 import sectionComponent from '../shared/section.vue';
 import timeCellComponent from './time_cell/time_cell.vue';
 import userCellComponent from '../shared/user_cell.vue';
-import { getSolves } from '@/app/repositories/solves';
 
 export default {
     created() {
@@ -48,13 +48,12 @@ export default {
     computed: {
         cubeSize() {
             switch (this.event) {
-                case '2x2': return 2;
-                case '3x3': return 3;
-                case '4x4': return 4;
-                case '5x5': return 5;
+            case '2x2': return 2;
+            case '3x3': return 3;
+            case '4x4': return 4;
+            case '5x5': return 5;
+            default: return 0;
             }
-
-            return 0;
         },
         event() {
             return this.$route.query.event || '3x3';
@@ -107,6 +106,6 @@ export default {
     },
     watch: {
         $route: 'fetchSolves',
-    }
+    },
 };
 </script>

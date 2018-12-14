@@ -14,7 +14,7 @@ export function isEmail(str) {
 /**
  * Format a time value.
  *
- * @param {number} time 
+ * @param {number} time
  * @return {string}
  */
 export function formatTime(time) {
@@ -27,8 +27,8 @@ export function formatTime(time) {
 
 /**
  * Format a time value, showing minutes only if necessary.
- * 
- * @param {number} time 
+ *
+ * @param {number} time
  * @return {string}
  */
 export function formatShortTime(time) {

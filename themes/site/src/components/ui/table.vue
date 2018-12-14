@@ -19,7 +19,7 @@ function normalizeColumn(col) {
     return {
         align: 'left',
         ...col,
-    }
+    };
 }
 
 //
@@ -27,7 +27,7 @@ function normalizeColumn(col) {
 //
 function headerCell(h, col) {
     const { align } = normalizeColumn(col);
-    
+
     return <th class={[
         align === 'left' && 'text-left',
         align === 'right' && 'text-right',
@@ -54,7 +54,7 @@ function tr(h, context, row, rowIndex) {
 
         bindings.on.click = (event) => {
             context.listeners['row-click']({ event, index: rowIndex, row });
-        }
+        };
     }
 
     return <tr key={key} {...bindings}>
