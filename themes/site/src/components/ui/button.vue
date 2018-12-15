@@ -16,7 +16,11 @@ export default {
                 bindings.class.push('bg-primary-4 text-primary-10 trans-bg hover:bg-primary-5')
             }
         } else {
-
+            if (outlined) {
+                bindings.class.push('border-2 border-grey-5 text-grey-7 trans-border trans-color hover:border-primary-5 hover:text-primary-7');
+            } else {
+                // ...
+            }
         }
 
         //

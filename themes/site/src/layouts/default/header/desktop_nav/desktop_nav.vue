@@ -28,9 +28,9 @@
 
             <!-- sign up -->
             <v-button
-                class="ml-12"
+                class="ml-8"
                 outlined
-                primary
+                size="sm"
                 :to="{ name: 'create-account' }">
                 Create Account
             </v-button>

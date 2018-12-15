@@ -57,9 +57,22 @@ $easing: ease-in-out;
         border $duration $easing;
 }
 
+.trans-bg.trans-border.trans-color {
+    transition:
+        background $duration $easing,
+        border $duration $easing,
+        color $duration $easing;
+}
+
 .trans-bg.trans-color {
     transition: 
         background $duration $easing, 
+        color $duration $easing;
+}
+
+.trans-border.trans-color {
+    transition: 
+        border $duration $easing, 
         color $duration $easing;
 }
 
