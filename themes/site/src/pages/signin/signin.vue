@@ -11,10 +11,7 @@
         </div>
 
         <!-- form -->
-        <v-card
-            class="max-w-sm mx-auto my-10"
-            padded>
-
+        <v-card class="max-w-sm mx-auto my-10" padded>
             <v-form
                 :errors="errors"
                 @submit="onSubmit">
