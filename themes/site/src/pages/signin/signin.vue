@@ -1,81 +1,89 @@
 <template>
     <v-margin padded>
         <!-- title -->
-        <h1 class="mb-16 text-center">
-            Welcome back, please sign in.
-        </h1>
+        <div class="text-center">
+            <h1 class="mb-3 text-3xl">
+                Welcome back
+            </h1>
+            <div class="text-grey-6">
+                Sign in and go break some records!
+            </div>
+        </div>
 
         <!-- form -->
-        <v-form
-            class="max-w-sm mx-auto"
-            :errors="errors"
-            @submit="onSubmit">
-            <!-- email -->
-            <v-form-field
-                name="email"
-                rules="required|email"
-                :error-messages="{
-                    required: 'Your email address is required',
-                }"
-                :value="email">
-                <v-input
-                    v-model="email"
-                    autofocus
-                    data-email
-                    placeholder="Email address"
-                    type="email"
-                    :disabled="isLoading"
-                />
-            </v-form-field>
+        <v-card
+            class="max-w-sm mx-auto my-10"
+            padded>
 
-            <!-- password -->
-            <v-form-field
-                name="password"
-                rules="required"
-                :error-messages="{
-                    required: 'Please enter your password',
-                }"
-                :value="password">
-                <v-input
-                    v-model="password"
-                    data-password
-                    placeholder="Password"
-                    type="password"
-                    :disabled="isLoading"
-                />
-            </v-form-field>
+            <v-form
+                :errors="errors"
+                @submit="onSubmit">
+                <!-- email -->
+                <v-form-field
+                    label="Email Address"
+                    name="email"
+                    rules="required|email"
+                    :error-messages="{
+                        required: 'Your email address is required',
+                    }"
+                    :value="email">
+                    <v-input
+                        v-model="email"
+                        autofocus
+                        data-email
+                        placeholder="Enter email address"
+                        type="email"
+                        :disabled="isLoading"
+                    />
+                </v-form-field>
 
-            <!-- submit -->
-            <div slot="actions">
-                <v-grid>
-                    <!-- remember -->
-                    <v-grid-cell sm="6">
-                        <v-form-field
-                            class="mb-6 w-full"
-                            name="remember"
-                            :value="remember">
-                            <v-checkbox
-                                v-model="remember"
-                                data-remember
-                                :disabled="isLoading">
-                                Remember
-                            </v-checkbox>
-                        </v-form-field>
-                    </v-grid-cell>
+                <!-- password -->
+                <v-form-field
+                    label="Password"
+                    name="password"
+                    rules="required"
+                    :error-messages="{
+                        required: 'Please enter your password',
+                    }"
+                    :value="password">
+                    <v-input
+                        v-model="password"
+                        data-password
+                        placeholder="Enter password"
+                        type="password"
+                        :disabled="isLoading"
+                    />
 
-                    <!-- submit -->
-                    <v-grid-cell class="sm:text-right" sm="6">
-                        <v-button
-                            class="w-full sm:w-auto"
-                            primary
-                            type="submit"
-                            :disabled="isLoading">
-                            Sign In
-                        </v-button>
-                    </v-grid-cell>
-                </v-grid>
+                    <router-link
+                        slot="help"
+                        tabindex="-1"
+                        :to="{ name: 'forgot-password' }">
+                        Forgot your password?
+                    </router-link>
+                </v-form-field>
+                
+                <!-- actions -->
+                <div class="flex justify-end mt-8">
+                    <v-button
+                        primary
+                        type="submit">
+                        Sign in
+                    </v-button>
+                </div>
+            </v-form>
+        </v-card>
+
+        <!-- sign up -->
+        <div class="text-center text-sm">
+            <div class="mb-2 text-grey-6">
+                Don't have an account?
             </div>
-        </v-form>
+            <router-link
+                class="block font-bold"
+                :to="{ name: 'create-account' }">
+                Click here to create an account
+            </router-link>
+        </div>
     </v-margin>
 </template>
 

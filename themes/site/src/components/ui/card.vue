@@ -21,10 +21,10 @@ export default {
 
         // padding
         if (padded) {
-            bindings.class.push('p-6');
+            bindings.class.push('px-8 py-10');
         }
 
-        return <div class="v-card bg-grey-darkest border-2 border-primary rounded text-grey-lightest" {...bindings}>
+        return <div class="v-card bg-grey-3 rounded shadow-sm" {...bindings}>
             {context.slots().default}
         </div>;
     },

@@ -5,12 +5,12 @@
 }
 
 a {
-    color: config('colors.grey-lightest');
+    color: config('colors.primary-7');
     text-decoration: none;
     transition: color 150ms ease-in-out;
 
     &:hover {
-        color: config('colors.primary');
+        color: config('colors.primary-5');
     }
 }
 

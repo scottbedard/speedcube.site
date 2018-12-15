@@ -22,6 +22,23 @@
             }
         }
     }
+
+    //
+    // help
+    //
+    .help {
+        &:empty {
+            display: none;
+        }
+
+        /deep/ a {
+            color: config('colors.grey-7');
+
+            &:hover {
+                color: config('colors.primary-6');
+            }
+        }
+    }
 </style>
 
 <template>
@@ -29,13 +46,18 @@
         class="v-form-field"
         :data-invalid="!isValid || undefined">
 
-        <!-- label -->
-        <label
-            class="block cursor-pointer font-bold mb-2 text-grey-dark text-sm tracking-wide"
-            v-if="label"
-            v-text="label"
-            @click="focus"
-        />
+        <div class="flex flex-wrap font-bold items-end justify-between">
+            <!-- label -->
+            <label
+                class="block cursor-pointer mb-2 text-grey-dark text-sm tracking-wide w-full sm:w-auto"
+                v-if="label"
+                v-text="label"
+                @click="focus"
+            />
+
+            <!-- help -->
+            <div class="help mb-2 text-xs tracking-wide"><slot name="help" /></div>
+        </div>
 
         <!-- content -->
         <slot />

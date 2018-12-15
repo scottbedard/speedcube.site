@@ -4,41 +4,49 @@ import { bindAll } from 'spyfu-vue-functional';
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { disabled, loading, primary, size } = context.props;
+        const { disabled, loading, outlined, primary, size, to } = context.props;
 
-        // append size classes
-        if (size === 'sm') {
-            bindings.class.push('v-button-sm px-4 text-xs');
-        } else if (size === 'md') {
-            bindings.class.push('v-button-md h-12 px-8 text-sm');
-        }
-
-        // disabled
-        if (disabled) {
-            bindings.class.push('opacity-60 pointer-events-none');
-        }
-
-        // loading
-        if (loading) {
-            bindings.class.push('pointer-events-none');
-        }
-
+        //
         // primary
+        //
         if (primary) {
-            bindings.class.push('border-grey-dark text-grey-dark focus:border-primary focus:text-primary hover:border-primary hover:text-primary');
+            if (outlined) {
+                bindings.class.push('border-2 border-primary-5 text-primary-6 trans-border hover:border-primary-6');
+            } else {
+                bindings.class.push('bg-primary-4 text-primary-10 trans-bg hover:bg-primary-5')
+            }
         } else {
-            bindings.class.push('border-grey-dark text-grey-dark hover:border-grey-darker hover:text-grey-darker');
+
         }
 
-        return <button
-            class="border-2 cursor-pointer font-bold inline-flex items-center rounded tracking-wide uppercase focus:outline-none"
+        //
+        // size
+        //
+        if (size === 'sm') {
+            bindings.class.push('h-10 px-6');
+        } else if (size === 'md') {
+            bindings.class.push('h-12 px-8');
+        }
+
+        //
+        // tag
+        //
+        let Tag = 'button';
+
+        if (to) {
+            Tag = 'router-link';
+        }
+
+        return <Tag
+            class="font-bold inline-flex items-center rounded-full text-xs tracking-wide uppercase focus:outline-none"
+            to={to}
             {...bindings}>
             {
                 loading
                     ? <v-spinner color="grey-dark" size="sm" />
                     : context.slots().default
             }
-        </button>;
+        </Tag>;
     },
     functional: true,
     props: {
@@ -50,6 +58,10 @@ export default {
             default: false,
             type: Boolean,
         },
+        outlined: {
+            default: false,
+            type: Boolean,
+        },
         primary: {
             default: false,
             type: Boolean,
@@ -57,6 +69,9 @@ export default {
         size: {
             default: 'md',
             type: String,
+        },
+        to: {
+            type: [Object, String],
         },
     },
 };

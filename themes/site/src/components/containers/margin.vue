@@ -6,10 +6,6 @@ export default {
         const bindings = bindAll(context);
         const { dark, padded } = context.props;
 
-        if (dark) {
-            bindings.class.push('bg-grey-2');
-        }
-
         if (padded) {
             bindings.class.push('px-6 trans-padding md:px-8');
         }
@@ -20,10 +16,6 @@ export default {
     },
     functional: true,
     props: {
-        dark: {
-            default: false,
-            type: Boolean,
-        },
         padded: {
             default: false,
             type: Boolean,

@@ -1,10 +1,10 @@
 <template>
-    <header class="bg-grey-2 shadow">
-        <v-margin class="flex h-16 items-center justify-between" padded>
+    <header>
+        <v-margin class="flex h-24 items-center justify-between" padded>
 
             <!-- logo -->
             <router-link
-                class="no-underline text-grey-8 hover:text-primary-7"
+                class="no-underline text-grey-8"
                 data-logo
                 :to="{ name: 'home' }">
                 <strong>speedcube.site</strong>

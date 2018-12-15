@@ -1,11 +1,13 @@
 <style lang="scss" scoped>
-    .layout {
-        // border: 5px solid red;
+    .backdrop {
+        background: linear-gradient(to bottom, config('colors.grey-1'), config('colors.grey-2'));
+        z-index: -1;
     }
 </style>
 
 <template>
-    <div class="layout flex flex-col min-h-screen">
+    <div class="layout flex flex-col">
+        <div class="absolute backdrop min-h-screen w-full"></div>
         <!-- header -->
         <v-header />
 

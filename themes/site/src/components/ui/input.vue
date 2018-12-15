@@ -4,7 +4,9 @@
         // chained together. using this mixin allows us to side
         // step the issue without repeating placeholder css.
         @mixin placeholder {
-            // color: config('colors.primary-lightest');
+            color: config('colors.grey-8');
+            font-weight: normal;
+            letter-spacing: normal;
         }
 
         &:-ms-input-placeholder { @include placeholder } // <- IE >= 10
@@ -15,120 +17,6 @@
         &:-webkit-autofill {
             // -webkit-box-shadow: 0 0 0 30px white inset;
         }
-
-        //
-        // color pickers
-        //
-        &[type=color] {
-            appearance: none;
-            border: none;
-            cursor: pointer;
-            height: 1.5rem;
-            padding: 0;
-            width: 1.5rem;
-
-            &::-webkit-color-swatch-wrapper {
-                padding: 0;
-            }
-
-            &::-webkit-color-swatch {
-                border: none;
-            }
-        }
-
-        //
-        // ranges
-        //
-        $thumbDiameter: 12px;
-        $trackHeight: 4px;
-
-        &[type=range] {
-            appearance: none;
-
-            &:focus {
-                outline: none
-            }
-
-            // webkit
-            &::-webkit-slider-thumb {
-                appearance: none;
-                background: config('colors.primary');
-                border-radius: 50%;
-                cursor: pointer;
-                height: $thumbDiameter;
-                margin-top: -$thumbDiameter / 3;
-                width: $thumbDiameter;
-            }
-
-            &::-webkit-slider-runnable-track {
-                background: config('colors.grey-darker');
-                border-radius: 2rem;
-                cursor: pointer;
-                height: $trackHeight;
-                transition: background 150ms ease-in-out;
-                width: 100%;
-            }
-
-            &:focus::-webkit-slider-runnable-track {
-                background: config('colors.grey-dark');
-            }
-
-            // mozilla
-            &::-moz-range-thumb {
-                background: config('colors.primary');
-                border-radius: 50%;
-                border: 0;
-                cursor: pointer;
-                height: $thumbDiameter;
-                width: $thumbDiameter;
-            }
-
-            &::-moz-range-track {
-                background: config('colors.grey-darker');
-                border-radius: 2rem;
-                cursor: pointer;
-                height: $trackHeight;
-                transition: background 150ms ease-in-out;
-                width: 100%;
-            }
-
-            // microsoft
-            &::-ms-track {
-                background: transparent;
-                border-color: transparent;
-                color: transparent;
-                cursor: pointer;
-                height: $trackHeight;
-                width: 100%;
-            }
-
-            &::-ms-fill-lower {
-                background: config('colors.grey-darker');
-                border-radius: 50px;
-                border: 0px;
-            }
-
-            &::-ms-fill-upper {
-                background: config('colors.grey-darker');
-                border-radius: 50px;
-                border: 0px;
-            }
-
-            &::-ms-thumb {
-                background: config('colors.primary');
-                border-radius: 37px;
-                border: 0px solid rgba(0, 0, 0, 0);
-                cursor: pointer;
-                height: $thumbDiameter;
-                height: $trackHeight;
-                width: $thumbDiameter;
-            }
-
-            &:focus::-ms-fill-lower {
-                background: config('colors.grey-dark');
-            }
-        }
-
     }
 </style>
 
@@ -139,21 +27,22 @@ import { isFunction } from 'lodash-es';
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const inputBindings = { class: [], on: {} };
         const { autofocus, disabled, max, min, placeholder, step, type, value } = context.props;
+
+        const inputBindings = {
+            class: [],
+            directives: [],
+            on: {},
+        };
 
         // autofocus
         if (autofocus) {
-            if (!inputBindings.directives) {
-                inputBindings.directives = [];
-            }
-
             inputBindings.directives.push({ name: 'autofocus' });
         }
 
         // disabled
         if (disabled) {
-            bindings.class.push('opacity-60 pointer-events-none');
+            // ...
         }
 
         // interface with v-model
@@ -163,20 +52,11 @@ export default {
             delete bindings.on.input;
         }
 
-        // types
-        if (type === 'color') {
-            bindings.class.push('');
-        } else if (type === 'range') {
-            // ...
-        } else {
-            bindings.class.push('border-b-2 border-grey-dark h-12 focus-within:border-primary');
-        }
-
         return <div
-            class="v-input"
+            class="v-input bg-grey-2 h-14 rounded px-4"
             {...bindings}>
             <input
-                class="bg-transparent h-full outline-none text-grey-lighter text-lg w-full"
+                class="bg-transparent font-bold h-full w-full text-grey-8 tracking-wide focus:outline-none"
                 disabled={disabled}
                 domPropsValue={value}
                 max={max}
