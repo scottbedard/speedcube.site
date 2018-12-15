@@ -63,7 +63,7 @@ class Solves extends Controller
         // dnf last month
         $this->vars['dnfLastMonth'] = Solve::dnf()
             ->lastMonth()
-            ->rememberForever()
+            ->remember(30)
             ->count();
 
         // completed this month
@@ -75,7 +75,7 @@ class Solves extends Controller
         // completed last month
         $this->vars['solvesLastMonth'] = Solve::completed()
             ->lastMonth()
-            ->rememberForever()
+            ->remember(30)
             ->count();
     }
 }
