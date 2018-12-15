@@ -5,6 +5,8 @@
 columns:
     id:
         label: ID
+        type: number
+        width: 64px
 
     user:
         label: User
@@ -17,21 +19,26 @@ columns:
 
     cube_size:
         label: Cube size
+        type: number
 
     time:
+        align: right
         label: Solve time
         type: partial
         path: $/speedcube/speedcube/models/solve/_column_time.htm
 
     moves:
         label: Turns
+        type: number
 
     average_speed:
+        align: right
         label: Average speed
         type: partial
         path: $/speedcube/speedcube/models/solve/_column_average_speed.htm
 
     status:
+        align: center
         label: Status
         type: partial
         path: $/speedcube/speedcube/models/solve/_column_status.htm
