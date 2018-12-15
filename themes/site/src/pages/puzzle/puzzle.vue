@@ -1,6 +1,6 @@
 <template>
     <v-page>
-        <v-margin class="relative" padded>
+        <v-margin class="relative" dark padded>
             <!-- sidebar -->
             <aside class="absolute hidden pin-l pin-t px-4 md:block">
                 <v-sidebar :config-key="puzzleId" />

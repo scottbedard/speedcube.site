@@ -2,7 +2,7 @@
     .v-card {
         /deep/ {
             h4 {
-                @apply font-bold mb-6 text-grey text-base;
+                // @apply font-bold mb-6 text-grey-5 text-base;
             }
 
             label {

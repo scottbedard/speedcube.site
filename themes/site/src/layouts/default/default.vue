@@ -1,10 +1,16 @@
+<style lang="scss" scoped>
+    .layout {
+        // border: 5px solid red;
+    }
+</style>
+
 <template>
-    <div class="flex flex-col min-h-screen">
+    <div class="layout flex flex-col min-h-screen">
         <!-- header -->
         <v-header />
 
         <!-- content -->
-        <main class="flex-1 py-8" role="main">
+        <main class="flex-1" role="main">
             <v-collapse-transition>
                 <router-view />
             </v-collapse-transition>

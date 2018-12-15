@@ -38,8 +38,27 @@ let defaultConfig = require('tailwindcss/defaultConfig')();
 |
 */
 
-let remSizes = Array(100).fill(0).reduce((acc, n, i) => {
-  return { ...acc, [i]: (i / 4) + 'rem' };
+let scale = [
+  1, // 0.25rem
+  2, // 0.5rem
+  3, // 0.75rem
+  4, // 1rem
+  6, // 1.5rem
+  8, // 2rem
+  12, // 3rem
+  16, // 4rem
+  24, // 6rem
+  32, // 8rem
+  48, // 12rem
+  64, // 16rem
+  96, // 24rem
+  128, // 32rem
+  160, // 40rem
+  192, // 48rem
+];
+
+let remSizes = scale.reduce((acc, n) => {
+  return { ...acc, [n]: (n / 4) + 'rem' };
 }, {});
 
 /*
@@ -59,34 +78,68 @@ let remSizes = Array(100).fill(0).reduce((acc, n, i) => {
 */
 
 let colors = {
+  //
+  // utility
+  //
   'transparent': 'transparent',
 
-  'black': '#000000',
-  'grey-darkest': '#25303b',
-  'grey-darker': '#6a7685',
-  'grey-dark': '#939fb0',
-  'grey': '#c0cbd4',
-  'grey-light': '#d4dbe2',
-  'grey-lighter': '#e5eaee',
-  'grey-lightest': '#f8fafc',
-  'off-white': '#f9fafb',
-  'white': '#ffffff',
+  //
+  // greys
+  //
+  'grey-1': '#1F2933',
+  'grey-2': '#323F4B',
+  'grey-3': '#3E4C59',
+  'grey-4': '#52606D',
+  'grey-5': '#616E7C',
+  'grey-6': '#7B8794',
+  'grey-7': '#9AA5B1',
+  'grey-8': '#CBD2D9',
+  'grey-9': '#E4E7EB',
+  'grey-10': '#F5F7FA',
 
-  'primary-darkest': '#112d42',
-  'primary-darker': '#1c537c',
-  'primary-dark': '#2673ac',
-  'primary': '#388ecf',
-  'primary-light': '#6eacdd',
-  'primary-lighter': '#b3d9f6',
-  'primary-lightest': '#f1f9ff',
+  //
+  // primary (blue)
+  //
+  'primary-1': '#003E6B',
+  'primary-2': '#0A558C',
+  'primary-3': '#0F609B',
+  'primary-4': '#186FAF',
+  'primary-5': '#2680C2',
+  'primary-6': '#4098D7',
+  'primary-7': '#62B0E8',
+  'primary-8': '#84C5F4',
+  'primary-9': '#B6E0FE',
+  'primary-10': '#DCEEFB',
 
-  'red-darkest': '#6c1919',
-  'red-darker': '#941c1e',
-  'red-dark': '#c02423',
-  'red': '#e03737',
-  'red-light': '#e76f6f',
-  'red-lighter': '#f6b3b3',
-  'red-lightest': '#fceaeb',
+  // //
+  // // deprecated
+  // //
+  // 'black': '#000000',
+  // 'grey-darkest': '#25303b',
+  // 'grey-darker': '#6a7685',
+  // 'grey-dark': '#939fb0',
+  // 'grey': '#c0cbd4',
+  // 'grey-light': '#d4dbe2',
+  // 'grey-lighter': '#e5eaee',
+  // 'grey-lightest': '#f8fafc',
+  // 'off-white': '#f9fafb',
+  // 'white': '#ffffff',
+
+  // 'primary-darkest': '#112d42',
+  // 'primary-darker': '#1c537c',
+  // 'primary-dark': '#2673ac',
+  // 'primary': '#388ecf',
+  // 'primary-light': '#6eacdd',
+  // 'primary-lighter': '#b3d9f6',
+  // 'primary-lightest': '#f1f9ff',
+
+  // 'red-darkest': '#6c1919',
+  // 'red-darker': '#941c1e',
+  // 'red-dark': '#c02423',
+  // 'red': '#e03737',
+  // 'red-light': '#e76f6f',
+  // 'red-lighter': '#f6b3b3',
+  // 'red-lightest': '#fceaeb',
 
   // 'orange-darkest': '#F57C00',
   // 'orange-darker': '#FB8C00',
@@ -96,21 +149,21 @@ let colors = {
   // 'orange-lighter': '#FFCC80',
   // 'orange-lightest': '#FFE0B2',
 
-  'yellow-darkest': '#675213',
-  'yellow-darker': '#977823',
-  'yellow-dark': '#d0af46',
-  'yellow': '#f5d16f',
-  'yellow-light': '#fae5a9',
-  'yellow-lighter': '#fdf5dc',
-  'yellow-lightest': '#fffcf5',
+  // 'yellow-darkest': '#675213',
+  // 'yellow-darker': '#977823',
+  // 'yellow-dark': '#d0af46',
+  // 'yellow': '#f5d16f',
+  // 'yellow-light': '#fae5a9',
+  // 'yellow-lighter': '#fdf5dc',
+  // 'yellow-lightest': '#fffcf5',
 
-  'green-darkest': '#135c41',
-  'green-darker': '#1a824a',
-  'green-dark': '#2aa763',
-  'green': '#40c87d',
-  'green-light': '#7fdda9',
-  'green-lighter': '#b1f0c8',
-  'green-lightest': '#e6fcee',
+  // 'green-darkest': '#135c41',
+  // 'green-darker': '#1a824a',
+  // 'green-dark': '#2aa763',
+  // 'green': '#40c87d',
+  // 'green-light': '#7fdda9',
+  // 'green-lighter': '#b1f0c8',
+  // 'green-lightest': '#e6fcee',
 
   // 'teal-darkest': '#00796B',
   // 'teal-darker': '#00897B',

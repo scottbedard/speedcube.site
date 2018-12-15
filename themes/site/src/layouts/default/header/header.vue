@@ -1,10 +1,10 @@
 <template>
-    <header>
-        <v-margin class="flex h-20 items-center justify-between" padded>
+    <header class="bg-grey-2 shadow">
+        <v-margin class="flex h-16 items-center justify-between" padded>
 
             <!-- logo -->
             <router-link
-                class="no-underline text-primary-lightest trans-color hover:text-white"
+                class="no-underline text-grey-8 hover:text-primary-7"
                 data-logo
                 :to="{ name: 'home' }">
                 <strong>speedcube.site</strong>
@@ -12,9 +12,9 @@
 
             <div class="h-full">
                 <!-- mobile nav -->
-                <div class="md:hidden">
+                <!-- <div class="md:hidden">
                     <v-mobile-nav />
-                </div>
+                </div> -->
 
                 <!-- desktop nav -->
                 <div class="hidden h-full items-center md:flex">

@@ -21,24 +21,26 @@
         <!-- guest -->
         <template v-else>
             <!-- sign in -->
-            <v-desktop-link :to="{ name: 'signin' }">
+            <v-desktop-link
+                :to="{ name: 'signin' }">
                 Sign In
             </v-desktop-link>
 
             <!-- sign up -->
-            <v-desktop-link :to="{ name: 'create-account' }">
+            <v-button
+                :to="{ name: 'create-account' }">
                 Create Account
-            </v-desktop-link>
+            </v-button>
 
             <!-- solve -->
-            <v-desktop-link :to="{ name: 'puzzle:3' }">
+            <!-- <v-desktop-link :to="{ name: 'puzzle:3' }">
                 Solve
-            </v-desktop-link>
+            </v-desktop-link> -->
 
             <!-- records -->
-            <v-desktop-link :to="{ name: 'records' }">
+            <!-- <v-desktop-link :to="{ name: 'records' }">
                 Records
-            </v-desktop-link>
+            </v-desktop-link> -->
         </template>
     </nav>
 </template>
