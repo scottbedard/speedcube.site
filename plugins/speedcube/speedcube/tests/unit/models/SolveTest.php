@@ -9,6 +9,14 @@ use Speedcube\Speedcube\Tests\PluginTestCase;
 
 class SolveTest extends PluginTestCase
 {
+    public function test_creating_a_solve_generates_a_token()
+    {
+        $solve = Factory::create(new Solve);
+
+        // if this value is ever changed, make sure to migrate the db column
+        $this->assertEquals(11, strlen($solve->token));
+    }
+    
     public function test_closing_abandoned_solves()
     {
         // newly created solves should not be considered abandoned

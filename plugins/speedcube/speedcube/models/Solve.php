@@ -72,6 +72,16 @@ class Solve extends Model
     ];
 
     /**
+     * Lifecylce hooks
+     * 
+     * @return void
+     */
+    public function beforeCreate()
+    {
+        $this->generateToken();
+    }
+
+    /**
      * Abort a solve.
      * 
      * @return void
@@ -120,6 +130,37 @@ class Solve extends Model
         }
 
         $this->save();
+    }
+
+    /**
+     * Generate a random string, using a cryptographically secure 
+     * pseudorandom number generator (random_int).
+     * 
+     * @return void
+     */
+    private function generateToken()
+    {
+        // the current length of gift tokens. if this value ever
+        // is changed, make sure to also update the db column.
+        $length = 11;
+
+        // token characters
+        $keyspace = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-';
+        
+        $token = null;
+        $max = mb_strlen($keyspace, '8bit') - 1;
+
+        while (!$token || self::whereToken($token)->exists()) {
+            $chars = [];
+
+            for ($i = 0; $i < $length; ++$i) {
+                $chars[] = $keyspace[random_int(0, $max)];
+            }
+
+            $token = implode('', $chars);
+        }
+
+        $this->token = $token;
     }
 
     /**
@@ -200,6 +241,11 @@ class Solve extends Model
     public function scopeCompleted($query)
     {
         return $query->where('status', 'complete');
+    }
+
+    public function scopeFindByToken($query, $token)
+    {
+        return $query->whereToken($token)->find();
     }
 
     public function scopeFewestMoves($query)

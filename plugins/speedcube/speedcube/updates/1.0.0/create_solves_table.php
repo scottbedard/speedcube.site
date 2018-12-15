@@ -11,6 +11,7 @@ class CreateSolvesTable extends Migration
         Schema::create('speedcube_speedcube_solves', function(Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
+            $table->string('token', 11)->unique();
             $table->integer('user_id')->nullable()->unsigned()->index();
             $table->boolean('is_rated')->default(false)->index();
             $table->integer('scramble_id')->nullable()->unsigned()->index();
