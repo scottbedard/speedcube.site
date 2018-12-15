@@ -14,8 +14,9 @@
         &::-moz-placeholder { @include placeholder } // <- Firefox >= 19
         &::-webkit-input-placeholder { @include placeholder } // <- Chrome, Opera, Safari
 
+        // remove the ugly webkit autofill background
         &:-webkit-autofill {
-            // -webkit-box-shadow: 0 0 0 30px white inset;
+            -webkit-box-shadow: 0 0 0 30px config('colors.grey-2') inset;
         }
     }
 </style>
