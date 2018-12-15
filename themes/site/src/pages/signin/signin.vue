@@ -62,7 +62,7 @@
                 <!-- actions -->
                 <div class="flex flex-wrap items-start justify-between mt-8">
                     <!-- remember -->
-                    <div>
+                    <div class="mb-8 mr-6 sm:mb-0 sm:mr-0">
                         <v-checkbox
                             v-model="remember">
                             Remember me
@@ -70,9 +70,7 @@
                     </div>
 
                     <!-- submit -->
-                    <v-button
-                        primary
-                        type="submit">
+                    <v-button primary type="submit">
                         Sign in
                     </v-button>
                 </div>
