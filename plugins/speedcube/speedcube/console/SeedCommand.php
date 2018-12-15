@@ -31,10 +31,10 @@ class SeedCommand extends Command
      */
     public function handle()
     {
-        $this->output->writeln('Seeding all tables');
+        $this->output->writeln("Seeding fake data...\n");
 
-        $this->seedUsers(20);
-        $this->seedSolves(500);
+        $this->seedUsers();
+        $this->seedSolves();
     }
 
     /**
@@ -52,7 +52,10 @@ class SeedCommand extends Command
      */
     protected function getOptions()
     {
-        return [];
+        return [
+            ['solves', null, InputOption::VALUE_OPTIONAL, 'Generate solves', 0],
+            ['users', null, InputOption::VALUE_OPTIONAL, 'Generate users', 0],
+        ];
     }
 
     /**
@@ -60,13 +63,20 @@ class SeedCommand extends Command
      * 
      * @return void
      */
-    public function seedSolves($end = 10)
+    public function seedSolves()
     {
-        $this->output->writeln('- Solves...');
+        $quantity = (int) $this->option('solves');
+
+        if ($quantity === 0) {
+            return;
+        }
 
         $users = User::all();
 
-        for ($i = 0; $i < $end; $i++) {
+        $this->output->writeln('- Solves');
+        $progressBar = $this->output->createProgressBar($quantity);
+
+        for ($i = 0; $i < $quantity; $i++) {
             // create a scramble and a solve
             $scramble = Factory::create(new Scramble, [
                 'cube_size' => rand(2, 5),
@@ -102,7 +112,13 @@ class SeedCommand extends Command
                 
                 $solve->complete($timestampedSolution);
             }
+
+            $progressBar->advance();
         }
+
+        $progressBar->finish();
+
+        $this->output->writeln("\n");
     }
 
 
@@ -111,12 +127,26 @@ class SeedCommand extends Command
      * 
      * @return void
      */
-    public function seedUsers($end = 10)
+    public function seedUsers()
     {
-        $this->output->writeln('- Users...');
+        $quantity = (int) $this->option('users');
 
-        for ($i = 0; $i < $end; $i++) {
-            Factory::registerUser();
+        if ($quantity === 0) {
+            return;
         }
+
+        $this->output->writeln('- Users');
+
+        $progressBar = $this->output->createProgressBar($quantity);
+
+        for ($i = 0; $i < $quantity; $i++) {
+            Factory::registerUser();
+
+            $progressBar->advance();
+        }
+
+        $progressBar->finish();
+
+        $this->output->writeln("\n");
     }
 }

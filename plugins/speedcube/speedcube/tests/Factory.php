@@ -94,8 +94,14 @@ class Factory
     {
         $faker = Faker\Factory::create('en_US');
 
+        $email = '';
+        
+        do {
+            $email = $faker->safeEmail;
+        } while (User::whereEmail($email)->count() > 0);
+
         return [
-            'email' => $faker->safeEmail,
+            'email' => $email,
             'name' => $faker->firstName(rand(0, 1)) . ' ' . $faker->lastName,
             'password' => 'foobar',
             'password_confirmation' => 'foobar',
