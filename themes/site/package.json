@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "bedard-cube": "^0.5.2",
+    "bedard-cube": "^1.0.0-beta.0",
     "color": "^3.1.0",
     "lodash-es": "^4.17.11",
     "moment": "^2.22.2",

@@ -220,9 +220,17 @@ export default {
             this.redraw();
         },
         setCubeState(state) {
-            forOwn(state, (values, face) => {
+            // our camel-casing middleware can cause cube states to come
+            // back with lowercase targets, so we'll normalize befor setting
+            const normalizedState = Object.keys(state).reduce((acc, target) => {
+                acc[target.toUpperCase()] = state[target];
+
+                return acc;
+            }, {});
+
+            forOwn(normalizedState, (values, target) => {
                 values.forEach((value, index) => {
-                    this.cube.state[face][index].value = value;
+                    this.cube.state[target][index].value = value;
                 });
             });
 
@@ -232,8 +240,10 @@ export default {
             this.turn(this.cube.generateScrambleString());
         },
         turn(turns) {
+            console.log('ok', turns);
             this.queue.push(...turns.split(' ').map(turn => turn.trim()));
-
+            console.log('next!');
+            
             executeNextTurn(this);
         },
     },

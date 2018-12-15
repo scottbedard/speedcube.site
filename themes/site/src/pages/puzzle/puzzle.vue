@@ -302,7 +302,7 @@ export default {
             }
         },
         turn(turn) {
-            const isPuzzleRotation = /\d*[xyzXYZ]-?\d?/g.test(turn);
+            const isPuzzleRotation = /[xyzXYZ]-?\d?$/g.test(turn);
 
             // disallow any moves that aren't whole-cube turns
             if (this.isInspecting && !isPuzzleRotation) {
