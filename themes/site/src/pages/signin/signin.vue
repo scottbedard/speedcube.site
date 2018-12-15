@@ -2,11 +2,11 @@
     <v-margin padded>
         <!-- title -->
         <div class="text-center">
-            <h1 class="mb-3 text-4xl text-grey-9">
+            <h1 class="mb-2 text-3xl text-grey-9">
                 Welcome back
             </h1>
-            <div class="text-grey-6">
-                Sign in and go break some records!
+            <div class="text-grey-7">
+                Sign in and break some records!
             </div>
         </div>
 
@@ -86,7 +86,7 @@
 
         <!-- sign up -->
         <div class="text-center text-sm">
-            <div class="mb-2 text-grey-6">
+            <div class="mb-2 text-grey-7">
                 Don't have an account?
             </div>
             <div>
