@@ -9,13 +9,13 @@ if ($solvesThisMonth > $solvesLastMonth) {
 <div class="scoreboard">
     <div data-control="toolbar">
         <div class="scoreboard-item title-value">
-            <h4>Completed</h4>
+            <h4>Solves This Month</h4>
             <p class="<?= $solvesThisMonthClass ?>"><?= number_format($solvesThisMonth) ?></p>
             <p class="description"><?= number_format($solvesLastMonth) ?> last month</p>
         </div>
 
         <div class="scoreboard-item title-value">
-            <h4>DNF</h4>
+            <h4>DNF This Month</h4>
             <p><?= number_format($dnfThisMonth) ?></p>
             <p class="description"><?= number_format($dnfLastMonth) ?> last month</p>
         </div>
