@@ -2,7 +2,7 @@
     <v-margin padded>
         <!-- title -->
         <div class="text-center">
-            <h1 class="mb-3 text-3xl">
+            <h1 class="mb-3 text-4xl text-grey-9">
                 Welcome back
             </h1>
             <div class="text-grey-6">
@@ -63,13 +63,24 @@
                 </v-form-field>
                 
                 <!-- actions -->
-                <div class="flex justify-end mt-8">
+                <div class="flex flex-wrap items-start justify-between mt-8">
+                    <!-- remember -->
+                    <div>
+                        <v-checkbox
+                            v-model="remember">
+                            Remember me
+                        </v-checkbox>
+                    </div>
+
+                    <!-- submit -->
                     <v-button
                         primary
                         type="submit">
                         Sign in
                     </v-button>
                 </div>
+
+                <!-- <pre>{{ $data }}</pre> -->
             </v-form>
         </v-card>
 
@@ -78,11 +89,13 @@
             <div class="mb-2 text-grey-6">
                 Don't have an account?
             </div>
-            <router-link
-                class="block font-bold"
-                :to="{ name: 'create-account' }">
-                Click here to create an account
-            </router-link>
+            <div>
+                <router-link
+                    class="font-bold"
+                    :to="{ name: 'create-account' }">
+                    Click here to sign up
+                </router-link>
+            </div>
         </div>
     </v-margin>
 </template>

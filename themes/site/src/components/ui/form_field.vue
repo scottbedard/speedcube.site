@@ -43,13 +43,13 @@
 
 <template>
     <div
-        class="v-form-field"
+        class="v-form-field text-grey-8 trans-color focus-within:text-grey-9"
         :data-invalid="!isValid || undefined">
 
         <div class="flex flex-wrap font-bold items-end justify-between">
             <!-- label -->
             <label
-                class="block cursor-pointer mb-2 text-grey-dark text-sm tracking-wide w-full sm:w-auto"
+                class="block cursor-pointer mb-2 text-sm tracking-wide w-full sm:w-auto"
                 v-if="label"
                 v-text="label"
                 @click="focus"

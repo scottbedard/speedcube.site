@@ -1,10 +1,10 @@
 <style lang="scss" scoped>
     .v-checkbox:hover [aria-checked=false][tabindex] {
-        border-color: config('colors.primary');
+        border-color: config('colors.primary-2');
     }
 
     path {
-        stroke: config('colors.grey-lightest');
+        stroke: config('colors.primary-5');
     }
 </style>
 
@@ -79,11 +79,11 @@ export default {
         delete bindings.on.change;
 
         return <div
-            class="v-checkbox flex items-center trans-opacity"
+            class="v-checkbox flex items-center text-grey-8 trans-color focus-within:text-grey-9"
             {...bindings}>
             <div
                 aria-checked={checked ? 'true' : 'false'}
-                class="border-2 h-6 outline-none p-px rounded trans-bg trans-border trans-shadow w-6 focus:border-primary"
+                class="bg-grey-2 h-6 rounded p-1 w-6 focus:outline-none"
                 role="checkbox"
                 tabindex={disabled ? null : 0}
                 {...displayBindings}>
@@ -100,13 +100,13 @@ export default {
                         stroke-width="4"
                         style={{
                             animation: checked
-                                ? 'checkbox 100ms ease-in 100ms 1 normal forwards'
+                                ? 'checkbox 100ms ease-in 50ms 1 normal forwards'
                                 : null,
                         }}
                     />
                 </svg>
             </div>
-            <div class="font-bold ml-2 text-grey-dark tracking-wide select-none text-sm uppercase">
+            <div class="font-bold ml-2 tracking-wide select-none text-sm tracking-wide">
                 {context.slots().default}
             </div>
         </div>;
