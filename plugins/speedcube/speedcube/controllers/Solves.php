@@ -51,31 +51,26 @@ class Solves extends Controller
             ->groupBy('user_id')
             ->orderBy('total', 'desc')
             ->withUserSummary()
-            ->remember(30)
             ->first();
 
         // dnf this month
         $this->vars['dnfThisMonth'] = Solve::dnf()
             ->thisMonth()
-            ->remember(30)
             ->count();
     
         // dnf last month
         $this->vars['dnfLastMonth'] = Solve::dnf()
             ->lastMonth()
-            ->remember(30)
             ->count();
 
         // completed this month
         $this->vars['solvesThisMonth'] = Solve::completed()
             ->thisMonth()
-            ->remember(30)
             ->count();
         
         // completed last month
         $this->vars['solvesLastMonth'] = Solve::completed()
             ->lastMonth()
-            ->remember(30)
             ->count();
     }
 }
