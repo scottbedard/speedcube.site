@@ -210,6 +210,14 @@ export default {
         },
     },
     methods: {
+        fakeScramble(length = 20) {
+            // generate a fake scramble to use as a loading state.
+            // we're removing double turns in order to keep the
+            // turning speed constant throughout the fake scramble.
+            const fakeScramble = this.cube.generateScrambleString(length).replace(/2\w?/g, '');
+
+            this.turn(fakeScramble);
+        },
         redraw() {
             initialize(this);
             render(this);
@@ -220,9 +228,17 @@ export default {
             this.redraw();
         },
         setCubeState(state) {
-            forOwn(state, (values, face) => {
+            // our camel-casing middleware can cause cube states to come
+            // back with lowercase targets, so we'll normalize befor setting
+            const normalizedState = Object.keys(state).reduce((acc, target) => {
+                acc[target.toUpperCase()] = state[target];
+
+                return acc;
+            }, {});
+
+            forOwn(normalizedState, (values, target) => {
                 values.forEach((value, index) => {
-                    this.cube.state[face][index].value = value;
+                    this.cube.state[target][index].value = value;
                 });
             });
 

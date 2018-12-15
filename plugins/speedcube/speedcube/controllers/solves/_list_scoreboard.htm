@@ -22,7 +22,7 @@ if ($solvesThisMonth > $solvesLastMonth) {
 
         <div class="scoreboard-item title-value">
             <h4>Top User</h4>
-            <p class="oc-icon-star"><?= $mostSolves->user->name ?></p>
+            <p class="oc-icon-star"><?= $mostSolves->user ? $mostSolves->user->name : 'Guest' ?></p>
             <p class="description"><?= number_format($mostSolves->total) ?> completed <?= str_plural('solve', $mostSolves->total) ?></p>
         </div>
     </div>

@@ -90,63 +90,71 @@ export function getEffectedStickers(vm, parsedTurn) {
     const stickers = [];
     const { cube, colMap, rowMap } = vm;
     const { size } = vm.cube;
-    const { depth, face, outer } = parsedTurn;
+    const { depth, target, wide } = parsedTurn;
     const zeroDepth = depth - 1;
     const reverseDepth = size - depth;
 
-    // attach the entire face of outer turns
-    if (parsedTurn.outer) {
-        stickers.push(...cube.state[parsedTurn.face]);
+    // attach the entire face of wide turns
+    if (wide || depth === 1) {
+        stickers.push(...cube.state[parsedTurn.target]);
     }
 
     // attach the entire opposite face of inner turns
     if (depth >= size) {
-        const opposite = { u: 'd', l: 'r', f: 'b', r: 'l', b: 'f', d: 'u' };
-        stickers.push(...cube.state[opposite[parsedTurn.face]]);
+        const opposite = {
+            U: 'D',
+            L: 'R',
+            F: 'B',
+            R: 'L',
+            B: 'F',
+            D: 'U',
+        };
+
+        stickers.push(...cube.state[opposite[target]]);
     }
 
     // get the slices being turned
-    if (face === 'u') {
+    if (target === 'U') {
         stickers.push(
-            ...cube.state.b.filter((s, i) => outer ? rowMap[i] < depth : rowMap[i] === zeroDepth),
-            ...cube.state.r.filter((s, i) => outer ? rowMap[i] < depth : rowMap[i] === zeroDepth),
-            ...cube.state.f.filter((s, i) => outer ? rowMap[i] < depth : rowMap[i] === zeroDepth),
-            ...cube.state.l.filter((s, i) => outer ? rowMap[i] < depth : rowMap[i] === zeroDepth),
+            ...cube.state.B.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
+            ...cube.state.R.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
+            ...cube.state.F.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
+            ...cube.state.L.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
         );
-    } else if (face === 'l') {
+    } else if (target === 'L') {
         stickers.push(
-            ...cube.state.u.filter((s, i) => outer ? colMap[i] < depth : colMap[i] === zeroDepth),
-            ...cube.state.f.filter((s, i) => outer ? colMap[i] < depth : colMap[i] === zeroDepth),
-            ...cube.state.d.filter((s, i) => outer ? colMap[i] < depth : colMap[i] === zeroDepth),
-            ...cube.state.b.filter((s, i) => outer ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+            ...cube.state.U.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
+            ...cube.state.F.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
+            ...cube.state.D.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
+            ...cube.state.B.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
         );
-    } else if (face === 'f') {
+    } else if (target === 'F') {
         stickers.push(
-            ...cube.state.u.filter((s, i) => outer ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
-            ...cube.state.r.filter((s, i) => outer ? colMap[i] < depth : colMap[i] === zeroDepth),
-            ...cube.state.d.filter((s, i) => outer ? rowMap[i] < depth : rowMap[i] === zeroDepth),
-            ...cube.state.l.filter((s, i) => outer ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+            ...cube.state.U.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
+            ...cube.state.R.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
+            ...cube.state.D.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
+            ...cube.state.L.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
         );
-    } else if (face === 'r') {
+    } else if (target === 'R') {
         stickers.push(
-            ...cube.state.u.filter((s, i) => outer ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
-            ...cube.state.b.filter((s, i) => outer ? colMap[i] < depth : colMap[i] === zeroDepth),
-            ...cube.state.d.filter((s, i) => outer ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
-            ...cube.state.f.filter((s, i) => outer ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+            ...cube.state.U.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+            ...cube.state.B.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
+            ...cube.state.D.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+            ...cube.state.F.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
         );
-    } else if (face === 'b') {
+    } else if (target === 'B') {
         stickers.push(
-            ...cube.state.u.filter((s, i) => outer ? rowMap[i] < depth : rowMap[i] === zeroDepth),
-            ...cube.state.l.filter((s, i) => outer ? colMap[i] < depth : colMap[i] === zeroDepth),
-            ...cube.state.d.filter((s, i) => outer ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
-            ...cube.state.r.filter((s, i) => outer ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+            ...cube.state.U.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
+            ...cube.state.L.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
+            ...cube.state.D.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
+            ...cube.state.R.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
         );
-    } else if (face === 'd') {
+    } else if (target === 'D') {
         stickers.push(
-            ...cube.state.b.filter((s, i) => outer ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
-            ...cube.state.r.filter((s, i) => outer ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
-            ...cube.state.f.filter((s, i) => outer ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
-            ...cube.state.l.filter((s, i) => outer ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
+            ...cube.state.B.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
+            ...cube.state.R.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
+            ...cube.state.F.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
+            ...cube.state.L.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
         );
     }
 
@@ -161,35 +169,35 @@ export function getEffectedStickers(vm, parsedTurn) {
  * @return {Array}
  */
 export function getTurnAxisAndDegrees(parsedTurn) {
+    const { target, rotation } = parsedTurn;
     let axis, degrees;
-    const { double, face, prime, whole } = parsedTurn;
 
     // helper function to get turn degrees. note that the
     // clockwise / counter-clickwise degrees might seem
     // backwards. this is because we're turning from the
     // context of our scene's world axis, not the face.
-    const deg = (cw, ccw) => double ? 180 : (prime ? ccw : cw);
+    const deg = (cw, ccw) => rotation === 2 ? 180 : (rotation === -1 ? ccw : cw);
 
-    if (whole) {
-        axis = face;
+    if (['X', 'Y', 'Z'].includes(target)) {
+        axis = target.toLowerCase();
         degrees = deg(-90, 90);
     } else {
-        if (face === 'u') {
+        if (target === 'U') {
             axis = 'y';
             degrees = deg(-90, 90);
-        } else if (face === 'l') {
+        } else if (target === 'L') {
             axis = 'x';
             degrees = deg(90, -90);
-        } else if (face === 'f') {
+        } else if (target === 'F') {
             axis = 'z';
             degrees = deg(-90, 90);
-        } else if (face === 'r') {
+        } else if (target === 'R') {
             axis = 'x';
             degrees = deg(-90, 90);
-        } else if (face === 'b') {
+        } else if (target === 'B') {
             axis = 'z';
             degrees = deg(90, -90);
-        } else if (face === 'd') {
+        } else if (target === 'D') {
             axis = 'y';
             degrees = deg(90, -90);
         }  
@@ -209,12 +217,14 @@ export function getTurnObject(vm, parsedTurn) {
 
     obj.name = 'turn';
 
-    if (parsedTurn.whole) {
+    if (['X', 'Y', 'Z'].includes(parsedTurn.target)) {
         // if the entire cube is being turned, add all stickers to the turn object
         vm.cube.stickers((s) => obj.add(s.display));
     } else {
         // otherwise add only the stickers being effected by the turn
-        getEffectedStickers(vm, parsedTurn).forEach((s) => obj.add(s.display));
+        const effected = getEffectedStickers(vm, parsedTurn);
+
+        effected.forEach((s) => obj.add(s.display));
     }
 
     vm.scene.add(obj);
@@ -294,12 +304,12 @@ export function positionStickers(vm) {
 
     // rotate, position, and translate all stickers
     const elevation = vm.stickerSize * vm.stickerElevation;
-    vm.cube.state.u.forEach((s, i) => rpt(s, i, { x: -90 }, { y: vm.halfCubeSize + elevation }));
-    vm.cube.state.l.forEach((s, i) => rpt(s, i, { y: -90 }, { x: -vm.halfCubeSize - elevation }));
-    vm.cube.state.f.forEach((s, i) => rpt(s, i, {}, { z: vm.halfCubeSize + elevation }));
-    vm.cube.state.r.forEach((s, i) => rpt(s, i, { y: 90 }, { x: vm.halfCubeSize + elevation }));
-    vm.cube.state.b.forEach((s, i) => rpt(s, i, { y: 180 }, { z: -vm.halfCubeSize - elevation }));
-    vm.cube.state.d.forEach((s, i) => rpt(s, i, { x: 90 }, { y: -vm.halfCubeSize - elevation }));
+    vm.cube.state.U.forEach((s, i) => rpt(s, i, { x: -90 }, { y: vm.halfCubeSize + elevation }));
+    vm.cube.state.L.forEach((s, i) => rpt(s, i, { y: -90 }, { x: -vm.halfCubeSize - elevation }));
+    vm.cube.state.F.forEach((s, i) => rpt(s, i, {}, { z: vm.halfCubeSize + elevation }));
+    vm.cube.state.R.forEach((s, i) => rpt(s, i, { y: 90 }, { x: vm.halfCubeSize + elevation }));
+    vm.cube.state.B.forEach((s, i) => rpt(s, i, { y: 180 }, { z: -vm.halfCubeSize - elevation }));
+    vm.cube.state.D.forEach((s, i) => rpt(s, i, { x: 90 }, { y: -vm.halfCubeSize - elevation }));
 }
 
 /**

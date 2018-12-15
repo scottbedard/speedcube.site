@@ -15,54 +15,49 @@ class Cube
      */
     public static function countTurns(string $turns)
     {
-        $result = 0;
-        $rawTurns = explode(' ', self::removeTimestamps($turns));
+        $parsedTurns = self::parseTurns(self::removeTimestamps($turns));
 
         $intersections = [
-            'u' => ['b', 'r', 'f', 'l'],
-            'l' => ['u', 'f', 'd', 'b'],
-            'f' => ['u', 'r', 'd', 'l'],
-            'r' => ['u', 'b', 'd', 'f'],
-            'b' => ['u', 'l', 'd', 'b'],
-            'd' => ['f', 'r', 'b', 'l'],
+            'U' => ['B', 'R', 'F', 'L'],
+            'L' => ['U', 'F', 'D', 'B'],
+            'F' => ['U', 'R', 'D', 'L'],
+            'R' => ['U', 'B', 'D', 'F'],
+            'B' => ['U', 'L', 'D', 'B'],
+            'D' => ['F', 'R', 'B', 'L'],
         ];
 
-        $previousFace = '';
+        $result = 0;
+        $previousTarget = '';
 
-        foreach ($rawTurns as $turn) {
-            $parsedTurn = self::parseTurn($turn);
-
-            if ($parsedTurn['whole'] || $previousFace === $parsedTurn['face']) {
+        foreach ($parsedTurns as $turn) {
+            if (in_array($turn['target'], ['X', 'Y', 'Z'])) {
                 continue;
             }
 
-            $previousFace = $parsedTurn['face'];
-            $result += 1;
+            if ($previousTarget !== $turn['target']) {
+                $previousTarget = $turn['target'];
+
+                $result += 1;
+            }
         }
-        
+
         return $result;
     }
 
     /**
      * Parse a turn.
      * 
-     * @param  string   $turn
+     * @param  string   $turns
      * @return Array
      */
-    public static function parseTurn(string $turn)
+    public static function parseTurns(string $turns)
     {
-        preg_match('/^[0-9]+/', $turn, $rawDepth);
-        preg_match('/[A-Za-z]/', $turn, $face);
+        $cubePath = base_path('themes/site/node_modules/bedard-cube/cli.js');
+        $turnsArg = escapeshellarg($turns);
 
-        $face = $face ? strtolower($face[0]) : '';
+        $result = exec("node {$cubePath} parse {$turnsArg}");
 
-        return [
-            'depth' => $rawDepth ? $rawDepth[0] : 1,
-            'face' => $face,
-            'double' => Utils::endsWith($turn, '2'),
-            'prime' => Utils::endsWith($turn, '-'),
-            'whole' => in_array($face, ['x', 'y', 'z']),
-        ];
+        return json_decode($result, true);
     }
 
     /**

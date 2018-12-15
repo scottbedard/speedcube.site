@@ -275,7 +275,7 @@ export default {
                 this.$refs.puzzle.$once('idle', resolve);
             });
 
-            this.$refs.puzzle.scramble();
+            this.$refs.puzzle.fakeScramble();
 
             // begin the inspection when we're ready to go
             Promise.all([request, scramble]).then(([response]) => {
@@ -302,7 +302,7 @@ export default {
             }
         },
         turn(turn) {
-            const isPuzzleRotation = /\d*[xyzXYZ]-?\d?/g.test(turn);
+            const isPuzzleRotation = /[xyzXYZ]-?\d?$/g.test(turn);
 
             // disallow any moves that aren't whole-cube turns
             if (this.isInspecting && !isPuzzleRotation) {

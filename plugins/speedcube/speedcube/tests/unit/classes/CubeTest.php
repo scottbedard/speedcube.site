@@ -11,4 +11,18 @@ class CubeTest extends PluginTestCase
     {
         $this->assertEquals(3, Cube::countTurns('X Y Z R U U F-'));
     }
+
+    public function test_parsing_turns()
+    {
+        $turns = Cube::parseTurns('R');
+
+        $this->assertEquals($turns, [
+            [
+                'depth' => 1,
+                'target' => 'R',
+                'wide' => false,
+                'rotation' => 1,
+            ],
+        ]);
+    }
 }
