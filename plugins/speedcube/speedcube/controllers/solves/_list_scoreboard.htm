@@ -20,10 +20,12 @@ if ($solvesThisMonth > $solvesLastMonth) {
             <p class="description"><?= number_format($dnfLastMonth) ?> last month</p>
         </div>
 
-        <div class="scoreboard-item title-value">
-            <h4>Top User</h4>
-            <p class="oc-icon-star"><?= $mostSolves->user ? $mostSolves->user->name : 'Guest' ?></p>
-            <p class="description"><?= number_format($mostSolves->total) ?> completed <?= str_plural('solve', $mostSolves->total) ?></p>
-        </div>
+        <?php if ($mostSolves): ?>
+            <div class="scoreboard-item title-value">
+                <h4>Top User</h4>
+                <p class="oc-icon-star"><?= $mostSolves->user ? $mostSolves->user->name : 'Guest' ?></p>
+                <p class="description"><?= number_format($mostSolves->total) ?> completed <?= str_plural('solve', $mostSolves->total) ?></p>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
