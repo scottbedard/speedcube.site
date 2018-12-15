@@ -44,31 +44,38 @@ class Solves extends Controller
 
     protected function loadScoreboard()
     {
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $startOfLastMonth = Carbon::now()->startOfMonth()->subMonths(1);
-
+        // top user this month
         $this->vars['mostSolves']= Solve::completed()
             ->thisMonth()
             ->select('user_id', DB::raw('count(*) as total'))
             ->groupBy('user_id')
             ->orderBy('total', 'desc')
             ->withUserSummary()
-            // ->remember(30)
+            ->remember(30)
             ->first();
 
+        // dnf this month
         $this->vars['dnfThisMonth'] = Solve::dnf()
             ->thisMonth()
-            // ->remember(30)
+            ->remember(30)
+            ->count();
+    
+        // dnf last month
+        $this->vars['dnfLastMonth'] = Solve::dnf()
+            ->lastMonth()
+            ->rememberForever()
             ->count();
 
+        // completed this month
         $this->vars['solvesThisMonth'] = Solve::completed()
             ->thisMonth()
-            // ->remember(30)
+            ->remember(30)
             ->count();
         
+        // completed last month
         $this->vars['solvesLastMonth'] = Solve::completed()
             ->lastMonth()
-            // ->rememberForever()
+            ->rememberForever()
             ->count();
     }
 }

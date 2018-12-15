@@ -211,9 +211,10 @@ class Solve extends Model
     {
         return $query->where(function($q) {
             $startOfMonth = Carbon::now()->startOfMonth();
+            $startOfLastMonth = Carbon::now()->startOfMonth()->subMonths(1);
             
             return $q
-                ->where('created_at', '>=', $startOfMonth->subDays(1)->startOfMonth())
+                ->where('created_at', '>=', $startOfLastMonth)
                 ->where('created_at', '<', $startOfMonth);
         });
     }
