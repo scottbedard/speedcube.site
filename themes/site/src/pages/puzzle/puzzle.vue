@@ -275,7 +275,7 @@ export default {
                 this.$refs.puzzle.$once('idle', resolve);
             });
 
-            this.$refs.puzzle.scramble();
+            this.$refs.puzzle.fakeScramble();
 
             // begin the inspection when we're ready to go
             Promise.all([request, scramble]).then(([response]) => {

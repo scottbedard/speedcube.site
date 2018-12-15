@@ -210,6 +210,14 @@ export default {
         },
     },
     methods: {
+        fakeScramble(length = 20) {
+            // generate a fake scramble to use as a loading state.
+            // we're removing double turns in order to keep the
+            // turning speed constant throughout the fake scramble.
+            const fakeScramble = this.cube.generateScrambleString(length).replace(/2\w?/g, '');
+
+            this.turn(fakeScramble);
+        },
         redraw() {
             initialize(this);
             render(this);
@@ -240,10 +248,8 @@ export default {
             this.turn(this.cube.generateScrambleString());
         },
         turn(turns) {
-            console.log('ok', turns);
             this.queue.push(...turns.split(' ').map(turn => turn.trim()));
-            console.log('next!');
-            
+
             executeNextTurn(this);
         },
     },
