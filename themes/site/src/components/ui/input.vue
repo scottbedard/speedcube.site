@@ -1,5 +1,7 @@
 <style lang="scss" scoped>
     input {
+        caret-color: config('colors.grey-6');
+
         // these selectors aren't standardized, and are buggy when
         // chained together. using this mixin allows us to side
         // step the issue without repeating placeholder css.
@@ -14,9 +16,10 @@
         &::-moz-placeholder { @include placeholder } // <- Firefox >= 19
         &::-webkit-input-placeholder { @include placeholder } // <- Chrome, Opera, Safari
 
-        // remove the ugly webkit autofill background
+        // clean up the autofill state in webkit browsers
         &:-webkit-autofill {
             -webkit-box-shadow: 0 0 0 30px config('colors.grey-2') inset;
+            -webkit-text-fill-color: config('colors.grey-8');
         }
     }
 </style>
