@@ -1,4 +1,14 @@
 <style lang="scss" scoped>
+    a {
+        .copy {
+            opacity: 0;
+        }
+
+        &:hover .copy {
+            opacity: 100;
+        }
+    }
+    
     a + a {
         margin-top: 1rem;
     }
@@ -13,11 +23,15 @@ export default {
         const { icon } = context.props;
 
         return <a
-            class="flex items-center text-sm text-grey-dark"
+            class="text-grey-6"
             href="#"
             {...bindings}>
-            <i class={`fa ${icon} inline-block mr-2 text-center w-6`} />
-            {context.slots().default}
+            <span class="bg-grey-3 h-8 inline-flex items-center justify-center mr-2 rounded-full w-8">
+                <i class={`fa ${icon}`} />
+            </span>
+            <span class="copy text-xs tracking-wide trans-opacity trans-transform uppercase">
+                {context.slots().default}
+            </span>
         </a>;
     },
     functional: true,

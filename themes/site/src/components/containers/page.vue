@@ -8,12 +8,12 @@ export default {
 
         // padded
         if (padded) {
-            bindings.class.push('px-4 md:px-8');
+            bindings.class.push('px-4 trans-padding md:px-8');
         }
 
-        return <main class="trans-padding" role="main" {...bindings}>
+        return <div {...bindings}>
             {context.slots().default}
-        </main>;
+        </div>;
     },
     functional: true,
     props: {

@@ -17,10 +17,7 @@
 </style>
 
 <template>
-    <v-card class="relative w-84" padded>
-        <!-- content -->
-        <div class="text-grey-dark">
-            <slot />
-        </div>
+    <v-card class="w-84" padded>
+        <slot />
     </v-card>
 </template>
