@@ -5,6 +5,7 @@
 }
 
 a {
+    border: 0;
     color: config('colors.primary-5');
     text-decoration: none;
     transition: color 150ms ease-in-out;
@@ -12,6 +13,11 @@ a {
     &:hover {
         color: config('colors.primary-6');
     }
+}
+
+html,
+body {
+    height: 100%;
 }
 
 body {

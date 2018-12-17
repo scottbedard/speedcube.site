@@ -1,28 +1,26 @@
 <template>
-    <header>
-        <v-margin class="flex h-24 items-center justify-between" padded>
+    <div class="flex items-center justify-between" padded>
 
-            <!-- logo -->
-            <router-link
-                class="no-underline text-grey-8"
-                data-logo
-                :to="{ name: 'home' }">
-                <strong>speedcube.site</strong>
-            </router-link>
+        <!-- logo -->
+        <router-link
+            class="no-underline text-grey-8"
+            data-logo
+            :to="{ name: 'home' }">
+            <strong>speedcube.site</strong>
+        </router-link>
 
-            <div class="h-full">
-                <!-- mobile nav -->
-                <!-- <div class="md:hidden">
-                    <v-mobile-nav />
-                </div> -->
+        <div class="h-full">
+            <!-- mobile nav -->
+            <!-- <div class="md:hidden">
+                <v-mobile-nav />
+            </div> -->
 
-                <!-- desktop nav -->
-                <div class="hidden h-full items-center md:flex">
-                    <v-desktop-nav />
-                </div>
+            <!-- desktop nav -->
+            <div class="hidden h-full items-center md:flex">
+                <v-desktop-nav />
             </div>
-        </v-margin>
-    </header>
+        </div>
+    </div>
 </template>
 
 <script>

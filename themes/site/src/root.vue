@@ -2,7 +2,7 @@
 <style lang="scss" src="./scss/global.scss"></style>
 
 <template>
-    <div>
+    <div class="h-full">
         <v-fade-transition>
             <router-view />
         </v-fade-transition>

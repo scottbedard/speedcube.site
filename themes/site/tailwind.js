@@ -39,6 +39,7 @@ let defaultConfig = require('tailwindcss/defaultConfig')();
 */
 
 let scale = [
+  0, // 0rem
   1, // 0.25rem
   2, // 0.5rem
   3, // 0.75rem
@@ -54,6 +55,7 @@ let scale = [
   32, // 8rem
   48, // 12rem
   64, // 16rem
+  80, // 20rem
   96, // 24rem
   128, // 32rem
   160, // 40rem

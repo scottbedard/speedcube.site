@@ -2,9 +2,9 @@
     <v-page>
         <v-margin class="relative" padded>
             <!-- sidebar -->
-            <aside class="absolute hidden pin-l pin-t pl-6 md:block">
+            <!-- <aside class="absolute hidden pin-l pin-t pl-6 md:block">
                 <v-sidebar :config-key="puzzleId" />
-            </aside>
+            </aside> -->
 
             <!-- puzzle -->
             <v-puzzle
@@ -51,7 +51,7 @@
 
                     <!-- scramble button -->
                     <div v-else-if="!isComplete && !scrambleIsLoading" key="scramble">
-                        <v-button @click="scramble">
+                        <v-button outlined @click="scramble">
                             Scramble
                         </v-button>
                     </div>
