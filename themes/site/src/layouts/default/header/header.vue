@@ -1,33 +1,10 @@
 <template>
-    <div class="flex items-center justify-between" padded>
-
-        <!-- logo -->
+    <div>
         <router-link
-            class="no-underline text-grey-8"
+            class="no-underline text-grey-8 tracking-wide text-sm"
             data-logo
             :to="{ name: 'home' }">
             <strong>speedcube.site</strong>
         </router-link>
-
-        <div class="h-full">
-            <!-- mobile nav -->
-            <!-- <div class="md:hidden">
-                <v-mobile-nav />
-            </div> -->
-
-            <!-- desktop nav -->
-            <div class="hidden h-full items-center md:flex">
-                <v-desktop-nav />
-            </div>
-        </div>
     </div>
 </template>
-
-<script>
-export default {
-    components: {
-        'v-desktop-nav': () => import('./desktop_nav/desktop_nav.vue'),
-        'v-mobile-nav': () => import('./mobile_nav/mobile_nav.vue'),
-    },
-};
-</script>

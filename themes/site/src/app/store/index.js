@@ -1,5 +1,6 @@
 import alerts from './alerts';
 import browser from './browser';
+import sidebar from './sidebar';
 import user from './user';
 
 //
@@ -8,5 +9,6 @@ import user from './user';
 export default {
     alerts,
     browser,
+    sidebar,
     user,
 };
