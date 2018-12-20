@@ -1,22 +1,30 @@
 <template>
     <div>
-        <!-- user -->
-        <v-user v-if="isAuthenticated" />
-        
-        <!-- nav -->
-        <v-collapse-transition>
-            <component :is="contentComponent" />
-        </v-collapse-transition>
+        <!-- content -->
+        <v-fade-transition>
+            <!-- default content -->
+            <div v-if="sidebarComponent === true" key="default">
+                <v-user v-if="isAuthenticated" />
+                <v-nav />
+            </div>
+
+            <!-- custom content -->
+            <div v-else key="sidebar">
+                <component :is="sidebarComponent" />
+            </div>
+        </v-fade-transition>
     </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
 import content from './content';
+import navComponent from './nav/nav.vue';
 import userComponent from './user/user.vue';
 
 export default {
     components: {
+        'v-nav': navComponent,
         'v-user': userComponent,
     },
     computed: {
@@ -26,8 +34,8 @@ export default {
         ...mapState('sidebar', [
             'contentId',
         ]),
-        contentComponent() {
-            return content[this.contentId];
+        sidebarComponent() {
+            return this.$route.meta.sidebar;
         },
     },
 };

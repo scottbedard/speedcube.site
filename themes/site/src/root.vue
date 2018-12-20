@@ -13,6 +13,11 @@
 export default {
     created() {
         this.trackBrowserDimensions();
+
+        // @note: refactor this not to be stored on the window. it completely
+        //        breaks testability, but is hacked in so we can access logic
+        //        from our redirects. we should make an app factory to fix this.
+        window.app = this;
     },
     methods: {
         trackBrowserDimensions() {

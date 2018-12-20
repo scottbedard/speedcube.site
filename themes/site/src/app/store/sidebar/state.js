@@ -4,7 +4,7 @@
 export default function () {
     return {
         // controls the current sidebar content
-        contentId: 'nav',
+        contentId: '',
 
         // determines if the sitebar is collapsed or not
         isExpanded: true,

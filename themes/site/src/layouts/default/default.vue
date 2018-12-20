@@ -6,6 +6,14 @@
 
 <template>
     <div class="bg-grey-1 layout flex h-full">
+        <!-- sidebar -->
+            <v-fade-transition>
+                <!-- default sidebar -->
+                <aside v-if="sidebar" class="bg-grey-2 px-6 py-10 shadow-sm w-80">
+                    <v-sidebar />
+                </aside>
+            </v-fade-transition>
+
         <div class="flex-1 px-6 py-10" role="main">
             <!-- header -->
             <header>
@@ -19,11 +27,6 @@
                 </v-collapse-transition>
             </main>
         </div>
-        
-        <!-- sidebar -->
-        <aside class="bg-grey-2 px-6 py-10 shadow-lg w-80">
-            <v-sidebar />
-        </aside>
 
         <!-- alerts -->
         <v-alerts />
@@ -41,5 +44,10 @@ export default {
         'v-header': headerComponent,
         'v-sidebar': sidebarComponent,
     },
+    computed: {
+        sidebar() {
+            return this.$route.meta.sidebar;
+        },
+    }
 };
 </script>

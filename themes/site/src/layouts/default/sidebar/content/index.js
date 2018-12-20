@@ -1,6 +1,4 @@
-import navComponent from './nav/nav.vue';
-
 export default {
-    nav: navComponent,
+    customize: () => import('./customize/customize.vue' /* webpackChunkName: 'sidebarCustomize' */),
     puzzles: () => import('./puzzles/puzzles.vue' /* webpackChunkName: 'sidebarPuzzles' */),
 }

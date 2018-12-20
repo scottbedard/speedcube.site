@@ -1,6 +1,7 @@
 <style lang="scss" scoped>
     .v-checkbox:hover [aria-checked=false][tabindex] {
         border-color: config('colors.primary-2');
+        opacity: 0.8;
     }
 
     path {
@@ -100,7 +101,7 @@ export default {
                         stroke-width="4"
                         style={{
                             animation: checked
-                                ? 'checkbox 100ms ease-in 50ms 1 normal forwards'
+                                ? 'checkbox 50ms cubic-bezier(.41,.88,.84,-0.45) 250ms 1 normal forwards'
                                 : null,
                         }}
                     />

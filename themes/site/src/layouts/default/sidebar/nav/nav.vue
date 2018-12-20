@@ -1,24 +1,30 @@
 <template>
     <nav>
         <v-sidebar-link
-            copy="Puzzles"
-            icon="fa-cubes"
-            @click="setContentId('puzzles')"
+            copy="Solving"
+            icon="fa-clock-o"
+            :to="{
+                name: 'solve',
+            }"
         />
         <v-sidebar-link
             copy="Stats"
             icon="fa-line-chart"
-            :to="{ name: 'home' }"
+            :to="{
+                name: 'home',
+            }"
         />
         <v-sidebar-link
             copy="Records"
             icon="fa-trophy"
-            :to="{ name: 'records' }"
+            :to="{
+                name: 'records',
+            }"
         />
         <v-sidebar-link
             copy="Customize"
             icon="fa-sliders"
-            :to="{ name: 'home' }"
+            @click="setContentId('customize')"
         />
     </nav>
 </template>

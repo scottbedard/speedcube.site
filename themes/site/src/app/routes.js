@@ -1,4 +1,5 @@
 import defaultLayoutComponent from '@/layouts/default/default.vue';
+import store from './store/store';
 
 export default [
 
@@ -7,77 +8,6 @@ export default [
     //
     {
         children: [
-            //
-            // 2x2
-            //
-            {
-                meta: {
-                    cubeSize: 2,
-                },
-                name: 'puzzle:2',
-                path: '2x2',
-                component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
-            },
-
-            //
-            // 3x3
-            //
-            {
-                meta: {
-                    cubeSize: 3,
-                },
-                name: 'puzzle:3',
-                path: '3x3',
-                component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
-            },
-
-            //
-            // 4x4
-            //
-            {
-                meta: {
-                    cubeSize: 4,
-                },
-                name: 'puzzle:4',
-                path: '4x4',
-                component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
-            },
-
-            //
-            // 5x5
-            //
-            {
-                meta: {
-                    cubeSize: 5,
-                },
-                name: 'puzzle:5',
-                path: '5x5',
-                component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
-            },
-
-            //
-            // 10x10
-            //
-            {
-                meta: {
-                    cubeSize: 10,
-                },
-                name: 'puzzle:10',
-                path: '10x10',
-                component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
-            },
-
-            //
-            // max
-            //
-            {
-                meta: {
-                    cubeSize: 15,
-                },
-                name: 'puzzle:max',
-                path: 'max',
-                component: () => import('@/pages/puzzle/puzzle.vue' /* webpackChunkName: "puzzle" */),
-            },
 
             //
             // account
@@ -133,15 +63,30 @@ export default [
             // home
             //
             {
+                meta: {
+                    auth: false,
+                    sidebar: true,
+                },
                 name: 'home',
-                path: '/',
+                path: '/home',
                 component: () => import('@/pages/home/home.vue' /* webpackChunkName: "home" */),
+            },
+
+            //
+            // index
+            //
+            {
+                path: '/',
+                redirect: '/solve',
             },
 
             //
             // records
             //
             {
+                meta: {
+                    sidebar: true,
+                },
                 name: 'records',
                 path: '/records',
                 component: () => import('@/pages/records/records.vue' /* webpackChunkName: "records" */),
@@ -151,6 +96,9 @@ export default [
             // replay
             //
             {
+                meta: {
+                    sidebar: true,
+                },
                 name: 'replay',
                 path: '/replay/:id',
                 component: () => import('@/pages/replay/replay.vue' /* webpackChunkName: "replay" */),
@@ -162,6 +110,7 @@ export default [
             {
                 meta: {
                     auth: false,
+                    sidebar: false,
                 },
                 name: 'signin',
                 path: '/signin',
@@ -175,6 +124,19 @@ export default [
                 name: 'signout',
                 path: '/signout',
                 component: () => import('@/pages/signout/signout.vue' /* webpackChunkName: "signout" */),
+            },
+
+            //
+            // solve
+            //
+            {
+                meta: {
+                    cubeSize: 3,
+                    sidebar: true,
+                },
+                name: 'solve',
+                path: 'solve',
+                component: () => import('@/pages/solve/solve.vue' /* webpackChunkName: "solve" */),
             },
         ],
         path: '',
