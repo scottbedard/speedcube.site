@@ -1,4 +1,5 @@
 import alertComponent from './ui/alert.vue';
+import avatarComponent from './ui/avatar.vue';
 import buttonComponent from './ui/button.vue';
 import cardComponent from './ui/card.vue';
 import checkboxComponent from './ui/checkbox.vue';
@@ -45,6 +46,7 @@ export default {
     // ui
     //
     'v-alert': alertComponent,
+    'v-avatar': avatarComponent,
     'v-button': buttonComponent,
     'v-card': cardComponent,
     'v-checkbox': checkboxComponent,

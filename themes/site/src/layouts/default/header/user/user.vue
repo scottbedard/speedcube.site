@@ -5,10 +5,8 @@
             class="flex items-center text-grey-6 hover:text-grey-6"
             href="#"
             @click.prevent="expand">
-            <div class="border border-grey-6 inline-block flex h-10 items-center justify-center rounded-full w-10">
-                <i class="fa fa-user-o text-lg text-grey-6"></i>
-            </div>
-            <i class="fa fa-angle-down ml-2"></i>
+            <v-avatar :user="user" />
+            <i class="fa fa-angle-down ml-3"></i>
         </a>
 
         <!-- dropdown -->
