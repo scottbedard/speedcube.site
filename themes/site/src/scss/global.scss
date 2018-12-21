@@ -6,12 +6,12 @@
 
 a {
     border: 0;
-    color: config('colors.primary-5');
+    color: config('colors.grey-7');
     text-decoration: none;
     transition: color 150ms ease-in-out;
 
     &:hover {
-        color: config('colors.primary-6');
+        color: config('colors.grey-8');
     }
 }
 

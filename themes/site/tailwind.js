@@ -787,6 +787,7 @@ module.exports = {
     'md': '0 5px 15px rgba(0, 0, 0, 0.2)',
     'lg': '0 10px 24px rgba(0, 0, 0, 0.2)',
     'xl': '0 15px 35px rgba(0, 0, 0, 0.2)',
+    'inner': 'inset 0 0 0 1px rgba(0, 0, 0, 0.1)',
     'none': 'none',
   },
 

@@ -20,6 +20,7 @@ import puzzleControllerComponent from './puzzle/controller.vue';
 import spinnerComponent from './ui/spinner.vue';
 import tableComponent from './ui/table.vue';
 import timerComponent from './ui/timer.vue';
+import uploadButtonComponent from './ui/upload_button.vue';
 
 export default {
     //
@@ -59,4 +60,5 @@ export default {
     'v-spinner': spinnerComponent,
     'v-table': tableComponent,
     'v-timer': timerComponent,
+    'v-upload-button': uploadButtonComponent,
 };

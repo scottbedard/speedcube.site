@@ -4,7 +4,7 @@ import { bindAll } from 'spyfu-vue-functional';
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { disabled, loading, outlined, primary, size, to } = context.props;
+        const { disabled, loading, outlined, primary, size, tag, to } = context.props;
 
         //
         // primary
@@ -35,14 +35,14 @@ export default {
         //
         // tag
         //
-        let Tag = 'button';
+        let Tag = tag;
 
         if (to) {
             Tag = 'router-link';
         }
 
         return <Tag
-            class="font-bold inline-flex items-center rounded-full text-xs tracking-wide uppercase focus:outline-none"
+            class="cursor-pointer font-bold inline-flex items-center rounded-full text-xs tracking-wide uppercase focus:outline-none"
             to={to}
             {...bindings}>
             {
@@ -72,6 +72,10 @@ export default {
         },
         size: {
             default: 'md',
+            type: String,
+        },
+        tag: {
+            default: 'button',
             type: String,
         },
         to: {

@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
     input {
-        caret-color: config('colors.grey-6');
+        // caret-color: config('colors.grey-6');
 
         // these selectors aren't standardized, and are buggy when
         // chained together. using this mixin allows us to side

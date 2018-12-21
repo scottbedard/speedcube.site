@@ -16,4 +16,9 @@ export default {
         setSignoutIsLoading: 'signoutIsLoading',
         setUser: 'user',
     }),
+
+    // remove a user's avatar
+    removeAvatar(state) {
+        state.user.avatar = null;
+    },
 };

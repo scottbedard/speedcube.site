@@ -27,6 +27,8 @@ export default function () {
         signoutIsLoading: false,
 
         // the current user
-        user: {},
+        user: {
+            avatar: null,
+        },
     };
 }
