@@ -1,28 +1,25 @@
-<script>
-import { bindClasses } from 'spyfu-vue-functional';
+<style lang="scss" scoped>
+    a {
+        border-left: 3px solid transparent;
 
-export default {
-    render(h, context) {
-        const { icon, to } = context.props;
-        const currentRoute = context.parent.$route.name;
-        const bindings = bindClasses(context);
-
-        // active / inactive
-        if (currentRoute === to.name) {
-            bindings.class.push('border-primary text-primary hover:text-primary');
-        } else {
-            bindings.class.push('border-grey-darker text-grey hover:text-grey-darker');
+        &.router-link-active {
+            border-color: config('colors.primary-2');
+            color: config('colors.grey-8');
         }
+    }
+</style>
 
-        return <router-link
-            class="block border-l-2 flex items-center trans-color p-4 hover:no-underline"
-            to={to}
-            {...bindings}>
-            <i class={['fa mr-4 text-center text-lg w-5', icon]} />
-            {context.slots().default}
-        </router-link>;
-    },
-    functional: true,
+<template functional>
+    <router-link
+        class="flex items-center p-4 text-grey-7 text-sm trans-bg trans-border trans-color hover:bg-grey-4 hover:border-grey-5 hover:text-grey-8"
+        :to="props.to">
+        <i :class="`fa ${props.icon} mr-2 text-center w-6`"></i>
+        <slot />
+    </router-link>
+</template>
+
+<script>
+export default {
     props: [
         'icon',
         'to',

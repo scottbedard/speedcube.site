@@ -2,18 +2,22 @@
     <div>
         <!-- header -->
         <v-account-header>
-            Change Password
+            Profile Photo
         </v-account-header>
 
         <!-- content -->
         <v-card padded>
-            Soon...
+            <v-form
+                class="max-w-sm mx-auto"
+                @submit="onSubmit">
+                Soon...
+            </v-form>
         </v-card>
     </div>
 </template>
 
 <script>
-import accountHeaderComponent from '../account_header/account_header.vue';
+import accountHeaderComponent from '../../account_header/account_header.vue';
 
 export default {
     data() {
