@@ -23,8 +23,9 @@
                     <v-input
                         v-model="password"
                         autofocus
-                        type="password"
+                        data-password
                         placeholder="New password"
+                        type="password"
                         :disabled="isLoading"
                     />
                 </v-form-field>
@@ -64,6 +65,7 @@
 
 <script>
 import accountHeaderComponent from '../account_header/account_header.vue';
+import { postUser } from '@/app/repositories/user';
 
 export default {
     data() {
@@ -78,7 +80,23 @@ export default {
     },
     methods: {
         onSubmit() {
-            // ...
+            this.isLoading = true;
+
+            postUser({
+                password: this.password,
+                password_confirmation: this.passwordConfirmation,
+            }).then((response) => {
+                // success
+                this.$alert('Your password has been changed', { type: 'success' });
+            }, (err) => {
+                // failed
+                console.error(err);
+            }).finally(() => {
+                // complete
+                this.isLoading = false;
+                this.password = '';
+                this.passwordConfirmation = '';
+            });
         },
     },
 };
