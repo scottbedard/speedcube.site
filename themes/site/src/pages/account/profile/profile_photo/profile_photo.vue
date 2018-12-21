@@ -32,9 +32,9 @@
                         <div v-else key="upload">
                             <v-upload-button
                                 accept="image/*"
-                                outlined
+                                primary
                                 @change="uploadPhoto">
-                                Select Profile Photo
+                                Upload Profile Photo
                             </v-upload-button>
                         </div>
                     </v-collapse-transition>

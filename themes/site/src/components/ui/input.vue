@@ -6,9 +6,7 @@
         // chained together. using this mixin allows us to side
         // step the issue without repeating placeholder css.
         @mixin placeholder {
-            color: config('colors.grey-8');
-            font-weight: normal;
-            letter-spacing: normal;
+            @apply font-thin text-grey-8 tracking-wide;
         }
 
         &:-ms-input-placeholder { @include placeholder } // <- IE >= 10
@@ -60,7 +58,7 @@ export default {
             class="v-input bg-grey-2 h-14 rounded px-4"
             {...bindings}>
             <input
-                class="bg-transparent font-bold h-full w-full text-grey-8 tracking-wide focus:outline-none"
+                class="bg-transparent h-full w-full text-grey-8 focus:outline-none"
                 disabled={disabled}
                 domPropsValue={value}
                 max={max}
