@@ -48,7 +48,7 @@
                         primary
                         type="submit"
                         :disabled="isLoading">
-                        Update
+                        Save
                     </v-button>
                 </div>
             </v-form>
