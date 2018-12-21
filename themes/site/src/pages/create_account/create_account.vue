@@ -2,7 +2,7 @@
     <v-page padded>
         <!-- title -->
         <div class="text-center">
-            <h1 class="mb-2 text-3xl text-grey-9">
+            <h1 class="font-thin mb-4 text-3xl text-grey-9 tracking-wide">
                 Let's get you signed up!
             </h1>
             <div class="leading-normal text-grey-7">

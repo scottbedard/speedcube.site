@@ -2,10 +2,10 @@
     <v-page padded>
         <!-- title -->
         <div class="text-center">
-            <h1 class="mb-2 text-3xl text-grey-9">
+            <h1 class="font-thin mb-4 text-3xl text-grey-9 tracking-wide">
                 Welcome back
             </h1>
-            <div class="text-grey-7">
+            <div class="leading-normal text-grey-7">
                 Sign in and go break some records!
             </div>
         </div>
