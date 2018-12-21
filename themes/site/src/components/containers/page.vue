@@ -8,7 +8,7 @@ export default {
 
         // padded
         if (padded) {
-            bindings.class.push('px-4 py-12 trans-padding md:px-8');
+            bindings.class.push('py-8 trans-padding md:py-12');
         }
 
         return <div {...bindings}>

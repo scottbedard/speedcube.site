@@ -10,7 +10,9 @@ export default {
             bindings.class.push('px-6 trans-padding md:px-8');
         }
 
-        return <div {...bindings}>
+        return <div
+            class="max-w-4xl mx-auto"
+            {...bindings}>
             {context.slots().default}
         </div>;
     },
