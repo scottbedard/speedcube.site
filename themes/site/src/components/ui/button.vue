@@ -42,7 +42,7 @@ export default {
         }
 
         return <Tag
-            class="cursor-pointer font-bold inline-flex items-center rounded-full text-xs tracking-wide uppercase focus:outline-none"
+            class="cursor-pointer font-bold inline-flex items-center justify-center rounded-full text-xs tracking-wide uppercase focus:outline-none"
             to={to}
             {...bindings}>
             {

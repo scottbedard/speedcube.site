@@ -51,6 +51,26 @@ export function postRegister(payload) {
 }
 
 /**
+ * Reset a user's password.
+ *
+ * @param  {Object}     payload
+ * @return {Promise} 
+ */
+export function postResetPassword(payload) {
+    return axios.post('/api/givingteam/auth/reset-password', payload);
+}
+
+/**
+ * Submit a password reset request.
+ *
+ * @param  {Object}     payload
+ * @return {Promise} 
+ */
+export function postSendResetEmail(payload) {
+    return axios.post('/api/givingteam/auth/send-reset-email', payload);
+}
+
+/**
  * Authenticate a user.
  *
  * @param  {object} payload
