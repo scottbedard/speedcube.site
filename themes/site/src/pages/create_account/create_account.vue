@@ -1,5 +1,5 @@
 <template>
-    <v-margin padded>
+    <v-page padded>
         <!-- title -->
         <div class="text-center">
             <h1 class="mb-2 text-3xl text-grey-9">
@@ -97,7 +97,7 @@
                 </div>
             </v-form>
         </v-card>
-    </v-margin>
+    </v-page>
 </template>
 
 <script>

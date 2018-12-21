@@ -65,7 +65,6 @@ export default [
             {
                 meta: {
                     auth: false,
-                    sidebar: true,
                 },
                 name: 'home',
                 path: '/home',
@@ -84,9 +83,6 @@ export default [
             // records
             //
             {
-                meta: {
-                    sidebar: true,
-                },
                 name: 'records',
                 path: '/records',
                 component: () => import('@/pages/records/records.vue' /* webpackChunkName: "records" */),
@@ -96,9 +92,6 @@ export default [
             // replay
             //
             {
-                meta: {
-                    sidebar: true,
-                },
                 name: 'replay',
                 path: '/replay/:id',
                 component: () => import('@/pages/replay/replay.vue' /* webpackChunkName: "replay" */),
@@ -110,7 +103,6 @@ export default [
             {
                 meta: {
                     auth: false,
-                    sidebar: false,
                 },
                 name: 'signin',
                 path: '/signin',
@@ -132,7 +124,6 @@ export default [
             {
                 meta: {
                     cubeSize: 3,
-                    sidebar: true,
                 },
                 name: 'solve',
                 path: 'solve',

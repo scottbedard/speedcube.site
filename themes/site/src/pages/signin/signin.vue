@@ -1,12 +1,12 @@
 <template>
-    <v-margin padded>
+    <v-page padded>
         <!-- title -->
         <div class="text-center">
             <h1 class="mb-2 text-3xl text-grey-9">
                 Welcome back
             </h1>
             <div class="text-grey-7">
-                Sign in and break some records!
+                Sign in and go break some records!
             </div>
         </div>
 
@@ -92,7 +92,7 @@
                 </router-link>
             </div>
         </div>
-    </v-margin>
+    </v-page>
 </template>
 
 <script>

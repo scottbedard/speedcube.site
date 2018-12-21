@@ -1,16 +1,6 @@
 <template>
     <v-margin padded>
-        <v-grid padded>
-            <!-- account nav -->
-            <v-grid-cell md="4" lg="3">
-                <v-account-nav />
-            </v-grid-cell>
-            <v-grid-cell md="8" lg="9">
-                <v-fade-transition>
-                    <router-view />
-                </v-fade-transition>
-            </v-grid-cell>
-        </v-grid>
+        <router-view />
     </v-margin>
 </template>
 
