@@ -2,9 +2,11 @@
 
 namespace Speedcube\Speedcube\Classes;
 
+use App;
 use Exception;
 use Illuminate\Routing\Controller;
 use Log;
+use October\Rain\Exception\ValidationException;
 
 class ApiController extends Controller
 {
@@ -26,6 +28,19 @@ class ApiController extends Controller
             'status' => 'failed',
             'error' => $err->getMessage(),
         ], 500);
+    }
+
+    /**
+     * Invalid
+     *
+     * @param  ValidationException  $err
+     * @return Response
+     */
+    public function invalid(ValidationException $err)
+    {
+        return response([
+            'status' => 'invalid',
+        ],);
     }
 
     /**

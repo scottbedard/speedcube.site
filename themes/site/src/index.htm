@@ -2,19 +2,18 @@
 title = "test"
 url = "/:all?*"
 ==
-use GivingTeam\Auth\Classes\AccountManager;
 use Speedcube\Speedcube\Classes\Utils;
 
 function onStart()
 {
     // get the current user
-    $user = (new AccountManager)->getAuthenticatedUser();
+    // $user = (new AccountManager)->getAuthenticatedUser();
 
     // initial page data
     $this['vuetober'] = Utils::camelCaseKeys([
         'env' => app()->env,
         'token' => Session::token(),
-        'user' => $user ? $user->toArray() : [],
+        'user' => [], // $user ? $user->toArray() : [],
     ]);
 }
 ==

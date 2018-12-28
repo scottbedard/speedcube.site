@@ -3,4 +3,4 @@ description: 'An opinionated SPA using Vue and October CMS'
 name: 'vuetober'
 require:
   - RainLab.User
-  - GivingTeam.Auth
+  - Vuetober.RainLabUserApi

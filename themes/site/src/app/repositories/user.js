@@ -47,7 +47,7 @@ export function postProfilePhoto(avatar) {
  * @return {Promise}
  */
 export function postRegister(payload) {
-    return axios.post('/api/givingteam/auth/register', payload);
+    return axios.post('/api/rainlab/user/account', payload);
 }
 
 /**

@@ -7,6 +7,8 @@ use Model;
  */
 class Scramble extends Model
 {
+    use \October\Rain\Database\Traits\Validation;
+
     /**
      * @var string The database table used by the model.
      */
@@ -43,6 +45,13 @@ class Scramble extends Model
      */
     public $hasMany = [
         'solves' => 'Speedcube\Speedcube\Models\Solve',
+    ];
+
+    /**
+     * @var array Validation rules
+     */
+    public $rules = [
+        'cube_size' => 'required|integer|min:2',
     ];
 
     /**

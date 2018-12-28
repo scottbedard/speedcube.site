@@ -15,7 +15,6 @@ class Plugin extends PluginBase
      * @var array Plugin dependencies
      */
     public $require = [
-        'GivingTeam.Auth',
         'RainLab.User',
     ];
 
