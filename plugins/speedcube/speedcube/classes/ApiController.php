@@ -40,7 +40,8 @@ class ApiController extends Controller
     {
         return response([
             'status' => 'invalid',
-        ],);
+            'errors' => $e->getFields(),
+        ], 400);
     }
 
     /**

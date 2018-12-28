@@ -6,7 +6,7 @@ import axios from 'axios';
  * @return {Promise}
  */
 export function deleteAvatar() {
-    return axios.delete('/api/givingteam/auth/user/avatar');
+    return axios.delete('/api/rainlab/user/user/avatar');
 }
 
 /**
@@ -15,7 +15,7 @@ export function deleteAvatar() {
  * @return {Promise}
  */
 export function getSignout() {
-    return axios.get('/api/givingteam/auth/signout');
+    return axios.get('/api/rainlab/user/signout');
 }
 
 /**
@@ -29,7 +29,7 @@ export function postProfilePhoto(avatar) {
 
     data.append('avatar', avatar);
 
-    return axios.post('/api/givingteam/auth/user', data, {
+    return axios.post('/api/rainlab/user/user', data, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
@@ -47,7 +47,7 @@ export function postProfilePhoto(avatar) {
  * @return {Promise}
  */
 export function postRegister(payload) {
-    return axios.post('/api/rainlab/user/account', payload);
+    return axios.post('/api/rainlab/user/register', payload);
 }
 
 /**
@@ -57,7 +57,7 @@ export function postRegister(payload) {
  * @return {Promise} 
  */
 export function postResetPassword(payload) {
-    return axios.post('/api/givingteam/auth/reset-password', payload);
+    return axios.post('/api/rainlab/user/reset-password', payload);
 }
 
 /**
@@ -67,7 +67,7 @@ export function postResetPassword(payload) {
  * @return {Promise} 
  */
 export function postSendResetEmail(payload) {
-    return axios.post('/api/givingteam/auth/send-reset-email', payload);
+    return axios.post('/api/rainlab/user/send-reset-email', payload);
 }
 
 /**
@@ -80,7 +80,7 @@ export function postSendResetEmail(payload) {
  * @return {Promise}
  */
 export function postSignin(payload) {
-    return axios.post('/api/givingteam/auth/signin', payload);
+    return axios.post('/api/rainlab/user/signin', payload);
 }
 
 /**
@@ -94,5 +94,5 @@ export function postSignin(payload) {
  * @return {Promise}
  */
 export function postUser(payload) {
-    return axios.post('/api/givingteam/auth/user', payload);
+    return axios.post('/api/rainlab/user/user', payload);
 }
