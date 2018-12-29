@@ -15,7 +15,6 @@ class Solve extends Model
      */
     public $attributes = [
         'config' => '{}',
-        'is_rated' => true,
         'solution' => '',
         'status' => 'pending',
     ];
@@ -25,9 +24,7 @@ class Solve extends Model
      */
     protected $casts = [
         'average_speed' => 'integer',
-        'cube_size' => 'integer',
         'id' => 'integer',
-        'is_rated' => 'boolean',
         'moves' => 'integer',
         'scramble_id' => 'integer',
         'size' => 'integer',
@@ -72,16 +69,6 @@ class Solve extends Model
     ];
 
     /**
-     * Lifecylce hooks
-     * 
-     * @return void
-     */
-    public function beforeCreate()
-    {
-        $this->generateToken();
-    }
-
-    /**
      * Abort a solve.
      * 
      * @return void
@@ -122,7 +109,6 @@ class Solve extends Model
 
         // verify that our solution is correct
         if (Cube::testSolution($this->scramble, $solution)) {
-            $this->setCubeSize();
             $this->setTime();
             $this->status = 'complete';
         } else {
@@ -130,37 +116,6 @@ class Solve extends Model
         }
 
         $this->save();
-    }
-
-    /**
-     * Generate a random string, using a cryptographically secure 
-     * pseudorandom number generator (random_int).
-     * 
-     * @return void
-     */
-    private function generateToken()
-    {
-        // the current length of gift tokens. if this value ever
-        // is changed, make sure to also update the db column.
-        $length = 11;
-
-        // token characters
-        $keyspace = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-';
-        
-        $token = null;
-        $max = mb_strlen($keyspace, '8bit') - 1;
-
-        while (!$token || self::whereToken($token)->exists()) {
-            $chars = [];
-
-            for ($i = 0; $i < $length; ++$i) {
-                $chars[] = $keyspace[random_int(0, $max)];
-            }
-
-            $token = implode('', $chars);
-        }
-
-        $this->token = $token;
     }
 
     /**
@@ -274,14 +229,10 @@ class Solve extends Model
         return $query->where('status', 'pending');
     }
 
-    public function scopeRated($query)
-    {
-        return $query->where('is_rated', true);
-    }
-
-    public function scopeSize($query, int $size)
-    {
-        return $query->where('cube_size', $size);
+    public function scopePuzzle($query, $puzzle) {
+        return $query->whereHas('scramble', function($scramble) use ($puzzle) {
+            $scramble->wherePuzzle($puzzle);
+        });
     }
 
     public function scopeThisMonth($query)
@@ -293,21 +244,9 @@ class Solve extends Model
     {
         return $query->with([
             'user' => function($user) {
-                $user->select(['id', 'name']);
+                $user->select(['id', 'name', 'username']);
             },
         ]);
-    }
-
-    /**
-     * Set cube size.
-     * 
-     * @return void
-     */
-    protected function setCubeSize()
-    {
-        if ($this->scramble) {
-            $this->cube_size = $this->scramble->cube_size;
-        }
     }
 
     /**

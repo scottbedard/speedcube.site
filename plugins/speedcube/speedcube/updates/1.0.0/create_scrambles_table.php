@@ -11,7 +11,7 @@ class CreateScramblesTable extends Migration
         Schema::create('speedcube_speedcube_scrambles', function(Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->tinyInteger('cube_size')->unsigned()->index();
+            $table->string('puzzle', 10)->index();
             $table->text('scramble');
             $table->text('scrambled_state');
             $table->timestamps();

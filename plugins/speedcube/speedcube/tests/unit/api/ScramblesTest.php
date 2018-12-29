@@ -13,7 +13,7 @@ class ScramblesApiTest extends PluginTestCase
     public function test_creating_a_scramble()
     {
         $response = $this->post('/api/speedcube/speedcube/scrambles', [
-            'cubeSize' => 3,
+            'puzzle' => 'cube3',
         ]);
 
         $response->assertStatus(200);
@@ -28,7 +28,7 @@ class ScramblesApiTest extends PluginTestCase
         Auth::login($user);
 
         $response = $this->post('/api/speedcube/speedcube/scrambles', [
-            'cubeSize' => 3,
+            'puzzle' => 'cube3',
         ]);
 
         $response->assertStatus(200);

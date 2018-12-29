@@ -11,13 +11,9 @@ use Speedcube\Speedcube\Tests\PluginTestCase;
 class SolvesApiTest extends PluginTestCase
 {
     // helper function to create an easily solved scramble
-    public static function createScramble($turns = '', $cubeSize = 3) {
-        $scramble = Factory::create(new Scramble, [
-            'cube_size' => $cubeSize,
-        ]);
-
+    public static function createScramble($turns = '') {
+        $scramble = Factory::create(new Scramble, ['puzzle' => 'cube3']);
         $scramble->scramble = $turns;
-
         $scramble->save();
 
         return $scramble;
@@ -49,7 +45,6 @@ class SolvesApiTest extends PluginTestCase
 
         $this->assertEquals(1, Solve::count());
         $this->assertNull($solve->user_id);
-        $this->assertEquals(3, $solve->cube_size);
         $this->assertEquals(3, $solve->moves);
         $this->assertEquals(133, $solve->average_speed);
         $this->assertEquals('#000000', $solve->config['colors'][0]);
@@ -171,7 +166,7 @@ class SolvesApiTest extends PluginTestCase
         $solveB->complete('0#START 100:R- 200#END');
 
         // fetch the fastest solves
-        $response = $this->get('/api/speedcube/speedcube/solves?cubeSize=3&orderBy=time');
+        $response = $this->get('/api/speedcube/speedcube/solves?puzzle=cube3&orderBy=time');
 
         $data = json_decode($response->getContent(), true);
         
@@ -187,7 +182,7 @@ class SolvesApiTest extends PluginTestCase
     {
         $user = Factory::registerUser();
 
-        $scramble = Factory::create(new Scramble, ['cube_size' => 3]);
+        $scramble = Factory::create(new Scramble, ['puzzle' => 'cube3']);
         $scramble->scramble = 'R';
         $scramble->save();
 
@@ -202,6 +197,6 @@ class SolvesApiTest extends PluginTestCase
         
         $this->assertEquals($solve->id, $data['solve']['id']);
         $this->assertEquals($solve->scramble->id, $data['solve']['scramble']['id']);
-        $this->assertEquals($solve->user->id, $data['solve']['user']['id']);
+        $this->assertEquals($solve->user->username, $data['solve']['user']['username']);
     }
 }

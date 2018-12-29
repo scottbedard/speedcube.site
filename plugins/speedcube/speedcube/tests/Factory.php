@@ -95,17 +95,23 @@ class Factory
         $faker = Faker\Factory::create('en_US');
 
         $email = '';
+        $username = '';
         
         do {
             $email = $faker->safeEmail;
         } while (User::whereEmail($email)->count() > 0);
 
+        do {
+            $username = preg_replace("/[^A-Za-z0-9 ]/", '', $faker->username);
+        } while (User::whereUsername($username)->count() > 0);
+
         return [
+            'created_at' => Carbon::now()->subDays(rand(0, 365)),
             'email' => $email,
             'name' => $faker->firstName(rand(0, 1)) . ' ' . $faker->lastName,
             'password' => 'foobar',
             'password_confirmation' => 'foobar',
-            'created_at' => Carbon::now()->subDays(rand(0, 365)),
+            'username' => $username,
         ];
     }
 
@@ -115,7 +121,7 @@ class Factory
     public static function scramble(array $data = [])
     {
         return [
-            'cube_size' => 3,
+            'puzzle' => 'cube3',
         ];
     }
 

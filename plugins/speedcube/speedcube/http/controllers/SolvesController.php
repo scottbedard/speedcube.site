@@ -18,41 +18,45 @@ class SolvesController extends ApiController
      */
     public function complete()
     {
-        $user = Auth::getUser();
+        try {
+            $user = Auth::getUser();
 
-        $data = input();
-        $abort = array_get($data, 'abort', false);
-        $config = array_get($data, 'config', []);
-        $scrambleId = array_get($data, 'scrambleId', 0);
-        $solution = array_get($data, 'solution', '');
+            $data = input();
+            $abort = array_get($data, 'abort', false);
+            $config = array_get($data, 'config', []);
+            $scrambleId = array_get($data, 'scrambleId', 0);
+            $solution = array_get($data, 'solution', '');
 
-        // throw an error if the scramble has already been solved
-        if (Solve::notPending()->where('scramble_id', $scrambleId)->exists()) {
-            throw new ApplicationException("Duplicate solve submitted for scramble #{$scrambleId}");
+            // throw an error if the scramble has already been solved
+            if (Solve::notPending()->where('scramble_id', $scrambleId)->exists()) {
+                throw new ApplicationException("Duplicate solve submitted for scramble #{$scrambleId}");
+            }
+
+            // find the scramble being solved
+            $scramble = Scramble::findOrFail($scrambleId);
+            
+            // find or instantiate the solve
+            $solve = $user
+                ? $scramble->solves()->where('user_id', $user->id)->firstOrFail()
+                : new Solve(['scramble_id' => $scramble->id]);
+            
+            // cache the solve configuration
+            $solve->config = $config;
+
+            // abort or complete the solve
+            if ($abort) {
+                $solve->abort($solution);
+            } else {
+                $solve->complete($solution);
+            }
+
+            return $this->success([ 'solve' => $solve->toArray() ]);
         }
-
-        // find the scramble being solved
-        $scramble = Scramble::findOrFail($scrambleId);
         
-        // find or instantiate the solve
-        $solve = $user
-            ? $scramble->solves()->where('user_id', $user->id)->firstOrFail()
-            : new Solve(['scramble_id' => $scramble->id]);
-        
-        // cache the solve configuration
-        $solve->config = $config;
-
-        // abort or complete the solve
-        if ($abort) {
-            $solve->abort($solution);
-        } else {
-            $solve->complete($solution);
+        // unknown error
+        catch (Exception $err) {
+            return $this->failed($err);
         }
-
-        // success
-        return $this->success([
-            'solve' => $solve->toArray(),
-        ]);
     }
 
     /**
@@ -64,7 +68,7 @@ class SolvesController extends ApiController
     {
         $solve = Solve::withUserSummary()
             ->with('scramble')
-            ->find($id);
+            ->findOrFail($id);
 
         return $this->success([
             'solve' => $solve,
@@ -86,11 +90,9 @@ class SolvesController extends ApiController
             // base query
             //
             $query = Solve::completed()
-                ->rated()
                 ->select([
                     'average_speed',
                     'created_at',
-                    'cube_size',
                     'id',
                     'moves',
                     'time',
@@ -102,8 +104,8 @@ class SolvesController extends ApiController
             //
             // size
             //
-            if (array_key_exists('cubeSize', $data)) {
-                $query->size($data['cubeSize']);
+            if (array_key_exists('puzzle', $data)) {
+                $query->puzzle($data['puzzle']);
             }
             
             //

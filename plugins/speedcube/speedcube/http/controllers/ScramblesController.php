@@ -18,11 +18,12 @@ class ScramblesController extends ApiController
     public function create()
     {
         $user = Auth::getUser();
-        $params = input();
+        $data = input();
+        $puzzle = array_get($data, 'puzzle');
 
         // create a scramble
         $scramble = Scramble::create([
-            'cube_size' => $params['cubeSize'],
+            'puzzle' => $puzzle,
         ]);
         
         // create a solve if the user is signed in

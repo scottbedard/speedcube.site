@@ -18,8 +18,8 @@ class Scramble extends Model
      * @var array Attribute casting
      */
     protected $casts = [
-        'cube_size' => 'integer',
         'id' => 'integer',
+        'puzzle' => 'string',
         'solve_id' => 'integer',
     ];
 
@@ -32,7 +32,7 @@ class Scramble extends Model
      * @var array Fillable fields
      */
     protected $fillable = [
-        'cube_size',
+        'puzzle',
     ];
 
     /**
@@ -51,7 +51,7 @@ class Scramble extends Model
      * @var array Validation rules
      */
     public $rules = [
-        'cube_size' => 'required|integer|min:2',
+        'puzzle' => 'required',
     ];
 
     /**
@@ -72,7 +72,18 @@ class Scramble extends Model
     public function generateScramble()
     {
         $cubePath = base_path('themes/site/node_modules/bedard-cube/cli.js');
-        $sizeArg = escapeshellarg($this->cube_size);
+
+        $sizeArg = escapeshellarg([
+            'cube2' => 2,
+            'cube3' => 3,
+            'cube4' => 4,
+            'cube5' => 5,
+            'cube6' => 6,
+            'cube7' => 7,
+            'cube8' => 8,
+            'cube9' => 9,
+            'cube10' => 10,
+        ][$this->puzzle]);
 
         return exec("node {$cubePath} scramble {$sizeArg}");
     }
@@ -85,8 +96,20 @@ class Scramble extends Model
     public function setScrambleAttribute($scramble)
     {
         $cubePath = base_path('themes/site/node_modules/bedard-cube/cli.js');
-        $sizeArg = escapeshellarg($this->cube_size);
+
         $scrambleArg = escapeshellarg($scramble);
+
+        $sizeArg = escapeshellarg([
+            'cube2' => 2,
+            'cube3' => 3,
+            'cube4' => 4,
+            'cube5' => 5,
+            'cube6' => 6,
+            'cube7' => 7,
+            'cube8' => 8,
+            'cube9' => 9,
+            'cube10' => 10,
+        ][$this->puzzle]);
 
         $this->attributes['scramble'] = $scramble;
         $this->attributes['scrambled_state'] = exec("node {$cubePath} turn {$sizeArg} {$scrambleArg}");
