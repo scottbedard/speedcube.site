@@ -46,18 +46,6 @@ export default {
         };
     },
     computed: {
-        cubeSize() {
-            switch (this.event) {
-            case '2x2': return 2;
-            case '3x3': return 3;
-            case '4x4': return 4;
-            case '5x5': return 5;
-            default: return 0;
-            }
-        },
-        event() {
-            return this.$route.query.event || '3x3';
-        },
         schema() {
             return [
                 {
@@ -82,7 +70,7 @@ export default {
             this.isLoading = true;
 
             getSolves({
-                cubeSize: this.cubeSize,
+                puzzle: this.puzzle,
                 orderBy: 'time',
             }).then((response) => {
                 // success

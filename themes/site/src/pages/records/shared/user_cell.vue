@@ -1,13 +1,21 @@
-<template functional>
-    <div>
-        <!-- name -->
-        <div class="font-bold mb-2">
-            {{ props.value ? props.value.name : 'Anonymous' }}
-        </div>
+<script>
+export default {
+    render(h, context) {
+        const { row, value } = context.props;
 
-        <!-- date -->
-        <div class="text-grey-dark text-xs">
-            {{ props.row.createdAt | datestamp }}
-        </div>
-    </div>
-</template>
+        return <div>
+            <div class="font-bold mb-2">
+                { value.name || value.username || 'Anonymous' }
+            </div>
+            <div class="text-xs">
+                { row.createdAt }
+            </div>
+        </div>;
+    },
+    functional: true,
+    props: [
+        'row',
+        'value',
+    ],
+};
+</script>

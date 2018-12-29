@@ -19,7 +19,7 @@
             <!-- title -->
             <div class="text-center">
                 <h1 class="font-thin mb-4">
-                    Foo's <strong class="font-bold">{{ solve.time | shortTimer }}</strong> solve
+                    {{ displayName }}'s <strong class="font-bold">{{ solve.time | shortTimer }}</strong> solve
                 </h1>
                 <div class="font-thin text-grey-dark">
                     {{ solve.createdAt | datestamp }}
@@ -120,6 +120,9 @@ export default {
         },
         cubeSize() {
             return parseInt(this.solve.scramble.puzzle.replace(/[A-Za-z]/g, ''), 10);
+        },
+        displayName() {
+            return this.solve.user.name || this.solve.user.username || 'Anonymous';
         },
         solution() {
             if (!this.solve) {
