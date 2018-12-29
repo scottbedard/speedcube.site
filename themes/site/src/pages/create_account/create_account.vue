@@ -19,16 +19,16 @@
                     ref="form"
                     @submit="onSubmit">
 
-                    <!-- name -->
+                    <!-- username -->
                     <v-form-field
-                        label="Name"
-                        name="name"
-                        :value="name">
+                        label="Username"
+                        name="username"
+                        :value="username">
                         <v-input
-                            v-model="name"
+                            v-model="username"
                             autofocus
                             data-name
-                            placeholder="Enter your name"
+                            placeholder="Select a username"
                             type="text"
                             :disabled="isLoading"
                         />
@@ -112,7 +112,7 @@ export default {
         return {
             email: '',
             isLoading: false,
-            name: '',
+            username: '',
             password: '',
             passwordConfirmation: '',
         };
@@ -123,7 +123,7 @@ export default {
 
             postRegister({
                 email: this.email,
-                name: this.name,
+                username: this.username,
                 password: this.password,
                 password_confirmation: this.passwordConfirmation,
             }).then((response) => {
