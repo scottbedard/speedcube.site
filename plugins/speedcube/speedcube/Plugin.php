@@ -3,6 +3,7 @@
 namespace Speedcube\Speedcube;
 
 use Backend;
+use Event;
 use RainLab\User\Models\User;
 use System\Classes\PluginBase;
 
@@ -50,11 +51,17 @@ class Plugin extends PluginBase
      */
     protected function extendRainLabUser()
     {
+        // eager load necessary relationships. this lets us
+        // attach the relationships to the user requests
+        // on startup, when the user signs in, etc...
+        Event::listen('vuetober.rainlabuserapi.afterGetUser', function($user) {
+            $user->load(['avatar', 'configs']);
+        });
+
+        // extend the user model
         User::extend(function($model) {
-            // relationships
             $model->hasMany['configs'] = 'SpeedCube\SpeedCube\Models\Config';
 
-            // validation
             $model->bindEvent('model.beforeValidate', function() use ($model) {
                 $model->rules['username'] = $model->rules['username'] . '|alpha_num';
             });

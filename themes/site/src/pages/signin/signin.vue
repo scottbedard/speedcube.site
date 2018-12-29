@@ -15,22 +15,23 @@
             <v-card class="max-w-sm mx-auto my-10" padded>
                 <v-form
                     :errors="errors"
+                    ref="form"
                     @submit="onSubmit">
-                    <!-- email -->
+
+                    <!-- username -->
                     <v-form-field
-                        label="Email Address"
-                        name="email"
-                        rules="required|email"
+                        label="Username"
+                        name="login"
+                        rules="required"
                         :error-messages="{
-                            required: 'Your email address is required',
+                            required: 'Your username is required',
                         }"
-                        :value="email">
+                        :value="login">
                         <v-input
-                            v-model="email"
+                            v-model="login"
                             autofocus
-                            data-email
-                            placeholder="Enter email address"
-                            type="email"
+                            data-login
+                            placeholder="Username"
                             :disabled="isLoading"
                         />
                     </v-form-field>
@@ -103,7 +104,7 @@ export default {
         return {
             errors: {},
             isLoading: false,
-            email: '',
+            login: '',
             password: '',
             remember: false,
         };
@@ -111,17 +112,15 @@ export default {
     methods: {
         onSubmit() {
             this.$store.dispatch('user/signin', {
-                login: this.email,
+                login: this.login,
                 password: this.password,
                 remember: this.remember,
             }).then(() => {
                 // success
                 this.$router.push({ name: this.$route.query.returnTo || 'home' });
-            }, () => {
+            }, (err) => {
                 // failed
-                this.errors = {
-                    password: 'Invalid email address / password combination',
-                };
+                this.$refs.form.handleValidationError(err);
             });
         },
     },

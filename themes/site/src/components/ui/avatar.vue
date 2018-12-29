@@ -1,5 +1,6 @@
 <script>
 import { bindAll } from 'spyfu-vue-functional';
+import { get } from 'lodash-es';
 
 export default {
     render(h, context) {
@@ -61,7 +62,7 @@ export default {
                     ]}>
                     <img
                         class="rounded-full shadow-inner w-full"
-                        src={user.avatar.path}
+                        src={get(user, 'avatar.path', '')}
                     />
                 </div>
             }

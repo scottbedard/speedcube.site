@@ -3,17 +3,18 @@ title = "test"
 url = "/:all?*"
 ==
 use Speedcube\Speedcube\Classes\Utils;
+use Vuetober\RainLabUserApi\Classes\AccountManager;
 
 function onStart()
 {
     // get the current user
-    // $user = (new AccountManager)->getAuthenticatedUser();
+    $user = (new AccountManager)->getAuthenticatedUser();
 
     // initial page data
     $this['vuetober'] = Utils::camelCaseKeys([
         'env' => app()->env,
         'token' => Session::token(),
-        'user' => [], // $user ? $user->toArray() : [],
+        'user' => $user ? $user->toArray() : [],
     ]);
 }
 ==
