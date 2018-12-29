@@ -16,18 +16,21 @@ class ApiController extends Controller
      * @param  Exception $err
      * @return Response
      */
-    public function failed(Exception $err)
+    public function failed($err)
     {
         Log::error($err);
 
-        // if (env('APP_ENV') === 'testing') {
-        //     die($err);
-        // }
+        if ($err instanceof Exception) {
+            return response([
+                'status' => 'failed',
+                'error' => $err->getMessage(),
+            ], 500);
+        }
 
         return response([
             'status' => 'failed',
-            'error' => $err->getMessage(),
-        ], 500);
+            'error' => $err,
+        ]);
     }
 
     /**
