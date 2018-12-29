@@ -50,9 +50,14 @@ class Plugin extends PluginBase
      */
     protected function extendRainLabUser()
     {
-        // extend the user model
         User::extend(function($model) {
+            // relationships
             $model->hasMany['configs'] = 'SpeedCube\SpeedCube\Models\Config';
+
+            // validation
+            $model->bindEvent('model.beforeValidate', function() use ($model) {
+                $model->rules['username'] = $model->rules['username'] . '|alpha_num';
+            });
         });
     }
 

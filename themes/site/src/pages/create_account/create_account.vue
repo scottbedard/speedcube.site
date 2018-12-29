@@ -134,7 +134,11 @@ export default {
                 // failed
                 const status = get(err, 'response.data.status');
 
-                if (status === 'email_taken') {
+                if (status === 'username_taken') {
+                    this.$refs.form.applyErrors({
+                        username: 'This username is already taken.',
+                    });
+                } else if (status === 'email_taken') {
                     this.$refs.form.applyErrors({
                         email: 'This email address is already registered. Try resetting your password if you\'ve forgotten it.',
                     });
