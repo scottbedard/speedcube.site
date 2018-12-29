@@ -19,7 +19,7 @@
             <!-- title -->
             <div class="text-center">
                 <h1 class="font-thin mb-4">
-                    {{ user.name }}'s <strong class="font-bold">{{ solve.time | shortTimer }}</strong> solve
+                    Foo's <strong class="font-bold">{{ solve.time | shortTimer }}</strong> solve
                 </h1>
                 <div class="font-thin text-grey-dark">
                     {{ solve.createdAt | datestamp }}
@@ -30,7 +30,7 @@
             <div class="max-w-md mx-auto">
                 <v-puzzle
                     ref="puzzle"
-                    :size="solve.cubeSize"
+                    :size="cubeSize"
                     :colors="config.colors"
                     :sticker-elevation="config.stickerElevation"
                     :sticker-inner-opacity="config.stickerInnerOpacity"
@@ -100,13 +100,13 @@ export default {
 
             // the solve being replayed
             solve: {
-                cubeSize: 2,
                 scramble: {
                     createdAt: '',
+                    puzzle: 'cube3',
                 },
                 user: {
                     id: 0,
-                    name: 'Anonymous',
+                    username: 'Anonymous',
                 },
             },
 
@@ -117,6 +117,9 @@ export default {
     computed: {
         config() {
             return this.isLoading ? {} : this.solve.config;
+        },
+        cubeSize() {
+            return parseInt(this.solve.scramble.puzzle.replace(/[A-Za-z]/g, ''), 10);
         },
         solution() {
             if (!this.solve) {
