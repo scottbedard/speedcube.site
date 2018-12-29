@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import { get } from 'lodash-es';
+
 export default {
     data() {
         return {
@@ -25,12 +27,36 @@ export default {
         };
     },
     methods: {
+        applyErrors(errors) {
+            Object.keys(errors).forEach(key => {
+                const field = this.fields.find(vm => vm.name === key);
+
+                if (field) {
+                    if (typeof errors[key] === 'string') {
+                        field.error = errors[key];
+                    } else {
+                        field.error = errors[key].pop();
+                    }
+                }
+            });
+        },
         focus(name) {
             const field = this.fields.find(f => f.name === name);
 
             if (field) {
                 field.focus();
             }
+        },
+        handleValidationError(err) {
+            // do nothing if we were given something other
+            // than an invalid from the error request.
+            if (get(err, 'response.data.status') !== 'invalid') {
+                return;
+            }
+
+            // otherwise itterate over the invalid fields
+            // and display the various error messages.
+            this.applyErrors(get(err, 'response.data.errors', {}));
         },
         onSubmit(e) {
             this.validate().then(() => {

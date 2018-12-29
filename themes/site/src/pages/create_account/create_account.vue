@@ -16,6 +16,7 @@
             <v-card class="max-w-sm mx-auto mt-12" padded>
                 <v-form
                     class="max-w-sm mx-auto"
+                    ref="form"
                     @submit="onSubmit">
 
                     <!-- name -->
@@ -103,6 +104,7 @@
 </template>
 
 <script>
+import { get } from 'lodash-es';
 import { postRegister } from '@/app/repositories/user';
 
 export default {
@@ -127,10 +129,18 @@ export default {
             }).then((response) => {
                 // success
                 this.$store.commit('user/setUser', response.data);
-
                 this.$router.push({ name: 'home' });
-            }, () => {
+            }, (err) => {
                 // failed
+                const status = get(err, 'response.data.status');
+
+                if (status === 'email_taken') {
+                    this.$refs.form.applyErrors({
+                        email: 'This email address is already registered. Try resetting your password if you\'ve forgotten it.',
+                    });
+                } else {
+                    this.$refs.form.handleValidationError(err);
+                }
             }).finally(() => {
                 // complete
                 this.isLoading = false;

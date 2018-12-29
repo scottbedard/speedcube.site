@@ -6,7 +6,7 @@ export default {
         const bindings = bindAll(context);
 
         return <div
-            class="text-red-light text-sm"
+            class="leading-normal text-danger-7 text-sm"
             {...bindings}>
             {context.slots().default}
         </div>;

@@ -116,6 +116,20 @@ let colors = {
   'primary-9': '#B6E0FE',
   'primary-10': '#DCEEFB',
 
+  //
+  // danger (red)
+  //
+  'danger-1': '#610404',
+  'danger-2': '#780A0A',
+  'danger-3': '#911111',
+  'danger-4': '#A61B1B',
+  'danger-5': '#BA2525',
+  'danger-6': '#D64545',
+  'danger-7': '#E66A6A',
+  'danger-8': '#F29B9B',
+  'danger-9': '#FACDCD',
+  'danger-10': '#FFEEEE',
+
   // //
   // // deprecated
   // //
