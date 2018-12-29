@@ -267,7 +267,7 @@ export default {
             // cube state to the scrambled state of our solve
             this.scrambleIsLoading = true;
 
-            const request = postCreateScramble(this.size);
+            const request = postCreateScramble(`cube${this.size}`);
 
             // animate the cube being scrambled. we're only using
             // this as a loading state, this isn't the real scramble
