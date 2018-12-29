@@ -129,6 +129,15 @@ export default [
                 path: 'solve',
                 component: () => import('@/pages/solve/solve.vue' /* webpackChunkName: "solve" */),
             },
+
+            //
+            // users
+            //
+            {
+                name: 'users',
+                path: 'users/:username',
+                component: () => import('@/pages/users/user/user.vue' /* webpackChunkName: "user" */),
+            },
         ],
         path: '',
         component: defaultLayoutComponent,

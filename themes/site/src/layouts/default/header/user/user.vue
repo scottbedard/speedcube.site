@@ -18,7 +18,14 @@
                     <v-dropdown-link icon="fa-user-circle-o" :to="{ name: 'account:profile' }">
                         My Account
                     </v-dropdown-link>
-                    <v-dropdown-link icon="fa-line-chart" :to="{ name: 'home' }">
+                    <v-dropdown-link
+                        icon="fa-line-chart"
+                        :to="{
+                            name: 'users',
+                            params: {
+                                username: this.user.username,
+                            },
+                        }">
                         Stats
                     </v-dropdown-link>
                     <v-dropdown-link icon="fa-sign-out" :to="{ name: 'signout' }">
