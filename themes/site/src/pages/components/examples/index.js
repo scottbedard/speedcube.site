@@ -9,5 +9,6 @@ export default {
     '<v-fade-transition>': () => import('./fade_transition_example.vue'),
     '<v-grid> & <v-grid-cell>': () => import('./grid_example.vue'),
     '<v-input>': () => import('./input_example.vue'),
+    '<v-select>': () => import('./select_example.vue'),
     '<v-spinner>': () => import('./spinner_example.vue'),
 };

@@ -17,6 +17,7 @@ import marginComponent from './containers/margin.vue';
 import pageComponent from './containers/page.vue';
 import puzzleComponent from './puzzle/puzzle.vue';
 import puzzleControllerComponent from './puzzle/controller.vue';
+import selectComponent from './ui/select.vue';
 import spinnerComponent from './ui/spinner.vue';
 import tableComponent from './ui/table.vue';
 import timerComponent from './ui/timer.vue';
@@ -57,6 +58,7 @@ export default {
     'v-form': formComponent,
     'v-form-field': formFieldComponent,
     'v-input': inputComponent,
+    'v-select': selectComponent,
     'v-spinner': spinnerComponent,
     'v-table': tableComponent,
     'v-timer': timerComponent,
