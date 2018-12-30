@@ -1,19 +1,18 @@
 <template>
     <v-page padded>
         <v-margin padded>
-            <h1>{{ user.username }}</h1>
+            <!-- overview -->
+            <v-overview />
         </v-margin>
     </v-page>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import overviewComponent from './overview/overview.vue';
 
 export default {
-    computed: {
-        ...mapState('user', [
-            'user',
-        ]),
+    components: {
+        'v-overview': overviewComponent,
     },
 };
 </script>

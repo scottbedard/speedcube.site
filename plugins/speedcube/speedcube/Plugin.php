@@ -60,9 +60,11 @@ class Plugin extends PluginBase
 
         // extend the user model
         User::extend(function($model) {
+            // relationships
             $model->hasMany['configs'] = 'SpeedCube\SpeedCube\Models\Config';
             $model->hasMany['records'] = 'Speedcube\Speedcube\Models\PersonalRecord';
 
+            // prevent weird characters from being part of usernames
             $model->bindEvent('model.beforeValidate', function() use ($model) {
                 $model->rules['username'] = $model->rules['username'] . '|alpha_num';
             });

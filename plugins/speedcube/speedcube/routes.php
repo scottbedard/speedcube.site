@@ -20,8 +20,8 @@ Route::prefix('api/speedcube/speedcube')
         Route::get('solves', 'Speedcube\Speedcube\Http\Controllers\SolvesController@index');
         Route::post('solves', 'Speedcube\Speedcube\Http\Controllers\SolvesController@complete');
 
-        // user
-        Route::get('user/{username}/stats', 'Speedcube\Speedcube\Http\Controllers\UserController@stats');
+        // users
+        Route::get('users/{username}/overview', 'Speedcube\Speedcube\Http\Controllers\UsersController@find');
 
 
         //

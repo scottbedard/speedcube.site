@@ -8,15 +8,15 @@ use RainLab\User\Models\User;
 use Speedcube\Speedcube\Classes\ApiController;
 use Speedcube\Speedcube\Models\Solve;
 
-class UserController extends ApiController
+class UsersController extends ApiController
 {
     /**
      * Fetch the stats for a user.
      * 
      * @param  string   $username
-     * @return Response
+     * @return Response d
      */
-    public function stats($username)
+    public function find($username)
     {
         try {
             // fetch the user with their avatar
@@ -24,18 +24,19 @@ class UserController extends ApiController
                 ->with('avatar')
                 ->firstOrFail();
 
-            // fetch the user's non-pending solves
-            $solves = Solve::whereUserId($user->id)
-                ->notPending()
-                ->select([
-                    'status',
-                    'id',
-                    'time',
+            // load the user's records
+            $records = $user->records()
+                ->with([
+                    'solve' => function ($solve) {
+                        $solve
+                            ->select('id', 'scramble_id', 'time')
+                            ->with('scramble:id,puzzle');
+                    },
                 ])
                 ->get();
 
             return $this->success([
-                'solves' => $solves,
+                'records' => $records,
                 'user' => [
                     'avatar' => $user->avatar,
                     'created_at' => (string) $user->created_at,
@@ -45,9 +46,14 @@ class UserController extends ApiController
             ]);
         }
 
-        // username not found
+        // user not found
+        catch (ModelNotFoundException $err) {
+            return $this->failed('not_found');
+        }
+
+        // unknown error
         catch (Exception $err) {
-            return $this->failed('user_not_found');
+            return $this->failed($err);
         }
     }
 }
