@@ -5,6 +5,7 @@
         <v-button
             class="mb-8"
             size="sm"
+            outlined
             @click="padded = !padded">
             Padded: {{ padded }}
         </v-button>

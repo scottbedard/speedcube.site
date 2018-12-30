@@ -4,6 +4,7 @@
 
         <v-button
             :loading="loading"
+            outlined
             @click="onClick">
             Click me
         </v-button>

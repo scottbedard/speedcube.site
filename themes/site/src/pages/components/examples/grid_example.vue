@@ -11,6 +11,7 @@
             <v-button
                 class="mr-4"
                 size="sm"
+                outlined
                 @click="padded = !padded">
                 Padded: {{ padded }}
             </v-button>

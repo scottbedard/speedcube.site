@@ -13,6 +13,7 @@
         <v-button
             class="mb-8"
             size="sm"
+            outlined
             @click="value = !value">
             Toggle
         </v-button>

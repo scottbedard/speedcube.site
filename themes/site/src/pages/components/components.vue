@@ -1,32 +1,36 @@
 <template>
-    <v-margin padded>
-        <!-- title -->
-        <h1 class="font-light mb-4">
-            Components
-        </h1>
+    <v-page padded>
+        <v-margin padded>
+            <!-- title -->
+            <h1 class="font-light mb-4">
+                Components
+            </h1>
 
-        <p class="font-light mb-8">
-            This page is our living component docs.
-        </p>
+            <p class="font-light mb-8">
+                This page is our living component docs.
+            </p>
 
-        <!-- filter -->
-        <v-input
-            v-model="filter"
-            class="mb-16"
-            icon="search"
-            placeholder="Filter components..."
-        />
+            <!-- filter -->
+            <v-input
+                v-model="filter"
+                icon="search"
+                placeholder="Filter components..."
+            />
 
-        <!-- examples -->
-        <div>
-            <div
-                v-for="example in examples"
-                class="mb-16"
-                :key="example.key">
-                <component :is="example.component" />
+            <!-- examples -->
+            <div>
+                <div
+                    v-for="example in examples"
+                    class="py-16"
+                    :class="{
+                        'border-b border-grey-3': true,   
+                    }"
+                    :key="example.key">
+                    <component :is="example.component" />
+                </div>
             </div>
-        </div>
-    </v-margin>
+        </v-margin>
+    </v-page>
 </template>
 
 <script>
