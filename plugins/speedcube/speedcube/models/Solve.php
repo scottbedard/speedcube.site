@@ -88,6 +88,11 @@ class Solve extends Model
      */
     protected function checkPersonalRecords()
     {
+        // do nothing if this is a guest solve
+        if (!$this->user_id) {
+            return;
+        }
+        
         // find the previous record for this user and puzzle
         $record = $this->user
             ->records()
