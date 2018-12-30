@@ -33,6 +33,23 @@ class Factory
     }
 
     /**
+     * Create a scramble with a given set of turns.
+     * 
+     * @param  string   $turns
+     * @return Scramble
+     */
+    public static function createScrambleWithTurns($turns = '')
+    {
+        $scramble = self::create(new Scramble, ['puzzle' => 'cube3']);
+
+        $scramble->scramble = $turns;
+
+        $scramble->save();
+
+        return $scramble;
+    }
+
+    /**
      * Create a model and fill it with data.
      *
      * @param  Model    $model  Model to fill

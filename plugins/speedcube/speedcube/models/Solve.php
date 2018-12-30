@@ -82,6 +82,36 @@ class Solve extends Model
     }
 
     /**
+     * Check for a personal record.
+     * 
+     * @return void
+     */
+    protected function checkPersonalRecords()
+    {
+        // find the previous record for this user and puzzle
+        $record = $this->user
+            ->records()
+            ->whereHas('solve.scramble', function($query) {
+                $query->wherePuzzle($this->scramble->puzzle);
+            })
+            ->with('solve:id,time')
+            ->first();
+
+        // if there was no previous record, create the first one
+        if ($record === null) {
+            $this->user
+                ->records()
+                ->create(['solve_id' => $this->id]);
+        }
+
+        // otherwise update the record if this solve was faster
+        elseif ($record->solve->time > $this->time) {
+            $record->solve_id = $this->id;
+            $record->save();
+        }
+    }
+
+    /**
      * Close solves that are older than one day.
      *
      * @return void
@@ -116,6 +146,10 @@ class Solve extends Model
         }
 
         $this->save();
+
+        if ($this->status === 'complete') {
+            $this->checkPersonalRecords();
+        }
     }
 
     /**
