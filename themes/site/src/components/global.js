@@ -22,8 +22,14 @@ import spinnerComponent from './ui/spinner.vue';
 import tableComponent from './ui/table.vue';
 import timerComponent from './ui/timer.vue';
 import uploadButtonComponent from './ui/upload_button.vue';
+import scatterChartComponent from './charts/scatter_chart.vue';
 
 export default {
+    //
+    // charts
+    //
+    'v-scatter-chart': scatterChartComponent,
+
     //
     // containers
     //

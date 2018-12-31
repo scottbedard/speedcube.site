@@ -24,7 +24,7 @@ class UsersController extends ApiController
                 ->with('avatar:attachment_id,attachment_type,disk_name')
                 ->firstOrFail();
 
-            // fetch all time records
+            // fetch user records
             $records = $user->records()
                 ->with([
                     'solve' => function ($solve) {
@@ -35,11 +35,13 @@ class UsersController extends ApiController
                 ])
                 ->get();
 
-            // fetch recent solves
+            // fetch recent completed solves
             $solves = $user
                 ->solves()
-                ->select(['created_at', 'id', 'moves', 'status', 'time'])
+                ->completed()
+                ->select(['created_at', 'scramble_id', 'time'])
                 ->createdPastDays(30)
+                ->with('scramble:id,puzzle')
                 ->get();
 
             return $this->success([

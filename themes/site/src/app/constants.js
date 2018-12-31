@@ -22,6 +22,14 @@ export const isTouch = false;
 export const enterKeyCode = 13;
 export const spacebarKeyCode = 32;
 
+// puzzles
+// this constant is used to keep meta data with various puzzle ids
+export const puzzles = {
+    '3x3': {
+        color: '#00ff00',
+    },
+};
+
 // our common string format for date values
 // tip: this format is useful because it's human readable and values
 //      can be compared with each other as strings. for example...

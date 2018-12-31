@@ -19,15 +19,7 @@
                             {{ user.name || user.username }}
                         </h1>
 
-                        <v-grid padded>
-                            <!-- records -->
-                            <v-grid-cell md="4" lg="3">
-                                <v-records />
-                            </v-grid-cell>
-                            <v-grid-cell md="8" lg="9">
-                                <v-solves />
-                            </v-grid-cell>
-                        </v-grid>
+                        <v-solves :solves="solves" />
                     </template>
 
                     <!-- not found -->
@@ -58,6 +50,7 @@ export default {
         return {
             overviewIsLoading: false,
             records: [],
+            solves: [],
             user: null,
         };
     },
@@ -76,9 +69,10 @@ export default {
 
             getOverview(this.$route.params.username).then((response) => {
                 // success
-                const { records, user } = response.data;
+                const { records, solves, user } = response.data;
 
                 this.user = user;
+                this.solves = solves;
                 this.records = records;
             }).finally(() => {
                 // complete
