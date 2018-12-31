@@ -14,7 +14,7 @@ class UsersController extends ApiController
      * Fetch the stats for a user.
      * 
      * @param  string   $username
-     * @return Response d
+     * @return Response
      */
     public function find($username)
     {
@@ -24,7 +24,7 @@ class UsersController extends ApiController
                 ->with('avatar:attachment_id,attachment_type,disk_name')
                 ->firstOrFail();
 
-            // load the user's records
+            // fetch all time records
             $records = $user->records()
                 ->with([
                     'solve' => function ($solve) {
@@ -35,8 +35,16 @@ class UsersController extends ApiController
                 ])
                 ->get();
 
+            // fetch recent solves
+            $solves = $user
+                ->solves()
+                ->select(['created_at', 'id', 'moves', 'status', 'time'])
+                ->createdPastDays(30)
+                ->get();
+
             return $this->success([
                 'records' => $records,
+                'solves' => $solves,
                 'user' => [
                     'avatar' => $user->avatar,
                     'created_at' => (string) $user->created_at,
@@ -49,6 +57,43 @@ class UsersController extends ApiController
         // user not found
         catch (ModelNotFoundException $err) {
             return $this->failed('not_found');
+        }
+
+        // unknown error
+        catch (Exception $err) {
+            return $this->failed($err);
+        }
+    }
+
+    /**
+     * Get the solve history for a user.
+     * 
+     * @param  string   $username
+     * @return Response
+     */
+    public function solves($username)
+    {
+        try {
+            $params = input();
+            $days = (int) array_get($params, 'days', 30);
+
+            $user = User::whereUsername($username)->firstOrFail();
+
+            $solves = $user
+                ->solves()
+                ->select([
+                    'created_at',
+                    'id',
+                    'moves',
+                    'status',
+                    'time',
+                ])
+                ->createdPastDays($days)
+                ->get();
+
+            return $this->success([
+                'solves' => $solves->toArray(),
+            ]);
         }
 
         // unknown error

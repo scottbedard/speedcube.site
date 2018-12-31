@@ -22,7 +22,7 @@ Route::prefix('api/speedcube/speedcube')
 
         // users
         Route::get('users/{username}/overview', 'Speedcube\Speedcube\Http\Controllers\UsersController@find');
-
+        Route::get('users/{username}/solves', 'Speedcube\Speedcube\Http\Controllers\UsersController@solves');
 
         //
         // authenticated routes

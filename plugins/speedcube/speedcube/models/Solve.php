@@ -10,6 +10,8 @@ use Model;
  */
 class Solve extends Model
 {
+    use \Speedcube\Speedcube\Traits\CarbonScopes;
+
     /**
      * @var array Attributes
      */
