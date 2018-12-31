@@ -1,18 +1,90 @@
 <template>
     <v-page padded>
         <v-margin padded>
-            <!-- overview -->
-            <v-overview />
+            <v-fade-transition>
+                <!-- loading -->
+                <div
+                    v-if="isLoading"
+                    class="text-center"
+                    key="loading">
+                    <v-spinner color="grey" />
+                </div>
+
+                <!-- ready -->
+                <div v-else key="user">
+
+                    <!-- user -->
+                    <template v-if="user">
+                        <h1 class="mb-4 text-grey-8">
+                            {{ user.name || user.username }}
+                        </h1>
+
+                        <v-grid padded>
+                            <!-- records -->
+                            <v-grid-cell md="4" lg="3">
+                                <v-records />
+                            </v-grid-cell>
+                            <v-grid-cell md="8" lg="9">
+                                <v-solves />
+                            </v-grid-cell>
+                        </v-grid>
+                    </template>
+
+                    <!-- not found -->
+                    <template v-else>
+                        <h1 class="mb-4 text-grey-8">
+                            User not found
+                        </h1>
+                        <p class="text-sm text-grey-6">
+                            There is no user with a username of "{{ $route.params.username }}".
+                        </p>
+                    </template>
+                </div>
+            </v-fade-transition>
         </v-margin>
     </v-page>
 </template>
 
 <script>
-import overviewComponent from './overview/overview.vue';
+import recordsComponent from './records/records.vue';
+import solvesComponent from './solves/solves.vue';
+import { getOverview } from '@/app/repositories/user';
 
 export default {
+    created() {
+        this.fetchOverview();
+    },
+    data() {
+        return {
+            overviewIsLoading: false,
+            records: [],
+            user: null,
+        };
+    },
     components: {
-        'v-overview': overviewComponent,
+        'v-records': recordsComponent,
+        'v-solves': solvesComponent,
+    },
+    computed: {
+        isLoading() {
+            return this.overviewIsLoading;
+        },
+    },
+    methods: {
+        fetchOverview() {
+            this.overviewIsLoading = true;
+
+            getOverview(this.$route.params.username).then((response) => {
+                // success
+                const { records, user } = response.data;
+
+                this.user = user;
+                this.records = records;
+            }).finally(() => {
+                // complete
+                this.overviewIsLoading = false;
+            });
+        },
     },
 };
 </script>

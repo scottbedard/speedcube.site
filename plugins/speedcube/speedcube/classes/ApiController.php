@@ -30,7 +30,7 @@ class ApiController extends Controller
         return response([
             'status' => 'failed',
             'error' => $err,
-        ]);
+        ], 500);
     }
 
     /**

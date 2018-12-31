@@ -63,6 +63,7 @@ class Plugin extends PluginBase
             // relationships
             $model->hasMany['configs'] = 'SpeedCube\SpeedCube\Models\Config';
             $model->hasMany['records'] = 'Speedcube\Speedcube\Models\PersonalRecord';
+            $model->hasMany['solves'] = 'Speedcube\Speedcube\Models\Solve';
 
             // prevent weird characters from being part of usernames
             $model->bindEvent('model.beforeValidate', function() use ($model) {

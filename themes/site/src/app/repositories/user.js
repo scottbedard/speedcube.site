@@ -2,11 +2,21 @@ import axios from 'axios';
 
 /**
  * Delete a user's profile photo.
- * 
+ *
  * @return {Promise}
  */
 export function deleteAvatar() {
     return axios.delete('/api/rainlab/user/user/avatar');
+}
+
+/**
+ * Get a user's stats overview.
+ *
+ * @param  {string}     username 
+ * @return {Promise}
+ */
+export function getOverview(username) {
+    return axios.get(`/api/speedcube/speedcube/users/${username}/overview`);
 }
 
 /**

@@ -9,11 +9,7 @@
         stroke: config('colors.primary');
 
         &[data-color="grey"] {
-            stroke: config('colors.grey');
-        }
-
-        &[data-color="grey-dark"] {
-            stroke: config('colors.grey-dark');
+            stroke: config('colors.grey-5');
         }
     }
 

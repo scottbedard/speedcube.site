@@ -21,7 +21,7 @@ class UsersController extends ApiController
         try {
             // fetch the user with their avatar
             $user = User::whereUsername($username)
-                ->with('avatar')
+                ->with('avatar:attachment_id,attachment_type,disk_name')
                 ->firstOrFail();
 
             // load the user's records
