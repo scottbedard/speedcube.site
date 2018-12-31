@@ -39,7 +39,12 @@ class UsersController extends ApiController
             $solves = $user
                 ->solves()
                 ->completed()
-                ->select(['created_at', 'scramble_id', 'time'])
+                ->select([
+                    'created_at',
+                    'id',
+                    'scramble_id',
+                    'time',
+                ])
                 ->createdPastDays(30)
                 ->with('scramble:id,puzzle')
                 ->get();

@@ -11,7 +11,7 @@
 <script>
 import moment from 'moment';
 import { formatSolveTime } from '@/app/utils/number';
-import { timestampFormat } from '@/app/constants';
+import { puzzles, timestampFormat } from '@/app/constants';
 
 export default {
     computed: {
@@ -26,7 +26,7 @@ export default {
                             return {
                                 x: moment(solve.createdAt, timestampFormat).unix(),
                                 y: solve.time,
-                            }
+                            };
                         }),
                     },
                 ],
@@ -35,6 +35,11 @@ export default {
         chartOptions() {
             return {
                 maintainAspectRatio: false,
+                onClick: (e, point) => {
+                    if (point) {
+                        this.onSolveClick(this.solves[point[0]._index]);
+                    }
+                },
                 responsive: true,
                 scales: {
                     xAxes: [
@@ -63,9 +68,31 @@ export default {
                             
                             return formatSolveTime(solve.time);
                         },
+                        title: (points) => {
+                            const solve = this.solves[points[0].index];
+                            const puzzle = puzzles[solve.scramble.puzzle];
+                            
+                            if (!puzzle) {
+                                return 'Error';
+                            }
+
+                            return `${puzzle.title}: ${moment(solve.createdAt, timestampFormat).format('MMM Do')}`;
+                        }
                     },
                 },
             };
+        },
+    },
+    methods: {
+        onSolveClick(solve) {
+            console.log('ok', solve.id);
+
+            this.$router.push({
+                name: 'replay',
+                params: {
+                    id: solve.id,
+                },
+            });
         },
     },
     props: [
