@@ -122,12 +122,14 @@ export default [
             // solve
             //
             {
-                meta: {
-                    cubeSize: 3,
-                },
                 name: 'solve',
-                path: 'solve',
+                path: 'solve/:puzzle',
                 component: () => import('@/pages/solve/solve.vue' /* webpackChunkName: "solve" */),
+            },
+
+            {
+                path: '/solve',
+                redirect: '/solve/3x3',
             },
 
             //
