@@ -45,9 +45,9 @@ export function attachStickers(vm) {
         sticker.display = new Object3D();
         sticker.display.name = 'sticker';
 
-        const color = vm.masked ? vm.maskColor : vm.colors[sticker.value];
+        const color = vm.normalizedConfig.colors[sticker.value]; // vm.masked ? vm.maskColor : vm.colors[sticker.value];
 
-        const outerMaterial = new MeshLambertMaterial({
+        const outerMaterial = new MeshLambertMaterial({ 
             color: color,
             side: FrontSide,
         });
@@ -56,14 +56,14 @@ export function attachStickers(vm) {
             color: color,
             side: BackSide,
             transparent: true,
-            opacity: vm.stickerInnerOpacity,
+            opacity: vm.normalizedConfig.stickerInnerOpacity,
         });
 
         const outerMesh = new Mesh(geometry, outerMaterial);
         const innerMesh = new Mesh(geometry, innerMaterial);
 
-        outerMesh.scale.set(vm.stickerScale, vm.stickerScale, 1);
-        innerMesh.scale.set(vm.stickerScale, vm.stickerScale, 1);
+        outerMesh.scale.set(vm.stickerScale, vm.normalizedConfig.stickerScale, 1);
+        innerMesh.scale.set(vm.stickerScale, vm.normalizedConfig.stickerScale, 1);
 
         sticker.display.add(outerMesh);
         sticker.display.add(innerMesh);
@@ -279,8 +279,9 @@ export function positionStickers(vm) {
     
     // helper function to place a sticker
     const origin = { x: 0, y: 0, z: 0 };
-    const offset = -vm.halfCubeSize + vm.halfStickerSize;
+    const offset = -vm.halfPuzzleWidth + vm.halfStickerWidth;
 
+    // rotate, position, translate
     function rpt(sticker, i, rotation, position) {
         position = { ...origin, ...position };
         rotation = { ...origin, ...rotation };
@@ -296,20 +297,21 @@ export function positionStickers(vm) {
         sticker.display.position.z = position.z;
 
         // translate
-        const x = offset + (vm.colMap[i] * vm.stickerSize);
-        const y = offset - (vm.rowMap[i] * vm.stickerSize) * -1;
+        const x = offset + (vm.colMap[i] * vm.stickerWidth);
+        const y = offset - (vm.rowMap[i] * vm.stickerWidth) * -1;
         if (x) sticker.display.translateX(x);
         if (y) sticker.display.translateY(y * -1);
     }
 
     // rotate, position, and translate all stickers
-    const elevation = vm.stickerSize * vm.stickerElevation;
-    vm.cube.state.U.forEach((s, i) => rpt(s, i, { x: -90 }, { y: vm.halfCubeSize + elevation }));
-    vm.cube.state.L.forEach((s, i) => rpt(s, i, { y: -90 }, { x: -vm.halfCubeSize - elevation }));
-    vm.cube.state.F.forEach((s, i) => rpt(s, i, {}, { z: vm.halfCubeSize + elevation }));
-    vm.cube.state.R.forEach((s, i) => rpt(s, i, { y: 90 }, { x: vm.halfCubeSize + elevation }));
-    vm.cube.state.B.forEach((s, i) => rpt(s, i, { y: 180 }, { z: -vm.halfCubeSize - elevation }));
-    vm.cube.state.D.forEach((s, i) => rpt(s, i, { x: 90 }, { y: -vm.halfCubeSize - elevation }));
+    const elevation = vm.stickerWidth * vm.normalizedConfig.stickerElevation;
+
+    vm.cube.state.U.forEach((s, i) => rpt(s, i, { x: -90 }, { y: vm.halfPuzzleWidth + elevation }));
+    vm.cube.state.L.forEach((s, i) => rpt(s, i, { y: -90 }, { x: -vm.halfPuzzleWidth - elevation }));
+    vm.cube.state.F.forEach((s, i) => rpt(s, i, {}, { z: vm.halfPuzzleWidth + elevation }));
+    vm.cube.state.R.forEach((s, i) => rpt(s, i, { y: 90 }, { x: vm.halfPuzzleWidth + elevation }));
+    vm.cube.state.B.forEach((s, i) => rpt(s, i, { y: 180 }, { z: -vm.halfPuzzleWidth - elevation }));
+    vm.cube.state.D.forEach((s, i) => rpt(s, i, { x: 90 }, { y: -vm.halfPuzzleWidth - elevation }));
 }
 
 /**
