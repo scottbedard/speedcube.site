@@ -3,8 +3,6 @@
         <canvas
             style="border: 4px solid red"
             ref="canvas"
-            :height="`${canvasHeight}px`"
-            :width="`${canvasWidth}px`"
         />
 
         <div class="mt-20">
@@ -20,17 +18,13 @@ import * as THREE from 'three';
 export default {
     data() {
         return {
-            canvasWidth: 0,
-            canvasHeight: 0,
             containerWidth: 0,
         };
     },
     mounted() {
         this.trackContainerWidth();
-        
-        this.reset();
 
-        this.render();
+        this.reset();
     },
     computed: {
         isCube() {
@@ -57,55 +51,60 @@ export default {
             return new Puzzle(this);
         },
         render() {
-            this.$options.puzzle.positionStickers();
-
             this.$options.renderer.render(this.$options.scene, this.$options.camera);
-            
-            console.log('rendered');
         },
         reset() {
-            // create a renderer
+            // instantiate a puzzle, renderer, scene, and camera
+            this.$options.puzzle = this.createPuzzle();
+
             this.$options.renderer = new THREE.WebGLRenderer({
                 alpha: true,
                 antialias: true,
                 canvas: this.$refs.canvas,
             });
 
-            this.$options.renderer.setPixelRatio(window.devicePixelRatio);
-
-            // create a scene
             this.$options.scene = new THREE.Scene();
 
-            // create a perspective camera and point it at the center
-            this.$options.camera = new THREE.PerspectiveCamera(180, 1, 0, 10000);
-            this.$options.camera.position.set(0, 500, 500);
+            this.$options.camera = new THREE.PerspectiveCamera(60, 1, 1, 1000);
+            
+            // position the camera
+            this.$options.camera.position.set(0, 5, 10);
             this.$options.camera.lookAt(0, 0, 0);
 
-            // add a bit of lighting
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-            const pointLight = new THREE.PointLight(0xffffff, 0.7);
+            var light = new THREE.DirectionalLight(0xffffff, 0.55);
+            light.position.set(0, 0, 1);
+            this.$options.scene.add(light);
 
-            this.$options.scene.add(ambientLight);
-            this.$options.scene.add(pointLight);
-
-            pointLight.position.set(0, 500, 500);
-
-            // axes helper
-            var axesHelper = new THREE.AxesHelper(10000);
-            
+            var axesHelper = new THREE.AxesHelper(5);
             this.$options.scene.add(axesHelper);
 
-            // create the puzzle
-            this.$options.puzzle = this.createPuzzle();
+            var geometry = new THREE.BoxGeometry(5, 5, 5);
+            var material = new THREE.MeshPhongMaterial({ color: 0xfff000 });
+            var cube = new THREE.Mesh(geometry, material);
+            this.$options.scene.add(cube);
 
-            // resize our canvas
-            this.resize();
+            var light = new THREE.DirectionalLight(0xffffff, 0.55);
+            light.position.set(0, 0, 1);
+            this.$options.scene.add(light);
+
+            var axesHelper = new THREE.AxesHelper(10);
+            this.$options.scene.add(axesHelper);
+
+            var render = () => {
+                requestAnimationFrame( render );
+
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+
+                this.render();
+            };
+
+            render();
         },
         resize() {
             const { height, width } = this.$options.puzzle.getCanvasDimensions();
 
-            this.canvasHeight = height;
-            this.canvasWidth = width;
+            this.$options.renderer.setSize(width, height);
         },
         trackContainerWidth() {
             const sync = () => {
