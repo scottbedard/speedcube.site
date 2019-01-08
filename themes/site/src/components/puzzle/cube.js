@@ -1,6 +1,185 @@
 import Cube from 'bedard-cube';
 import * as THREE from 'three';
-import { attachStickers } from './cube/canvas';
+
+/**
+ * Create 3d objects to represent each sticker.
+ * 
+ * @param  {Cube}   cube
+ * @return {void}
+ */
+function attachStickers(cube) {
+    const geometry = stickerGeometry(cube);
+
+    cube.model.stickers(sticker => {
+        sticker.display = new THREE.Object3D();
+        sticker.display.name = 'sticker';
+
+        const color = cube.config.colors[sticker.value];
+
+        const outerMaterial = new THREE.MeshLambertMaterial({
+            color,
+            side: THREE.FrontSide,
+        });
+
+        const innerMaterial = new THREE.MeshLambertMaterial({
+            color,
+            opacity: 0.5,
+            side: THREE.BackSide,
+            transparent: true,
+        });
+
+        const outerMesh = new THREE.Mesh(geometry, outerMaterial);
+        const innerMesh = new THREE.Mesh(geometry, innerMaterial);
+
+        sticker.display.add(outerMesh);
+        sticker.display.add(innerMesh);
+    });
+}
+
+/**
+ * Convert degrees to radians.
+ *
+ * @param  {mumber} deg
+ * @return {number}
+ */
+function degToRad(deg) {
+    return deg * (Math.PI / 180);
+}
+
+/**
+ * Position the stickers.
+ * 
+ * @param  {Cube} cube
+ * @return {void}
+ */
+function positionStickers(cube) {
+    const { scene } = cube.vm.$options;
+    const stickerSize = 1000 / cube.cubeLayers;
+    const halfCubeSize = 500;
+    const halfStickerSize = stickerSize / 2;
+
+    // refresh the scene by removing and re-adding all sticker objects
+    scene.children
+        .filter(child => child.name === 'sticker' || child.name === 'turn')
+        .forEach(scene.remove);
+
+    cube.model.stickers(sticker => scene.add(sticker.display));
+
+    // rotate, position, and translate 
+    function rotate(sticker, x, y) {
+        if (x) sticker.display.rotation.x = degToRad(x);
+        if (y) sticker.display.rotation.y = degToRad(y);
+    }
+
+    function position(sticker, x, y, z) {
+        if (x) sticker.display.position.x = x;
+        if (y) sticker.display.position.y = y;
+        if (z) sticker.display.position.z = z;
+    }
+
+    function translate(sticker, i) {
+        const x = -halfCubeSize + halfStickerSize + (cube.colMap[i] * stickerSize);
+        const y = -halfCubeSize + halfStickerSize + (cube.rowMap[i] * stickerSize);
+        if (x) sticker.display.translateX(x);
+        if (y) sticker.display.translateY(y * -1);
+    }
+
+    const elevation = halfCubeSize + (halfCubeSize * cube.config.stickerElevation);
+
+    cube.model.state.U.forEach((sticker, i) => {
+        rotate(sticker, -90, 0);
+        position(sticker, 0, elevation, 0);
+        translate(sticker, i);
+    });
+
+    cube.model.state.L.forEach((sticker, i) => {
+        rotate(sticker, 0, -90);
+        position(sticker, -elevation, 0, 0);
+        translate(sticker, i);
+    });
+
+    cube.model.state.F.forEach((sticker, i) => {
+        position(sticker, 0, 0, elevation);
+        translate(sticker, i);
+    });
+
+    cube.model.state.R.forEach((sticker, i) => {
+        rotate(sticker, 0, 90);
+        position(sticker, elevation, 0, 0);
+        translate(sticker, i);
+    });
+
+    cube.model.state.B.forEach((sticker, i) => {
+        rotate(sticker, 0, 180);
+        position(sticker, 0, 0, -elevation);
+        translate(sticker, i);
+    });
+
+    cube.model.state.D.forEach((sticker, i) => {
+        rotate(sticker, 90, 0);
+        position(sticker, 0, -elevation, 0);
+        translate(sticker, i);
+    });
+
+
+
+    // // helper function to place a sticker
+    // const origin = { x: 0, y: 0, z: 0 };
+    // const offset = halfCubeSize + halfStickerSize;
+    
+    // // rotate, position, translate
+    // function rpt(sticker, i, rotation, position) {
+    //     position = { ...origin, ...position };
+    //     rotation = { ...origin, ...rotation };
+
+    //     sticker.display.rotation.x = degToRad(rotation.x);
+    //     sticker.display.rotation.y = degToRad(rotation.y);
+    //     sticker.display.rotation.z = degToRad(rotation.z);
+
+    //     sticker.display.position.x = position.x;
+    //     sticker.display.position.y = position.y;
+    //     sticker.display.position.z = position.z;
+
+    //     const x = offset + (cube.colMap[i] * stickerSize);
+    //     const y = offset - (cube.rowMap[i] * stickerSize) * -1;
+    //     if (x) sticker.display.translateX(x);
+    //     if (y) sticker.display.translateY(y * -1);
+    // }
+
+    // const elevation = 0;
+    // cube.model.state.U.forEach((sticker, i) => rpt(sticker, i, { x: -90 }, { y: halfCubeSize + elevation }));
+    // cube.model.state.L.forEach((s, i) => rpt(s, i, { y: -90 }, { x: -halfCubeSize - elevation }));
+    // cube.model.state.F.forEach((s, i) => rpt(s, i, {}, { z: halfCubeSize + elevation }));
+    // cube.model.state.R.forEach((s, i) => rpt(s, i, { y: 90 }, { x: halfCubeSize + elevation }));
+    // cube.model.state.B.forEach((s, i) => rpt(s, i, { y: 180 }, { z: -halfCubeSize - elevation }));
+    // cube.model.state.D.forEach((s, i) => rpt(s, i, { x: 90 }, { y: -halfCubeSize - elevation }));
+}
+
+/**
+ * Threejs geometry to represent a sticker.
+ * 
+ * @param  {Cube}
+ * @return {ShapeBufferGeometry}
+ */
+function stickerGeometry(cube) {
+    const stickerSize = 1000 / cube.cubeLayers;
+    const shape = new THREE.Shape();
+    const offset = -(stickerSize / 2);
+    const offsetSize = offset + stickerSize;
+    const radius = stickerSize * cube.config.stickerRadius;
+
+    shape.moveTo(offset, offset + radius);
+    shape.lineTo(offset, offsetSize - radius);
+    shape.quadraticCurveTo(offset, offsetSize, offset + radius, offsetSize);
+    shape.lineTo(offsetSize - radius, offsetSize);
+    shape.quadraticCurveTo(offsetSize, offsetSize, offsetSize, offsetSize - radius);
+    shape.lineTo(offsetSize, offset + radius);
+    shape.quadraticCurveTo(offsetSize, offset, offsetSize - radius, offset);
+    shape.lineTo(offset + radius, offset);
+    shape.quadraticCurveTo(offset, offset, offset, offset + radius);
+
+    return new THREE.ShapeBufferGeometry(shape);
+}
 
 export default class {
 
@@ -12,7 +191,11 @@ export default class {
     constructor(vm) {
         this.vm = vm;
 
-        this.reset();
+        // instantiate a model for our cube
+        this.model = new Cube(this.cubeLayers, { useObjects: true });
+
+        // create a 3d object to represent each of our stickers
+        attachStickers(this);
     }
 
     /**
@@ -30,10 +213,19 @@ export default class {
                 '#4caf50', // B -> green
                 '#eeeeee', // D -> white
             ],
-            stickerElevation: 0.1,
-            stickerInnerOpacity: 0.5,
-            stickerScale: 0.8,
+            stickerElevation: 1,
+            stickerRadius: 0.2,
+            stickerSpacing: 0.2,
         };
+    }
+
+    /**
+     * Map a sticker index to a column index.
+     *
+     * @return {Array<number>}
+     */
+    get colMap() {
+        return new Array(this.cubeLayers ** 2).fill().map((val, i) => i % this.cubeLayers);
     }
 
     /**
@@ -41,36 +233,18 @@ export default class {
      * 
      * @return {number}
      */
-    get size() {
+    get cubeLayers() {
         // "2x2" -> 2, "3x3" -> 3, etc...
         return parseInt(this.vm.puzzleId, 10);
     }
 
     /**
-     * The geometry object for our stickers.
-     * 
-     * @return {Shape}
+     * Map a sticker index to a row index.
+     *
+     * @return {Array<number>}
      */
-    get stickerGeometry() {
-        const stickerSize = 5000;
-        const stickerRadius = 0.2;
-
-        const shape = new THREE.Shape();
-        const offset = -(stickerSize / 2);
-        const offsetSize = offset + stickerSize;
-        const radius = 0;
-
-        shape.moveTo(offset, offset + radius);
-        shape.lineTo(offset, offsetSize - radius);
-        shape.quadraticCurveTo(offset, offsetSize, offset + radius, offsetSize);
-        shape.lineTo(offsetSize - radius, offsetSize);
-        shape.quadraticCurveTo(offsetSize, offsetSize, offsetSize, offsetSize - radius);
-        shape.lineTo(offsetSize, offset + radius);
-        shape.quadraticCurveTo(offsetSize, offset, offsetSize - radius, offset);
-        shape.lineTo(offset + radius, offset);
-        shape.quadraticCurveTo(offset, offset, offset, offset + radius);
-
-        return new THREE.ShapeBufferGeometry(shape);
+    get rowMap() {
+        return new Array(this.cubeLayers ** 2).fill().map((val, i) => Math.floor(i / this.cubeLayers));
     }
 
     /**
@@ -81,8 +255,8 @@ export default class {
     getCanvasDimensions() {
         let maxSize = 480;
 
-        if (this.size === 2) maxSize = 280;
-        else if (this.size === 3) maxSize = 340;
+        if (this.cubeLayers === 2) maxSize = 280;
+        else if (this.cubeLayers === 3) maxSize = 340;
 
         const size = Math.min(maxSize, this.vm.containerWidth);
 
@@ -93,116 +267,11 @@ export default class {
     }
 
     /**
-     * Position the puzzle's stickers.
+     * Render the puzzle.
      * 
      * @return {void}
      */
-    positionStickers() {
-        console.log('positioning');
-        
-        const sticker = this.model.state.U[0];
-
-        sticker.display.position.x = 200;
-        sticker.display.position.y = 200;
-        sticker.display.position.z = 0;
-
-        this.vm.$options.scene.add(sticker.display);
-
-        console.log(sticker);
-
-        // // refresh the scene by removing and re-adding all sticker objects
-        // vm.scene.children
-        //     .filter(child => child.name === 'sticker' || child.name === 'turn')
-        //     .forEach(child => vm.scene.remove(child));
-
-        // vm.cube.stickers(sticker => vm.scene.add(sticker.display));
-
-        // // helper function to place a sticker
-        // const origin = { x: 0, y: 0, z: 0 };
-        // const offset = -vm.halfPuzzleWidth + vm.halfStickerWidth;
-
-        // // rotate, position, translate
-        // function rpt(sticker, i, rotation, position) {
-        //     position = { ...origin, ...position };
-        //     rotation = { ...origin, ...rotation };
-
-        //     // rotate
-        //     sticker.display.rotation.x = degToRad(rotation.x);
-        //     sticker.display.rotation.y = degToRad(rotation.y);
-        //     sticker.display.rotation.z = degToRad(rotation.z);
-
-        //     // position
-        //     sticker.display.position.x = position.x;
-        //     sticker.display.position.y = position.y;
-        //     sticker.display.position.z = position.z;
-
-        //     // translate
-        //     const x = offset + (vm.colMap[i] * vm.stickerWidth);
-        //     const y = offset - (vm.rowMap[i] * vm.stickerWidth) * -1;
-        //     if (x) sticker.display.translateX(x);
-        //     if (y) sticker.display.translateY(y * -1);
-        // }
-
-        // // rotate, position, and translate all stickers
-        // const elevation = vm.stickerWidth * vm.normalizedConfig.stickerElevation;
-
-        // vm.cube.state.U.forEach((s, i) => rpt(s, i, { x: -90 }, { y: vm.halfPuzzleWidth + elevation }));
-        // vm.cube.state.L.forEach((s, i) => rpt(s, i, { y: -90 }, { x: -vm.halfPuzzleWidth - elevation }));
-        // vm.cube.state.F.forEach((s, i) => rpt(s, i, {}, { z: vm.halfPuzzleWidth + elevation }));
-        // vm.cube.state.R.forEach((s, i) => rpt(s, i, { y: 90 }, { x: vm.halfPuzzleWidth + elevation }));
-        // vm.cube.state.B.forEach((s, i) => rpt(s, i, { y: 180 }, { z: -vm.halfPuzzleWidth - elevation }));
-        // vm.cube.state.D.forEach((s, i) => rpt(s, i, { x: 90 }, { y: -vm.halfPuzzleWidth - elevation }));
-    }
-
-    /**
-     * Reset the scene.
-     * 
-     * @return {void}
-     */
-    reset() {
-        // create a state model for our cube
-        this.model = new Cube(this.size, { useObjects: true });
-
-        // create a 3d object to represent each sticker
-        const geometry = this.stickerGeometry;
-
-        this.model.stickers(sticker => {
-            sticker.display = new THREE.Object3D();
-            sticker.display.name = 'sticker';
-
-            const outerMaterial = new THREE.MeshLambertMaterial({
-                color: 0xff0000,
-                side: THREE.DoubleSide,
-            });
-
-            const outerMesh = new THREE.Mesh(geometry, outerMaterial);
-
-            sticker.display.add(outerMesh);
-        });
-        // sticker.display = new Object3D();
-        // sticker.display.name = 'sticker';
-
-        // const color = vm.normalizedConfig.colors[sticker.value]; // vm.masked ? vm.maskColor : vm.colors[sticker.value];
-
-        // const outerMaterial = new MeshLambertMaterial({ 
-        //     color: color,
-        //     side: FrontSide,
-        // });
-
-        // const innerMaterial = new MeshLambertMaterial({
-        //     color: color,
-        //     side: BackSide,
-        //     transparent: true,
-        //     opacity: vm.normalizedConfig.stickerInnerOpacity,
-        // });
-
-        // const outerMesh = new Mesh(geometry, outerMaterial);
-        // const innerMesh = new Mesh(geometry, innerMaterial);
-
-        // outerMesh.scale.set(vm.stickerScale, vm.normalizedConfig.stickerScale, 1);
-        // innerMesh.scale.set(vm.stickerScale, vm.normalizedConfig.stickerScale, 1);
-
-        // sticker.display.add(outerMesh);
-        // sticker.display.add(innerMesh);
+    render() {
+        positionStickers(this);
     }
 }

@@ -1,5 +1,6 @@
 <template>
     <div class="text-center">
+        <pre class="text-left mb-8 text-sm">{{ $data }}</pre>
         <canvas
             style="border: 4px solid red"
             ref="canvas"
@@ -51,12 +52,12 @@ export default {
             return new Puzzle(this);
         },
         render() {
+            this.$options.puzzle.render();
+            
             this.$options.renderer.render(this.$options.scene, this.$options.camera);
         },
         reset() {
-            // instantiate a puzzle, renderer, scene, and camera
-            this.$options.puzzle = this.createPuzzle();
-
+            // instantiate a renderer and scene
             this.$options.renderer = new THREE.WebGLRenderer({
                 alpha: true,
                 antialias: true,
@@ -65,41 +66,45 @@ export default {
 
             this.$options.scene = new THREE.Scene();
 
-            this.$options.camera = new THREE.PerspectiveCamera(60, 1, 1, 1000);
-            
-            // position the camera
-            this.$options.camera.position.set(0, 5, 10);
+            // instantiate a camera, and point it at the center of our scene
+            this.$options.camera = new THREE.PerspectiveCamera(60, 1, 1, 10000);
+            this.$options.camera.position.set(0, 1500, 2500);
             this.$options.camera.lookAt(0, 0, 0);
 
-            var light = new THREE.DirectionalLight(0xffffff, 0.55);
-            light.position.set(0, 0, 1);
-            this.$options.scene.add(light);
+            // add some lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            const pointLight = new THREE.PointLight(0xffffff, 0.7);
 
-            var axesHelper = new THREE.AxesHelper(5);
+            this.$options.scene.add(ambientLight);
+            this.$options.scene.add(pointLight);
+            pointLight.position.set(0, 2000, 2000);
+
+            // axes helper
+            var axesHelper = new THREE.AxesHelper(2500);
             this.$options.scene.add(axesHelper);
 
-            var geometry = new THREE.BoxGeometry(5, 5, 5);
-            var material = new THREE.MeshPhongMaterial({ color: 0xfff000 });
-            var cube = new THREE.Mesh(geometry, material);
-            this.$options.scene.add(cube);
+            // instantiate and render the puzzle
+            this.$options.puzzle = this.createPuzzle();
 
-            var light = new THREE.DirectionalLight(0xffffff, 0.55);
-            light.position.set(0, 0, 1);
-            this.$options.scene.add(light);
+            this.$nextTick(this.render);
 
-            var axesHelper = new THREE.AxesHelper(10);
-            this.$options.scene.add(axesHelper);
+            // // spinning cube
+            // var geometry = new THREE.BoxGeometry(100, 100, 100);
+            // var material = new THREE.MeshPhongMaterial({ color: 0xfff000 });
+            // var cube = new THREE.Mesh(geometry, material);
+            // this.$options.scene.add(cube);
 
-            var render = () => {
-                requestAnimationFrame( render );
+            // var render = () => {
+            //     requestAnimationFrame( render );
 
-                cube.rotation.x += 0.01;
-                cube.rotation.y += 0.01;
+            //     cube.rotation.y += 0.01;
+            //     cube.rotation.y += 0.01;
+            //     cube.rotation.z += 0.01;
 
-                this.render();
-            };
+            //     this.render();
+            // }
 
-            render();
+            // render();
         },
         resize() {
             const { height, width } = this.$options.puzzle.getCanvasDimensions();
