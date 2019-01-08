@@ -57,6 +57,9 @@ export default {
             this.$options.renderer.render(this.$options.scene, this.$options.camera);
         },
         reset() {
+            // instantiate the puzzle
+            this.$options.puzzle = this.createPuzzle();
+
             // instantiate a renderer and scene
             this.$options.renderer = new THREE.WebGLRenderer({
                 alpha: true,
@@ -68,7 +71,7 @@ export default {
 
             // instantiate a camera, and point it at the center of our scene
             this.$options.camera = new THREE.PerspectiveCamera(60, 1, 1, 10000);
-            this.$options.camera.position.set(0, 1500, 2500);
+            this.$options.camera.position.set(0, 1000, 2000);
             this.$options.camera.lookAt(0, 0, 0);
 
             // add some lighting
@@ -83,28 +86,8 @@ export default {
             var axesHelper = new THREE.AxesHelper(2500);
             this.$options.scene.add(axesHelper);
 
-            // instantiate and render the puzzle
-            this.$options.puzzle = this.createPuzzle();
-
+            // render the initial frame
             this.$nextTick(this.render);
-
-            // // spinning cube
-            // var geometry = new THREE.BoxGeometry(100, 100, 100);
-            // var material = new THREE.MeshPhongMaterial({ color: 0xfff000 });
-            // var cube = new THREE.Mesh(geometry, material);
-            // this.$options.scene.add(cube);
-
-            // var render = () => {
-            //     requestAnimationFrame( render );
-
-            //     cube.rotation.y += 0.01;
-            //     cube.rotation.y += 0.01;
-            //     cube.rotation.z += 0.01;
-
-            //     this.render();
-            // }
-
-            // render();
         },
         resize() {
             const { height, width } = this.$options.puzzle.getCanvasDimensions();

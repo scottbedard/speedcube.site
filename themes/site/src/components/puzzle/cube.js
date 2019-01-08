@@ -78,8 +78,14 @@ function positionStickers(cube) {
     }
 
     function translate(sticker, i) {
-        const x = -halfCubeSize + halfStickerSize + (cube.colMap[i] * stickerSize);
-        const y = -halfCubeSize + halfStickerSize + (cube.rowMap[i] * stickerSize);
+        const col = cube.colMap[i];
+        const row = cube.rowMap[i];
+        const spacing = cube.config.stickerSpacing * stickerSize;
+        const spacingOffset = spacing * ((cube.model.size - 1) / 2);
+        const origin = -halfCubeSize + halfStickerSize;
+
+        const x = origin + (col * stickerSize) + (col * spacing) - spacingOffset;
+        const y = origin + (row * stickerSize) + (row * spacing) - spacingOffset;
         if (x) sticker.display.translateX(x);
         if (y) sticker.display.translateY(y * -1);
     }
@@ -162,7 +168,7 @@ function positionStickers(cube) {
  * @return {ShapeBufferGeometry}
  */
 function stickerGeometry(cube) {
-    const stickerSize = 1000 / cube.cubeLayers;
+    const stickerSize = 1000 / cube.model.size;
     const shape = new THREE.Shape();
     const offset = -(stickerSize / 2);
     const offsetSize = offset + stickerSize;
@@ -213,9 +219,9 @@ export default class {
                 '#4caf50', // B -> green
                 '#eeeeee', // D -> white
             ],
-            stickerElevation: 1,
-            stickerRadius: 0.2,
-            stickerSpacing: 0.2,
+            stickerElevation: 0.4,
+            stickerRadius: 0.1,
+            stickerSpacing: 0.5,
         };
     }
 
