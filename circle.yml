@@ -28,7 +28,3 @@ workflows:
   tests:
     jobs:
       - backend
-      - frontend
-      - deploy:
-          requires:
-            - backend
