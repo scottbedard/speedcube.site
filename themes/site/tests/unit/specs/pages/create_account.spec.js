@@ -35,7 +35,7 @@ describe('create account page', function() {
     beforeEach(function() {
         stubRequests({
             post: {
-                '/api/givingteam/auth/register': userFixture,
+                '/api/rainlab/user/register': userFixture,
             },
         });
     });
@@ -45,7 +45,7 @@ describe('create account page', function() {
             template: `<v-create-account />`,
         });
 
-        input('John Doe', vm.$el.querySelector('[data-name] input'));
+        input('johndoe', vm.$el.querySelector('[data-username] input'));
         input('john@example.com', vm.$el.querySelector('[data-email] input'));
         input('abc123', vm.$el.querySelector('[data-password] input'));
         input('abc123', vm.$el.querySelector('[data-password-confirmation] input'));
@@ -55,12 +55,12 @@ describe('create account page', function() {
 
             setTimeout(() => {
                 expect(axios.post).to.have.been.calledWithMatch(
-                    '/api/givingteam/auth/register',
+                    '/api/rainlab/user/register',
                     {
-                        name: 'John Doe',
                         email: 'john@example.com',
                         password: 'abc123',
                         password_confirmation: 'abc123',
+                        username: 'johndoe',
                     },
                 );
 

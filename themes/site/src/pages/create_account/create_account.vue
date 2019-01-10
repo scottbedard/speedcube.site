@@ -27,7 +27,7 @@
                         <v-input
                             v-model="username"
                             autofocus
-                            data-name
+                            data-username
                             placeholder="Select a username"
                             type="text"
                             :disabled="isLoading"
