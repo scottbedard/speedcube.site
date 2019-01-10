@@ -23,7 +23,7 @@ function attachStickers(cube) {
 
         const innerMaterial = new THREE.MeshLambertMaterial({
             color,
-            opacity: 0.5,
+            opacity: cube.config.innerBrightness,
             side: THREE.BackSide,
             transparent: true,
         });
@@ -187,6 +187,7 @@ export default class {
                 '#4caf50', // B -> green
                 '#eeeeee', // D -> white
             ],
+            innerBrightness: 0.7,
             stickerElevation: 0.05,
             stickerRadius: 0.1,
             stickerSpacing: 0.1,
