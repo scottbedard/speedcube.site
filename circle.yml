@@ -20,11 +20,11 @@ jobs:
             php composer.phar install --no-interaction
             sudo composer self-update
             composer install
+            (cd ./plugins/speedcube/speedcube && composer install)
       - run:
           name: Yarn Install
           command: |
-            cd ~/themes/site
-            yarn install
+            (cd ./themes/site && yarn install)
       - save_cache:
           key: -v3-{{ checksum "composer.json" }}-{{ checksum "themes/site/yarn.lock" }}
           paths:
