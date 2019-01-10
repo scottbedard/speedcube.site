@@ -12,7 +12,7 @@ jobs:
             git clone git@github.com:rainlab/user-plugin.git ./plugins/rainlab/user
             git clone git@github.com:vuetober/rainlab-user-api.git ./plugins/vuetober/rainlabuserapi
       - restore_cache:
-          key: -v3-{{ checksum "composer.lock" }}
+          key: -v3-{{ checksum "composer.json" }}
       - run:
           name: Composer install
           command: |
@@ -21,7 +21,7 @@ jobs:
             sudo composer self-update
             composer install
       - save_cache:
-          key: -v3-{{ checksum "composer.lock" }}
+          key: -v3-{{ checksum "composer.json" }}
           paths:
             - "composer.lock"
             - "vendor"
