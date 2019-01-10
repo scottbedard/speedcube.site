@@ -11,11 +11,6 @@ jobs:
             git clone git@github.com:rainlab/googleanalytics-plugin.git ./plugins/rainlab/googleanalytics
             git clone git@github.com:rainlab/user-plugin.git ./plugins/rainlab/user
             git clone git@github.com:vuetober/rainlab-user-api.git ./plugins/vuetober/rainlabuserapi
-      - run:
-          name: Setup Environment
-          command: |
-            mv .env.example .env
-            php artisan key:generate
       - restore_cache:
           key: -v3-{{ checksum "composer.json" }}-{{ checksum "themes/site/yarn.lock" }}
       - run:
@@ -32,6 +27,11 @@ jobs:
           paths:
             - "vendor"
             - "themes/site/node_modules"
+      - run:
+          name: Setup Environment
+          command: |
+            mv .env.example .env
+            php artisan key:generate
       - run:
           name: Backend Tests
           command: |
