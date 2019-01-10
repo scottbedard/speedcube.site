@@ -29,7 +29,7 @@ jobs:
           name: Test
           command: |
             ls -a
-            phpunit -c ./plugins/speedcube/speedcube/phpunit.xml
+            vendor/bin/phpunit -c ./plugins/speedcube/speedcube/phpunit.xml
 workflows:
   version: 2
   tests:
