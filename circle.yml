@@ -54,6 +54,10 @@ jobs:
           name: Test frontend
           command: |
             (cd ./themes/site && yarn test:unit)
+      - run:
+          name: Codecov
+          command: |
+            (cd ./themes/site && bash <(curl -s https://codecov.io/bash) -t 5c7c532d-d106-480a-b67e-d2af48ce8f56 -cF javascript)
 workflows:
   version: 2
   tests:
