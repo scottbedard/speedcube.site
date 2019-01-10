@@ -1,0 +1,34 @@
+version: 2
+jobs:
+  backend:
+    docker:
+      - image: circleci/php:7.2-node-browsers
+    steps:
+      - checkout
+      - run:
+          name: Clone required plugins
+          command: |
+            git clone git@github.com:rainlab/googleanalytics-plugin.git ./plugins/rainlab/googleanalytics
+            git clone git@github.com:rainlab/user-plugin.git ./plugins/rainlab/user
+            git clone git@github.com:vuetober/rainlab-user-api.git ./plugins/vuetober/rainlabuserapi
+      - run:
+          name: Composer install
+          command: |
+            wget https://getcomposer.org/composer.phar
+            php composer.phar install --no-interaction
+            sudo composer self-update
+            composer install
+      - run:
+          name: Test
+          command: |
+            cd ~/project/plugins/speedcube/speedcube
+            php vendor/bin/phpunit
+workflows:
+  version: 2
+  tests:
+    jobs:
+      - backend
+      - frontend
+      - deploy:
+          requires:
+            - backend
