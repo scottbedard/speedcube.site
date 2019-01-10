@@ -15,6 +15,7 @@ jobs:
           name: Setup Environment
           command: |
             mv .env.example .env
+            php artisan key:generate
       - restore_cache:
           key: -v3-{{ checksum "composer.json" }}-{{ checksum "themes/site/yarn.lock" }}
       - run:
