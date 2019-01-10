@@ -12,9 +12,21 @@ const resolve = (...args) => path.resolve(__dirname, ...args);
 
 module.exports = {
     chainWebpack(config) {
-        // mock all axios calls in our testing environment
         if (isTesting) {
+            // mock all axios calls in our testing environment
             config.resolve.alias.set('axios$', resolve('./tests/unit/mocks/axios'));
+
+            // instrument our code for coverage reports
+            config.module
+                .rule('istanbul')
+                .test(/\.(js|vue)$/)
+                .enforce('post')
+                .include
+                    .add(path.resolve(__dirname, '/src'))
+                    .end()
+                .use('istanbul-instrumenter-loader')
+                    .loader('istanbul-instrumenter-loader')
+                    .options({ esModules: true })
         }
     },
     configureWebpack() {
