@@ -19,11 +19,11 @@ jobs:
             wget https://getcomposer.org/composer.phar
             php composer.phar install --no-interaction
             sudo composer self-update
-            composer install --dev
+            composer install
       - run:
           name: Yarn Install
           command: |
-            cd ./themes/site
+            cd ~/themes/site
             yarn install
       - save_cache:
           key: -v3-{{ checksum "composer.json" }}-{{ checksum "themes/site/yarn.lock" }}
@@ -31,9 +31,11 @@ jobs:
             - "vendor"
             - "themes/site/node_modules"
       - run:
-          name: Test
+          name: Backend Tests
           command: |
-            vendor/bin/phpunit -c ./plugins/speedcube/speedcube/phpunit.xml
+            cd ~/plugins/speedcube/speedcube
+            composer install
+            vendor/bin/phpunit
 workflows:
   version: 2
   tests:
