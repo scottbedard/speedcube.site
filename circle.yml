@@ -30,8 +30,7 @@ jobs:
       - run:
           name: Setup Environment
           command: |
-            mv .env.example .env
-            php artisan key:generate
+            cp .env.example .env
             cat .env
       - run:
           name: Backend Tests
