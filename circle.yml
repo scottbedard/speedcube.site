@@ -1,12 +1,12 @@
 version: 2
 jobs:
-  install:
+  backend:
     docker:
       - image: circleci/php:7.2-node-browsers
     steps:
       - checkout
       - run:
-          name: Install plugins and dependencies
+          name: Install plugins
           command: |
             git clone git@github.com:rainlab/googleanalytics-plugin.git ./plugins/rainlab/googleanalytics
             git clone git@github.com:rainlab/user-plugin.git ./plugins/rainlab/user
@@ -14,7 +14,7 @@ jobs:
       - restore_cache:
           key: -v3-{{ checksum "composer.lock" }}-{{ checksum "themes/site/yarn.lock" }}
       - run:
-          name: Install Dependencies
+          name: Install dependencies
           command: |
             wget https://getcomposer.org/composer.phar
             php composer.phar install --no-interaction
@@ -28,23 +28,15 @@ jobs:
             - "vendor"
             - "themes/site/node_modules"
       - run:
-          name: Setup Environment
+          name: Configure environment
           command: |
             cp .env.example .env
-            cat .env
-  test:
-    docker:
-      - image: circleci/php:7.2-node-browsers
-    steps:
       - run:
-          name: test
+          name: Test backend
           command: |
             (cd ./plugins/speedcube/speedcube && vendor/bin/phpunit)
 workflows:
   version: 2
   tests:
     jobs:
-      - install
-      - test:
-          requires:
-            - install
+      - backend
