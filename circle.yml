@@ -11,6 +11,8 @@ jobs:
             git clone git@github.com:rainlab/googleanalytics-plugin.git ./plugins/rainlab/googleanalytics
             git clone git@github.com:rainlab/user-plugin.git ./plugins/rainlab/user
             git clone git@github.com:vuetober/rainlab-user-api.git ./plugins/vuetober/rainlabuserapi
+      - restore_cache:
+          key: -v3-{{ checksum "composer.lock" }}
       - run:
           name: Composer install
           command: |
@@ -18,10 +20,16 @@ jobs:
             php composer.phar install --no-interaction
             sudo composer self-update
             composer install
+      - save_cache:
+          key: -v3-{{ checksum "composer.lock" }}
+          paths:
+            - "composer.lock"
+            - "vendor"
       - run:
           name: Test
           command: |
             cd ~/project/plugins/speedcube/speedcube
+            ls -a
             php vendor/bin/phpunit
 workflows:
   version: 2
