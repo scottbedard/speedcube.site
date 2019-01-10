@@ -17,7 +17,7 @@ describe('signout page', function() {
     beforeEach(function() {
         stubRequests({
             get: {
-                '/api/givingteam/auth/signout': true,
+                '/api/rainlab/user/signout': true,
             },
         });
     });
@@ -32,7 +32,7 @@ describe('signout page', function() {
             template: `<v-signout />`,
         });
 
-        expect(axios.get).to.have.been.calledWith('/api/givingteam/auth/signout');
+        expect(axios.get).to.have.been.calledWith('/api/rainlab/user/signout');
 
         setTimeout(() => {
             expect(push).to.have.been.calledWithMatch({ name: 'home' });
