@@ -30,7 +30,7 @@ jobs:
           command: |
             cd ~/project/plugins/speedcube/speedcube
             ls -a
-            php vendor/bin/phpunit
+            phpunit
 workflows:
   version: 2
   tests:
