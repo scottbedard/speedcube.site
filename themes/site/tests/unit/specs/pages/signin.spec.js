@@ -17,7 +17,7 @@ describe('signin page', function() {
     beforeEach(function() {
         stubRequests({
             post: {
-                '/api/givingteam/auth/signin': true,
+                '/api/rainlab/user/signin': true,
             },
         });
     });
@@ -27,7 +27,7 @@ describe('signin page', function() {
             template: `<v-signin />`,
         });
 
-        input('john@example.com', vm.$el.querySelector('[data-email] input'));
+        input('johndoe', vm.$el.querySelector('[data-login] input'));
         input('abc123', vm.$el.querySelector('[data-password] input'));
 
         setTimeout(() => {
@@ -35,9 +35,9 @@ describe('signin page', function() {
 
             setTimeout(() => {
                 expect(axios.post).to.have.been.calledWithMatch(
-                    '/api/givingteam/auth/signin',
+                    '/api/rainlab/user/signin',
                     {
-                        login: 'john@example.com',
+                        login: 'johndoe',
                         password: 'abc123',
                         remember: false,
                     }
