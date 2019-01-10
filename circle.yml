@@ -33,9 +33,7 @@ jobs:
       - run:
           name: Backend Tests
           command: |
-            cd ~/plugins/speedcube/speedcube
-            composer install
-            vendor/bin/phpunit
+            (cd ./plugins/speedcube/speedcube && vendor/bin/phpunit)
 workflows:
   version: 2
   tests:
