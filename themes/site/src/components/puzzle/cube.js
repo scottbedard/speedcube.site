@@ -57,6 +57,11 @@ function positionStickers(cube) {
     const stickerSize = 1000 / cube.cubeLayers;
     const halfCubeSize = 500;
     const halfStickerSize = stickerSize / 2;
+    const spacing = cube.config.stickerSpacing * stickerSize;
+    const spacingOffset = spacing * ((cube.model.size - 1) / 2);
+    const elevation = halfCubeSize + spacingOffset + (stickerSize * cube.config.stickerElevation);
+
+    console.log('elevation', elevation)
 
     // refresh the scene by removing and re-adding all sticker objects
     scene.children
@@ -79,18 +84,14 @@ function positionStickers(cube) {
 
     function translate(sticker, i) {
         const col = cube.colMap[i];
-        const row = cube.rowMap[i];
-        const spacing = cube.config.stickerSpacing * stickerSize;
-        const spacingOffset = spacing * ((cube.model.size - 1) / 2);
         const origin = -halfCubeSize + halfStickerSize;
+        const row = cube.rowMap[i];
 
         const x = origin + (col * stickerSize) + (col * spacing) - spacingOffset;
         const y = origin + (row * stickerSize) + (row * spacing) - spacingOffset;
         if (x) sticker.display.translateX(x);
         if (y) sticker.display.translateY(y * -1);
     }
-
-    const elevation = halfCubeSize + (halfCubeSize * cube.config.stickerElevation);
 
     cube.model.state.U.forEach((sticker, i) => {
         rotate(sticker, -90, 0);
@@ -126,39 +127,6 @@ function positionStickers(cube) {
         position(sticker, 0, -elevation, 0);
         translate(sticker, i);
     });
-
-
-
-    // // helper function to place a sticker
-    // const origin = { x: 0, y: 0, z: 0 };
-    // const offset = halfCubeSize + halfStickerSize;
-    
-    // // rotate, position, translate
-    // function rpt(sticker, i, rotation, position) {
-    //     position = { ...origin, ...position };
-    //     rotation = { ...origin, ...rotation };
-
-    //     sticker.display.rotation.x = degToRad(rotation.x);
-    //     sticker.display.rotation.y = degToRad(rotation.y);
-    //     sticker.display.rotation.z = degToRad(rotation.z);
-
-    //     sticker.display.position.x = position.x;
-    //     sticker.display.position.y = position.y;
-    //     sticker.display.position.z = position.z;
-
-    //     const x = offset + (cube.colMap[i] * stickerSize);
-    //     const y = offset - (cube.rowMap[i] * stickerSize) * -1;
-    //     if (x) sticker.display.translateX(x);
-    //     if (y) sticker.display.translateY(y * -1);
-    // }
-
-    // const elevation = 0;
-    // cube.model.state.U.forEach((sticker, i) => rpt(sticker, i, { x: -90 }, { y: halfCubeSize + elevation }));
-    // cube.model.state.L.forEach((s, i) => rpt(s, i, { y: -90 }, { x: -halfCubeSize - elevation }));
-    // cube.model.state.F.forEach((s, i) => rpt(s, i, {}, { z: halfCubeSize + elevation }));
-    // cube.model.state.R.forEach((s, i) => rpt(s, i, { y: 90 }, { x: halfCubeSize + elevation }));
-    // cube.model.state.B.forEach((s, i) => rpt(s, i, { y: 180 }, { z: -halfCubeSize - elevation }));
-    // cube.model.state.D.forEach((s, i) => rpt(s, i, { x: 90 }, { y: -halfCubeSize - elevation }));
 }
 
 /**
@@ -219,9 +187,9 @@ export default class {
                 '#4caf50', // B -> green
                 '#eeeeee', // D -> white
             ],
-            stickerElevation: 0.4,
+            stickerElevation: 0.05,
             stickerRadius: 0.1,
-            stickerSpacing: 0.5,
+            stickerSpacing: 0.1,
         };
     }
 

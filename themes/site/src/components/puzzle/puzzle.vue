@@ -82,9 +82,9 @@ export default {
             this.$options.scene.add(pointLight);
             pointLight.position.set(0, 2000, 2000);
 
-            // axes helper
-            var axesHelper = new THREE.AxesHelper(2500);
-            this.$options.scene.add(axesHelper);
+            // // axes helper
+            // var axesHelper = new THREE.AxesHelper(2500);
+            // this.$options.scene.add(axesHelper);
 
             // render the initial frame
             this.$nextTick(this.render);
