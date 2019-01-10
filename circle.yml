@@ -12,14 +12,14 @@ jobs:
             git clone git@github.com:rainlab/user-plugin.git ./plugins/rainlab/user
             git clone git@github.com:vuetober/rainlab-user-api.git ./plugins/vuetober/rainlabuserapi
       - restore_cache:
-          key: -v3-{{ checksum "composer.json" }}
+          key: -v3-{{ checksum "composer.json" }}-{{ checksum "themes/site/yarn.lock" }}
       - run:
           name: Composer Install
           command: |
             wget https://getcomposer.org/composer.phar
             php composer.phar install --no-interaction
             sudo composer self-update
-            composer install
+            composer install --dev
       - run:
           name: Yarn Install
           command: |
@@ -28,12 +28,11 @@ jobs:
       - save_cache:
           key: -v3-{{ checksum "composer.json" }}-{{ checksum "themes/site/yarn.lock" }}
           paths:
-            - "composer.lock"
             - "vendor"
+            - "themes/site/node_modules"
       - run:
           name: Test
           command: |
-            ls -a
             vendor/bin/phpunit -c ./plugins/speedcube/speedcube/phpunit.xml
 workflows:
   version: 2
