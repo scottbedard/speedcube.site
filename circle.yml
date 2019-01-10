@@ -6,7 +6,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Clone Plugins
+          name: Install plugins and dependencies
           command: |
             git clone git@github.com:rainlab/googleanalytics-plugin.git ./plugins/rainlab/googleanalytics
             git clone git@github.com:rainlab/user-plugin.git ./plugins/rainlab/user
@@ -45,4 +45,6 @@ workflows:
   tests:
     jobs:
       - install
-      - test
+      - test:
+          requires:
+            - install
