@@ -28,9 +28,8 @@ jobs:
       - run:
           name: Test
           command: |
-            cd ~/project/plugins/speedcube/speedcube
             ls -a
-            phpunit
+            phpunit -c ./plugins/speedcube/speedcube/phpunit.xml
 workflows:
   version: 2
   tests:
