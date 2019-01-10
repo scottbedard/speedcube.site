@@ -32,6 +32,7 @@ jobs:
           command: |
             mv .env.example .env
             php artisan key:generate
+            cat .env
       - run:
           name: Backend Tests
           command: |
