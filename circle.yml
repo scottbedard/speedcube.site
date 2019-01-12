@@ -34,7 +34,7 @@ jobs:
       - run:
           name: Test backend
           command: |
-            (cd ./plugins/speedcube/speedcube && vendor/bin/phpunit --coverage-clover build/logs/clover.xml)
+            (cd ./plugins/speedcube/speedcube && vendor/bin/phpunit --coverage-clover clover.xml && bash <(curl -s https://codecov.io/bash) -t 5c7c532d-d106-480a-b67e-d2af48ce8f56 -cF php)
   frontend:
     docker:
       - image: circleci/php:7.2-node-browsers
