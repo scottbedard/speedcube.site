@@ -1,6 +1,7 @@
 # speedcube.site
 
 [![Build](https://img.shields.io/circleci/project/github/scottbedard/speedcube.site/master.svg)](https://circleci.com/gh/scottbedard/speedcube.site)
+[![Coverage](https://img.shields.io/codecov/c/github/scottbedard/speedcube.site/master.svg)](https://codecov.io/gh/scottbedard/speedcube.site)
 
 > **Warning:** This site is a work in progress. Feel free to try things out, but be aware that things may not work properly, and accounts may be reset at any time.
 
