@@ -2,8 +2,12 @@
     <div class="text-center">
         <canvas ref="canvas" />
 
-        <div class="mt-20">
-            <v-button @click="turn" outlined>turn</v-button>
+        <div class="my-20">
+            <v-button @click="turn('F')" outlined>turn</v-button>
+        </div>
+
+        <div class="mb-20">
+            <pre>{{ queue }}</pre>
         </div>
     </div>
 </template>
@@ -15,7 +19,14 @@ import Cube from './cube';
 export default {
     data() {
         return {
+            // the width of our containing element
             containerWidth: 0,
+
+            // determines if the puzzle is being turned
+            isTurning: false,
+
+            // turns waiting to be executed
+            queue: [],
         };
     },
     mounted() {
@@ -48,6 +59,21 @@ export default {
             }
 
             return new Puzzle(this);
+        },
+        onQueueChange() {            
+            if (!this.isTurning) {
+                const turn = this.queue[0];
+                
+                if (turn) {
+                    this.isTurning = true;
+
+                    this.$options.puzzle.turn(turn).then(() => {
+                        this.isTurning = false;
+                        
+                        this.queue.shift();
+                    });
+                }
+            }
         },
         render() {
             // this function updates our canvas with the current frame
@@ -109,13 +135,9 @@ export default {
                 window.removeEventListener('resize', sync);
             });
         },
-        turn() {
-            const turn = 'R';
-            
-            this.$options.puzzle.turn(turn).then(() => {
-                console.log('done turning!');
-            });
-        }
+        turn(turn) {
+            this.queue.push(turn);
+        },
     },
     props: {
         puzzle: {
@@ -125,6 +147,7 @@ export default {
     },
     watch: {
         containerWidth: 'resize',
+        queue: 'onQueueChange',
     },
 };
 </script>

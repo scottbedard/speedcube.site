@@ -425,21 +425,18 @@ export default class {
                 const timeout = progress * turnDuration;
 
                 cleanTimeout(this.vm, () => {
-                    // animate our effected stickers being turned if the
-                    // progress is less than one
-                    if (progress < 1) {
-                        updateTurn(this, turnObj, axis, degrees, progress);
-                    }
+                    // animate our effected stickers being turned
+                    updateTurn(this, turnObj, axis, degrees, progress);
 
-                    // otherwise the turn is complete. update our model
-                    // and draw a fresh frame so we have the same objects
-                    // to work with on the next turn
-                    else {
-                        this.model.turn(turn);
+                    // if the turn is complete. update our model and
+                    // re-render in preparation for the next turn.
+                    if (progress === 1) {
+                        requestAnimationFrame(() => {
+                            this.model.turn(turn);
+                            this.render();
 
-                        this.render();
-
-                        resolve();
+                            requestAnimationFrame(resolve);
+                        });
                     }
                 }, timeout);
             }
