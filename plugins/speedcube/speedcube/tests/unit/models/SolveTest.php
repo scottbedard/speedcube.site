@@ -75,4 +75,17 @@ class SolveTest extends PluginTestCase
         $this->assertEquals(1, $user->records()->count());
         $this->assertEquals($solve2->id, $user->records()->first()->solve_id);
     }
+
+    //
+    // scopes
+    //
+    public function test_solve_dnf_scope()
+    {
+        Factory::create(new Solve);
+        
+        $dnf = Factory::create(new Solve, ['status' => 'dnf']);
+        
+        $this->assertEquals(1, Solve::dnf()->count());
+        $this->assertEquals($dnf->id, Solve::dnf()->first()->id);
+    }
 }
