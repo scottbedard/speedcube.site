@@ -300,11 +300,9 @@ export default class {
     constructor(vm) {
         this.vm = vm;
 
-        // instantiate a model for our cube
-        this.model = new Cube(this.cubeLayers, { useObjects: true });
-
-        // create a 3d object to represent each of our stickers
-        attachStickers(this);
+        this.model = new Cube(this.cubeLayers, {
+            useObjects: true,
+        });
     }
 
     /**
@@ -326,7 +324,7 @@ export default class {
             stickerElevation: 0.05,
             stickerRadius: 0.1,
             stickerSpacing: 0.1,
-            turnDuration: 750,
+            turnDuration: 150,
         };
     }
 

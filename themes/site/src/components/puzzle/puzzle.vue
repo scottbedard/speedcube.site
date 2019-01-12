@@ -3,11 +3,7 @@
         <canvas ref="canvas" />
 
         <div class="my-20">
-            <v-button @click="turn('F')" outlined>turn</v-button>
-        </div>
-
-        <div class="mb-20">
-            <pre>{{ queue }}</pre>
+            <v-button @click="turn('R')" outlined>turn</v-button>
         </div>
     </div>
 </template>
@@ -69,7 +65,7 @@ export default {
 
                     this.$options.puzzle.turn(turn).then(() => {
                         this.isTurning = false;
-                        
+
                         this.queue.shift();
                     });
                 }
@@ -140,6 +136,14 @@ export default {
         },
     },
     props: {
+        turnable: {
+            default: true,
+            type: Boolean,
+        },
+        turnConfig: {
+            default: () => {},
+            type: Object,
+        },
         puzzle: {
             required: true,
             type: String,
