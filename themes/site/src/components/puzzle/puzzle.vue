@@ -22,6 +22,8 @@ export default {
         this.trackContainerWidth();
 
         this.reset();
+        this.renderPuzzle();
+        this.render();
     },
     computed: {
         isCube() {
@@ -48,9 +50,13 @@ export default {
             return new Puzzle(this);
         },
         render() {
-            this.$options.puzzle.render();
-            
+            // this function updates our canvas with the current frame
             this.$options.renderer.render(this.$options.scene, this.$options.camera);
+        },
+        renderPuzzle() {
+            // this method instructs our puzzle to render itself, but does
+            // not actually draw on the canvas. to do that, call render.
+            this.$options.puzzle.render();
         },
         reset() {
             // instantiate the puzzle
@@ -106,7 +112,9 @@ export default {
         turn() {
             const turn = 'R';
             
-            this.$options.puzzle.turn(turn);
+            this.$options.puzzle.turn(turn).then(() => {
+                console.log('done turning!');
+            });
         }
     },
     props: {

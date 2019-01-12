@@ -1,5 +1,6 @@
-import Cube from 'bedard-cube';
 import * as THREE from 'three';
+import Cube from 'bedard-cube';
+import { cleanTimeout } from '@/app/utils/component';
 
 /**
  * Create 3d objects to represent each sticker.
@@ -124,12 +125,58 @@ function getStickersEffectedByTurn(cube, parsedTurn) {
 }
 
 /**
+ * Get the axis and rotation of a turn.
+ * 
+ * @param  {Cube}   cube
+ * @param  {Object} parsedTurn
+ * @return {Array}
+ */
+export function getTurnAxisAndDegrees(parsedTurn) {
+    const { target, rotation } = parsedTurn;
+    let axis, degrees;
+
+    // helper function to get turn degrees. note that the
+    // clockwise / counter-clickwise degrees might seem
+    // backwards. this is because we're turning from the
+    // context of our scene's world axis, not the face.
+    const deg = (cw, ccw) => rotation === 2 ? 180 : (rotation === -1 ? ccw : cw);
+
+    if (['X', 'Y', 'Z'].includes(target)) {
+        axis = target.toLowerCase();
+        degrees = deg(-90, 90);
+    } else {
+        if (target === 'U') {
+            axis = 'y';
+            degrees = deg(-90, 90);
+        } else if (target === 'L') {
+            axis = 'x';
+            degrees = deg(90, -90);
+        } else if (target === 'F') {
+            axis = 'z';
+            degrees = deg(-90, 90);
+        } else if (target === 'R') {
+            axis = 'x';
+            degrees = deg(-90, 90);
+        } else if (target === 'B') {
+            axis = 'z';
+            degrees = deg(90, -90);
+        } else if (target === 'D') {
+            axis = 'y';
+            degrees = deg(90, -90);
+        }  
+    }
+
+    return { axis, degrees };
+}
+
+/**
  * Position the stickers.
  * 
- * @param  {Cube} cube
+ * @param  {Cube}       cube
+ * @param  {boolean}    initial     
  * @return {void}
  */
-function positionStickers(cube) {
+function positionStickers(cube, initial = false) {
     const { scene } = cube.vm.$options;
     const stickerSize = 1000 / cube.cubeLayers;
     const halfCubeSize = 500;
@@ -141,7 +188,7 @@ function positionStickers(cube) {
     // refresh the scene by removing and re-adding all sticker objects
     scene.children
         .filter(child => child.name === 'sticker' || child.name === 'turn')
-        .forEach(scene.remove);
+        .forEach(child => scene.remove(child));
 
     cube.model.stickers(sticker => scene.add(sticker.display));
 
@@ -164,6 +211,7 @@ function positionStickers(cube) {
 
         const x = origin + (col * stickerSize) + (col * spacing) - spacingOffset;
         const y = origin + (row * stickerSize) + (row * spacing) - spacingOffset;
+
         if (x) sticker.display.translateX(x);
         if (y) sticker.display.translateY(y * -1);
     }
@@ -230,6 +278,18 @@ function stickerGeometry(cube) {
     return new THREE.ShapeBufferGeometry(shape);
 }
 
+/**
+ * Update the a turn based on the progress.
+ *
+ * @param {Cube} cube 
+ * @param {Object} parsedTurn 
+ * @param {number} progress 
+ */
+function updateTurn(cube, turnObj, axis, degrees, progress) {
+    turnObj.rotation[axis] = degToRad(progress * degrees);
+    cube.vm.render();
+}
+
 export default class {
 
     /**
@@ -266,6 +326,7 @@ export default class {
             stickerElevation: 0.05,
             stickerRadius: 0.1,
             stickerSpacing: 0.1,
+            turnDuration: 750,
         };
     }
 
@@ -322,6 +383,7 @@ export default class {
      * @return {void}
      */
     render() {
+        attachStickers(this);
         positionStickers(this);
     }
 
@@ -331,9 +393,56 @@ export default class {
      * @param {string} turn
      */
     turn(turn) {
+        const fps = 60;
         const parsedTurn = this.model.parseTurn(turn);
-        const stickers = getStickersEffectedByTurn(this, parsedTurn);
+        const { turnDuration } = this.config;
+        const { axis, degrees } = getTurnAxisAndDegrees(parsedTurn);
 
-        console.log('turn', turn, stickers);
+        // create a 3d object to represent our turn. we will attach the
+        // sticker objects to this and use it to turn all stickers together
+        const turnObj = new THREE.Object3D();
+
+        turnObj.name = 'turn';
+
+        // if we're doing a cube rotation, attach all of our stickers to the turn
+        if (['X', 'Y', 'Z'].includes(parsedTurn.target)) {
+            this.model.stickers(sticker => turnObj.add(sticker.display));
+        }
+
+        // otherwise attach only the stickers effected by this turn
+        else {
+            getStickersEffectedByTurn(this, parsedTurn).forEach(sticker => turnObj.add(sticker.display));
+        }
+
+        // attach our turn object to the scene
+        this.vm.$options.scene.add(turnObj);
+        
+        return new Promise(resolve => {
+            const { axis, degrees } = getTurnAxisAndDegrees(parsedTurn);
+
+            for (let i = 0; i <= fps; i+= 1) {
+                const progress = i / fps;
+                const timeout = progress * turnDuration;
+
+                cleanTimeout(this.vm, () => {
+                    // animate our effected stickers being turned if the
+                    // progress is less than one
+                    if (progress < 1) {
+                        updateTurn(this, turnObj, axis, degrees, progress);
+                    }
+
+                    // otherwise the turn is complete. update our model
+                    // and draw a fresh frame so we have the same objects
+                    // to work with on the next turn
+                    else {
+                        this.model.turn(turn);
+
+                        this.render();
+
+                        resolve();
+                    }
+                }, timeout);
+            }
+        });
     }
 }
