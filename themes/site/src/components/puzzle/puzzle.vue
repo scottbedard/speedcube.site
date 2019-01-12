@@ -1,20 +1,16 @@
 <template>
     <div class="text-center">
-        <pre class="text-left mb-8 text-sm">{{ $data }}</pre>
-        <canvas
-            style="border: 4px solid red"
-            ref="canvas"
-        />
+        <canvas ref="canvas" />
 
         <div class="mt-20">
-            <v-button @click="render" outlined>Render</v-button>
+            <v-button @click="turn" outlined>turn</v-button>
         </div>
     </div>
 </template>
 
 <script>
-import Cube from './cube';
 import * as THREE from 'three';
+import Cube from './cube';
 
 export default {
     data() {
@@ -107,6 +103,11 @@ export default {
                 window.removeEventListener('resize', sync);
             });
         },
+        turn() {
+            const turn = 'R';
+            
+            this.$options.puzzle.turn(turn);
+        }
     },
     props: {
         puzzle: {

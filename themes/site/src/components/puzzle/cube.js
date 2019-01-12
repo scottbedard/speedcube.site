@@ -47,6 +47,83 @@ function degToRad(deg) {
 }
 
 /**
+ * Get the stickers that are effected by a specific turn.
+ *
+ * @param  {Object}         parsedTurn
+ * @return {Array<Object>}
+ */
+function getStickersEffectedByTurn(cube, parsedTurn) {
+    const stickers = [];
+
+    // grab a couple of values we'll need to determine
+    // which stickers are being effected by the turn
+    const { colMap, cubeLayers, rowMap } = cube;
+    const { depth, target, wide } = parsedTurn;
+    const zeroDepth = depth - 1;
+    const reverseDepth = cubeLayers - depth;
+
+    // attach the entire face of wide turns
+    if (wide || depth === 1) {
+        stickers.push(...cube.model.state[target]);
+    }
+
+    // attach the entire opposide face of inner turns
+    // that are greater than the total number of layers
+    if (depth >= cubeLayers) {
+        const opposite = { U: 'D', L: 'R', F: 'B', R: 'L', B: 'F', D: 'U' };
+
+        stickers.push(...cube.model.state[opposite[target]]);
+    }
+
+    // get the slices being turned
+    if (target === 'U') {
+        stickers.push(
+            ...cube.model.state.B.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
+            ...cube.model.state.R.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
+            ...cube.model.state.F.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
+            ...cube.model.state.L.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
+        );
+    } else if (target === 'L') {
+        stickers.push(
+            ...cube.model.state.U.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
+            ...cube.model.state.F.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
+            ...cube.model.state.D.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
+            ...cube.model.state.B.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+        );
+    } else if (target === 'F') {
+        stickers.push(
+            ...cube.model.state.U.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
+            ...cube.model.state.R.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
+            ...cube.model.state.D.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
+            ...cube.model.state.L.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+        );
+    } else if (target === 'R') {
+        stickers.push(
+            ...cube.model.state.U.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+            ...cube.model.state.B.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
+            ...cube.model.state.D.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+            ...cube.model.state.F.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+        );
+    } else if (target === 'B') {
+        stickers.push(
+            ...cube.model.state.U.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
+            ...cube.model.state.L.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
+            ...cube.model.state.D.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
+            ...cube.model.state.R.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+        );
+    } else if (target === 'D') {
+        stickers.push(
+            ...cube.model.state.B.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
+            ...cube.model.state.R.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
+            ...cube.model.state.F.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
+            ...cube.model.state.L.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
+        );
+    }
+
+    return stickers;
+}
+
+/**
  * Position the stickers.
  * 
  * @param  {Cube} cube
@@ -60,8 +137,6 @@ function positionStickers(cube) {
     const spacing = cube.config.stickerSpacing * stickerSize;
     const spacingOffset = spacing * ((cube.model.size - 1) / 2);
     const elevation = halfCubeSize + spacingOffset + (stickerSize * cube.config.stickerElevation);
-
-    console.log('elevation', elevation)
 
     // refresh the scene by removing and re-adding all sticker objects
     scene.children
@@ -187,7 +262,7 @@ export default class {
                 '#4caf50', // B -> green
                 '#eeeeee', // D -> white
             ],
-            innerBrightness: 0.7,
+            innerBrightness: 0.8,
             stickerElevation: 0.05,
             stickerRadius: 0.1,
             stickerSpacing: 0.1,
@@ -242,11 +317,23 @@ export default class {
     }
 
     /**
-     * Render the puzzle.
+     * Render
      * 
      * @return {void}
      */
     render() {
         positionStickers(this);
+    }
+
+    /**
+     * Turn
+     *
+     * @param {string} turn
+     */
+    turn(turn) {
+        const parsedTurn = this.model.parseTurn(turn);
+        const stickers = getStickersEffectedByTurn(this, parsedTurn);
+
+        console.log('turn', turn, stickers);
     }
 }
