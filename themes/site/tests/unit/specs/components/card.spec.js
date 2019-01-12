@@ -20,13 +20,15 @@ describe('<v-card>', function() {
             template: `<v-card :padded="padded" />`,
         });
 
-        const hasPadding = el => el.className.split(' ').filter(c => /^p-\d+$/g.test(c)).length > 0;
+        const hasPadding = el => el.className.split(' ').filter(c => /^p[xy]?-\d+$/g.test(c)).length > 0 ||
 
         expect(hasPadding(vm.$el)).to.be.false;
 
         vm.padded = true;
+
         vm.$nextTick(() => {
             expect(hasPadding(vm.$el)).to.be.true;
+
             done();
         });
     });

@@ -21,14 +21,4 @@ describe('<v-button>', function() {
 
         expect(vm.$el.textContent).to.equal('Hello world');
     });
-
-    it('accepts a size prop', function() {
-        const def = mount({ template: `<v-button />` });
-        const sm = mount({ template: `<v-button size="sm" />` });
-        const md = mount({ template: `<v-button size="md" />` });
-
-        expect(def.$el).to.have.class('v-button-md');
-        expect(sm.$el).to.have.class('v-button-sm');
-        expect(md.$el).to.have.class('v-button-md');
-    });
 });

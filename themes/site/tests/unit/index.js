@@ -39,6 +39,7 @@ afterEach(function() {
 // require all spec files
 //
 const specs = require.context('./specs', true, /\.spec\.js$/);
+
 specs.keys().forEach(specs);
 
 //

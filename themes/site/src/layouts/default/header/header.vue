@@ -5,6 +5,7 @@
                 <div class="flex items-center">
                     <router-link
                         class="block font-bold no-underline text-grey-7 tracking-wide text-sm hover:text-grey-8"
+                        data-logo
                         :to="{ name: 'home' }">
                         speedcube.site
                     </router-link>
