@@ -407,6 +407,28 @@ export default class {
     }
 
     /**
+     * Apply a state to the puzzle.
+     * 
+     * @param  {Object} state
+     * @return {void}
+     */
+    applyState(state) {
+        // because of the camel casing middleware, our scrambled state
+        // keys will be lower cased. rather than messing with the http
+        // layer, we'll just cast them to uppercase before applying.
+        Object.keys(state).forEach(rawFace => {
+            const normalizedFace = rawFace.toUpperCase();
+
+            this.model.state[normalizedFace].forEach((sticker, index) => {
+                sticker.value = state[rawFace][index];
+            });
+
+            this.render();
+            this.vm.render();
+        });
+    }
+
+    /**
      * Determine the size of our canvas.
      * 
      * @return {Object}
@@ -472,15 +494,7 @@ export default class {
 
             animate();
         }).then(() => {
-            // restore the state of our puzzle and re-render
-            faces.forEach(face => {
-                this.model.state[face].forEach((sticker, index) => {
-                    sticker.value = cache[face][index];
-                });
-
-                this.render();
-                this.vm.render();
-            });
+            this.applyState(cache);
         });
     }
 

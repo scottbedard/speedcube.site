@@ -52,9 +52,7 @@ export default {
             // animating update our puzzle state and begin the countdown
             Promise.all([scrambleRequest, pseudoScramble]).then(([response]) => {
                 // success
-                const { scrambledState } = response.data;
-
-                console.log('ready!', scrambledState);
+                this.$refs.puzzle.applyState(response.data.scrambledState);
             }).finally(() => {
                 // complete
                 this.isScrambling = false;
