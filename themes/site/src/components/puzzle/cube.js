@@ -3,9 +3,21 @@ import Cube from 'bedard-cube';
 import { cleanTimeout } from '@/app/utils/component';
 
 /**
+ * Inspection durations.
+ * 
+ * @const {Object}
+ */
+const inspectionDurations = {
+    '2x2': 10000,
+    '3x3': 15000,
+    '4x4': 15000,
+    '5x5': 15000,
+};
+
+/**
  * Length of scrambling animations by puzzle id.
  * 
- * @const  {Object}
+ * @const {Object}
  */
 const pseudoScrambleLengths = {
     '2x2': 10,
@@ -516,7 +528,7 @@ export default class {
      * @return {number}
      */
     getInspectionDuration() {
-        return 15000;
+        return inspectionDurations[this.vm.puzzleId];
     }
 
     /**

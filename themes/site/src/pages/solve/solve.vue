@@ -15,9 +15,8 @@
                     <!-- scrambling -->
                     <div
                         v-if="scrambling"
-                        key="scrambling">
-                        scrambling
-                    </div>
+                        key="scrambling"
+                    />
 
                     <!-- inspecting -->
                     <div
@@ -32,7 +31,9 @@
 
                     <!-- solving -->
                     <div v-else-if="solving" key="solving">
-                        Solving!
+                        <v-timer
+                            :started-at="solveStartedAt"
+                        />
                     </div>
 
                     <!-- idle -->
