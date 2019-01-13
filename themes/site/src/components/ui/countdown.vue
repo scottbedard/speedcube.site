@@ -9,12 +9,9 @@
 import { cleanTimeout } from '@/app/utils/component';
 
 export default {
-    created() {
-        this.timeRemaining = this.duration;
-    },
     data() {
         return {
-            timeRemaining: 0,
+            now: Date.now(),
         };
     },
     mounted() {
@@ -22,14 +19,17 @@ export default {
     },
     computed: {
         formattedTimeRemaining() {
-            return Math.floor(this.timeRemaining / 1000);
+            return Math.ceil(this.timeRemaining / 1000);
+        },
+        timeRemaining() {
+            return this.duration - (this.now - this.startedAt);
         },
     },
     methods: {
         tick() {
             if (this.timeRemaining > 0) {
                 cleanTimeout(this, () => {
-                    this.timeRemaining -= 1000;
+                    this.now = Date.now();
                     this.tick();
                 }, 1000);
             } else {
@@ -39,6 +39,10 @@ export default {
     },
     props: {
         duration: {
+            required: true,
+            type: Number,
+        },
+        startedAt: {
             required: true,
             type: Number,
         },

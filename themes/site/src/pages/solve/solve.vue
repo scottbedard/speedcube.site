@@ -16,6 +16,7 @@
                     <div
                         v-if="scrambling"
                         key="scrambling">
+                        scrambling
                     </div>
 
                     <!-- inspecting -->
@@ -24,6 +25,7 @@
                         key="inspecting">
                         <v-countdown
                             :duration="inspectionDuration"
+                            :started-at="inspectionStartedAt"
                             @complete="beginSolve"
                         />
                     </div>
@@ -59,8 +61,14 @@ export default {
             // inspection duration in milliseconds
             inspectionDuration: 0,
 
+            // inspection start time
+            inspectionStartedAt: 0,
+
             // scrambling phase
             scrambling: false,
+
+            // solve start time
+            solveStartedAt: 0,
 
             // solving phase
             solving: false,
@@ -77,16 +85,18 @@ export default {
     methods: {
         beginInspection() {
             // allow partial turns
+            this.scrambling = false;
             this.turnable = 1;
 
             // begin an inspection for however long our puzzle allows
-            this.inspectionDuration = this.$refs.puzzle.getInspectionDuration();
-            this.scrambling = false;
             this.inspecting = true;
+            this.inspectionDuration = this.$refs.puzzle.getInspectionDuration();
+            this.inspectionStartedAt = Date.now();
         },
         beginSolve() {
             // transition to solving state and allow all turns
             this.inspecting = false;
+            this.solveStartedAt = Date.now();
             this.solving = true;
             this.turnable = 2;
 
