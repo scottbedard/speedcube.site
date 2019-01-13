@@ -1,22 +1,36 @@
 <template>
     <div class="text-center">
+        <!--
+            this canvas is where our cube will be drawn. our puzzle
+            driver is responsible for handling the render logic.
+        -->
         <canvas ref="canvas" />
 
-        <div class="my-20">
-            <v-button @click="turn('R')" outlined>turn</v-button>
-        </div>
+        <!--
+            attach a controller if the puzzle is turnable. we are
+            listening for the events from a child component in order
+            to bind / unbind the event listeners when turnable changes.
+        -->
+        <v-controller
+            v-if="turnable"
+            @keyup="onKeyup"
+        />
     </div>
 </template>
 
 <script>
 import * as THREE from 'three';
 import Cube from './cube';
+import controllerComponent from './controller/controller.vue';
 
 export default {
     data() {
         return {
             // the width of our containing element
             containerWidth: 0,
+
+            // masks the puzzle making all stickers the same color
+            isMasked: false,
 
             // determines if the puzzle is being turned
             isTurning: false,
@@ -32,13 +46,12 @@ export default {
         this.renderPuzzle();
         this.render();
     },
+    components: {
+        'v-controller': controllerComponent,
+    },
     computed: {
         isCube() {
-            return [
-                '2x2', '3x3', '4x4',
-                '5x5', '6x6', '7x7',
-                '8x8', '9x9', '10x10',
-            ].includes(this.puzzleId);
+            return ['2x2', '3x3', '4x4', '5x5'].includes(this.puzzleId);
         },
         puzzleId() {
             return this.puzzle.trim().toLowerCase();
@@ -55,6 +68,17 @@ export default {
             }
 
             return new Puzzle(this);
+        },
+        onKeyup(e) {
+            const turn = this.$options.puzzle.getTurnFromKeyboardEvent(e);
+            
+            if (turn) {
+                this.turn(turn);
+            }
+        },
+        onIsMaskedChange() {
+            this.renderPuzzle();
+            this.render();
         },
         onQueueChange() {            
             if (!this.isTurning) {
@@ -118,6 +142,13 @@ export default {
 
             this.$options.renderer.setSize(width, height);
         },
+        pseudoScramble() {
+            this.isMasked = true;
+
+            return this.$options.puzzle.pseudoScramble().then(() => {
+                this.isMasked = false;
+            });
+        },
         trackContainerWidth() {
             const sync = () => {
                 this.containerWidth = this.$el.offsetWidth;
@@ -148,9 +179,14 @@ export default {
             required: true,
             type: String,
         },
+        scrambling: {
+            default: false,
+            type: Boolean,
+        },
     },
     watch: {
         containerWidth: 'resize',
+        isMasked: 'onIsMaskedChange',
         queue: 'onQueueChange',
     },
 };

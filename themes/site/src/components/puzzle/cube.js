@@ -2,6 +2,13 @@ import * as THREE from 'three';
 import Cube from 'bedard-cube';
 import { cleanTimeout } from '@/app/utils/component';
 
+const pseudoScrambleLengths = {
+    '2x2': 10,
+    '3x3': 20,
+    '4x4': 30,
+    '5x5': 40,
+};
+
 /**
  * Create 3d objects to represent each sticker.
  * 
@@ -298,6 +305,8 @@ export default class {
      * @param {Vue} vue
      */
     constructor(vm) {
+        this.isMasked = false;
+
         this.vm = vm;
 
         this.model = new Cube(this.cubeLayers, {
@@ -311,21 +320,62 @@ export default class {
      * @return {Object}
      */
     get config() {
-        return {
-            colors: [
+        const colors = this.vm.isMasked
+            ? new Array(6).fill('#7B8794')
+            : [
                 '#ffeb3b', // U -> yellow
                 '#ff9800', // L -> orange
                 '#03a9f4', // F -> blue
                 '#f44336', // R -> red
                 '#4caf50', // B -> green
                 '#eeeeee', // D -> white
-            ],
-            innerBrightness: 0.8,
-            stickerElevation: 0.05,
+            ];
+
+        return {
+            colors,
+            innerBrightness: 0.4,
+            stickerElevation: 0.1,
             stickerRadius: 0.1,
-            stickerSpacing: 0.1,
-            turnDuration: 150,
+            stickerSpacing: 0.2,
+            turnDuration: 90,
         };
+    }
+
+    /**
+     * Default controls.
+     * 
+     * @return {Object}
+     */
+    get controls() {
+        return {
+            // face turns
+            J: 'U',
+            F: 'U-',
+            D: 'L',
+            E: 'L-',
+            H: 'F',
+            G: 'F-',
+            I: 'R',
+            K: 'R-',
+            W: 'B',
+            O: 'B-',
+            S: 'D',
+            L: 'D-',
+        
+            // cube rotations
+            A: 'Y-',
+            ';': 'Y',
+            R: 'X',
+            U: 'X',
+            T: 'X',
+            Y: 'X',
+            V: 'X-',
+            C: 'X-',
+            N: 'X-',
+            M: 'X-',
+            Q: 'Z-',
+            P: 'Z',
+        }
     }
 
     /**
@@ -373,6 +423,65 @@ export default class {
             height: size,
             width: size,
         };
+    }
+
+    /**
+     * Translate a keypress into a turn.
+     * 
+     * @param  {KeyboardEvent}
+     * @return {string}
+     */
+    getTurnFromKeyboardEvent(e) {
+        const key = String(e.key).toUpperCase();
+
+        const turn = this.controls[key];
+
+        if (turn) {
+            return turn;
+        }
+    }
+
+    /**
+     * Simulate scrambling the puzzle.
+     * 
+     * @return {Promise}
+     */
+    pseudoScramble() {
+        // cache the state of our puzzle
+        const faces = Object.keys(this.model.state);
+
+        const cache = faces.reduce((acc, side) => {
+            acc[side] = this.model.state[side].map(sticker => sticker.value);
+            return acc;
+        }, {});
+
+        // generate a scramble to be used as a loading state. we're removing
+        // any double turns in order to keep the turning speed consistent
+        const length = pseudoScrambleLengths[this.vm.puzzleId];
+
+        const scramble = this.model.generateScrambleString(length)
+            .replace(/2/g, '')
+            .split(' ');
+
+        // itterate over each turn and animate the scramble
+        return new Promise((resolve) => {
+            const animate = () => {
+                this.turn(scramble.shift())
+                    .then(() => scramble.length ? animate() : resolve());
+            }
+
+            animate();
+        }).then(() => {
+            // restore the state of our puzzle and re-render
+            faces.forEach(face => {
+                this.model.state[face].forEach((sticker, index) => {
+                    sticker.value = cache[face][index];
+                });
+
+                this.render();
+                this.vm.render();
+            });
+        });
     }
 
     /**
