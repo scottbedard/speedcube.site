@@ -2,12 +2,75 @@ import * as THREE from 'three';
 import Cube from 'bedard-cube';
 import { cleanTimeout } from '@/app/utils/component';
 
+/**
+ * Length of scrambling animations by puzzle id.
+ * 
+ * @const  {Object}
+ */
 const pseudoScrambleLengths = {
     '2x2': 10,
     '3x3': 20,
     '4x4': 30,
     '5x5': 40,
 };
+
+/**
+ * Turn the puzzle.
+ * 
+ * @param  {Object}     cube 
+ * @param  {string}     turn
+ * @return {Promise}
+ */
+function applyTurn(cube, turn) {
+    const fps = 60;
+    const parsedTurn = cube.model.parseTurn(turn);
+    const { turnDuration } = cube.config;
+    const { axis, degrees } = getTurnAxisAndDegrees(parsedTurn);
+
+    // create a 3d object to represent our turn. we will attach the
+    // sticker objects to this and use it to turn all stickers together
+    const turnObj = new THREE.Object3D();
+
+    turnObj.name = 'turn';
+
+    // if we're doing a cube rotation, attach all of our stickers to the turn
+    if (['X', 'Y', 'Z'].includes(parsedTurn.target)) {
+        cube.model.stickers(sticker => turnObj.add(sticker.display));
+    }
+
+    // otherwise attach only the stickers effected by cube turn
+    else {
+        getStickersEffectedByTurn(cube, parsedTurn).forEach(sticker => turnObj.add(sticker.display));
+    }
+
+    // attach our turn object to the scene
+    cube.vm.$options.scene.add(turnObj);
+    
+    return new Promise(resolve => {
+        const { axis, degrees } = getTurnAxisAndDegrees(parsedTurn);
+
+        for (let i = 0; i <= fps; i+= 1) {
+            const progress = i / fps;
+            const timeout = progress * turnDuration;
+
+            cleanTimeout(cube.vm, () => {
+                // animate our effected stickers being turned
+                updateTurn(cube, turnObj, axis, degrees, progress);
+
+                // if the turn is complete. update our model and
+                // re-render in preparation for the next turn.
+                if (progress === 1) {
+                    requestAnimationFrame(() => {
+                        cube.model.turn(turn);
+                        cube.render();
+
+                        requestAnimationFrame(resolve);
+                    });
+                }
+            }, timeout);
+        }
+    });
+}
 
 /**
  * Create 3d objects to represent each sticker.
@@ -448,6 +511,15 @@ export default class {
     }
 
     /**
+     * Get the inspection duration in milliseconds
+     * 
+     * @return {number}
+     */
+    getInspectionDuration() {
+        return 15000;
+    }
+
+    /**
      * Translate a keypress into a turn.
      * 
      * @param  {KeyboardEvent}
@@ -487,12 +559,12 @@ export default class {
 
         // itterate over each turn and animate the scramble
         return new Promise((resolve) => {
-            const animate = () => {
-                this.turn(scramble.shift())
-                    .then(() => scramble.length ? animate() : resolve());
+            const turn = () => {
+                applyTurn(this, scramble.shift())
+                    .then(() => scramble.length ? turn() : resolve());
             }
 
-            animate();
+            turn();
         }).then(() => {
             this.applyState(cache);
         });
@@ -514,53 +586,15 @@ export default class {
      * @param {string} turn
      */
     turn(turn) {
-        const fps = 60;
-        const parsedTurn = this.model.parseTurn(turn);
-        const { turnDuration } = this.config;
-        const { axis, degrees } = getTurnAxisAndDegrees(parsedTurn);
-
-        // create a 3d object to represent our turn. we will attach the
-        // sticker objects to this and use it to turn all stickers together
-        const turnObj = new THREE.Object3D();
-
-        turnObj.name = 'turn';
-
-        // if we're doing a cube rotation, attach all of our stickers to the turn
-        if (['X', 'Y', 'Z'].includes(parsedTurn.target)) {
-            this.model.stickers(sticker => turnObj.add(sticker.display));
+        // disable turns entirely when turnable is 0
+        // only allow whole-cube rotations when turnable is 1
+        if (
+            (this.vm.turnable === 0) ||
+            (this.vm.turnable === 1 && ['X', 'Y', 'Z'].includes(turn[0]) === false)
+        ) {
+            return Promise.resolve();
         }
 
-        // otherwise attach only the stickers effected by this turn
-        else {
-            getStickersEffectedByTurn(this, parsedTurn).forEach(sticker => turnObj.add(sticker.display));
-        }
-
-        // attach our turn object to the scene
-        this.vm.$options.scene.add(turnObj);
-        
-        return new Promise(resolve => {
-            const { axis, degrees } = getTurnAxisAndDegrees(parsedTurn);
-
-            for (let i = 0; i <= fps; i+= 1) {
-                const progress = i / fps;
-                const timeout = progress * turnDuration;
-
-                cleanTimeout(this.vm, () => {
-                    // animate our effected stickers being turned
-                    updateTurn(this, turnObj, axis, degrees, progress);
-
-                    // if the turn is complete. update our model and
-                    // re-render in preparation for the next turn.
-                    if (progress === 1) {
-                        requestAnimationFrame(() => {
-                            this.model.turn(turn);
-                            this.render();
-
-                            requestAnimationFrame(resolve);
-                        });
-                    }
-                }, timeout);
-            }
-        });
+        return applyTurn(this, turn);
     }
 }

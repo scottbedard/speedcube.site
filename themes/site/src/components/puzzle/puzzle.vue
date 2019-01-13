@@ -72,6 +72,9 @@ export default {
 
             return new Puzzle(this);
         },
+        getInspectionDuration() {
+            return this.$options.puzzle.getInspectionDuration();
+        },
         onKeyup(e) {
             const turn = this.$options.puzzle.getTurnFromKeyboardEvent(e);
             
@@ -171,8 +174,11 @@ export default {
     },
     props: {
         turnable: {
-            default: true,
-            type: Boolean,
+            // 0 = no turns permitted
+            // 1 = allow puzzle rotations only
+            // 2 = allow all turns
+            default: 0,
+            type: Number,
         },
         turnConfig: {
             default: () => {},
