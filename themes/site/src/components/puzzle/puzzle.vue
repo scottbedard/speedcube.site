@@ -58,8 +58,8 @@ export default {
         },
     },
     methods: {
-        applyState(scrambledState) {
-            this.$options.puzzle.applyState(scrambledState);
+        applyState(state) {
+            this.$options.puzzle.applyState(state);
         },
         createPuzzle() {
             let Puzzle;
