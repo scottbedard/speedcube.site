@@ -56,6 +56,7 @@
 
 <script>
 import { postCreateScramble } from '@/app/repositories/scrambles';
+import { postSolve } from '@/app/repositories/solves';
 
 export default {
     data() {
@@ -71,6 +72,9 @@ export default {
 
             // inspection start time
             inspectionStartedAt: 0,
+
+            // id of the scramble model
+            scrambleId: 0,
 
             // scrambling phase
             scrambling: false,
@@ -98,6 +102,9 @@ export default {
         puzzle() {
             return this.$route.params.puzzle;
         },
+        puzzleConfig() {
+            return {};
+        },
     },
     methods: {
         beginInspection() {
@@ -109,8 +116,6 @@ export default {
             this.inspecting = true;
             this.inspectionDuration = this.$refs.puzzle.getInspectionDuration();
             this.inspectionStartedAt = Date.now();
-
-            console.log('inspect');
         },
         beginSolve() {
             // transition to solving state and allow all turns
@@ -119,7 +124,9 @@ export default {
             this.solving = true;
             this.turnable = 2;
 
-            console.log('start');
+            const offset = this.solveStartedAt - this.inspectionStartedAt;
+
+            this.history.push(`${offset}#START`);
         },
         completeSolve() {
             this.solveCompletedAt = Date.now();
@@ -128,7 +135,13 @@ export default {
             this.solving = false;
             this.turnable = 0;
 
-            console.log('completed', this.solveCompletedTime);
+            this.history.push(`${this.solveCompletedTime}#COMPLETE`);
+
+            postSolve({
+                config: this.puzzleConfig,
+                scrambleId: this.scrambleId,
+                solution: this.history.join(' '),
+            });
         },
         recordTurn(turn) {
             if (this.inspecting || this.solving) {
@@ -154,6 +167,7 @@ export default {
             
             // update the puzzle's state and begin the inspection
             Promise.all([scrambleRequest, pseudoScramble]).then(([response]) => {
+                this.scrambleId = response.data.id;
                 this.$refs.puzzle.applyState(response.data.scrambledState);
                 
                 this.beginInspection();
