@@ -11,27 +11,53 @@ import { cleanInterval } from '@/app/utils/component';
 
 export default {
     created() {
-        cleanInterval(this, this.tick, 10);
+        if (this.running) {
+            this.start();
+        }
     },
     data() {
         return {
             now: Date.now(),
+            intervalId: 0,
         };
     },
     computed: {
         formattedTime() {
-            return formatTime(this.now - this.startedAt);
+            const time = typeof this.displayTime === 'number'
+                ? this.displayTime
+                : this.now - this.startedAt;
+
+            return formatTime(time);
         },
     },
     methods: {
+        start() {
+            this.stop();
+            this.intervalId = cleanInterval(this, this.tick, 10);
+        },
+        stop() {
+            clearInterval(this.intervalId);
+        },
         tick() {
             this.now = Date.now();
         },
     },
     props: {
+        displayTime: {
+            default: null,
+        },
+        running: {
+            default: true,
+        },
         startedAt: {
             required: true,
             type: Number,
+        },
+    },
+    watch: {
+        running(running) {
+            if (running) this.start();
+            else this.stop();
         },
     },
 };

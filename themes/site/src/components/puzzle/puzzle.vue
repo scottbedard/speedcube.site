@@ -100,6 +100,10 @@ export default {
                         this.isTurning = false;
 
                         this.queue.shift();
+
+                        if (this.$options.puzzle.isSolved()) {
+                            this.$emit('solved');
+                        }
                     });
                 }
             }
@@ -172,7 +176,11 @@ export default {
             });
         },
         turn(turn) {
-            this.queue.push(turn);
+            if (this.$options.puzzle.turnIsPermitted(turn)) {
+                this.queue.push(turn);
+
+                this.$emit('turn', turn);
+            }
         },
     },
     props: {

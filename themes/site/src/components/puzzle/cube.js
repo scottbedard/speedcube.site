@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import Cube from 'bedard-cube';
 import { cleanTimeout } from '@/app/utils/component';
 
+
 /**
  * Inspection durations.
  * 
@@ -411,7 +412,7 @@ export default class {
             innerBrightness: 0.4,
             stickerElevation: 0.1,
             stickerRadius: 0.1,
-            stickerSpacing: 0.2,
+            stickerSpacing: 0.1,
             turnDuration: 90,
         };
     }
@@ -604,20 +605,33 @@ export default class {
     /**
      * Turn
      *
-     * @param {string} turn
+     * @param  {string}     turn
+     * @return {Promise}
      */
     turn(turn) {
         // disable turns entirely when turnable is 0
         // only allow whole-cube rotations when turnable is 1
+        if (!this.turnIsPermitted(turn)) {
+            return Promise.resolve();
+        }
+
+        return applyTurn(this, turn);
+    }
+
+    /**
+     * Test if a turn is permitted.
+     *
+     * @param  {string}     turn
+     * @return {boolean}
+     */
+    turnIsPermitted(turn) {
         if (
             (this.vm.turnable === 0) ||
             (this.vm.turnable === 1 && ['X', 'Y', 'Z'].includes(turn[0]) === false)
         ) {
-            return Promise.resolve();
+            return false;
         }
 
-        return applyTurn(this, turn).then(() => {
-            this.vm.$emit('turn', turn);
-        });
+        return true;
     }
 }

@@ -7,7 +7,8 @@
                 ref="puzzle"
                 :puzzle="puzzle"
                 :turnable="turnable"
-                @turn="onTurn"
+                @solved="completeSolve"
+                @turn="recordTurn"
             />
 
             <!-- controls -->
@@ -31,8 +32,10 @@
                     </div>
 
                     <!-- solving -->
-                    <div v-else-if="solving" key="solving">
+                    <div v-else-if="solving || solved" key="solving">
                         <v-timer
+                            :running="solving"
+                            :display-time="solveCompletedTime"
                             :started-at="solveStartedAt"
                         />
                     </div>
@@ -57,6 +60,9 @@ import { postCreateScramble } from '@/app/repositories/scrambles';
 export default {
     data() {
         return {
+            // log of all turns and solve events
+            history: [],
+
             // inspection phase
             inspecting: false,
 
@@ -72,11 +78,17 @@ export default {
             // solve completion time
             solveCompletedAt: 0,
 
+            // the final time of the solve
+            solveCompletedTime: null,
+
             // solve start time
             solveStartedAt: 0,
 
             // solving phase
             solving: false,
+
+            // solved phase
+            solved: false,
 
             // puzzle turnability
             turnable: 2,
@@ -97,6 +109,8 @@ export default {
             this.inspecting = true;
             this.inspectionDuration = this.$refs.puzzle.getInspectionDuration();
             this.inspectionStartedAt = Date.now();
+
+            console.log('inspect');
         },
         beginSolve() {
             // transition to solving state and allow all turns
@@ -104,26 +118,33 @@ export default {
             this.solveStartedAt = Date.now();
             this.solving = true;
             this.turnable = 2;
+
+            console.log('start');
         },
         completeSolve() {
-            this.turnable = 0;
-            this.solving = false;
             this.solveCompletedAt = Date.now();
-        },
-        onTurn(turn) {
-            // do nothing if we aren't solving
-            if (!this.solving) return;
+            this.solveCompletedTime = this.solveCompletedAt - this.solveStartedAt;
+            this.solved = true;
+            this.solving = false;
+            this.turnable = 0;
 
-            // otherwise check to see if the puzzle is solved
-            if (this.$refs.puzzle.isSolved()) {
-                this.completeSolve();
+            console.log('completed', this.solveCompletedTime);
+        },
+        recordTurn(turn) {
+            if (this.inspecting || this.solving) {
+                const offset = Date.now() - this.inspectionStartedAt;
+
+                this.history.push(`${offset}:${turn}`);
             }
         },
         scramble() {
-            // prevent the cube from being turned while scrambling
+            // reset the state
+            this.inspecting = false;
             this.scrambling = true;
-            this.solveCompletedAt = 0;
+            this.solveCompletedAt = null;
             this.solveStaretdAt = 0;
+            this.solved = false;
+            this.solving = false;
             this.turnable = 0;
 
             // get a scramble from the server, and use an animating
@@ -134,6 +155,7 @@ export default {
             // update the puzzle's state and begin the inspection
             Promise.all([scrambleRequest, pseudoScramble]).then(([response]) => {
                 this.$refs.puzzle.applyState(response.data.scrambledState);
+                
                 this.beginInspection();
             });
         },
