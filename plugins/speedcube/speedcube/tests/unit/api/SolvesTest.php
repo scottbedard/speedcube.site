@@ -12,7 +12,7 @@ class SolvesApiTest extends PluginTestCase
 {
     // helper function to create an easily solved scramble
     public static function createScramble($turns = '') {
-        $scramble = Factory::create(new Scramble, ['puzzle' => 'cube3']);
+        $scramble = Factory::create(new Scramble, ['puzzle' => '3x3']);
         $scramble->scramble = $turns;
         $scramble->save();
 
@@ -166,7 +166,7 @@ class SolvesApiTest extends PluginTestCase
         $solveB->complete('0#START 100:R- 200#END');
 
         // fetch the fastest solves
-        $response = $this->get('/api/speedcube/speedcube/solves?puzzle=cube3&orderBy=time');
+        $response = $this->get('/api/speedcube/speedcube/solves?puzzle=3x3&orderBy=time');
 
         $data = json_decode($response->getContent(), true);
         
@@ -182,7 +182,7 @@ class SolvesApiTest extends PluginTestCase
     {
         $user = Factory::registerUser();
 
-        $scramble = Factory::create(new Scramble, ['puzzle' => 'cube3']);
+        $scramble = Factory::create(new Scramble, ['puzzle' => '3x3']);
         $scramble->scramble = 'R';
         $scramble->save();
 

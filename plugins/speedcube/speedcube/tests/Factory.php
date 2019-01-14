@@ -40,7 +40,7 @@ class Factory
      */
     public static function createScrambleWithTurns($turns = '')
     {
-        $scramble = self::create(new Scramble, ['puzzle' => 'cube3']);
+        $scramble = self::create(new Scramble, ['puzzle' => '3x3']);
 
         $scramble->scramble = $turns;
 
