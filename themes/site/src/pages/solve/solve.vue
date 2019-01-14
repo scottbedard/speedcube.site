@@ -7,6 +7,7 @@
                 ref="puzzle"
                 :puzzle="puzzle"
                 :turnable="turnable"
+                @turn="onTurn"
             />
 
             <!-- controls -->
@@ -68,6 +69,9 @@ export default {
             // scrambling phase
             scrambling: false,
 
+            // solve completion time
+            solveCompletedAt: 0,
+
             // solve start time
             solveStartedAt: 0,
 
@@ -100,12 +104,26 @@ export default {
             this.solveStartedAt = Date.now();
             this.solving = true;
             this.turnable = 2;
+        },
+        completeSolve() {
+            this.turnable = 0;
+            this.solving = false;
+            this.solveCompletedAt = Date.now();
+        },
+        onTurn(turn) {
+            // do nothing if we aren't solving
+            if (!this.solving) return;
 
-            console.log('hooray');
+            // otherwise check to see if the puzzle is solved
+            if (this.$refs.puzzle.isSolved()) {
+                this.completeSolve();
+            }
         },
         scramble() {
             // prevent the cube from being turned while scrambling
             this.scrambling = true;
+            this.solveCompletedAt = 0;
+            this.solveStaretdAt = 0;
             this.turnable = 0;
 
             // get a scramble from the server, and use an animating

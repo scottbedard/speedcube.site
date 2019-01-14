@@ -548,6 +548,15 @@ export default class {
     }
 
     /**
+     * Test if the puzzle is solved.
+     *
+     * @return {boolean}
+     */
+    isSolved() {
+        return this.model.isSolved();
+    }
+
+    /**
      * Simulate scrambling the puzzle.
      * 
      * @return {Promise}
@@ -607,6 +616,8 @@ export default class {
             return Promise.resolve();
         }
 
-        return applyTurn(this, turn);
+        return applyTurn(this, turn).then(() => {
+            this.vm.$emit('turn', turn);
+        });
     }
 }

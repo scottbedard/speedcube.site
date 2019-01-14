@@ -75,6 +75,9 @@ export default {
         getInspectionDuration() {
             return this.$options.puzzle.getInspectionDuration();
         },
+        isSolved() {
+            return this.$options.puzzle.isSolved();
+        },
         onKeyup(e) {
             const turn = this.$options.puzzle.getTurnFromKeyboardEvent(e);
             
