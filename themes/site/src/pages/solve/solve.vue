@@ -135,7 +135,7 @@ export default {
             this.solving = false;
             this.turnable = 0;
 
-            this.history.push(`${this.solveCompletedTime}#COMPLETE`);
+            this.history.push(`${this.solveCompletedTime}#END`);
 
             postSolve({
                 config: this.puzzleConfig,
