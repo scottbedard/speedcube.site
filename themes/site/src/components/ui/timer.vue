@@ -7,11 +7,11 @@
 
 <script>
 import { formatTime } from '@/app/utils/string';
-import { cleanTimeout } from '@/app/utils/component';
+import { cleanInterval } from '@/app/utils/component';
 
 export default {
     created() {
-        this.tick();
+        cleanInterval(this, this.tick, 10);
     },
     data() {
         return {
@@ -26,8 +26,6 @@ export default {
     methods: {
         tick() {
             this.now = Date.now();
-
-            cleanTimeout(this, this.tick, 10);
         },
     },
     props: {

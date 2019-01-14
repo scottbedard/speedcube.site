@@ -13,6 +13,21 @@ export function bindExternalEvent(vm, target, ...options) {
 }
 
 /**
+ * Create an interval that is cleaned up when the vm is destroyed.
+ *
+ * @param {Vue}         vm
+ * @param {Function}    callback
+ * @param {number}      timeout
+ */
+export function cleanInterval(vm, callback, timeout) {
+    const intervalId = setInterval(callback, timeout);
+
+    vm.$once('hook:destroyed', () => clearInterval(intervalId));
+
+    return intervalId;
+}
+
+/**
  * Create a timeout that is cleaned up when the vm is destroyed.
  *
  * @param {Vue}         vm
