@@ -12,7 +12,7 @@
             to bind / unbind the event listeners when turnable changes.
         -->
         <v-controller
-            v-if="turnable"
+            v-if="turnable === 1 || turnable === 2"
             @keyup="onKeyup"
         />
     </div>
@@ -189,9 +189,12 @@ export default {
             });
         },
         turn(turn) {
-            if (this.$options.puzzle.turnIsPermitted(turn)) {
+            if (
+                this.turnable === 3 || 
+                this.$options.puzzle.turnIsPermitted(turn)
+            ) {
                 this.queue.push(turn);
-
+                
                 this.$emit('turn', turn);
             }
         },
@@ -201,6 +204,7 @@ export default {
             // 0 = no turns permitted
             // 1 = allow puzzle rotations only
             // 2 = allow all turns
+            // 3 - allow all turns, but disable controller (used for replay)
             default: 0,
             type: Number,
         },

@@ -212,6 +212,7 @@ export default {
         },
         scramble() {
             // reset the state
+            this.history = [];
             this.inspecting = false;
             this.scrambling = true;
             this.solveCompletedAt = null;

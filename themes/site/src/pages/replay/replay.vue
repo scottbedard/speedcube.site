@@ -5,6 +5,7 @@
             <v-puzzle
                 ref="puzzle"
                 :puzzle="puzzle"
+                :turnable="3"
             />
 
             <v-fade-transition>
@@ -89,8 +90,19 @@ export default {
             });
         },
         replay() {
-            this.solution.forEach(({ offset, turn, event }) => {
-                // ...
+            this.solution.forEach((move) => {
+                const { event, offset, turn } = move;
+
+                cleanTimeout(this, () => {
+                    if (event === 'START') {
+                        console.log('start', offset);
+                    } else if (event === 'END') {
+                        console.log('end', offset);
+                    } else if (turn) {
+                        console.log('turn', turn);
+                        this.$refs.puzzle.turn(turn);
+                    }
+                }, offset);
             });
         },
     },
