@@ -43,8 +43,6 @@ export default {
         this.trackContainerWidth();
 
         this.reset();
-        this.renderPuzzle();
-        this.render();
     },
     components: {
         'v-controller': controllerComponent,
@@ -118,6 +116,11 @@ export default {
             this.$options.puzzle.render();
         },
         reset() {
+            // do nothing if we have no puzzle
+            if (this.puzzle === '') {
+                return;
+            }
+
             // instantiate the puzzle
             this.$options.puzzle = this.createPuzzle();
 
@@ -149,8 +152,18 @@ export default {
 
             // render the initial frame
             this.$nextTick(this.render);
+
+            this.$nextTick(() => {
+                this.renderPuzzle();
+                this.render();
+            });
         },
         resize() {
+            // do nothing if we have no puzzle
+            if (this.puzzle === '') {
+                return;
+            }
+
             const { height, width } = this.$options.puzzle.getCanvasDimensions();
 
             this.$options.renderer.setSize(width, height);
@@ -196,6 +209,7 @@ export default {
             type: Object,
         },
         puzzle: {
+            default: '',
             required: true,
             type: String,
         },
@@ -207,6 +221,10 @@ export default {
     watch: {
         containerWidth: 'resize',
         isMasked: 'onIsMaskedChange',
+        puzzle() {
+            this.reset();
+            this.resize();
+        },
         queue: 'onQueueChange',
     },
 };

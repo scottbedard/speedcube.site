@@ -10,6 +10,13 @@ class Scramble extends Model
     use \October\Rain\Database\Traits\Validation;
 
     /**
+     * @var array Attributes
+     */
+    public $attributes = [
+        'scrambled_state' => '{}',
+    ];
+
+    /**
      * @var string The database table used by the model.
      */
     public $table = 'speedcube_speedcube_scrambles';
@@ -38,7 +45,9 @@ class Scramble extends Model
     /**
      * @var array Jsonable fields
      */
-    protected $jsonable = [];
+    protected $jsonable = [
+        'scrambled_state',
+    ];
 
     /**
      * @var array Relations
