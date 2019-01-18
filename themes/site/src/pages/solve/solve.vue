@@ -243,7 +243,8 @@ export default {
             this.history = [];
             this.inspecting = false;
             this.scrambling = true;
-            this.solveCompletedAt = null;
+            this.solveCompletedAt = 0;
+            this.solveCompletedTime = null;
             this.solveStaretdAt = 0;
             this.solved = false;
             this.solving = false;
