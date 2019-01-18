@@ -40,6 +40,12 @@
                         <p class="font-thin mt-4 mb-8 text-grey-5">press space to scramble</p>
                     </div>
 
+                    <!-- dnf -->
+                    <div v-else-if="dnf" key="dnf">
+                        <div class="font-thin text-center text-grey-5 text-4xl">DNF</div>
+                        <p class="font-thin mt-4 mb-8 text-grey-5">press space to scramble</p>
+                    </div>
+
                     <!-- idle -->
                     <div
                         v-else
@@ -55,7 +61,6 @@
 </template>
 
 <script>
-import controllerComponent from './controller/controller.vue';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postSolve } from '@/app/repositories/solves';
 import { bindExternalEvent } from '@/app/utils/component';
@@ -123,6 +128,7 @@ export default {
                 return;
             }
 
+            this.inspecting = false;
             this.solving = false;
             this.dnf = true;
 

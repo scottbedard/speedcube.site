@@ -7,7 +7,6 @@
 <script>
 import * as THREE from 'three';
 import Cube from './cube';
-import controllerComponent from './controller/controller.vue';
 
 export default {
     data() {
