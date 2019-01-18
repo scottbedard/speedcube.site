@@ -50,7 +50,9 @@ class SolvesController extends ApiController
                 $solve->complete($solution);
             }
 
-            return $this->success([ 'solve' => $solve->toArray() ]);
+            return $this->success([
+                'solve' => $solve->toArray(),
+            ]);
         }
         
         // unknown error

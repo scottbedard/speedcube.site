@@ -164,8 +164,6 @@ export default {
             this.solveStartedAt = Date.now();
             this.solving = true;
 
-            const offset = this.solveStartedAt - this.inspectionStartedAt;
-
             this.recordEvent('START');
         },
         completeSolve() {
@@ -175,7 +173,7 @@ export default {
 
             // transition to solved state
             this.solveCompletedAt = Date.now();
-            this.solveCompletedTime = this.solveCompletedAt - this.solveStartedAt;
+            this.solveCompletedTime = this.solveCompletedAt - this.inspectionStartedAt;
             this.solved = true;
             this.solving = false;
 
