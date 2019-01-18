@@ -549,6 +549,18 @@ export default class {
     }
 
     /**
+     * Test if a turn is permitted during inspection.
+     *
+     * @param  {string}     turn
+     * @return {boolean}
+     */
+    isInspectionTurn(turn) {
+        const parsedTurn = this.model.parseTurn(turn);
+
+        return ['X', 'Y', 'Z'].includes(parsedTurn.target);
+    }
+
+    /**
      * Test if the puzzle is solved.
      *
      * @return {boolean}
@@ -609,29 +621,6 @@ export default class {
      * @return {Promise}
      */
     turn(turn) {
-        // disable turns entirely when turnable is 0
-        // only allow whole-cube rotations when turnable is 1
-        if (!this.turnIsPermitted(turn)) {
-            return Promise.resolve();
-        }
-
         return applyTurn(this, turn);
-    }
-
-    /**
-     * Test if a turn is permitted.
-     *
-     * @param  {string}     turn
-     * @return {boolean}
-     */
-    turnIsPermitted(turn) {
-        if (
-            (this.vm.turnable === 0) ||
-            (this.vm.turnable === 1 && ['X', 'Y', 'Z'].includes(turn[0]) === false)
-        ) {
-            return false;
-        }
-
-        return true;
     }
 }

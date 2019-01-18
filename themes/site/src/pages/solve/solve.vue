@@ -2,13 +2,11 @@
     <v-page padded>
         <v-margin padded>
 
-            <!-- puzzle -->
+            <!-- puzzle / controller -->
             <v-puzzle
                 ref="puzzle"
                 :puzzle="puzzle"
-                :turnable="turnable"
                 @solved="completeSolve"
-                @turn="recordTurn"
             />
 
             <!-- controls -->
@@ -57,9 +55,10 @@
 </template>
 
 <script>
-import { bindExternalEvent } from '@/app/utils/component';
+import controllerComponent from './controller/controller.vue';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postSolve } from '@/app/repositories/solves';
+import { bindExternalEvent } from '@/app/utils/component';
 
 export default {
     created() {
@@ -67,6 +66,9 @@ export default {
     },
     data() {
         return {
+            // did not finish
+            dnf: false,
+
             // log of all turns and solve events
             history: [],
 
@@ -102,9 +104,6 @@ export default {
 
             // solved phase
             solved: false,
-
-            // puzzle turnability
-            turnable: 2,
         };
     },
     computed: {
@@ -120,8 +119,14 @@ export default {
     },
     methods: {
         abortSolve() {
-            this.history.push(`${Date.now()}#END`);
+            if (!this.inspecting && !this.solving) {
+                return;
+            }
+
             this.solving = false;
+            this.dnf = true;
+
+            this.recordEvent('END');
 
             postSolve({
                 abort: true,
@@ -137,7 +142,6 @@ export default {
         beginInspection() {
             // allow partial turns
             this.scrambling = false;
-            this.turnable = 1;
 
             // begin an inspection for however long our puzzle allows
             this.inspecting = true;
@@ -145,22 +149,29 @@ export default {
             this.inspectionStartedAt = Date.now();
         },
         beginSolve() {
+            if (!this.inspecting) {
+                return;
+            }
+
             // transition to solving state and allow all turns
             this.inspecting = false;
             this.solveStartedAt = Date.now();
             this.solving = true;
-            this.turnable = 2;
 
             const offset = this.solveStartedAt - this.inspectionStartedAt;
 
-            this.history.push(`${offset}#START`);
+            this.recordEvent('START');
         },
         completeSolve() {
+            if (!this.solving) {
+                return;
+            }
+
+            // transition to solved state
             this.solveCompletedAt = Date.now();
             this.solveCompletedTime = this.solveCompletedAt - this.solveStartedAt;
             this.solved = true;
             this.solving = false;
-            this.turnable = 0;
 
             this.history.push(`${this.solveCompletedTime}#END`);
 
@@ -188,7 +199,14 @@ export default {
                 this.onSpaceUp();
             } else if (e.key === 'Escape') {
                 this.onEscapeUp();
+            } else {
+                const turn = this.$refs.puzzle.getTurnFromKeyboardEvent(e);
+
+                if (turn) {
+                    this.turn(turn);
+                }
             }
+
         },
         onSpaceUp() {
             // start a new solve if we're not doing anything
@@ -203,15 +221,19 @@ export default {
                 this.beginSolve();
             }
         },
-        recordTurn(turn) {
-            if (this.inspecting || this.solving) {
-                const offset = Date.now() - this.inspectionStartedAt;
+        recordEvent(event) {
+            const offset = Date.now() - this.inspectionStartedAt;
 
-                this.history.push(`${offset}:${turn}`);
-            }
+            this.history.push(`${offset}#${event}`);
+        },
+        recordTurn(turn) {
+            const offset = Date.now() - this.inspectionStartedAt;
+
+            this.history.push(`${offset}:${turn}`);
         },
         scramble() {
             // reset the state
+            this.dnf = false;
             this.history = [];
             this.inspecting = false;
             this.scrambling = true;
@@ -219,7 +241,6 @@ export default {
             this.solveStaretdAt = 0;
             this.solved = false;
             this.solving = false;
-            this.turnable = 0;
 
             // get a scramble from the server, and use an animating
             // pseudo-scramble as the loading state
@@ -233,6 +254,13 @@ export default {
                 
                 this.beginInspection();
             });
+        },
+        turn(turn) {
+            if (!this.inspecting || this.$refs.puzzle.isInspectionTurn(turn)) {
+                this.$refs.puzzle.turn(turn);
+
+                this.recordTurn(turn);
+            }
         },
     },
 };

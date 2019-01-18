@@ -1,20 +1,6 @@
 <template>
     <div class="text-center">
-        <!--
-            this canvas is where our cube will be drawn. our puzzle
-            driver is responsible for handling the render logic.
-        -->
         <canvas ref="canvas" />
-
-        <!--
-            attach a controller if the puzzle is turnable. we are
-            listening for the events from a child component in order
-            to bind / unbind the event listeners when turnable changes.
-        -->
-        <v-controller
-            v-if="turnable === 1 || turnable === 2"
-            @keyup="onKeyup"
-        />
     </div>
 </template>
 
@@ -44,9 +30,6 @@ export default {
 
         this.reset();
     },
-    components: {
-        'v-controller': controllerComponent,
-    },
     computed: {
         isCube() {
             return ['2x2', '3x3', '4x4', '5x5'].includes(this.puzzleId);
@@ -73,15 +56,14 @@ export default {
         getInspectionDuration() {
             return this.$options.puzzle.getInspectionDuration();
         },
+        getTurnFromKeyboardEvent(e) {
+            return this.$options.puzzle.getTurnFromKeyboardEvent(e);
+        },
+        isInspectionTurn(turn) {
+            return this.$options.puzzle.isInspectionTurn(turn);
+        },
         isSolved() {
             return this.$options.puzzle.isSolved();
-        },
-        onKeyup(e) {
-            const turn = this.$options.puzzle.getTurnFromKeyboardEvent(e);
-            
-            if (turn) {
-                this.turn(turn);
-            }
         },
         onIsMaskedChange() {
             this.renderPuzzle();
@@ -189,25 +171,10 @@ export default {
             });
         },
         turn(turn) {
-            if (
-                this.turnable === 3 || 
-                this.$options.puzzle.turnIsPermitted(turn)
-            ) {
-                this.queue.push(turn);
-                
-                this.$emit('turn', turn);
-            }
+            this.queue.push(turn);
         },
     },
     props: {
-        turnable: {
-            // 0 = no turns permitted
-            // 1 = allow puzzle rotations only
-            // 2 = allow all turns
-            // 3 - allow all turns, but disable controller (used for replay)
-            default: 0,
-            type: Number,
-        },
         turnConfig: {
             default: () => {},
             type: Object,
