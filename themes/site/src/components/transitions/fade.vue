@@ -1,7 +1,17 @@
 <script>
 export default {
     render(h, context) {
-        const { mode } = context.props;
+        const { enterDelay, enterDuration, mode } = context.props;
+
+        function onBeforeEnter(el) {
+            if (enterDelay > 0) {
+                el.style.transitionDelay = `${enterDelay}ms`;
+            }
+
+            if (enterDuration > 0) {
+                el.style.transitionDuration = `${enterDuration}ms`;
+            }
+        }
 
         return <transition
             enter-active-class="trans-opacity"
@@ -10,12 +20,21 @@ export default {
             leave-active-class="trans-opacity"
             leave-class="opacity-100"
             leave-to-class="opacity-0"
-            mode={mode}>
+            mode={mode}
+            onBeforeEnter={onBeforeEnter}>
             {context.slots().default}
         </transition>;
     },
     functional: true,
     props: {
+        enterDelay: {
+            default: 0,
+            type: Number,
+        },
+        enterDuration: {
+            default: 0,
+            type: Number,
+        },
         mode: {
             default: 'out-in',
             type: String,

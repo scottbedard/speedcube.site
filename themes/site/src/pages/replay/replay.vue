@@ -1,17 +1,21 @@
 <template>
     <v-page padded>
         <v-margin padded>
-            <!-- header -->
-            <h1
-                v-if="!loading"
-                class="font-thin text-center">
-                <div class="mb-4 text-grey-5">{{ solve.user.username }}</div>
-                <div class="flex flex-wrap justify-center text-base text-grey-5">
-                    <div class="w-full md:w-auto">{{ solve.time | shortTimer }} seconds</div>
-                    <div class="w-full px-4 md:w-auto">&mdash;</div>
-                    <div class="w-full md:w-auto">{{ solve.createdAt | datestamp }}</div>
+            <template v-if="!loading">
+                <!-- header -->
+                <h1 class="font-thin mb-4 text-center">
+                    Replay of {{ solve.user.username }}'s {{ solveTitle }} solve
+                    <!-- <div class="flex flex-wrap justify-center text-lg text-grey-6">
+                        <div class="w-full md:w-auto">{{ solve.time | shortTimer }} seconds</div>
+                        <div class="w-full px-4 md:w-auto">&mdash;</div>
+                        <div class="w-full md:w-auto">{{ solve.createdAt | datestamp }}</div>
+                    </div> -->
+                </h1>
+
+                <div class="text-center text-grey-6">
+                    <time :datetime="solve.createdAt">{{ solve.createdAt | datestamp }}</time>
                 </div>
-            </h1>
+            </template>
 
             <!-- puzzle -->
             <div class="mb-4">
@@ -33,16 +37,23 @@
                 <div
                     v-else-if="solving || solved"
                     key="solving">
-                    <v-timer
-                        :started-at="startedAt"
-                        :display-time="time"
-                    />
+                    <div
+                        class="font-thin text-center text-4xl trans-color"
+                        :class="{
+                            'text-grey-6': playing,
+                            'text-grey-7': !playing,
+                        }">
+                        <v-timer
+                            :started-at="startedAt"
+                            :display-time="time"
+                        />
+                    </div>
 
                     <v-fade-transition>
                         <div
                             v-if="solved"
-                            class="font-thin mt-4 text-center text-grey-5">
-                            <!-- press space to replay -->
+                            class="font-thin mt-4 text-center text-grey-6">
+                            press space to watch again
                         </div>
                     </v-fade-transition>
                 </div>
@@ -53,7 +64,7 @@
                     class="text-center"
                     key="ready">
                     <v-button @click="replay">
-                        Replay
+                        Watch
                     </v-button>
                 </div>
             </v-fade-transition>
@@ -62,13 +73,16 @@
 </template>
 
 <script>
+import { bindExternalEvent, cleanTimeout } from '@/app/utils/component';
+import { formatShortTime } from '@/app/utils/string';
 import { getSolve } from '@/app/repositories/solves';
-import { cleanTimeout } from '@/app/utils/component';
 import { get } from 'lodash-es';
 
 export default {
     created() {
         this.fetchSolve();
+
+        bindExternalEvent(this, document.body, 'keyup', this.onKeyup);
     },
     data() {
         return {
@@ -104,6 +118,16 @@ export default {
         puzzle() {
             // get the puzzle from our scramble
             return get(this.solve, 'scramble.puzzle', '');
+        },
+        solveTitle() {
+            const time = get(this.solve, 'time', 0);
+            const shortTime = formatShortTime(time);
+            const seconds = Math.floor(time / 1000);
+            const minutes = Math.floor(time / 60000);
+
+            return minutes < 1
+                ? `${shortTime} second`
+                : `${shortTime} minute`;
         },
         solution() {
             return get(this.solve, 'solution', '').split(' ').map(move => {
@@ -166,7 +190,6 @@ export default {
 
             // add a ticking clock for the duration of the solve
             this.queueTimeout(() => {
-                console.log('done');
                 this.completedSolve();
             }, this.solve.time);
         },
@@ -180,8 +203,9 @@ export default {
                 return;
             }
 
-            this.solving = false;
+            this.playing = false;
             this.solved = true;
+            this.solving = false;
             this.time = this.solve.time;
         },
         fetchSolve() {
@@ -199,6 +223,12 @@ export default {
                 this.loading = false;
                 this.$refs.puzzle.applyState(this.solve.scramble.scrambledState);
             });
+        },
+        onKeyup(e) {
+            // replay the solve on space when not already playing
+            if (e.key === ' ') {
+                this.replay();
+            }
         },
         replay() {
             this.clearTimeouts();

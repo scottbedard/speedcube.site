@@ -1,8 +1,5 @@
 <template>
-    <div
-        class="font-thin text-center text-grey-5 text-4xl"
-        v-text="formattedTime"
-    />
+    <span v-text="formattedTime" />
 </template>
 
 <script>
