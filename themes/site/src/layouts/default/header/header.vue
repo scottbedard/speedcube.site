@@ -9,10 +9,10 @@
                         :to="{ name: 'home' }">
                         speedcube.site
                     </router-link>
-                    <v-nav-link :to="{ name: 'solve' }">
+                    <v-nav-link :to="{ name: 'solve', params: { puzzle: '3x3' }}">
                         solve
                     </v-nav-link>
-                    <v-nav-link :to="{ name: 'records' }">
+                    <v-nav-link :to="{ name: 'records', params: { puzzle: '3x3' }}">
                         records
                     </v-nav-link>
                 </div>
