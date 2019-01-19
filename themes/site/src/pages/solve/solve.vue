@@ -6,7 +6,8 @@
             <v-puzzle
                 ref="puzzle"
                 :puzzle="puzzle"
-                @solved="completeSolve"
+                @turn-start="recordTurn"
+                @turn-end="completeIfSolved"
             />
 
             <!-- controls -->
@@ -27,23 +28,30 @@
                             :started-at="inspectionStartedAt"
                             @complete="beginSolve"
                         />
-                        <p class="font-thin mt-4 text-grey-5">press space to start</p>
+                        <p class="font-thin mt-4 text-grey-6">press space to start</p>
                     </div>
 
                     <!-- solving / solved -->
                     <div v-else-if="solving || solved" key="solving">
-                        <v-timer
-                            :running="solving"
-                            :display-time="solveCompletedTime"
-                            :started-at="solveStartedAt"
-                        />
-                        <p class="font-thin mt-4 mb-8 text-grey-5">press space to scramble</p>
+                        <div
+                            class="font-thin text-center text-4xl trans-color"
+                            :class="{
+                                'text-grey-6': !solved,
+                                'text-grey-7': solved,
+                            }">
+                            <v-timer
+                                :running="solving"
+                                :display-time="solveCompletedTime"
+                                :started-at="solveStartedAt"
+                            />
+                        </div>
+                        <p class="font-thin mt-4 mb-8 text-grey-6">press space to scramble</p>
                     </div>
 
                     <!-- dnf -->
                     <div v-else-if="dnf" key="dnf">
-                        <div class="font-thin text-center text-grey-5 text-4xl">DNF</div>
-                        <p class="font-thin mt-4 mb-8 text-grey-5">press space to scramble</p>
+                        <div class="font-thin text-center text-grey-6 text-4xl">DNF</div>
+                        <p class="font-thin mt-4 mb-8 text-grey-6">press space to scramble</p>
                     </div>
 
                     <!-- idle -->
@@ -159,12 +167,19 @@ export default {
                 return;
             }
 
+            const now = Date.now();
+
             // transition to solving state and allow all turns
             this.inspecting = false;
-            this.solveStartedAt = Date.now();
+            this.solveStartedAt = now;
             this.solving = true;
 
-            this.recordEvent('START');
+            this.recordEvent('START', now);
+        },
+        completeIfSolved(isSolved) {
+            if (isSolved) {
+                this.completeSolve();
+            }
         },
         completeSolve() {
             if (!this.solving) {
@@ -172,12 +187,13 @@ export default {
             }
 
             // transition to solved state
-            this.solveCompletedAt = Date.now();
-            this.solveCompletedTime = this.solveCompletedAt - this.inspectionStartedAt;
+            const now = Date.now();
+            this.solveCompletedAt = now;
+            this.solveCompletedTime = this.solveCompletedAt - this.solveStartedAt;
             this.solved = true;
             this.solving = false;
 
-            this.history.push(`${this.solveCompletedTime}#END`);
+            this.recordEvent('END', now);
 
             postSolve({
                 config: this.puzzleConfig,
@@ -230,8 +246,8 @@ export default {
 
             this.history.push(`${offset}#${event}`);
         },
-        recordTurn(turn) {
-            const offset = Date.now() - this.inspectionStartedAt;
+        recordTurn(turn, now = null) {
+            const offset = (now || Date.now()) - this.inspectionStartedAt;
 
             this.history.push(`${offset}:${turn}`);
         },
@@ -263,8 +279,6 @@ export default {
         turn(turn) {
             if (!this.inspecting || this.$refs.puzzle.isInspectionTurn(turn)) {
                 this.$refs.puzzle.turn(turn);
-
-                this.recordTurn(turn);
             }
         },
     },

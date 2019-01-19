@@ -74,15 +74,13 @@ export default {
                 
                 if (turn) {
                     this.isTurning = true;
+                    this.$emit('turn-start', turn);
 
                     this.$options.puzzle.turn(turn).then(() => {
                         this.isTurning = false;
-
                         this.queue.shift();
-
-                        if (this.$options.puzzle.isSolved()) {
-                            this.$emit('solved');
-                        }
+                        
+                        this.$emit('turn-end', this.isSolved());
                     });
                 }
             }
