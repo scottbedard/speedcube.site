@@ -23,8 +23,8 @@ export default {
                         label: puzzle,
                         fill: false,
                         backgroundColor: puzzles[puzzle].color,
-                        pointRadius: 4,
-                        pointHoverRadius: 5,
+                        pointRadius: 5,
+                        pointHoverRadius: 6,
                         data: this.groupedSolves[puzzle].map(solve => {
                             return {
                                 solve,
@@ -50,6 +50,15 @@ export default {
                             e.target.style.cursor = 'default';
                         }
                     },
+                },
+                legend: {
+                    labels: {
+                        boxWidth: 16,
+                        fontColor: '#7B8794',
+                        fontSize: 14,
+                        padding: 20,
+                    },
+                    position: 'bottom',
                 },
                 maintainAspectRatio: false,
                 onClick(e) {
