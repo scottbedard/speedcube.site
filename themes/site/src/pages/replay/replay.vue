@@ -151,6 +151,9 @@ export default {
         },
     },
     methods: {
+        applyScrambledState() {
+            this.$refs.puzzle.applyState(this.solve.scramble.scrambledState);
+        },
         beginInspection() {
             this.inspecting = true;
 
@@ -235,7 +238,7 @@ export default {
                 this.loading = false;
 
                 if (typeof this.solve.id !== 'undefined') {
-                    this.$refs.puzzle.applyState(this.solve.scramble.scrambledState);
+                    this.applyScrambledState();
                 }
             });
         },
@@ -246,6 +249,7 @@ export default {
             }
         },
         replay() {
+            this.applyScrambledState();
             this.clearTimeouts();
 
             this.inspecting = false;
