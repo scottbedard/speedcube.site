@@ -12,7 +12,7 @@ class SolvesApiTest extends PluginTestCase
 {
     // helper function to create an easily solved scramble
     public static function createScramble($turns = '') {
-        $scramble = Factory::create(new Scramble, ['puzzle' => 'cube3']);
+        $scramble = Factory::create(new Scramble, ['puzzle' => '3x3']);
         $scramble->scramble = $turns;
         $scramble->save();
 
@@ -69,7 +69,7 @@ class SolvesApiTest extends PluginTestCase
                 'colors' => ['#000000', '#111111', '#222222', '#333333', '#444444', '#555555'],
             ],
             'scrambleId' => $scramble->id,
-            'solution' => '0#START 100:R 200:U- 300:R- 400#END',
+            'solution' => '100:X 200:X- 1000#START 2000:R 3000:U- 4000:R- 5000#END',
         ]);
 
         $response->assertStatus(200);
@@ -81,6 +81,7 @@ class SolvesApiTest extends PluginTestCase
 
         $this->assertEquals(1, Solve::count());
         $this->assertEquals($user->id, $solve->user_id);
+        $this->assertEquals(4000, $solve->time);
     }
     
     public function test_completing_a_solve_with_an_incorrect_solution()
@@ -166,7 +167,7 @@ class SolvesApiTest extends PluginTestCase
         $solveB->complete('0#START 100:R- 200#END');
 
         // fetch the fastest solves
-        $response = $this->get('/api/speedcube/speedcube/solves?puzzle=cube3&orderBy=time');
+        $response = $this->get('/api/speedcube/speedcube/solves?puzzle=3x3&orderBy=time');
 
         $data = json_decode($response->getContent(), true);
         
@@ -182,7 +183,7 @@ class SolvesApiTest extends PluginTestCase
     {
         $user = Factory::registerUser();
 
-        $scramble = Factory::create(new Scramble, ['puzzle' => 'cube3']);
+        $scramble = Factory::create(new Scramble, ['puzzle' => '3x3']);
         $scramble->scramble = 'R';
         $scramble->save();
 

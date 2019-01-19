@@ -1,6 +1,6 @@
 module.exports = {
     plugins: [
-        "istanbul",
+        'istanbul',
     ],
     presets: [
         '@vue/app',

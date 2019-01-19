@@ -34,7 +34,5 @@ export function formatTime(time) {
 export function formatShortTime(time) {
     const formattedTime = formatTime(time);
 
-    return formattedTime.startsWith('0:')
-        ? formattedTime.slice(2)
-        : time;
+    return formattedTime.replace(/^[0:]*/, '');
 }

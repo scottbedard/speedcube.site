@@ -1,232 +1,262 @@
 <template>
     <v-page padded>
-
-        <!-- loading -->
-        <div
-            v-if="isLoading"
-            class="text-center"
-            key="loading">
-            <v-spinner />
-        </div>
-
-        <!-- replay -->
-        <div
-            class="trans-opacity"
-            :class="{
-                'opacity-0': isLoading,
-                'opacity-100': !isLoading,
-            }">
-            <!-- title -->
-            <div class="text-center">
-                <h1 class="font-thin mb-4">
-                    {{ displayName }}'s <strong class="font-bold">{{ solve.time | shortTimer }}</strong> solve
+        <v-margin padded>
+            <template v-if="!loading">
+                <!-- header -->
+                <h1 class="font-thin mb-4 text-center">
+                    Replay of {{ username }}'s {{ solveTitle }} solve
                 </h1>
-                <div class="font-thin text-grey-dark">
-                    {{ solve.createdAt | datestamp }}
+
+                <div class="text-center text-grey-6">
+                    <time :datetime="solve.createdAt">{{ createdAt | datestamp }}</time>
                 </div>
-            </div>
+            </template>
 
             <!-- puzzle -->
-            <div class="max-w-md mx-auto">
+            <div class="mb-4">
                 <v-puzzle
                     ref="puzzle"
-                    :size="cubeSize"
-                    :colors="config.colors"
-                    :sticker-elevation="config.stickerElevation"
-                    :sticker-inner-opacity="config.stickerInnerOpacity"
-                    :sticker-radius="config.stickerRadius"
-                    :sticker-scale="config.stickerScale"
-                    :turn-duration="config.turnDuration"
+                    :puzzle="puzzle"
                 />
             </div>
 
-            <div class="text-center">
-                <v-fade-transition>
-                    <!-- timer -->
-                    <div v-if="isSolving || isComplete" key="timer">
-                        <div class="mb-8">
-                            <v-timer :time="time" />
+            <v-fade-transition>
+                <!-- inspecting -->
+                <div
+                    v-if="inspecting"
+                    key="inspecting">
+                    <!-- @todo: add countdown clock -->
+                </div>
+
+                <!-- solving -->
+                <div
+                    v-else-if="solving || solved"
+                    key="solving">
+                    <div
+                        class="font-thin text-center text-4xl trans-color"
+                        :class="{
+                            'text-grey-6': playing,
+                            'text-grey-7': !playing,
+                        }">
+                        <v-timer
+                            :started-at="startedAt"
+                            :display-time="time"
+                        />
+                    </div>
+
+                    <v-fade-transition>
+                        <div
+                            v-if="solved"
+                            class="font-thin mt-4 text-center text-grey-6">
+                            press space to watch again
                         </div>
+                    </v-fade-transition>
+                </div>
 
-                        <v-fade-transition>
-                            <div v-if="isComplete">
-                                <v-button @click="replay">Replay</v-button>
-                            </div>
-                        </v-fade-transition>
-                    </div>
-
-                    <!-- inspection -->
-                    <div v-else-if="isInspecting" key="inspection">
-                        <v-countdown />
-                    </div>
-
-                    <!-- replay -->
-                    <div v-else key="replay">
-                        <v-button @click="replay">Replay</v-button>
-                    </div>
-                </v-fade-transition>
-            </div>
-        </div>
+                <!-- ready -->
+                <div
+                    v-else
+                    class="text-center"
+                    key="ready">
+                    <v-button @click="replay">
+                        Watch
+                    </v-button>
+                </div>
+            </v-fade-transition>
+        </v-margin>
     </v-page>
 </template>
 
 <script>
+import { bindExternalEvent } from '@/app/utils/component';
+import { formatShortTime } from '@/app/utils/string';
 import { getSolve } from '@/app/repositories/solves';
-import { cleanTimeout } from '@/app/utils/component';
+import { get } from 'lodash-es';
 
 export default {
     created() {
         this.fetchSolve();
+
+        bindExternalEvent(this, document.body, 'keyup', this.onKeyup);
     },
     data() {
         return {
-            // this is set to true when the replay has finished
-            isComplete: false,
+            // loading state for the initial fetch
+            loading: false,
 
-            // this is set to true when inspection begins
-            isInspecting: false,
+            // set to true when replaying inspection phase
+            inspecting: false,
 
-            // loading state for xhr to fetch the solve
-            isLoading: false,
+            // set to true when the replay is running
+            playing: false,
 
-            // this is set to true when the solve starts
-            isSolving: false,
-
-            // timestamp used to determine the time
-            now: 0,
-
-            // timestamp that the solve started at
-            solveStartedAt: 0,
+            // time that the current replay started at
+            startedAt: 0,
 
             // the solve being replayed
-            solve: {
-                scramble: {
-                    createdAt: '',
-                    puzzle: 'cube3',
-                },
-                user: {
-                    id: 0,
-                    username: 'Anonymous',
-                },
-            },
+            solve: {},
 
-            // tick interval
-            tickInterval: 0,
+            // set to true after after solved
+            solved: false,
+
+            // set to true when replaying solving phase
+            solving: false,
+
+            // clock time
+            time: null,
+
+            // settimeout ids to from current replay
+            timeoutIds: [],
         };
     },
     computed: {
-        config() {
-            return this.isLoading ? {} : this.solve.config;
+        createdAt() {
+            return get(this.solve, 'createdAt', '');
         },
-        cubeSize() {
-            return parseInt(this.solve.scramble.puzzle.replace(/[A-Za-z]/g, ''), 10);
+        puzzle() {
+            // get the puzzle from our scramble
+            return get(this.solve, 'scramble.puzzle', '');
         },
-        displayName() {
-            return this.solve.user.name || this.solve.user.username || 'Anonymous';
+        solveTitle() {
+            const time = get(this.solve, 'time', 0);
+            const shortTime = formatShortTime(time);
+            const minutes = Math.floor(time / 60000);
+
+            return minutes < 1
+                ? `${shortTime} second`
+                : `${shortTime} minute`;
         },
         solution() {
-            if (!this.solve) {
-                return [];
-            }
+            return get(this.solve, 'solution', '').split(' ').map((move) => {
+                const [offset, turnOrEvent] = move.split(/[:#]/);
 
-            return this.turns
-                .filter(turn => !turn.match(/\d+#[a-zA-Z]+/))
-                .map((rawTurn) => {
-                    const [time, turn] = rawTurn.split(':');
-                    return {
-                        time: parseInt(time, 10),
-                        turn,
-                    };
-                });
-        },
-        startTime() {
-            const event = this.turns.find(turn => turn.match(/\d+#START/));
+                const turn = move.includes(':') && turnOrEvent;
+                const event = move.includes('#') && turnOrEvent;
 
-            return event
-                ? parseInt(event.split('#')[0], 10)
-                : 0;
+                return {
+                    event,
+                    offset: parseInt(offset, 10),
+                    turn,
+                };
+            });
         },
-        time() {
-            if (this.isComplete) {
-                return this.solve.time;
-            }
-
-            if (this.isSolving) {
-                return this.now - this.solveStartedAt;
-            }
-
-            return 0;
-        },
-        turns() {
-            return this.solve.solution.split(' ').map(turn => turn.trim());
-        },
-        user() {
-            return this.solve.user;
+        username() {
+            return get(this.solve, 'user.username', '');
         },
     },
     methods: {
-        completeSolve() {
-            this.stopTicking();
+        applyScrambledState() {
+            this.$refs.puzzle.applyState(this.solve.scramble.scrambledState);
+        },
+        beginInspection() {
+            this.inspecting = true;
 
-            this.isComplete = true;
+            for (let i = 0, end = this.solution.length; i < end; i += 1) {
+                const { event, offset, turn } = this.solution[i];
+
+                // turn the puzzle
+                if (turn) {
+                    this.queueTimeout(() => {
+                        this.$refs.puzzle.turn(turn);
+                    }, offset);
+                }
+
+                // transition to the solving phase
+                else if (event === 'START') {
+                    this.queueTimeout(() => {
+                        this.beginSolve(offset, this.solution.slice(i + 1));
+                    }, offset);
+
+                    return;
+                }
+            }
+        },
+        beginSolve(startTime, remainingMoves) {
+            if (!this.inspecting) {
+                return;
+            }
+
+            this.startedAt = Date.now();
+            this.inspecting = false;
+            this.solving = true;
+
+            // animate the remaining moves
+            remainingMoves.forEach((move) => {
+                const { offset, turn } = move;
+
+                if (turn) {
+                    this.queueTimeout(() => {
+                        this.$refs.puzzle.turn(turn);
+                    }, offset - startTime);
+                }
+            });
+
+            // add a ticking clock for the duration of the solve
+            this.queueTimeout(() => {
+                this.completedSolve();
+            }, this.solve.time);
+        },
+        clearTimeouts() {
+            this.timeoutIds.forEach(id => window.clearTimeout(id));
+
+            this.timeoutIds = [];
+        },
+        completedSolve() {
+            if (!this.solving) {
+                return;
+            }
+
+            this.playing = false;
+            this.solved = true;
+            this.solving = false;
+            this.time = this.solve.time;
         },
         fetchSolve() {
-            this.isLoading = true;
+            this.loading = true;
 
             getSolve(this.$route.params.id).then((response) => {
                 // success
-                this.solve = response.data.solve;
+                const { solve } = response.data;
+
+                this.solve = solve;
+            }, () => {
+                // failed
+                this.$router.push({
+                    name: 'solve',
+                    params: {
+                        puzzle: '3x3',
+                    },
+                });
             }).finally(() => {
                 // complete
-                this.isLoading = false;
-                this.reset();
+                this.loading = false;
+
+                if (typeof this.solve.id !== 'undefined') {
+                    this.applyScrambledState();
+                }
             });
+        },
+        onKeyup(e) {
+            // replay the solve on space when not already playing
+            if (e.key === ' ') {
+                this.replay();
+            }
         },
         replay() {
-            // start the inspection
-            this.reset();
-            this.startInspection();
+            this.applyScrambledState();
+            this.clearTimeouts();
 
-            // and queue each turn in the solve
-            this.solution.forEach(({ time, turn }) => {
-                cleanTimeout(this, () => this.$refs.puzzle.turn(turn), time);
-            });
+            this.inspecting = false;
+            this.playing = true;
+            this.solved = false;
+            this.solving = false;
+            this.startedAt = 0;
+            this.time = null;
+
+            this.beginInspection();
         },
-        reset() {
-            const state = JSON.parse(this.solve.scramble.scrambledState);
-
-            this.$refs.puzzle.setCubeState(state);
-        },
-        startInspection() {
-            this.isComplete = false;
-            this.isInspecting = true;
-
-            cleanTimeout(this, () => {
-                this.isInspecting = false;
-
-                this.startSolve();
-            }, this.startTime);
-        },
-        startSolve() {
-            this.isSolving = true;
-            this.solveStartedAt = Date.now();
-
-            this.startTicking();
-
-            cleanTimeout(this, () => {
-                this.isSolving = false;
-
-                this.completeSolve();
-            }, this.solve.time);
-        },
-        startTicking() {
-            this.tickInterval = setInterval(this.tick, 5);
-        },
-        stopTicking() {
-            clearInterval(this.tickInverval);
-        },
-        tick() {
-            this.now = Date.now();
+        queueTimeout(fn, delay) {
+            this.timeoutIds.push(window.setTimeout(fn, delay));
         },
     },
 };

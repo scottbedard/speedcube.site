@@ -45,9 +45,9 @@
 </template>
 
 <script>
-import accountHeaderComponent from '../../account_header/account_header.vue';
 import { mapGetters, mapState } from 'vuex';
 import { deleteAvatar, postProfilePhoto } from '@/app/repositories/user';
+import accountHeaderComponent from '../../account_header/account_header.vue';
 
 export default {
     data() {
@@ -74,7 +74,7 @@ export default {
         deletePhoto() {
             this.deleteIsLoading = true;
 
-            deleteAvatar().then((response) => {
+            deleteAvatar().then(() => {
                 // success
                 this.$store.commit('user/removeAvatar');
             }, () => {

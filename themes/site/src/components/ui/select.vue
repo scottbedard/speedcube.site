@@ -1,4 +1,6 @@
 <script>
+/* eslint-disable no-unused-vars */
+
 export default {
     render(h, context) {
         const { options } = context.props;

@@ -5,6 +5,7 @@ namespace Speedcube\Speedcube\Http\Controllers;
 use ApplicationException;
 use Auth;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Speedcube\Speedcube\Classes\ApiController;
 use Speedcube\Speedcube\Models\Scramble;
 use Speedcube\Speedcube\Models\Solve;
@@ -50,7 +51,9 @@ class SolvesController extends ApiController
                 $solve->complete($solution);
             }
 
-            return $this->success([ 'solve' => $solve->toArray() ]);
+            return $this->success([
+                'solve' => $solve->toArray(),
+            ]);
         }
         
         // unknown error
@@ -66,9 +69,13 @@ class SolvesController extends ApiController
      */
     public function find($id)
     {
-        $solve = Solve::withUserSummary()
-            ->with('scramble')
-            ->findOrFail($id);
+        try {
+            $solve = Solve::withUserSummary()
+                ->with('scramble')
+                ->findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return $this->failed('not_found');
+        }
 
         return $this->success([
             'solve' => $solve,

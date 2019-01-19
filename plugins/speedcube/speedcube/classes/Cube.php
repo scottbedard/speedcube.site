@@ -96,18 +96,13 @@ class Cube
     public static function testSolution(Scramble $scramble, string $solution)
     {
         $cubePath = base_path('themes/site/node_modules/bedard-cube/cli.js');
-        $stateArg = escapeshellarg($scramble->scrambled_state);
+        $stateArg = escapeshellarg(json_encode($scramble->scrambled_state));
         $solutionArg = escapeshellarg(self::removeTimestamps($solution));
         $sizeArg = escapeshellarg([
-            'cube2' => 2,
-            'cube3' => 3,
-            'cube4' => 4,
-            'cube5' => 5,
-            'cube6' => 6,
-            'cube7' => 7,
-            'cube8' => 8,
-            'cube9' => 9,
-            'cube10' => 10,
+            '2x2' => 2,
+            '3x3' => 3,
+            '4x4' => 4,
+            '5x5' => 5,
         ][$scramble->puzzle]);
 
         return exec("node {$cubePath} test {$sizeArg} {$stateArg} {$solutionArg}") === '1';

@@ -6,11 +6,7 @@
     }
 
     path {
-        stroke: config('colors.primary');
-
-        &[data-color="grey"] {
-            stroke: config('colors.grey-5');
-        }
+        stroke: config('colors.grey-5');
     }
 
     @keyframes spin {

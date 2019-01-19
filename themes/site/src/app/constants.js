@@ -25,10 +25,25 @@ export const spacebarKeyCode = 32;
 // puzzles
 // this constant is used to keep meta data with various puzzle ids
 export const puzzles = {
-    'cube3': {
-        color: '#00ff00',
+    '2x2': {
+        color: '#4098D7',
+        slug: '2x2',
+        title: '2x2',
+    },
+    '3x3': {
+        color: '#f5d16f',
         slug: '3x3',
         title: '3x3',
+    },
+    '4x4': {
+        color: '#ff00ff',
+        slug: '4x4',
+        title: '4x4',
+    },
+    '5x5': {
+        color: '#ff00ff',
+        slug: '5x5',
+        title: '5x5',
     },
 };
 

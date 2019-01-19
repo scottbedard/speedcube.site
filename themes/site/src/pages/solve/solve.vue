@@ -1,328 +1,281 @@
 <template>
-    <v-page>
-        <v-margin class="relative" padded>
-            <!-- sidebar -->
-            <!-- <aside class="absolute hidden pin-l pin-t pl-6 md:block">
-                <v-sidebar :config-key="puzzleId" />
-            </aside> -->
+    <v-page padded>
+        <v-margin padded>
 
-            <!-- puzzle -->
+            <!-- puzzle / controller -->
             <v-puzzle
-                :colors="colors"
-                :masked="scrambleIsLoading"
-                :size="size"
-                :sticker-elevation="stickerElevation"
-                :sticker-radius="stickerRadius"
-                :sticker-scale="stickerScale"
-                :sticker-inner-opacity="stickerInnerOpacity"
-                :turn-duration="turnDuration"
                 ref="puzzle"
-                @solved="onSolved"
+                :puzzle="puzzle"
+                @turn-start="recordTurn"
+                @turn-end="completeIfSolved"
             />
 
-            <!-- controller -->
-            <v-puzzle-controller
-                :size="size"
-                @escape="onEscape"
-                @space-up="onSpaceUp"
-                @turn="turn"
-            />
-
+            <!-- controls -->
             <div class="text-center">
-                <v-collapse-transition>
-                    <!-- timer -->
-                    <div v-if="isSolving || isComplete" key="timer">
-                        <v-timer :time="displayTime" />
-                        <v-fade-transition>
-                            <div v-if="isComplete" class="mt-4" key="loading">
-                                <v-tip>press spacebar to scramble</v-tip>
-                            </div>
-                            <div v-else class="mt-4" key="solving">
-                                <v-tip>press escape to end solve</v-tip>
-                            </div>
-                        </v-fade-transition>
+                <v-fade-transition>
+                    <!-- scrambling -->
+                    <div
+                        v-if="scrambling"
+                        key="scrambling"
+                    />
+
+                    <!-- inspecting -->
+                    <div
+                        v-else-if="inspecting"
+                        key="inspecting">
+                        <v-countdown
+                            :duration="inspectionDuration"
+                            :started-at="inspectionStartedAt"
+                            @complete="beginSolve"
+                        />
+                        <p class="font-thin mt-4 text-grey-6">press space to start</p>
                     </div>
 
-                    <!-- countdown -->
-                    <div v-else-if="isInspecting" key="countdown">
-                        <v-countdown />
-                        <v-tip>press spacebar to start</v-tip>
+                    <!-- solving / solved -->
+                    <div v-else-if="solving || solved" key="solving">
+                        <div
+                            class="font-thin text-center text-4xl trans-color"
+                            :class="{
+                                'text-grey-6': !solved,
+                                'text-grey-7': solved,
+                            }">
+                            <v-timer
+                                :running="solving"
+                                :display-time="solveCompletedTime"
+                                :started-at="solveStartedAt"
+                            />
+                        </div>
+                        <p class="font-thin mt-4 mb-8 text-grey-6">press space to scramble</p>
                     </div>
 
-                    <!-- scramble button -->
-                    <div v-else-if="!isComplete && !scrambleIsLoading" key="scramble">
-                        <v-button outlined @click="scramble">
+                    <!-- dnf -->
+                    <div v-else-if="dnf" key="dnf">
+                        <div class="font-thin text-center text-grey-6 text-4xl">DNF</div>
+                        <p class="font-thin mt-4 mb-8 text-grey-6">press space to scramble</p>
+                    </div>
+
+                    <!-- idle -->
+                    <div
+                        v-else
+                        key="idle">
+                        <v-button @click="scramble">
                             Scramble
                         </v-button>
                     </div>
-                </v-collapse-transition>
+                </v-fade-transition>
             </div>
         </v-margin>
     </v-page>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postSolve } from '@/app/repositories/solves';
-import { cleanTimeout } from '@/app/utils/component';
-import sidebarComponent from './sidebar/sidebar.vue';
-import tipComponent from './tip/tip.vue';
+import { bindExternalEvent } from '@/app/utils/component';
 
 export default {
     created() {
-        this.setConfigForPuzzle();
+        bindExternalEvent(this, document.body, 'keyup', this.onKeyup);
     },
     data() {
         return {
-            // final time property when completed
-            completeTime: 0,
+            // did not finish
+            dnf: false,
 
-            // history of inspection and solve
+            // log of all turns and solve events
             history: [],
 
-            // time the inspection phase started
+            // inspection phase
+            inspecting: false,
+
+            // inspection duration in milliseconds
+            inspectionDuration: 0,
+
+            // inspection start time
             inspectionStartedAt: 0,
 
-            // this is true when the solve is complete
-            isComplete: false,
-
-            // this is true during the inspection phase
-            isInspecting: false,
-
-            // cleanTimeout id for inspection
-            inspectionTimeout: 0,
-
-            // this is true during the solving phase
-            isSolving: false,
-
-            // the current timestamp. this is updated when solving.
-            now: Date.now(),
-
-            // id of the Scramble model being solved
+            // id of the scramble model
             scrambleId: 0,
 
-            // loading state for fetching a scramble from the server
-            scrambleIsLoading: false,
+            // scrambling phase
+            scrambling: false,
 
-            // time value at the start of a solve
-            solveStartTime: 0,
+            // session of recent solves
+            solves: [],
 
-            // loading state for submitting a solve to the server
-            solveIsLoading: false,
+            // solve completion time
+            solveCompletedAt: 0,
 
-            // interval id for our timer
-            tickInterval: 0,
+            // the final time of the solve
+            solveCompletedTime: null,
 
-            // the turn duration of the cube
-            turnDuration: 95,
+            // solve start time
+            solveStartedAt: 0,
+
+            // solving phase
+            solving: false,
+
+            // solved phase
+            solved: false,
         };
     },
-    components: {
-        'v-sidebar': sidebarComponent,
-        'v-tip': tipComponent,
-    },
     computed: {
-        ...mapState('user', [
-            'config',
-        ]),
-        ...mapState('user', {
-            colors: state => state.config.colors,
-            stickerElevation: state => state.config.stickerElevation,
-            stickerInnerOpacity: state => state.config.stickerInnerOpacity,
-            stickerRadius: state => state.config.stickerRadius,
-            stickerScale: state => state.config.stickerScale,
-        }),
-        ...mapGetters('user', [
-            'isAuthenticated',
-            'puzzleConfig',
-        ]),
-        displayTime() {
-            return this.time - this.solveStartTime;
+        puzzle() {
+            return this.$route.params.puzzle;
         },
-        puzzleId() {
-            return `cube${this.size}`;
-        },
-        size() {
-            return this.$route.meta.cubeSize;
+        puzzleConfig() {
+            return {};
         },
         solution() {
             return this.history.join(' ');
         },
-        time() {
-            if (this.isInspecting || this.isSolving) {
-                return this.now - this.inspectionStartedAt;
-            }
-
-            return this.completeTime;
-        },
     },
     methods: {
         abortSolve() {
-            // abort a solve
+            if (!this.inspecting && !this.solving) {
+                return;
+            }
+
+            this.inspecting = false;
+            this.solving = false;
+            this.dnf = true;
+
+            this.recordEvent('END');
+
             postSolve({
                 abort: true,
-                config: this.config,
+                config: this.puzzleConfig,
                 scrambleId: this.scrambleId,
                 solution: this.solution,
+            }).then((response) => {
+                const { solve } = response.data;
+
+                this.solves.push(solve);
             });
         },
         beginInspection() {
-            // reset history, we'll be recording from here
-            // through the end of the solve
-            this.history = [];
-            this.isInspecting = true;
+            // allow partial turns
+            this.scrambling = false;
+
+            // begin an inspection for however long our puzzle allows
+            this.inspecting = true;
+            this.inspectionDuration = this.$refs.puzzle.getInspectionDuration();
             this.inspectionStartedAt = Date.now();
-
-            // start the solve for this scramble after 15
-            const { scrambleId } = this;
-
-            this.inspectionTimeout = cleanTimeout(this, () => {
-                if (this.scrambleId === scrambleId) {
-                    this.beginSolve();
-                }
-            }, 15000);
         },
         beginSolve() {
-            // do nothing if the solve has already started
-            if (this.isSolving) {
+            if (!this.inspecting) {
                 return;
             }
 
-            clearTimeout(this.inspectionTimeout);
+            const now = Date.now();
 
-            // log the start of the solve
-            const solveStartTime = this.time;
+            // transition to solving state and allow all turns
+            this.inspecting = false;
+            this.solveStartedAt = now;
+            this.solving = true;
 
-            this.solveStartTime = solveStartTime;
-            this.history.push(`${solveStartTime}#START`);
-
-            // update our state
-            this.isInspecting = false;
-            this.isSolving = true;
+            this.recordEvent('START', now);
         },
-        onEscape() {
-            // abort and solve that is currently in progress
-            if (this.isInspecting || this.isSolving) {
-                this.abortSolve();
+        completeIfSolved(isSolved) {
+            if (isSolved) {
+                this.completeSolve();
             }
-
-            this.reset();
         },
-        onSolved() {
-            // do nothing if we're not solving, meaning the
-            // cube was simply reset.
-            if (!this.isSolving) {
+        completeSolve() {
+            if (!this.solving) {
                 return;
             }
 
-            // attach an event completing the solve
-            const completeTime = this.time;
+            // transition to solved state
+            const now = Date.now();
+            this.solveCompletedAt = now;
+            this.solveCompletedTime = this.solveCompletedAt - this.solveStartedAt;
+            this.solved = true;
+            this.solving = false;
 
-            this.history.push(`${completeTime}#END`);
-
-            // close our the state tracking the solve
-            this.completeIsLoading = true;
-            this.completeTime = completeTime;
-            this.isComplete = true;
-            this.isSolving = false;
+            this.recordEvent('END', now);
 
             postSolve({
-                config: this.config,
+                config: this.puzzleConfig,
                 scrambleId: this.scrambleId,
                 solution: this.solution,
-            }).finally(() => {
-                // complete
-                this.completeIsLoading = false;
+            }).then((response) => {
+                // success
+                const { solve } = response.data;
+
+                this.solves.push(solve);
             });
+        },
+        onEscapeUp() {
+            // abort the current solve if one is running
+            if (this.inspecting || this.solving) {
+                this.abortSolve();
+            }
+        },
+        onKeyup(e) {
+            if (e.key === ' ') {
+                this.onSpaceUp();
+            } else if (e.key === 'Escape') {
+                this.onEscapeUp();
+            } else {
+                const turn = this.$refs.puzzle.getTurnFromKeyboardEvent(e);
+
+                if (turn) {
+                    this.turn(turn);
+                }
+            }
         },
         onSpaceUp() {
-            if (this.isInspecting) {
-                this.beginSolve(this.scrambleId);
-            } else if (!this.isSolving) {
+            // start a new solve if we're not doing anything
+            if (!this.inspecting && !this.solving) {
                 this.scramble();
             }
+
+            // if we're inspecting, transition to solving
+            // doing this removes our countdown from the dom, and this
+            // cancels the timeout from triggering a redundant start
+            if (this.inspecting) {
+                this.beginSolve();
+            }
         },
-        setConfigForPuzzle() {
-            const puzzleConfig = this.$store.getters['user/puzzleConfig'];
+        recordEvent(event) {
+            const offset = Date.now() - this.inspectionStartedAt;
 
-            this.$store.commit('user/setConfig', puzzleConfig(this.puzzleId));
+            this.history.push(`${offset}#${event}`);
         },
-        reset() {
-            this.stopTicking();
+        recordTurn(turn, now = null) {
+            const offset = (now || Date.now()) - this.inspectionStartedAt;
 
-            this.inspectionStartedAt = 0;
-            this.isComplete = false;
-            this.isInspecting = false;
-            this.isSolving = false;
-
-            Object.assign(this.$data, this.$options.data.apply(this));
-
-            this.$refs.puzzle.reset();
+            this.history.push(`${offset}:${turn}`);
         },
         scramble() {
-            this.reset();
+            // reset the state
+            this.dnf = false;
+            this.history = [];
+            this.inspecting = false;
+            this.scrambling = true;
+            this.solveCompletedAt = 0;
+            this.solveCompletedTime = null;
+            this.solveStaretdAt = 0;
+            this.solved = false;
+            this.solving = false;
 
-            // request a new solve from the server, and set the
-            // cube state to the scrambled state of our solve
-            this.scrambleIsLoading = true;
+            // get a scramble from the server, and use an animating
+            // pseudo-scramble as the loading state
+            const scrambleRequest = postCreateScramble(this.puzzle);
+            const pseudoScramble = this.$refs.puzzle.pseudoScramble();
 
-            const request = postCreateScramble(`cube${this.size}`);
-
-            // animate the cube being scrambled. we're only using
-            // this as a loading state, this isn't the real scramble
-            const scramble = new Promise((resolve) => {
-                this.$refs.puzzle.$once('idle', resolve);
-            });
-
-            this.$refs.puzzle.fakeScramble();
-
-            // begin the inspection when we're ready to go
-            Promise.all([request, scramble]).then(([response]) => {
-                // set the state of our scrambled puzzle
+            // update the puzzle's state and begin the inspection
+            Promise.all([scrambleRequest, pseudoScramble]).then(([response]) => {
                 this.scrambleId = response.data.id;
-                this.$refs.puzzle.setCubeState(response.data.scrambledState);
+                this.$refs.puzzle.applyState(response.data.scrambledState);
 
-                // give the cube a sec to render, and away we go
-                cleanTimeout(this, () => {
-                    this.scrambleIsLoading = false;
-                    this.beginInspection();
-                }, 100);
+                this.beginInspection();
             });
-        },
-        startTicking() {
-            this.tickInterval = setInterval(this.tick, 5);
-        },
-        stopTicking() {
-            clearInterval(this.tickInterval);
-        },
-        tick() {
-            if (this.isInspecting || this.isSolving) {
-                this.now = Date.now();
-            }
         },
         turn(turn) {
-            const isPuzzleRotation = /[xyzXYZ]-?\d?$/g.test(turn);
-
-            // disallow any moves that aren't whole-cube turns
-            if (this.isInspecting && !isPuzzleRotation) {
-                return;
-            }
-
-            this.history.push(`${this.time}:${turn}`);
-
-            this.$refs.puzzle.turn(turn);
-        },
-    },
-    watch: {
-        isInspecting(isInspecting) {
-            if (isInspecting) {
-                this.startTicking();
-            }
-        },
-        isSolving(isSolving) {
-            if (!isSolving) {
-                this.stopTicking();
+            if (!this.inspecting || this.$refs.puzzle.isInspectionTurn(turn)) {
+                this.$refs.puzzle.turn(turn);
             }
         },
     },

@@ -28,7 +28,7 @@ export default {
     },
     methods: {
         applyErrors(errors) {
-            Object.keys(errors).forEach(key => {
+            Object.keys(errors).forEach((key) => {
                 const field = this.fields.find(vm => vm.name === key);
 
                 if (field) {

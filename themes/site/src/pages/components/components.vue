@@ -23,7 +23,7 @@
                     v-for="example in examples"
                     class="py-16"
                     :class="{
-                        'border-b border-grey-3': true,   
+                        'border-b border-grey-3': true,
                     }"
                     :key="example.key">
                     <component :is="example.component" />

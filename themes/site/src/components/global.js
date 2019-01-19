@@ -16,7 +16,7 @@ import inputComponent from './ui/input.vue';
 import marginComponent from './containers/margin.vue';
 import pageComponent from './containers/page.vue';
 import puzzleComponent from './puzzle/puzzle.vue';
-import puzzleControllerComponent from './puzzle/controller.vue';
+// import puzzleControllerComponent from './puzzle/controller.vue';
 import selectComponent from './ui/select.vue';
 import spinnerComponent from './ui/spinner.vue';
 import tableComponent from './ui/table.vue';
@@ -42,7 +42,7 @@ export default {
     // puzzle
     //
     'v-puzzle': puzzleComponent,
-    'v-puzzle-controller': puzzleControllerComponent,
+    // 'v-puzzle-controller': puzzleControllerComponent,
 
     //
     // transitions

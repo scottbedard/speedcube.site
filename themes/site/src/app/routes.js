@@ -1,5 +1,4 @@
 import defaultLayoutComponent from '@/layouts/default/default.vue';
-import store from './store/store';
 
 export default [
 
@@ -84,7 +83,7 @@ export default [
             //
             {
                 name: 'records',
-                path: '/records',
+                path: '/records/:puzzle',
                 component: () => import('@/pages/records/records.vue' /* webpackChunkName: "records" */),
             },
 
@@ -122,12 +121,14 @@ export default [
             // solve
             //
             {
-                meta: {
-                    cubeSize: 3,
-                },
                 name: 'solve',
-                path: 'solve',
+                path: 'solve/:puzzle',
                 component: () => import('@/pages/solve/solve.vue' /* webpackChunkName: "solve" */),
+            },
+
+            {
+                path: '/solve',
+                redirect: '/solve/3x3',
             },
 
             //

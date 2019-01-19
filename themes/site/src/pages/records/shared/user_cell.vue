@@ -1,4 +1,7 @@
 <script>
+import moment from 'moment';
+import { timestampFormat } from '@/app/constants';
+
 export default {
     render(h, context) {
         const { row, value } = context.props;
@@ -7,8 +10,8 @@ export default {
             <div class="font-bold mb-2">
                 { value.name || value.username || 'Anonymous' }
             </div>
-            <div class="text-xs">
-                { row.createdAt }
+            <div class="font-light text-xs text-grey-6">
+                { moment(row.createdAt, timestampFormat).format('MMMM Do, YYYY') }
             </div>
         </div>;
     },

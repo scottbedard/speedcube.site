@@ -10,6 +10,13 @@ class Scramble extends Model
     use \October\Rain\Database\Traits\Validation;
 
     /**
+     * @var array Attributes
+     */
+    public $attributes = [
+        'scrambled_state' => '{}',
+    ];
+
+    /**
      * @var string The database table used by the model.
      */
     public $table = 'speedcube_speedcube_scrambles';
@@ -38,7 +45,9 @@ class Scramble extends Model
     /**
      * @var array Jsonable fields
      */
-    protected $jsonable = [];
+    protected $jsonable = [
+        'scrambled_state',
+    ];
 
     /**
      * @var array Relations
@@ -74,15 +83,10 @@ class Scramble extends Model
         $cubePath = base_path('themes/site/node_modules/bedard-cube/cli.js');
 
         $sizeArg = escapeshellarg([
-            'cube2' => 2,
-            'cube3' => 3,
-            'cube4' => 4,
-            'cube5' => 5,
-            'cube6' => 6,
-            'cube7' => 7,
-            'cube8' => 8,
-            'cube9' => 9,
-            'cube10' => 10,
+            '2x2' => 2,
+            '3x3' => 3,
+            '4x4' => 4,
+            '5x5' => 5,
         ][$this->puzzle]);
 
         return exec("node {$cubePath} scramble {$sizeArg}");
@@ -100,15 +104,10 @@ class Scramble extends Model
         $scrambleArg = escapeshellarg($scramble);
 
         $sizeArg = escapeshellarg([
-            'cube2' => 2,
-            'cube3' => 3,
-            'cube4' => 4,
-            'cube5' => 5,
-            'cube6' => 6,
-            'cube7' => 7,
-            'cube8' => 8,
-            'cube9' => 9,
-            'cube10' => 10,
+            '2x2' => 2,
+            '3x3' => 3,
+            '4x4' => 4,
+            '5x5' => 5,
         ][$this->puzzle]);
 
         $this->attributes['scramble'] = $scramble;

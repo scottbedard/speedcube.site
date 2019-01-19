@@ -4,7 +4,7 @@ import { bindAll } from 'spyfu-vue-functional';
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { dark, padded } = context.props;
+        const { padded } = context.props;
 
         if (padded) {
             bindings.class.push('px-6 trans-padding md:px-8');

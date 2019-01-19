@@ -12,7 +12,7 @@ export function deleteAvatar() {
 /**
  * Get a user's stats overview.
  *
- * @param  {string}     username 
+ * @param  {string}     username
  * @return {Promise}
  */
 export function getOverview(username) {
@@ -30,8 +30,8 @@ export function getSignout() {
 
 /**
  * Upload a profile photo.
- * 
- * @param  {Object}     avatar 
+ *
+ * @param  {Object}     avatar
  * @return {Promise}
  */
 export function postProfilePhoto(avatar) {
@@ -64,7 +64,7 @@ export function postRegister(payload) {
  * Reset a user's password.
  *
  * @param  {Object}     payload
- * @return {Promise} 
+ * @return {Promise}
  */
 export function postResetPassword(payload) {
     return axios.post('/api/rainlab/user/reset-password', payload);
@@ -74,7 +74,7 @@ export function postResetPassword(payload) {
  * Submit a password reset request.
  *
  * @param  {Object}     payload
- * @return {Promise} 
+ * @return {Promise}
  */
 export function postSendResetEmail(payload) {
     return axios.post('/api/rainlab/user/send-reset-email', payload);

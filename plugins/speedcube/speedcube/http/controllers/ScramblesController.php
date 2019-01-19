@@ -36,7 +36,7 @@ class ScramblesController extends ApiController
 
         return $this->success([
             'id' => $scramble->id,
-            'scrambled_state' => json_decode($scramble->scrambled_state, true),
+            'scrambled_state' => $scramble->scrambled_state,
         ]);
     }
 }
