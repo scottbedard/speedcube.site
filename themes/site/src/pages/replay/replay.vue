@@ -4,7 +4,7 @@
             <template v-if="!loading">
                 <!-- header -->
                 <h1 class="font-thin mb-4 text-center">
-                    Replay of {{ solve.user.username }}'s {{ solveTitle }} solve
+                    Replay of {{ username }}'s {{ solveTitle }} solve
                     <!-- <div class="flex flex-wrap justify-center text-lg text-grey-6">
                         <div class="w-full md:w-auto">{{ solve.time | shortTimer }} seconds</div>
                         <div class="w-full px-4 md:w-auto">&mdash;</div>
@@ -13,7 +13,7 @@
                 </h1>
 
                 <div class="text-center text-grey-6">
-                    <time :datetime="solve.createdAt">{{ solve.createdAt | datestamp }}</time>
+                    <time :datetime="solve.createdAt">{{ createdAt | datestamp }}</time>
                 </div>
             </template>
 
@@ -115,6 +115,9 @@ export default {
         };
     },
     computed: {
+        createdAt() {
+            return get(this.solve, 'createdAt', '');
+        },
         puzzle() {
             // get the puzzle from our scramble
             return get(this.solve, 'scramble.puzzle', '');
@@ -142,6 +145,9 @@ export default {
                     turn,
                 };
             });
+        },
+        username() {
+            return get(this.solve, 'user.username', '');
         },
     },
     methods: {
@@ -216,12 +222,21 @@ export default {
                 const { solve } = response.data;
 
                 this.solve = solve;
-            }, () => {
+            }, (err) => {
                 // failed
+                this.$router.push({
+                    name: 'solve',
+                    params: {
+                        puzzle: '3x3',
+                    },
+                });
             }).finally(() => {
                 // complete
                 this.loading = false;
-                this.$refs.puzzle.applyState(this.solve.scramble.scrambledState);
+
+                if (typeof this.solve.id !== 'undefined') {
+                    this.$refs.puzzle.applyState(this.solve.scramble.scrambledState);
+                }
             });
         },
         onKeyup(e) {
