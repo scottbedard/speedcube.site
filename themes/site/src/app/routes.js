@@ -1,5 +1,4 @@
 import defaultLayoutComponent from '@/layouts/default/default.vue';
-import store from './store/store';
 
 export default [
 

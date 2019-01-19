@@ -13,8 +13,6 @@
 </template>
 
 <script>
-import { get } from 'lodash-es';
-
 export default {
     props: [
         'text',

@@ -5,11 +5,6 @@
                 <!-- header -->
                 <h1 class="font-thin mb-4 text-center">
                     Replay of {{ username }}'s {{ solveTitle }} solve
-                    <!-- <div class="flex flex-wrap justify-center text-lg text-grey-6">
-                        <div class="w-full md:w-auto">{{ solve.time | shortTimer }} seconds</div>
-                        <div class="w-full px-4 md:w-auto">&mdash;</div>
-                        <div class="w-full md:w-auto">{{ solve.createdAt | datestamp }}</div>
-                    </div> -->
                 </h1>
 
                 <div class="text-center text-grey-6">
@@ -73,7 +68,7 @@
 </template>
 
 <script>
-import { bindExternalEvent, cleanTimeout } from '@/app/utils/component';
+import { bindExternalEvent } from '@/app/utils/component';
 import { formatShortTime } from '@/app/utils/string';
 import { getSolve } from '@/app/repositories/solves';
 import { get } from 'lodash-es';
@@ -125,7 +120,6 @@ export default {
         solveTitle() {
             const time = get(this.solve, 'time', 0);
             const shortTime = formatShortTime(time);
-            const seconds = Math.floor(time / 1000);
             const minutes = Math.floor(time / 60000);
 
             return minutes < 1
@@ -133,12 +127,12 @@ export default {
                 : `${shortTime} minute`;
         },
         solution() {
-            return get(this.solve, 'solution', '').split(' ').map(move => {
+            return get(this.solve, 'solution', '').split(' ').map((move) => {
                 const [offset, turnOrEvent] = move.split(/[:#]/);
 
                 const turn = move.includes(':') && turnOrEvent;
                 const event = move.includes('#') && turnOrEvent;
-                
+
                 return {
                     event,
                     offset: parseInt(offset, 10),
@@ -165,8 +159,8 @@ export default {
                     this.queueTimeout(() => {
                         this.$refs.puzzle.turn(turn);
                     }, offset);
-                } 
-                
+                }
+
                 // transition to the solving phase
                 else if (event === 'START') {
                     this.queueTimeout(() => {
@@ -188,7 +182,7 @@ export default {
 
             // animate the remaining moves
             remainingMoves.forEach((move) => {
-                const { event, offset, turn } = move;
+                const { offset, turn } = move;
 
                 if (turn) {
                     this.queueTimeout(() => {
@@ -225,7 +219,7 @@ export default {
                 const { solve } = response.data;
 
                 this.solve = solve;
-            }, (err) => {
+            }, () => {
                 // failed
                 this.$router.push({
                     name: 'solve',

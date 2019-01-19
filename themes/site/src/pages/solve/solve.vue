@@ -204,8 +204,6 @@ export default {
                 const { solve } = response.data;
 
                 this.solves.push(solve);
-            }, (err) => {
-                // failed
             });
         },
         onEscapeUp() {
@@ -226,7 +224,6 @@ export default {
                     this.turn(turn);
                 }
             }
-
         },
         onSpaceUp() {
             // start a new solve if we're not doing anything
@@ -267,12 +264,12 @@ export default {
             // pseudo-scramble as the loading state
             const scrambleRequest = postCreateScramble(this.puzzle);
             const pseudoScramble = this.$refs.puzzle.pseudoScramble();
-            
+
             // update the puzzle's state and begin the inspection
             Promise.all([scrambleRequest, pseudoScramble]).then(([response]) => {
                 this.scrambleId = response.data.id;
                 this.$refs.puzzle.applyState(response.data.scrambledState);
-                
+
                 this.beginInspection();
             });
         },

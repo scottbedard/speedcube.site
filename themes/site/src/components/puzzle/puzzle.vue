@@ -68,10 +68,10 @@ export default {
             this.renderPuzzle();
             this.render();
         },
-        onQueueChange() {            
+        onQueueChange() {
             if (!this.isTurning) {
                 const turn = this.queue[0];
-                
+
                 if (turn) {
                     this.isTurning = true;
                     this.$emit('turn-start', turn);
@@ -79,7 +79,7 @@ export default {
                     this.$options.puzzle.turn(turn).then(() => {
                         this.isTurning = false;
                         this.queue.shift();
-                        
+
                         this.$emit('turn-end', this.isSolved());
                     });
                 }
@@ -157,7 +157,7 @@ export default {
         trackContainerWidth() {
             const sync = () => {
                 this.containerWidth = this.$el.offsetWidth;
-            }
+            };
 
             sync();
 

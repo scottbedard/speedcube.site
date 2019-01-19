@@ -38,9 +38,9 @@
 </template>
 
 <script>
+import { getOverview } from '@/app/repositories/user';
 import recordsComponent from './records/records.vue';
 import solvesComponent from './solves/solves.vue';
-import { getOverview } from '@/app/repositories/user';
 
 export default {
     created() {

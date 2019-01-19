@@ -4,7 +4,7 @@ import { bindAll } from 'spyfu-vue-functional';
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { disabled, loading, primary, size, tag, to } = context.props;
+        const { loading, primary, size, tag, to } = context.props;
 
         //
         // primary

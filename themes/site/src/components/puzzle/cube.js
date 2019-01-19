@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import * as THREE from 'three';
 import Cube from 'bedard-cube';
 import { cleanTimeout } from '@/app/utils/component';
@@ -5,7 +6,7 @@ import { cleanTimeout } from '@/app/utils/component';
 
 /**
  * Inspection durations.
- * 
+ *
  * @const {Object}
  */
 const inspectionDurations = {
@@ -17,7 +18,7 @@ const inspectionDurations = {
 
 /**
  * Length of scrambling animations by puzzle id.
- * 
+ *
  * @const {Object}
  */
 const pseudoScrambleLengths = {
@@ -29,8 +30,8 @@ const pseudoScrambleLengths = {
 
 /**
  * Turn the puzzle.
- * 
- * @param  {Object}     cube 
+ *
+ * @param  {Object}     cube
  * @param  {string}     turn
  * @return {Promise}
  */
@@ -38,7 +39,6 @@ function applyTurn(cube, turn) {
     const fps = 60;
     const parsedTurn = cube.model.parseTurn(turn);
     const { turnDuration } = cube.config;
-    const { axis, degrees } = getTurnAxisAndDegrees(parsedTurn);
 
     // create a 3d object to represent our turn. we will attach the
     // sticker objects to this and use it to turn all stickers together
@@ -58,11 +58,11 @@ function applyTurn(cube, turn) {
 
     // attach our turn object to the scene
     cube.vm.$options.scene.add(turnObj);
-    
-    return new Promise(resolve => {
+
+    return new Promise((resolve) => {
         const { axis, degrees } = getTurnAxisAndDegrees(parsedTurn);
 
-        for (let i = 0; i <= fps; i+= 1) {
+        for (let i = 0; i <= fps; i += 1) {
             const progress = i / fps;
             const timeout = progress * turnDuration;
 
@@ -87,14 +87,14 @@ function applyTurn(cube, turn) {
 
 /**
  * Create 3d objects to represent each sticker.
- * 
+ *
  * @param  {Cube}   cube
  * @return {void}
  */
 function attachStickers(cube) {
     const geometry = stickerGeometry(cube);
 
-    cube.model.stickers(sticker => {
+    cube.model.stickers((sticker) => {
         sticker.display = new THREE.Object3D();
         sticker.display.name = 'sticker';
 
@@ -162,45 +162,45 @@ function getStickersEffectedByTurn(cube, parsedTurn) {
     // get the slices being turned
     if (target === 'U') {
         stickers.push(
-            ...cube.model.state.B.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
-            ...cube.model.state.R.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
-            ...cube.model.state.F.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
-            ...cube.model.state.L.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
+            ...cube.model.state.B.filter((s, i) => (wide ? rowMap[i] < depth : rowMap[i] === zeroDepth)),
+            ...cube.model.state.R.filter((s, i) => (wide ? rowMap[i] < depth : rowMap[i] === zeroDepth)),
+            ...cube.model.state.F.filter((s, i) => (wide ? rowMap[i] < depth : rowMap[i] === zeroDepth)),
+            ...cube.model.state.L.filter((s, i) => (wide ? rowMap[i] < depth : rowMap[i] === zeroDepth)),
         );
     } else if (target === 'L') {
         stickers.push(
-            ...cube.model.state.U.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
-            ...cube.model.state.F.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
-            ...cube.model.state.D.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
-            ...cube.model.state.B.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+            ...cube.model.state.U.filter((s, i) => (wide ? colMap[i] < depth : colMap[i] === zeroDepth)),
+            ...cube.model.state.F.filter((s, i) => (wide ? colMap[i] < depth : colMap[i] === zeroDepth)),
+            ...cube.model.state.D.filter((s, i) => (wide ? colMap[i] < depth : colMap[i] === zeroDepth)),
+            ...cube.model.state.B.filter((s, i) => (wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth)),
         );
     } else if (target === 'F') {
         stickers.push(
-            ...cube.model.state.U.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
-            ...cube.model.state.R.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
-            ...cube.model.state.D.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
-            ...cube.model.state.L.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+            ...cube.model.state.U.filter((s, i) => (wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth)),
+            ...cube.model.state.R.filter((s, i) => (wide ? colMap[i] < depth : colMap[i] === zeroDepth)),
+            ...cube.model.state.D.filter((s, i) => (wide ? rowMap[i] < depth : rowMap[i] === zeroDepth)),
+            ...cube.model.state.L.filter((s, i) => (wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth)),
         );
     } else if (target === 'R') {
         stickers.push(
-            ...cube.model.state.U.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
-            ...cube.model.state.B.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
-            ...cube.model.state.D.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
-            ...cube.model.state.F.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+            ...cube.model.state.U.filter((s, i) => (wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth)),
+            ...cube.model.state.B.filter((s, i) => (wide ? colMap[i] < depth : colMap[i] === zeroDepth)),
+            ...cube.model.state.D.filter((s, i) => (wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth)),
+            ...cube.model.state.F.filter((s, i) => (wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth)),
         );
     } else if (target === 'B') {
         stickers.push(
-            ...cube.model.state.U.filter((s, i) => wide ? rowMap[i] < depth : rowMap[i] === zeroDepth),
-            ...cube.model.state.L.filter((s, i) => wide ? colMap[i] < depth : colMap[i] === zeroDepth),
-            ...cube.model.state.D.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
-            ...cube.model.state.R.filter((s, i) => wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth),
+            ...cube.model.state.U.filter((s, i) => (wide ? rowMap[i] < depth : rowMap[i] === zeroDepth)),
+            ...cube.model.state.L.filter((s, i) => (wide ? colMap[i] < depth : colMap[i] === zeroDepth)),
+            ...cube.model.state.D.filter((s, i) => (wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth)),
+            ...cube.model.state.R.filter((s, i) => (wide ? colMap[i] >= reverseDepth : colMap[i] === reverseDepth)),
         );
     } else if (target === 'D') {
         stickers.push(
-            ...cube.model.state.B.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
-            ...cube.model.state.R.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
-            ...cube.model.state.F.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
-            ...cube.model.state.L.filter((s, i) => wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth),
+            ...cube.model.state.B.filter((s, i) => (wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth)),
+            ...cube.model.state.R.filter((s, i) => (wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth)),
+            ...cube.model.state.F.filter((s, i) => (wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth)),
+            ...cube.model.state.L.filter((s, i) => (wide ? rowMap[i] >= reverseDepth : rowMap[i] === reverseDepth)),
         );
     }
 
@@ -209,44 +209,44 @@ function getStickersEffectedByTurn(cube, parsedTurn) {
 
 /**
  * Get the axis and rotation of a turn.
- * 
+ *
  * @param  {Cube}   cube
  * @param  {Object} parsedTurn
  * @return {Array}
  */
 export function getTurnAxisAndDegrees(parsedTurn) {
     const { target, rotation } = parsedTurn;
-    let axis, degrees;
+    let axis;
+    let degrees;
 
     // helper function to get turn degrees. note that the
     // clockwise / counter-clickwise degrees might seem
     // backwards. this is because we're turning from the
     // context of our scene's world axis, not the face.
-    const deg = (cw, ccw) => rotation === 2 ? 180 : (rotation === -1 ? ccw : cw);
+    /* eslint-disable-next-line no-nested-ternary */
+    const deg = (cw, ccw) => (rotation === 2 ? 180 : (rotation === -1 ? ccw : cw));
 
     if (['X', 'Y', 'Z'].includes(target)) {
         axis = target.toLowerCase();
         degrees = deg(-90, 90);
-    } else {
-        if (target === 'U') {
-            axis = 'y';
-            degrees = deg(-90, 90);
-        } else if (target === 'L') {
-            axis = 'x';
-            degrees = deg(90, -90);
-        } else if (target === 'F') {
-            axis = 'z';
-            degrees = deg(-90, 90);
-        } else if (target === 'R') {
-            axis = 'x';
-            degrees = deg(-90, 90);
-        } else if (target === 'B') {
-            axis = 'z';
-            degrees = deg(90, -90);
-        } else if (target === 'D') {
-            axis = 'y';
-            degrees = deg(90, -90);
-        }  
+    } else if (target === 'U') {
+        axis = 'y';
+        degrees = deg(-90, 90);
+    } else if (target === 'L') {
+        axis = 'x';
+        degrees = deg(90, -90);
+    } else if (target === 'F') {
+        axis = 'z';
+        degrees = deg(-90, 90);
+    } else if (target === 'R') {
+        axis = 'x';
+        degrees = deg(-90, 90);
+    } else if (target === 'B') {
+        axis = 'z';
+        degrees = deg(90, -90);
+    } else if (target === 'D') {
+        axis = 'y';
+        degrees = deg(90, -90);
     }
 
     return { axis, degrees };
@@ -254,12 +254,11 @@ export function getTurnAxisAndDegrees(parsedTurn) {
 
 /**
  * Position the stickers.
- * 
+ *
  * @param  {Cube}       cube
- * @param  {boolean}    initial     
  * @return {void}
  */
-function positionStickers(cube, initial = false) {
+function positionStickers(cube) {
     const { scene } = cube.vm.$options;
     const stickerSize = 1000 / cube.cubeLayers;
     const halfCubeSize = 500;
@@ -275,7 +274,7 @@ function positionStickers(cube, initial = false) {
 
     cube.model.stickers(sticker => scene.add(sticker.display));
 
-    // rotate, position, and translate 
+    // rotate, position, and translate
     function rotate(sticker, x, y) {
         if (x) sticker.display.rotation.x = degToRad(x);
         if (y) sticker.display.rotation.y = degToRad(y);
@@ -292,8 +291,8 @@ function positionStickers(cube, initial = false) {
         const origin = -halfCubeSize + halfStickerSize;
         const row = cube.rowMap[i];
 
-        const x = origin + (col * stickerSize) + (col * spacing) - spacingOffset;
-        const y = origin + (row * stickerSize) + (row * spacing) - spacingOffset;
+        const x = (origin + (col * stickerSize) + (col * spacing)) - spacingOffset;
+        const y = (origin + (row * stickerSize) + (row * spacing)) - spacingOffset;
 
         if (x) sticker.display.translateX(x);
         if (y) sticker.display.translateY(y * -1);
@@ -337,7 +336,7 @@ function positionStickers(cube, initial = false) {
 
 /**
  * Threejs geometry to represent a sticker.
- * 
+ *
  * @param  {Cube}
  * @return {ShapeBufferGeometry}
  */
@@ -364,9 +363,9 @@ function stickerGeometry(cube) {
 /**
  * Update the a turn based on the progress.
  *
- * @param {Cube} cube 
- * @param {Object} parsedTurn 
- * @param {number} progress 
+ * @param {Cube} cube
+ * @param {Object} parsedTurn
+ * @param {number} progress
  */
 function updateTurn(cube, turnObj, axis, degrees, progress) {
     turnObj.rotation[axis] = degToRad(progress * degrees);
@@ -374,10 +373,9 @@ function updateTurn(cube, turnObj, axis, degrees, progress) {
 }
 
 export default class {
-
     /**
      * Constructor.
-     * 
+     *
      * @param {Vue} vue
      */
     constructor(vm) {
@@ -392,7 +390,7 @@ export default class {
 
     /**
      * Default config.
-     * 
+     *
      * @return {Object}
      */
     get config() {
@@ -419,7 +417,7 @@ export default class {
 
     /**
      * Default controls.
-     * 
+     *
      * @return {Object}
      */
     get controls() {
@@ -437,7 +435,7 @@ export default class {
             O: 'B-',
             S: 'D',
             L: 'D-',
-        
+
             // cube rotations
             A: 'Y-',
             ';': 'Y',
@@ -451,7 +449,7 @@ export default class {
             M: 'X-',
             Q: 'Z-',
             P: 'Z',
-        }
+        };
     }
 
     /**
@@ -465,7 +463,7 @@ export default class {
 
     /**
      * Determine the number of layers in our cube.
-     * 
+     *
      * @return {number}
      */
     get cubeLayers() {
@@ -484,7 +482,7 @@ export default class {
 
     /**
      * Apply a state to the puzzle.
-     * 
+     *
      * @param  {Object} state
      * @return {void}
      */
@@ -492,7 +490,7 @@ export default class {
         // because of the camel casing middleware, our scrambled state
         // keys will be lower cased. rather than messing with the http
         // layer, we'll just cast them to uppercase before applying.
-        Object.keys(state).forEach(rawFace => {
+        Object.keys(state).forEach((rawFace) => {
             const normalizedFace = rawFace.toUpperCase();
 
             this.model.state[normalizedFace].forEach((sticker, index) => {
@@ -506,7 +504,7 @@ export default class {
 
     /**
      * Determine the size of our canvas.
-     * 
+     *
      * @return {Object}
      */
     getCanvasDimensions() {
@@ -525,7 +523,7 @@ export default class {
 
     /**
      * Get the inspection duration in milliseconds
-     * 
+     *
      * @return {number}
      */
     getInspectionDuration() {
@@ -534,18 +532,19 @@ export default class {
 
     /**
      * Translate a keypress into a turn.
-     * 
+     *
      * @param  {KeyboardEvent}
      * @return {string}
      */
     getTurnFromKeyboardEvent(e) {
         const key = String(e.key).toUpperCase();
-
         const turn = this.controls[key];
 
         if (turn) {
             return turn;
         }
+
+        return undefined;
     }
 
     /**
@@ -571,7 +570,7 @@ export default class {
 
     /**
      * Simulate scrambling the puzzle.
-     * 
+     *
      * @return {Promise}
      */
     pseudoScramble() {
@@ -595,8 +594,8 @@ export default class {
         return new Promise((resolve) => {
             const turn = () => {
                 applyTurn(this, scramble.shift())
-                    .then(() => scramble.length ? turn() : resolve());
-            }
+                    .then(() => (scramble.length ? turn() : resolve()));
+            };
 
             turn();
         }).then(() => {
@@ -606,7 +605,7 @@ export default class {
 
     /**
      * Render
-     * 
+     *
      * @return {void}
      */
     render() {

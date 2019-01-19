@@ -64,8 +64,8 @@
 </template>
 
 <script>
-import accountHeaderComponent from '../account_header/account_header.vue';
 import { postUser } from '@/app/repositories/user';
+import accountHeaderComponent from '../account_header/account_header.vue';
 
 export default {
     data() {
@@ -85,7 +85,7 @@ export default {
             postUser({
                 password: this.password,
                 password_confirmation: this.passwordConfirmation,
-            }).then((response) => {
+            }).then(() => {
                 // success
                 this.$alert('Your password has been changed', { type: 'success' });
             }, (err) => {

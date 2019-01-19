@@ -18,23 +18,19 @@ export default {
     computed: {
         chartData() {
             return {
-                datasets: this.solvedPuzzles.map(puzzle => {
-                    return {
-                        label: puzzle,
-                        fill: false,
-                        backgroundColor: puzzles[puzzle].color,
-                        pointRadius: 5,
-                        pointHoverRadius: 6,
-                        data: this.groupedSolves[puzzle].map(solve => {
-                            return {
-                                solve,
-                                x: moment(solve.createdAt, timestampFormat).unix(),
-                                y: solve.time,
-                            };
-                        }),
-                    }
-                }),
-            }
+                datasets: this.solvedPuzzles.map(puzzle => ({
+                    label: puzzle,
+                    fill: false,
+                    backgroundColor: puzzles[puzzle].color,
+                    pointRadius: 5,
+                    pointHoverRadius: 6,
+                    data: this.groupedSolves[puzzle].map(solve => ({
+                        solve,
+                        x: moment(solve.createdAt, timestampFormat).unix(),
+                        y: solve.time,
+                    })),
+                })),
+            };
         },
         chartOptions() {
             const vm = this;
@@ -67,7 +63,7 @@ export default {
                     if (point) {
                         const { _datasetIndex, _index } = point;
                         const solve = vm.findSolveInChartData(_datasetIndex, _index);
-                        
+
                         if (solve) {
                             vm.onSolveClick(solve);
                         }
@@ -88,7 +84,7 @@ export default {
                             ticks: {
                                 beginAtZero: true,
                                 fontColor: '#7B8794',
-                                callback: val => val > 0 ? `${(val / 1000)}s` : '',
+                                callback: val => (val > 0 ? `${(val / 1000)}s` : ''),
                             },
                         },
                     ],
@@ -99,7 +95,7 @@ export default {
                         label: (obj) => {
                             const { datasetIndex, index } = obj;
                             const solve = this.findSolveInChartData(datasetIndex, index);
-                            
+
                             return solve
                                 ? formatSolveTime(solve.time)
                                 : 'Error';
@@ -111,7 +107,7 @@ export default {
                             return solve
                                 ? `${moment(solve.createdAt, timestampFormat).format('MMM Do YYYY')}`
                                 : '';
-                        }
+                        },
                     },
                 },
             };
