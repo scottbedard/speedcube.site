@@ -12,32 +12,56 @@
 import moment from 'moment';
 import { formatSolveTime } from '@/app/utils/number';
 import { puzzles, timestampFormat } from '@/app/constants';
+import { get } from 'lodash-es';
 
 export default {
     computed: {
         chartData() {
             return {
-                datasets: [
-                    {
-                        label: '3x3',
+                datasets: this.solvedPuzzles.map(puzzle => {
+                    return {
+                        label: puzzle,
                         fill: false,
-                        backgroundColor: '#ff0000',
-                        data: this.solves.map(solve => {
+                        backgroundColor: puzzles[puzzle].color,
+                        pointRadius: 4,
+                        pointHoverRadius: 5,
+                        data: this.groupedSolves[puzzle].map(solve => {
                             return {
+                                solve,
                                 x: moment(solve.createdAt, timestampFormat).unix(),
                                 y: solve.time,
                             };
                         }),
-                    },
-                ],
-            };
+                    }
+                }),
+            }
         },
         chartOptions() {
+            const vm = this;
+
             return {
+                hover: {
+                    onHover(e) {
+                        const point = this.getElementAtEvent(e);
+
+                        if (point.length) {
+                            e.target.style.cursor = 'pointer';
+                        } else {
+                            e.target.style.cursor = 'default';
+                        }
+                    },
+                },
                 maintainAspectRatio: false,
-                onClick: (e, point) => {
+                onClick(e) {
+                    const point = this.getElementAtEvent(e)[0];
+
                     if (point) {
-                        this.onSolveClick(this.solves[point[0]._index]);
+                        const { _datasetIndex, _index } = point;
+                        const solve = vm.findSolveInChartData(_datasetIndex, _index);
+                        
+                        if (solve) {
+                            vm.onSolveClick(solve);
+                        }
                     }
                 },
                 responsive: true,
@@ -63,30 +87,48 @@ export default {
                 tooltips: {
                     enabled: true,
                     callbacks: {
-                        label: ({ index }) => {
-                            const solve = this.solves[index];
+                        label: (obj) => {
+                            const { datasetIndex, index } = obj;
+                            const solve = this.findSolveInChartData(datasetIndex, index);
                             
-                            return formatSolveTime(solve.time);
+                            return solve
+                                ? formatSolveTime(solve.time)
+                                : 'Error';
                         },
-                        title: (points) => {
-                            const solve = this.solves[points[0].index];
-                            const puzzle = puzzles[solve.scramble.puzzle];
-                            
-                            if (!puzzle) {
-                                return 'Error';
-                            }
+                        title: (obj) => {
+                            const { datasetIndex, index } = obj[0];
+                            const solve = this.findSolveInChartData(datasetIndex, index);
 
-                            return `${puzzle.title}: ${moment(solve.createdAt, timestampFormat).format('MMM Do')}`;
+                            return solve
+                                ? `${moment(solve.createdAt, timestampFormat).format('MMM Do YYYY')}`
+                                : '';
                         }
                     },
                 },
             };
         },
+        groupedSolves() {
+            return this.solves.reduce((acc, solve) => {
+                const puzzle = get(solve, 'scramble.puzzle', 'unknown');
+
+                if (!Array.isArray(acc[puzzle])) {
+                    acc[puzzle] = [];
+                }
+
+                acc[puzzle].push(solve);
+
+                return acc;
+            }, {});
+        },
+        solvedPuzzles() {
+            return Object.keys(this.groupedSolves);
+        },
     },
     methods: {
+        findSolveInChartData(datasetIndex, index) {
+            return get(this.chartData, `datasets[${datasetIndex}].data[${index}].solve`);
+        },
         onSolveClick(solve) {
-            console.log('ok', solve.id);
-
             this.$router.push({
                 name: 'replay',
                 params: {
