@@ -1,6 +1,7 @@
 <?php namespace Speedcube\Speedcube\Models;
 
 use Carbon\Carbon;
+use DB;
 use Speedcube\Speedcube\Classes\Cube;
 use Speedcube\Speedcube\Exceptions\InvalidSolutionException;
 use Model;
@@ -224,6 +225,19 @@ class Solve extends Model
         return $query->pending()->where('created_at', '<', $cutoff);
     }
 
+    public function scopeCountByPuzzle($query)
+    {
+        return $query->leftJoin('speedcube_speedcube_scrambles', 'speedcube_speedcube_scrambles.id', '=', 'scramble_id')
+            ->select('puzzle', DB::raw('count(*) as total'))
+            ->groupBy('puzzle')
+            ->get();
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', 'complete');
+    }
+
     public function scopeDnf($query)
     {
         return $query->where('status', 'dnf');
@@ -232,11 +246,6 @@ class Solve extends Model
     public function scopeFastest($query)
     {
         return $query->orderBy('time', 'asc');
-    }
-
-    public function scopeCompleted($query)
-    {
-        return $query->where('status', 'complete');
     }
 
     public function scopeFindByToken($query, $token)

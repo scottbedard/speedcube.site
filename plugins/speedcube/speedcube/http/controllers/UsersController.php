@@ -35,6 +35,11 @@ class UsersController extends ApiController
                 ])
                 ->get();
 
+            // fetch puzzle breakdown
+            $totals = $user->solves()
+                ->completed()
+                ->countByPuzzle();
+
             // fetch recent completed solves
             $solves = $user
                 ->solves()
@@ -52,6 +57,7 @@ class UsersController extends ApiController
             return $this->success([
                 'records' => $records,
                 'solves' => $solves,
+                'totals' => $totals,
                 'user' => [
                     'avatar' => $user->avatar,
                     'created_at' => (string) $user->created_at,

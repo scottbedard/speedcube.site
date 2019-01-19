@@ -88,4 +88,19 @@ class SolveTest extends PluginTestCase
         $this->assertEquals(1, Solve::dnf()->count());
         $this->assertEquals($dnf->id, Solve::dnf()->first()->id);
     }
+
+    public function test_count_by_puzzle_scope()
+    {
+        $two = Factory::create(new Scramble, ['puzzle' => '2x2']);
+        $three = Factory::create(new Scramble, ['puzzle' => '3x3']);
+
+        Factory::create(new Solve, ['scramble_id' => $two->id]);
+        Factory::create(new Solve, ['scramble_id' => $three->id]);
+        Factory::create(new Solve, ['scramble_id' => $three->id]);
+
+        $totals = Solve::countByPuzzle();
+
+        $this->assertEquals(1, $totals->where('puzzle', '2x2')->first()->total);
+        $this->assertEquals(2, $totals->where('puzzle', '3x3')->first()->total);
+    }
 }
