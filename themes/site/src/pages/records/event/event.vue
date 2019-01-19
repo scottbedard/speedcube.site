@@ -21,7 +21,7 @@
                     <div
                         class="text-center text-grey-darker"
                         slot="empty">
-                        Nobody has completed a {{ event }} solve yet.
+                        Nobody has completed a {{ puzzle }} solve yet.
                     </div>
                 </v-table>
             </div>
@@ -46,6 +46,9 @@ export default {
         };
     },
     computed: {
+        puzzle() {
+            return this.$route.params.puzzle;
+        },
         schema() {
             return [
                 {

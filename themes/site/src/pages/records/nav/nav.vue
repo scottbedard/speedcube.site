@@ -5,8 +5,8 @@
             text="2x2"
             :to="{
                 name: 'records',
-                query: {
-                    event: '2x2',
+                params: {
+                    puzzle: '2x2',
                 },
             }"
         />
@@ -16,8 +16,8 @@
             text="3x3"
             :to="{
                 name: 'records',
-                query: {
-                    event: '3x3',
+                params: {
+                    puzzle: '3x3',
                 },
             }"
         />
@@ -27,8 +27,8 @@
             text="4x4"
             :to="{
                 name: 'records',
-                query: {
-                    event: '4x4',
+                params: {
+                    puzzle: '4x4',
                 },
             }"
         />
@@ -38,8 +38,8 @@
             text="5x5"
             :to="{
                 name: 'records',
-                query: {
-                    event: '5x5',
+                params: {
+                    puzzle: '5x5',
                 },
             }"
         />

@@ -84,7 +84,7 @@ export default [
             //
             {
                 name: 'records',
-                path: '/records',
+                path: '/records/:puzzle',
                 component: () => import('@/pages/records/records.vue' /* webpackChunkName: "records" */),
             },
 
