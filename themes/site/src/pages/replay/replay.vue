@@ -3,8 +3,8 @@
         <v-margin padded>
             <template v-if="!loading">
                 <!-- header -->
-                <h1 class="font-thin mb-4 text-center">
-                    Replay of {{ username }}'s {{ solveTitle }} solve
+                <h1 class="font-thin mb-4 text-center text-grey-6">
+                    <router-link class="text-grey-6" :to="{ name: 'users', params: { username }}">{{ username }}'s</router-link> {{ solveTitle }} solve
                 </h1>
 
                 <div class="text-center text-grey-6">
