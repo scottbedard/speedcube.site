@@ -6,6 +6,7 @@ import checkboxComponent from './ui/checkbox.vue';
 import collapseTransitionComponent from './transitions/collapse.vue';
 import countdownComponent from './ui/countdown.vue';
 import cubeColorPickerComponent from './ui/cube_color_picker.vue';
+import doughnutChartComponent from './charts/doughnut_chart.vue';
 import errorMessageComponent from './ui/error_message.vue';
 import fadeTransitionComponent from './transitions/fade.vue';
 import formComponent from './ui/form.vue';
@@ -16,18 +17,18 @@ import inputComponent from './ui/input.vue';
 import marginComponent from './containers/margin.vue';
 import pageComponent from './containers/page.vue';
 import puzzleComponent from './puzzle/puzzle.vue';
-// import puzzleControllerComponent from './puzzle/controller.vue';
+import scatterChartComponent from './charts/scatter_chart.vue';
 import selectComponent from './ui/select.vue';
 import spinnerComponent from './ui/spinner.vue';
 import tableComponent from './ui/table.vue';
 import timerComponent from './ui/timer.vue';
 import uploadButtonComponent from './ui/upload_button.vue';
-import scatterChartComponent from './charts/scatter_chart.vue';
 
 export default {
     //
     // charts
     //
+    'v-doughnut-chart': doughnutChartComponent,
     'v-scatter-chart': scatterChartComponent,
 
     //

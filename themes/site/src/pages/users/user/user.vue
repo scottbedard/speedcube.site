@@ -19,7 +19,14 @@
                             {{ user.name || user.username }}
                         </h1>
 
-                        <v-solves :solves="solves" />
+                        <v-grid padded>
+                            <v-grid-cell md="4" lg="3">
+                                <v-solve-counts :totals="totals" />
+                            </v-grid-cell>
+                            <v-grid-cell md="8" lg="9">
+                                <v-solves :solves="solves" />
+                            </v-grid-cell>
+                        </v-grid>
                     </template>
 
                     <!-- not found -->
@@ -40,6 +47,7 @@
 <script>
 import { getOverview } from '@/app/repositories/user';
 import recordsComponent from './records/records.vue';
+import solveCountsComponent from './solve_counts/solve_counts.vue';
 import solvesComponent from './solves/solves.vue';
 
 export default {
@@ -50,12 +58,14 @@ export default {
         return {
             overviewIsLoading: false,
             records: [],
+            totals: [],
             solves: [],
             user: null,
         };
     },
     components: {
         'v-records': recordsComponent,
+        'v-solve-counts': solveCountsComponent,
         'v-solves': solvesComponent,
     },
     computed: {
@@ -69,11 +79,12 @@ export default {
 
             getOverview(this.$route.params.username).then((response) => {
                 // success
-                const { records, solves, user } = response.data;
+                const { records, solves, totals, user } = response.data;
 
                 this.user = user;
                 this.solves = solves;
                 this.records = records;
+                this.totals = totals;
             }).finally(() => {
                 // complete
                 this.overviewIsLoading = false;
