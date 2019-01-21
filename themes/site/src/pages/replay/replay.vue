@@ -69,7 +69,7 @@
 
 <script>
 import { bindExternalEvent } from '@/app/utils/component';
-import { formatShortTime } from '@/app/utils/string';
+import { formatShortTimeSentence } from '@/app/utils/string';
 import { getSolve } from '@/app/repositories/solves';
 import { get } from 'lodash-es';
 
@@ -119,12 +119,8 @@ export default {
         },
         solveTitle() {
             const time = get(this.solve, 'time', 0);
-            const shortTime = formatShortTime(time);
-            const minutes = Math.floor(time / 60000);
-
-            return minutes < 1
-                ? `${shortTime} second`
-                : `${shortTime} minute`;
+            
+            return formatShortTimeSentence(time);
         },
         solution() {
             return get(this.solve, 'solution', '').split(' ').map((move) => {

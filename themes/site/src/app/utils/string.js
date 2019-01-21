@@ -14,7 +14,7 @@ export function isEmail(str) {
 /**
  * Format a time value.
  *
- * @param {number} time
+ * @param  {number} time
  * @return {string}
  */
 export function formatTime(time) {
@@ -28,11 +28,26 @@ export function formatTime(time) {
 /**
  * Format a time value, showing minutes only if necessary.
  *
- * @param {number} time
+ * @param  {number} time
  * @return {string}
  */
 export function formatShortTime(time) {
     const formattedTime = formatTime(time);
 
     return formattedTime.replace(/^[0:]*/, '');
+}
+
+/**
+ * Format a time to be short sentence.
+ *
+ * @param  {number} time
+ * @return {string}
+ */
+export function formatShortTimeSentence(time) {
+    const shortTime = formatShortTime(time);
+    const minutes = Math.floor(time / 60000);
+
+    return minutes < 1
+        ? `${shortTime} second`
+        : `${shortTime} minute`;
 }

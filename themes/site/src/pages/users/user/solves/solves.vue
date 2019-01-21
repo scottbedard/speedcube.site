@@ -1,16 +1,19 @@
 <template>
-    <v-card padded>
-        <v-scatter-chart
-            :chart-data="chartData"
-            :height="240"
-            :options="chartOptions"
-        />
-    </v-card>
+    <div>
+        <h3 class="mb-4 text-grey-6 text-xl">Recent solves</h3>
+        <v-card padded>
+            <v-scatter-chart
+                :chart-data="chartData"
+                :height="240"
+                :options="chartOptions"
+            />
+        </v-card>
+    </div>
 </template>
 
 <script>
 import moment from 'moment';
-import { formatSolveTime } from '@/app/utils/number';
+import { formatShortTimeSentence } from '@/app/utils/string';
 import { puzzles, timestampFormat } from '@/app/constants';
 import { get } from 'lodash-es';
 
@@ -90,14 +93,17 @@ export default {
                     ],
                 },
                 tooltips: {
-                    enabled: true,
+                    backgroundColor: '#1F2933',
+                    bodyFontColor: '#CBD2D9',
+                    bodyFontFamily: "'Open Sans', 'system-ui', 'BlinkMacSystemFont', '-apple-system', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif'",
+                    bodyFontSize: 14,
                     callbacks: {
                         label: (obj) => {
                             const { datasetIndex, index } = obj;
                             const solve = this.findSolveInChartData(datasetIndex, index);
 
                             return solve
-                                ? formatSolveTime(solve.time)
+                                ? formatShortTimeSentence(solve.time)
                                 : 'Error';
                         },
                         title: (obj) => {
@@ -105,10 +111,18 @@ export default {
                             const solve = this.findSolveInChartData(datasetIndex, index);
 
                             return solve
-                                ? `${moment(solve.createdAt, timestampFormat).format('MMM Do YYYY')}`
+                                ? `${puzzles[solve.scramble.puzzle].title} - ${moment(solve.createdAt, timestampFormat).format('MMM Do YYYY')}`
                                 : '';
                         },
                     },
+                    caretSize: 12,
+                    cornerRadius: 3,
+                    displayColors: false,
+                    titleFontColor: '#CBD2D9',
+                    titleFontSize: 14,
+                    titleMarginBottom: 8,
+                    xPadding: 12,
+                    yPadding: 12,
                 },
             };
         },

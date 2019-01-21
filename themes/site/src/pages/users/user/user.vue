@@ -15,9 +15,12 @@
 
                     <!-- user -->
                     <template v-if="user">
-                        <h1 class="mb-4 text-grey-8">
+                        <h1 class="mb-2 text-grey-8">
                             {{ user.name || user.username }}
                         </h1>
+                        <div class="mb-8 text-grey-5 text-sm">
+                            Member since <time :datetime="user.createdAt">{{ user.createdAt | datestamp }}</time>
+                        </div>
 
                         <v-grid padded>
                             <v-grid-cell md="4" lg="3">

@@ -10,6 +10,8 @@ import './directives/autofocus';
 // filters
 //
 import './filters/moment';
+import './filters/numeric';
+import './filters/pluralize';
 import './filters/timer';
 
 //
