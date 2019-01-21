@@ -1,12 +1,33 @@
+<style lang="scss" scoped>
+    .empty {
+        @screen lg {
+            min-height: 240px;
+        }
+    }
+</style>
+
 <template>
     <div>
         <h3 class="mb-4 text-grey-6 text-xl">Recent solves</h3>
         <v-card padded>
-            <v-scatter-chart
-                :chart-data="chartData"
-                :height="240"
-                :options="chartOptions"
-            />
+            <div class="flex items-center justify-center">
+                <div
+                    v-if="solves.length > 0"
+                    key="chart"
+                    class="w-full">
+                    <v-scatter-chart
+                        :chart-data="chartData"
+                        :height="240"
+                        :options="chartOptions"
+                    />
+                </div>
+                <div
+                    v-else
+                    class="empty flex items-center justify-center text-center text-grey-6 w-full"
+                    key="empty">
+                    This users has no recent solves to display.
+                </div>
+            </div>
         </v-card>
     </div>
 </template>
@@ -51,13 +72,7 @@ export default {
                     },
                 },
                 legend: {
-                    labels: {
-                        boxWidth: 16,
-                        fontColor: '#7B8794',
-                        fontSize: 14,
-                        padding: 20,
-                    },
-                    position: 'bottom',
+                    display: false,
                 },
                 maintainAspectRatio: false,
                 onClick(e) {

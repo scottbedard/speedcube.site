@@ -29,7 +29,7 @@ class UsersController extends ApiController
                 ->with([
                     'solve' => function ($solve) {
                         $solve
-                            ->select('id', 'scramble_id', 'time')
+                            ->select('id', 'created_at', 'scramble_id', 'time')
                             ->with('scramble:id,puzzle');
                     },
                 ])

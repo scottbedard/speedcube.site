@@ -10,7 +10,7 @@ export default {
             <div class="font-bold mb-2">
                 { value.name || value.username || 'Anonymous' }
             </div>
-            <div class="font-light text-xs text-grey-6">
+            <div class="font-light text-xs text-grey-7">
                 { moment(row.createdAt, timestampFormat).format('MMMM Do, YYYY') }
             </div>
         </div>;

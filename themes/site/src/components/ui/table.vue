@@ -18,6 +18,7 @@ import { isFunction, isObject } from 'lodash-es';
 function normalizeColumn(col) {
     return {
         align: 'left',
+        verticalAlign: 'top',
         ...col,
     };
 }
@@ -66,14 +67,20 @@ function tr(h, context, row, rowIndex) {
 // row cell
 //
 function rowCell(h, row, rowIndex, col, colIndex) {
-    const { align } = normalizeColumn(col);
+    const { align, verticalAlign } = normalizeColumn(col);
     const bindings = { class: [] };
     const value = row[col.key];
 
+    // horizontal alignment
     if (align === 'right') {
         bindings.class.push('text-right');
     } else {
         bindings.class.push('text-left');
+    }
+
+    // vertical alignment
+    if (verticalAlign === 'top') {
+        bindings.class.push('align-top');
     }
 
     // custom cell types

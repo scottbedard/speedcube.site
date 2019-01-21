@@ -15,19 +15,29 @@
 
                     <!-- user -->
                     <template v-if="user">
-                        <h1 class="mb-2 text-grey-8">
-                            {{ user.name || user.username }}
-                        </h1>
-                        <div class="mb-8 text-grey-5 text-sm">
-                            Member since <time :datetime="user.createdAt">{{ user.createdAt | datestamp }}</time>
+                        <div class="flex items-center mb-8">
+                            <!-- doughnut chart -->
+                            <div v-if="totalSolves > 0" class="mr-4">
+                                <v-solve-counts :totals="totals" />
+                            </div>
+
+                            <!-- user -->
+                            <div>
+                                <h1 class="mb-2 text-grey-8">
+                                    {{ user.name || user.username }}
+                                </h1>
+                                <div class="text-grey-5 text-sm">
+                                    Member since <time :datetime="user.createdAt">{{ user.createdAt | datestamp }}</time>
+                                </div>
+                            </div>
                         </div>
 
                         <v-grid padded>
                             <v-grid-cell md="4" lg="3">
-                                <v-solve-counts :totals="totals" />
+                                <v-records :records="records" />
                             </v-grid-cell>
                             <v-grid-cell md="8" lg="9">
-                                <v-solves :solves="solves" />
+                                <v-recent-solves :solves="solves" />
                             </v-grid-cell>
                         </v-grid>
                     </template>
@@ -49,9 +59,9 @@
 
 <script>
 import { getOverview } from '@/app/repositories/user';
+import recentSolvesComponent from './recent_solves/recent_solves.vue';
 import recordsComponent from './records/records.vue';
 import solveCountsComponent from './solve_counts/solve_counts.vue';
-import solvesComponent from './solves/solves.vue';
 
 export default {
     created() {
@@ -69,11 +79,14 @@ export default {
     components: {
         'v-records': recordsComponent,
         'v-solve-counts': solveCountsComponent,
-        'v-solves': solvesComponent,
+        'v-recent-solves': recentSolvesComponent,
     },
     computed: {
         isLoading() {
             return this.overviewIsLoading;
+        },
+        totalSolves() {
+            return this.totals.reduce((acc, obj) => acc + obj.total, 0);
         },
     },
     methods: {

@@ -2,6 +2,7 @@ import alertComponent from './ui/alert.vue';
 import avatarComponent from './ui/avatar.vue';
 import buttonComponent from './ui/button.vue';
 import cardComponent from './ui/card.vue';
+import cardLinkComponent from './ui/card_link.vue';
 import checkboxComponent from './ui/checkbox.vue';
 import collapseTransitionComponent from './transitions/collapse.vue';
 import countdownComponent from './ui/countdown.vue';
@@ -43,7 +44,6 @@ export default {
     // puzzle
     //
     'v-puzzle': puzzleComponent,
-    // 'v-puzzle-controller': puzzleControllerComponent,
 
     //
     // transitions
@@ -58,6 +58,7 @@ export default {
     'v-avatar': avatarComponent,
     'v-button': buttonComponent,
     'v-card': cardComponent,
+    'v-card-link': cardLinkComponent,
     'v-checkbox': checkboxComponent,
     'v-countdown': countdownComponent,
     'v-cube-color-picker': cubeColorPickerComponent,
