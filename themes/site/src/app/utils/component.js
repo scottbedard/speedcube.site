@@ -1,3 +1,5 @@
+import { isUndefined } from 'lodash-es';
+
 /**
  * Bind an external event to a component.
  *
@@ -35,11 +37,33 @@ export function cleanInterval(vm, callback, timeout) {
  * @param {number}      timeout
  */
 export function cleanTimeout(vm, callback, timeout) {
-    const timeoutId = setTimeout(callback, timeout);
+    // set a clean timeouts container, and bind an event
+    // to the component to clear them our on destroy
+    if (isUndefined(vm.$options._cleanTimeouts)) {
+        vm.$options._cleanTimeouts = [];
 
-    vm.$once('hook:destroyed', () => clearTimeout(timeoutId));
+        vm.$once('hook:destroyed', (id) => {
+            vm.$options._cleanTimeouts.forEach(obj => window.clearTimeout(obj.timeoutId));
+        });
+    }
 
-    return timeoutId;
+    // wrap the timed our callback and keep track of if with
+    // a unique key. we'll use the key to clear the timeout
+    // when our component is destroyed.
+    const key = {};
+    
+    const timeoutId = window.setTimeout(() => {
+        callback();
+
+        const index = vm.$options._cleanTimeouts.findIndex(obj => obj.key === key);
+
+        if (index !== -1) {
+            vm.$options._cleanTimeouts.splice(index, 1);
+        }
+    }, timeout);
+
+    // push the timeout reference onto our array of clean timeouts
+    vm.$options._cleanTimeouts.push({ key, timeoutId });
 }
 
 /**
