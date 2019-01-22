@@ -13,8 +13,8 @@
             Personal Records
         </h3>
 
-        <!-- card -->
-        <v-card>
+        <!-- records -->
+        <v-card v-if="records.length > 0">
             <v-card-link
                 v-for="record in records"
                 :key="record.id"
@@ -36,6 +36,11 @@
                     <div>{{ record.solve.time | shortTimer }}</div>
                 </div>
             </v-card-link>
+        </v-card>
+
+        <!-- empty -->
+        <v-card v-else padded>
+            <div class="leading-normal text-center text-grey-6">No records have been set yet.</div>
         </v-card>
     </div>
 </template>

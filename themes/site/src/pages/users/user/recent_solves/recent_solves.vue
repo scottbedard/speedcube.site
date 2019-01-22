@@ -8,7 +8,7 @@
 
 <template>
     <div>
-        <h3 class="mb-4 text-grey-6 text-xl">Recent solves</h3>
+        <h3 class="mb-4 text-grey-6 text-xl">Recent Solves</h3>
         <v-card padded>
             <div class="flex items-center justify-center">
                 <div
@@ -23,9 +23,9 @@
                 </div>
                 <div
                     v-else
-                    class="empty flex items-center justify-center text-center text-grey-6 w-full"
+                    class="empty flex items-center justify-center leading-normal text-center text-grey-6 w-full"
                     key="empty">
-                    This users has no recent solves to display.
+                    There have been no recent solves.
                 </div>
             </div>
         </v-card>
