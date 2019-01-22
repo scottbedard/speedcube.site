@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { bindExternalEvent } from '@/app/utils/component';
+import { bindExternalEvent, cleanTimeout, clearCleanTimeouts } from '@/app/utils/component';
 import { formatShortTimeSentence } from '@/app/utils/string';
 import { getSolve } from '@/app/repositories/solves';
 import { get } from 'lodash-es';
@@ -104,9 +104,6 @@ export default {
 
             // clock time
             time: null,
-
-            // settimeout ids to from current replay
-            timeoutIds: [],
         };
     },
     computed: {
@@ -152,14 +149,14 @@ export default {
 
                 // turn the puzzle
                 if (turn) {
-                    this.queueTimeout(() => {
+                    cleanTimeout(this, () => {
                         this.$refs.puzzle.turn(turn);
                     }, offset);
                 }
 
                 // transition to the solving phase
                 else if (event === 'START') {
-                    this.queueTimeout(() => {
+                    cleanTimeout(this, () => {
                         this.beginSolve(offset, this.solution.slice(i + 1));
                     }, offset);
 
@@ -181,21 +178,16 @@ export default {
                 const { offset, turn } = move;
 
                 if (turn) {
-                    this.queueTimeout(() => {
+                    cleanTimeout(this, () => {
                         this.$refs.puzzle.turn(turn);
                     }, offset - startTime);
                 }
             });
 
             // add a ticking clock for the duration of the solve
-            this.queueTimeout(() => {
+            cleanTimeout(this, () => {
                 this.completedSolve();
             }, this.solve.time);
-        },
-        clearTimeouts() {
-            this.timeoutIds.forEach(id => window.clearTimeout(id));
-
-            this.timeoutIds = [];
         },
         completedSolve() {
             if (!this.solving) {
@@ -239,8 +231,9 @@ export default {
             }
         },
         replay() {
+            clearCleanTimeouts(this);
+            
             this.applyScrambledState();
-            this.clearTimeouts();
 
             this.inspecting = false;
             this.playing = true;
@@ -250,9 +243,6 @@ export default {
             this.time = null;
 
             this.beginInspection();
-        },
-        queueTimeout(fn, delay) {
-            this.timeoutIds.push(window.setTimeout(fn, delay));
         },
     },
 };

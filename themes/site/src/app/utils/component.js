@@ -32,19 +32,17 @@ export function cleanInterval(vm, callback, timeout) {
 /**
  * Create a timeout that is cleaned up when the vm is destroyed.
  *
- * @param {Vue}         vm
- * @param {Function}    callback
- * @param {number}      timeout
+ * @param  {Vue}        vm
+ * @param  {Function}   callback
+ * @param  {number}     timeout
+ * @return {void}
  */
 export function cleanTimeout(vm, callback, timeout) {
     // set a clean timeouts container, and bind an event
     // to the component to clear them our on destroy
     if (isUndefined(vm.$options._cleanTimeouts)) {
         vm.$options._cleanTimeouts = [];
-
-        vm.$once('hook:destroyed', (id) => {
-            vm.$options._cleanTimeouts.forEach(obj => window.clearTimeout(obj.timeoutId));
-        });
+        vm.$once('hook:destroyed', () => clearCleanTimeouts(vm));
     }
 
     // wrap the timed our callback and keep track of if with
@@ -64,6 +62,20 @@ export function cleanTimeout(vm, callback, timeout) {
 
     // push the timeout reference onto our array of clean timeouts
     vm.$options._cleanTimeouts.push({ key, timeoutId });
+}
+
+/**
+ * Manually clear any clean timeouts a component has queued.
+ * 
+ * @param  {Vue} vm
+ * @return {void}
+ */
+export function clearCleanTimeouts(vm) {
+    if (Array.isArray(vm.$options._cleanTimeouts)) {
+        vm.$options._cleanTimeouts.forEach(obj => window.clearTimeout(obj.timeoutId));
+
+        delete vm.$options._cleanTimeouts;
+    }
 }
 
 /**

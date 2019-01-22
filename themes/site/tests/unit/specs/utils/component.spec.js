@@ -1,5 +1,6 @@
 import {
     cleanTimeout,
+    clearCleanTimeouts,
 } from '@/app/utils/component';
 
 
@@ -23,5 +24,21 @@ describe('component utils', function() {
 
             done();
         }, 40);
+    });
+
+    it('clearCleanTimeouts', function(done) {
+        const stub = sinon.stub();
+
+        vm = mount({
+            created() {
+                cleanTimeout(this, stub, 10);
+                clearCleanTimeouts(this);
+            },
+        });
+
+        setTimeout(() => {
+            expect(stub).not.to.have.been.called;
+            done();
+        }, 20);
     });
 });
