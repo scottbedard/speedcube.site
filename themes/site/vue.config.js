@@ -13,6 +13,9 @@ const resolve = (...args) => path.resolve(__dirname, ...args);
 module.exports = {
     chainWebpack(config) {
         if (isTesting) {
+            // disable eslint in the test environment
+            config.module.rules.delete('eslint');
+
             // mock all axios calls in our testing environment
             config.resolve.alias.set('axios$', resolve('./tests/unit/mocks/axios'));
 
