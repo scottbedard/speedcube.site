@@ -18,6 +18,7 @@ import inputComponent from './ui/input.vue';
 import marginComponent from './containers/margin.vue';
 import pageComponent from './containers/page.vue';
 import puzzleComponent from './puzzle/puzzle.vue';
+import rangeInputComponent from './ui/range_input.vue';
 import scatterChartComponent from './charts/scatter_chart.vue';
 import selectComponent from './ui/select.vue';
 import spinnerComponent from './ui/spinner.vue';
@@ -66,6 +67,7 @@ export default {
     'v-form': formComponent,
     'v-form-field': formFieldComponent,
     'v-input': inputComponent,
+    'v-range-input': rangeInputComponent,
     'v-select': selectComponent,
     'v-spinner': spinnerComponent,
     'v-table': tableComponent,
