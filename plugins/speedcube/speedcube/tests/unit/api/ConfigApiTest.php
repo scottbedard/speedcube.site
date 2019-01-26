@@ -31,6 +31,20 @@ class ConfigApiTest extends PluginTestCase
         $this->assertEquals($config->id, $data['configs'][0]['id']);
     }
 
+    public function test_creating_an_invalid_config()
+    {
+        $user = Factory::registerUser();
+
+        Auth::login($user);
+
+        // omitting a puzzle should cause the request to fail
+        $response = $this->post('/api/speedcube/speedcube/config', [
+            'config' => [],
+        ]);
+
+        $response->assertStatus(500);
+    }
+
     public function test_updating_a_config()
     {
         $user = Factory::registerUser();

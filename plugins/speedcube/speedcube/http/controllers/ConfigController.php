@@ -62,7 +62,7 @@ class ConfigController extends ApiController
                 'configs' => $user->configs()->get(),
             ]);
         } catch (Exception $err) {
-            return $this->failed($err);
+            return $this->failed();
         }
     }
 }
