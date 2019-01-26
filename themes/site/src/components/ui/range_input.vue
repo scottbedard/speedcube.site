@@ -5,8 +5,6 @@
 <template>
     <vue-slider
         v-model="val"
-        tooltip="hover"
-        tooltip-dir="top"
         :bg-style="{
             backgroundColor: '#616E7C',
             border: 'none',
@@ -14,27 +12,31 @@
         :dot-size="20"
         :height="2"
         :lazy="true"
-        :min="min"
         :max="max"
+        :min="min"
         :process-style="{
             backgroundColor: '#0F609B',
         }"
         :slider-style="{
             backgroundColor: '#3E4C59',
-            boxShadow: 'none',
             border: 'none',
-        }">
+            boxShadow: 'none',
+        }"
+        :tooltip="false">
 
-        <!-- tooltip -->
-        <template slot="tooltip" slot-scope="{ value }">
-            <v-card class="mb-1 p-2 text-xs">
-                {{ value }}
-            </v-card>
+        <!-- dot -->
+        <template slot="dot">
+            <div
+                class="bg-grey-3 h-full rounded-half trans-bg w-full hover:bg-grey-4"
+            />
         </template>
     </vue-slider>
 </template>
 
 <script>
+// see slider docs at:
+// https://github.com/NightCatSama/vue-slider-component
+
 import vueSlider from 'vue-slider-component/src/vue2-slider.vue';
 
 export default {
@@ -60,9 +62,6 @@ export default {
             type: Number,
         },
         min: {
-            type: Number,
-        },
-        step: {
             type: Number,
         },
         value: {
