@@ -3,17 +3,43 @@
 namespace Speedcube\Speedcube\Tests\Unit\Api;
 
 use Auth;
+use Speedcube\Speedcube\Models\Config;
 use Speedcube\Speedcube\Tests\Factory;
 use Speedcube\Speedcube\Tests\PluginTestCase;
 
 class ConfigApiTest extends PluginTestCase
 {
+    public function test_fetching_user_configs()
+    {
+        // create and authenticate a user
+        $user = Factory::registerUser();
+        Auth::login($user);
+
+        // create a couple configs for the user
+        $config = Factory::create(new Config, [
+            'config' => [],
+            'puzzle' => 'foo',
+            'user_id' => $user->id,
+        ]);
+
+        // fetch the user's configs
+        $response = $this->get('/api/speedcube/speedcube/config');
+
+        $response->assertStatus(200);
+
+        // the response data should contain an array of config models
+        $data = json_decode($response->getContent(), true);
+
+        $this->assertEquals(1, count($data['configs']));
+    }
+
     public function test_creating_a_config()
     {
+        // create and authenticate a user
         $user = Factory::registerUser();
-
         Auth::login($user);
         
+        // create a new puzzle config
         $response = $this->post('/api/speedcube/speedcube/config', [
             'puzzle' => 'test',
             'config' => [
@@ -23,8 +49,9 @@ class ConfigApiTest extends PluginTestCase
 
         $response->assertStatus(200);
 
+        // the user should now have one config, and all configs
+        // should have been returned in the response
         $config = $user->configs()->first();
-
         $data = json_decode($response->getContent(), true);
 
         $this->assertEquals(1, $user->configs()->count());
@@ -47,26 +74,30 @@ class ConfigApiTest extends PluginTestCase
 
     public function test_updating_a_config()
     {
+        // create and authenticate a user
         $user = Factory::registerUser();
-
         Auth::login($user);
 
-        $response = $this->post('/api/speedcube/speedcube/config', [
-            'puzzle' => 'test',
+        // create a config for us to update
+        $config = Factory::create(new Config, [
             'config' => [
-                'foo' => 'first',
+                'thing' => 1,
             ],
-        ]);
-        
-        $this->assertEquals('first', $user->configs()->first()->config['foo']);
-
-        $response = $this->post('/api/speedcube/speedcube/config', [
-            'puzzle' => 'test',
-            'config' => [
-                'foo' => 'second',
-            ],
+            'puzzle' => 'foo',
+            'user_id' => $user->id,
         ]);
 
-        $this->assertEquals('second', $user->configs()->first()->config['foo']);
+        // update the config
+        $response = $this->post('/api/speedcube/speedcube/config', [
+            'config' => [
+                'thing' => 2,
+            ],
+            'puzzle' => 'foo',
+        ]);
+
+        $response->assertStatus(200);
+
+        // we should now see the updated "thing" value
+        $this->assertEquals(2, $user->configs()->first()->config['thing']);
     }
 }

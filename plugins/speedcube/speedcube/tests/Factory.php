@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Faker;
 use Model;
 use RainLab\User\Models\User;
+use Speedcube\Speedcube\Models\Config;
 use Speedcube\Speedcube\Models\Scramble;
 use Speedcube\Speedcube\Models\Solve;
 
@@ -62,6 +63,7 @@ class Factory
 
         switch (get_class($model)) {
             case 'RainLab\User\Models\User': $seed = self::user($data); break;
+            case 'Speedcube\Speedcube\Models\Config': $seed = self::config($data); break;
             case 'Speedcube\Speedcube\Models\Scramble': $seed = self::scramble($data); break;
             case 'Speedcube\Speedcube\Models\Solve': $seed = self::solve($data); break;
         }
@@ -133,12 +135,23 @@ class Factory
     }
 
     /**
+     * Config
+     */
+    public static function config(array $data = [])
+    {
+        return [
+            'config' => [],
+            'puzzle' => '',
+        ];
+    }
+
+    /**
      * Scramble
      */
     public static function scramble(array $data = [])
     {
         return [
-            'puzzle' => 'cube3',
+            'puzzle' => '3x3',
         ];
     }
 

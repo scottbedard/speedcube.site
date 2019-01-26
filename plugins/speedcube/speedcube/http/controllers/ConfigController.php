@@ -17,6 +17,7 @@ class ConfigController extends ApiController
     public function index()
     {
         $user = Auth::getUser();
+
         $configs = $user->configs()->get();
 
         return $this->success([
