@@ -3,6 +3,7 @@
 namespace Speedcube\Speedcube\Http\Controllers;
 
 use Auth;
+use Exception;
 use Speedcube\Speedcube\Classes\ApiController;
 use Speedcube\Speedcube\Models\Config;
 
@@ -30,30 +31,38 @@ class ConfigController extends ApiController
      */
     public function save()
     {
-        $data = input();
-        $user = Auth::getUser();
+        try {
+            $data = input();
+            $config = array_get($data, 'config', []);
+            $puzzle = array_get($data, 'puzzle');
+            $user = Auth::getUser();
 
-        // find the config being modified
-        $config = $user->configs()->where('puzzle', $data['key'])->first();
+            // update an existing configuration if one exists
+            $existingConfig = $user
+                ->configs()
+                ->where('puzzle', $puzzle)
+                ->first();
 
-        // update the config if it exists
-        if ($config) {
-            $config->config = $data['config'];
-            $config->save();
-        }
+            if ($existingConfig) {
+                $existingConfig->config = $config;
+                $existingConfig->save();
+            }
 
-        // otherwise create a new entry
-        else {
-            Config::create([
-                'config' => $data['config'],
-                'puzzle' => $data['key'],
-                'user_id' => $user->id,
+            // otherwise create a new config model
+            else {
+                Config::create([
+                    'config' => $config,
+                    'puzzle' => $puzzle,
+                    'user_id' => $user->id,
+                ]);
+            }
+
+            // return all of the user's config models
+            return $this->success([
+                'configs' => $user->configs()->get(),
             ]);
+        } catch (Exception $err) {
+            return $this->failed($err);
         }
-        
-        // return all of the user's configs
-        return $this->success([
-            'configs' => $user->configs()->get()->toArray(),
-        ]);
     }
 }
