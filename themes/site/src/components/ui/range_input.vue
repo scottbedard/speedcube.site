@@ -11,7 +11,6 @@
         }"
         :dot-size="20"
         :height="2"
-        :lazy="true"
         :max="max"
         :min="min"
         :process-style="{

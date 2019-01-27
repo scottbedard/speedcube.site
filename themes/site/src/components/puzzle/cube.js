@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import Cube from 'bedard-cube';
 import { cleanTimeout } from '@/app/utils/component';
-
+import { get } from 'lodash-es';
 
 /**
  * Inspection durations.
@@ -373,6 +373,7 @@ function updateTurn(cube, turnObj, axis, degrees, progress) {
 }
 
 export default class {
+
     /**
      * Constructor.
      *
@@ -389,8 +390,8 @@ export default class {
     }
 
     /**
-     * Default config.
-     *
+     * Config.
+     * 
      * @return {Object}
      */
     get config() {
@@ -407,12 +408,12 @@ export default class {
 
         return {
             colors,
-            innerBrightness: 0.4,
-            stickerElevation: 0.1,
-            stickerRadius: 0.1,
-            stickerSpacing: 0.1,
-            turnDuration: 90,
-        };
+            stickerElevation: get(this.vm.config, 'stickerElevation', 10) / 100,
+            stickerSpacing: get(this.vm.config, 'stickerSpacing', 10) / 100,
+            stickerRadius: get(this.vm.config, 'stickerRadius', 10) / 100,
+            innerBrightness: get(this.vm.config, 'innerBrightness', 40) / 100,
+            turnDuration: get(this.vm.config, 'turnDuration', 90),
+        }
     }
 
     /**

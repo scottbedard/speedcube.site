@@ -1,10 +1,10 @@
 <template>
     <v-page padded>
         <v-margin padded>
-
             <!-- puzzle / controller -->
             <v-puzzle
                 ref="puzzle"
+                :config="puzzleConfig"
                 :puzzle="puzzle"
                 @turn-start="recordTurn"
                 @turn-end="completeIfSolved"
@@ -13,9 +13,23 @@
             <!-- controls -->
             <div class="text-center">
                 <v-fade-transition>
+                    <!-- options -->
+                    <div
+                        v-if="optionsAreVisible"
+                        key="options">
+                        <v-options
+                            :config="puzzleConfig"
+                            :options="puzzleOptions"
+                            :puzzle="puzzle"
+                            @close="hideOptions"
+                            @guest-config="setGuestConfig"
+                            @pending="setPendingConfig"
+                        />
+                    </div>
+
                     <!-- scrambling -->
                     <div
-                        v-if="scrambling"
+                        v-else-if="scrambling"
                         key="scrambling"
                     />
 
@@ -58,9 +72,20 @@
                     <div
                         v-else
                         key="idle">
-                        <v-button @click="scramble">
-                            Scramble
-                        </v-button>
+                        <div class="mb-8">
+                            <v-button class="mb-8" @click="scramble">
+                                Scramble
+                            </v-button>
+
+                            <div class="text-xs tracking-wide uppercase">
+                                <a
+                                    class="text-grey-6"
+                                    href="#"
+                                    @click.prevent="onCustomizeClick">
+                                    Customize
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </v-fade-transition>
             </div>
@@ -69,9 +94,12 @@
 </template>
 
 <script>
+import optionsComponent from './options/options.vue';
+import options from './options.js';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postSolve } from '@/app/repositories/solves';
 import { bindExternalEvent } from '@/app/utils/component';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
     created() {
@@ -81,6 +109,9 @@ export default {
         return {
             // did not finish
             dnf: false,
+
+            // guest puzzle config
+            guestConfig: {},
 
             // log of all turns and solve events
             history: [],
@@ -93,6 +124,12 @@ export default {
 
             // inspection start time
             inspectionStartedAt: 0,
+
+            // visibility of puzzle options
+            optionsAreVisible: false,
+
+            // pending puzzle config
+            pendingConfig: null,
 
             // id of the scramble model
             scrambleId: 0,
@@ -119,12 +156,39 @@ export default {
             solved: false,
         };
     },
+    components: {
+        'v-options': optionsComponent,
+    },
     computed: {
+        ...mapGetters('user', [
+            'isAuthenticated',
+        ]),
+        ...mapState('user', [
+            'user',
+        ]),
+        hasOptions() {
+            return Array.isArray(this.puzzleOptions);
+        },
         puzzle() {
             return this.$route.params.puzzle;
         },
         puzzleConfig() {
-            return {};
+            if (this.pendingConfig) {
+                return this.pendingConfig;
+            }
+
+            if (this.isAuthenticated) {
+                const savedConfig = this.user.configs.find(config => config.puzzle === this.puzzle)
+                
+                if (savedConfig) {
+                    return savedConfig.config
+                }
+            }
+            
+            return this.guestConfig;
+        },
+        puzzleOptions() {
+            return options[this.puzzle];
         },
         solution() {
             return this.history.join(' ');
@@ -206,6 +270,13 @@ export default {
                 this.solves.push(solve);
             });
         },
+        hideOptions() {
+            this.optionsAreVisible = false;
+            this.pendingConfig = null;
+        },
+        onCustomizeClick() {
+            this.optionsAreVisible = true;
+        },
         onEscapeUp() {
             // abort the current solve if one is running
             if (this.inspecting || this.solving) {
@@ -226,6 +297,11 @@ export default {
             }
         },
         onSpaceUp() {
+            // do nothing if we're modifying cube options
+            if (this.optionsAreVisible) {
+                return;
+            }
+
             // start a new solve if we're not doing anything
             if (!this.inspecting && !this.solving) {
                 this.scramble();
@@ -248,11 +324,18 @@ export default {
 
             this.history.push(`${offset}:${turn}`);
         },
+        setGuestConfig(guestConfig) {
+            this.guestConfig = guestConfig;
+        },
+        setPendingConfig(pendingConfig) {
+            this.pendingConfig = pendingConfig;
+        },
         scramble() {
             // reset the state
             this.dnf = false;
             this.history = [];
             this.inspecting = false;
+            this.optionsAreVisible = false;
             this.scrambling = true;
             this.solveCompletedAt = 0;
             this.solveCompletedTime = null;

@@ -16,22 +16,15 @@ class ApiController extends Controller
      * @param  Exception $err
      * @return Response
      */
-    public function failed($err = null)
+    public function failed($err = null, $message = 'unknown')
     {
-        if ($err) {
-            Log::error($err);
-        }
-
         if ($err instanceof Exception) {
-            return response([
-                'status' => 'failed',
-                'error' => $err->getMessage(),
-            ], 500);
+            Log::error($err);
         }
 
         return response([
             'status' => 'failed',
-            'error' => $err ?: 'unknown',
+            'error' => $message,
         ], 500);
     }
 

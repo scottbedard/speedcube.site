@@ -6,6 +6,6 @@ export function getConfigs() {
 }
 
 // save a configuration
-export function postConfig(key, config) {
-    return axios.post('/api/speedcube/speedcube/config', { key, config });
+export function postConfig(payload) {
+    return axios.post('/api/speedcube/speedcube/config', payload);
 }

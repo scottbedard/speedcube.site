@@ -12,6 +12,7 @@ export default {
         setConfigStickerRadius: 'config.stickerRadius',
         setConfigStickerScale: 'config.stickerScale',
         setConfigs: 'user.configs',
+        setConfigsAreLoading: 'configsAreLoading',
         setSigninIsLoading: 'signinIsLoading',
         setSignoutIsLoading: 'signoutIsLoading',
         setUser: 'user',

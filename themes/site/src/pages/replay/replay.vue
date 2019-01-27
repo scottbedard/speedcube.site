@@ -16,6 +16,7 @@
             <div class="mb-4">
                 <v-puzzle
                     ref="puzzle"
+                    :config="puzzleConfig"
                     :puzzle="puzzle"
                 />
             </div>
@@ -111,8 +112,10 @@ export default {
             return get(this.solve, 'createdAt', '');
         },
         puzzle() {
-            // get the puzzle from our scramble
             return get(this.solve, 'scramble.puzzle', '');
+        },
+        puzzleConfig() {
+            return get(this.solve, 'config', {});
         },
         solveTitle() {
             const time = get(this.solve, 'time', 0);

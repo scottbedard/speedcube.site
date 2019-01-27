@@ -172,7 +172,7 @@ export default {
         },
     },
     props: {
-        turnConfig: {
+        config: {
             default: () => {},
             type: Object,
         },
@@ -181,12 +181,15 @@ export default {
             required: true,
             type: String,
         },
-        scrambling: {
-            default: false,
-            type: Boolean,
-        },
     },
     watch: {
+        config: {
+            deep: true,
+            handler() {
+                this.renderPuzzle();
+                this.render();
+            },
+        },
         containerWidth: 'resize',
         isMasked: 'onIsMaskedChange',
         puzzle() {

@@ -4,14 +4,29 @@ import {
     postUser,
 } from '@/app/repositories/user';
 
-import { getConfigs } from '@/app/repositories/config';
+import {
+    getConfigs,
+    postConfig,
+} from '@/app/repositories/config';
 
 //
 // actions
 //
 export default {
+    // save a user's puzzle configuration
+    saveConfig({ commit, dispatch }, payload) {
+        const request = postConfig(payload);
+
+        request.then((response) => {
+            // success
+            commit('setConfigs', response.data.configs);
+        });
+
+        return request;
+    },
+
     // authenticate a user
-    signin({ commit }, payload) {
+    signin({ commit, dispatch }, payload) {
         commit('setSigninIsLoading', true);
 
         const authRequest = postSignin(payload);
@@ -20,10 +35,8 @@ export default {
             // success
             commit('setUser', response.data);
 
-            // load related user data
             return Promise.all([
-                // configurations
-                getConfigs().then(res => commit('setConfigs', res.data.configs)),
+                dispatch('syncConfigs'),
             ]);
         }).finally(() => {
             // complete
@@ -45,6 +58,23 @@ export default {
         }).finally(() => {
             // complete
             commit('setSignoutIsLoading', false);
+        });
+
+        return request;
+    },
+
+    // sync a user's configs
+    syncConfigs({ commit }) {
+        const request = getConfigs();
+
+        commit('setConfigsAreLoading', true);
+
+        return request.then((response) => {
+            // success
+            commit('setConfigs', response.data.configs);
+        }).finally(() => {
+            // complete
+            commit('setConfigsAreLoading', false);
         });
 
         return request;
