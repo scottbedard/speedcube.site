@@ -6,6 +6,7 @@ export default {
     '<v-card>': () => import('./card_example.vue'),
     '<v-checkbox>': () => import('./checkbox_example.vue'),
     '<v-collapse-transition>': () => import('./collapse_transition_example.vue'),
+    '<v-color-input>': () => import('./color_input_example.vue'),
     '<v-fade-transition>': () => import('./fade_transition_example.vue'),
     '<v-grid> & <v-grid-cell>': () => import('./grid_example.vue'),
     '<v-input>': () => import('./input_example.vue'),
