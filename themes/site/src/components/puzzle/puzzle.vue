@@ -1,6 +1,7 @@
 <template>
     <div class="text-center">
         <canvas ref="canvas" />
+        <!-- <pre class="text-left text-xs mx-auto max-w-md">{{ config }}</pre> -->
     </div>
 </template>
 
@@ -114,8 +115,6 @@ export default {
 
             // instantiate a camera, and point it at the center of our scene
             this.$options.camera = new THREE.PerspectiveCamera(60, 1, 1, 10000);
-            this.$options.camera.position.set(0, 1000, 2000);
-            this.$options.camera.lookAt(0, 0, 0);
 
             // add some lighting
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -129,10 +128,8 @@ export default {
             // var axesHelper = new THREE.AxesHelper(2500);
             // this.$options.scene.add(axesHelper);
 
-            // render the initial frame
-            this.$nextTick(this.render);
-
             this.$nextTick(() => {
+                this.positionCamera();
                 this.renderPuzzle();
                 this.render();
             });
@@ -146,6 +143,11 @@ export default {
             const { height, width } = this.$options.puzzle.getCanvasDimensions();
 
             this.$options.renderer.setSize(width, height);
+        },
+        positionCamera() {
+            if (this.$options.puzzle) {
+                this.$options.puzzle.positionCamera();
+            }
         },
         pseudoScramble() {
             this.isMasked = true;
@@ -186,6 +188,7 @@ export default {
         config: {
             deep: true,
             handler() {
+                this.positionCamera();
                 this.renderPuzzle();
                 this.render();
             },

@@ -405,6 +405,8 @@ export default class {
         ];
 
         return {
+            cameraAngle: get(this.vm.config, 'cameraAngle', 45),
+            cameraDistance: get(this.vm.config, 'cameraDistance', 200),
             colors: this.vm.isMasked
                 ? new Array(6).fill('#7B8794')
                 : get(this.vm.config, 'colors', []).concat(defaultColors),
@@ -567,6 +569,23 @@ export default class {
      */
     isSolved() {
         return this.model.isSolved();
+    }
+
+    /**
+     * Position the camera.
+     * 
+     * 
+     */
+    positionCamera() {
+        const config = this.config;
+        const angle = degToRad(config.cameraAngle);
+
+        const hypotenuse = this.config.cameraDistance;
+        const adjacent = Math.sin(angle) * hypotenuse;
+        const opposite = Math.cos(angle) * hypotenuse;
+
+        this.vm.$options.camera.position.set(0, opposite, adjacent);
+        this.vm.$options.camera.lookAt(0, 0, 0);
     }
 
     /**
