@@ -2,38 +2,53 @@
     <div>
         <!-- form -->
         <form
-            class="max-w-sm mx-auto w-full"
+            class="max-w-md mx-auto w-full"
             @submit.prevent="onSubmit">
 
             <!-- options -->
-            <div class="max-w-xs mx-auto w-full">
-                <div
+            <v-grid padded>
+                <v-grid-cell 
                     v-for="(option, index) in options"
-                    class="mb-6"
+                    :md="option.span"
                     :key="index">
                     <div
                         v-if="option.label"
                         v-text="option.label"
                         class="mb-2 text-grey-6 text-sm tracking-wide"
                     />
+
+                    <!-- colors -->
+                    <div
+                        v-if="option.type === 'colors'"
+                        class="flex flex-wrap justify-center">
+                        <div
+                            v-for="(x, index) in arrayOfLength(option.faces)"
+                            :key="index">
+                            <div class="pt-2 px-2">
+                                <v-color-input v-model="currentOptions[option.key][index]" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- number ranges -->
                     <v-range-input
-                        v-if="option.type === 'range'"
+                        v-else-if="option.type === 'range'"
                         v-model="currentOptions[option.key]"
                         :max="option.max"
                         :min="option.min"
                     />
-                </div>
-            </div>
+                </v-grid-cell>
+            </v-grid>
 
             <!-- authentication warning -->
             <div
                 v-if="!isAuthenticated"
-                class="leading-normal mb-8 text-grey-6 text-sm">
+                class="leading-normal mt-8 text-grey-6 text-sm">
                 You aren't signed in, these settings won't be saved.
             </div>
 
             <!-- actions -->
-            <div class="flex items-center justify-center">
+            <div class="mt-8 flex items-center justify-center">
                 <a
                     class="mr-4 text-grey-7 text-xs tracking-wide uppercase hover:text-danger-7"
                     href="#"
@@ -66,6 +81,9 @@ export default {
         ...mapGetters('user', [
             'isAuthenticated',
         ]),
+        arrayOfLength() {
+            return (n, initialValue) => new Array(n).fill(initialValue);
+        },
     },
     methods: {
         close() {
@@ -77,10 +95,14 @@ export default {
                 this.$set(this.currentOptions, option.key, option.default);
             });
 
-            // set the current config
-            Object.keys(this.config).forEach(key => {
-                if (typeof this.config[key] !== 'undefined') {
-                    this.currentOptions[key] = this.config[key];
+            // set the current config using a raw javascript object. we need
+            // to do this in order to prevent mutatino errors, since the source
+            // object is one that technically lives in the vuex user store.
+            const rawConfig = JSON.parse(JSON.stringify(this.config));
+
+            Object.keys(rawConfig).forEach(key => {
+                if (typeof rawConfig[key] !== 'undefined') {
+                    this.currentOptions[key] = rawConfig[key];
                 }
             });
         },

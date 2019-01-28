@@ -1,23 +1,25 @@
 const cubeOptions = [
-    // {
-    //     default: [
-    //         '#ffeb3b', // U -> yellow
-    //         '#ff9800', // L -> orange
-    //         '#03a9f4', // F -> blue
-    //         '#f44336', // R -> red
-    //         '#4caf50', // B -> green
-    //         '#eeeeee', // D -> white
-    //     ],
-    //     faces: 6,
-    //     label: 'Colors',
-    //     type: 'colors',
-    // },
+    {
+        default: [
+            '#ffeb3b', // U -> yellow
+            '#ff9800', // L -> orange
+            '#03a9f4', // F -> blue
+            '#f44336', // R -> red
+            '#4caf50', // B -> green
+            '#eeeeee', // D -> white
+        ],
+        faces: 6,
+        key: 'colors',
+        label: 'Colors',
+        type: 'colors',
+    },
     {
         default: 10,
         key: 'stickerSpacing',
         label: 'Sticker Spacing',
         max: 100,
         min: 0,
+        span: 6,
         type: 'range',
     },
     {
@@ -26,6 +28,7 @@ const cubeOptions = [
         label: 'Sticker Elevation',
         max: 100,
         min: 0,
+        span: 6,
         type: 'range',
     },
     {
@@ -34,6 +37,7 @@ const cubeOptions = [
         label: 'Sticker Radius',
         max: 50,
         min: 0,
+        span: 6,
         type: 'range',
     },
     {
@@ -42,6 +46,7 @@ const cubeOptions = [
         label: 'Inner Brightness',
         max: 100,
         min: 0,
+        span: 6,
         type: 'range',
     },
     {

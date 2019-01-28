@@ -395,19 +395,19 @@ export default class {
      * @return {Object}
      */
     get config() {
-        const colors = this.vm.isMasked
-            ? new Array(6).fill('#7B8794')
-            : [
-                '#ffeb3b', // U -> yellow
-                '#ff9800', // L -> orange
-                '#03a9f4', // F -> blue
-                '#f44336', // R -> red
-                '#4caf50', // B -> green
-                '#eeeeee', // D -> white
-            ];
+        const defaultColors = [
+            '#ffeb3b', // U -> yellow
+            '#ff9800', // L -> orange
+            '#03a9f4', // F -> blue
+            '#f44336', // R -> red
+            '#4caf50', // B -> green
+            '#eeeeee', // D -> white
+        ];
 
         return {
-            colors,
+            colors: this.vm.isMasked
+                ? new Array(6).fill('#7B8794')
+                : get(this.vm.config, 'colors', []).concat(defaultColors),
             stickerElevation: get(this.vm.config, 'stickerElevation', 10) / 100,
             stickerSpacing: get(this.vm.config, 'stickerSpacing', 10) / 100,
             stickerRadius: get(this.vm.config, 'stickerRadius', 10) / 100,
