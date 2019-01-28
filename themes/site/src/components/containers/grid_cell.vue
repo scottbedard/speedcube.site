@@ -22,10 +22,13 @@ export default {
     render(h, context) {
         const bindings = bindAll(context);
         const {
-            sm, md, lg, xl,
+            xs, sm, md, lg, xl,
         } = context.props;
 
         // breakpoints
+        if (xs) {
+            bindings.class.push(`xs:w-${xs}/12`);
+        }
         if (sm) {
             bindings.class.push(`sm:w-${sm}/12`);
         }
@@ -48,6 +51,9 @@ export default {
     },
     functional: true,
     props: {
+        xs: {
+            type: [Number, String],
+        },
         sm: {
             type: [Number, String],
         },

@@ -6,7 +6,18 @@ module.exports = [
     'pl-4',
 
     // these classes are necessary for <v-grid> and <v-grid-cell>
-    // it is recommended that you comment out the unused ones.
+    'xs:w-1/12',
+    'xs:w-2/12',
+    'xs:w-3/12',
+    'xs:w-4/12',
+    'xs:w-5/12',
+    'xs:w-6/12',
+    'xs:w-7/12',
+    'xs:w-8/12',
+    'xs:w-9/12',
+    'xs:w-10/12',
+    'xs:w-11/12',
+    'xs:w-12/12',
     'sm:w-1/12',
     'sm:w-2/12',
     'sm:w-3/12',

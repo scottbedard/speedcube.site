@@ -2,14 +2,18 @@
     <div>
         <!-- form -->
         <form
-            class="max-w-md mx-auto w-full"
+            class="max-w-lg mx-auto w-full"
             @submit.prevent="onSubmit">
 
             <!-- options -->
-            <v-grid padded>
+            <v-grid class="justify-center" padded>
                 <v-grid-cell 
                     v-for="(option, index) in options"
-                    :md="option.span"
+                    :xs="grid(option, 'xs')"
+                    :sm="grid(option, 'sm')"
+                    :md="grid(option, 'md')"
+                    :lg="grid(option, 'lg')"
+                    :xl="grid(option, 'xl')"
                     :key="index">
                     <div
                         v-if="option.label"
@@ -66,6 +70,7 @@
 </template>
 
 <script>
+import { get } from 'lodash-es';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -83,6 +88,9 @@ export default {
         ]),
         arrayOfLength() {
             return (n, initialValue) => new Array(n).fill(initialValue);
+        },
+        grid() {
+            return (obj, breakpoint) => get(obj, `grid.${breakpoint}`);
         },
     },
     methods: {
