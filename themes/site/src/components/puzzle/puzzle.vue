@@ -1,7 +1,6 @@
 <template>
     <div class="text-center">
         <canvas ref="canvas" />
-        <!-- <pre class="text-left text-xs mx-auto max-w-md">{{ config }}</pre> -->
     </div>
 </template>
 
@@ -14,6 +13,9 @@ export default {
         return {
             // the width of our containing element
             containerWidth: 0,
+
+            // default puzzle config
+            defaultConfig: {},
 
             // masks the puzzle making all stickers the same color
             isMasked: false,
@@ -66,7 +68,7 @@ export default {
             return this.$options.puzzle.isSolved();
         },
         onIsMaskedChange() {
-            this.renderPuzzle();
+            this.prepareNextFrame();
             this.render();
         },
         onQueueChange() {
@@ -86,14 +88,18 @@ export default {
                 }
             }
         },
-        render() {
-            // this function updates our canvas with the current frame
-            this.$options.renderer.render(this.$options.scene, this.$options.camera);
-        },
-        renderPuzzle() {
+        prepareNextFrame() {
             // this method instructs our puzzle to render itself, but does
             // not actually draw on the canvas. to do that, call render.
-            this.$options.puzzle.render();
+            if (this.$options.puzzle) {
+                this.$options.puzzle.prepareNextFrame();
+            }
+        },
+        render() {
+            // this function updates our canvas with the current frame
+            if (this.$options.renderer) {
+                this.$options.renderer.render(this.$options.scene, this.$options.camera);
+            }
         },
         reset() {
             // do nothing if we have no puzzle
@@ -103,6 +109,7 @@ export default {
 
             // instantiate the puzzle
             this.$options.puzzle = this.createPuzzle();
+            this.defaultConfig = this.$options.puzzle.getDefaultConfig();
 
             // instantiate a renderer and scene
             this.$options.renderer = new THREE.WebGLRenderer({
@@ -130,7 +137,7 @@ export default {
 
             this.$nextTick(() => {
                 this.positionCamera();
-                this.renderPuzzle();
+                this.prepareNextFrame();
                 this.render();
             });
         },
@@ -189,11 +196,14 @@ export default {
             deep: true,
             handler() {
                 this.positionCamera();
-                this.renderPuzzle();
+                this.prepareNextFrame();
                 this.render();
             },
         },
         containerWidth: 'resize',
+        defaultConfig(defaultConfig) {
+            this.$emit('default-config', defaultConfig);
+        },
         isMasked: 'onIsMaskedChange',
         puzzle() {
             this.reset();

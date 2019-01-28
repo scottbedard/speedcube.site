@@ -2,7 +2,30 @@
 import * as THREE from 'three';
 import Cube from 'bedard-cube';
 import { cleanTimeout } from '@/app/utils/component';
-import { get } from 'lodash-es';
+import { cloneDeep, get } from 'lodash-es';
+
+/**
+ * Default config.
+ * 
+ * @const {Object}
+ */
+const defaultConfig = {
+    colors: [
+        '#ffeb3b',
+        '#ff9800',
+        '#03a9f4',
+        '#f44336',
+        '#4caf50',
+        '#eeeeee',
+    ],
+    stickerSpacing: 10,
+    stickerElevation: 10,
+    stickerRadius: 10,
+    innerBrightness: 40,
+    cameraAngle: 60,
+    cameraDistance: 2000,
+    turnDuration: 90,
+};
 
 /**
  * Inspection durations.
@@ -75,7 +98,7 @@ function applyTurn(cube, turn) {
                 if (progress === 1) {
                     requestAnimationFrame(() => {
                         cube.model.turn(turn);
-                        cube.render();
+                        cube.prepareNextFrame();
 
                         requestAnimationFrame(resolve);
                     });
@@ -405,16 +428,16 @@ export default class {
         ];
 
         return {
-            cameraAngle: get(this.vm.config, 'cameraAngle', 45),
-            cameraDistance: get(this.vm.config, 'cameraDistance', 200),
+            cameraAngle: get(this.vm.config, 'cameraAngle', defaultConfig.cameraAngle),
+            cameraDistance: get(this.vm.config, 'cameraDistance', defaultConfig.cameraDistance),
             colors: this.vm.isMasked
                 ? new Array(6).fill('#7B8794')
                 : get(this.vm.config, 'colors', []).concat(defaultColors),
-            stickerElevation: get(this.vm.config, 'stickerElevation', 10) / 100,
-            stickerSpacing: get(this.vm.config, 'stickerSpacing', 10) / 100,
-            stickerRadius: get(this.vm.config, 'stickerRadius', 10) / 100,
-            innerBrightness: get(this.vm.config, 'innerBrightness', 40) / 100,
-            turnDuration: get(this.vm.config, 'turnDuration', 90),
+            stickerElevation: get(this.vm.config, 'stickerElevation', defaultConfig.stickerElevation) / 100,
+            stickerSpacing: get(this.vm.config, 'stickerSpacing', defaultConfig.stickerSpacing) / 100,
+            stickerRadius: get(this.vm.config, 'stickerRadius', defaultConfig.stickerRadius) / 100,
+            innerBrightness: get(this.vm.config, 'innerBrightness', defaultConfig.innerBrightness) / 100,
+            turnDuration: get(this.vm.config, 'turnDuration', defaultConfig.turnDuration),
         }
     }
 
@@ -500,7 +523,7 @@ export default class {
                 sticker.value = state[rawFace][index];
             });
 
-            this.render();
+            this.prepareNextFrame();
             this.vm.render();
         });
     }
@@ -522,6 +545,13 @@ export default class {
             height: size,
             width: size,
         };
+    }
+
+    /**
+     * 
+     */
+    getDefaultConfig() {
+        return cloneDeep(defaultConfig);
     }
 
     /**
@@ -624,11 +654,11 @@ export default class {
     }
 
     /**
-     * Render
+     * Prepare next frame.
      *
      * @return {void}
      */
-    render() {
+    prepareNextFrame() {
         attachStickers(this);
         positionStickers(this);
     }

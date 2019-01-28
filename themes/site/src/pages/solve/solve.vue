@@ -6,6 +6,7 @@
                 ref="puzzle"
                 :config="puzzleConfig"
                 :puzzle="puzzle"
+                @default-config="setDefaultConfig"
                 @turn-start="recordTurn"
                 @turn-end="completeIfSolved"
             />
@@ -107,6 +108,9 @@ export default {
     },
     data() {
         return {
+            // default puzzle configuration
+            defaultConfig: {},
+
             // did not finish
             dnf: false,
 
@@ -174,18 +178,18 @@ export default {
         },
         puzzleConfig() {
             if (this.pendingConfig) {
-                return this.pendingConfig;
+                return { ...this.defaultConfig, ...this.pendingConfig };
             }
 
             if (this.isAuthenticated) {
                 const savedConfig = this.user.configs.find(config => config.puzzle === this.puzzle)
                 
                 if (savedConfig) {
-                    return savedConfig.config
+                    return { ...this.defaultConfig, ...savedConfig.config };
                 }
             }
             
-            return this.guestConfig;
+            return { ...this.defaultConfig, ...this.guestConfig };
         },
         puzzleOptions() {
             return options[this.puzzle];
@@ -323,6 +327,9 @@ export default {
             const offset = (now || Date.now()) - this.inspectionStartedAt;
 
             this.history.push(`${offset}:${turn}`);
+        },
+        setDefaultConfig(defaultConfig) {
+            this.defaultConfig = defaultConfig;
         },
         setGuestConfig(guestConfig) {
             this.guestConfig = guestConfig;
