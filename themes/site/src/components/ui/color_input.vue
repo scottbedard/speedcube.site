@@ -5,7 +5,7 @@
             class="block h-8 w-8 rounded-full"
             href="#"
             :style="{
-                backgroundColor: value,   
+                backgroundColor: value,
             }"
             @click.prevent="expand">
         </a>

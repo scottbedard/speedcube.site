@@ -106,11 +106,11 @@
 </template>
 
 <script>
-import appearanceOptions from './appearance_options.js';
-import { postCreateScramble } from '@/app/repositories/scrambles';
-import { postSolve } from '@/app/repositories/solves';
 import { bindExternalEvent } from '@/app/utils/component';
 import { mapGetters, mapState } from 'vuex';
+import { postCreateScramble } from '@/app/repositories/scrambles';
+import { postSolve } from '@/app/repositories/solves';
+import appearanceOptions from './appearance_options';
 
 export default {
     created() {
@@ -192,13 +192,13 @@ export default {
             }
 
             if (this.isAuthenticated) {
-                const savedConfig = this.user.configs.find(config => config.puzzle === this.puzzle)
-                
+                const savedConfig = this.user.configs.find(config => config.puzzle === this.puzzle);
+
                 if (savedConfig) {
                     return { ...this.defaultConfig, ...savedConfig.config };
                 }
             }
-            
+
             return { ...this.defaultConfig, ...this.guestConfig };
         },
         puzzleOptions() {
