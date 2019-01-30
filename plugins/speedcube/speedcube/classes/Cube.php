@@ -2,15 +2,15 @@
 
 namespace Speedcube\Speedcube\Classes;
 
-use Speedcube\Speedcube\Classes\Utils;
 use Speedcube\Speedcube\Models\Scramble;
 
 class Cube
 {
     /**
      * Count the number of intersecting turns.
-     * 
-     * @param  string   $turns
+     *
+     * @param string $turns
+     *
      * @return int
      */
     public static function countTurns(string $turns)
@@ -46,9 +46,10 @@ class Cube
 
     /**
      * Parse a turn.
-     * 
-     * @param  string   $turns
-     * @return Array
+     *
+     * @param string $turns
+     *
+     * @return array
      */
     public static function parseTurns(string $turns)
     {
@@ -62,8 +63,9 @@ class Cube
 
     /**
      * Remove time data and events from a set of turns.
-     * 
-     * @param  string   $turns
+     *
+     * @param string $turns
+     *
      * @return string
      */
     public static function removeTimestamps(string $turns)
@@ -73,25 +75,32 @@ class Cube
 
     /**
      * Reverse a scramble.
-     * 
-     * @param  string   $turns
+     *
+     * @param string $turns
+     *
      * @return string
      */
     public static function reverseScramble(string $turns)
     {
-        return implode(' ', array_map(function($turn) {
-            if (Utils::endsWith($turn, '2')) return $turn;
-            if (Utils::endsWith($turn, '-')) return str_replace('-', '', $turn);
-            return $turn . '-';
+        return implode(' ', array_map(function ($turn) {
+            if (Utils::endsWith($turn, '2')) {
+                return $turn;
+            }
+            if (Utils::endsWith($turn, '-')) {
+                return str_replace('-', '', $turn);
+            }
+
+            return $turn.'-';
         }, array_reverse(explode(' ', $turns))));
     }
 
     /**
      * Test a scramble solution.
-     * 
-     * @param  \Speedcube\Speedcube\Models\Scramble $scramble
-     * @param  string                               $turns
-     * @return boolean
+     *
+     * @param \Speedcube\Speedcube\Models\Scramble $scramble
+     * @param string                               $turns
+     *
+     * @return bool
      */
     public static function testSolution(Scramble $scramble, string $solution)
     {

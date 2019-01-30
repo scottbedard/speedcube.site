@@ -1,9 +1,11 @@
-<?php namespace Speedcube\Speedcube\Models;
+<?php
+
+namespace Speedcube\Speedcube\Models;
 
 use Model;
 
 /**
- * PersonalRecord Model
+ * PersonalRecord Model.
  */
 class PersonalRecord extends Model
 {
@@ -12,7 +14,7 @@ class PersonalRecord extends Model
      */
     protected $casts = [
         'solve_id' => 'integer',
-        'user_id' => 'integer',
+        'user_id'  => 'integer',
     ];
 
     /**
@@ -38,6 +40,6 @@ class PersonalRecord extends Model
      */
     public $belongsTo = [
         'solve' => 'Speedcube\Speedcube\Models\Solve',
-        'user' => 'RainLab\User\Models\User',
+        'user'  => 'RainLab\User\Models\User',
     ];
 }

@@ -1,9 +1,11 @@
-<?php namespace Speedcube\Speedcube\Models;
+<?php
+
+namespace Speedcube\Speedcube\Models;
 
 use Model;
 
 /**
- * Scramble Model
+ * Scramble Model.
  */
 class Scramble extends Model
 {
@@ -25,8 +27,8 @@ class Scramble extends Model
      * @var array Attribute casting
      */
     protected $casts = [
-        'id' => 'integer',
-        'puzzle' => 'string',
+        'id'       => 'integer',
+        'puzzle'   => 'string',
         'solve_id' => 'integer',
     ];
 

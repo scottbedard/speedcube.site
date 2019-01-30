@@ -1,13 +1,14 @@
-<?php namespace Speedcube\Speedcube\Models;
+<?php
+
+namespace Speedcube\Speedcube\Models;
 
 use Carbon\Carbon;
 use DB;
-use Speedcube\Speedcube\Classes\Cube;
-use Speedcube\Speedcube\Exceptions\InvalidSolutionException;
 use Model;
+use Speedcube\Speedcube\Classes\Cube;
 
 /**
- * Solve Model
+ * Solve Model.
  */
 class Solve extends Model
 {
@@ -17,9 +18,9 @@ class Solve extends Model
      * @var array Attributes
      */
     public $attributes = [
-        'config' => '{}',
+        'config'   => '{}',
         'solution' => '',
-        'status' => 'pending',
+        'status'   => 'pending',
     ];
 
     /**
@@ -27,12 +28,12 @@ class Solve extends Model
      */
     protected $casts = [
         'average_speed' => 'integer',
-        'id' => 'integer',
-        'moves' => 'integer',
-        'scramble_id' => 'integer',
-        'size' => 'integer',
-        'time' => 'integer',
-        'user_id' => 'integer',
+        'id'            => 'integer',
+        'moves'         => 'integer',
+        'scramble_id'   => 'integer',
+        'size'          => 'integer',
+        'time'          => 'integer',
+        'user_id'       => 'integer',
     ];
 
     /**
@@ -68,12 +69,12 @@ class Solve extends Model
      */
     public $belongsTo = [
         'scramble' => 'Speedcube\Speedcube\Models\Scramble',
-        'user' => 'RainLab\User\Models\User',
+        'user'     => 'RainLab\User\Models\User',
     ];
 
     /**
      * Abort a solve.
-     * 
+     *
      * @return void
      */
     public function abort($solution = '')
@@ -86,7 +87,7 @@ class Solve extends Model
 
     /**
      * Check for a personal record.
-     * 
+     *
      * @return void
      */
     protected function checkPersonalRecords()
@@ -95,11 +96,11 @@ class Solve extends Model
         if (!$this->user_id) {
             return;
         }
-        
+
         // find the previous record for this user and puzzle
         $record = $this->user
             ->records()
-            ->whereHas('solve.scramble', function($query) {
+            ->whereHas('solve.scramble', function ($query) {
                 $query->wherePuzzle($this->scramble->puzzle);
             })
             ->with('solve:id,time')
@@ -128,7 +129,7 @@ class Solve extends Model
     {
         $abandoned = self::abandoned()->get();
 
-        $abandoned->each(function($solve) {
+        $abandoned->each(function ($solve) {
             $solve->status = 'dnf';
 
             $solve->save();
@@ -162,9 +163,10 @@ class Solve extends Model
 
     /**
      * Get the timestamp of the first occurance of a solve event.
-     * 
-     * @param  string   $event
-     * @return integer
+     *
+     * @param string $event
+     *
+     * @return int
      */
     public function getEventTimestamp($event)
     {
@@ -187,7 +189,7 @@ class Solve extends Model
 
     /**
      * Get the last turn in the solution.
-     * 
+     *
      * @return string
      */
     public function getLastTurn()
@@ -197,8 +199,8 @@ class Solve extends Model
 
     /**
      * Get the solution as an array.
-     * 
-     * @return Array
+     *
+     * @return array
      */
     public function getTurns()
     {
@@ -207,8 +209,8 @@ class Solve extends Model
 
     /**
      * Parse a turn.
-     * 
-     * @return Array
+     *
+     * @return array
      */
     public function getTimestampForTurn($turn)
     {
@@ -216,7 +218,7 @@ class Solve extends Model
     }
 
     /**
-     * Scopes
+     * Scopes.
      */
     public function scopeAbandoned($query)
     {
@@ -260,15 +262,16 @@ class Solve extends Model
 
     public function scopeLastMonth($query)
     {
-        return $query->where(function($q) {
+        return $query->where(function ($q) {
             $startOfMonth = Carbon::now()->startOfMonth();
             $startOfLastMonth = Carbon::now()->startOfMonth()->subMonths(1);
-            
+
             return $q
                 ->where('created_at', '>=', $startOfLastMonth)
                 ->where('created_at', '<', $startOfMonth);
         });
     }
+
     public function scopeNotPending($query)
     {
         return $query->where('status', '<>', 'pending');
@@ -279,8 +282,9 @@ class Solve extends Model
         return $query->where('status', 'pending');
     }
 
-    public function scopePuzzle($query, $puzzle) {
-        return $query->whereHas('scramble', function($scramble) use ($puzzle) {
+    public function scopePuzzle($query, $puzzle)
+    {
+        return $query->whereHas('scramble', function ($scramble) use ($puzzle) {
             $scramble->wherePuzzle($puzzle);
         });
     }
@@ -293,7 +297,7 @@ class Solve extends Model
     public function scopeWithUserSummary($query)
     {
         return $query->with([
-            'user' => function($user) {
+            'user' => function ($user) {
                 $user->select(['id', 'name', 'username']);
             },
         ]);
@@ -301,7 +305,7 @@ class Solve extends Model
 
     /**
      * Set time and move data.
-     * 
+     *
      * @return void
      */
     protected function setTime()

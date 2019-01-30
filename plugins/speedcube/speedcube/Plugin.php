@@ -8,7 +8,7 @@ use RainLab\User\Models\User;
 use System\Classes\PluginBase;
 
 /**
- * Speedcube Plugin Information File    
+ * Speedcube Plugin Information File.
  */
 class Plugin extends PluginBase
 {
@@ -30,7 +30,7 @@ class Plugin extends PluginBase
             'name'        => 'Speedcube',
             'description' => 'A place for speed cubing',
             'author'      => 'Speedcube',
-            'icon'        => 'icon-cube'
+            'icon'        => 'icon-cube',
         ];
     }
 
@@ -45,8 +45,8 @@ class Plugin extends PluginBase
     }
 
     /**
-     * Extend RainLab.User
-     * 
+     * Extend RainLab.User.
+     *
      * @return void
      */
     protected function extendRainLabUser()
@@ -54,20 +54,20 @@ class Plugin extends PluginBase
         // eager load necessary relationships. this lets us
         // attach the relationships to the user requests
         // on startup, when the user signs in, etc...
-        Event::listen('vuetober.rainlabuserapi.afterGetUser', function($user) {
+        Event::listen('vuetober.rainlabuserapi.afterGetUser', function ($user) {
             $user->load(['avatar', 'configs']);
         });
 
         // extend the user model
-        User::extend(function($model) {
+        User::extend(function ($model) {
             // relationships
             $model->hasMany['configs'] = 'SpeedCube\SpeedCube\Models\Config';
             $model->hasMany['records'] = 'Speedcube\Speedcube\Models\PersonalRecord';
             $model->hasMany['solves'] = 'Speedcube\Speedcube\Models\Solve';
 
             // prevent weird characters from being part of usernames
-            $model->bindEvent('model.beforeValidate', function() use ($model) {
-                $model->rules['username'] = $model->rules['username'] . '|alpha_num';
+            $model->bindEvent('model.beforeValidate', function () use ($model) {
+                $model->rules['username'] = $model->rules['username'].'|alpha_num';
             });
         });
     }
@@ -91,16 +91,16 @@ class Plugin extends PluginBase
     {
         return [
             'speedcube' => [
-                'icon' => 'icon-cube',
-                'label' => 'Speedcube',
-                'order' => 500,
+                'icon'        => 'icon-cube',
+                'label'       => 'Speedcube',
+                'order'       => 500,
                 'permissions' => ['speedcube.speedcube.*'],
-                'sideMenu' => [
+                'sideMenu'    => [
                     'solves' => [
-                        'icon' => 'icon-clock-o',
-                        'label' => 'Solves',
+                        'icon'        => 'icon-clock-o',
+                        'label'       => 'Solves',
                         'permissions' => ['speedcube.speedcube.access_solves'],
-                        'url' => Backend::url('speedcube/speedcube/solves'),
+                        'url'         => Backend::url('speedcube/speedcube/solves'),
                     ],
                 ],
                 'url' => Backend::url('speedcube/speedcube/solves'),
@@ -117,8 +117,8 @@ class Plugin extends PluginBase
     {
         return [
             'speedcube.speedcube.access_solves' => [
-                'tab' => 'Speedcube',
-                'label' => 'Manage solves'
+                'tab'   => 'Speedcube',
+                'label' => 'Manage solves',
             ],
         ];
     }
@@ -132,7 +132,9 @@ class Plugin extends PluginBase
     {
         // close abandoned solves once per day
         $schedule
-            ->call(function() { Solve::closeAbandoned(); })
+            ->call(function () {
+                Solve::closeAbandoned();
+            })
             ->daily()
             ->thenPing(env('HB_CLOSE_ABANDONED_SOLVES'));
     }

@@ -2,7 +2,6 @@
 
 namespace Speedcube\Speedcube\Classes;
 
-use App;
 use Exception;
 use Illuminate\Routing\Controller;
 use Log;
@@ -11,9 +10,10 @@ use October\Rain\Exception\ValidationException;
 class ApiController extends Controller
 {
     /**
-     * Failed
-     * 
-     * @param  Exception $err
+     * Failed.
+     *
+     * @param Exception $err
+     *
      * @return Response
      */
     public function failed($err = null, $message = 'unknown')
@@ -24,14 +24,15 @@ class ApiController extends Controller
 
         return response([
             'status' => 'failed',
-            'error' => $message,
+            'error'  => $message,
         ], 500);
     }
 
     /**
-     * Invalid
+     * Invalid.
      *
-     * @param  ValidationException  $err
+     * @param ValidationException $err
+     *
      * @return Response
      */
     public function invalid(ValidationException $err)
@@ -43,7 +44,7 @@ class ApiController extends Controller
     }
 
     /**
-     * Success
+     * Success.
      *
      * @return Response
      */
@@ -55,11 +56,11 @@ class ApiController extends Controller
     }
 
     /**
-     * Unauthorized
-     * 
+     * Unauthorized.
+     *
      * @return Response
      */
-    public function unauthorized(array $data = []) 
+    public function unauthorized(array $data = [])
     {
         return response(array_merge([
             'status' => 'unauthorized',

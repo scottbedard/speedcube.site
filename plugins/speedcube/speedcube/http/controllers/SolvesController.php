@@ -14,7 +14,7 @@ class SolvesController extends ApiController
 {
     /**
      * Complete a solve.
-     * 
+     *
      * @return Response
      */
     public function complete()
@@ -35,12 +35,12 @@ class SolvesController extends ApiController
 
             // find the scramble being solved
             $scramble = Scramble::findOrFail($scrambleId);
-            
+
             // find or instantiate the solve
             $solve = $user
                 ? $scramble->solves()->where('user_id', $user->id)->firstOrFail()
                 : new Solve(['scramble_id' => $scramble->id]);
-            
+
             // cache the solve configuration
             $solve->config = $config;
 
@@ -55,7 +55,7 @@ class SolvesController extends ApiController
                 'solve' => $solve->toArray(),
             ]);
         }
-        
+
         // unknown error
         catch (Exception $err) {
             return $this->failed($err);
@@ -64,7 +64,7 @@ class SolvesController extends ApiController
 
     /**
      * Find a solve.
-     * 
+     *
      * @return Response
      */
     public function find($id)
@@ -84,7 +84,7 @@ class SolvesController extends ApiController
 
     /**
      * Get the fastest solves of all time.
-     * 
+     *
      * @return Response
      */
     public function index()
@@ -114,7 +114,7 @@ class SolvesController extends ApiController
             if (array_key_exists('puzzle', $data)) {
                 $query->puzzle($data['puzzle']);
             }
-            
+
             //
             // order
             //
@@ -125,7 +125,7 @@ class SolvesController extends ApiController
                     $query->fastest();
                 } elseif ($orderBy === 'moves') {
                     $query->fewestMoves();
-                } 
+                }
             }
 
             return $this->success([

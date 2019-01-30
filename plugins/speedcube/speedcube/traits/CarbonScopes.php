@@ -9,8 +9,8 @@ trait CarbonScopes
     /**
      * Records created after a number of days ago.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder    $query
-     * @param  integer                                  $days
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int                                   $days
      */
     public function scopeCreatedPastDays($query, $days)
     {

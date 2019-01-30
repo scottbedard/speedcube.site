@@ -11,7 +11,7 @@ class ConfigController extends ApiController
 {
     /**
      * Get all configs for a user.
-     * 
+     *
      * @return Response
      */
     public function index()
@@ -27,7 +27,7 @@ class ConfigController extends ApiController
 
     /**
      * Save a config.
-     * 
+     *
      * @return Response
      */
     public function save()
@@ -52,8 +52,8 @@ class ConfigController extends ApiController
             // otherwise create a new config model
             else {
                 Config::create([
-                    'config' => $config,
-                    'puzzle' => $puzzle,
+                    'config'  => $config,
+                    'puzzle'  => $puzzle,
                     'user_id' => $user->id,
                 ]);
             }
