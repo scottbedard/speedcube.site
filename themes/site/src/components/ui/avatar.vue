@@ -21,7 +21,6 @@ export default {
         }
 
         return <span {...bindings}>
-            {/* no avatar */}
             {
                 user.avatar === null &&
                 <div
@@ -51,8 +50,6 @@ export default {
                     </svg>
                 </div>
             }
-
-            {/* avatar */}
             {
                 user.avatar !== null &&
                 <div
