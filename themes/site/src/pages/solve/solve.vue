@@ -14,11 +14,11 @@
             <!-- controls -->
             <div class="text-center">
                 <v-fade-transition>
-                    <!-- options -->
+                    <!-- appearance -->
                     <div
-                        v-if="optionsAreVisible"
-                        key="options">
-                        <v-options
+                        v-if="appearanceIsVisible"
+                        key="appearance">
+                        <v-appearance
                             :config="puzzleConfig"
                             :options="puzzleOptions"
                             :puzzle="puzzle"
@@ -78,13 +78,24 @@
                                 Scramble
                             </v-button>
 
-                            <div class="text-xs tracking-wide uppercase">
-                                <a
-                                    class="text-grey-6"
-                                    href="#"
-                                    @click.prevent="onCustomizeClick">
-                                    Customize
-                                </a>
+                            <div class="flex flex-wrap items-center justify-center text-xs tracking-wide uppercase">
+                                <div class="p-4 w-full md:w-auto">
+                                    <a
+                                        class="text-grey-6"
+                                        href="#"
+                                        @click.prevent="onAppearanceClick">
+                                        Appearance
+                                    </a>
+                                </div>
+                                <div class="border-grey-4 border-b w-3" />
+                                <div class="p-4 w-full md:w-auto">
+                                    <a
+                                        class="text-grey-6"
+                                        href="#"
+                                        @click.prevent="onControlsClick">
+                                        Controls
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -95,8 +106,7 @@
 </template>
 
 <script>
-import optionsComponent from './options/options.vue';
-import options from './options.js';
+import appearanceOptions from './appearance_options.js';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postSolve } from '@/app/repositories/solves';
 import { bindExternalEvent } from '@/app/utils/component';
@@ -129,8 +139,8 @@ export default {
             // inspection start time
             inspectionStartedAt: 0,
 
-            // visibility of puzzle options
-            optionsAreVisible: false,
+            // visibility of puzzle appearance controls
+            appearanceIsVisible: false,
 
             // pending puzzle config
             pendingConfig: null,
@@ -161,7 +171,7 @@ export default {
         };
     },
     components: {
-        'v-options': optionsComponent,
+        'v-appearance': () => import('./appearance/appearance.vue'),
     },
     computed: {
         ...mapGetters('user', [
@@ -192,7 +202,7 @@ export default {
             return { ...this.defaultConfig, ...this.guestConfig };
         },
         puzzleOptions() {
-            return options[this.puzzle];
+            return appearanceOptions[this.puzzle];
         },
         solution() {
             return this.history.join(' ');
@@ -275,11 +285,11 @@ export default {
             });
         },
         hideOptions() {
-            this.optionsAreVisible = false;
+            this.appearanceIsVisible = false;
             this.pendingConfig = null;
         },
-        onCustomizeClick() {
-            this.optionsAreVisible = true;
+        onAppearanceClick() {
+            this.appearanceIsVisible = true;
         },
         onEscapeUp() {
             // abort the current solve if one is running
@@ -302,7 +312,7 @@ export default {
         },
         onSpaceUp() {
             // do nothing if we're modifying cube options
-            if (this.optionsAreVisible) {
+            if (this.appearanceIsVisible) {
                 return;
             }
 
@@ -342,7 +352,7 @@ export default {
             this.dnf = false;
             this.history = [];
             this.inspecting = false;
-            this.optionsAreVisible = false;
+            this.appearanceIsVisible = false;
             this.scrambling = true;
             this.solveCompletedAt = 0;
             this.solveCompletedTime = null;
