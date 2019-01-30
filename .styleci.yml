@@ -1,0 +1,9 @@
+finder:
+  exclude:
+    - "bootstrap"
+    - "modules"
+    - "tests"
+  name:
+    - "*.php"
+preset: recommended    
+risky: false
