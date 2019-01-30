@@ -115,16 +115,22 @@ export default {
 
         return <div class="v-table">
             <v-collapse-transition>
+
+                {/* loading */}
                 { loading &&
                     <div class="text-center" key="loading">
                         <v-spinner />
                     </div>
                 }
+
+                {/* empty */}
                 { !loading && empty &&
                     <div key="empty">
                         {context.slots().empty}
                     </div>
                 }
+
+                {/* table */}
                 { !loading && !empty &&
                     <table class="w-full" key="table"
                         {...bindings}>
