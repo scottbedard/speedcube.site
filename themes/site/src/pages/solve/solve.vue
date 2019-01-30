@@ -1,7 +1,7 @@
 <template>
     <v-page padded>
         <v-margin padded>
-            <!-- puzzle -->
+            <!-- puzzle / controller -->
             <v-puzzle
                 ref="puzzle"
                 :config="puzzleConfig"
@@ -11,7 +11,7 @@
                 @turn-end="completeIfSolved"
             />
 
-            <!-- views -->
+            <!-- controls -->
             <div class="text-center">
                 <v-fade-transition>
                     <!-- appearance -->
@@ -22,18 +22,9 @@
                             :config="puzzleConfig"
                             :options="puzzleOptions"
                             :puzzle="puzzle"
-                            @close="hideAppearance"
+                            @close="hideOptions"
                             @guest-config="setGuestConfig"
                             @pending="setPendingConfig"
-                        />
-                    </div>
-
-                    <!-- controls -->
-                    <div
-                        v-else-if="controlsAreVisible"
-                        key="controls">
-                        <v-controls
-                            @close="hideControls"
                         />
                     </div>
 
@@ -102,7 +93,7 @@
                                         class="text-grey-6"
                                         href="#"
                                         @click.prevent="onControlsClick">
-                                        Keyboard Controls
+                                        Controls
                                     </a>
                                 </div>
                             </div>
@@ -127,12 +118,6 @@ export default {
     },
     data() {
         return {
-            // visibility of puzzle appearance controls
-            appearanceIsVisible: false,
-
-            // visibility of keymap controls editor
-            controlsAreVisible: false,
-
             // default puzzle configuration
             defaultConfig: {},
 
@@ -153,6 +138,9 @@ export default {
 
             // inspection start time
             inspectionStartedAt: 0,
+
+            // visibility of puzzle appearance controls
+            appearanceIsVisible: false,
 
             // pending puzzle config
             pendingConfig: null,
@@ -184,7 +172,6 @@ export default {
     },
     components: {
         'v-appearance': () => import('./appearance/appearance.vue'),
-        'v-controls': () => import('./controls/controls.vue'),
     },
     computed: {
         ...mapGetters('user', [
@@ -297,18 +284,12 @@ export default {
                 this.solves.push(solve);
             });
         },
-        hideAppearance() {
+        hideOptions() {
             this.appearanceIsVisible = false;
             this.pendingConfig = null;
         },
-        hideControls() {
-            this.controlsAreVisible = false;
-        },
         onAppearanceClick() {
             this.appearanceIsVisible = true;
-        },
-        onControlsClick() {
-            this.controlsAreVisible = true;
         },
         onEscapeUp() {
             // abort the current solve if one is running
