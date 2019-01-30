@@ -3,6 +3,8 @@ finder:
     - "bootstrap"
     - "modules"
     - "tests"
+    - "index.php"
+    - "server.php"
   name:
     - "*.php"
 preset: recommended    
