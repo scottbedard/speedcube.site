@@ -1,11 +1,5 @@
-<style lang="scss" scoped>
-    .layout {
-        background: linear-gradient(to bottom, config('colors.grey-1'), config('colors.grey-2'));
-    }
-</style>
-
 <template>
-    <div class="bg-grey-1 layout h-full">
+    <div class="bg-grey-1 h-full">
         <!-- header -->
         <v-header />
 
