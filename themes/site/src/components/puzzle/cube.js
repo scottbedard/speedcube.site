@@ -6,7 +6,7 @@ import { cloneDeep, get } from 'lodash-es';
 
 /**
  * Default config.
- * 
+ *
  * @const {Object}
  */
 const defaultConfig = {
@@ -396,7 +396,6 @@ function updateTurn(cube, turnObj, axis, degrees, progress) {
 }
 
 export default class {
-
     /**
      * Constructor.
      *
@@ -414,7 +413,7 @@ export default class {
 
     /**
      * Config.
-     * 
+     *
      * @return {Object}
      */
     get config() {
@@ -438,7 +437,7 @@ export default class {
             stickerRadius: get(this.vm.config, 'stickerRadius', defaultConfig.stickerRadius) / 100,
             innerBrightness: get(this.vm.config, 'innerBrightness', defaultConfig.innerBrightness) / 100,
             turnDuration: get(this.vm.config, 'turnDuration', defaultConfig.turnDuration),
-        }
+        };
     }
 
     /**
@@ -548,7 +547,7 @@ export default class {
     }
 
     /**
-     * 
+     *
      */
     getDefaultConfig() {
         return cloneDeep(defaultConfig);
@@ -603,11 +602,11 @@ export default class {
 
     /**
      * Position the camera.
-     * 
-     * 
+     *
+     *
      */
     positionCamera() {
-        const config = this.config;
+        const { config } = this;
         const angle = degToRad(config.cameraAngle);
 
         const hypotenuse = this.config.cameraDistance;

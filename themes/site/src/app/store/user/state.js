@@ -19,7 +19,7 @@ export default function () {
         //     stickerScale: 0.9,
         //     turnDuration: 100,
         // },
-        
+
         // loading state for puzzle configs
         configsAreLoading: false,
 
