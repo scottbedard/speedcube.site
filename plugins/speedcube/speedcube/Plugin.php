@@ -8,7 +8,7 @@ use RainLab\User\Models\User;
 use System\Classes\PluginBase;
 
 /**
- * Speedcube Plugin Information File
+ * Speedcube Plugin Information File    
  */
 class Plugin extends PluginBase
 {
