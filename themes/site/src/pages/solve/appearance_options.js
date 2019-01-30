@@ -81,7 +81,7 @@ const cubeOptions = [
         max: 500,
         min: 50,
         type: 'range',
-    },
+    }
 ];
 
 export default {

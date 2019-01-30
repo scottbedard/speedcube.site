@@ -14,7 +14,7 @@ import {
 //
 export default {
     // save a user's puzzle configuration
-    saveConfig({ commit }, payload) {
+    saveConfig({ commit, dispatch }, payload) {
         const request = postConfig(payload);
 
         request.then((response) => {
@@ -69,7 +69,7 @@ export default {
 
         commit('setConfigsAreLoading', true);
 
-        request.then((response) => {
+        return request.then((response) => {
             // success
             commit('setConfigs', response.data.configs);
         }).finally(() => {

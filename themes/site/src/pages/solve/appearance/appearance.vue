@@ -7,7 +7,7 @@
 
             <!-- options -->
             <v-grid class="justify-center" padded>
-                <v-grid-cell
+                <v-grid-cell 
                     v-for="(option, index) in options"
                     :xs="grid(option, 'xs')"
                     :sm="grid(option, 'sm')"
@@ -99,7 +99,7 @@ export default {
         },
         initialize() {
             // set the initial values on our currentOptions object
-            this.options.forEach((option) => {
+            this.options.forEach(option => {
                 this.$set(this.currentOptions, option.key, option.default);
             });
 
@@ -108,7 +108,7 @@ export default {
             // object is one that technically lives in the vuex user store.
             const rawConfig = JSON.parse(JSON.stringify(this.config));
 
-            Object.keys(rawConfig).forEach((key) => {
+            Object.keys(rawConfig).forEach(key => {
                 if (typeof rawConfig[key] !== 'undefined') {
                     this.currentOptions[key] = rawConfig[key];
                 }

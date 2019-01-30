@@ -38,13 +38,10 @@ export function cleanInterval(vm, callback, timeout) {
  * @return {void}
  */
 export function cleanTimeout(vm, callback, timeout) {
-    /* eslint-disable no-underscore-dangle */
     // set a clean timeouts container, and bind an event
     // to the component to clear them our on destroy
     if (isUndefined(vm.$options._cleanTimeouts)) {
         vm.$options._cleanTimeouts = [];
-
-        /* eslint-disable-next-line no-use-before-define */
         vm.$once('hook:destroyed', () => clearCleanTimeouts(vm));
     }
 
@@ -52,7 +49,7 @@ export function cleanTimeout(vm, callback, timeout) {
     // a unique key. we'll use the key to clear the timeout
     // when our component is destroyed.
     const key = {};
-
+    
     const timeoutId = window.setTimeout(() => {
         callback();
 
@@ -65,23 +62,20 @@ export function cleanTimeout(vm, callback, timeout) {
 
     // push the timeout reference onto our array of clean timeouts
     vm.$options._cleanTimeouts.push({ key, timeoutId });
-    /* eslint-enable no-underscore-dangle */
 }
 
 /**
  * Manually clear any clean timeouts a component has queued.
- *
+ * 
  * @param  {Vue} vm
  * @return {void}
  */
 export function clearCleanTimeouts(vm) {
-    /* eslint-disable no-underscore-dangle */
     if (Array.isArray(vm.$options._cleanTimeouts)) {
         vm.$options._cleanTimeouts.forEach(obj => window.clearTimeout(obj.timeoutId));
 
         delete vm.$options._cleanTimeouts;
     }
-    /* eslint-enable no-underscore-dangle */
 }
 
 /**

@@ -119,7 +119,7 @@ export default {
         },
         solveTitle() {
             const time = get(this.solve, 'time', 0);
-
+            
             return formatShortTimeSentence(time);
         },
         solution() {
@@ -235,7 +235,7 @@ export default {
         },
         replay() {
             clearCleanTimeouts(this);
-
+            
             this.applyScrambledState();
 
             this.inspecting = false;
