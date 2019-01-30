@@ -12,8 +12,9 @@ class UsersController extends ApiController
 {
     /**
      * Fetch the stats for a user.
-     * 
-     * @param  string   $username
+     *
+     * @param string $username
+     *
      * @return Response
      */
     public function find($username)
@@ -56,13 +57,13 @@ class UsersController extends ApiController
 
             return $this->success([
                 'records' => $records,
-                'solves' => $solves,
-                'totals' => $totals,
-                'user' => [
-                    'avatar' => $user->avatar,
+                'solves'  => $solves,
+                'totals'  => $totals,
+                'user'    => [
+                    'avatar'     => $user->avatar,
                     'created_at' => (string) $user->created_at,
-                    'name' => $user->name,
-                    'username' => $user->username,
+                    'name'       => $user->name,
+                    'username'   => $user->username,
                 ],
             ]);
         }
@@ -80,8 +81,9 @@ class UsersController extends ApiController
 
     /**
      * Get the solve history for a user.
-     * 
-     * @param  string   $username
+     *
+     * @param string $username
+     *
      * @return Response
      */
     public function solves($username)

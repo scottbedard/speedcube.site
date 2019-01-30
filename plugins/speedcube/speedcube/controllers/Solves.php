@@ -1,19 +1,20 @@
-<?php namespace Speedcube\Speedcube\Controllers;
+<?php
 
-use BackendMenu;
+namespace Speedcube\Speedcube\Controllers;
+
 use Backend\Classes\Controller;
-use Carbon\Carbon;
+use BackendMenu;
 use DB;
 use Speedcube\Speedcube\Models\Solve;
 
 /**
- * Solves Back-end Controller
+ * Solves Back-end Controller.
  */
 class Solves extends Controller
 {
     public $implement = [
         'Backend.Behaviors.FormController',
-        'Backend.Behaviors.ListController'
+        'Backend.Behaviors.ListController',
     ];
 
     public $formConfig = 'config_form.yaml';
@@ -45,7 +46,7 @@ class Solves extends Controller
     protected function loadScoreboard()
     {
         // top user this month
-        $this->vars['mostSolves']= Solve::completed()
+        $this->vars['mostSolves'] = Solve::completed()
             ->thisMonth()
             ->select('user_id', DB::raw('count(*) as total'))
             ->groupBy('user_id')
@@ -57,7 +58,7 @@ class Solves extends Controller
         $this->vars['dnfThisMonth'] = Solve::dnf()
             ->thisMonth()
             ->count();
-    
+
         // dnf last month
         $this->vars['dnfLastMonth'] = Solve::dnf()
             ->lastMonth()
@@ -67,7 +68,7 @@ class Solves extends Controller
         $this->vars['solvesThisMonth'] = Solve::completed()
             ->thisMonth()
             ->count();
-        
+
         // completed last month
         $this->vars['solvesLastMonth'] = Solve::completed()
             ->lastMonth()

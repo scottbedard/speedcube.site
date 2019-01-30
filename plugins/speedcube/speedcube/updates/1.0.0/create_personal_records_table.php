@@ -1,14 +1,16 @@
-<?php namespace Speedcube\Speedcube\Updates;
+<?php
 
-use Schema;
+namespace Speedcube\Speedcube\Updates;
+
 use October\Rain\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
+use Schema;
 
 class CreatePersonalRecordsTable extends Migration
 {
     public function up()
     {
-        Schema::create('speedcube_speedcube_personal_records', function(Blueprint $table) {
+        Schema::create('speedcube_speedcube_personal_records', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('solve_id')->unsigned()->index();

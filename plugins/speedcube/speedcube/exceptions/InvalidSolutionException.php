@@ -6,5 +6,4 @@ use ApplicationException;
 
 class InvalidSolutionException extends ApplicationException
 {
-
 }

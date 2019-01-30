@@ -1,9 +1,11 @@
-<?php namespace Speedcube\Speedcube\Models;
+<?php
+
+namespace Speedcube\Speedcube\Models;
 
 use Model;
 
 /**
- * Config Model
+ * Config Model.
  */
 class Config extends Model
 {
