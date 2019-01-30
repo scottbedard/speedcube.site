@@ -1,5 +1,5 @@
-depth: "> 1"
 finder:
+  depth: "> 1"
   exclude:
     - "bootstrap"
     - "modules"
