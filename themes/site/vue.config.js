@@ -58,6 +58,7 @@ module.exports = {
             ],
         };
     },
+    publicPath: '/themes/site/assets',
     pluginOptions: {
         karma: {
             files: [
