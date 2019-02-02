@@ -17,9 +17,10 @@ columns:
         sortable: true
         type: partial
 
-    cube_size:
-        label: Cube size
-        type: number
+    puzzle:
+        label: Puzzle
+        relation: scramble
+        select: puzzle
 
     time:
         align: right

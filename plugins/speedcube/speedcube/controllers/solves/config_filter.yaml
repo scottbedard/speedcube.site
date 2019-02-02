@@ -4,10 +4,10 @@
 
 scopes:
 
-    cube_size:
+    puzzle:
         label: Puzzle
         type: group
-        conditions: cube_size in (:filtered)
+        scope: puzzles
         options:
             2: 2x2
             3: 3x3

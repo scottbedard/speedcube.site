@@ -289,6 +289,13 @@ class Solve extends Model
         });
     }
 
+    public function scopePuzzles($query, array $puzzles)
+    {
+        return $query->whereHas('scramble', function ($scramble) use ($puzzles) {
+            $scramble->whereIn('puzzle', $puzzles);
+        });
+    }
+
     public function scopeThisMonth($query)
     {
         return $query->where('created_at', '>=', Carbon::now()->startOfMonth());

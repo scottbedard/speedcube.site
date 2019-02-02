@@ -1,1 +1,9 @@
-<?= $record->user ?: 'Guest' ?>
+<?php
+$row = $record->toArray();
+?>
+
+<?php if ($row['user']): ?>
+    <?= array_get($row, 'user.username'); ?>
+<?php else: ?>
+    Guest
+<?php endif; ?>

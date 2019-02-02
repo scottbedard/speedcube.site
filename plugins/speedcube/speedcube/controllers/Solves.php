@@ -40,7 +40,7 @@ class Solves extends Controller
 
     public function listExtendQuery($query)
     {
-        $query->with('user');
+        return $query->withUserSummary();
     }
 
     protected function loadScoreboard()
