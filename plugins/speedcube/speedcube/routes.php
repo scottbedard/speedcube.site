@@ -30,5 +30,6 @@ Route::prefix('api/speedcube/speedcube')
             // config
             Route::get('config', 'Speedcube\Speedcube\Http\Controllers\ConfigController@index');
             Route::post('config', 'Speedcube\Speedcube\Http\Controllers\ConfigController@save');
+            Route::post('keyboardconfig', 'Speedcube\Speedcube\Http\Controllers\KeyboardConfigController@save');
         });
     });

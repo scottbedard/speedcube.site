@@ -62,6 +62,7 @@ class Plugin extends PluginBase
         User::extend(function ($model) {
             // relationships
             $model->hasMany['configs'] = 'SpeedCube\SpeedCube\Models\Config';
+            $model->hasMany['keyboardConfigs'] = 'Speedcube\Speedcube\Models\KeyboardConfig';
             $model->hasMany['records'] = 'Speedcube\Speedcube\Models\PersonalRecord';
             $model->hasMany['solves'] = 'Speedcube\Speedcube\Models\Solve';
 
