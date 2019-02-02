@@ -17,6 +17,7 @@
         <v-card v-if="records.length > 0">
             <v-card-link
                 v-for="record in records"
+                title="Click to watch replay"
                 :key="record.id"
                 :to="{
                     name: 'replay',
