@@ -15,6 +15,13 @@ class KeyboardConfig extends Model
     public $table = 'speedcube_speedcube_keyboard_configs';
 
     /**
+     * @var array Attributes
+     */
+    public $attributes = [
+        'config' => '{}',
+    ];
+
+    /**
      * @var array Fillable fields
      */
     protected $fillable = [

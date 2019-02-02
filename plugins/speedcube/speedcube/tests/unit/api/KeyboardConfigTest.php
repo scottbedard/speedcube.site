@@ -39,4 +39,32 @@ class KeyboardConfigApiTest extends PluginTestCase
         
         $this->assertEquals('world', $model->config['hello']);
     }
+
+    public function test_updating_a_keyboard_config()
+    {
+        $keyboardConfig = Factory::create(new KeyboardConfig, [
+            'config' => [
+                'foo' => 'bar',
+            ],
+            'puzzle' => '3x3',
+            'user_id' => $this->user->id,
+        ]);
+
+        $response = $this->post('/api/speedcube/speedcube/keyboardconfig', [
+            'config' => [
+                'foo' => 'baz',
+            ],
+            'puzzle' => '3x3',
+        ]);
+
+        $response->assertStatus(200);
+
+        $data = json_decode($response->getContent(), true);
+
+        $model = KeyboardConfig::find($data['keyboardConfig']['id']);
+        
+        $this->assertEquals(1, KeyboardConfig::count());
+        
+        $this->assertEquals('baz', $model->config['foo']);
+    }
 }

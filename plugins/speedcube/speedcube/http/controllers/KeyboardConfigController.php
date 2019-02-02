@@ -40,5 +40,11 @@ class KeyboardConfigController extends ApiController
         }
 
         // otherwise update the existing keyboard config
+        $model->config = $config;
+        $model->save();
+
+        return $this->success([
+            'keyboardConfig' => $model,
+        ]);
     }
 }
