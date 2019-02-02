@@ -23,7 +23,13 @@ if ($solvesThisMonth > $solvesLastMonth) {
         <?php if ($mostSolves): ?>
             <div class="scoreboard-item title-value">
                 <h4>Top User</h4>
-                <p class="oc-icon-star"><?= $mostSolves->user ? $mostSolves->user->username : 'Guest' ?></p>
+                <p class="oc-icon-star">
+                    <?php if  ($mostSolves->user): ?>
+                        <a href="<?= url('/users/' . $mostSolves->user->username) ?>"><?= $mostSolves->user->username ?></a>
+                    <?php else: ?>
+                        Guest
+                    <?php endif; ?>
+                </p>
                 <p class="description"><?= number_format($mostSolves->total) ?> completed <?= str_plural('solve', $mostSolves->total) ?></p>
             </div>
         <?php endif; ?>
