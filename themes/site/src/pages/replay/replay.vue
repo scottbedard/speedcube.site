@@ -59,6 +59,10 @@
                     v-else
                     class="text-center"
                     key="ready">
+                    <div
+                        v-text="solve.scramble.scramble"
+                        class="font-mono font-thin max-w-lg mx-auto leading-normal mb-12 text-grey-6"
+                    />
                     <v-button @click="replay">
                         Watch
                     </v-button>
