@@ -1,9 +1,11 @@
-<?php namespace Speedcube\Speedcube\Models;
+<?php
+
+namespace Speedcube\Speedcube\Models;
 
 use Model;
 
 /**
- * KeyboardConfig Model
+ * KeyboardConfig Model.
  */
 class KeyboardConfig extends Model
 {
