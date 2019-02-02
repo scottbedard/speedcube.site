@@ -28,6 +28,15 @@
                         />
                     </div>
 
+                    <!-- controls -->
+                    <div
+                        v-if="controlsAreVisible"
+                        key="controls">
+                        <v-controls
+                            :puzzle="puzzle"
+                        />
+                    </div>
+
                     <!-- scrambling -->
                     <div
                         v-else-if="scrambling"
@@ -118,6 +127,9 @@ export default {
     },
     data() {
         return {
+            // visilbility of keyboard controls editor
+            controlsAreVisible: false,
+
             // default puzzle configuration
             defaultConfig: {},
 
@@ -172,6 +184,7 @@ export default {
     },
     components: {
         'v-appearance': () => import('./appearance/appearance.vue'),
+        'v-controls': () => import('./controls/controls.vue'),
     },
     computed: {
         ...mapGetters('user', [
@@ -290,6 +303,9 @@ export default {
         },
         onAppearanceClick() {
             this.appearanceIsVisible = true;
+        },
+        onControlsClick() {
+            this.controlsAreVisible = true;
         },
         onEscapeUp() {
             // abort the current solve if one is running
