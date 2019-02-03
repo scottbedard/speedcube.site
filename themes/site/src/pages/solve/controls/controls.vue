@@ -3,6 +3,7 @@
         <!-- cube controls -->
         <v-cube-controls
             v-if="isCube"
+            @close="close"
         />
     </div>
 </template>
@@ -18,6 +19,11 @@ export default {
     computed: {
         isCube() {
             return isCube(this.puzzle);
+        },
+    },
+    methods: {
+        close() {
+            this.$emit('close');
         },
     },
     props: {

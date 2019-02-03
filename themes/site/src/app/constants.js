@@ -1,6 +1,39 @@
 // the current year
 export const currentYear = (new Date()).getFullYear();
 
+// default cube keyboard config
+export const defaultCubeKeyboardConfig = {
+    modifiers: {
+        // ...
+    },
+    turns: {
+        J: 'U',
+        F: 'U-',
+        D: 'L',
+        E: 'L-',
+        H: 'F',
+        G: 'F-',
+        I: 'R',
+        K: 'R-',
+        W: 'B',
+        O: 'B-',
+        S: 'D',
+        L: 'D-',
+        A: 'Y-',
+        ';': 'Y',
+        R: 'X',
+        U: 'X',
+        T: 'X',
+        Y: 'X',
+        V: 'X-',
+        C: 'X-',
+        N: 'X-',
+        M: 'X-',
+        Q: 'Z-',
+        P: 'Z',
+    },
+};
+
 // bezier curves
 export const easeInCubic = [0.55, 0.055, 0.675, 0.19];
 export const easeInOutCubic = [0.645, 0.045, 0.355, 1];

@@ -30,10 +30,11 @@
 
                     <!-- controls -->
                     <div
-                        v-if="controlsAreVisible"
+                        v-else-if="controlsAreVisible"
                         key="controls">
                         <v-controls
                             :puzzle="puzzle"
+                            @close="hideControls"
                         />
                     </div>
 
@@ -296,6 +297,9 @@ export default {
 
                 this.solves.push(solve);
             });
+        },
+        hideControls() {
+            this.controlsAreVisible = false;
         },
         hideOptions() {
             this.appearanceIsVisible = false;
