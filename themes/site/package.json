@@ -43,7 +43,7 @@
     "pluralize": "^7.0.0",
     "spyfu-vue-functional": "^0.2.6",
     "spyfu-vuex-helpers": "^0.12.4",
-    "three": "^0.100.0",
+    "three": "^0.101.1",
     "vue": "^2.5.17",
     "vue-chartjs": "^3.4.0",
     "vue-color": "^2.7.0",
