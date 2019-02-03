@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-grey-1 h-full">
+    <div>
         <!-- header -->
         <v-header />
 
