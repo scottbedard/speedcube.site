@@ -2,7 +2,7 @@
     p {
         @apply leading-normal max-w-md mx-auto text-center text-grey-6 text-sm;
     }
-    
+
     b {
         @apply font-mono inline-flex items-center text-sm;
     }
@@ -44,7 +44,7 @@
                 @click.prevent>
                 Add Key Binding
             </v-button>
-            
+
             <!-- save -->
             <v-button
                 class="m-4"
@@ -67,14 +67,10 @@
 </template>
 
 <script>
-import { bindExternalEvent } from '@/app/utils/component';
 import { defaultCubeKeyboardConfig } from '@/app/constants';
 import { get } from 'lodash-es';
 
 export default {
-    mounted() {
-        bindExternalEvent(this, document.body, 'keypress', this.onKeypress);
-    },
     computed: {
         keyboardConfig() {
             return defaultCubeKeyboardConfig;
@@ -88,9 +84,6 @@ export default {
     methods: {
         onCloseClick() {
             this.$emit('close');
-        },
-        onKeypress(e) {
-            // console.log('keypress', e);
         },
         onKeymapClick(key) {
             console.log('ok', key);
