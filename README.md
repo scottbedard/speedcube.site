@@ -1,4 +1,4 @@
-# speedcube.site
+# [speedcube.site](https://speedcube.site)
 
 [![Uptime](https://img.shields.io/uptimerobot/ratio/7/m781868813-fbc9defa79cd3ab6d0c548ef.svg?style=flat)](https://uptimerobot.com/dashboard.php#781868813)
 [![Build](https://img.shields.io/circleci/project/github/scottbedard/speedcube.site/master.svg)](https://circleci.com/gh/scottbedard/speedcube.site)
