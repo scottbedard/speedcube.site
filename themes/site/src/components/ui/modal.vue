@@ -19,8 +19,10 @@
                 :id="descriptionId"
             />
 
-            <v-card padded>
-                <slot />
+            <v-card :padded="padded">
+                <div class="max-w-sm">
+                    <slot />
+                </div>
             </v-card>
         </div>
     </portal>
@@ -28,8 +30,8 @@
 
 <script>
 import { bindExternalEvent, cleanTimeout } from '@/app/utils/component';
-import { uniqueId } from 'lodash-es';
 import { isForeignClick, queryElementThen } from '@/app/utils/dom';
+import { uniqueId } from 'lodash-es';
 
 const possibleFocusTargets = 'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),[tabindex="0"]';
 
@@ -107,6 +109,10 @@ export default {
     props: {
         description: {
             type: String,
+        },
+        padded: {
+            default: false,
+            type: Boolean,
         },
         title: {
             required: true,

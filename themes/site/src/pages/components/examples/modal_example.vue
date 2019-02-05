@@ -3,7 +3,6 @@
         <p>Modal style popovers.</p>
 
         <div class="pt-8">
-            <pre>{{ $data }}</pre>
             <v-button @click="open">
                 Show modal
             </v-button>
@@ -11,10 +10,22 @@
         
         <v-modal
             v-if="visible"
-            title="Some awesome modal"
+            description="A description not required, but is a good practice to include."
+            padded
+            title="Example modal"
             @close="close">
-            uh...
-            <input @focus="onFocus" />
+            <h3 class="mb-4">Be aware of the focus behavior</h3>
+            <p class="leading-normal mb-8 text-grey-8 text-sm">
+                Opening a modal will set the focus to the first eligible element within it. In this
+                example, that element will be the following button. Because that button is focused,
+                pressing <b class="font-mono">&quot;enter&quot;</b> should behave the same as clicking
+                the button. When a modal is closed, focus will be returned to the element that previously
+                had it. Here, that element will be the <b class="font-mono">&quot;show&nbsp;modal&quot;</b>
+                button.
+            </p>
+            <div class="flex justify-end">
+                <v-button @click="close">Close</v-button>
+            </div>
         </v-modal>
     </v-example>
 </template>
@@ -32,9 +43,6 @@ export default {
         'v-example': exampleComponent,
     },
     methods: {
-        onFocus() {
-            console.log('woots');
-        },
         close() {
             this.visible = false;
         },
