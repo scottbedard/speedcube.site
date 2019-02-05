@@ -38,6 +38,7 @@
     "bedard-cube": "^1.0.0-beta.0",
     "chart.js": "^2.7.3",
     "color": "^3.1.0",
+    "focus-trap": "^4.0.2",
     "lodash-es": "^4.17.11",
     "moment": "^2.22.2",
     "pluralize": "^7.0.0",

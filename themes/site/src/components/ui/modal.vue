@@ -1,7 +1,9 @@
 <template>
     <portal to="modal">
         <div
+            class="outline-none"
             role="dialog"
+            tabindex="-1"
             :aria-labelledby="titleId"
             :aria-describedby="descriptionId"
             :data-modal="uid">
@@ -29,11 +31,8 @@
 </template>
 
 <script>
-import { bindExternalEvent, cleanTimeout } from '@/app/utils/component';
-import { isForeignClick, queryElementThen } from '@/app/utils/dom';
 import { uniqueId } from 'lodash-es';
-
-const possibleFocusTargets = 'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),[tabindex="0"]';
+import focusTrap from 'focus-trap';
 
 export default {
     data() {
@@ -50,25 +49,25 @@ export default {
         // keep track of the modal on the screen
         this.$store.commit('modals/register', this.uid);
 
-        // restore focus when this modal is destroyed
-        const previousEl = document.activeElement;
-        
-        this.$once('hook:destroyed', () => previousEl.focus());
-
-        // portal components take a tick to update, so we'll wait for that
-        // to complete then continue mounting. the additional 10ms timeout
-        // is there to avoid an issue in chrome where the listener is called
-        // ion the initial click to open a modal.
+        // portal components take a tick to update
         this.$nextTick(() => {
-            cleanTimeout(this, () => {
-                
-                // focus the first eligible element in our modal
-                this.focus();
+            // trap focus inside of the modal and set initial focus
+            const el = this.$root.$el.querySelector(`[data-modal="${this.uid}"]`);
+            
+            const trap = focusTrap(el, { 
+                clickOutsideDeactivates: true,
+                escapeDeactivates: true,
+                fallbackFocus: el,
+                onDeactivate: this.close,
+            });
 
-                // bind events to close our modal
-                bindExternalEvent(this, document.body, 'click', this.onBodyClick);
-                bindExternalEvent(this, document.body, 'keydown', this.onBodyKeydown);
-            }, 10);
+            trap.activate({
+                initialFocus: 'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),[tabindex="0"]',
+            });
+
+            // when this component is destroyed deactivate our trap
+            // and return the focus to where it previously was
+            this.$once('hook:destroyed', () => trap.deactivate({ returnFocus: true }));
         });
     },
     computed: {
@@ -82,28 +81,6 @@ export default {
     methods: {
         close() {
             this.$emit('close');
-        },
-        focus() {
-            // look for a new focus target within our modal
-            const container = this.getContainer();
-
-            queryElementThen(container, possibleFocusTargets, el => el.focus());
-        },
-        getContainer() {
-            return this.$root.$el.querySelector(`[data-modal="${this.uid}"]`);
-        },
-        onBodyClick(e) {
-            // close if the click even didn't originate from our container
-            const container = this.getContainer();
-            
-            if (isForeignClick(e, container)) {
-                this.close();
-            }
-        },
-        onBodyKeydown(e) {
-            if (e.key === 'Escape' || e.key === 'Esc') {
-                this.close();
-            }
         },
     },
     props: {
