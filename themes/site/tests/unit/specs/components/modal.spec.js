@@ -141,7 +141,40 @@ describe('<v-modal>', function() {
         expect(modalEl.querySelector(`#modal-description-${uid}`).textContent).to.equal('bar');
     });
 
-    it('closes when the backdrop is clicked');
+    it('closes when the body is clicked without passing through the modal', async function() {
+        const onClose = stub();
+
+        vm = mount({
+            methods: {
+                onClose,
+            },
+            template: `
+                <div>
+                    <v-modals />
+                    <v-modal title="foo" @close="onClose">
+                        <button />
+                    </v-modal>
+                </div>
+            `,
+        });
+        
+        await vm.$nextTick();
+
+        // these events are attached to the body, so that means we
+        // need to place our modal in the document to run these tests
+        document.body.appendChild(vm.$el);
+
+        // clicking inside our modal should do nothing
+        click(vm.$el.querySelector('button'));
+        expect(onClose).not.to.have.been.called;
+
+        // clicking outside the modal should fire the close event
+        click(vm.$el);
+        expect(onClose).to.have.been.called;
+
+        // clean up after ourselves
+        document.body.removeChild(vm.$el);
+    });
 
     it('closes when escape is pressed');
 });
