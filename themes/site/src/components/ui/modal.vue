@@ -8,7 +8,7 @@
             :aria-labelledby="titleId"
             :aria-describedby="descriptionId"
             :data-modal="uid">
-            
+
             <h2
                 v-text="title"
                 class="hidden"
@@ -62,7 +62,7 @@ export default {
 
             // el.scrollTop(0);
 
-            const trap = focusTrap(el, { 
+            const trap = focusTrap(el, {
                 clickOutsideDeactivates: true,
                 escapeDeactivates: true,
                 fallbackFocus: el,

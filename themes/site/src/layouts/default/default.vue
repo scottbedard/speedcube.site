@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
     .modals {
         height: 200px;
-        
+
         &:not(:empty) {
             background-color: blue;
         }

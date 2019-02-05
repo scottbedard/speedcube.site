@@ -7,7 +7,7 @@
                 Show modal
             </v-button>
         </div>
-        
+
         <v-modal
             v-if="visible"
             description="A description not required, but is a good practice to include."
@@ -26,7 +26,7 @@
             <p class="leading-normal mb-8 text-grey-8 text-sm">
                 In addition to this, focus will be trapped within the modal. If the modal contains multiple
                 focusable elements, tabbing will cycle through them.
-            </p> 
+            </p>
             <div class="flex justify-end">
                 <v-button @click="close">Close</v-button>
             </div>
@@ -53,6 +53,6 @@ export default {
         open() {
             this.visible = true;
         },
-    }
+    },
 };
 </script>
