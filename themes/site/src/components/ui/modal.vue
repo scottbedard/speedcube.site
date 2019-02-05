@@ -29,7 +29,9 @@
 <script>
 import { bindExternalEvent } from '@/app/utils/component';
 import { uniqueId } from 'lodash-es';
-import { isForeignClick } from '@/app/utils/dom';
+import { isForeignClick, queryElementThen } from '@/app/utils/dom';
+
+const possibleFocusTargets = 'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),[tabindex="0"]';
 
 export default {
     data() {
@@ -49,7 +51,12 @@ export default {
         bindExternalEvent(this, document.body, 'click', this.onBodyClick);
         bindExternalEvent(this, document.body, 'keydown', this.onBodyKeydown);
 
-        // focus the first available element in our modal
+        // restore focus when this modal is destroyed
+        const previousEl = document.activeElement;
+        
+        this.$once('hook:destroyed', () => previousEl.focus());
+
+        // focus the first eligible element in our modal
         this.$nextTick(this.focus);
     },
     computed: {
@@ -65,21 +72,11 @@ export default {
             this.$emit('close');
         },
         focus() {
+            // look for a new focus target within our modal
             const container = this.getContainer();
 
             if (container) {
-                const focusableEls = Array.prototype.slice.call(container.querySelectorAll('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]'));
-
-                if (focusableEls.length > 0) {
-                    // document.activeElement does not work as expected on windows
-                    // versions of firefox, need to investigate this further and
-                    // find a more reliable way to restore the original focus.
-                    const previousFocus = document.activeElement;
-
-                    this.$on('hook:destroyed', () => previousFocus.focus());
-
-                    focusableEls[0].focus();
-                }
+                queryElementThen(container, possibleFocusTargets, el => el.focus());
             }
         },
         getContainer() {

@@ -14,7 +14,7 @@
             title="Some awesome modal"
             @close="close">
             uh...
-            <a href="#" @click.prevent>I should be focused</a>
+            <input @focus="onFocus" />
         </v-modal>
     </v-example>
 </template>
@@ -32,6 +32,9 @@ export default {
         'v-example': exampleComponent,
     },
     methods: {
+        onFocus() {
+            console.log('woots');
+        },
         close() {
             this.visible = false;
         },
