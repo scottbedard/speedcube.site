@@ -75,9 +75,7 @@ export default {
             // look for a new focus target within our modal
             const container = this.getContainer();
 
-            if (container) {
-                queryElementThen(container, possibleFocusTargets, el => el.focus());
-            }
+            queryElementThen(container, possibleFocusTargets, el => el.focus());
         },
         getContainer() {
             return this.$root.$el.querySelector(`[data-modal="${this.uid}"]`);
@@ -86,7 +84,7 @@ export default {
             // close if the click even didn't originate from our container
             const container = this.getContainer();
             
-            if (container && isForeignClick(e, container)) {
+            if (isForeignClick(e, container)) {
                 this.close();
             }
         },
