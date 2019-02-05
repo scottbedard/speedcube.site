@@ -12,7 +12,7 @@ const mount = factory({
 //
 // specs
 //
-describe.only('<v-modal>', function() {
+describe('<v-modal>', function() {
     it('renders a modal to the target container', async function() {
         vm = mount({
             data() {
