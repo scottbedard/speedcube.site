@@ -89,7 +89,9 @@ export default {
             }
         },
         onBodyKeydown(e) {
-
+            if (e.key === 'Escape' || e.key === 'Esc') {
+                this.close();
+            }
         },
     },
     props: {

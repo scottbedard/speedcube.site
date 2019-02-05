@@ -176,5 +176,41 @@ describe('<v-modal>', function() {
         document.body.removeChild(vm.$el);
     });
 
-    it('closes when escape is pressed');
+    it('closes when escape is pressed', async function() {
+        const onClose = stub();
+
+        vm = mount({
+            methods: {
+                onClose,
+            },
+            template: `
+                <div>
+                    <v-modals />
+                    <v-modal title="foo" @close="onClose">
+                        <button />
+                    </v-modal>
+                </div>
+            `,
+        });
+
+        await vm.$nextTick();
+
+        // these events are attached to the document body
+        document.body.appendChild(vm.$el);
+
+        // non-escape keydowns should not close the modal
+        simulate('keydown', document.body);
+
+        expect(onClose).not.to.have.been.called;
+
+        // and escape keys should close the modal
+        simulate('keydown', document.body, e => {
+            e.key = 'Escape';
+        });
+
+        expect(onClose).to.have.been.called;
+
+        // clean up after ourselves
+        document.body.removeChild(vm.$el);
+    });
 });
