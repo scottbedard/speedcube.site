@@ -119,6 +119,28 @@ describe('<v-modal>', function() {
         document.body.removeChild(vm.$el);
     });
 
+    it('applies correct accessability properties to the modal', async function() {
+        vm = mount({
+            template: `
+                <div>
+                    <v-modals />
+                    <v-modal ref="modal" title="foo" description="bar" />
+                </div>
+            `,
+        });
+
+        await vm.$nextTick();
+
+        const uid = vm.$refs.modal.uid;
+        const modalEl = vm.$el.querySelector(`[data-modal="${uid}"]`);
+
+        expect(modalEl.getAttribute('role')).to.equal('dialog');
+        expect(modalEl.getAttribute('aria-labelledby')).to.equal(`modal-title-${uid}`);
+        expect(modalEl.getAttribute('aria-describedby')).to.equal(`modal-description-${uid}`);
+        expect(modalEl.querySelector(`#modal-title-${uid}`).textContent).to.equal('foo');
+        expect(modalEl.querySelector(`#modal-description-${uid}`).textContent).to.equal('bar');
+    });
+
     it('closes when the backdrop is clicked');
 
     it('closes when escape is pressed');
