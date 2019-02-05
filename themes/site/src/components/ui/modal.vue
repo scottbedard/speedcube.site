@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { bindExternalEvent } from '@/app/utils/component';
+import { bindExternalEvent, cleanTimeout } from '@/app/utils/component';
 import { uniqueId } from 'lodash-es';
 import { isForeignClick, queryElementThen } from '@/app/utils/dom';
 
@@ -36,6 +36,7 @@ const possibleFocusTargets = 'a[href],area[href],input:not([disabled]),select:no
 export default {
     data() {
         return {
+            // a unique identifier for this modal
             uid: uniqueId(),
         };
     },
@@ -47,17 +48,26 @@ export default {
         // keep track of the modal on the screen
         this.$store.commit('modals/register', this.uid);
 
-        // listen for events to close our modal
-        bindExternalEvent(this, document.body, 'click', this.onBodyClick);
-        bindExternalEvent(this, document.body, 'keydown', this.onBodyKeydown);
-
         // restore focus when this modal is destroyed
         const previousEl = document.activeElement;
         
         this.$once('hook:destroyed', () => previousEl.focus());
 
-        // focus the first eligible element in our modal
-        this.$nextTick(this.focus);
+        // portal components take a tick to update, so we'll wait for that
+        // to complete then continue mounting. the additional 10ms timeout
+        // is there to avoid an issue in chrome where the listener is called
+        // ion the initial click to open a modal.
+        this.$nextTick(() => {
+            cleanTimeout(this, () => {
+                
+                // focus the first eligible element in our modal
+                this.focus();
+
+                // bind events to close our modal
+                bindExternalEvent(this, document.body, 'click', this.onBodyClick);
+                bindExternalEvent(this, document.body, 'keydown', this.onBodyKeydown);
+            }, 10);
+        });
     },
     computed: {
         descriptionId() {

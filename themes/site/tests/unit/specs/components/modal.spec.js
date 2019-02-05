@@ -66,7 +66,7 @@ describe('<v-modal>', function() {
 
         vm.visible = true;
 
-        await vm.$nextTick();
+        await timeout(100);
 
         // our anchor should have been focused
         expect(onFocus).to.have.been.called;
@@ -158,7 +158,7 @@ describe('<v-modal>', function() {
             `,
         });
         
-        await vm.$nextTick();
+        await timeout(100);
 
         // these events are attached to the body, so that means we
         // need to place our modal in the document to run these tests
@@ -193,7 +193,7 @@ describe('<v-modal>', function() {
             `,
         });
 
-        await vm.$nextTick();
+        await timeout(100);
 
         // these events are attached to the document body
         document.body.appendChild(vm.$el);
