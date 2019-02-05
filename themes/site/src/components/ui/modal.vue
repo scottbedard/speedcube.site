@@ -2,6 +2,7 @@
     <portal to="modal">
         <div
             class="outline-none"
+            style="margin: auto"
             role="dialog"
             tabindex="-1"
             :aria-labelledby="titleId"
@@ -31,10 +32,15 @@
 </template>
 
 <script>
-import { uniqueId } from 'lodash-es';
 import focusTrap from 'focus-trap';
+import noScroll from 'no-scroll';
+import { uniqueId } from 'lodash-es';
 
 export default {
+    created() {
+        // keep track of the modal on the screen
+        this.$store.commit('modals/register', this.uid);
+    },
     data() {
         return {
             // a unique identifier for this modal
@@ -46,14 +52,16 @@ export default {
         this.$store.commit('modals/unregister', this.uid);
     },
     mounted() {
-        // keep track of the modal on the screen
-        this.$store.commit('modals/register', this.uid);
+        // disable background scrolling
+        noScroll.on();
 
         // portal components take a tick to update
         this.$nextTick(() => {
             // trap focus inside of the modal and set initial focus
             const el = this.$root.$el.querySelector(`[data-modal="${this.uid}"]`);
-            
+
+            // el.scrollTop(0);
+
             const trap = focusTrap(el, { 
                 clickOutsideDeactivates: true,
                 escapeDeactivates: true,
@@ -65,9 +73,13 @@ export default {
                 initialFocus: 'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),[tabindex="0"]',
             });
 
-            // when this component is destroyed deactivate our trap
-            // and return the focus to where it previously was
-            this.$once('hook:destroyed', () => trap.deactivate({ returnFocus: true }));
+            this.$once('hook:destroyed', () => {
+                // kill the trap and restore focus to where it previous was
+                trap.deactivate({ returnFocus: true });
+
+                // restore background scrolling
+                noScroll.off();
+            });
         });
     },
     computed: {
