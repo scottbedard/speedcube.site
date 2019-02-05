@@ -129,3 +129,10 @@ window.stubRequests = function (requests = {}) {
 window.submit = function (el, setupFn) {
     simulate('submit', el, setupFn);
 };
+
+//
+// timeout
+//
+window.timeout = function (ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

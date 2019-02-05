@@ -41,6 +41,7 @@
     "lodash-es": "^4.17.11",
     "moment": "^2.22.2",
     "pluralize": "^7.0.0",
+    "portal-vue": "^1.5.1",
     "spyfu-vue-functional": "^0.2.6",
     "spyfu-vuex-helpers": "^0.12.4",
     "three": "^0.101.1",

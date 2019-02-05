@@ -17,6 +17,7 @@ import gridCellComponent from './containers/grid_cell.vue';
 import gridComponent from './containers/grid.vue';
 import inputComponent from './ui/input.vue';
 import marginComponent from './containers/margin.vue';
+import modalComponent from './ui/modal.vue';
 import pageComponent from './containers/page.vue';
 import puzzleComponent from './puzzle/puzzle.vue';
 import rangeInputComponent from './ui/range_input.vue';
@@ -69,6 +70,7 @@ export default {
     'v-form': formComponent,
     'v-form-field': formFieldComponent,
     'v-input': inputComponent,
+    'v-modal': modalComponent,
     'v-range-input': rangeInputComponent,
     'v-select': selectComponent,
     'v-spinner': spinnerComponent,

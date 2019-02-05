@@ -18,6 +18,7 @@ import './filters/timer';
 // plugins
 //
 import './plugins/alert';
+import './plugins/portal';
 import './plugins/router';
 import './plugins/vuex';
 

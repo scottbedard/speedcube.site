@@ -52,6 +52,7 @@ export const isTesting = process.env.NODE_ENV === 'testing';
 export const isTouch = false;
 
 // key codes
+// export const escapeKeyCode = ...;
 export const enterKeyCode = 13;
 export const spacebarKeyCode = 32;
 
