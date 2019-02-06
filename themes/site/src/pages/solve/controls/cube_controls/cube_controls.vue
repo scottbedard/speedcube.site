@@ -28,9 +28,31 @@
                     class="inline-flex items-center mb-6 text-left px-4 w-24"
                     href="#"
                     :key="index"
-                    @click.prevent="onKeymapClick(key)">
-                    {{ key }} <i class="fa fa-angle-right px-2 text-grey-4"></i> {{ turn }}
+                    @click.prevent="openForm(key)">
+                    {{ key }} <i class="fa fa-angle-right px-2"></i> {{ turn }}
                 </a>
+
+                <v-modal
+                    v-if="formIsVisible"
+                    padded
+                    title="Update Key Binding"
+                    @close="closeForm">
+                    <form class="w-96" @submit.prevent="updateTurn">
+                        <div class="mb-8">
+                            <v-input
+                                v-model="turn"
+                                placeholder="Enter a turn"
+                            />
+                        </div>
+                        <div class="flex flex-wrap justify-end -m-4 overflow-hidden">
+                            <v-button
+                                class="m-4"
+                                size="sm">
+                                Confirm
+                            </v-button>
+                        </div>
+                    </form>
+                </v-modal>
             </div>
         </div>
 
@@ -71,6 +93,12 @@ import { defaultCubeKeyboardConfig } from '@/app/constants';
 import { get } from 'lodash-es';
 
 export default {
+    data() {
+        return {
+            formIsVisible: false,
+            turn: '',
+        };
+    },
     computed: {
         keyboardConfig() {
             return defaultCubeKeyboardConfig;
@@ -82,11 +110,19 @@ export default {
         },
     },
     methods: {
+        closeForm() {
+            this.formIsVisible = false;
+        },
         onCloseClick() {
             this.$emit('close');
         },
-        onKeymapClick(key) {
-            console.log('ok', key);
+        openForm(key) {
+            this.formIsVisible = true;
+
+            console.log('key', key);
+        },
+        updateTurn() {
+            console.log('update the turn');
         },
     },
 };
