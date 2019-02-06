@@ -63,7 +63,7 @@ export default {
             onTransitionend={onTransitionEnd}>
             <transition
                 css={false}
-                onAfterEnter={onAfterEnter.bind(context)}
+                onAfterEnter={onAfterEnter}
                 onBeforeEnter={onBeforeEnter.bind(context)}
                 onBeforeLeave={onBeforeLeave.bind(context)}
                 onEnter={onEnter.bind(context)}
