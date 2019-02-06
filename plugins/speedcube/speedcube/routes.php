@@ -14,10 +14,11 @@ Route::prefix('api/speedcube/speedcube')
         Route::post('scrambles', 'Speedcube\Speedcube\Http\Controllers\ScramblesController@create');
 
         // solves
+        Route::get('solves/highlighted', 'Speedcube\Speedcube\Http\Controllers\SolvesController@highlighted');
         Route::get('solves/{id}', 'Speedcube\Speedcube\Http\Controllers\SolvesController@find');
         Route::get('solves', 'Speedcube\Speedcube\Http\Controllers\SolvesController@index');
         Route::post('solves', 'Speedcube\Speedcube\Http\Controllers\SolvesController@complete');
-
+        
         // users
         Route::get('users/{username}/overview', 'Speedcube\Speedcube\Http\Controllers\UsersController@find');
         Route::get('users/{username}/solves', 'Speedcube\Speedcube\Http\Controllers\UsersController@solves');

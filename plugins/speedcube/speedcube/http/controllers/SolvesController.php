@@ -83,6 +83,24 @@ class SolvesController extends ApiController
     }
 
     /**
+     * Get a highlighted solve.
+     * 
+     * @return Response
+     */
+    public function highlighted()
+    {
+        $solve = Solve::withUserSummary()
+            ->with('scramble')
+            ->wherePuzzle('3x3')
+            ->fastest()
+            ->first();
+
+        return $this->success([
+            'solve' => $solve,
+        ]);
+    }
+
+    /**
      * Get the fastest solves of all time.
      *
      * @return Response
