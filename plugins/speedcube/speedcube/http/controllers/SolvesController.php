@@ -91,7 +91,7 @@ class SolvesController extends ApiController
     {
         $solve = Solve::withUserSummary()
             ->with('scramble')
-            ->wherePuzzle('3x3')
+            ->puzzle('3x3')
             ->fastest()
             ->first();
 

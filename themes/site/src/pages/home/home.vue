@@ -1,13 +1,33 @@
 <template>
     <v-margin class="text-center py-20" padded>
-        <h1 class="font-light">This site is a work in progress, check back later.</h1>
+        <pre>{{ highlightedSolve }}</pre>
     </v-margin>
 </template>
 
 <script>
+import { getHighlightedSolve } from '@/app/repositories/solves';
+
 export default {
+    created() {
+        this.fetchHighlightedSolve();
+    },
+    data() {
+        return {
+            highlightedSolve: null,
+            highlightedSolveIsLoading: false,
+        };
+    },
     methods: {
-        // ...
+        fetchHighlightedSolve() {
+            this.highlightedSolveIsLoading = true;
+
+            getHighlightedSolve().then((response) => {
+                // success
+                this.highlightedSolve = response.data.solve;
+            }).finally(() => {
+                this.highlightedSolveIsLoading = false;
+            });
+        },
     },
 };
 </script>
