@@ -84,7 +84,7 @@ class SolvesController extends ApiController
 
     /**
      * Get a highlighted solve.
-     * 
+     *
      * @return Response
      */
     public function highlighted()
