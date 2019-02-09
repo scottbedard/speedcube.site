@@ -29,7 +29,7 @@ import { isFunction } from 'lodash-es';
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { autofocus, disabled, id, max, min, placeholder, step, type, value } = context.props;
+        const { autofocus, disabled, id, max, min, placeholder, type, value } = context.props;
 
         const inputBindings = {
             class: [],
