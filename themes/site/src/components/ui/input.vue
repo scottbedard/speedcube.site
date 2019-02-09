@@ -29,7 +29,7 @@ import { isFunction } from 'lodash-es';
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { autofocus, disabled, max, min, placeholder, step, type, value } = context.props;
+        const { autofocus, disabled, id, max, min, placeholder, step, type, value } = context.props;
 
         const inputBindings = {
             class: [],
@@ -61,11 +61,9 @@ export default {
                 class="bg-transparent h-full w-full text-grey-8 focus:outline-none"
                 disabled={disabled}
                 domPropsValue={value}
-                max={max}
-                min={min}
+                id={id}
                 placeholder={placeholder}
                 type={type}
-                step={step}
                 {...inputBindings}
             />
         </div>;
@@ -80,6 +78,9 @@ export default {
             default: false,
             type: Boolean,
         },
+        id: {
+            type: String,
+        },
         max: {
             type: [Number, String],
         },
@@ -88,9 +89,6 @@ export default {
         },
         placeholder: {
             type: String,
-        },
-        step: {
-            type: [Number, String],
         },
         type: {
             type: String,
