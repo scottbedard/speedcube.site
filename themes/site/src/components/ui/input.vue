@@ -42,11 +42,6 @@ export default {
             inputBindings.directives.push({ name: 'autofocus' });
         }
 
-        // disabled
-        if (disabled) {
-            // ...
-        }
-
         // interface with v-model
         if (isFunction(context.listeners.input)) {
             inputBindings.on.input = e => context.listeners.input(e.target.value);
