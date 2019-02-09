@@ -4,15 +4,22 @@ import { bindAll } from 'spyfu-vue-functional';
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { loading, primary, size, tag, to } = context.props;
+        const { danger, loading, primary, size, tag, to } = context.props;
+
+        bindings.class.push('block border-2 border-grey-5 text-grey-7 trans-border trans-color');
 
         //
-        // primary
+        // theme
         //
-        if (primary) {
+        if (danger) {
+            // danger
+            bindings.class.push('hover:border-danger-7 hover:text-danger-7');
+        } else if (primary) {
+            // primary
             bindings.class.push('bg-primary-4 text-primary-10 trans-bg hover:bg-primary-5');
         } else {
-            bindings.class.push('block border-2 border-grey-5 text-grey-7 trans-border trans-color hover:border-primary-5 hover:text-primary-7');
+            // default
+            bindings.class.push('hover:border-primary-5 hover:text-primary-7');
         }
 
         //
@@ -46,6 +53,10 @@ export default {
     },
     functional: true,
     props: {
+        danger: {
+            default: false,
+            type: Boolean,
+        },
         disabled: {
             default: false,
             type: Boolean,

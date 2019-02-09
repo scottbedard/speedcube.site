@@ -32,26 +32,62 @@
                     {{ key }} <i class="fa fa-angle-right px-2"></i> {{ turn }}
                 </a>
 
+                <!-- modal -->
                 <v-modal
                     v-if="formIsVisible"
                     padded
                     title="Update Key Binding"
                     @close="closeForm">
-                    <form class="w-96" @submit.prevent="updateTurn">
+                    <!-- <form class="w-96" @submit.prevent="updateTurn">
                         <div class="mb-8">
+                            <label class="mb-2" for="cube_controls_turn">
+                                Turn to execute
+                            </label>
+                            <v-input
+                                v-model="turn"
+                                id="cube_controls_turn"
+                                placeholder="Enter a turn"
+                            />
+                        </div>
+                        
+                    </form> -->
+                    <v-form
+                        class="sm:w-96"
+                        @submit="updateTurn">
+
+                        <!-- turn -->
+                        <v-form-field
+                            label="Turn to execute"
+                            name="turn"
+                            rules="required"
+                            :error-messages="{
+                                required: 'Please enter a turn to execute for this key binding',   
+                            }"
+                            :value="turn">
                             <v-input
                                 v-model="turn"
                                 placeholder="Enter a turn"
                             />
-                        </div>
-                        <div class="flex flex-wrap justify-end -m-4 overflow-hidden">
+                        </v-form-field>
+
+                        <!-- actions -->
+                        <div class="flex flex-wrap justify-end -m-2 overflow-hidden pt-8">
                             <v-button
-                                class="m-4"
-                                size="sm">
+                                class="m-2"
+                                danger
+                                size="sm"
+                                type="buttom"
+                                @click.prevent="deleteBinding">
+                                Delete
+                            </v-button>
+                            <v-button
+                                class="m-2"
+                                size="sm"
+                                type="submit">
                                 Confirm
                             </v-button>
                         </div>
-                    </form>
+                    </v-form>
                 </v-modal>
             </div>
         </div>
@@ -112,6 +148,9 @@ export default {
     methods: {
         closeForm() {
             this.formIsVisible = false;
+        },
+        deleteBinding() {
+            console.log('deleting the key binding...');
         },
         onCloseClick() {
             this.$emit('close');
