@@ -22,7 +22,7 @@
 
         <!-- key bindings -->
         <div class="flex mb-6 text-sm">
-            <div class="config-entries font-mono leading-normal max-w-md mx-auto">
+            <div class="font-mono leading-normal max-w-xl mx-auto">
                 <a
                     v-for="({ key, turn }, index) in turns"
                     class="inline-flex items-center mb-6 text-left px-4 w-24"
@@ -38,7 +38,7 @@
                     padded
                     title="Update Key Binding"
                     @close="closeForm">
-                    <v-form class="sm:w-96" @submit="updateTurn">
+                    <v-form @submit="updateTurn">
                         <!-- key binding -->
                         <v-form-field
                             label="Key binding"
@@ -94,36 +94,40 @@
         </div>
 
         <!-- actions -->
-        <div class="flex flex-wrap justify-center -m-4 overflow-hidden">
-            <!-- add key binding -->
-            <v-button
-                class="m-4"
-                href="#"
-                size="sm"
-                :disabled="loading"
-                @click.prevent="addBinding">
-                Add Key Binding
-            </v-button>
+        <v-collapse-transition>
+            <div v-if="loading" key="loading">
+                <v-spinner />
+            </div>
+            <div v-else key="actions">
+                <div class="flex flex-wrap justify-center -m-4 overflow-hidden">
+                    <!-- add key binding -->
+                    <v-button
+                        class="m-4"
+                        href="#"
+                        :disabled="loading"
+                        @click.prevent="addBinding">
+                        Add Turn
+                    </v-button>
 
-            <!-- save -->
-            <v-button
-                class="m-4"
-                href="#"
-                size="sm"
-                :disabled="loading"
-                @click.prevent="onSaveClick">
-                Save Changes
-            </v-button>
-        </div>
-
-        <div class="mt-6">
-            <a
-                class="text-grey-7 text-xs tracking-wide uppercase hover:text-danger-7"
-                href="#"
-                @click.prevent="onCloseClick">
-                Discard Changes
-            </a>
-        </div>
+                    <!-- save -->
+                    <v-button
+                        class="m-4"
+                        href="#"
+                        :disabled="loading"
+                        @click.prevent="onSaveClick">
+                        Save
+                    </v-button>
+                </div>
+                <div class="mt-6">
+                    <a
+                        class="text-grey-7 text-xs tracking-wide uppercase hover:text-danger-7"
+                        href="#"
+                        @click.prevent="onCloseClick">
+                        Discard Changes
+                    </a>
+                </div>
+            </div>
+        </v-collapse-transition>
     </div>
 </template>
 
@@ -202,8 +206,13 @@ export default {
     },
     watch: {
         formIsVisible(formIsVisible) {
-            console.log('emitting', formIsVisible);
             this.$emit(formIsVisible ? 'disable-turning' : 'enable-turning');
+        },
+        pendingKeyboardConfig: {
+            deep: true,
+            handler(pendingKeyboardConfig) {
+                this.$emit('update-pending', pendingKeyboardConfig);
+            },
         },
     },
 };

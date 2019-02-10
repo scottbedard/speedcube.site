@@ -39,6 +39,7 @@
                             @close="hideControls"
                             @disable-turning="disableTurning"
                             @enable-turning="enableTurning"
+                            @update-pending="setPendingKeyboardConfig"
                         />
                     </div>
 
@@ -164,6 +165,9 @@ export default {
             // pending puzzle config
             pendingConfig: null,
 
+            // pending keyboard config
+            pendingKeyboardConfig: null,
+
             // enables key listeners
             puzzleIsTurnable: true,
 
@@ -207,6 +211,10 @@ export default {
             return Array.isArray(this.puzzleOptions);
         },
         keyboardConfig() {
+            if (this.pendingKeyboardConfig) {
+                return this.pendingKeyboardConfig;
+            }
+
             const userConfig = this.user.keyboardConfigs.find(kc => kc.puzzle === this.puzzle);
 
             return userConfig
@@ -322,6 +330,7 @@ export default {
         },
         hideControls() {
             this.controlsAreVisible = false;
+            this.pendingKeyboardConfig = null;
         },
         hideOptions() {
             this.appearanceIsVisible = false;
@@ -393,6 +402,9 @@ export default {
         },
         setPendingConfig(pendingConfig) {
             this.pendingConfig = pendingConfig;
+        },
+        setPendingKeyboardConfig(pendingKeyboardConfig) {
+            this.pendingKeyboardConfig = pendingKeyboardConfig;
         },
         scramble() {
             // reset the state

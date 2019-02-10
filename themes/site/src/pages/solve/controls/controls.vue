@@ -8,6 +8,7 @@
             @close="close"
             @disable-turning="disableTurning"
             @enable-turning="enableTurning"
+            @update-pending="updatePending"
             @save="saveKeyboardConfig"
         />
     </div>
@@ -51,10 +52,15 @@ export default {
             }).then((response) => {
                 // success
                 this.$store.commit('user/updateKeyboardConfig', response.data.keyboardConfig);
+                this.close();
             }).finally(() => {
                 // complete
                 this.loading = false;
             });
+        },
+        updatePending(pendingKeyboardConfig) {
+            console.log('bubbling', pendingKeyboardConfig);
+            this.$emit('update-pending', pendingKeyboardConfig);
         },
     },
     props: {
