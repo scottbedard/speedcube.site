@@ -1,0 +1,14 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+keyboardConfigs:
+    deferredBinding: true
+    emptyMessage: This user has no custom keyboard configurations.
+    label: Keyboard Configs
+    manage:
+        form: $/speedcube/speedcube/models/keyboardconfig/fields.yaml
+        recordsPerPage: 10
+    view:
+        list: $/speedcube/speedcube/models/keyboardconfig/columns.yaml
+        toolbarButtons: delete
