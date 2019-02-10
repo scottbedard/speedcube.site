@@ -11,7 +11,7 @@
 <template>
     <div>
         <!-- copy -->
-        <p class="leading-loose mb-12">
+        <p class="mb-12">
             These are your current keyboard controls, displayed in <b>&quot;key <i class="fa fa-angle-right px-2"></i> turn&quot;</b> format.
             The <b>&quot;key&quot;</b> represents to the key on your keyboard, and the <b>&quot;turn&quot;</b> represents the puzzle turn to execute.
         </p>
