@@ -21,6 +21,7 @@ function userFixture() {
         email: 'john@example.com',
         id: '1',
         isActivated: true,
+        keyboardConfigs: [],
         lastLogin: '2018-11-04 23:21:54',
         name: 'John Doe',
         updatedAt: '2018-11-04 23:21:54',
@@ -40,7 +41,7 @@ describe('create account page', function() {
         });
     });
 
-    it('registers a user when the form is submitted', function(done) {
+    it('registers a user when the form is submitted', async function() {
         vm = mount({
             template: `<v-create-account />`,
         });
@@ -50,24 +51,22 @@ describe('create account page', function() {
         input('abc123', vm.$el.querySelector('[data-password] input'));
         input('abc123', vm.$el.querySelector('[data-password-confirmation] input'));
 
-        setTimeout(() => {
-            submit(vm.$el.querySelector('form'));
+        await timeout(10);
+            
+        submit(vm.$el.querySelector('form'));
+        
+        await timeout(10);
+        
+        expect(axios.post).to.have.been.calledWithMatch(
+            '/api/rainlab/user/register',
+            {
+                email: 'john@example.com',
+                password: 'abc123',
+                password_confirmation: 'abc123',
+                username: 'johndoe',
+            },
+        );
 
-            setTimeout(() => {
-                expect(axios.post).to.have.been.calledWithMatch(
-                    '/api/rainlab/user/register',
-                    {
-                        email: 'john@example.com',
-                        password: 'abc123',
-                        password_confirmation: 'abc123',
-                        username: 'johndoe',
-                    },
-                );
-
-                expect(vm.$store.state.user.user.email).to.be.equal('john@example.com');
-                
-                done();
-            }, 10);
-        }, 10);
+        expect(vm.$store.state.user.user.email).to.be.equal('john@example.com');
     });
 });

@@ -24,9 +24,7 @@ class KeyboardConfigApiTest extends PluginTestCase
     {
         $response = $this->post('/api/speedcube/speedcube/keyboardconfig', [
             'puzzle' => 'test',
-            'config' => [
-                'hello' => 'world',
-            ],
+            'config' => '{"foo":"bar"}',
         ]);
 
         $response->assertStatus(200);
@@ -37,23 +35,19 @@ class KeyboardConfigApiTest extends PluginTestCase
         
         $this->assertEquals(1, KeyboardConfig::count());
         
-        $this->assertEquals('world', $model->config['hello']);
+        $this->assertEquals('{"foo":"bar"}', $model->config);
     }
 
     public function test_updating_a_keyboard_config()
     {
         $keyboardConfig = Factory::create(new KeyboardConfig, [
-            'config' => [
-                'foo' => 'bar',
-            ],
+            'config' => '{"foo":"bar"}',
             'puzzle' => '3x3',
             'user_id' => $this->user->id,
         ]);
 
         $response = $this->post('/api/speedcube/speedcube/keyboardconfig', [
-            'config' => [
-                'foo' => 'baz',
-            ],
+            'config' => '{"foo":"changed"}',
             'puzzle' => '3x3',
         ]);
 
@@ -65,6 +59,6 @@ class KeyboardConfigApiTest extends PluginTestCase
         
         $this->assertEquals(1, KeyboardConfig::count());
         
-        $this->assertEquals('baz', $model->config['foo']);
+        $this->assertEquals('{"foo":"changed"}', $model->config);
     }
 }
