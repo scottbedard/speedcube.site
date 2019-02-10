@@ -4,7 +4,8 @@ namespace Speedcube\Speedcube;
 
 use Backend;
 use Event;
-use RainLab\User\Models\User;
+use RainLab\User\Controllers\Users as UsersController;
+use RainLab\User\Models\User as UserModel;
 use System\Classes\PluginBase;
 
 /**
@@ -55,11 +56,15 @@ class Plugin extends PluginBase
         // attach the relationships to the user requests
         // on startup, when the user signs in, etc...
         Event::listen('vuetober.rainlabuserapi.afterGetUser', function ($user) {
-            $user->load(['avatar', 'configs']);
+            $user->load([
+                'avatar',
+                'configs',
+                'keyboardConfigs',
+            ]);
         });
 
         // extend the user model
-        User::extend(function ($model) {
+        UserModel::extend(function ($model) {
             // relationships
             $model->hasMany['configs'] = 'SpeedCube\SpeedCube\Models\Config';
             $model->hasMany['keyboardConfigs'] = 'Speedcube\Speedcube\Models\KeyboardConfig';
@@ -70,6 +75,34 @@ class Plugin extends PluginBase
             $model->bindEvent('model.beforeValidate', function () use ($model) {
                 $model->rules['username'] = $model->rules['username'].'|alpha_num';
             });
+        });
+
+        // extend the users controller with the relation controller behavior and config
+        UsersController::extend(function ($controller) {
+            if (!$controller->isClassExtendedWith('Backend.Behaviors.RelationController')) {
+                $controller->implement[] = 'Backend.Behaviors.RelationController';
+            }
+
+            if (!isset($controller->relationConfig)) {
+                $controller->addDynamicProperty('relationConfig');
+                $controller->relationConfig = $controller->mergeConfig(
+                    $controller->relationConfig,
+                    '$/speedcube/speedcube/controllers/keyboardconfigs/config_relation.yaml'
+                );
+            }
+        });
+
+        // extend the user form with our relation controllers
+        Event::listen('backend.form.extendFields', function ($widget) {
+            if ($widget->model instanceof UserModel && $widget->getController() instanceof UsersController) {
+                $widget->addTabFields([
+                    'keyboard_configs' => [
+                        'path' => '$/speedcube/speedcube/models/keyboardconfig/_field_keyboard_configs.htm',
+                        'tab'  => 'Keyboard Configs',
+                        'type' => 'partial',
+                    ],
+                ]);
+            }
         });
     }
 

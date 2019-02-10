@@ -1,8 +1,7 @@
 <template>
     <portal to="modal">
         <div
-            class="outline-none"
-            style="margin: auto"
+            class="m-auto outline-none"
             role="dialog"
             tabindex="-1"
             :aria-labelledby="titleId"
@@ -23,9 +22,7 @@
             />
 
             <v-card :padded="padded">
-                <div class="max-w-sm">
-                    <slot />
-                </div>
+                <slot />
             </v-card>
         </div>
     </portal>

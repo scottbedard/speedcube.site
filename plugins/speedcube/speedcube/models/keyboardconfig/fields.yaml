@@ -3,6 +3,11 @@
 # ===================================
 
 fields:
-    id:
-        label: ID
+    puzzle:
         disabled: true
+        label: Puzzle
+
+    config:
+        label: Configuration
+        language: js
+        type: codeeditor

@@ -441,43 +441,6 @@ export default class {
     }
 
     /**
-     * Default controls.
-     *
-     * @return {Object}
-     */
-    get controls() {
-        return {
-            // face turns
-            J: 'U',
-            F: 'U-',
-            D: 'L',
-            E: 'L-',
-            H: 'F',
-            G: 'F-',
-            I: 'R',
-            K: 'R-',
-            W: 'B',
-            O: 'B-',
-            S: 'D',
-            L: 'D-',
-
-            // cube rotations
-            A: 'Y-',
-            ';': 'Y',
-            R: 'X',
-            U: 'X',
-            T: 'X',
-            Y: 'X',
-            V: 'X-',
-            C: 'X-',
-            N: 'X-',
-            M: 'X-',
-            Q: 'Z-',
-            P: 'Z',
-        };
-    }
-
-    /**
      * Map a sticker index to a column index.
      *
      * @return {Array<number>}
@@ -569,8 +532,8 @@ export default class {
      * @return {string}
      */
     getTurnFromKeyboardEvent(e) {
-        const key = String(e.key).toUpperCase();
-        const turn = this.controls[key];
+        const key = String(e.key);
+        const turn = get(this.vm.keyboardConfig, `turns[${key}]`);
 
         if (turn) {
             return turn;

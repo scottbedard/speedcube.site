@@ -32,6 +32,14 @@ describe('<v-input>', function() {
         expect(vm.value).to.equal('bar');
     });
 
+    it('accepts an id', function() {
+        vm = mount({
+            template: `<v-input id="hello" />`,
+        });
+
+        expect(vm.$el.querySelector('input').getAttribute('id')).to.equal('hello');
+    });
+
     it('accepts a placeholder', function() {
         vm = mount({
             template: `<v-input placeholder="hello" />`,

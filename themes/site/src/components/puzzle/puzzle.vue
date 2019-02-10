@@ -185,6 +185,10 @@ export default {
             default: () => {},
             type: Object,
         },
+        keyboardConfig: {
+            default: () => {},
+            type: Object,
+        },
         puzzle: {
             default: '',
             required: true,

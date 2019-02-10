@@ -53,6 +53,12 @@ function onTransitionEnd(e) {
     // when the transitions are over remove inline styles from our wrapper
     if (e.target.classList.contains('v-collapse-transition')) {
         e.target.removeAttribute('style');
+    } else {
+        const parent = e.target.parentElement;
+
+        if (parent && parent.classList.contains('v-collapse-transition')) {
+            parent.removeAttribute('style');
+        }
     }
 }
 
@@ -63,7 +69,7 @@ export default {
             onTransitionend={onTransitionEnd}>
             <transition
                 css={false}
-                onAfterEnter={onAfterEnter.bind(context)}
+                onAfterEnter={onAfterEnter}
                 onBeforeEnter={onBeforeEnter.bind(context)}
                 onBeforeLeave={onBeforeLeave.bind(context)}
                 onEnter={onEnter.bind(context)}

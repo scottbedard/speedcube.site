@@ -60,8 +60,8 @@
                     class="text-center"
                     key="ready">
                     <div
-                        v-text="solve.scramble.scramble"
-                        class="font-mono font-thin max-w-lg mx-auto leading-normal mb-12 text-grey-6"
+                        v-text="scrambleText"
+                        class="font-mono font-thin leading-loose max-w-md mx-auto leading-normal mb-12 text-grey-6 text-sm"
                     />
                     <v-button @click="replay">
                         Watch
@@ -120,6 +120,9 @@ export default {
         },
         puzzleConfig() {
             return get(this.solve, 'config', {});
+        },
+        scrambleText() {
+            return get(this.solve, 'scramble.scramble', '');
         },
         solveTitle() {
             const time = get(this.solve, 'time', 0);

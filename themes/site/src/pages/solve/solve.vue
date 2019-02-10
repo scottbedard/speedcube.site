@@ -5,6 +5,7 @@
             <v-puzzle
                 ref="puzzle"
                 :config="puzzleConfig"
+                :keyboard-config="keyboardConfig"
                 :puzzle="puzzle"
                 @default-config="setDefaultConfig"
                 @turn-start="recordTurn"
@@ -33,8 +34,12 @@
                         v-else-if="controlsAreVisible"
                         key="controls">
                         <v-controls
+                            :keyboard-config="keyboardConfig"
                             :puzzle="puzzle"
                             @close="hideControls"
+                            @disable-turning="disableTurning"
+                            @enable-turning="enableTurning"
+                            @update-pending="setPendingKeyboardConfig"
                         />
                     </div>
 
@@ -120,7 +125,9 @@ import { bindExternalEvent } from '@/app/utils/component';
 import { mapGetters, mapState } from 'vuex';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postSolve } from '@/app/repositories/solves';
+import { jsonToObject } from '@/app/utils/object';
 import appearanceOptions from './appearance_options';
+import defaultKeyboardConfigs from './default_keyboard_configs';
 
 export default {
     created() {
@@ -157,6 +164,12 @@ export default {
 
             // pending puzzle config
             pendingConfig: null,
+
+            // pending keyboard config
+            pendingKeyboardConfig: null,
+
+            // enables key listeners
+            puzzleIsTurnable: true,
 
             // id of the scramble model
             scrambleId: 0,
@@ -196,6 +209,17 @@ export default {
         ]),
         hasOptions() {
             return Array.isArray(this.puzzleOptions);
+        },
+        keyboardConfig() {
+            if (this.pendingKeyboardConfig) {
+                return this.pendingKeyboardConfig;
+            }
+
+            const userConfig = this.user.keyboardConfigs.find(kc => kc.puzzle === this.puzzle);
+
+            return userConfig
+                ? jsonToObject(userConfig.config)
+                : defaultKeyboardConfigs[this.puzzle];
         },
         puzzle() {
             return this.$route.params.puzzle;
@@ -298,8 +322,15 @@ export default {
                 this.solves.push(solve);
             });
         },
+        disableTurning() {
+            this.puzzleIsTurnable = false;
+        },
+        enableTurning() {
+            this.puzzleIsTurnable = true;
+        },
         hideControls() {
             this.controlsAreVisible = false;
+            this.pendingKeyboardConfig = null;
         },
         hideOptions() {
             this.appearanceIsVisible = false;
@@ -318,6 +349,11 @@ export default {
             }
         },
         onKeyup(e) {
+            // do nothing if the puzzle is not turnable
+            if (!this.puzzleIsTurnable) {
+                return;
+            }
+
             if (e.key === ' ') {
                 this.onSpaceUp();
             } else if (e.key === 'Escape') {
@@ -367,12 +403,16 @@ export default {
         setPendingConfig(pendingConfig) {
             this.pendingConfig = pendingConfig;
         },
+        setPendingKeyboardConfig(pendingKeyboardConfig) {
+            this.pendingKeyboardConfig = pendingKeyboardConfig;
+        },
         scramble() {
             // reset the state
+            this.appearanceIsVisible = false;
             this.dnf = false;
             this.history = [];
             this.inspecting = false;
-            this.appearanceIsVisible = false;
+            this.puzzleIsTurnable = true;
             this.scrambling = true;
             this.solveCompletedAt = 0;
             this.solveCompletedTime = null;
