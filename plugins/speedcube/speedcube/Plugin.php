@@ -57,7 +57,7 @@ class Plugin extends PluginBase
         // on startup, when the user signs in, etc...
         Event::listen('vuetober.rainlabuserapi.afterGetUser', function ($user) {
             $user->load([
-                'avatar', 
+                'avatar',
                 'configs',
                 'keyboardConfigs',
             ]);
@@ -98,7 +98,7 @@ class Plugin extends PluginBase
                 $widget->addTabFields([
                     'keyboard_configs' => [
                         'path' => '$/speedcube/speedcube/models/keyboardconfig/_field_keyboard_configs.htm',
-                        'tab' => 'Keyboard Configs',
+                        'tab'  => 'Keyboard Configs',
                         'type' => 'partial',
                     ],
                 ]);

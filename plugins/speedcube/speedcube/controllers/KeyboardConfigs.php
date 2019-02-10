@@ -1,16 +1,18 @@
-<?php namespace Speedcube\Speedcube\Controllers;
+<?php
 
-use BackendMenu;
+namespace Speedcube\Speedcube\Controllers;
+
 use Backend\Classes\Controller;
+use BackendMenu;
 
 /**
- * Keyboard Configs Back-end Controller
+ * Keyboard Configs Back-end Controller.
  */
 class KeyboardConfigs extends Controller
 {
     public $implement = [
         'Backend.Behaviors.FormController',
-        'Backend.Behaviors.ListController'
+        'Backend.Behaviors.ListController',
     ];
 
     public $formConfig = 'config_form.yaml';
