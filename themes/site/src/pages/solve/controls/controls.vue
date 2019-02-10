@@ -3,8 +3,11 @@
         <!-- cube controls -->
         <v-cube-controls
             v-if="isCube"
+            :loading="loading"
             :keyboard-config="keyboardConfig"
             @close="close"
+            @disable-turning="disableTurning"
+            @enable-turning="enableTurning"
             @save="saveKeyboardConfig"
         />
     </div>
@@ -32,6 +35,12 @@ export default {
     methods: {
         close() {
             this.$emit('close');
+        },
+        disableTurning() {
+            this.$emit('disable-turning');
+        },
+        enableTurning() {
+            this.$emit('enable-turning');
         },
         saveKeyboardConfig(config) {
             this.loading = true;

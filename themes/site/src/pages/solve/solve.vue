@@ -37,6 +37,8 @@
                             :keyboard-config="keyboardConfig"
                             :puzzle="puzzle"
                             @close="hideControls"
+                            @disable-turning="disableTurning"
+                            @enable-turning="enableTurning"
                         />
                     </div>
 
@@ -161,6 +163,9 @@ export default {
 
             // pending puzzle config
             pendingConfig: null,
+
+            // enables key listeners
+            puzzleIsTurnable: true,
 
             // id of the scramble model
             scrambleId: 0,
@@ -309,6 +314,12 @@ export default {
                 this.solves.push(solve);
             });
         },
+        disableTurning() {
+            this.puzzleIsTurnable = false;
+        },
+        enableTurning() {
+            this.puzzleIsTurnable = true;
+        },
         hideControls() {
             this.controlsAreVisible = false;
         },
@@ -329,6 +340,11 @@ export default {
             }
         },
         onKeyup(e) {
+            // do nothing if the puzzle is not turnable
+            if (!this.puzzleIsTurnable) {
+                return;
+            }
+
             if (e.key === ' ') {
                 this.onSpaceUp();
             } else if (e.key === 'Escape') {
@@ -380,10 +396,11 @@ export default {
         },
         scramble() {
             // reset the state
+            this.appearanceIsVisible = false;
             this.dnf = false;
             this.history = [];
             this.inspecting = false;
-            this.appearanceIsVisible = false;
+            this.puzzleIsTurnable = true;
             this.scrambling = true;
             this.solveCompletedAt = 0;
             this.solveCompletedTime = null;

@@ -51,6 +51,7 @@
                             <v-input
                                 v-model="key"
                                 placeholder="Enter key"
+                                :disabled="loading"
                             />
                         </v-form-field>
 
@@ -66,6 +67,7 @@
                             <v-input
                                 v-model="turn"
                                 placeholder="Enter a turn"
+                                :disabled="loading"
                             />
                         </v-form-field>
 
@@ -98,6 +100,7 @@
                 class="m-4"
                 href="#"
                 size="sm"
+                :disabled="loading"
                 @click.prevent="addBinding">
                 Add Key Binding
             </v-button>
@@ -107,6 +110,7 @@
                 class="m-4"
                 href="#"
                 size="sm"
+                :disabled="loading"
                 @click.prevent="onSaveClick">
                 Save Changes
             </v-button>
@@ -171,8 +175,6 @@ export default {
             this.$emit('close');
         },
         onSaveClick() {
-            console.log(this.pendingKeyboardConfig);
-
             this.$emit('save', this.pendingKeyboardConfig);
         },
         openForm() {
@@ -185,7 +187,6 @@ export default {
 
             this.$set(this.pendingKeyboardConfig.turns, this.key, this.turn);
 
-            console.log(JSON.parse(JSON.stringify(this.pendingKeyboardConfig)));
             this.closeForm();
         },
     },
@@ -193,6 +194,16 @@ export default {
         keyboardConfig: {
             required: true,
             type: Object,
+        },
+        loading: {
+            required: true,
+            type: Boolean,
+        },
+    },
+    watch: {
+        formIsVisible(formIsVisible) {
+            console.log('emitting', formIsVisible);
+            this.$emit(formIsVisible ? 'disable-turning' : 'enable-turning');
         },
     },
 };
