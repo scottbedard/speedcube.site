@@ -11,18 +11,14 @@
 <template>
     <div>
         <!-- copy -->
-        <p class="font-mono mb-4 uppercase">
-            <strong>This feature is a work in progress, check back later.</strong>
-        </p>
-
-        <p class="mb-12">
+        <p class="leading-loose mb-12">
             These are your current keyboard controls, displayed in <b>&quot;key <i class="fa fa-angle-right px-2"></i> turn&quot;</b> format.
             The <b>&quot;key&quot;</b> represents to the key on your keyboard, and the <b>&quot;turn&quot;</b> represents the puzzle turn to execute.
         </p>
 
         <!-- key bindings -->
         <div class="max-w-xl mx-auto mb-6 text-sm">
-            <div class="pb-6">
+            <div v-if="isAuthenticated" class="pb-6">
                 <a
                     class="flex m-4 uppercase text-xs tracking-wide"
                     href="#"
@@ -104,7 +100,13 @@
 
             <!-- actions -->
             <v-collapse-transition>
-                <div v-if="loading" key="loading">
+                <div v-if="!isAuthenticated" class="mt-4" key="guest">
+                    <p class="mb-4">Please <router-link :to="{ name: 'signin' }">sign in</router-link> or <router-link :to="{ name: 'create-account' }">create an account</router-link> to customize key bindings</p>
+                    <p>
+                        <a href="#" @click.prevent="onCloseClick">Click here to exit</a>
+                    </p>
+                </div>
+                <div v-else-if="loading" key="loading">
                     <v-spinner />
                 </div>
                 <div v-else key="actions">
@@ -136,6 +138,7 @@
 
 <script>
 import { cloneDeep, get } from 'lodash-es';
+import { mapGetters } from 'vuex';
 
 export default {
     data() {
@@ -157,6 +160,9 @@ export default {
         };
     },
     computed: {
+        ...mapGetters('user', [
+            'isAuthenticated',
+        ]),
         turns() {
             const turns = get(this.pendingKeyboardConfig, 'turns', {});
 
@@ -178,6 +184,10 @@ export default {
             this.closeForm();
         },
         onBindingClick(key) {
+            if (!this.isAuthenticated) {
+                return;
+            }
+
             this.formContext = 'update';
             this.key = key;
             this.turn = this.pendingKeyboardConfig.turns[key];
