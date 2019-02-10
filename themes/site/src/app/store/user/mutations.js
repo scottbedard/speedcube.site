@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get } from 'lodash-es';
 import { simpleSetters } from 'spyfu-vuex-helpers';
 
 //
@@ -28,10 +28,8 @@ export default {
         // parse our keyboard configs. we're deliberately not making this
         // jsonable on the backend to avoid auto camel casing and losing
         // case sensitivity
-        user.keyboardConfigs = user.keyboardConfigs.map(obj => {
-            return { ...obj, config: JSON.parse(obj.config) }
-        });
-        
+        user.keyboardConfigs = user.keyboardConfigs.map(obj => ({ ...obj, config: JSON.parse(obj.config) }));
+
         state.user = user;
     },
 

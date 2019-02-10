@@ -119,7 +119,6 @@
 
 <script>
 import { bindExternalEvent } from '@/app/utils/component';
-import { get } from 'lodash-es';
 import { mapGetters, mapState } from 'vuex';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postSolve } from '@/app/repositories/solves';

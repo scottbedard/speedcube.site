@@ -57,6 +57,8 @@ export default {
                 disabled={disabled}
                 domPropsValue={value}
                 id={id}
+                max={max}
+                min={min}
                 placeholder={placeholder}
                 type={type}
                 {...inputBindings}

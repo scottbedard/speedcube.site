@@ -41,7 +41,7 @@ export default {
                 puzzle: this.puzzle,
             }).then((response) => {
                 // success
-                this.$store.commit('user/updateKeyboardConfig', response.data.keyboardConfig)
+                this.$store.commit('user/updateKeyboardConfig', response.data.keyboardConfig);
             }).finally(() => {
                 // complete
                 this.loading = false;

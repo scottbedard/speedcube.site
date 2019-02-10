@@ -60,7 +60,7 @@
                             name="turn"
                             rules="required"
                             :error-messages="{
-                                required: 'Please enter a turn to execute for this key binding',   
+                                required: 'Please enter a turn to execute for this key binding',
                             }"
                             :value="turn">
                             <v-input
@@ -185,7 +185,7 @@ export default {
 
             this.$set(this.pendingKeyboardConfig.turns, this.key, this.turn);
 
-            console.log(JSON.parse(JSON.stringify(this.pendingKeyboardConfig)))
+            console.log(JSON.parse(JSON.stringify(this.pendingKeyboardConfig)));
             this.closeForm();
         },
     },

@@ -1,6 +1,6 @@
 /**
  * Convert json to an object.
- * 
+ *
  * @param  {string|Object} json
  * @return {Object}
  */
