@@ -59,7 +59,6 @@ export default {
             });
         },
         updatePending(pendingKeyboardConfig) {
-            console.log('bubbling', pendingKeyboardConfig);
             this.$emit('update-pending', pendingKeyboardConfig);
         },
     },

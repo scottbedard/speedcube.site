@@ -21,11 +21,21 @@
         </p>
 
         <!-- key bindings -->
-        <div class="flex mb-6 text-sm">
-            <div class="font-mono leading-normal max-w-xl mx-auto">
+        <div class="max-w-xl mx-auto mb-6 text-sm">
+            <div class="pb-6">
+                <a
+                    class="flex m-4 uppercase text-xs tracking-wide"
+                    href="#"
+                    @click.prevent="addBinding">
+                    <i class="fa fa-plus mr-2"></i>
+                    Add Key Binding
+                </a>
+            </div>
+
+            <div class="font-mono leading-normal w-full">
                 <a
                     v-for="({ key, turn }, index) in turns"
-                    class="inline-flex items-center mb-6 text-left px-4 w-24"
+                    class="inline-flex items-center mb-6 text-left px-4 w-20"
                     href="#"
                     :key="index"
                     @click.prevent="onBindingClick(key)">
@@ -38,7 +48,7 @@
                     padded
                     title="Update Key Binding"
                     @close="closeForm">
-                    <v-form @submit="updateTurn">
+                    <v-form class="sm:w-96" @submit="updateTurn">
                         <!-- key binding -->
                         <v-form-field
                             label="Key binding"
@@ -72,62 +82,55 @@
                         </v-form-field>
 
                         <!-- actions -->
-                        <div class="flex flex-wrap justify-end -m-2 overflow-hidden pt-8">
+                        <div class="flex flex-wrap items-center justify-end -m-4 overflow-hidden pt-8 sm:justify-between">
+                            <div>
+                                <a
+                                    v-if="formContext === 'update'"
+                                    class="m-4 text-xs tracking-wide uppercase hover:text-danger-7"
+                                    href="#"
+                                    @click.prevent="deleteBinding(key)">
+                                    Delete Key Binding
+                                </a>
+                            </div>
                             <v-button
-                                class="m-2"
-                                danger
-                                size="sm"
-                                type="button"
-                                @click.prevent="deleteBinding(key)">
-                                Delete
-                            </v-button>
-                            <v-button
-                                class="m-2"
-                                size="sm"
+                                class="m-4"
                                 type="submit">
-                                Confirm
+                                Apply
                             </v-button>
                         </div>
                     </v-form>
                 </v-modal>
             </div>
+
+            <!-- actions -->
+            <v-collapse-transition>
+                <div v-if="loading" key="loading">
+                    <v-spinner />
+                </div>
+                <div v-else key="actions">
+                    <div class="flex flex-wrap items-center justify-center -m-4 overflow-hidden pt-6 md:justify-end">
+                        <!-- discard -->
+                        <a
+                            class="block m-4 uppercase text-xs tracking-wide hover:text-danger-7"
+                            href="#"
+                            :disabled="loading"
+                            @click.prevent="onCloseClick">
+                            Discard Changes
+                        </a>
+
+                        <!-- save -->
+                        <v-button
+                            class="m-4"
+                            href="#"
+                            :disabled="loading"
+                            @click.prevent="onSaveClick">
+                            Save
+                        </v-button>
+                    </div>
+                </div>
+            </v-collapse-transition>
         </div>
 
-        <!-- actions -->
-        <v-collapse-transition>
-            <div v-if="loading" key="loading">
-                <v-spinner />
-            </div>
-            <div v-else key="actions">
-                <div class="flex flex-wrap justify-center -m-4 overflow-hidden">
-                    <!-- add key binding -->
-                    <v-button
-                        class="m-4"
-                        href="#"
-                        :disabled="loading"
-                        @click.prevent="addBinding">
-                        Add Turn
-                    </v-button>
-
-                    <!-- save -->
-                    <v-button
-                        class="m-4"
-                        href="#"
-                        :disabled="loading"
-                        @click.prevent="onSaveClick">
-                        Save
-                    </v-button>
-                </div>
-                <div class="mt-6">
-                    <a
-                        class="text-grey-7 text-xs tracking-wide uppercase hover:text-danger-7"
-                        href="#"
-                        @click.prevent="onCloseClick">
-                        Discard Changes
-                    </a>
-                </div>
-            </div>
-        </v-collapse-transition>
     </div>
 </template>
 
@@ -137,6 +140,9 @@ import { cloneDeep, get } from 'lodash-es';
 export default {
     data() {
         return {
+            // form context
+            formContext: 'update',
+
             // form visibility
             formIsVisible: false,
 
@@ -159,6 +165,7 @@ export default {
     },
     methods: {
         addBinding() {
+            this.formContext = 'add';
             this.key = '';
             this.turn = '';
             this.openForm();
@@ -171,6 +178,7 @@ export default {
             this.closeForm();
         },
         onBindingClick(key) {
+            this.formContext = 'update';
             this.key = key;
             this.turn = this.pendingKeyboardConfig.turns[key];
             this.openForm();
