@@ -39,7 +39,9 @@ class KeyboardConfig extends Model
      * @var array Jsonable fields
      */
     protected $jsonable = [
-        'config',
+        // keyboard configurations are case-sensitive. because of this
+        // we'll avoid jsonifying the object in order to prevent our
+        // camel casing middleware from effecting object key cases.
     ];
 
     /**

@@ -55,7 +55,11 @@ class Plugin extends PluginBase
         // attach the relationships to the user requests
         // on startup, when the user signs in, etc...
         Event::listen('vuetober.rainlabuserapi.afterGetUser', function ($user) {
-            $user->load(['avatar', 'configs']);
+            $user->load([
+                'avatar', 
+                'configs',
+                'keyboardConfigs',
+            ]);
         });
 
         // extend the user model

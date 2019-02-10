@@ -5,6 +5,7 @@
             <v-puzzle
                 ref="puzzle"
                 :config="puzzleConfig"
+                :keyboard-config="keyboardConfig"
                 :puzzle="puzzle"
                 @default-config="setDefaultConfig"
                 @turn-start="recordTurn"
@@ -33,6 +34,7 @@
                         v-else-if="controlsAreVisible"
                         key="controls">
                         <v-controls
+                            :keyboard-config="keyboardConfig"
                             :puzzle="puzzle"
                             @close="hideControls"
                         />
@@ -117,10 +119,12 @@
 
 <script>
 import { bindExternalEvent } from '@/app/utils/component';
+import { get } from 'lodash-es';
 import { mapGetters, mapState } from 'vuex';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postSolve } from '@/app/repositories/solves';
 import appearanceOptions from './appearance_options';
+import defaultKeyboardConfigs from './default_keyboard_configs';
 
 export default {
     created() {
@@ -196,6 +200,9 @@ export default {
         ]),
         hasOptions() {
             return Array.isArray(this.puzzleOptions);
+        },
+        keyboardConfig() {
+            return this.user.keyboardConfigs.find(kc => kc.puzzle === this.puzzle) || defaultKeyboardConfigs[this.puzzle];
         },
         puzzle() {
             return this.$route.params.puzzle;

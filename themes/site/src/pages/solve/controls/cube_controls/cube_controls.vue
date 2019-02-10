@@ -20,6 +20,9 @@
             The <b>&quot;key&quot;</b> represents to the key on your keyboard, and the <b>&quot;turn&quot;</b> represents the puzzle turn to execute.
         </p>
 
+        <pre class="text-xs text-left">{{ keyboardConfig }}</pre>
+        <pre class="text-xs text-left">{{ pendingKeyboardConfig }}</pre>
+
         <!-- key bindings -->
         <div class="flex mb-6 text-sm">
             <div class="config-entries font-mono leading-normal max-w-md mx-auto">
@@ -28,7 +31,7 @@
                     class="inline-flex items-center mb-6 text-left px-4 w-24"
                     href="#"
                     :key="index"
-                    @click.prevent="openForm(key)">
+                    @click.prevent="onBindingClick(key)">
                     {{ key }} <i class="fa fa-angle-right px-2"></i> {{ turn }}
                 </a>
 
@@ -38,22 +41,21 @@
                     padded
                     title="Update Key Binding"
                     @close="closeForm">
-                    <!-- <form class="w-96" @submit.prevent="updateTurn">
-                        <div class="mb-8">
-                            <label class="mb-2" for="cube_controls_turn">
-                                Turn to execute
-                            </label>
+                    <v-form class="sm:w-96" @submit="updateTurn">
+                        <!-- key binding -->
+                        <v-form-field
+                            label="Key binding"
+                            name="key"
+                            rules="required"
+                            :error-messages="{
+                                required: 'Please enter a key binding',
+                            }"
+                            :value="key">
                             <v-input
-                                v-model="turn"
-                                id="cube_controls_turn"
-                                placeholder="Enter a turn"
+                                v-model="key"
+                                placeholder="Enter key"
                             />
-                        </div>
-                        
-                    </form> -->
-                    <v-form
-                        class="sm:w-96"
-                        @submit="updateTurn">
+                        </v-form-field>
 
                         <!-- turn -->
                         <v-form-field
@@ -76,8 +78,8 @@
                                 class="m-2"
                                 danger
                                 size="sm"
-                                type="buttom"
-                                @click.prevent="deleteBinding">
+                                type="button"
+                                @click.prevent="deleteBinding(key)">
                                 Delete
                             </v-button>
                             <v-button
@@ -99,7 +101,7 @@
                 class="m-4"
                 href="#"
                 size="sm"
-                @click.prevent>
+                @click.prevent="addBinding">
                 Add Key Binding
             </v-button>
 
@@ -108,7 +110,7 @@
                 class="m-4"
                 href="#"
                 size="sm"
-                @click.prevent>
+                @click.prevent="onSaveClick">
                 Save Changes
             </v-button>
         </div>
@@ -125,43 +127,75 @@
 </template>
 
 <script>
-import { defaultCubeKeyboardConfig } from '@/app/constants';
-import { get } from 'lodash-es';
+import { cloneDeep, get } from 'lodash-es';
 
 export default {
     data() {
         return {
+            // form visibility
             formIsVisible: false,
+
+            // key binding
+            key: '',
+
+            // a clone of the keyboard config to hold pending changes
+            pendingKeyboardConfig: cloneDeep(this.keyboardConfig.config),
+
+            // turn field
             turn: '',
         };
     },
     computed: {
-        keyboardConfig() {
-            return defaultCubeKeyboardConfig;
-        },
         turns() {
-            const turns = get(this.keyboardConfig, 'turns', {});
+            const turns = get(this.pendingKeyboardConfig, 'turns', {});
 
             return Object.keys(turns).map(key => ({ key, turn: turns[key] }));
         },
     },
     methods: {
+        addBinding() {
+            this.key = '';
+            this.turn = '';
+            this.openForm();
+        },
         closeForm() {
             this.formIsVisible = false;
         },
-        deleteBinding() {
-            console.log('deleting the key binding...');
+        deleteBinding(key) {
+            this.$delete(this.pendingKeyboardConfig.turns, key);
+            this.closeForm();
+        },
+        onBindingClick(key) {
+            this.key = key;
+            this.turn = this.pendingKeyboardConfig.turns[key];
+            this.openForm();
         },
         onCloseClick() {
             this.$emit('close');
         },
-        openForm(key) {
-            this.formIsVisible = true;
+        onSaveClick() {
+            console.log(this.pendingKeyboardConfig);
 
-            console.log('key', key);
+            this.$emit('save', this.pendingKeyboardConfig);
+        },
+        openForm() {
+            this.formIsVisible = true;
         },
         updateTurn() {
-            console.log('update the turn');
+            if (!this.pendingKeyboardConfig.turns) {
+                this.pendingKeyboardConfig.turns = {};
+            }
+
+            this.$set(this.pendingKeyboardConfig.turns, this.key, this.turn);
+
+            console.log(JSON.parse(JSON.stringify(this.pendingKeyboardConfig)))
+            this.closeForm();
+        },
+    },
+    props: {
+        keyboardConfig: {
+            required: true,
+            type: Object,
         },
     },
 };
