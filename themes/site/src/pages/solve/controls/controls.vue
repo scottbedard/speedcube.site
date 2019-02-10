@@ -34,12 +34,10 @@ export default {
             this.$emit('close');
         },
         saveKeyboardConfig(config) {
-            console.log('ok, saving', JSON.parse(JSON.stringify(config)));
-
             this.loading = true;
 
             postKeyboardConfig({
-                config,
+                config: JSON.stringify(config),
                 puzzle: this.puzzle,
             }).then((response) => {
                 // success

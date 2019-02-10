@@ -123,6 +123,7 @@ import { get } from 'lodash-es';
 import { mapGetters, mapState } from 'vuex';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postSolve } from '@/app/repositories/solves';
+import { jsonToObject } from '@/app/utils/object';
 import appearanceOptions from './appearance_options';
 import defaultKeyboardConfigs from './default_keyboard_configs';
 
@@ -202,7 +203,11 @@ export default {
             return Array.isArray(this.puzzleOptions);
         },
         keyboardConfig() {
-            return this.user.keyboardConfigs.find(kc => kc.puzzle === this.puzzle) || defaultKeyboardConfigs[this.puzzle];
+            const userConfig = this.user.keyboardConfigs.find(kc => kc.puzzle === this.puzzle);
+
+            return userConfig
+                ? jsonToObject(userConfig.config)
+                : defaultKeyboardConfigs[this.puzzle];
         },
         puzzle() {
             return this.$route.params.puzzle;

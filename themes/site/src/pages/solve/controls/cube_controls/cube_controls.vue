@@ -20,9 +20,6 @@
             The <b>&quot;key&quot;</b> represents to the key on your keyboard, and the <b>&quot;turn&quot;</b> represents the puzzle turn to execute.
         </p>
 
-        <pre class="text-xs text-left">{{ keyboardConfig }}</pre>
-        <pre class="text-xs text-left">{{ pendingKeyboardConfig }}</pre>
-
         <!-- key bindings -->
         <div class="flex mb-6 text-sm">
             <div class="config-entries font-mono leading-normal max-w-md mx-auto">
@@ -139,7 +136,7 @@ export default {
             key: '',
 
             // a clone of the keyboard config to hold pending changes
-            pendingKeyboardConfig: cloneDeep(this.keyboardConfig.config),
+            pendingKeyboardConfig: cloneDeep(this.keyboardConfig),
 
             // turn field
             turn: '',
