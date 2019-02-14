@@ -2,6 +2,16 @@
 #  Relation Behavior Config
 # ===================================
 
+configs:
+    deferredBinding: true
+    emptyMessage: This user has no custom puzzle configurations.
+    label: Puzzle Configs
+    manage:
+        form: $/speedcube/speedcube/models/config/fields.yaml
+        recordsPerPage: 10
+    view:
+        list: $/speedcube/speedcube/models/config/columns.yaml
+        toolbarButtons: delete
 keyboardConfigs:
     deferredBinding: true
     emptyMessage: This user has no custom keyboard configurations.

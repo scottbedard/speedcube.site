@@ -76,6 +76,7 @@
 import { bindExternalEvent, cleanTimeout, clearCleanTimeouts } from '@/app/utils/component';
 import { formatShortTimeSentence } from '@/app/utils/string';
 import { getSolve } from '@/app/repositories/solves';
+import { jsonToObject } from '@/app/utils/object';
 import { get } from 'lodash-es';
 
 export default {
@@ -119,7 +120,7 @@ export default {
             return get(this.solve, 'scramble.puzzle', '');
         },
         puzzleConfig() {
-            return get(this.solve, 'config', {});
+            return jsonToObject(get(this.solve, 'config', '{}'));
         },
         scrambleText() {
             return get(this.solve, 'scramble.scramble', '');

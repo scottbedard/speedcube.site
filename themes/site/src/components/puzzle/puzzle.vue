@@ -53,7 +53,11 @@ export default {
                 throw new Error(`Unknown puzzle type '${this.puzzle}'`);
             }
 
-            return new Puzzle(this);
+            const instance = new Puzzle(this);
+
+            this.$emit('ready', instance);
+
+            return instance;
         },
         getInspectionDuration() {
             return this.$options.puzzle.getInspectionDuration();

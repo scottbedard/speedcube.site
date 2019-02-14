@@ -31,9 +31,7 @@ class Config extends Model
     /**
      * @var array Jsonable fields
      */
-    protected $jsonable = [
-        'config',
-    ];
+    protected $jsonable = [];
 
     /**
      * @var array Relations
