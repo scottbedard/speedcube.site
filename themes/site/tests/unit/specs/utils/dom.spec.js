@@ -47,7 +47,7 @@ describe('dom utils', function() {
         expect(bar).not.to.have.been.called;
     });
 
-    it.only('walkEventPath (ie)', function(done) {
+    it('walkEventPath (ie)', function(done) {
         const cb = stub();
 
         vm = mount({
