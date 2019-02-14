@@ -95,7 +95,7 @@ class Plugin extends PluginBase
         // extend the user form with our relation controllers
         Event::listen('backend.form.extendFields', function ($widget) {
             if (
-                $widget->model instanceof UserModel && 
+                $widget->model instanceof UserModel &&
                 $widget->getController() instanceof UsersController
             ) {
                 $widget->addTabFields([
