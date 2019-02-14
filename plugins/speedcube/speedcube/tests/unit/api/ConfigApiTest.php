@@ -17,7 +17,7 @@ class ConfigApiTest extends PluginTestCase
 
         // create a couple configs for the user
         $config = Factory::create(new Config, [
-            'config' => [],
+            'config' => '[]',
             'puzzle' => 'foo',
             'user_id' => $user->id,
         ]);
@@ -42,9 +42,7 @@ class ConfigApiTest extends PluginTestCase
         // create a new puzzle config
         $response = $this->post('/api/speedcube/speedcube/config', [
             'puzzle' => 'test',
-            'config' => [
-                'hello' => 'world',
-            ],
+            'config' => '{"hello":"world"}',
         ]);
 
         $response->assertStatus(200);
@@ -66,7 +64,7 @@ class ConfigApiTest extends PluginTestCase
 
         // omitting a puzzle should cause the request to fail
         $response = $this->post('/api/speedcube/speedcube/config', [
-            'config' => [],
+            'config' => '[]',
         ]);
 
         $response->assertStatus(500);
@@ -80,24 +78,20 @@ class ConfigApiTest extends PluginTestCase
 
         // create a config for us to update
         $config = Factory::create(new Config, [
-            'config' => [
-                'thing' => 1,
-            ],
+            'config' => '{"thing":1}',
             'puzzle' => 'foo',
             'user_id' => $user->id,
         ]);
 
         // update the config
         $response = $this->post('/api/speedcube/speedcube/config', [
-            'config' => [
-                'thing' => 2,
-            ],
+            'config' => '{"thing":2}',
             'puzzle' => 'foo',
         ]);
 
         $response->assertStatus(200);
 
         // we should now see the updated "thing" value
-        $this->assertEquals(2, $user->configs()->first()->config['thing']);
+        $this->assertEquals(2, json_decode($user->configs()->first()->config, true)['thing']);
     }
 }
