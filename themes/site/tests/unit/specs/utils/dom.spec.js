@@ -1,6 +1,7 @@
 import {
     isForeignClick,
     queryElementThen,
+    walkEventPath,
 } from '@/app/utils/dom';
 
 //
@@ -44,5 +45,37 @@ describe('dom utils', function() {
 
         expect(foo).to.have.been.called;
         expect(bar).not.to.have.been.called;
+    });
+
+    it.only('walkEventPath (ie)', function(done) {
+        const cb = stub();
+
+        vm = mount({
+            methods: {
+                onClick(e) {
+                    const pathLength = e.path.length;
+
+                    // we'll make our event look like ie by deleting the path
+                    delete e.path;
+
+                    walkEventPath(e, cb);
+
+                    expect(cb.callCount).to.equal(pathLength);
+
+                    done();
+                },
+            },
+            template: `
+                <div @click="onClick">
+                    <div data-foo />
+                </div>
+            `,
+        });
+
+        document.body.appendChild(vm.$el);
+
+        click(vm.$el.querySelector('[data-foo]'));
+
+        document.body.removeChild(vm.$el);
     });
 });
