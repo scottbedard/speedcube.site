@@ -17,7 +17,7 @@
                         <template v-else>
                             A guest
                         </template>
-                        currently holds the {{ puzzleTitle }} record with this {{ time }} solve!
+                        holds the current {{ puzzleTitle }} single record with this {{ time }} solve!
                     </p>
                     <v-button
                         primary

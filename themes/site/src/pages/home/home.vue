@@ -7,8 +7,8 @@
         </p>
 
         <p class="leading-normal max-w-lg mx-auto text-grey-6 text-sm">
-            Please be aware, we're currently in an open beta. If you encounter a problem, <a href="https://github.com/scottbedard/speedcube.site/issues" target="_blank">please report it on GitHub</a>.<br class="hidden lg:inline" />
-            Until beta ends stats may be reset at any time, so don't get too attached to your records.
+            We are currently in an open beta. If you encounter a problem, <a href="https://github.com/scottbedard/speedcube.site/issues" target="_blank">please report it on GitHub</a>.<br class="hidden lg:inline" />
+            Stats may be reset at any time, so try not to get too attached to your records.
         </p>
 
         <v-highlighted />
