@@ -7,6 +7,7 @@
 <script>
 import * as THREE from 'three';
 import Cube from './cube';
+import { jsonToObject } from '@/app/utils/object';
 
 export default {
     data() {
@@ -42,7 +43,11 @@ export default {
     },
     methods: {
         applyState(state) {
-            this.$options.puzzle.applyState(state);
+            state = jsonToObject(state);
+
+            if (this.$options.puzzle) {
+                this.$options.puzzle.applyState(state);
+            }
         },
         createPuzzle() {
             let Puzzle;
@@ -53,9 +58,10 @@ export default {
                 throw new Error(`Unknown puzzle type '${this.puzzle}'`);
             }
 
+            // instantiate our puzzle and fire a ready event on nextTick
             const instance = new Puzzle(this);
 
-            this.$emit('ready', instance);
+            this.$nextTick(() => this.$emit('ready', this));
 
             return instance;
         },
@@ -197,6 +203,9 @@ export default {
             default: '',
             required: true,
             type: String,
+        },
+        turnDuration: {
+            type: Number,
         },
     },
     watch: {

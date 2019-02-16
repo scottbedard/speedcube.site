@@ -15,9 +15,9 @@
             <!-- puzzle -->
             <div class="mb-4">
                 <v-puzzle
-                    ref="puzzle"
                     :config="puzzleConfig"
                     :puzzle="puzzle"
+                    @ready="onReady"
                 />
             </div>
 
@@ -150,7 +150,9 @@ export default {
     },
     methods: {
         applyScrambledState() {
-            this.$refs.puzzle.applyState(this.solve.scramble.scrambledState);
+            if (this.$options.puzzle) {
+                this.$options.puzzle.applyState(this.solve.scramble.scrambledState);
+            }
         },
         beginInspection() {
             this.inspecting = true;
@@ -161,7 +163,7 @@ export default {
                 // turn the puzzle
                 if (turn) {
                     cleanTimeout(this, () => {
-                        this.$refs.puzzle.turn(turn);
+                        this.$options.puzzle.turn(turn);
                     }, offset);
                 }
 
@@ -171,6 +173,8 @@ export default {
                         this.beginSolve(offset, this.solution.slice(i + 1));
                     }, offset);
 
+                    // return here to short-circuit the loop, remaining
+                    // turns will be queued in the beginSolve method.
                     return;
                 }
             }
@@ -190,7 +194,7 @@ export default {
 
                 if (turn) {
                     cleanTimeout(this, () => {
-                        this.$refs.puzzle.turn(turn);
+                        this.$options.puzzle.turn(turn);
                     }, offset - startTime);
                 }
             });
@@ -229,10 +233,6 @@ export default {
             }).finally(() => {
                 // complete
                 this.loading = false;
-
-                if (typeof this.solve.id !== 'undefined') {
-                    this.applyScrambledState();
-                }
             });
         },
         onKeyup(e) {
@@ -240,6 +240,11 @@ export default {
             if (e.key === ' ') {
                 this.replay();
             }
+        },
+        onReady(puzzle) {
+            this.$options.puzzle = puzzle;
+
+            this.applyScrambledState();
         },
         replay() {
             clearCleanTimeouts(this);

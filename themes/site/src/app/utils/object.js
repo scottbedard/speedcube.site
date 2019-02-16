@@ -1,9 +1,23 @@
+import { cloneDeep } from 'lodash-es';
+
 /**
- * Convert json to an object.
+ * Safely convert a json to an object.
  *
  * @param  {string|Object} json
+ * @param  {string|Object} defaultValue
  * @return {Object}
  */
-export function jsonToObject(json) {
-    return typeof json === 'string' ? JSON.parse(json) : json;
+export function jsonToObject(json, defaultValue = '{}') {
+    // if json is already an object return a clone
+    if (typeof json === 'object') {
+        return cloneDeep(json);
+    }
+
+    // otherwise attempt to parse the json
+    try {
+        return JSON.parse(json);
+    } catch (e) {}
+    
+    // if json parsing failed, repeat with our default value
+    return jsonToObject(defaultValue);
 }

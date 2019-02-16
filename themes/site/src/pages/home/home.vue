@@ -1,33 +1,16 @@
 <template>
     <v-margin class="text-center py-20" padded>
-        <pre>{{ highlightedSolve }}</pre>
+        <v-highlighted />
     </v-margin>
 </template>
 
 <script>
+import highlightedComponent from './highlighted/highlighted';
 import { getHighlightedSolve } from '@/app/repositories/solves';
 
 export default {
-    created() {
-        this.fetchHighlightedSolve();
-    },
-    data() {
-        return {
-            highlightedSolve: null,
-            highlightedSolveIsLoading: false,
-        };
-    },
-    methods: {
-        fetchHighlightedSolve() {
-            this.highlightedSolveIsLoading = true;
-
-            getHighlightedSolve().then((response) => {
-                // success
-                this.highlightedSolve = response.data.solve;
-            }).finally(() => {
-                this.highlightedSolveIsLoading = false;
-            });
-        },
+    components: {
+        'v-highlighted': highlightedComponent,
     },
 };
 </script>

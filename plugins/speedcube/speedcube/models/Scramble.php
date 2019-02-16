@@ -45,13 +45,6 @@ class Scramble extends Model
     ];
 
     /**
-     * @var array Jsonable fields
-     */
-    protected $jsonable = [
-        'scrambled_state',
-    ];
-
-    /**
      * @var array Relations
      */
     public $hasMany = [

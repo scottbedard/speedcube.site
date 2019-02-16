@@ -24,7 +24,7 @@ class SolvesController extends ApiController
 
             $data = input();
             $abort = array_get($data, 'abort', false);
-            $config = array_get($data, 'config', []);
+            $config = array_get($data, 'config', '{}');
             $scrambleId = array_get($data, 'scrambleId', 0);
             $solution = array_get($data, 'solution', '');
 

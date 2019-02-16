@@ -8522,6 +8522,10 @@ spyfu-vue-functional@^0.2.6:
   version "0.2.6"
   resolved "https://registry.yarnpkg.com/spyfu-vue-functional/-/spyfu-vue-functional-0.2.6.tgz#3ff8e021ae93eae5d7ff102c6ce17ae8fb5f4d43"
 
+spyfu-vue-utils@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/spyfu-vue-utils/-/spyfu-vue-utils-0.2.0.tgz#e4ecebd3d4781a21cd8e041b3dca3f71a6e30e65"
+
 spyfu-vuex-helpers@^0.12.4:
   version "0.12.4"
   resolved "https://registry.yarnpkg.com/spyfu-vuex-helpers/-/spyfu-vuex-helpers-0.12.4.tgz#cf6715b7e0ed85373ed38532126f9c40ff139388"

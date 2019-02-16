@@ -87,7 +87,14 @@ function applyTurn(cube, turn) {
 
         for (let i = 0; i <= fps; i += 1) {
             const progress = i / fps;
-            const timeout = progress * turnDuration;
+
+            // determine the duration of our turn. double
+            // turns will take twice as long to animate.
+            let timeout = progress * turnDuration;
+
+            if (degrees === 180) {
+                timeout *= 2;
+            }
 
             cleanTimeout(cube.vm, () => {
                 // animate our effected stickers being turned
@@ -436,7 +443,7 @@ export default class {
             stickerSpacing: get(this.vm.config, 'stickerSpacing', defaultConfig.stickerSpacing) / 100,
             stickerRadius: get(this.vm.config, 'stickerRadius', defaultConfig.stickerRadius) / 100,
             innerBrightness: get(this.vm.config, 'innerBrightness', defaultConfig.innerBrightness) / 100,
-            turnDuration: get(this.vm.config, 'turnDuration', defaultConfig.turnDuration),
+            turnDuration: this.vm.turnDuration || get(this.vm.config, 'turnDuration', defaultConfig.turnDuration),
         };
     }
 
