@@ -119,7 +119,7 @@ export default {
             if (this.isAuthenticated) {
                 this.$store.dispatch('user/saveConfig', {
                     puzzle: this.puzzle,
-                    config: this.currentOptions,
+                    config: JSON.stringify(this.currentOptions),
                 }).then(() => {
                     // success
                     this.close();

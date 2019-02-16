@@ -87,15 +87,23 @@ class Plugin extends PluginBase
                 $controller->addDynamicProperty('relationConfig');
                 $controller->relationConfig = $controller->mergeConfig(
                     $controller->relationConfig,
-                    '$/speedcube/speedcube/controllers/keyboardconfigs/config_relation.yaml'
+                    '$/speedcube/speedcube/controllers/users/config_relation.yaml'
                 );
             }
         });
 
         // extend the user form with our relation controllers
         Event::listen('backend.form.extendFields', function ($widget) {
-            if ($widget->model instanceof UserModel && $widget->getController() instanceof UsersController) {
+            if (
+                $widget->model instanceof UserModel &&
+                $widget->getController() instanceof UsersController
+            ) {
                 $widget->addTabFields([
+                    'configs' => [
+                        'path' => '$/speedcube/speedcube/models/config/_field_configs.htm',
+                        'tab'  => 'Puzzle Configs',
+                        'type' => 'partial',
+                    ],
                     'keyboard_configs' => [
                         'path' => '$/speedcube/speedcube/models/keyboardconfig/_field_keyboard_configs.htm',
                         'tab'  => 'Keyboard Configs',

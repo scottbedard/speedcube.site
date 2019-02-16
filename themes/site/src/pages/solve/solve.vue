@@ -233,7 +233,7 @@ export default {
                 const savedConfig = this.user.configs.find(config => config.puzzle === this.puzzle);
 
                 if (savedConfig) {
-                    return { ...this.defaultConfig, ...savedConfig.config };
+                    return { ...this.defaultConfig, ...jsonToObject(savedConfig.config) };
                 }
             }
 
@@ -312,7 +312,7 @@ export default {
             this.recordEvent('END', now);
 
             postSolve({
-                config: this.puzzleConfig,
+                config: JSON.stringify(this.puzzleConfig),
                 scrambleId: this.scrambleId,
                 solution: this.solution,
             }).then((response) => {
