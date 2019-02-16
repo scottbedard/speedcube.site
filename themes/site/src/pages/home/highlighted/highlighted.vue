@@ -17,7 +17,7 @@
                         <template v-else>
                             A guest
                         </template>
-                        set the {{ puzzleTitle }} single record by solving this in {{ time }}s!
+                        holds the {{ puzzleTitle }} record by solving this in {{ time }}s!
                     </p>
                     <v-button
                         primary
@@ -26,7 +26,7 @@
                             params: { id: solve.id }, 
                             query: { autoplay: null },
                         }">
-                        Click to watch replay
+                        Click here to watch replay
                     </v-button>
                 </div>
             </div>

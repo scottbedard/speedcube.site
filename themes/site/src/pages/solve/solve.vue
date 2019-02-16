@@ -8,8 +8,9 @@
                 :keyboard-config="keyboardConfig"
                 :puzzle="puzzle"
                 @default-config="setDefaultConfig"
-                @turn-start="recordTurn"
+                @ready="onReady"
                 @turn-end="completeIfSolved"
+                @turn-start="recordTurn"
             />
 
             <!-- controls -->
@@ -89,26 +90,26 @@
                         v-else
                         key="idle">
                         <div class="mb-8">
-                            <v-button class="mb-8" @click="scramble">
+                            <v-button primary @click="scramble">
                                 Scramble
                             </v-button>
 
-                            <div class="flex flex-wrap items-center justify-center text-xs tracking-wide uppercase">
-                                <div class="p-4 w-full md:w-auto">
+                            <div class="flex flex-wrap items-center justify-center mt-4 text-xs tracking-wide uppercase">
+                                <div class="p-4 w-full sm:w-auto">
                                     <a
                                         class="text-grey-6"
                                         href="#"
                                         @click.prevent="onAppearanceClick">
-                                        Appearance
+                                        Customize Puzzle
                                     </a>
                                 </div>
-                                <div class="border-grey-4 border-b w-3" />
-                                <div class="p-4 w-full md:w-auto">
+                                <div class="border-grey-6 border-b w-2" />
+                                <div class="p-4 w-full sm:w-auto">
                                     <a
                                         class="text-grey-6"
                                         href="#"
                                         @click.prevent="onControlsClick">
-                                        Controls
+                                        Edit Keybindings
                                     </a>
                                 </div>
                             </div>
@@ -275,7 +276,7 @@ export default {
 
             // begin an inspection for however long our puzzle allows
             this.inspecting = true;
-            this.inspectionDuration = this.$refs.puzzle.getInspectionDuration();
+            this.inspectionDuration = this.$options.puzzle.getInspectionDuration();
             this.inspectionStartedAt = Date.now();
         },
         beginSolve() {
@@ -359,12 +360,15 @@ export default {
             } else if (e.key === 'Escape') {
                 this.onEscapeUp();
             } else {
-                const turn = this.$refs.puzzle.getTurnFromKeyboardEvent(e);
+                const turn = this.$options.puzzle.getTurnFromKeyboardEvent(e);
 
                 if (turn) {
                     this.turn(turn);
                 }
             }
+        },
+        onReady(puzzle) {
+            this.$options.puzzle = puzzle;
         },
         onSpaceUp() {
             // do nothing if we're modifying cube options
@@ -423,19 +427,19 @@ export default {
             // get a scramble from the server, and use an animating
             // pseudo-scramble as the loading state
             const scrambleRequest = postCreateScramble(this.puzzle);
-            const pseudoScramble = this.$refs.puzzle.pseudoScramble();
+            const pseudoScramble = this.$options.puzzle.pseudoScramble();
 
             // update the puzzle's state and begin the inspection
             Promise.all([scrambleRequest, pseudoScramble]).then(([response]) => {
                 this.scrambleId = response.data.id;
-                this.$refs.puzzle.applyState(response.data.scrambledState);
+                this.$options.puzzle.applyState(response.data.scrambledState);
 
                 this.beginInspection();
             });
         },
         turn(turn) {
-            if (!this.inspecting || this.$refs.puzzle.isInspectionTurn(turn)) {
-                this.$refs.puzzle.turn(turn);
+            if (!this.inspecting || this.$options.puzzle.isInspectionTurn(turn)) {
+                this.$options.puzzle.turn(turn);
             }
         },
     },

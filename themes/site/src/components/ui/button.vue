@@ -1,54 +1,68 @@
+<style lang="scss" scoped>
+    a,
+    button {
+        &:active {
+            transform: translateY(1px);
+        }
+    }
+
+    .v-button-ghost {
+        border-color: transparent !important;
+    }
+</style>
+
 <script>
 import { bindAll } from 'spyfu-vue-functional';
 
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { danger, loading, primary, size, tag, to } = context.props;
-
-        bindings.class.push('block border-2 border-grey-5 text-grey-7 trans-border trans-color');
+        const { danger, ghost, href, primary, size, to, type } = context.props;
 
         //
         // theme
         //
-        if (danger) {
-            // danger
-            bindings.class.push('hover:border-danger-7 hover:text-danger-7');
-        } else if (primary) {
-            // primary
-            bindings.class.push('bg-primary-4 text-primary-10 trans-bg hover:bg-primary-5');
+        if (primary) {
+            bindings.class.push('v-button-primary border-grey-7 text-grey-7 hover:border-primary-6 hover:text-primary-6');
+        } else if (danger) {
+            bindings.class.push('v-button-danger border-grey-7 text-grey-7 hover:border-danger-7 hover:text-danger-7');
         } else {
-            // default
-            bindings.class.push('hover:border-primary-5 hover:text-primary-7');
+            bindings.class.push('border-grey-7 text-grey-7 hover:border-grey-7 hover:text-grey-8');
+        }
+
+        //
+        // ghost
+        //
+        if (ghost) {
+            bindings.class.push('v-button-ghost');
         }
 
         //
         // size
         //
         if (size === 'sm') {
-            bindings.class.push('h-10 px-6');
+            bindings.class.push('min-h-10 px-4 py-2');
         } else if (size === 'md') {
-            bindings.class.push('h-12 px-8');
+            bindings.class.push('min-h-12 px-8 py-2');
         }
 
         //
         // tag
         //
-        let Tag = tag;
+        let Tag = 'button';
 
         if (to) {
             Tag = 'router-link';
+        } else if (href) {
+            Tag = 'a';
         }
 
         return <Tag
-            class="cursor-pointer font-bold inline-flex items-center justify-center rounded-full text-xs tracking-wide uppercase focus:outline-none"
+            class="border border-solid inline-flex items-center justify-center leading-normal rounded text-center text-xs tracking-wide trans-border trans-color uppercase focus:outline-none"
+            href={href}
             to={to}
             {...bindings}>
-            {
-                loading
-                    ? <v-spinner color="grey-dark" size="sm" />
-                    : context.slots().default
-            }
+            {context.slots().default}
         </Tag>;
     },
     functional: true,
@@ -57,13 +71,12 @@ export default {
             default: false,
             type: Boolean,
         },
-        disabled: {
+        ghost: {
             default: false,
             type: Boolean,
         },
-        loading: {
-            default: false,
-            type: Boolean,
+        href: {
+            type: String,
         },
         primary: {
             default: false,
@@ -73,12 +86,11 @@ export default {
             default: 'md',
             type: String,
         },
-        tag: {
-            default: 'button',
-            type: String,
-        },
         to: {
-            type: [Object, String],
+            type: Object,
+        },
+        type: {
+            type: String,
         },
     },
 };

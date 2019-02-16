@@ -3,14 +3,17 @@
         <p>A basic button</p>
 
         <v-button
-            :loading="loading"
-            outlined
+            :danger="danger"
+            :ghost="ghost"
+            :primary="primary"
             @click="onClick">
-            Click me
+            Watch Replay
         </v-button>
 
-        <div slot="options">
-            <v-checkbox v-model="loading">Loading</v-checkbox>
+        <div class="flex flex-wrap" slot="options">
+            <v-checkbox v-model="danger" class="mr-8">Danger</v-checkbox>
+            <v-checkbox v-model="primary" class="mr-8">Primary</v-checkbox>
+            <v-checkbox v-model="ghost" class="mr-8">Ghost</v-checkbox>
         </div>
     </v-example>
 </template>
@@ -21,7 +24,9 @@ import exampleComponent from '../example.vue';
 export default {
     data() {
         return {
-            loading: false,
+            danger: false,
+            ghost: false,
+            primary: false,
         };
     },
     components: {
