@@ -4,7 +4,13 @@
             <template v-if="!loading">
                 <!-- header -->
                 <h1 class="font-thin mb-4 text-center text-grey-6">
-                    <router-link class="text-grey-6" :to="{ name: 'users', params: { username }}">{{ username }}'s</router-link> {{ solveTitle }} solve
+                    <template v-if="username">
+                        <router-link class="text-grey-6" :to="{ name: 'users', params: { username }}">{{ username }}'s</router-link>
+                    </template>
+                    <template v-else>
+                        A guest's
+                    </template>
+                    {{ solveTitle }} solve
                 </h1>
 
                 <div class="text-center text-grey-6">

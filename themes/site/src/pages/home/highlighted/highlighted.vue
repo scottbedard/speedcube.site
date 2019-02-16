@@ -10,13 +10,19 @@
                 />
 
                 <div class="font-light text-grey-7">
-                    <p class="font-thin mb-12 mt-8 text-grey-6 text-sm">
-                        <router-link :to="{ name: 'users', params: { username }}">{{ username }}</router-link> holds the single solve record with this {{ time }} solve!
+                    <p class="font-thin mb-8 mt-8 text-grey-6 text-sm">
+                        <template v-if="username">
+                            <router-link :to="{ name: 'users', params: { username }}">{{ username }}</router-link>
+                        </template>
+                        <template v-else>
+                            A guest
+                        </template>
+                        currently holds the {{ puzzleTitle }} record with this {{ time }} solve!
                     </p>
                     <v-button
                         primary
                         :to="{ name: 'replay', params: { id: solve.id }}">
-                        Click here to watch it
+                        Click to watch replay
                     </v-button>
                 </div>
             </div>
