@@ -90,6 +90,11 @@ export default {
         this.fetchSolve();
 
         bindExternalEvent(this, document.body, 'keyup', this.onKeyup);
+
+
+        if (typeof this.$route.query.autoplay !== 'undefined') {
+            this.inspecting = true;
+        }
     },
     data() {
         return {
@@ -251,6 +256,12 @@ export default {
             this.$options.puzzle = puzzle;
 
             this.applyScrambledState();
+
+            if (typeof this.$route.query.autoplay !== 'undefined') {
+                this.$router.replace({ query: { autoplay: undefined }});
+
+                this.replay();
+            }
         },
         replay() {
             clearCleanTimeouts(this);

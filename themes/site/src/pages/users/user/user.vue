@@ -24,7 +24,7 @@
                             <!-- user -->
                             <div>
                                 <h1 class="mb-2 text-grey-8">
-                                    {{ user.name || user.username }}
+                                    {{ user.username }}
                                 </h1>
                                 <div class="text-grey-5 text-sm">
                                     Member since <time :datetime="user.createdAt">{{ user.createdAt | datestamp }}</time>

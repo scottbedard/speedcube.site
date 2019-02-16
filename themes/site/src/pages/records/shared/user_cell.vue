@@ -8,7 +8,7 @@ export default {
 
         return <div>
             <div class="font-bold mb-2">
-                { value ? (value.name || value.username || 'Anonymous') : 'Guest' }
+                { value ? value.username : 'Guest' }
             </div>
             <div class="font-light text-xs text-grey-7">
                 { moment(row.createdAt, timestampFormat).format('MMMM Do, YYYY') }
