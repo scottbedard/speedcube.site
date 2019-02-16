@@ -28,10 +28,24 @@ window.click = function click(el) {
 // create a vue factory
 //
 window.factory = function factory(options = {}) {
+    function walk(children) {
+        return children.reduce((acc, route) => {
+            if (typeof route.name === 'string') {
+                acc.push(route.name);
+            }
+
+            if (Array.isArray(route.children)) {
+                acc.push(...walk(route.children));
+            }
+
+            return acc;
+        }, []);
+    }
+
     return spyfuVueFactory({
         Vue,
         modules,
-        routes,
+        routes: walk(routes()),
         ...options,
     });
 }

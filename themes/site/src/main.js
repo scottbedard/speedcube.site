@@ -30,7 +30,7 @@ const store = new Vuex.Store({
 //
 const router = new VueRouter({
     mode: 'history',
-    routes,
+    routes: routes(store),
 });
 
 const { beforeEach, afterEach } = guards(store);
