@@ -1,17 +1,24 @@
 <template>
     <div>
-        <v-fade-transition>
-            <div v-if="loading" key="loading">
-                <v-spinner />
-            </div>
-
-            <div v-else key="puzzle">
+        <v-fade-transition :enter-duration="500">
+            <div v-if="!loading">
                 <v-puzzle
                     :config="puzzleConfig"
                     :puzzle="puzzle"
                     :turn-duration="scramblingTurnDuration"
                     @ready="onReady"
                 />
+
+                <div class="font-light text-grey-7">
+                    <p class="font-thin mb-12 mt-8 text-grey-6 text-sm">
+                        <router-link :to="{ name: 'users', params: { username }}">{{ username }}</router-link> holds the single solve record with this {{ time }} solve!
+                    </p>
+                    <v-button
+                        primary
+                        :to="{ name: 'replay', params: { id: solve.id }}">
+                        Click here to watch it
+                    </v-button>
+                </div>
             </div>
         </v-fade-transition>
     </div>
@@ -22,6 +29,8 @@ import { jsonToObject } from '@/app/utils/object';
 import { get } from 'lodash-es';
 import { getHighlightedSolve } from '@/app/repositories/solves';
 import { componentTimeout } from 'spyfu-vue-utils';
+import { puzzles } from '@/app/constants';
+import { formatShortTimeSentence } from '@/app/utils/string';
 
 export default {
     created() {
@@ -41,6 +50,11 @@ export default {
         puzzleConfig() {
             return jsonToObject(get(this.solve, 'config'));
         },
+        puzzleTitle() {
+            const puzzleId = get(this.solve, 'scramble.puzzle');
+
+            return get(puzzles, `${puzzleId}.title`);
+        },
         scrambleLength() {
             return this.scrambleTurns.length;
         },
@@ -48,10 +62,19 @@ export default {
             return get(this.solve, 'scramble.scramble', '').split(' ');
         },
         scramblingTurnDuration() {
-            return 200;
+            return 100;
         },
         scrambledState() {
             return jsonToObject(get(this.solve, 'scramble.scrambledState'));
+        },
+        solveTime() {
+            return get(this.solve, 'time', 0);
+        },
+        time() {
+            return formatShortTimeSentence(this.solveTime); 
+        },
+        username() {
+            return get(this.solve, 'user.username');
         },
     },
     methods: {
@@ -67,8 +90,7 @@ export default {
         },
         onReady(puzzle) {
             this.$options.puzzle = puzzle;
-            
-            // begin scrambling the puzzle
+
             this.scrambling = true;
 
             this.scrambleTurns.forEach((turn, index) => {
@@ -84,7 +106,7 @@ export default {
                     }, delay);
                 }
             });
-        },
+        }
     },
 };
 </script>
