@@ -109,7 +109,7 @@
                                         class="text-grey-6"
                                         href="#"
                                         @click.prevent="onControlsClick">
-                                        Edit Keybindings
+                                        Edit Key Bindings
                                     </a>
                                 </div>
                             </div>
