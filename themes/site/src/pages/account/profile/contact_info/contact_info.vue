@@ -13,7 +13,7 @@
 
                 <!-- name -->
                 <v-form-field
-                    label="Display Name"
+                    label="Name"
                     name="name"
                     :value="name">
                     <v-input
