@@ -6,8 +6,8 @@
 
 <script>
 import * as THREE from 'three';
-import Cube from './cube';
 import { jsonToObject } from '@/app/utils/object';
+import Cube from './cube';
 
 export default {
     data() {

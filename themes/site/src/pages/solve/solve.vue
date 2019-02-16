@@ -122,11 +122,11 @@
 </template>
 
 <script>
-import { bindExternalEvent } from '@/app/utils/component';
 import { mapGetters, mapState } from 'vuex';
+import { bindExternalEvent } from '@/app/utils/component';
+import { jsonToObject } from '@/app/utils/object';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postSolve } from '@/app/repositories/solves';
-import { jsonToObject } from '@/app/utils/object';
 import appearanceOptions from './appearance_options';
 import defaultKeyboardConfigs from './default_keyboard_configs';
 

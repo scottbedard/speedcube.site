@@ -18,8 +18,7 @@
 </template>
 
 <script>
-import highlightedComponent from './highlighted/highlighted';
-import { getHighlightedSolve } from '@/app/repositories/solves';
+import highlightedComponent from './highlighted/highlighted.vue';
 
 export default {
     components: {

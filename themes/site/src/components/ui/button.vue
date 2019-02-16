@@ -61,6 +61,7 @@ export default {
             class="border border-solid inline-flex items-center justify-center leading-normal rounded text-center text-xs tracking-wide trans-border trans-color uppercase focus:outline-none"
             href={href}
             to={to}
+            type={type}
             {...bindings}>
             {context.slots().default}
         </Tag>;

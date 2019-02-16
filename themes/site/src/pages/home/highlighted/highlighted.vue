@@ -21,9 +21,9 @@
                     </p>
                     <v-button
                         primary
-                        :to="{ 
-                            name: 'replay', 
-                            params: { id: solve.id }, 
+                        :to="{
+                            name: 'replay',
+                            params: { id: solve.id },
                             query: { autoplay: null },
                         }">
                         Click here to watch replay
@@ -35,12 +35,12 @@
 </template>
 
 <script>
-import { jsonToObject } from '@/app/utils/object';
-import { get } from 'lodash-es';
-import { getHighlightedSolve } from '@/app/repositories/solves';
-import { componentTimeout } from 'spyfu-vue-utils';
-import { puzzles } from '@/app/constants';
 import { formatShortTimeSentence } from '@/app/utils/string';
+import { getHighlightedSolve } from '@/app/repositories/solves';
+import { jsonToObject } from '@/app/utils/object';
+import { puzzles } from '@/app/constants';
+import { componentTimeout } from 'spyfu-vue-utils';
+import { get } from 'lodash-es';
 
 export default {
     created() {
@@ -81,7 +81,7 @@ export default {
             return get(this.solve, 'time', 0);
         },
         time() {
-            return formatShortTimeSentence(this.solveTime); 
+            return formatShortTimeSentence(this.solveTime);
         },
         username() {
             return get(this.solve, 'user.username');
@@ -116,7 +116,7 @@ export default {
                     }, delay);
                 }
             });
-        }
+        },
     },
 };
 </script>

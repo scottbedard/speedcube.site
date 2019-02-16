@@ -258,7 +258,7 @@ export default {
             this.applyScrambledState();
 
             if (typeof this.$route.query.autoplay !== 'undefined') {
-                this.$router.replace({ query: { autoplay: undefined }});
+                this.$router.replace({ query: { autoplay: undefined } });
 
                 this.replay();
             }

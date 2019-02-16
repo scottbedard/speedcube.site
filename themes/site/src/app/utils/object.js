@@ -16,8 +16,10 @@ export function jsonToObject(json, defaultValue = '{}') {
     // otherwise attempt to parse the json
     try {
         return JSON.parse(json);
-    } catch (e) {}
-    
+    } catch (e) {
+        /* esling-disable no-empty */
+    }
+
     // if json parsing failed, repeat with our default value
     return jsonToObject(defaultValue);
 }
