@@ -93,6 +93,7 @@ class SolvesController extends ApiController
             ->with('scramble')
             ->puzzle('3x3')
             ->fastest()
+            ->completed()
             ->first();
 
         return $this->success([

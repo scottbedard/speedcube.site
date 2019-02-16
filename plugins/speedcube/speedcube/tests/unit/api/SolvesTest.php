@@ -209,9 +209,18 @@ class SolvesApiTest extends PluginTestCase
         $scramble->scramble = 'R';
         $scramble->save();
 
+        // throw a junk dnf solve in, this shouldn't be returned
+        Factory::create(new Solve, [
+            'scramble_id' => $scramble->id,
+            'solution' => '500#START 1000:F 1500#END',
+            'status' => 'dnf',
+        ]);
+
+        // create our record solve
         $solve = Factory::create(new Solve, [
             'scramble_id' => $scramble->id,
-            'solution' => '500#START 1000:R- 1500#END',
+            'solution' => '500#START 1000:R- 2000#END',
+            'status' => 'complete',
             'user_id' => $user->id,
         ]);
 
