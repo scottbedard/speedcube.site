@@ -29,9 +29,7 @@ class SolvesApiTest extends PluginTestCase
 
         // submit a request to complete a solve for it
         $response = $this->post("/api/speedcube/speedcube/solves", [
-            'config' => [
-                'colors' => ['#000000', '#111111', '#222222', '#333333', '#444444', '#555555'],
-            ],
+            'config' => '{"colors":["#000","#111","#222","#333","#444","#555"]}',
             'scrambleId' => $scramble->id,
             'solution' => '0#START 100:R 200:U- 300:R- 400#END',
         ]);
@@ -47,7 +45,7 @@ class SolvesApiTest extends PluginTestCase
         $this->assertNull($solve->user_id);
         $this->assertEquals(3, $solve->moves);
         $this->assertEquals(133, $solve->average_speed);
-        $this->assertEquals('#000000', $solve->config['colors'][0]);
+        $this->assertEquals('#000', json_decode($solve->config, true)['colors'][0]);
         $this->assertEquals('complete', $solve->status);
     }
 
@@ -65,9 +63,7 @@ class SolvesApiTest extends PluginTestCase
         ]);
 
         $response = $this->post("/api/speedcube/speedcube/solves", [
-            'config' => [
-                'colors' => ['#000000', '#111111', '#222222', '#333333', '#444444', '#555555'],
-            ],
+            'config' => '{"colors":["#000","#111","#222","#333","#444","#555"]}',
             'scrambleId' => $scramble->id,
             'solution' => '100:X 200:X- 1000#START 2000:R 3000:U- 4000:R- 5000#END',
         ]);
@@ -199,5 +195,35 @@ class SolvesApiTest extends PluginTestCase
         $this->assertEquals($solve->id, $data['solve']['id']);
         $this->assertEquals($solve->scramble->id, $data['solve']['scramble']['id']);
         $this->assertEquals($solve->user->username, $data['solve']['user']['username']);
+    }
+
+    //
+    // highlighted
+    //
+    public function test_fetching_the_highlighted_solve()
+    {
+        // scaffold a user, scramble, and solve
+        $user = Factory::registerUser();
+
+        $scramble = Factory::create(new Scramble, ['puzzle' => '3x3']);
+        $scramble->scramble = 'R';
+        $scramble->save();
+
+        $solve = Factory::create(new Solve, [
+            'scramble_id' => $scramble->id,
+            'solution' => '500#START 1000:R- 1500#END',
+            'user_id' => $user->id,
+        ]);
+
+        // fetch the highlighted solve
+        $response = $this->get('/api/speedcube/speedcube/solves/highlighted');
+
+        $data = json_decode($response->getContent(), true);
+
+        // we should have a solve with the user summary and scramble
+        $response->assertStatus(200);
+        $this->assertEquals($scramble->id, $data['solve']['scramble']['id']);
+        $this->assertEquals($solve->id, $data['solve']['id']);
+        $this->assertEquals($user->id, $data['solve']['user']['id']);
     }
 }

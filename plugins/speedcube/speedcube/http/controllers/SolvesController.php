@@ -24,7 +24,7 @@ class SolvesController extends ApiController
 
             $data = input();
             $abort = array_get($data, 'abort', false);
-            $config = array_get($data, 'config', []);
+            $config = array_get($data, 'config', '{}');
             $scrambleId = array_get($data, 'scrambleId', 0);
             $solution = array_get($data, 'solution', '');
 
@@ -76,6 +76,24 @@ class SolvesController extends ApiController
         } catch (ModelNotFoundException $e) {
             return $this->failed('not_found');
         }
+
+        return $this->success([
+            'solve' => $solve,
+        ]);
+    }
+
+    /**
+     * Get a highlighted solve.
+     *
+     * @return Response
+     */
+    public function highlighted()
+    {
+        $solve = Solve::withUserSummary()
+            ->with('scramble')
+            ->puzzle('3x3')
+            ->fastest()
+            ->first();
 
         return $this->success([
             'solve' => $solve,

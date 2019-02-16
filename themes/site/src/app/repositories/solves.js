@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+// get a highlighted solve
+export function getHighlightedSolve() {
+    return axios.get('/api/speedcube/speedcube/solves/highlighted');
+}
+
 // get solve
 export function getSolve(id) {
     return axios.get(`/api/speedcube/speedcube/solves/${id}`);
