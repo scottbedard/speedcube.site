@@ -1,5 +1,5 @@
 <template>
-    <header class="bg-grey-2 shadow-md">
+    <header>
         <v-margin padded>
             <div class="flex h-20 items-center justify-between">
                 <div class="flex items-center">
