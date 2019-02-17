@@ -149,7 +149,7 @@ export default {
                                     const min = Math.floor(val / 60000);
                                     const sec = Math.floor((val % 60000) / 1000);
 
-                                    return `${min}:${sec}`;
+                                    return `${min}:${String(sec).padStart(2, '0')}`;
                                 },
                             },
                         },
