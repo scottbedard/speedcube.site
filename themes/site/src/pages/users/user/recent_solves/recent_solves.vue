@@ -15,11 +15,35 @@
                     v-if="solves.length > 0"
                     key="chart"
                     class="w-full">
+                    <!-- chart -->
                     <v-scatter-chart
                         :chart-data="chartData"
                         :height="240"
                         :options="chartOptions"
                     />
+
+                    <!-- legend -->
+                    <div class="flex leading-normal mt-4">
+                        <a
+                            v-for="puzzle in solvedPuzzles"
+                            class="flex items-center mr-6 text-grey-6 text-xs tracking-wide hover:text-grey-7"
+                            href="#"
+                            :key="puzzle"
+                            @click.prevent="toggle(puzzle)">
+                            <i
+                                class="fa fa-circle mr-2"
+                                :style="{
+                                    color: isHidden(puzzle) ? undefined : puzzles[puzzle].color,
+                                }"
+                            />
+                            <span
+                                v-text="puzzles[puzzle].title"
+                                :class="{
+                                    'text-grey-7': !isHidden(puzzle),   
+                                }"
+                            />
+                        </a>
+                    </div>
                 </div>
                 <div
                     v-else
@@ -36,9 +60,15 @@
 import moment from 'moment';
 import { formatShortTimeSentence } from '@/app/utils/string';
 import { puzzles, timestampFormat } from '@/app/constants';
-import { get } from 'lodash-es';
+import { get, sortBy } from 'lodash-es';
 
 export default {
+    data() {
+        return {
+            // array of puzzle ids not to display in the scatter plot
+            hidden: [],
+        };
+    },
     computed: {
         chartData() {
             return {
@@ -48,11 +78,13 @@ export default {
                     backgroundColor: puzzles[puzzle].color,
                     pointRadius: 5,
                     pointHoverRadius: 6,
-                    data: this.groupedSolves[puzzle].map(solve => ({
-                        solve,
-                        x: moment(solve.createdAt, timestampFormat).unix(),
-                        y: solve.time,
-                    })),
+                    data: this.groupedSolves[puzzle]
+                        .filter(solve => !this.isHidden(solve.scramble.puzzle))
+                        .map(solve => ({
+                            solve,
+                            x: moment(solve.createdAt, timestampFormat).unix(),
+                            y: solve.time,
+                        })),
                 })),
             };
         },
@@ -154,8 +186,14 @@ export default {
                 return acc;
             }, {});
         },
+        isHidden() {
+            return puzzle => this.hidden.includes(puzzle);
+        },
+        puzzles() {
+            return puzzles;
+        },
         solvedPuzzles() {
-            return Object.keys(this.groupedSolves);
+            return sortBy(Object.keys(this.groupedSolves));
         },
     },
     methods: {
@@ -169,6 +207,13 @@ export default {
                     id: solve.id,
                 },
             });
+        },
+        toggle(puzzle) {
+            if (this.isHidden(puzzle)) {
+                this.hidden = this.hidden.filter(hiddenPuzzle => hiddenPuzzle !== puzzle);
+            } else {
+                this.hidden.push(puzzle);
+            }
         },
     },
     props: [
