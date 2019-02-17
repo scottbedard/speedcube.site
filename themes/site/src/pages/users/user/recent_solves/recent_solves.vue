@@ -23,7 +23,7 @@
                     />
 
                     <!-- legend -->
-                    <div class="flex leading-normal mt-4">
+                    <div class="flex leading-normal mt-8">
                         <a
                             v-for="puzzle in solvedPuzzles"
                             class="flex items-center mr-6 text-grey-6 text-xs tracking-wide hover:text-grey-7"
@@ -58,7 +58,7 @@
 
 <script>
 import moment from 'moment';
-import { formatShortTimeSentence } from '@/app/utils/string';
+import { formatShortTime, formatShortTimeSentence } from '@/app/utils/string';
 import { puzzles, timestampFormat } from '@/app/constants';
 import { get, sortBy } from 'lodash-es';
 
@@ -73,7 +73,7 @@ export default {
         chartData() {
             return {
                 datasets: this.solvedPuzzles.map(puzzle => ({
-                    label: puzzle,
+                    label: puzzles[puzzle].title,
                     fill: false,
                     backgroundColor: puzzles[puzzle].color,
                     pointRadius: 5,
@@ -133,8 +133,24 @@ export default {
                         {
                             ticks: {
                                 beginAtZero: true,
+                                maxTicksLimit: 6,
                                 fontColor: '#7B8794',
-                                callback: val => (val > 0 ? `${(val / 1000)}s` : ''),
+                                callback: val => {
+                                    if (val === 0) {
+                                        return '';
+                                    }
+
+                                    if (val < 60000) {
+                                        const sec = Math.floor(val / 1000);
+
+                                        return `0:${String(sec).padStart(2, '0')}`;
+                                    }
+
+                                    const min = Math.floor(val / 60000);
+                                    const sec = Math.floor((val % 60000) / 1000);
+
+                                    return `${min}:${sec}`;
+                                },
                             },
                         },
                     ],
