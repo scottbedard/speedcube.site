@@ -16,7 +16,7 @@
         <!-- records -->
         <v-card v-if="records.length > 0">
             <v-card-link
-                v-for="record in records"
+                v-for="record in sortedRecords"
                 title="Click to watch replay"
                 :key="record.id"
                 :to="{
@@ -47,7 +47,14 @@
 </template>
 
 <script>
+import { get, sortBy } from 'lodash-es';
+
 export default {
+    computed: {
+        sortedRecords() {
+            return sortBy(this.records, record => get(record, 'solve.scramble.puzzle'));
+        },
+    },
     props: [
         'records',
     ],
