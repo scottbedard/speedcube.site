@@ -16,14 +16,14 @@
                     <!-- user -->
                     <template v-if="user">
                         <div class="flex items-center mb-8">
-                            <!-- doughnut chart -->
-                            <div v-if="totalSolves > 0" class="mr-4">
-                                <v-solve-counts :totals="totals" />
+                            <!-- avatar -->
+                            <div v-if="avatarPath" class="flex items-center mr-4">
+                                <v-avatar size="lg" :user="user" />
                             </div>
 
                             <!-- user -->
                             <div>
-                                <h1 class="mb-2 text-grey-8">
+                                <h1 class="mb-1 text-grey-8">
                                     {{ user.username }}
                                 </h1>
                                 <div class="text-grey-5 text-sm">
@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import { get } from 'lodash-es';
 import { getOverview } from '@/app/repositories/user';
 import recentSolvesComponent from './recent_solves/recent_solves.vue';
 import recordsComponent from './records/records.vue';
@@ -73,7 +74,7 @@ export default {
             records: [],
             totals: [],
             solves: [],
-            user: null,
+            user: {},
         };
     },
     components: {
@@ -82,6 +83,9 @@ export default {
         'v-recent-solves': recentSolvesComponent,
     },
     computed: {
+        avatarPath() {
+            return get(this.user, 'avatar.path');
+        },
         isLoading() {
             return this.overviewIsLoading;
         },
