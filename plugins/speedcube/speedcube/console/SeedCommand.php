@@ -77,10 +77,12 @@ class SeedCommand extends Command
         $this->output->writeln('- Solves');
         $progressBar = $this->output->createProgressBar($quantity);
 
+        $puzzles = ['2x2', '3x3', '4x4', '5x5'];
+
         for ($i = 0; $i < $quantity; $i++) {
             // create a scramble and a solve
-            $scramble = Factory::create(new Scramble(), [
-                'cube_size' => rand(2, 5),
+            $scramble = Factory::create(new Scramble, [
+                'puzzle' => $puzzles[array_rand($puzzles)],
             ]);
 
             $solve = Factory::create(new Solve(), [
