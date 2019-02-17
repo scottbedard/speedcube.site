@@ -81,7 +81,7 @@ class SeedCommand extends Command
 
         for ($i = 0; $i < $quantity; $i++) {
             // create a scramble and a solve
-            $scramble = Factory::create(new Scramble, [
+            $scramble = Factory::create(new Scramble(), [
                 'puzzle' => $puzzles[array_rand($puzzles)],
             ]);
 
