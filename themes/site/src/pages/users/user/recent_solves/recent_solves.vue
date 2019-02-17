@@ -72,20 +72,25 @@ export default {
     computed: {
         chartData() {
             return {
-                datasets: this.solvedPuzzles.map(puzzle => ({
-                    label: puzzles[puzzle].title,
-                    fill: false,
-                    backgroundColor: puzzles[puzzle].color,
-                    pointRadius: 5,
-                    pointHoverRadius: 6,
-                    data: this.groupedSolves[puzzle]
-                        .filter(solve => !this.isHidden(solve.scramble.puzzle))
-                        .map(solve => ({
-                            solve,
-                            x: moment(solve.createdAt, timestampFormat).unix(),
-                            y: solve.time,
-                        })),
-                })),
+                datasets: [
+                    // solve points
+                    ...this.solvedPuzzles.map(puzzle => {
+                        return {
+                            label: puzzles[puzzle].title,
+                            fill: false,
+                            backgroundColor: puzzles[puzzle].color,
+                            pointRadius: 5,
+                            pointHoverRadius: 6,
+                            data: this.groupedSolves[puzzle]
+                                .filter(solve => !this.isHidden(solve.scramble.puzzle))
+                                .map(solve => ({
+                                    solve,
+                                    x: moment(solve.createdAt, timestampFormat).unix(),
+                                    y: solve.time,
+                                }))
+                        };
+                    }),
+                ],
             };
         },
         chartOptions() {
