@@ -70,12 +70,12 @@ export const puzzles = {
         title: '3x3',
     },
     '4x4': {
-        color: '#ff00ff',
+        color: '#4CAF50',
         slug: '4x4',
         title: '4x4',
     },
     '5x5': {
-        color: '#ff00ff',
+        color: '#f44336',
         slug: '5x5',
         title: '5x5',
     },
