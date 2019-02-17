@@ -81,7 +81,7 @@ class UsersController extends ApiController
 
     /**
      * List users.
-     * 
+     *
      * @return Response
      */
     public function index()
@@ -98,15 +98,15 @@ class UsersController extends ApiController
             // fetch users
             $query = User::with('avatar:attachment_id,attachment_type,disk_name')
                 ->with([
-                    'records' => function($records) {
+                    'records' => function ($records) {
                         $records
                             ->select('solve_id', 'user_id')
                             ->with([
-                                'solve' => function($solve) {
+                                'solve' => function ($solve) {
                                     $solve
                                         ->select('id', 'created_at', 'scramble_id', 'time')
                                         ->with([
-                                            'scramble' => function($scramble) {
+                                            'scramble' => function ($scramble) {
                                                 $scramble->select('id', 'puzzle');
                                             },
                                         ]);
@@ -121,7 +121,7 @@ class UsersController extends ApiController
 
             // sorting
             [$col, $dir] = array_merge(explode(',', $orderBy), ['asc']);
-            
+
             $query->orderBy($col, $dir === 'asc' ? 'asc' : 'desc');
 
             $users = $query
@@ -132,7 +132,7 @@ class UsersController extends ApiController
                 'pagination' => [
                     'totalUsers' => $total,
                     'totalPages' => ceil($total / $take),
-                    'pageSize' => $take,
+                    'pageSize'   => $take,
                 ],
                 'users' => $users,
             ]);
