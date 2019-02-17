@@ -80,6 +80,71 @@ class UsersController extends ApiController
     }
 
     /**
+     * List users.
+     * 
+     * @return Response
+     */
+    public function index()
+    {
+        try {
+            $data = input();
+            $skip = (int) array_get($data, 'skip', '0');
+            $take = min((int) array_get($data, 'take', '0'), 100) ?: 25;
+            $orderBy = array_get($data, 'orderBy', 'id,asc');
+
+            // count the total users
+            $total = User::count();
+
+            // fetch users
+            $query = User::with('avatar:attachment_id,attachment_type,disk_name')
+                ->with([
+                    'records' => function($records) {
+                        $records
+                            ->select('solve_id', 'user_id')
+                            ->with([
+                                'solve' => function($solve) {
+                                    $solve
+                                        ->select('id', 'created_at', 'scramble_id', 'time')
+                                        ->with([
+                                            'scramble' => function($scramble) {
+                                                $scramble->select('id', 'puzzle');
+                                            },
+                                        ]);
+                                },
+                            ]);
+                    },
+                ]);
+
+            if ($skip > 0) {
+                $query->skip($skip);
+            }
+
+            // sorting
+            [$col, $dir] = array_merge(explode(',', $orderBy), ['asc']);
+            
+            $query->orderBy($col, $dir === 'asc' ? 'asc' : 'desc');
+
+            $users = $query
+                ->take($take)
+                ->get();
+
+            return $this->success([
+                'pagination' => [
+                    'totalUsers' => $total,
+                    'totalPages' => ceil($total / $take),
+                    'pageSize' => $take,
+                ],
+                'users' => $users,
+            ]);
+        }
+
+        // unknown err
+        catch (Exception $err) {
+            return $this->failed($err);
+        }
+    }
+
+    /**
      * Get the solve history for a user.
      *
      * @param string $username

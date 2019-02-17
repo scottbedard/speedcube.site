@@ -29,6 +29,16 @@ export function getSignout() {
 }
 
 /**
+ * Get users.
+ * 
+ * @param  {Object}     params
+ * @return {Promise}
+ */
+export function getUsers(params = {}) {
+    return axios.get('/api/speedcube/speedcube/users', { params });
+}
+
+/**
  * Upload a profile photo.
  *
  * @param  {Object}     avatar
