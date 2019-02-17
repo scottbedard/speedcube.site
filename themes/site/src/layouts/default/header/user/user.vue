@@ -21,7 +21,7 @@
                     <v-dropdown-link
                         icon="fa-line-chart"
                         :to="{
-                            name: 'users',
+                            name: 'users:show',
                             params: {
                                 username: this.user.username,
                             },

@@ -135,6 +135,15 @@ export default function (store) {
                 //
                 {
                     name: 'users',
+                    path: '/users',
+                    component: () => import('@/pages/users/users.vue' /* webpackChunkName: "users" */),
+                },
+
+                //
+                // user
+                //
+                {
+                    name: 'users:show',
                     path: 'users/:username',
                     component: () => import('@/pages/users/user/user.vue' /* webpackChunkName: "user" */),
                 },

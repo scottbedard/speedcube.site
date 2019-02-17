@@ -12,7 +12,7 @@
                 <div class="font-light text-grey-7">
                     <p class="font-thin mb-8 mt-8 text-grey-6">
                         <template v-if="username">
-                            <router-link :to="{ name: 'users', params: { username }}">{{ username }}</router-link>
+                            <router-link :to="{ name: 'users:show', params: { username }}">{{ username }}</router-link>
                         </template>
                         <template v-else>
                             A guest

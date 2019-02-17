@@ -5,7 +5,7 @@
                 <!-- header -->
                 <h1 class="font-thin mb-4 text-center text-grey-6">
                     <template v-if="username">
-                        <router-link class="text-grey-6" :to="{ name: 'users', params: { username }}">{{ username }}'s</router-link>
+                        <router-link class="text-grey-6" :to="{ name: 'users:show', params: { username }}">{{ username }}'s</router-link>
                     </template>
                     <template v-else>
                         A guest's
