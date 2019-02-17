@@ -17,17 +17,25 @@
                         <template v-else>
                             A guest
                         </template>
-                        holds the {{ puzzleTitle }} record by solving this in {{ time }}s!
+                        holds the {{ puzzleTitle }} record, solving this in {{ time }}!
                     </p>
-                    <v-button
-                        primary
-                        :to="{
-                            name: 'replay',
-                            params: { id: solve.id },
-                            query: { autoplay: null },
-                        }">
-                        Click here to watch replay
-                    </v-button>
+                    <div class="-m-4 flex flex-wrap items-center justify-center overflow-hidden">
+                        <v-button
+                            class="m-4"
+                            primary
+                            :to="{
+                                name: 'replay',
+                                params: { id: solve.id },
+                                query: { autoplay: null },
+                            }">
+                            Watch Replay
+                        </v-button>
+                        <v-button
+                            class="m-4"
+                            :to="{ name: 'solve', params: { puzzle: '3x3' }}">
+                            Start Solving
+                        </v-button>
+                    </div>
                 </div>
             </div>
         </v-fade-transition>
