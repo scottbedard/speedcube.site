@@ -96,7 +96,13 @@ class UsersController extends ApiController
             $total = User::count();
 
             // fetch users
-            $query = User::with('avatar:attachment_id,attachment_type,disk_name')
+            $query = User::select([
+                    'created_at',
+                    'id',
+                    'name',
+                    'username',
+                ])
+                ->with('avatar:attachment_id,attachment_type,disk_name')
                 ->with([
                     'records' => function ($records) {
                         $records
