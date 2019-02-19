@@ -258,6 +258,16 @@ class Solve extends Model
         return $query->orderBy('moves', 'asc');
     }
 
+    public function scopeJoinPuzzle($query)
+    {
+        $query->join(
+            'speedcube_speedcube_scrambles',
+            'speedcube_speedcube_solves.scramble_id',
+            '=',
+            'speedcube_speedcube_scrambles.id'
+        )->addSelect('speedcube_speedcube_scrambles.puzzle');
+    }
+
     public function scopeLastMonth($query)
     {
         return $query->where(function ($q) {

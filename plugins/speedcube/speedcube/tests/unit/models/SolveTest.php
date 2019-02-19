@@ -103,4 +103,15 @@ class SolveTest extends PluginTestCase
         $this->assertEquals(1, $totals->where('puzzle', '2x2')->first()->total);
         $this->assertEquals(2, $totals->where('puzzle', '3x3')->first()->total);
     }
+
+    public function test_join_puzzle_scope()
+    {
+        $scramble = Factory::create(new Scramble, ['puzzle' => '3x3']);
+        $solve = Factory::create(new Solve, ['scramble_id' => $scramble->id]);
+
+        $result = Solve::select('*')->joinPuzzle()->first();
+
+        $this->assertEquals($solve->id, $result->id);
+        $this->assertEquals('3x3', $result->puzzle);
+    }
 }
