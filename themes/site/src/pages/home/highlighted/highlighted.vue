@@ -28,7 +28,6 @@ import { formatShortTimeSentence } from '@/app/utils/string';
 import { getHighlightedSolve } from '@/app/repositories/solves';
 import { jsonToObject } from '@/app/utils/object';
 import { puzzles } from '@/app/constants';
-import { componentTimeout } from 'spyfu-vue-utils';
 import { get } from 'lodash-es';
 
 export default {
