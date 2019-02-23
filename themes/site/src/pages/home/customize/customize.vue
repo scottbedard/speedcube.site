@@ -10,7 +10,7 @@
                     to sticker positioning, and even the camera angle!
                 </p>
                 <p class="font-thin leading-loose text-grey-7">
-                    Once everything looks just right, make sure it feels just as good. Your keyboard
+                    Once everything looks perfect, make sure it feels just as good. Your keyboard
                     is the controller. Map any key to whatever turn feels right. After a bit of practice
                     it'll feel like a real puzzle in your hands, one that never pops.
                 </p>
