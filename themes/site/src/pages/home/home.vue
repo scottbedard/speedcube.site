@@ -1,7 +1,7 @@
 <template>
     <v-page padded>
         <v-margin padded>
-            <div class="mb-12 text-center md:mb-20">
+            <div class="mb-20 text-center md:mb-32">
                 <!-- heading -->
                 <h1 class="font-thin mb-8 text-grey-8 text-4xl">
                     Welcome to the speedcube site
@@ -18,26 +18,33 @@
             </div>
 
             <!-- about -->
-            <div class="mb-12 md:mb-20">
+            <div class="mb-20 md:mb-32">
                 <v-about />
             </div>
 
             <!-- stats -->
-            <div>
-                <v-stats />
+            <div class="mb-20 md:mb-32">
+                <v-customize />
             </div>
+
+            <!-- customize -->
+            <!-- <div>
+                <v-stats />
+            </div> -->
         </v-margin>
     </v-page>
 </template>
 
 <script>
 import aboutComponent from './about/about.vue';
+import customizeComponent from './customize/customize.vue';
 import statsComponent from './stats/stats.vue';
 import highlightedComponent from './highlighted/highlighted.vue';
 
 export default {
     components: {
         'v-about': aboutComponent,
+        'v-customize': customizeComponent,
         'v-highlighted': highlightedComponent,
         'v-stats': statsComponent,
     },
