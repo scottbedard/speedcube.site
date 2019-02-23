@@ -1,5 +1,18 @@
+<style lang="scss" scoped>
+.idle {
+    // wobble the puzzle along a sine wave
+    animation: wobble 2s alternate infinite ease-in-out;
+}
+
+@keyframes wobble {
+    to {
+        transform: translatey(1rem);
+    }
+}
+</style>
+
 <template>
-    <div class="text-center">
+    <div class="text-center" :class="{ idle }">
         <canvas ref="canvas" />
     </div>
 </template>
@@ -194,6 +207,10 @@ export default {
         config: {
             default: () => {},
             type: Object,
+        },
+        idle: {
+            default: false,
+            type: Boolean,
         },
         keyboardConfig: {
             default: () => {},

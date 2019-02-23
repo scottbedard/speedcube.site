@@ -1,42 +1,23 @@
 <template>
     <div>
-        <v-fade-transition :enter-duration="500">
+        <v-fade-transition>
             <div v-if="!loading">
                 <v-puzzle
                     :config="puzzleConfig"
                     :puzzle="puzzle"
                     :turn-duration="scramblingTurnDuration"
-                    @ready="onReady"
-                />
-
-                <div class="font-light text-grey-7">
-                    <p class="font-thin mb-8 mt-8 text-grey-6">
-                        <template v-if="username">
-                            <router-link :to="{ name: 'users:show', params: { username }}">{{ username }}</router-link>
-                        </template>
-                        <template v-else>
-                            A guest
-                        </template>
-                        holds the {{ puzzleTitle }} record, solving this in {{ time }}!
-                    </p>
-                    <div class="-m-4 flex flex-wrap items-center justify-center overflow-hidden">
-                        <v-button
-                            class="m-4"
-                            primary
-                            :to="{
-                                name: 'replay',
-                                params: { id: solve.id },
-                                query: { autoplay: null },
-                            }">
-                            Watch Replay
-                        </v-button>
-                        <v-button
-                            class="m-4"
-                            :to="{ name: 'solve', params: { puzzle: '3x3' }}">
-                            Start Solving
-                        </v-button>
-                    </div>
-                </div>
+                    @ready="onReady">
+                </v-puzzle>
+                <router-link
+                    class="font-thin leading-normal text-lg"
+                    :to="{
+                        name: 'replay',
+                        params: {
+                            id: solve.id,
+                        },
+                    }">
+                    Click to see {{ username ? `${username}'s` : 'the' }} record {{ time }} solve
+                </router-link>
             </div>
         </v-fade-transition>
     </div>
@@ -56,9 +37,9 @@ export default {
     },
     data() {
         return {
+            loading: false,
             scrambling: false,
             solve: {},
-            loading: false,
         };
     },
     computed: {
@@ -108,22 +89,7 @@ export default {
         },
         onReady(puzzle) {
             this.$options.puzzle = puzzle;
-
-            this.scrambling = true;
-
-            this.scrambleTurns.forEach((turn, index) => {
-                const delay = this.scramblingTurnDuration * index;
-
-                componentTimeout(this, () => {
-                    this.$options.puzzle.turn(turn);
-                }, delay);
-
-                if (index === this.scrambleLength - 1) {
-                    componentTimeout(this, () => {
-                        this.scrambling = false;
-                    }, delay);
-                }
-            });
+            this.$options.puzzle.applyState(this.scrambledState);
         },
     },
 };

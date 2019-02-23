@@ -48,6 +48,6 @@ export function formatShortTimeSentence(time) {
     const minutes = Math.floor(time / 60000);
 
     return minutes < 1
-        ? `${shortTime} seconds`
-        : `${shortTime} minutes`;
+        ? `${shortTime} second`
+        : `${shortTime} minute`;
 }
