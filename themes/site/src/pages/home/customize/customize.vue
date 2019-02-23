@@ -18,8 +18,8 @@
         <v-grid-cell class="md:order-1" md="5">
             <div class="flex justify-center md:min-h-128">
                 <v-fade-transition
-                    :enter-duration="500"
-                    :leave-duration="500">
+                    :enter-duration="frequency / 2"
+                    :leave-duration="frequency / 2">
                     <div :key="tick">
                         <img :src="puzzleSrc" />
                         <!-- <v-puzzle
@@ -123,7 +123,7 @@ import img32 from './32.png';
 import img33 from './33.png';
 import img34 from './34.png';
 
-const images = shuffle([
+var images = shuffle([
     img0,
     img1,
     img2,
@@ -159,14 +159,15 @@ const images = shuffle([
     img32,
     img33,
     img34,
-])
+]);
 
 export default {
     created() {
-        componentInterval(this, this.update, 1500);
+        componentInterval(this, this.update, this.frequency);
     },
     data() {
         return {
+            frequency: 2000,
             tick: 0,
         };
     },
@@ -177,6 +178,8 @@ export default {
     },
     methods: {
         update() {
+            images = shuffle(images);
+            
             this.tick += 1;
         },
     },
