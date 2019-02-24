@@ -1,25 +1,47 @@
 <template functional>
     <v-grid padded>
-        <v-grid-cell md="7">
-            <div class="md:pr-20 md:mt-12">
-                <h2 class="font-thin leading-normal mb-8 text-3xl text-grey-8">
-                    A community built for speed cubing
-                </h2>
+        <v-grid-cell lg="7">
+            <div class="text-center lg:mt-12 lg:pr-20 lg:text-left">
+                <h1 class="font-thin leading-normal mb-8 text-3xl text-grey-8">
+                    Welcome to the speedcube site!
+                </h1>
                 <p class="font-thin leading-loose mb-8 text-grey-7">
-                    Our goal is to be an free and fair place to compete and have fun with other speed cubers.
-                    Follow other cubers and be notified when records are broken, or compete in tournaments and 
-                    see how you measure up!
+                    We're a community built by and for speed cubers. Our mission is to be a free and fair
+                    place to compete and enjoy these puzzles we all love. Follow your friends and receive
+                    notifications when a record is broken, or enter a tournaments and try to be the best!
                 </p>
-                <p class="font-thin leading-loose text-grey-7">
+                <div class="-m-4">
+                    <v-button
+                        class="m-4"
+                        :to="{
+                            name: 'solve',
+                            params: {
+                                puzzle: '3x3',
+                            },
+                        }">
+                        Start solving
+                    </v-button>
+                    <v-button
+                        class="m-4"
+                        :to="{
+                            name: 'records',
+                            params: {
+                                puzzle: '3x3',
+                            },
+                        }">
+                        See current records
+                    </v-button>
+                </div>
+                <!-- <p class="font-thin leading-loose text-grey-7">
                     Additionally, this website is completely open source. That means anyone is welcome to contribute
                     and make the site better. We plan on adding lots of different features and puzzles,
                     <a href="https://github.com/scottbedard/speedcube.site" target="_blank">click here to give us a hand</a>.
-                </p>
+                </p> -->
             </div>
         </v-grid-cell>
-        <v-grid-cell md="5">
+        <v-grid-cell lg="5">
             <div class="h-full flex items-center justify-center md:text-right">
-                <img class="h-auto max-w-xs w-full md:max-w-sm" src="./fans.svg" />
+                <img class="h-auto max-w-xs w-full lg:max-w-sm" src="./fans.svg" />
             </div>
         </v-grid-cell>
     </v-grid>

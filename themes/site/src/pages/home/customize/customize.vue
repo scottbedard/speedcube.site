@@ -5,9 +5,9 @@
                     Make the puzzles your own
                 </h2>
                 <p class="font-thin leading-loose mb-8 text-grey-7">
-                    All of our puzzles are designed to be customized, so make them look exactly
-                    the way you want. You have complete control over everything from the color scheme,
-                    to sticker positioning, and even the camera angle!
+                    Every puzzle is built to be customized, so make everything look exactly the way you want.
+                    You have complete control over everything from colors to sticker positioning, and even
+                    the camera angle.
                 </p>
                 <p class="font-thin leading-loose text-grey-7">
                     Once everything looks perfect, make sure it feels just as good. Your keyboard
@@ -18,8 +18,8 @@
         <v-grid-cell class="md:order-1" md="5">
             <div class="flex justify-center md:min-h-128">
                 <v-fade-transition
-                    :enter-duration="frequency / 2"
-                    :leave-duration="frequency / 2">
+                    :enter-duration="frequency / 3"
+                    :leave-duration="frequency / 3">
                     <div :key="tick">
                         <img :src="puzzleSrc" />
                         <!-- <v-puzzle
@@ -167,7 +167,7 @@ export default {
     },
     data() {
         return {
-            frequency: 2000,
+            frequency: 3000,
             tick: 0,
         };
     },
@@ -179,7 +179,7 @@ export default {
     methods: {
         update() {
             images = shuffle(images);
-            
+
             this.tick += 1;
         },
     },

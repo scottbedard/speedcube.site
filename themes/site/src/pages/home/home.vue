@@ -1,22 +1,6 @@
 <template>
     <v-page padded>
         <v-margin padded>
-            <div class="mb-20 text-center md:mb-32">
-                <!-- heading -->
-                <h1 class="font-thin mb-8 text-grey-8 text-4xl">
-                    Welcome to the speedcube site
-                </h1>
-
-                <p class="font-thin leading-normal max-w-md mb-8 mx-auto text-grey-7 text-lg">
-                    A free and open source place for speed cubing. We are currently in an open beta,
-                    please <a href="https://github.com/scottbedard/speedcube.site/issues">report any issues</a>
-                    and know that stats may be reset at any time.
-                </p>
-
-                <!-- highlighted solve -->
-                <v-highlighted />
-            </div>
-
             <!-- about -->
             <div class="mb-20 md:mb-32">
                 <v-about />

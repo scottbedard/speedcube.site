@@ -27,7 +27,7 @@ export default {
         } else if (danger) {
             bindings.class.push('v-button-danger border-grey-7 text-grey-7 hover:border-danger-7 hover:text-danger-7');
         } else {
-            bindings.class.push('border-grey-7 text-grey-7 hover:border-grey-7 hover:text-grey-8');
+            bindings.class.push('border-grey-7 text-grey-7 hover:border-grey-8 hover:text-grey-8');
         }
 
         //
@@ -58,7 +58,7 @@ export default {
         }
 
         return <Tag
-            class="border border-solid inline-flex items-center justify-center leading-normal rounded text-center text-xs tracking-wide trans-border trans-color uppercase focus:outline-none"
+            class="border-2 border-solid cursor-pointer inline-flex items-center justify-center leading-normal rounded text-center text-xs tracking-wide trans-border trans-color uppercase focus:outline-none"
             href={href}
             to={to}
             type={type}
