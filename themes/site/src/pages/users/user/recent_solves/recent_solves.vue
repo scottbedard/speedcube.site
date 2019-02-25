@@ -15,35 +15,24 @@
                     v-if="solves.length > 0"
                     key="chart"
                     class="w-full">
-                    <!-- scatter chart -->
-                    <v-solves-scatter-chart
-                        :grouped-solves="groupedSolves"
-                        :is-hidden="isHidden"
-                        :solved-puzzles="solvedPuzzles"
-                        :solves="solves"
-                    />
 
-                    <!-- legend -->
-                    <div class="flex leading-normal mt-8">
-                        <a
-                            v-for="puzzle in solvedPuzzles"
-                            class="flex items-center mr-6 text-grey-6 text-xs tracking-wide hover:text-grey-7"
-                            href="#"
-                            :key="puzzle"
-                            @click.prevent="toggle(puzzle)">
-                            <i
-                                class="fa fa-circle mr-2"
-                                :style="{
-                                    color: isHidden(puzzle) ? undefined : puzzles[puzzle].color,
-                                }"
-                            />
-                            <span
-                                v-text="puzzles[puzzle].title"
-                                :class="{
-                                    'text-grey-7': !isHidden(puzzle),   
-                                }"
-                            />
-                        </a>
+                    <!-- scatter chart -->
+                    <div class="mb-8">
+                        <v-solves-scatter-chart
+                            :grouped-solves="groupedSolves"
+                            :is-hidden="isHidden"
+                            :solved-puzzles="solvedPuzzles"
+                            :solves="solves"
+                        />
+                    </div>
+
+                    <!-- doughnut chart / legend -->
+                    <div>
+                        <v-solves-doughnut-chart
+                            :grouped-solves="groupedSolves"
+                            :is-hidden="isHidden"
+                            @toggle="toggle"
+                        />
                     </div>
                 </div>
                 <div
@@ -59,10 +48,11 @@
 
 <script>
 import moment from 'moment';
-import solvesScatterChart from './solves_scatter_chart/solves_scatter_chart.vue';
 import { formatShortTime, formatShortTimeSentence } from '@/app/utils/string';
-import { puzzles, timestampFormat } from '@/app/constants';
 import { get, sortBy } from 'lodash-es';
+import { puzzles, timestampFormat } from '@/app/constants';
+import solvesDoughnutChartComponent from './solves_doughnut_chart/solves_doughnut_chart.vue'
+import solvesScatterChartComponent from './solves_scatter_chart/solves_scatter_chart.vue';
 
 export default {
     data() {
@@ -72,7 +62,8 @@ export default {
         };
     },
     components: {
-        'v-solves-scatter-chart': solvesScatterChart,
+        'v-solves-doughnut-chart': solvesDoughnutChartComponent,
+        'v-solves-scatter-chart': solvesScatterChartComponent,
     },
     computed: {
         groupedSolves() {

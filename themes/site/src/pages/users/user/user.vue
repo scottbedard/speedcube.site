@@ -62,7 +62,6 @@ import { get } from 'lodash-es';
 import { getOverview } from '@/app/repositories/user';
 import recentSolvesComponent from './recent_solves/recent_solves.vue';
 import recordsComponent from './records/records.vue';
-import solveCountsComponent from './solve_counts/solve_counts.vue';
 
 export default {
     created() {
@@ -79,7 +78,6 @@ export default {
     },
     components: {
         'v-records': recordsComponent,
-        'v-solve-counts': solveCountsComponent,
         'v-recent-solves': recentSolvesComponent,
     },
     computed: {
