@@ -72,6 +72,7 @@ class SolvesController extends ApiController
         try {
             $solve = Solve::withUserSummary()
                 ->with('scramble')
+                ->completed()
                 ->findOrFail($id);
         } catch (ModelNotFoundException $e) {
             return $this->failed('not_found');

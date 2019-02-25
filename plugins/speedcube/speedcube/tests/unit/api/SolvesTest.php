@@ -177,17 +177,18 @@ class SolvesApiTest extends PluginTestCase
     //
     public function test_finding_a_solve()
     {
+        // create a user and scramble
         $user = Factory::registerUser();
 
-        $scramble = Factory::create(new Scramble, ['puzzle' => '3x3']);
-        $scramble->scramble = 'R';
-        $scramble->save();
+        $scramble = Factory::createScrambleWithTurns('R');
 
+        // create and complete a solve, we should be able to find this
         $solve = Factory::create(new Solve, [
             'scramble_id' => $scramble->id,
-            'solution' => '500#START 1000:R- 1500#END',
             'user_id' => $user->id,
         ]);
+
+        $solve->complete('500#START 1000:R- 1500#END');
         
         $response = $this->get("/api/speedcube/speedcube/solves/{$solve->id}");
         $data = json_decode($response->getContent(), true);
@@ -195,6 +196,18 @@ class SolvesApiTest extends PluginTestCase
         $this->assertEquals($solve->id, $data['solve']['id']);
         $this->assertEquals($solve->scramble->id, $data['solve']['scramble']['id']);
         $this->assertEquals($solve->user->username, $data['solve']['user']['username']);
+    
+        // solves that aren't complete should fail
+        $pendingSolve = Factory::create(new Solve, [
+            'scramble_id' => $scramble->id,
+            'user_id' => $user->id,
+        ]);
+
+        $failedResponse = $this->get("/api/speedcube/speedcube/solves/{$pendingSolve->id}");
+        $failedData = json_decode($failedResponse->getContent(), true);
+
+        $failedResponse->assertStatus(500);
+        $this->assertEquals('failed', $failedData['status']);
     }
 
     //
