@@ -84,6 +84,16 @@ class Solve extends Model
     }
 
     /**
+     * After create.
+     * 
+     * @return void
+     */
+    public function afterCreate()
+    {
+        $this->closeOtherUserSolves();
+    }
+
+    /**
      * Check for a personal record.
      *
      * @return void
@@ -132,6 +142,23 @@ class Solve extends Model
 
             $solve->save();
         });
+    }
+
+    /**
+     * Close other solves if a user is authenticated.
+     * 
+     * @return void
+     */
+    protected function closeOtherUserSolves()
+    {
+        if ($this->user_id) {
+            self::pending()
+                ->where('id', '!=', $this->id)
+                ->get()->each(function($solve) {
+                    $solve->status = 'dnf';
+                    $solve->save();
+                });
+        }
     }
 
     /**

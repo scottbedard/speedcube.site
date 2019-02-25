@@ -76,6 +76,30 @@ class SolveTest extends PluginTestCase
         $this->assertEquals($solve2->id, $user->records()->first()->solve_id);
     }
 
+    public function test_creating_a_solve_closes_other_incomplete_solves()
+    {
+        // create a user, scramble, and solve
+        $user = Factory::registerUser();
+
+        $scramble = Factory::createScrambleWithTurns('R');
+
+        $solve = Factory::create(new Solve, [
+            'user_id' => $user->id,
+            'scramble_id' => $scramble->id,
+        ]);
+
+        // since there are no other solves, this one should be pending
+        $this->assertEquals('pending', $solve->fresh()->status);
+
+        // and creating a new solve should change it's status to dnf
+        Factory::create(new Solve, [
+            'user_id' => $user->id,
+            'scramble_id' => $scramble->id,
+        ]);
+
+        $this->assertEquals('dnf', $solve->fresh()->status);
+    }
+
     //
     // scopes
     //
