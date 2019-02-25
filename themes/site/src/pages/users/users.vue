@@ -47,7 +47,7 @@ export default {
             getUsers().then(() => {
                 // success
                 if (this.requestId === requestId) {
-                    console.log ('done!');
+                    console.log('done!');
                 }
             }).finally(() => {
                 // complete

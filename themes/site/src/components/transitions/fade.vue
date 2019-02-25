@@ -14,12 +14,12 @@ export default {
         }
 
         function onBeforeLeave(el) {
-            if (enterDelay > 0) {
-                el.style.transitionDelay = `${enterDelay}ms`;
+            if (leaveDelay > 0) {
+                el.style.transitionDelay = `${leaveDelay}ms`;
             }
 
-            if (enterDuration > 0) {
-                el.style.transitionDuration = `${enterDuration}ms`;
+            if (leaveDuration > 0) {
+                el.style.transitionDuration = `${leaveDuration}ms`;
             }
         }
 

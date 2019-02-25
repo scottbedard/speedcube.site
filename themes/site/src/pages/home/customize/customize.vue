@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import { componentInterval } from 'spyfu-vue-utils';
 import { random, sample, shuffle } from 'lodash-es';
 
 const initialPuzzles = [
@@ -54,7 +53,7 @@ const initialPuzzles = [
 
 function randomConfig() {
     return {
-        colors:  shuffle([
+        colors: shuffle([
             sample([
                 // yellows
                 '#F7D070', '#F9DA8B', '#F8E3A3', // dull
@@ -96,14 +95,14 @@ function randomConfig() {
                 '#FFFFFF', '#F5F5F5', '#EEEEEE', '#E5E5E5',
             ]),
         ]),
-        stickerSpacing:  random(1, 30),
+        stickerSpacing: random(1, 30),
         stickerElevation: random(1, 15),
         stickerRadius: random(0, 50),
         innerBrightness: random(20, 80),
         cameraAngle: random(55, 65),
         cameraDistance: 2000,
         turnDuration: 0,
-    }
+    };
 }
 
 function randomPuzzle() {
@@ -116,7 +115,7 @@ export default {
 
         return {
             config: JSON.parse(config),
-            puzzle: puzzle,
+            puzzle,
             tick: 0,
         };
     },

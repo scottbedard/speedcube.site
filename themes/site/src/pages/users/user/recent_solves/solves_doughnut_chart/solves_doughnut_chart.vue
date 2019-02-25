@@ -24,13 +24,13 @@
                     class="flex items-center w-full"
                     href="#"
                     :class="{
-                        'mt-2': index > 0,   
+                        'mt-2': index > 0,
                     }"
                     :key="puzzle"
                     @click.prevent="toggle(puzzle)">
                     <i
                         class="fa fa-circle mr-2 text-grey-6"
-                        :style="{ 
+                        :style="{
                             color: isHidden(puzzle) ? 'inherit' : puzzles[puzzle].color,
                         }"
                     />
@@ -84,12 +84,10 @@ export default {
             return puzzle => this.groupedSolves[puzzle];
         },
         totalSolves() {
-            return this.visiblePuzzles.reduce((acc, puzzle) => {
-                return acc + this.groupedSolves[puzzle].length;
-            }, 0);
+            return this.visiblePuzzles.reduce((acc, puzzle) => acc + this.groupedSolves[puzzle].length, 0);
         },
         visiblePuzzles() {
-            return this.solvedPuzzles.filter(puzzle => !this.isHidden(puzzle))
+            return this.solvedPuzzles.filter(puzzle => !this.isHidden(puzzle));
         },
     },
     methods: {

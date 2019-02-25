@@ -47,11 +47,9 @@
 </template>
 
 <script>
-import moment from 'moment';
-import { formatShortTime, formatShortTimeSentence } from '@/app/utils/string';
 import { get, sortBy } from 'lodash-es';
-import { puzzles, timestampFormat } from '@/app/constants';
-import solvesDoughnutChartComponent from './solves_doughnut_chart/solves_doughnut_chart.vue'
+import { puzzles } from '@/app/constants';
+import solvesDoughnutChartComponent from './solves_doughnut_chart/solves_doughnut_chart.vue';
 import solvesScatterChartComponent from './solves_scatter_chart/solves_scatter_chart.vue';
 
 export default {

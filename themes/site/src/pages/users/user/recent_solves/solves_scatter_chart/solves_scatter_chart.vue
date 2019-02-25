@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import { get, sortBy } from 'lodash-es';
+import { get } from 'lodash-es';
 import moment from 'moment';
-import { formatShortTime, formatShortTimeSentence } from '@/app/utils/string';
+import { formatShortTimeSentence } from '@/app/utils/string';
 import { puzzles, timestampFormat } from '@/app/constants';
 
 export default {
@@ -20,22 +20,20 @@ export default {
             return {
                 datasets: [
                     // solve points
-                    ...this.solvedPuzzles.map(puzzle => {
-                        return {
-                            backgroundColor: puzzles[puzzle].color,
-                            data: this.groupedSolves[puzzle]
-                                .filter(solve => !this.isHidden(solve.scramble.puzzle))
-                                .map(solve => ({
-                                    solve,
-                                    x: moment(solve.createdAt, timestampFormat).unix(),
-                                    y: solve.time,
-                                })),
-                            fill: false,
-                            label: puzzles[puzzle].title,
-                            pointHoverRadius: 5,
-                            pointRadius: 4,
-                        };
-                    }),
+                    ...this.solvedPuzzles.map(puzzle => ({
+                        backgroundColor: puzzles[puzzle].color,
+                        data: this.groupedSolves[puzzle]
+                            .filter(solve => !this.isHidden(solve.scramble.puzzle))
+                            .map(solve => ({
+                                solve,
+                                x: moment(solve.createdAt, timestampFormat).unix(),
+                                y: solve.time,
+                            })),
+                        fill: false,
+                        label: puzzles[puzzle].title,
+                        pointHoverRadius: 5,
+                        pointRadius: 4,
+                    })),
                 ],
             };
         },
@@ -86,7 +84,7 @@ export default {
                                 beginAtZero: true,
                                 maxTicksLimit: 6,
                                 fontColor: '#7B8794',
-                                callback: val => {
+                                callback: (val) => {
                                     if (val === 0) {
                                         return '';
                                     }

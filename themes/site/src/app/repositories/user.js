@@ -30,7 +30,7 @@ export function getSignout() {
 
 /**
  * Get users.
- * 
+ *
  * @param  {Object}     params
  * @return {Promise}
  */
