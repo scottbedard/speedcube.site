@@ -85,7 +85,7 @@ class Solve extends Model
 
     /**
      * After create.
-     * 
+     *
      * @return void
      */
     public function afterCreate()
@@ -146,7 +146,7 @@ class Solve extends Model
 
     /**
      * Close other solves if a user is authenticated.
-     * 
+     *
      * @return void
      */
     protected function closeOtherUserSolves()
@@ -154,7 +154,7 @@ class Solve extends Model
         if ($this->user_id) {
             self::pending()
                 ->where('id', '!=', $this->id)
-                ->get()->each(function($solve) {
+                ->get()->each(function ($solve) {
                     $solve->status = 'dnf';
                     $solve->save();
                 });
