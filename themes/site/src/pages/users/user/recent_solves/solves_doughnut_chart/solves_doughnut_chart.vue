@@ -6,7 +6,14 @@
                 :options="chartOptions"
             />
             <div class="absolute text-center pin-center">
-                <div class="font-bold mb-2 text-xl">{{ totalSolves | locale }}</div>
+                <div class="font-bold mb-2 text-xl">
+                    <v-number-transition
+                        v-slot="{ value }"
+                        :duration="600"
+                        :value="totalSolves">
+                        {{ Math.round(value) | locale }}
+                    </v-number-transition>
+                </div>
                 <div class="text-grey-6">{{ 'solve' | pluralize(totalSolves) }}</div>
             </div>
         </div>
