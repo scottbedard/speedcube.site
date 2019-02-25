@@ -2,7 +2,7 @@
     <v-grid padded>
         <v-grid-cell class="text-center lg:order-2 lg:text-right" lg="7">
             <h2 class="font-thin leading-normal mb-8 text-2xl text-grey-8">
-                Anyone can contribute, we're entirely open source
+                We're entirely open source, anyone can contribute
             </h2>
             <p class="font-thin leading-loose mb-8 text-grey-7">
                 If you know your way around PHP or Javascript, by all means get involved!
@@ -11,7 +11,7 @@
                 <a href="https://vuejs.org" target="_blank">Vue</a>, and
                 <a href="https://octobercms.com" target="_blank">October CMS</a>.
                 Even if you aren't a programmer, we can always use an extra set of hands managing
-                bugs and brainstorming new features.
+                bugs and brain storming new ideas.
             </p>
             <p class="font-thin leading-loose text-grey-7">
                 Ready to see some code?
