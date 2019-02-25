@@ -2,13 +2,13 @@
     <v-grid padded>
         <v-grid-cell lg="7">
             <div class="text-center lg:mt-12 lg:pr-20 lg:text-left">
-                <h1 class="font-thin leading-normal mb-8 text-3xl text-grey-8">
+                <h1 class="font-thin leading-normal mb-8 text-4xl text-grey-8">
                     Welcome to the speedcube site!
                 </h1>
                 <p class="font-thin leading-loose mb-8 text-grey-7">
                     We're a community built by and for speed cubers. Our mission is to be a free and fair
-                    place to compete and enjoy these puzzles we all love. Follow your friends and receive
-                    notifications when a record is broken, or enter a tournaments and try to be the best!
+                    place to compete and enjoy the puzzles we all love. Follow your friends and receive
+                    notifications when a record is broken, or enter tournaments and try to be the best!
                 </p>
                 <div class="-m-4">
                     <v-button
