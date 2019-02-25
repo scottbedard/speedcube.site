@@ -2,22 +2,22 @@
     <v-page padded>
         <v-margin padded>
             <!-- about -->
-            <div class="mb-8 md:mb-20">
+            <div class="mb-8 md:mb-16 lg:mb-32">
                 <v-about />
             </div>
 
             <!-- customize -->
-            <div class="mb-8 md:mb-20">
+            <div class="mb-8 md:mb-16 lg:mb-32">
                 <v-customize />
             </div>
 
             <!-- stats -->
-            <div class="mb-8 md:mb-20">
+            <div class="mb-8 md:mb-16 lg:mb-32">
                 <v-stats />
             </div>
 
             <!-- open source -->
-            <div>
+            <div class="mb-8 md:mb-16 lg:mb-32">
                 <v-open-source />
             </div>
         </v-margin>
