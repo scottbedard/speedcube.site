@@ -29,4 +29,16 @@ describe('function utils', function() {
         expect(fn).to.have.been.calledWithMatch(0);
         expect(fn).to.have.been.calledWithMatch(1);
     });
+
+    it('ease (canceled)', async function() {
+        const fn = spy();
+
+        const timeouts = ease(easeInOutExpo, fn, 50);
+
+        timeouts.cancel();
+
+        await timeout(100);
+
+        expect(fn).not.to.have.been.called;
+    });
 });
