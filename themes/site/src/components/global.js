@@ -18,6 +18,7 @@ import gridComponent from './containers/grid.vue';
 import inputComponent from './ui/input.vue';
 import marginComponent from './containers/margin.vue';
 import modalComponent from './ui/modal.vue';
+import numberTransitionComponent from './transitions/number.vue';
 import pageComponent from './containers/page.vue';
 import puzzleComponent from './puzzle/puzzle.vue';
 import rangeInputComponent from './ui/range_input.vue';
@@ -53,6 +54,7 @@ export default {
     //
     'v-collapse-transition': collapseTransitionComponent,
     'v-fade-transition': fadeTransitionComponent,
+    'v-number-transition': numberTransitionComponent,
 
     //
     // ui
