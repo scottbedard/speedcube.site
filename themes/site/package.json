@@ -48,7 +48,7 @@
     "spyfu-vue-functional": "^0.2.6",
     "spyfu-vue-utils": "^0.6.0",
     "spyfu-vuex-helpers": "^0.12.4",
-    "three": "^0.101.1",
+    "three": "^0.102.0",
     "vue": "^2.5.17",
     "vue-chartjs": "^3.4.0",
     "vue-color": "^2.7.0",
