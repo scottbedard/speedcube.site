@@ -29,9 +29,9 @@ export function email(data, key) {
 export function required(data, key) {
     const value = data[key];
 
-    return (isBoolean(value) && value) ||
-        (isString(value) && value.length > 0) ||
-        (isNumber(value) && value);
+    return (isBoolean(value) && value)
+        || (isString(value) && value.length > 0)
+        || (isNumber(value) && value);
 }
 
 /**

@@ -21,8 +21,8 @@ export default {
             </div>
 
             {
-                slots.options &&
-                <div class="mt-8 text-sm">
+                slots.options
+                && <div class="mt-8 text-sm">
                     {slots.options}
                 </div>
             }

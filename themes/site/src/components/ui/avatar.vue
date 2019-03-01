@@ -23,8 +23,8 @@ export default {
         return <span {...bindings}>
             {/* no avatar */}
             {
-                user.avatar === null &&
-                <div
+                user.avatar === null
+                && <div
                     class={[
                         'border-2 border-grey-4 inline-flex items-center justify-center rounded-full overflow-hidden',
                         sizeClasses,
@@ -54,8 +54,8 @@ export default {
 
             {/* avatar */}
             {
-                user.avatar !== null &&
-                <div
+                user.avatar !== null
+                && <div
                     class={[
                         'inline-flex items-center justify-center rounded-full overflow-hidden',
                         sizeClasses,

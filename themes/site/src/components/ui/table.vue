@@ -117,25 +117,25 @@ export default {
             <v-collapse-transition>
 
                 {/* loading */}
-                { loading &&
-                    <div class="text-center" key="loading">
+                { loading
+                    && <div class="text-center" key="loading">
                         <v-spinner />
                     </div>
                 }
 
                 {/* empty */}
-                { !loading && empty &&
-                    <div key="empty">
+                { !loading && empty
+                    && <div key="empty">
                         {context.slots().empty}
                     </div>
                 }
 
                 {/* table */}
-                { !loading && !empty &&
-                    <table class="w-full" key="table"
+                { !loading && !empty
+                    && <table class="w-full" key="table"
                         {...bindings}>
-                        { (headers === undefined || headers === true) &&
-                            <thead>
+                        { (headers === undefined || headers === true)
+                            && <thead>
                                 <tr>
                                     {schema.map(col => headerCell(h, col))}
                                 </tr>

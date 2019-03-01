@@ -27,8 +27,8 @@ export function eventPassedThroughTag(e, tagName) {
  */
 export function isKey(e, keyName) {
     return (
-        (keyName === 'enter' && (e.code === 'Enter' || e.keyCode === enterKeyCode)) ||
-        (keyName === 'spacebar' && (e.code === 'Space' || e.keyCode === spacebarKeyCode))
+        (keyName === 'enter' && (e.code === 'Enter' || e.keyCode === enterKeyCode))
+        || (keyName === 'spacebar' && (e.code === 'Space' || e.keyCode === spacebarKeyCode))
     );
 }
 
