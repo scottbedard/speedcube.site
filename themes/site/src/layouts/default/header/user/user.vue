@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { bindExternalEvent } from '@/app/utils/component';
+import { bindExternalEvent } from 'spyfu-vue-utils';
 import { mapState } from 'vuex';
 import dropdownLinkComponent from './dropdown_link/dropdown_link.vue';
 

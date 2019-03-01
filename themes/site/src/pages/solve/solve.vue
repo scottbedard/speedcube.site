@@ -123,7 +123,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import { bindExternalEvent } from '@/app/utils/component';
+import { bindExternalEvent } from 'spyfu-vue-utils';
 import { jsonToObject } from '@/app/utils/object';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postSolve } from '@/app/repositories/solves';

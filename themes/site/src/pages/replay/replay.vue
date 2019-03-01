@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { bindExternalEvent, cleanTimeout, clearCleanTimeouts } from '@/app/utils/component';
+import { bindExternalEvent, componentTimeout } from 'spyfu-vue-utils';
 import { formatShortTimeSentence } from '@/app/utils/string';
 import { getSolve } from '@/app/repositories/solves';
 import { jsonToObject } from '@/app/utils/object';
@@ -90,7 +90,6 @@ export default {
         this.fetchSolve();
 
         bindExternalEvent(this, document.body, 'keyup', this.onKeyup);
-
 
         if (typeof this.$route.query.autoplay !== 'undefined') {
             this.inspecting = true;
@@ -173,14 +172,14 @@ export default {
 
                 // turn the puzzle
                 if (turn) {
-                    cleanTimeout(this, () => {
+                    componentTimeout(this, () => {
                         this.$options.puzzle.turn(turn);
                     }, offset);
                 }
 
                 // transition to the solving phase
                 else if (event === 'START') {
-                    cleanTimeout(this, () => {
+                    componentTimeout(this, () => {
                         this.beginSolve(offset, this.solution.slice(i + 1));
                     }, offset);
 
@@ -204,14 +203,14 @@ export default {
                 const { offset, turn } = move;
 
                 if (turn) {
-                    cleanTimeout(this, () => {
+                    componentTimeout(this, () => {
                         this.$options.puzzle.turn(turn);
                     }, offset - startTime);
                 }
             });
 
             // add a ticking clock for the duration of the solve
-            cleanTimeout(this, () => {
+            componentTimeout(this, () => {
                 this.completedSolve();
             }, this.solve.time);
         },
@@ -264,8 +263,6 @@ export default {
             }
         },
         replay() {
-            clearCleanTimeouts(this);
-
             this.applyScrambledState();
 
             this.inspecting = false;

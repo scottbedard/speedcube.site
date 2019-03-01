@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { cleanTimeout } from '@/app/utils/component';
+import { componentTimeout } from 'spyfu-vue-utils';
 
 export default {
     data() {
@@ -28,7 +28,7 @@ export default {
     methods: {
         tick() {
             if (this.timeRemaining > 0) {
-                cleanTimeout(this, () => {
+                componentTimeout(this, () => {
                     this.now = Date.now();
                     this.tick();
                 }, 1000);

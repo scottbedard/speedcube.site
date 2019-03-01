@@ -34,7 +34,7 @@
 
 <script>
 import { Chrome } from 'vue-color';
-import { bindExternalEvent } from '@/app/utils/component';
+import { bindExternalEvent } from 'spyfu-vue-utils';
 
 export default {
     created() {

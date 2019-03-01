@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { cleanTimeout } from '@/app/utils/component';
+import { componentTimeout } from 'spyfu-vue-utils';
 import { mapState } from 'vuex';
 
 export default {
@@ -37,7 +37,7 @@ export default {
     },
     watch: {
         modalsAreOpen(modalsAreOpen) {
-            cleanTimeout(this, () => {
+            componentTimeout(this, () => {
                 if (modalsAreOpen) {
                     this.$refs.backdrop.scrollTop = 0;
                 }

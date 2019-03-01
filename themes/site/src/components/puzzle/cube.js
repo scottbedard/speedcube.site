@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import * as THREE from 'three';
 import Cube from 'bedard-cube';
-import { cleanTimeout } from '@/app/utils/component';
+import { componentTimeout } from 'spyfu-vue-utils';
 import { cloneDeep, get } from 'lodash-es';
 
 /**
@@ -96,7 +96,7 @@ function applyTurn(cube, turn) {
                 timeout *= 2;
             }
 
-            cleanTimeout(cube.vm, () => {
+            componentTimeout(cube.vm, () => {
                 // animate our effected stickers being turned
                 updateTurn(cube, turnObj, axis, degrees, progress);
 

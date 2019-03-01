@@ -4,7 +4,7 @@
 
 <script>
 import { formatTime } from '@/app/utils/string';
-import { cleanInterval } from '@/app/utils/component';
+import { componentInterval } from 'spyfu-vue-utils';
 
 export default {
     created() {
@@ -15,7 +15,7 @@ export default {
     data() {
         return {
             now: Date.now(),
-            intervalId: 0,
+            interval: null,
         };
     },
     computed: {
@@ -30,10 +30,13 @@ export default {
     methods: {
         start() {
             this.stop();
-            this.intervalId = cleanInterval(this, this.tick, 10);
+
+            this.interval = componentInterval(this, this.tick, 10);
         },
         stop() {
-            clearInterval(this.intervalId);
+            if (this.interval) {
+                this.interval.cancel();
+            }
         },
         tick() {
             this.now = Date.now();
