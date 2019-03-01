@@ -1,32 +1,24 @@
-<style lang="scss" scoped>
-
-</style>
-
 <template>
     <vue-slider
         v-model="val"
-        :bg-style="{
-            backgroundColor: '#616E7C',
-            border: 'none',
-        }"
-        :dot-size="20"
+        :dot-size="16"
         :height="2"
         :max="max"
         :min="min"
         :process-style="{
             backgroundColor: '#0F609B',
         }"
-        :slider-style="{
+        :rail-style="{
             backgroundColor: '#3E4C59',
             border: 'none',
             boxShadow: 'none',
         }"
-        :tooltip="false">
+        :tooltip="'none'">
 
         <!-- dot -->
         <template slot="dot">
             <div
-                class="bg-grey-3 h-full rounded-half trans-bg w-full hover:bg-grey-4"
+                class="bg-grey-3 cursor-grab h-full rounded-half trans-bg w-full hover:bg-grey-4"
             />
         </template>
     </vue-slider>
@@ -36,7 +28,7 @@
 // see slider docs at:
 // https://github.com/NightCatSama/vue-slider-component
 
-import vueSlider from 'vue-slider-component/src/vue2-slider.vue';
+import vueSlider from 'vue-slider-component';
 
 export default {
     components: {
