@@ -4,6 +4,7 @@
 [![Build](https://img.shields.io/circleci/project/github/scottbedard/speedcube.site/master.svg)](https://circleci.com/gh/scottbedard/speedcube.site)
 [![Coverage](https://img.shields.io/codecov/c/github/scottbedard/speedcube.site/master.svg)](https://codecov.io/gh/scottbedard/speedcube.site)
 [![Dependencies](https://img.shields.io/david/scottbedard/speedcube.site.svg?path=themes%2Fsite&style=flat)](https://david-dm.org/scottbedard/speedcube.site?path=themes%2Fsite)
+[![Dev dependencies](https://img.shields.io/david/dev/scottbedard/speedcube.site.svg?path=themes%2Fsite)](https://david-dm.org/scottbedard/speedcube.site?path=themes%2Fsite&type=dev)
 
 > **Warning:** This site is a work in progress. Feel free to try things out, but be aware that things may not work properly, and accounts may be reset at any time.
 
