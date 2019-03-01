@@ -5,17 +5,18 @@
 <script>
 import { ease } from '@/app/utils/function';
 import { easeInOutQuart } from '@/app/constants';
+import { componentTimeout } from 'spyfu-vue-utils';
 
 // protected method to animate counting
 function count(vm, to, from) {
     const diff = to - from;
 
-    if (vm.ease) {
-        vm.ease.cancel();
-        vm.ease = null;
+    if (vm.$options.ease) {
+        vm.$options.ease.cancel();
+        vm.$options.ease = null;
     }
 
-    vm.ease = ease(vm.curve, (t) => {
+    vm.$options.ease = ease(vm.curve, (t) => {
         vm.display = from + (diff * t);
     }, vm.duration);
 }
@@ -29,7 +30,7 @@ export default {
     },
     mounted() {
         if (this.appear) {
-            setTimeout(() => count(this, this.value, 0), this.delay);
+            componentTimeout(this, () => count(this, this.value, 0), this.delay);
         }
     },
     destroyed() {
@@ -38,7 +39,7 @@ export default {
     methods: {
         cancel() {
             if (this.currentAnimation) {
-                this.ease.cancel();
+                this.$options.ease.cancel();
             }
 
             this.display = this.value;
