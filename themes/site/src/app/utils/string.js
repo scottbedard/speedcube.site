@@ -14,13 +14,15 @@ export function isEmail(str) {
 /**
  * Format a time value.
  *
- * @param  {number} time
+ * @param  {number|string} time
  * @return {string}
  */
 export function formatTime(time) {
+    time = Number(time);
+
     const min = Math.floor(time / 60000);
     const sec = (Math.floor(time / 1000) % 60).toString().padStart(2, '0');
-    const ms = (time % 1000).toString().padStart(2, '0').slice(0, 2);
+    const ms = Math.floor((time % 1000) / 10).toString().padStart(2, '0');
 
     return `${min}:${sec}.${ms}`;
 }
