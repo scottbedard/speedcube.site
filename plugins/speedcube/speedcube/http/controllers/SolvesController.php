@@ -158,10 +158,11 @@ class SolvesController extends ApiController
 
     /**
      * Log a replay being viewed.
-     * 
+     *
      * @return Response
      */
-    public function replay($id) {
+    public function replay($id)
+    {
         try {
             $solve = Solve::completed()->findOrFail($id);
             $solve->replay_count += 1;
