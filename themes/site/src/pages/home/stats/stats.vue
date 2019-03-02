@@ -1,6 +1,6 @@
 <template functional>
     <div>
-        <h2 class="font-thin leading-normal mb-8 text-2xl text-grey-8">
+        <h2 class="font-thin leading-normal mb-4 text-2xl text-grey-8">
             Enjoy a detailed solve history
         </h2>
         <p class="font-thin leading-loose text-grey-7">

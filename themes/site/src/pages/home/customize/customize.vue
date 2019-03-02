@@ -7,10 +7,10 @@
 <template>
     <v-grid padded>
         <v-grid-cell class="lg:order-2" lg="7">
-            <h2 class="font-thin leading-normal mb-8 text-2xl text-grey-8">
+            <h2 class="font-thin leading-normal mb-4 text-2xl text-grey-8">
                 Make the puzzles your own
             </h2>
-            <p class="font-thin leading-loose mb-8 text-grey-7">
+            <p class="font-thin leading-loose mb-4 text-grey-7">
                 Our puzzles are built to be customized, make everything look exactly the way you want.
                 You have control over everything from colors to sticker positioning, and even
                 the camera angle.

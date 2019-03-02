@@ -27,7 +27,7 @@
                 Privacy
             </h2>
             <div class="max-w-lg mb-16">
-                <p>All user's profile picture, username, solve history, and personal records are all considered public information. This means it may published on records and stats pages. Additionally, this information may be broadcast to other users.</p>
+                <p>Usernames, profile pictures, solves, and personal records are all considered public information. This means it may published on records and stats pages. Additionally, this information may be broadcast to other users.</p>
                 <p>While we collect email addresses from our users, this information will never be shared with anyone. Users who have forgotten their credentials may reset their passwords by having a one-time reset link emailed to them.</p>
             </div>
         </v-margin>

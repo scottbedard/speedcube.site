@@ -1,9 +1,9 @@
 <template functional>
     <div>
-        <h2 class="font-thin leading-normal mb-8 text-2xl text-grey-8">
-            We're completely open source
+        <h2 class="font-thin leading-normal mb-4 text-2xl text-grey-8">
+            100% open source
         </h2>
-        <p class="font-thin leading-loose mb-8 text-grey-7">
+        <p class="font-thin leading-loose text-grey-7">
             If you know your way around PHP or Javascript, by all means get involved!
             The core technologies we're using include
             <a href="https://laravel.com" target="_blank">Laravel</a>,

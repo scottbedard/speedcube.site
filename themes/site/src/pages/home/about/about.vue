@@ -2,7 +2,7 @@
     <v-grid padded>
         <v-grid-cell lg="7">
             <div class="text-center lg:mt-12 lg:pr-20 lg:text-left">
-                <h1 class="font-thin leading-normal mb-8 text-4xl text-grey-8">
+                <h1 class="font-thin leading-normal mb-4 text-4xl text-grey-8">
                     A free and open place for speedcubing
                 </h1>
                 <p class="font-thin leading-loose mb-8 text-grey-7">
