@@ -32,7 +32,7 @@
                             autofocus
                             data-login
                             placeholder="Username"
-                            :disabled="isLoading"
+                            :disabled="loading"
                         />
                     </v-form-field>
 
@@ -50,7 +50,7 @@
                             data-password
                             placeholder="Enter password"
                             type="password"
-                            :disabled="isLoading"
+                            :disabled="loading"
                         />
 
                         <router-link
@@ -66,7 +66,8 @@
                         <!-- remember -->
                         <div class="mb-8 mr-6 sm:mb-0 sm:mr-0">
                             <v-checkbox
-                                v-model="remember">
+                                v-model="remember"
+                                :disabled="loading">
                                 Remember me
                             </v-checkbox>
                         </div>
@@ -76,34 +77,20 @@
                             Sign in
                         </v-button>
                     </div>
-
-                    <!-- <pre>{{ $data }}</pre> -->
                 </v-form>
             </v-card>
-
-            <!-- sign up -->
-            <div class="text-center text-sm">
-                <div class="mb-2 text-grey-7">
-                    Don't have an account?
-                </div>
-                <div>
-                    <router-link
-                        class="font-bold"
-                        :to="{ name: 'create-account' }">
-                        Click here to sign up
-                    </router-link>
-                </div>
-            </div>
         </v-margin>
     </v-page>
 </template>
 
 <script>
+import { get } from 'lodash-es';
+
 export default {
     data() {
         return {
             errors: {},
-            isLoading: false,
+            loading: false,
             login: '',
             password: '',
             remember: false,
@@ -111,6 +98,8 @@ export default {
     },
     methods: {
         onSubmit() {
+            this.loading = true;
+
             this.$store.dispatch('user/signin', {
                 login: this.login,
                 password: this.password,
@@ -120,7 +109,14 @@ export default {
                 this.$router.push({ name: this.$route.query.returnTo || 'home' });
             }, (err) => {
                 // failed
-                this.$refs.form.handleValidationError(err);
+                if (get(err, 'response.data.status') === 'failed') {
+                    this.$alert('Invalid username / password combination.');
+                } else {
+                    this.$refs.form.handleValidationError(err);
+                }
+            }).finally(() => {
+                // complete
+                this.loading = false;
             });
         },
     },
