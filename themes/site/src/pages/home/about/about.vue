@@ -3,12 +3,12 @@
         <v-grid-cell lg="7">
             <div class="text-center lg:mt-12 lg:pr-20 lg:text-left">
                 <h1 class="font-thin leading-normal mb-8 text-4xl text-grey-8">
-                    Enjoy a free and open place for speedcubing.
+                    A free and open place for speedcubing
                 </h1>
                 <p class="font-thin leading-loose mb-8 text-grey-7">
                     We're a community built by and for speed cubers. Our mission is to be a free and fair
                     place to compete and enjoy the puzzles we all love. We're currently in a public beta,
-                    please report any issues you encounter.
+                    please report any issues or bugs that you encounter.
                 </p>
                 <div class="-m-4">
                     <v-button

@@ -6,16 +6,14 @@
 
 <template>
     <v-grid padded>
-        <v-grid-cell class="text-center lg:order-2 lg:text-right" lg="7">
+        <v-grid-cell class="lg:order-2" lg="7">
             <h2 class="font-thin leading-normal mb-8 text-2xl text-grey-8">
                 Make the puzzles your own
             </h2>
             <p class="font-thin leading-loose mb-8 text-grey-7">
-                Our puzzles are built to be customized, so make everything look exactly the way you want.
+                Our puzzles are built to be customized, make everything look exactly the way you want.
                 You have control over everything from colors to sticker positioning, and even
-                the camera angle. Clicking the cube <span class="hidden lg:inline">to the left</span>
-                <span class="lg:hidden">below</span> will redraw it with randomized settings, use this
-                to get some inspiration for your own puzzles.
+                the camera angle.
             </p>
             <p class="font-thin leading-loose text-grey-7">
                 Once everything looks perfect, make sure it feels just as good. Your keyboard
@@ -24,17 +22,22 @@
             </p>
         </v-grid-cell>
         <v-grid-cell class="lg:order-1" lg="5">
-            <div class="puzzle-container cursor-pointer flex flex-wrap justify-center" @click="next">
-                <v-fade-transition
-                    :enter-duration="500"
-                    :leave-duration="500">
-                    <div :key="tick">
-                        <v-puzzle
-                            :config="config"
-                            :puzzle="puzzle"
-                        />
-                    </div>
-                </v-fade-transition>
+            <div class="cursor-pointer flex flex-wrap justify-center text-grey-7 trans-color hover:text-grey-8" @click="next">
+                <div class="puzzle-container">
+                    <v-fade-transition
+                        :enter-duration="500"
+                        :leave-duration="500">
+                        <div :key="tick">
+                            <v-puzzle
+                                :config="config"
+                                :puzzle="puzzle"
+                            />
+                        </div>
+                    </v-fade-transition>
+                </div>
+                <div class="font-thin text-sm text-center tracking-wide w-full">
+                    Click the puzzle to get some inspiration
+                </div>
             </div>
         </v-grid-cell>
     </v-grid>

@@ -11,15 +11,14 @@
                 <v-customize />
             </div>
 
-            <!-- stats -->
-            <div class="mb-8 md:mb-16 lg:mb-32">
-                <v-stats />
-            </div>
-
-            <!-- open source -->
-            <div class="mb-8 md:mb-16 lg:mb-32">
-                <v-open-source />
-            </div>
+            <v-grid padded>
+                <v-grid-cell md="6">
+                    <v-stats />
+                </v-grid-cell>
+                <v-grid-cell md="6">
+                    <v-open-source />
+                </v-grid-cell>
+            </v-grid>
         </v-margin>
     </v-page>
 </template>
