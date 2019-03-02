@@ -24,9 +24,7 @@
         <v-grid-cell class="lg:order-1" lg="5">
             <div class="cursor-pointer flex flex-wrap justify-center text-grey-7 trans-color hover:text-grey-8" @click="next">
                 <div class="puzzle-container">
-                    <v-fade-transition
-                        :enter-duration="500"
-                        :leave-duration="500">
+                    <v-fade-transition>
                         <div :key="tick">
                             <v-puzzle
                                 :config="config"
