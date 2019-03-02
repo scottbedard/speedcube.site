@@ -1,5 +1,6 @@
 import {
     getSignout,
+    postResetPassword,
     postSendResetEmail,
     postSignin,
     postUser,
@@ -24,6 +25,11 @@ export default {
         });
 
         return request;
+    },
+
+    // reset a user's password
+    resetPassword(context, { code, password }) {
+        return postResetPassword({ code, password });
     },
 
     // authenticate a user

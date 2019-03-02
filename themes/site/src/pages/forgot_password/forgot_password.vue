@@ -17,10 +17,10 @@
                     <!-- title -->
                     <div class="text-center">
                         <h1 class="font-thin mb-4 text-3xl text-grey-9 tracking-wide">
-                            Let's get you a new password
+                            Let's get you a new password.
                         </h1>
                         <p class="leading-normal max-w-lg mx-auto text-grey-7">
-                            Enter your password below, and we'll send you a one-time password reset link.
+                            Enter your email below, and we'll send you a one-time password reset link.
                         </p>
                     </div>
 

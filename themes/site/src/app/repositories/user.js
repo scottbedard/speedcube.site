@@ -59,7 +59,7 @@ export function postProfilePhoto(avatar) {
 /**
  * Register a user.
  *
- * @param  {object} payload
+ * @param  {object}     payload
  *         - {string}   name
  *         - {string}   email
  *         - {string}   password
@@ -74,6 +74,8 @@ export function postRegister(payload) {
  * Reset a user's password.
  *
  * @param  {Object}     payload
+ *         - {string}   code
+ *         - {string}   password
  * @return {Promise}
  */
 export function postResetPassword(payload) {
