@@ -8,6 +8,8 @@ jobs:
       - run:
           name: Install plugins
           command: |
+            git clone git@github.com:octoberrain/drivers-plugin.git ./plugins/october/drivers
+            git clone git@github.com:rainlab/blog-plugin.git ./plugins/rainlab/blog
             git clone git@github.com:rainlab/googleanalytics-plugin.git ./plugins/rainlab/googleanalytics
             git clone git@github.com:rainlab/user-plugin.git ./plugins/rainlab/user
             git clone git@github.com:vuetober/rainlab-user-api.git ./plugins/vuetober/rainlabuserapi
