@@ -171,6 +171,15 @@ export default function (store) {
                     path: 'users/:username',
                     component: () => import('@/pages/users/user/user.vue' /* webpackChunkName: "user" */),
                 },
+
+                //
+                // 404
+                //
+                {
+                    name: '404',
+                    path: '*',
+                    component: () => import('@/pages/404/404.vue' /* webpackChunkName: "404" */),
+                },
             ],
             path: '',
             component: defaultLayoutComponent,
