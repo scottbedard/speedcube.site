@@ -155,6 +155,15 @@ export default function (store) {
                 },
 
                 //
+                // terms
+                //
+                {
+                    name: 'terms',
+                    path: '/terms',
+                    component: () => import('@/pages/terms/terms.vue' /* webpackChunkName: "terms" */),
+                },
+
+                //
                 // users
                 //
                 {

@@ -7,11 +7,16 @@
                         <router-link :to="{ name: 'home' }">speedcube.site</router-link>
                     </div>
                     <div class="text-grey-5">
-                        Copyright &copy; 2018-{{ currentYear }}. All rights reserved.
+                        &copy; 2018-{{ currentYear }}, all rights reserved.
                     </div>
                 </v-grid-cell>
                 <v-grid-cell class="md:text-left" md="6">
-                    <div class="flex items-center justify-center -m-2 overflow-hidden text-2xl md:justify-end">
+                    <div class="flex flex-wrap items-center justify-center -m-2 overflow-hidden text-2xl md:justify-end">
+                        <router-link
+                            class="m-2 text-xs w-full md:w-auto"
+                            :to="{ name: 'terms' }">
+                            Terms &amp; Privacy
+                        </router-link>
                         <a
                             class="m-2"
                             href="https://github.com/scottbedard/speedcube.site"

@@ -90,6 +90,9 @@
                     </v-form-field>
 
                     <div slot="actions">
+                        <p class="font-thin leading-normal mb-6 text-left text-xs">
+                            By creating an account you agree to adhear to our <router-link :to="{ name: 'terms' }" target="_blank">Code of Conduct</router-link>, by acting respecfully towards other users and participating fairly.
+                        </p>
                         <v-button
                             class="w-full sm:w-auto"
                             primary
