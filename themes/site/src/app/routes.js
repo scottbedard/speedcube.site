@@ -59,6 +59,18 @@ export default function (store) {
                 },
 
                 //
+                // forgot password
+                //
+                {
+                    meta: {
+                        auth: false,
+                    },
+                    name: 'forgot-password',
+                    path: '/forgot-pasesword',
+                    component: () => import('@/pages/forgot_password/forgot_password.vue' /* webpackChunkName: "forgotPassword" */),
+                },
+
+                //
                 // home
                 //
                 {
@@ -93,6 +105,18 @@ export default function (store) {
                     name: 'replay',
                     path: '/replay/:id',
                     component: () => import('@/pages/replay/replay.vue' /* webpackChunkName: "replay" */),
+                },
+
+                //
+                // reset password
+                //
+                {
+                    meta: {
+                        auth: false,
+                    },
+                    name: 'reset-password',
+                    path: '/reset-password',
+                    component: () => import('@/pages/reset_password/reset_password.vue' /* webpackChunkName: "resetPassword" */),
                 },
 
                 //

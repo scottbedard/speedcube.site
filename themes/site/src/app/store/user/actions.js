@@ -1,5 +1,6 @@
 import {
     getSignout,
+    postSendResetEmail,
     postSignin,
     postUser,
 } from '@/app/repositories/user';
@@ -61,6 +62,11 @@ export default {
         });
 
         return request;
+    },
+
+    // send a user a password reset link
+    sendPasswordResetEmail(context, email) {
+        return postSendResetEmail({ email });
     },
 
     // sync a user's configs
