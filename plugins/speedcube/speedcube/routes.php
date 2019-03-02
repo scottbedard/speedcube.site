@@ -15,6 +15,7 @@ Route::prefix('api/speedcube/speedcube')
 
         // solves
         Route::get('solves/highlighted', 'Speedcube\Speedcube\Http\Controllers\SolvesController@highlighted');
+        Route::post('solves/replay/{id}', 'Speedcube\Speedcube\Http\Controllers\SolvesController@replay');
         Route::get('solves/{id}', 'Speedcube\Speedcube\Http\Controllers\SolvesController@find');
         Route::get('solves', 'Speedcube\Speedcube\Http\Controllers\SolvesController@index');
         Route::post('solves', 'Speedcube\Speedcube\Http\Controllers\SolvesController@complete');

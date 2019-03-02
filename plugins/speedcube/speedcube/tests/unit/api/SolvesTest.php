@@ -248,4 +248,31 @@ class SolvesApiTest extends PluginTestCase
         $this->assertEquals($solve->id, $data['solve']['id']);
         $this->assertEquals($user->id, $data['solve']['user']['id']);
     }
+
+    //
+    // log replay watch
+    //
+    public function test_logging_a_replay_watch()
+    {
+        // create a user and scramble
+        $user = Factory::registerUser();
+
+        $scramble = Factory::createScrambleWithTurns('R');
+
+        // create and complete a solve, we should be able to find this
+        $solve = Factory::create(new Solve, [
+            'scramble_id' => $scramble->id,
+            'user_id' => $user->id,
+        ]);
+
+        $solve->complete('500#START 1000:R- 1500#END');
+
+        // log a replay watch
+        $success = $this->post("/api/speedcube/speedcube/solves/replay/{$solve->id}");
+        $success->assertStatus(200);
+
+        // test logging a replay for a non-existant solve
+        $failed = $this->post("/api/speedcube/speedcube/solves/replay/12345");
+        $failed->assertStatus(500);
+    }
 }

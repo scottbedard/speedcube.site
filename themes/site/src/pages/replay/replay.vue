@@ -81,7 +81,7 @@
 <script>
 import { bindExternalEvent, componentTimeout } from 'spyfu-vue-utils';
 import { formatShortTimeSentence } from '@/app/utils/string';
-import { getSolve } from '@/app/repositories/solves';
+import { getSolve, postReplay } from '@/app/repositories/solves';
 import { jsonToObject } from '@/app/utils/object';
 import { get } from 'lodash-es';
 
@@ -263,6 +263,8 @@ export default {
             }
         },
         replay() {
+            postReplay(this.solve.id);
+
             this.applyScrambledState();
 
             this.inspecting = false;

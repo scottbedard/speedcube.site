@@ -30,6 +30,7 @@ class Solve extends Model
         'average_speed' => 'integer',
         'id'            => 'integer',
         'moves'         => 'integer',
+        'replay_count'  => 'integer',
         'scramble_id'   => 'integer',
         'size'          => 'integer',
         'time'          => 'integer',

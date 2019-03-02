@@ -5,3 +5,7 @@
   - 1.0.0/create_personal_records_table.php
   - 1.0.0/create_scrambles_table.php
   - 1.0.0/create_solves_table.php
+
+1.0.1:
+  - Add replay count to solves table
+  - 1.0.1/add_replay_count_column.php

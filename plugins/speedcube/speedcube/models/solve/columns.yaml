@@ -38,6 +38,10 @@ columns:
         type: partial
         path: $/speedcube/speedcube/models/solve/_column_average_speed.htm
 
+    replay_count:
+        align: right
+        label: Replay Count
+
     status:
         align: center
         label: Status
