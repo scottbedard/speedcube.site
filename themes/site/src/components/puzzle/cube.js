@@ -11,20 +11,20 @@ import { cloneDeep, get } from 'lodash-es';
  */
 const defaultConfig = {
     colors: [
-        '#ffeb3b',
-        '#ff9800',
-        '#03a9f4',
-        '#f44336',
-        '#4caf50',
-        '#eeeeee',
+        '#FFEE5D',
+        '#EFAA18',
+        '#2589E2',
+        '#EC6157',
+        '#5CBD60',
+        '#F0F0F0',
     ],
-    stickerSpacing: 10,
-    stickerElevation: 10,
-    stickerRadius: 10,
-    innerBrightness: 40,
     cameraAngle: 60,
     cameraDistance: 2000,
-    turnDuration: 90,
+    innerBrightness: 40,
+    stickerElevation: 10,
+    stickerRadius: 25,
+    stickerSpacing: 15,
+    turnDuration: 75,
 };
 
 /**

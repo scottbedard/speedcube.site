@@ -46,7 +46,7 @@ import { random, sample, shuffle } from 'lodash-es';
 
 const initialPuzzles = [
     {
-        config: '{"colors":["#F9DA8B","#FAB38B","#2186EB","#E66A6A","#A3D9A5","#FFFFFF"],"stickerSpacing":15,"stickerElevation":10,"stickerRadius":5,"innerBrightness":50,"cameraAngle":60,"cameraDistance":2000,"turnDuration":0}',
+        config: '{"colors":["#FFEE5D","#EFAA18","#2589E2","#EC6157","#5CBD60","#F0F0F0"],"cameraAngle":60,"cameraDistance":2000,"innerBrightness":40,"stickerElevation":10,"stickerRadius":25,"stickerSpacing":15,"turnDuration":75}',
         puzzle: '3x3',
     },
     // ...
