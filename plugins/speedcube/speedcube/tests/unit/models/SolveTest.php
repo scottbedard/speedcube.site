@@ -100,6 +100,46 @@ class SolveTest extends PluginTestCase
         $this->assertEquals('dnf', $solve->fresh()->status);
     }
 
+    // https://github.com/scottbedard/speedcube.site/issues/58
+    public function test_creating_a_solve_only_closes_other_solves_for_authenticated_user()
+    {
+        // scaffold a couple users
+        $john = Factory::registerUser();
+        $sally = Factory::registerUser();
+
+        // create a scramble and solve for john
+        $scramble1 = Factory::createScrambleWithTurns('R');
+
+        $solve1 = Factory::create(new Solve, [
+            'user_id' => $john->id,
+            'scramble_id' => $scramble1->id,
+        ]);
+        
+        // create a scramble and solve for sally
+        $scramble2 = Factory::createScrambleWithTurns('R');
+
+        $solve2 = Factory::create(new Solve, [
+            'user_id' => $sally->id,
+            'scramble_id' => $scramble1->id,
+        ]);
+
+        // both solves should have a pending status
+        $this->assertEquals('pending', $solve1->fresh()->status);
+        $this->assertEquals('pending', $solve2->fresh()->status);
+        
+        // create a new solve for sally
+        $scramble3 = Factory::createScrambleWithTurns('R');
+
+        $solve3 = Factory::create(new Solve, [
+            'user_id' => $sally->id,
+            'scramble_id' => $scramble1->id,
+        ]);
+
+        // sally's first solve should be closed, and johns solve should still be pending
+        $this->assertEquals('pending', $solve1->fresh()->status);
+        $this->assertEquals('dnf', $solve2->fresh()->status);
+    }
+
     //
     // scopes
     //

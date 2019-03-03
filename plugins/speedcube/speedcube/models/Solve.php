@@ -154,6 +154,7 @@ class Solve extends Model
     {
         if ($this->user_id) {
             self::pending()
+                ->where('user_id', $this->user_id)
                 ->where('id', '!=', $this->id)
                 ->get()->each(function ($solve) {
                     $solve->status = 'dnf';
