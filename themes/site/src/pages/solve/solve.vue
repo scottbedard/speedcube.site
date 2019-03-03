@@ -122,6 +122,7 @@
 </template>
 
 <script>
+import { get } from 'lodash-es';
 import { mapGetters, mapState } from 'vuex';
 import { bindExternalEvent } from 'spyfu-vue-utils';
 import { jsonToObject } from '@/app/utils/object';
@@ -216,7 +217,7 @@ export default {
                 return this.pendingKeyboardConfig;
             }
 
-            const userConfig = this.user.keyboardConfigs.find(kc => kc.puzzle === this.puzzle);
+            const userConfig = get(this.user, 'keyboardConfigs', []).find(kc => kc.puzzle === this.puzzle);
 
             return userConfig
                 ? jsonToObject(userConfig.config)
@@ -231,7 +232,7 @@ export default {
             }
 
             if (this.isAuthenticated) {
-                const savedConfig = this.user.configs.find(config => config.puzzle === this.puzzle);
+                const savedConfig = get(this.user, 'configs', []).find(config => config.puzzle === this.puzzle);
 
                 if (savedConfig) {
                     return { ...this.defaultConfig, ...jsonToObject(savedConfig.config) };
