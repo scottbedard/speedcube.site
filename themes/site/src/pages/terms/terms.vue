@@ -24,7 +24,7 @@
 
             <!-- privacy -->
             <h2 class="font-thin mb-8 text-4xl">
-                Privacy
+                Privacy Policy
             </h2>
             <div class="max-w-lg mb-16">
                 <p>Usernames, profile pictures, solves, and personal records are all considered public information. This means it may published on records and stats pages. Additionally, this information may be broadcast to other users.</p>
