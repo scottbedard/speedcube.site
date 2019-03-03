@@ -8,7 +8,9 @@
         <!-- form -->
         <v-card padded>
             <v-form
+                :errors="errors"
                 class="max-w-sm mx-auto"
+                ref="form"
                 @submit="onSubmit">
 
                 <!-- new password -->
@@ -64,12 +66,14 @@
 </template>
 
 <script>
+import { get } from 'lodash-es';
 import { postUser } from '@/app/repositories/user';
 import accountHeaderComponent from '../account_header/account_header.vue';
 
 export default {
     data() {
         return {
+            errors: {},
             password: '',
             passwordConfirmation: '',
             isLoading: false,
@@ -88,14 +92,19 @@ export default {
             }).then(() => {
                 // success
                 this.$alert('Your password has been changed', { type: 'success' });
+
+                this.password = '';
+                this.passwordConfirmation = '';
             }, (err) => {
                 // failed
-                console.error(err);
+                if (get(err, 'response.data.status') === 'invalid') {
+                    this.$refs.form.handleValidationError(err);
+                } else {
+                    this.$alert('An unknown error has occured, please try again or contact support.', { type: 'error' });
+                }
             }).finally(() => {
                 // complete
                 this.isLoading = false;
-                this.password = '';
-                this.passwordConfirmation = '';
             });
         },
     },
