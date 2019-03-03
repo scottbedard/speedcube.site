@@ -6,21 +6,23 @@ use October\Rain\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
 use Schema;
 
-class CreatePersonalRecordsTable extends Migration
+class CreateScramblesTable extends Migration
 {
     public function up()
     {
-        Schema::create('speedcube_speedcube_personal_records', function (Blueprint $table) {
+        // 1.0.0
+        Schema::create('speedcube_speedcube_scrambles', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('solve_id')->unsigned()->index();
-            $table->integer('user_id')->unsigned()->index();
+            $table->string('puzzle', 10)->index();
+            $table->text('scramble');
+            $table->text('scrambled_state');
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('speedcube_speedcube_personal_records');
+        Schema::dropIfExists('speedcube_speedcube_scrambles');
     }
 }

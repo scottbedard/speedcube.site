@@ -10,6 +10,7 @@ class CreateSolvesTable extends Migration
 {
     public function up()
     {
+        // 1.0.0
         Schema::create('speedcube_speedcube_solves', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');

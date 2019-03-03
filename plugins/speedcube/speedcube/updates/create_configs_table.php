@@ -6,11 +6,12 @@ use October\Rain\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
 use Schema;
 
-class CreateKeyboardConfigsTable extends Migration
+class CreateConfigsTable extends Migration
 {
     public function up()
     {
-        Schema::create('speedcube_speedcube_keyboard_configs', function (Blueprint $table) {
+        // 1.0.0
+        Schema::create('speedcube_speedcube_configs', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
@@ -22,6 +23,6 @@ class CreateKeyboardConfigsTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('speedcube_speedcube_keyboard_configs');
+        Schema::dropIfExists('speedcube_speedcube_configs');
     }
 }
