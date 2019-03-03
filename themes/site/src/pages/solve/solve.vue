@@ -94,21 +94,32 @@
                                 Scramble
                             </v-button>
 
-                            <div class="flex flex-wrap items-center justify-center mt-4 text-xs tracking-wide uppercase">
+                            <!-- other puzzles -->
+                            <div class="flex items-center justify-center mt-4 text-center text-xs tracking-wide">
+                                <router-link
+                                    v-for="key in puzzleKeys"
+                                    class="m-4"
+                                    :key="key"
+                                    :to="{
+                                        name: 'solve',
+                                        params: {
+                                            puzzle: puzzles[key].slug,
+                                        },
+                                    }">
+                                    {{ puzzles[key].title }}
+                                </router-link>
+                            </div>
+
+                            <!-- settings -->
+                            <div class="flex flex-wrap items-center justify-center text-xs tracking-wide uppercase">
                                 <div class="p-4 w-full sm:w-auto">
-                                    <a
-                                        class="text-grey-6"
-                                        href="#"
-                                        @click.prevent="onAppearanceClick">
+                                    <a href="#" @click.prevent="onAppearanceClick">
                                         Customize Puzzle
                                     </a>
                                 </div>
                                 <div class="border-grey-6 border-b w-2" />
                                 <div class="p-4 w-full sm:w-auto">
-                                    <a
-                                        class="text-grey-6"
-                                        href="#"
-                                        @click.prevent="onControlsClick">
+                                    <a href="#" @click.prevent="onControlsClick">
                                         Edit Key Bindings
                                     </a>
                                 </div>
@@ -128,6 +139,7 @@ import { bindExternalEvent } from 'spyfu-vue-utils';
 import { jsonToObject } from '@/app/utils/object';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postSolve } from '@/app/repositories/solves';
+import { puzzles } from '@/app/constants';
 import appearanceOptions from './appearance_options';
 import defaultKeyboardConfigs from './default_keyboard_configs';
 
@@ -241,8 +253,14 @@ export default {
 
             return { ...this.defaultConfig, ...this.guestConfig };
         },
+        puzzleKeys() {
+            return Object.keys(this.puzzles);
+        },
         puzzleOptions() {
             return appearanceOptions[this.puzzle];
+        },
+        puzzles() {
+            return puzzles;
         },
         solution() {
             return this.history.join(' ');
@@ -411,19 +429,22 @@ export default {
         setPendingKeyboardConfig(pendingKeyboardConfig) {
             this.pendingKeyboardConfig = pendingKeyboardConfig;
         },
-        scramble() {
-            // reset the state
+        reset() {
             this.appearanceIsVisible = false;
             this.dnf = false;
             this.history = [];
             this.inspecting = false;
             this.puzzleIsTurnable = true;
-            this.scrambling = true;
+            this.scrambling = false;
             this.solveCompletedAt = 0;
             this.solveCompletedTime = null;
             this.solveStaretdAt = 0;
             this.solved = false;
             this.solving = false;
+        },
+        scramble() {
+            this.reset();
+            this.scrambling = true;
 
             // get a scramble from the server, and use an animating
             // pseudo-scramble as the loading state
@@ -442,6 +463,15 @@ export default {
             if (!this.inspecting || this.$options.puzzle.isInspectionTurn(turn)) {
                 this.$options.puzzle.turn(turn);
             }
+        },
+    },
+    watch: {
+        $route: {
+            deep: true,
+            handler() {
+                this.abortSolve();
+                this.reset();
+            },
         },
     },
 };
