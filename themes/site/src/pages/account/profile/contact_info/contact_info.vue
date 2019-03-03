@@ -57,8 +57,8 @@
 </template>
 
 <script>
-import accountHeaderComponent from '../../account_header/account_header.vue';
 import { get } from 'lodash-es';
+import accountHeaderComponent from '../../account_header/account_header.vue';
 
 export default {
     data() {
