@@ -58,6 +58,7 @@
 
 <script>
 import accountHeaderComponent from '../../account_header/account_header.vue';
+import { get } from 'lodash-es';
 
 export default {
     data() {
@@ -80,9 +81,13 @@ export default {
             }).then(() => {
                 // success
                 this.$alert('Your contact information has been updated.', { type: 'success' });
-            }, () => {
+            }, (err) => {
                 // failed
-                this.$alert('Failed to update contact information.', { type: 'error' });
+                if (get(err, 'response.data.status') === 'email_taken') {
+                    this.$alert('An account already exists with that email address.', { type: 'error' });
+                } else {
+                    this.$alert('Failed to update contact information.', { type: 'error' });
+                }
             }).finally(() => {
                 // complete
                 this.isLoading = false;
