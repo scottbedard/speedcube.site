@@ -275,6 +275,7 @@ export default {
             this.inspecting = false;
             this.solving = false;
             this.dnf = true;
+            this.$refs.puzzle.flushQueuedTurns();
 
             this.recordEvent('END');
 
@@ -444,6 +445,7 @@ export default {
         },
         scramble() {
             this.reset();
+            this.$refs.puzzle.flushQueuedTurns();
             this.scrambling = true;
 
             // get a scramble from the server, and use an animating

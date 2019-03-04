@@ -78,6 +78,9 @@ export default {
 
             return instance;
         },
+        flushQueuedTurns() {
+            this.queue = [];
+        },
         getInspectionDuration() {
             return this.$options.puzzle.getInspectionDuration();
         },
