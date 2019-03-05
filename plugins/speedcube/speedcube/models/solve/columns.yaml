@@ -6,7 +6,7 @@ columns:
     id:
         label: ID
         type: number
-        width: 64px
+        width: 96px
 
     user:
         label: User
