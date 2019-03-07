@@ -84,7 +84,7 @@ const defaultErrors = {
         return 'This doesn\'t look like a valid email address.';
     },
     json() {
-        return 'This doesn\'t look like valie JSON.';
+        return 'This doesn\'t look like valid JSON.';
     },
     required() {
         return 'This field is required';
