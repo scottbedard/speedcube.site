@@ -6,6 +6,7 @@ use Backend;
 use Event;
 use RainLab\User\Controllers\Users as UsersController;
 use RainLab\User\Models\User as UserModel;
+use Speedcube\Speedcube\Models\Solve;
 use System\Classes\PluginBase;
 
 /**
