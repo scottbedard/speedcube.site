@@ -18,25 +18,39 @@
 
         <!-- key bindings -->
         <div class="max-w-xl mx-auto mb-6 text-sm">
-            <div v-if="isAuthenticated" class="pb-6">
+            <div v-if="isAuthenticated" class="flex items-center pb-6 uppsercase text-xs tracking-wide">
                 <a
-                    class="flex m-4 uppercase text-xs tracking-wide"
+                    class="flex items-center m-4 outline-none"
                     href="#"
                     @click.prevent="addBinding">
                     <i class="fa fa-plus mr-2"></i>
                     Add Key Binding
                 </a>
+                <a
+                    class="flex items-center m-4 outline-none hover:text-danger-7"
+                    href="#"
+                    @click.prevent="resetBindings">
+                    <i class="fa fa-trash-o mr-2"></i>
+                    Delete All Bindings
+                </a>
             </div>
 
-            <div class="font-mono leading-normal w-full">
-                <a
-                    v-for="({ key, turn }, index) in turns"
-                    class="inline-flex items-center mb-6 text-left px-4 w-20"
-                    href="#"
-                    :key="index"
-                    @click.prevent="onBindingClick(key)">
-                    {{ key }} <i class="fa fa-angle-right px-2"></i> {{ turn }}
-                </a>
+            <div class="leading-normal w-full">
+                <v-collapse-transition>
+                    <div v-if="empty" class="py-20" key="empty">
+                        <p>No key bindings are configured. If you did not mean to do this, discard changes.</p>
+                    </div>
+                    <div v-else class="font-mono" key="bindings">
+                        <a
+                            v-for="({ key, turn }, index) in turns"
+                            class="inline-flex items-center mb-6 text-left px-4 w-20"
+                            href="#"
+                            :key="index"
+                            @click.prevent="onBindingClick(key)">
+                            {{ key }} <i class="fa fa-angle-right px-2"></i> {{ turn }}
+                        </a>
+                    </div>
+                </v-collapse-transition>
 
                 <!-- modal -->
                 <v-modal
@@ -137,7 +151,7 @@
 </template>
 
 <script>
-import { cloneDeep, get } from 'lodash-es';
+import { cloneDeep, get, size } from 'lodash-es';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -163,6 +177,9 @@ export default {
         ...mapGetters('user', [
             'isAuthenticated',
         ]),
+        empty() {
+            return size(this.pendingKeyboardConfig.turns) === 0;
+        },
         turns() {
             const turns = get(this.pendingKeyboardConfig, 'turns', {});
 
@@ -201,6 +218,11 @@ export default {
         },
         openForm() {
             this.formIsVisible = true;
+        },
+        resetBindings() {
+            this.pendingKeyboardConfig = {
+                turns: {},
+            };
         },
         updateTurn() {
             if (!this.pendingKeyboardConfig.turns) {

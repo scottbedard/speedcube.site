@@ -87,9 +87,6 @@ export default {
         isLoading() {
             return this.overviewIsLoading;
         },
-        totalSolves() {
-            return this.totals.reduce((acc, obj) => acc + obj.total, 0);
-        },
     },
     methods: {
         fetchOverview() {
