@@ -109,5 +109,11 @@ export default {
             });
         },
     },
+    watch: {
+        '$route': {
+            deep: true,
+            method: 'fetchOverview',
+        },
+    }
 };
 </script>
