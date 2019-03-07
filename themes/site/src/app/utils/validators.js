@@ -4,19 +4,32 @@ import {
     isString,
 } from 'lodash-es';
 
-import { isEmail } from './string';
+import { isEmail, isJson } from './string';
 
 /**
  * Email.
  *
  * @param  {object}             data
  * @param  {string}             key
- * @return {Boolean|Promise}
+ * @return {Boolean}
  */
 export function email(data, key) {
     const value = data[key];
 
     return isString(value) && isEmail(value);
+}
+
+/**
+ * Json.
+ *
+ * @param  {object}             data
+ * @param  {string}             key
+ * @return {Boolean}
+ */
+export function json(data, key) {
+    const value = data[key];
+    
+    return isString(value) && isJson(value);
 }
 
 /**

@@ -1,4 +1,39 @@
 /**
+ * Copy a string to the user's clipboard.
+ * https://hackernoon.com/copying-text-to-clipboard-with-javascript-df4d4988697f
+ *
+ * @param  {string} str     the string being copied
+ * @return {void}
+ */
+export function copyToClipboard(str) {
+    const el = document.createElement('textarea');
+    el.value = str;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+
+    document.body.appendChild(el);
+
+    const selection = document.getSelection();
+
+    if (selection !== null) {
+        const selected = selection.rangeCount > 0
+            ? selection.getRangeAt(0)
+            : false;
+
+        el.select();
+
+        document.execCommand('copy');
+        document.body.removeChild(el);
+
+        if (selected) {
+            selection.removeAllRanges();
+            selection.addRange(selected);
+        }
+    }
+}
+
+/**
  * Test if a string is a valid email address.
  *
  * @param   {string}    str
@@ -10,6 +45,24 @@ export function isEmail(str) {
     return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(str);
     /* eslint-enable no-useless-escape */
 }
+
+/**
+ * Test if a string is a valid json object.
+ *
+ * @param   {string}    str
+ * @return  {boolean}
+ */
+export function isJson(jsonString){
+    try {
+        var o = JSON.parse(jsonString);
+
+        if (o && typeof o === 'object') {
+            return true;
+        }
+    } catch (e) {}
+
+    return false;
+};
 
 /**
  * Format a time value.

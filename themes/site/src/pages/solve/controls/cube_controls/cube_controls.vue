@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
     p {
-        @apply leading-normal max-w-md mx-auto text-center text-grey-6 text-sm;
+        @apply leading-normal max-w-md mx-auto;
     }
 
     b {
@@ -27,11 +27,18 @@
                     Add Key Binding
                 </a>
                 <a
+                    class="flex items-center m-4 outline-none"
+                    href="#"
+                    @click.prevent="showJson">
+                    <i class="fa fa-code mr-2"></i>
+                    Edit Raw JSON
+                </a>
+                <a
                     class="flex items-center m-4 outline-none hover:text-danger-7"
                     href="#"
                     @click.prevent="resetBindings">
                     <i class="fa fa-trash-o mr-2"></i>
-                    Delete All Bindings
+                    Clear All Bindings
                 </a>
             </div>
 
@@ -112,6 +119,36 @@
                 </v-modal>
             </div>
 
+            <!-- import / export modal -->
+            <v-modal
+                v-if="jsonIsVisible"
+                padded
+                title="Import / Export Key Bindings"
+                @close="hideJson">
+                <div class="color-grey-4 leading-normal max-w-sm mb-8 text-left text-sm">
+                    Be careful editing this, invalid configuration may break your key bindings. This is primarily used to transfer key bindings between puzzles, or share with other users.
+                </div>
+                <v-form @submit="applyJson">
+                    <v-form-field
+                        name="json"
+                        label="Key Bindings"
+                        rules="required|json"
+                        :error-messages="{
+                            required: 'Please enter key bindings',
+                        }"
+                        :value="pendingKeyboardConfigString">
+                        <v-input
+                            v-model="pendingKeyboardConfigString"
+                            class="font-mono text-xs"
+                            tabindex="-1"
+                        />
+                    </v-form-field>
+                    <div slot="actions">
+                        <v-button type="submit">Apply</v-button>
+                    </div>
+                </v-form>
+            </v-modal>
+
             <!-- actions -->
             <v-collapse-transition>
                 <div v-if="!isAuthenticated" class="mt-4" key="guest">
@@ -153,6 +190,7 @@
 <script>
 import { cloneDeep, get, size } from 'lodash-es';
 import { mapGetters } from 'vuex';
+import { copyToClipboard } from '@/app/utils/string';
 
 export default {
     data() {
@@ -163,11 +201,17 @@ export default {
             // form visibility
             formIsVisible: false,
 
+            // json modal visibility
+            jsonIsVisible: false,
+
             // key binding
             key: '',
 
             // a clone of the keyboard config to hold pending changes
             pendingKeyboardConfig: cloneDeep(this.keyboardConfig),
+
+            // string of pending keyboard config, used to import / export
+            pendingKeyboardConfigString: '',
 
             // turn field
             turn: '',
@@ -193,12 +237,19 @@ export default {
             this.turn = '';
             this.openForm();
         },
+        applyJson() {
+            this.pendingKeyboardConfig = JSON.parse(this.pendingKeyboardConfigString);
+            this.hideJson();
+        },
         closeForm() {
             this.formIsVisible = false;
         },
         deleteBinding(key) {
             this.$delete(this.pendingKeyboardConfig.turns, key);
             this.closeForm();
+        },
+        hideJson() {
+            this.jsonIsVisible = false;
         },
         onBindingClick(key) {
             if (!this.isAuthenticated) {
@@ -224,6 +275,10 @@ export default {
                 turns: {},
             };
         },
+        showJson() {
+            this.jsonIsVisible = true;
+            this.pendingKeyboardConfigString = JSON.stringify(this.pendingKeyboardConfig);
+        },
         updateTurn() {
             if (!this.pendingKeyboardConfig.turns) {
                 this.pendingKeyboardConfig.turns = {};
@@ -245,6 +300,9 @@ export default {
         },
     },
     watch: {
+        jsonIsVisible(jsonIsVisible) {
+            this.$emit(jsonIsVisible ? 'disable-turning' : 'enable-turning');
+        },
         formIsVisible(formIsVisible) {
             this.$emit(formIsVisible ? 'disable-turning' : 'enable-turning');
         },

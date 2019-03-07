@@ -29,7 +29,7 @@ import { isFunction } from 'lodash-es';
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { autofocus, disabled, id, max, min, placeholder, type, value } = context.props;
+        const { autofocus, disabled, id, max, min, placeholder, tabindex, type, value } = context.props;
 
         const inputBindings = {
             class: [],
@@ -60,6 +60,7 @@ export default {
                 max={max}
                 min={min}
                 placeholder={placeholder}
+                tabindex={tabindex}
                 type={type}
                 {...inputBindings}
             />
@@ -86,6 +87,9 @@ export default {
         },
         placeholder: {
             type: String,
+        },
+        tabindex: {
+            type: [Number, String],
         },
         type: {
             type: String,
