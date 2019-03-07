@@ -281,7 +281,7 @@ export default {
 
             postSolve({
                 abort: true,
-                config: this.puzzleConfig,
+                config: JSON.stringify(this.puzzleConfig),
                 scrambleId: this.scrambleId,
                 solution: this.solution,
             }).then((response) => {
