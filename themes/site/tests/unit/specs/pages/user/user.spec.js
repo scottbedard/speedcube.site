@@ -25,7 +25,7 @@ const mount = factory({
 //
 // specs
 //
-describe.only('user page', function() {
+describe('user page', function() {
     beforeEach(function() {
         stubRequests({
             get: {
