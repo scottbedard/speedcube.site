@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
     p {
-        @apply leading-normal max-w-md mx-auto;
+        @apply leading-normal mx-auto;
     }
 
     b {
@@ -11,14 +11,15 @@
 <template>
     <div>
         <!-- copy -->
-        <p class="mb-12">
-            These are your current keyboard controls, displayed in <b>&quot;key <i class="fa fa-angle-right px-2"></i> turn&quot;</b> format.
+        <p class="max-w-lg mb-12 text-grey-7 text-sm">
+            These are your current key bindings, displayed in <b>&quot;key <i class="fa fa-angle-right px-2"></i> turn&quot;</b> format.
             The <b>&quot;key&quot;</b> represents the key on your keyboard, and the <b>&quot;turn&quot;</b> represents the puzzle turn to execute.
+            Feel free to use the puzzle while the key binding editor is open, making a turn will highlight the associated binding if one exists.
         </p>
 
         <!-- key bindings -->
-        <div class="max-w-xl mx-auto mb-6 text-sm">
-            <div v-if="isAuthenticated" class="flex items-center pb-6 uppsercase text-xs tracking-wide">
+        <div class="max-w-xl mx-auto mb-4 text-sm">
+            <div v-if="isAuthenticated" class="flex items-center pb-4 uppsercase text-xs tracking-wide">
                 <a
                     class="flex items-center m-4 outline-none"
                     href="#"
@@ -45,13 +46,16 @@
             <div class="leading-normal w-full">
                 <v-collapse-transition>
                     <div v-if="empty" class="py-20" key="empty">
-                        <p>No key bindings are configured. If you did not mean to do this, discard changes.</p>
+                        <p class="text-grey-7">No key bindings are configured. If you did not mean to do this, discard changes.</p>
                     </div>
                     <div v-else class="font-mono" key="bindings">
                         <a
                             v-for="({ key, turn }, index) in turns"
                             class="inline-flex items-center mb-6 text-left px-4 w-20"
                             href="#"
+                            :class="{
+                                'text-grey-10': isFlashing(key),   
+                            }"
                             :key="index"
                             @click.prevent="onBindingClick(key)">
                             {{ key }} <i class="fa fa-angle-right px-2"></i> {{ turn }}
@@ -126,7 +130,7 @@
                 title="Import / Export Key Bindings"
                 @close="hideJson">
                 <div class="color-grey-4 leading-normal max-w-sm mb-8 text-left text-sm">
-                    Be careful editing this, invalid configuration may break your key bindings. This is primarily used to transfer key bindings between puzzles, or share with other users.
+                    Be careful editing this, invalid configuration may break your key bindings. Use this value to copy/paste bindings between puzzles.
                 </div>
                 <v-form @submit="applyJson">
                     <v-form-field
@@ -190,12 +194,19 @@
 <script>
 import { cloneDeep, get, size } from 'lodash-es';
 import { mapGetters } from 'vuex';
+import { bindExternalEvent, componentTimeout } from 'spyfu-vue-utils';
 
 export default {
+    created() {
+        bindExternalEvent(this, document.body, 'keypress', this.onBodyKeypress);
+    },
     data() {
         return {
             // form context
             formContext: 'update',
+
+            // illuminated keys
+            flashKeys: [],
 
             // form visibility
             formIsVisible: false,
@@ -223,6 +234,9 @@ export default {
         empty() {
             return size(this.pendingKeyboardConfig.turns) === 0;
         },
+        isFlashing() {
+            return key => this.flashKeys.includes(key);
+        },
         turns() {
             const turns = get(this.pendingKeyboardConfig, 'turns', {});
 
@@ -247,6 +261,17 @@ export default {
             this.$delete(this.pendingKeyboardConfig.turns, key);
             this.closeForm();
         },
+        flash(key) {
+            const clear = () => {
+                this.flashKeys = this.flashKeys.filter(k => k !== key);
+            }
+            
+            clear();
+
+            this.flashKeys.push(key);
+
+            componentTimeout(this, clear, 300);
+        },
         hideJson() {
             this.jsonIsVisible = false;
         },
@@ -259,6 +284,9 @@ export default {
             this.key = key;
             this.turn = this.pendingKeyboardConfig.turns[key];
             this.openForm();
+        },
+        onBodyKeypress(e) {
+            this.flash(e.key);
         },
         onCloseClick() {
             this.$emit('close');
