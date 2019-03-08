@@ -170,14 +170,16 @@ export default {
             }
         },
         validate(formData = {}) {
+            const fieldValidators = { ...this.customValidators, ...validators };
+
             this.error = '';
 
             return Promise.all(this.parsedRules.map((rule) => {
-                if (isUndefined(validators[rule.name])) {
+                if (isUndefined(fieldValidators[rule.name])) {
                     throw new Error(`Unknown validation rule "${rule.name}"`);
                 }
 
-                const result = validators[rule.name](formData, this.name, rule.params);
+                const result = fieldValidators[rule.name](formData, this.name, rule.params);
 
                 if (isBoolean(result)) {
                     if (result) {
@@ -201,6 +203,10 @@ export default {
         },
     },
     props: {
+        customValidators: {
+            default: () => ({}),
+            type: Object,
+        },
         errorMessages: {
             default() {
                 return {};

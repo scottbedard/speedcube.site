@@ -51,12 +51,11 @@
                     <div v-else class="font-mono" key="bindings">
                         <a
                             v-for="({ key, turn }, index) in turns"
-                            class="inline-flex items-center mb-6 text-left px-4 w-20"
+                            class="inline-flex items-center mb-6 text-left px-4"
                             href="#"
-                            :class="{
-                                'text-grey-10': isFlashing(key),
-                            }"
+                            :class="turnClasses(key, turn)"
                             :key="index"
+                            :title="turnTitle(turn)"
                             @click.prevent="onBindingClick(key)">
                             {{ key }} <i class="fa fa-angle-right px-2"></i> {{ turn }}
                         </a>
@@ -90,9 +89,13 @@
                         <v-form-field
                             label="Turn to execute"
                             name="turn"
-                            rules="required"
+                            rules="required|turn"
+                            :custom-validators="{
+                                turn: turnValidator,   
+                            }"
                             :error-messages="{
                                 required: 'Please enter a turn to execute for this key binding',
+                                turn: 'This is not a valid turn',
                             }"
                             :value="turn">
                             <v-input
@@ -195,6 +198,7 @@
 import { cloneDeep, get, size } from 'lodash-es';
 import { mapGetters } from 'vuex';
 import { bindExternalEvent, componentTimeout } from 'spyfu-vue-utils';
+import { isCubeTurn } from '@/app/utils/puzzle';
 
 export default {
     created() {
@@ -234,8 +238,29 @@ export default {
         empty() {
             return size(this.pendingKeyboardConfig.turns) === 0;
         },
-        isFlashing() {
-            return key => this.flashKeys.includes(key);
+        turnClasses() {
+            return (key, turn) => {
+                // flashing
+                if (this.flashKeys.includes(key)) return 'text-grey-10';
+
+                // invalid
+                if (!isCubeTurn(turn)) return 'text-danger-7';
+
+                // idle
+                return '';
+            }
+        },
+        turnTitle() {
+            return turn => {
+                if (!isCubeTurn(turn)) {
+                    return 'This key binding will have no effect, the turn is invalid.';
+                }
+
+                return '';
+            }
+        },
+        turnValidator() {
+            return (data, key) => isCubeTurn(data[key]);
         },
         turns() {
             const turns = get(this.pendingKeyboardConfig, 'turns', {});
