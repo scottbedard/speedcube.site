@@ -52,17 +52,18 @@ export function isEmail(str) {
  * @param   {string}    str
  * @return  {boolean}
  */
-export function isJson(jsonString){
+export function isJson(jsonString) {
     try {
-        var o = JSON.parse(jsonString);
+        const o = JSON.parse(jsonString);
 
         if (o && typeof o === 'object') {
             return true;
         }
+    /* eslint-disable-next-line no-empty */
     } catch (e) {}
 
     return false;
-};
+}
 
 /**
  * Format a time value.

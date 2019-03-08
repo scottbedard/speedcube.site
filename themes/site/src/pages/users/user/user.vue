@@ -107,12 +107,12 @@ export default {
         },
     },
     watch: {
-        '$route': {
+        $route: {
             deep: true,
             handler() {
                 this.fetchOverview();
             },
         },
-    }
+    },
 };
 </script>

@@ -190,7 +190,6 @@
 <script>
 import { cloneDeep, get, size } from 'lodash-es';
 import { mapGetters } from 'vuex';
-import { copyToClipboard } from '@/app/utils/string';
 
 export default {
     data() {

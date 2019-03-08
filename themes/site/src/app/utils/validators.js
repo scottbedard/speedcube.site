@@ -28,7 +28,7 @@ export function email(data, key) {
  */
 export function json(data, key) {
     const value = data[key];
-    
+
     return isString(value) && isJson(value);
 }
 
