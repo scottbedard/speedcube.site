@@ -81,7 +81,7 @@
 <script>
 import { bindExternalEvent, componentTimeout } from 'spyfu-vue-utils';
 import { formatShortTimeSentence } from '@/app/utils/string';
-import { getSolve, postReplay } from '@/app/repositories/solves';
+import { getSolve, getRandomSolve, postReplay } from '@/app/repositories/solves';
 import { jsonToObject } from '@/app/utils/object';
 import { get } from 'lodash-es';
 
@@ -223,6 +223,33 @@ export default {
             this.solved = true;
             this.solving = false;
             this.time = this.solve.time;
+
+            if (this.$route.query.mode === 'theater') {
+                componentTimeout(this, () => {
+                    this.loading = true;
+
+                    getRandomSolve().then(response => {
+                        // success
+                        const solve = get(response, 'data.solve', {});
+                        const id = get(solve, 'id', 0);
+
+                        this.$router.replace({
+                            name: 'replay',
+                            params: { id },
+                            query: {
+                                mode: 'theater',
+                            }
+                        });
+
+                        this.solve = solve;
+
+                        this.replay();
+                    }, () => {
+                        // complete
+                        this.loading = false;
+                    });
+                }, 2000);
+            }
         },
         fetchSolve() {
             this.loading = true;
@@ -232,6 +259,10 @@ export default {
                 const { solve } = response.data;
 
                 this.solve = solve;
+
+                if (this.$route.query.mode === 'theater') {
+                    this.replay();
+                }
             }, () => {
                 // failed
                 this.$router.push({

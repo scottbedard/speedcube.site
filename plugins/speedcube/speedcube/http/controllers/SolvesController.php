@@ -161,6 +161,7 @@ class SolvesController extends ApiController
         try {
             $solve = Solve::completed()
                 ->inRandomOrder()
+                ->with('scramble')
                 ->withUserSummary()
                 ->firstOrFail();
 

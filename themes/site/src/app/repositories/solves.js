@@ -5,6 +5,11 @@ export function getHighlightedSolve() {
     return axios.get('/api/speedcube/speedcube/solves/highlighted');
 }
 
+// get a random solve
+export function getRandomSolve() {
+    return axios.get('/api/speedcube/speedcube/solves/random');
+}
+
 // get solve
 export function getSolve(id) {
     return axios.get(`/api/speedcube/speedcube/solves/${id}`);
