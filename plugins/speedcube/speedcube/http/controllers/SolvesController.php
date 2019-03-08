@@ -156,6 +156,22 @@ class SolvesController extends ApiController
         }
     }
 
+    public function random()
+    {
+        try {
+            $solve = Solve::completed()
+                ->inRandomOrder()
+                ->withUserSummary()
+                ->firstOrFail();
+
+            return $this->success([
+                'solve' => $solve,
+            ]);
+        } catch (Exception $e) {
+            return $this->failed($e);
+        }
+    }
+
     /**
      * Log a replay being viewed.
      *
