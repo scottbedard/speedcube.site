@@ -54,7 +54,7 @@
                             class="inline-flex items-center mb-6 text-left px-4 w-20"
                             href="#"
                             :class="{
-                                'text-grey-10': isFlashing(key),   
+                                'text-grey-10': isFlashing(key),
                             }"
                             :key="index"
                             @click.prevent="onBindingClick(key)">
@@ -264,8 +264,8 @@ export default {
         flash(key) {
             const clear = () => {
                 this.flashKeys = this.flashKeys.filter(k => k !== key);
-            }
-            
+            };
+
             clear();
 
             this.flashKeys.push(key);
