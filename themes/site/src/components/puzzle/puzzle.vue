@@ -105,7 +105,9 @@ export default {
                     this.isTurning = true;
                     this.$emit('turn-start', turn);
 
-                    this.$options.puzzle.turn(turn).then(() => {
+                    let valid = true;
+
+                    const turnPromise = this.$options.puzzle.turn(turn).finally(() => {
                         this.isTurning = false;
                         this.queue.shift();
 
@@ -203,7 +205,9 @@ export default {
             });
         },
         turn(turn) {
-            this.queue.push(turn);
+            if (this.$options.puzzle.isValidTurn(turn)) {
+                this.queue.push(turn);
+            }
         },
     },
     props: {

@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import Cube from 'bedard-cube';
 import { componentTimeout } from 'spyfu-vue-utils';
 import { cloneDeep, get } from 'lodash-es';
+import { isCubeTurn } from '@/app/utils/puzzle';
 
 /**
  * Default config.
@@ -59,6 +60,11 @@ const pseudoScrambleLengths = {
  * @return {Promise}
  */
 function applyTurn(cube, turn) {
+    // do nothing if this is not a valid turn
+    if (!isCubeTurn(turn)) {
+        return Promise.reject(`Invalid turn "${turn}"`);
+    }
+
     const fps = 60;
     const parsedTurn = cube.model.parseTurn(turn);
     const { turnDuration } = cube.config;
@@ -556,6 +562,10 @@ export default class {
      * @return {boolean}
      */
     isInspectionTurn(turn) {
+        if (!isCubeTurn(turn)) {
+            return false;
+        }
+        
         const parsedTurn = this.model.parseTurn(turn);
 
         return ['X', 'Y', 'Z'].includes(parsedTurn.target);
@@ -568,6 +578,16 @@ export default class {
      */
     isSolved() {
         return this.model.isSolved();
+    }
+
+    /**
+     * Test if a turn is valid.
+     *
+     * @param  {string}     turn
+     * @return {boolean}
+     */
+    isValidTurn(turn) {
+        return isCubeTurn(turn);
     }
 
     /**
