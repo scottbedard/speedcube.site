@@ -62,7 +62,7 @@ const pseudoScrambleLengths = {
 function applyTurn(cube, turn) {
     // do nothing if this is not a valid turn
     if (!isCubeTurn(turn)) {
-        return Promise.reject(`Invalid turn "${turn}"`);
+        return Promise.reject(new Error(`Invalid turn "${turn}"`));
     }
 
     const fps = 60;
@@ -565,7 +565,7 @@ export default class {
         if (!isCubeTurn(turn)) {
             return false;
         }
-        
+
         const parsedTurn = this.model.parseTurn(turn);
 
         return ['X', 'Y', 'Z'].includes(parsedTurn.target);

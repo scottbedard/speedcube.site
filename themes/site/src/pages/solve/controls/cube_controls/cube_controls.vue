@@ -91,7 +91,7 @@
                             name="turn"
                             rules="required|turn"
                             :custom-validators="{
-                                turn: turnValidator,   
+                                turn: turnValidator,
                             }"
                             :error-messages="{
                                 required: 'Please enter a turn to execute for this key binding',
@@ -248,16 +248,16 @@ export default {
 
                 // idle
                 return '';
-            }
+            };
         },
         turnTitle() {
-            return turn => {
+            return (turn) => {
                 if (!isCubeTurn(turn)) {
                     return 'This key binding will have no effect, the turn is invalid.';
                 }
 
                 return '';
-            }
+            };
         },
         turnValidator() {
             return (data, key) => isCubeTurn(data[key]);

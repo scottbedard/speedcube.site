@@ -105,9 +105,7 @@ export default {
                     this.isTurning = true;
                     this.$emit('turn-start', turn);
 
-                    let valid = true;
-
-                    const turnPromise = this.$options.puzzle.turn(turn).finally(() => {
+                    this.$options.puzzle.turn(turn).finally(() => {
                         this.isTurning = false;
                         this.queue.shift();
 
