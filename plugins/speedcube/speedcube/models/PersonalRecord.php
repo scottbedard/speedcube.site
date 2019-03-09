@@ -48,7 +48,7 @@ class PersonalRecord extends Model
     ];
 
     /**
-     * After Update
+     * After Update.
      */
     public function afterSave()
     {
