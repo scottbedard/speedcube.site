@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Notification;
 use NotificationChannels\Twitter\TwitterServiceProvider;
 use RainLab\User\Controllers\Users as UsersController;
 use RainLab\User\Models\User as UserModel;
+use Speedcube\Speedcube\Models\Profile;
 use Speedcube\Speedcube\Models\Solve;
 use System\Classes\PluginBase;
 
@@ -94,6 +95,17 @@ class Plugin extends PluginBase
             $model->hasMany['keyboardConfigs'] = 'Speedcube\Speedcube\Models\KeyboardConfig';
             $model->hasMany['records'] = 'Speedcube\Speedcube\Models\PersonalRecord';
             $model->hasMany['solves'] = 'Speedcube\Speedcube\Models\Solve';
+            $model->hasOne['profile'] = 'Speedcube\Speedcube\Models\Profile';
+
+            // create a profile when a user registers
+            $model->bindEvent('model.afterCreate', function () use ($model) {
+                Profile::create(['user_id' => $model->id]);
+            });
+
+            // delete profile when the user is deleted
+            $model->bindEvent('model.afterDelete', function () use ($model) {
+                $model->profile()->delete();
+            });
 
             // prevent weird characters from being part of usernames
             $model->bindEvent('model.beforeValidate', function () use ($model) {
