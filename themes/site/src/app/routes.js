@@ -17,6 +17,14 @@ export default function (store) {
                             meta: {
                                 auth: true,
                             },
+                            name: 'account:notifications',
+                            path: 'notifications',
+                            component: () => import('@/pages/account/notifications/notifications.vue' /* webpackChunkName: "accountNotifications" */),
+                        },
+                        {
+                            meta: {
+                                auth: true,
+                            },
                             name: 'account:profile',
                             path: 'profile',
                             component: () => import('@/pages/account/profile/profile.vue' /* webpackChunkName: "accountProfile" */),
