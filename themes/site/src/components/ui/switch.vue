@@ -30,7 +30,7 @@ export default {
             }
         }
 
-        return <div class="flex flex-wrap items-center">
+        return <div class="flex flex-wrap items-center w-full">
             <div
                 aria-checked={checked ? 'true' : 'false'}
                 class={[
@@ -52,7 +52,7 @@ export default {
             {
                 /* label */
                 (off || on) &&
-                <div>
+                <div class="flex-1">
                     <v-fade-transition>
                         { off && !checked && <div key="off">{off}</div> }
                         { on && checked && <div key="on">{on}</div> }

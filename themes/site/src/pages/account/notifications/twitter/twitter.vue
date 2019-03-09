@@ -9,13 +9,37 @@
         <v-card padded>
             <div class="max-w-md mx-auto">
                 <p class="leading-normal mb-8">
-                    Want to share your best solves with the world? Enable Twitter broadcasting and we'll tweet a link to view the replay when you set a personal record.
+                    Want to share your best solves with the world? Enable Twitter broadcasting and we'll tweet a link to view the replay when you set a personal record. Optionally, provide your Twitter handle and we'll send the tweet directly to you.
                 </p>
+                <v-form @submit="save">
+                    <!-- toggle -->
+                    <div class="flex h-14 items-center mb-8">
+                        <v-switch v-model="form.broadcasting" :disabled="loading">
+                            <div class="text-grey-6" slot="off">
+                                Your solves will not be broadcast on Twitter
+                            </div>
+                            <div slot="on">
+                                <v-input
+                                    v-model="form.handle"
+                                    autofocus
+                                    placeholder="Enter your twitter handle"
+                                    :disabled="loading"
+                                />
+                            </div>
+                        </v-switch>
+                    </div>
 
-                <v-switch v-model="broadcasting" :disabled="loading">
-                    <div slot="off">Twitter broadcasting is disabled</div>
-                    <div slot="on">Your best solves will be broadcast on Twitter</div>
-                </v-switch>
+                    <!-- actions -->
+                    <div class="flex justify-end">
+                        <v-button
+                            class="w-full sm:w-auto"
+                            primary
+                            type="submit"
+                            :disabled="loading">
+                            Save
+                        </v-button>
+                    </div>
+                </v-form>
             </div>
         </v-card>
     </div>
@@ -27,7 +51,10 @@ import accountHeaderComponent from '../../account_header/account_header.vue';
 export default {
     data() {
         return {
-            broadcasting: false,
+            form: {
+                broadcasting: false,
+                handle: '',
+            },
             loading: false,
         };
     },
@@ -35,7 +62,9 @@ export default {
         'v-account-header': accountHeaderComponent,
     },
     methods: {
-        // ...
+        save() {
+            console.log ('ok...');
+        },
     },
 };
 </script>
