@@ -30,19 +30,19 @@ export default {
             }
         }
 
-        return <div class="flex items-center">
+        return <div class="flex flex-wrap items-center">
             <div
                 aria-checked={checked ? 'true' : 'false'}
-                onClick={toggle}
-                role="radio"
-                tabindex={disabled ? '-1' : '0'}
                 class={[
-                    'h-8 outline-none relative rounded-full trans-bg w-16',
+                    'h-8 mr-8 outline-none relative rounded-full trans-bg w-16',
                     checked ? 'bg-primary-5' : 'bg-grey-5',
                     disabled
                         ? 'opacity-50'
                         : 'cursor-pointer group'
-                ]}>
+                ]}
+                onClick={toggle}
+                role="radio"
+                tabindex={disabled ? '-1' : '0'}>
                 <div
                     data-dot
                     class="absolute bg-grey-8 h-8 rounded-full shadow-xs trans-bg trans-left w-8 group-hover:bg-grey-9"
@@ -52,7 +52,7 @@ export default {
             {
                 /* label */
                 (off || on) &&
-                <div class="ml-8 text-sm">
+                <div>
                     <v-fade-transition>
                         { off && !checked && <div key="off">{off}</div> }
                         { on && checked && <div key="on">{on}</div> }
