@@ -64,9 +64,22 @@ jobs:
           name: Codecov
           command: |
             (cd ./themes/site && bash <(curl -s https://codecov.io/bash) -t 5c7c532d-d106-480a-b67e-d2af48ce8f56 -cF javascript)
+  deploy:
+    docker:
+      - image: circleci/php:7.2-node-browsers
+    steps:
+      - checkout
+      - run:
+          name: Trigger Deployment
+          command: |
+            git status
 workflows:
   version: 2
   tests:
     jobs:
       - backend
       - frontend
+      - deploy
+          requires:
+            - backend
+            - frontend
