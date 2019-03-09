@@ -45,8 +45,9 @@ class Utils
 
     /**
      * Convert a number of milliseconds to a human-readable time format.
-     * 
-     * @param  int      $value
+     *
+     * @param int $value
+     *
      * @return string
      */
     public static function formatTime(int $value)
