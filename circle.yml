@@ -72,7 +72,7 @@ jobs:
       - run:
           name: Deploy
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ];
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
               echo "Deploying to production..."
             else
               echo "Deployment aborted for non-master branch."
