@@ -72,7 +72,11 @@ jobs:
       - run:
           name: Deploy
           command: |
-            git status
+            if [ "${CIRCLE_BRANCH}" == "master" ];
+              echo "Deploying to production..."
+            else
+              echo "Deployment aborted for non-master branch."
+            fi
 workflows:
   version: 2
   tests:
