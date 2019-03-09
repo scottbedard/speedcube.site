@@ -1,5 +1,5 @@
 {
-    "name": "Speedcube",
+    "name": "speedcube/speedcube",
     "type": "october-plugin",
     "autoload": {
         "psr-4": {
