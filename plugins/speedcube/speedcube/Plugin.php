@@ -2,8 +2,13 @@
 
 namespace Speedcube\Speedcube;
 
+use App;
 use Backend;
 use Event;
+use Illuminate\Foundation\AliasLoader;
+use Illuminate\Notifications\NotificationServiceProvider;
+use Illuminate\Support\Facades\Notification;
+use NotificationChannels\Twitter\TwitterServiceProvider;
 use RainLab\User\Controllers\Users as UsersController;
 use RainLab\User\Models\User as UserModel;
 use Speedcube\Speedcube\Models\Solve;
@@ -46,7 +51,22 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
+        $this->bootPackages();
         $this->extendRainLabUser();
+    }
+
+    /**
+     * Register service providers and aliases.
+     *
+     * @return void
+     */
+    protected function bootPackages()
+    {
+        App::register(NotificationServiceProvider::class);
+        App::register(TwitterServiceProvider::class);
+
+        $alias = AliasLoader::getInstance();
+        $alias->alias('Notification', Notification::class);
     }
 
     /**
