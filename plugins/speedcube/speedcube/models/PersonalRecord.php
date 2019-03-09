@@ -56,12 +56,14 @@ class PersonalRecord extends Model
     }
 
     /**
-     * Broadcast a twitter notification.
+     * Dispatch a twitter notification is the user has broadcasting enabled.
      *
      * @return void
      */
     protected function broadcastTwitterNotification()
     {
-        $this->notify(new PersonalRecordNotification($this));
+        if ($this->user->profile->twitter_broadcasting) {
+            $this->notify(new PersonalRecordNotification($this));
+        }
     }
 }
