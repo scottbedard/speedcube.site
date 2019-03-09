@@ -1,9 +1,11 @@
-<?php namespace Speedcube\Speedcube\Models;
+<?php
+
+namespace Speedcube\Speedcube\Models;
 
 use Model;
 
 /**
- * Profile Model
+ * Profile Model.
  */
 class Profile extends Model
 {
@@ -16,10 +18,10 @@ class Profile extends Model
      * @var array Attribute casting
      */
     protected $casts = [
-        'id' => 'integer',
+        'id'                   => 'integer',
         'twitter_broadcasting' => 'boolean',
-        'twitter_handle' => 'string',
-        'user_id' => 'integer',
+        'twitter_handle'       => 'string',
+        'user_id'              => 'integer',
     ];
 
     /**

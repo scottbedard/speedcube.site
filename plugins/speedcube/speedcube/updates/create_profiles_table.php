@@ -1,4 +1,6 @@
-<?php namespace Speedcube\Speedcube\Updates;
+<?php
+
+namespace Speedcube\Speedcube\Updates;
 
 use October\Rain\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
@@ -11,7 +13,7 @@ class CreateProfilesTable extends Migration
     public function up()
     {
         // 1.0.2
-        Schema::create('speedcube_speedcube_profiles', function(Blueprint $table) {
+        Schema::create('speedcube_speedcube_profiles', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
