@@ -73,8 +73,8 @@ jobs:
           name: Deploy
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              echo "Deploying to production..."
               curl $ENVOYER_URL
+              echo "Deployment initiated with Envoyer."
             else
               echo "Deployment aborted for non-master branch."
             fi
