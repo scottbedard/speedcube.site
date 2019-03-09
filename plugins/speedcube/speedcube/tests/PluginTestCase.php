@@ -5,6 +5,7 @@ namespace Speedcube\Speedcube\Tests;
 use App;
 use Auth;
 use Illuminate\Foundation\AliasLoader;
+use Illuminate\Support\Facades\Notification;
 use Mail;
 use Mockery;
 use PluginTestCase as BasePluginTestCase;
@@ -69,6 +70,9 @@ abstract class PluginTestCase extends BasePluginTestCase
         // "fake" method instead. the only downside to doing this
         // is that we cannot use the "quick sending" methods.
         Mail::fake();
+
+        // disable notifications during tests
+        Notification::fake();
     }
 
     /**
