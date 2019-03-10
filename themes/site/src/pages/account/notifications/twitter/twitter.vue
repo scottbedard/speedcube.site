@@ -9,28 +9,42 @@
         <v-card padded>
             <div class="max-w-md mx-auto">
                 <p class="leading-normal mb-8">
-                    Want to share your best solves with the world? Enable Twitter broadcasting and we'll tweet a link to view the replay when you set a personal record. Optionally, provide your Twitter handle and we'll send the tweet directly to you.
+                    Want to share your best solves with the world? Enable Twitter broadcasting and we'll tweet a link to view the replay when you set a personal record.
                 </p>
                 <v-form @submit="save">
                     <!-- toggle -->
-                    <div class="flex h-14 items-center mb-8">
+                    <v-form-field
+                        name="broadcasting"
+                        :value="form.broadcasting">
                         <v-switch v-model="form.broadcasting" :disabled="loading">
                             <div class="text-grey-6" slot="off">
-                                Your solves will not be broadcast on Twitter
+                                Twitter broadcasting is disabled
                             </div>
                             <div slot="on">
+                                Twitter broadcasting is enabled
+                            </div>
+                        </v-switch>
+                    </v-form-field>
+
+                    <!-- handle -->
+                    <v-collapse-transition>
+                        <div v-if="form.broadcasting" class="pt-8">
+                            <v-form-field
+                                label="Twitter Handle"
+                                name="handle"
+                                :value="form.handle">
                                 <v-input
                                     v-model="form.handle"
                                     autofocus
-                                    placeholder="Enter your twitter handle"
+                                    placeholder="Please enter your Twitter handle"
                                     :disabled="loading"
                                 />
-                            </div>
-                        </v-switch>
-                    </div>
+                            </v-form-field>
+                        </div>
+                    </v-collapse-transition>
 
                     <!-- actions -->
-                    <div class="flex justify-end">
+                    <div class="flex justify-end" slot="actions">
                         <v-button
                             class="w-full sm:w-auto"
                             primary
@@ -47,13 +61,15 @@
 
 <script>
 import accountHeaderComponent from '../../account_header/account_header.vue';
+import { postTwitter } from '@/app/repositories/profile';
+import { get } from 'lodash-es';
 
 export default {
     data() {
         return {
             form: {
-                broadcasting: false,
-                handle: '',
+                broadcasting: get(this.$store.state, 'user.user.profile.twitterBroadcasting', true),
+                handle: get(this.$store.state, 'user.user.profile.twitterHandle', ''),
             },
             loading: false,
         };
@@ -63,7 +79,17 @@ export default {
     },
     methods: {
         save() {
-            console.log ('ok...');
+            this.loading = true;
+
+            postTwitter(this.form).then((response) => {
+                // success
+                const { profile } = response.data;
+                this.$store.commit('user/setProfile', profile);
+                this.$alert('Twitter broadcast settings saved.');
+            }).finally(() => {
+                // complete
+                this.loading = false;
+            });
         },
     },
 };

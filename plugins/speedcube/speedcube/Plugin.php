@@ -85,6 +85,7 @@ class Plugin extends PluginBase
                 'avatar',
                 'configs',
                 'keyboardConfigs',
+                'profile',
             ]);
         });
 

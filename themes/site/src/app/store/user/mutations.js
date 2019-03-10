@@ -13,6 +13,7 @@ export default {
         setConfigStickerScale: 'config.stickerScale',
         setConfigs: 'user.configs',
         setConfigsAreLoading: 'configsAreLoading',
+        setProfile: 'user.profile',
         setSigninIsLoading: 'signinIsLoading',
         setSignoutIsLoading: 'signoutIsLoading',
     }),
