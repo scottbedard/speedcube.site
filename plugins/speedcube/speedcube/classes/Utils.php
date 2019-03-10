@@ -46,13 +46,14 @@ class Utils
     /**
      * Convert a number of milliseconds to a human-readable time format.
      *
-     * @param int $value
-     *
+     * @param  mixed    $value
      * @return string
      */
-    public static function formatTime(int $value)
+    public static function formatTime($value)
     {
-        $ms = floor((int) str_pad($value % 1000, 3, '0', STR_PAD_LEFT) / 10);
+        $value = (int) $value;
+
+        $ms = str_pad(floor(($value % 1000) / 10), 2, '0', STR_PAD_LEFT);
         $seconds = str_pad(floor(($value / 1000) % 60), 2, '0', STR_PAD_LEFT);
         $minutes = floor($value / 60000);
 
