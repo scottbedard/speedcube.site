@@ -46,7 +46,8 @@ class Utils
     /**
      * Convert a number of milliseconds to a human-readable time format.
      *
-     * @param  mixed    $value
+     * @param mixed $value
+     *
      * @return string
      */
     public static function formatTime($value)
