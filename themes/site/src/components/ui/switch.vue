@@ -21,7 +21,7 @@ export default {
         const { checked, disabled } = context.props;
         const { off, on } = context.slots();
         const listener = get(context, 'listeners.change');
-        
+
         delete context.listeners.change;
 
         function toggle() {
@@ -38,7 +38,7 @@ export default {
                     checked ? 'bg-primary-5' : 'bg-grey-5',
                     disabled
                         ? 'opacity-50'
-                        : 'cursor-pointer group'
+                        : 'cursor-pointer group',
                 ]}
                 onClick={toggle}
                 role="radio"
@@ -51,8 +51,8 @@ export default {
 
             {
                 /* label */
-                (off || on) &&
-                <div class="flex-1">
+                (off || on)
+                && <div class="flex-1">
                     <v-fade-transition>
                         { off && !checked && <div key="off">{off}</div> }
                         { on && checked && <div key="on">{on}</div> }

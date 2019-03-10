@@ -228,7 +228,7 @@ export default {
                 componentTimeout(this, () => {
                     this.loading = true;
 
-                    getRandomSolve().then(response => {
+                    getRandomSolve().then((response) => {
                         // success
                         const solve = get(response, 'data.solve', {});
                         const id = get(solve, 'id', 0);
@@ -238,7 +238,7 @@ export default {
                             params: { id },
                             query: {
                                 mode: 'theater',
-                            }
+                            },
                         });
 
                         this.solve = solve;

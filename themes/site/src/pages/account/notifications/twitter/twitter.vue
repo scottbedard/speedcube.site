@@ -60,9 +60,9 @@
 </template>
 
 <script>
+import { get } from 'lodash-es';
 import accountHeaderComponent from '../../account_header/account_header.vue';
 import { postTwitter } from '@/app/repositories/profile';
-import { get } from 'lodash-es';
 
 export default {
     data() {
