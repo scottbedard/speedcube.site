@@ -7,7 +7,7 @@
 <template>
     <v-grid padded>
         <v-grid-cell class="lg:order-2" lg="7">
-            <h2 class="font-thin leading-normal mb-4 text-2xl text-grey-8">
+            <h2 class="font-thin leading-normal mb-4 text-2xl text-grey-8 lg:mt-12">
                 Make the puzzles your own
             </h2>
             <p class="font-thin leading-loose mb-4 text-grey-7">
@@ -22,7 +22,7 @@
             </p>
         </v-grid-cell>
         <v-grid-cell class="lg:order-1" lg="5">
-            <div class="cursor-pointer flex flex-wrap justify-center text-grey-7 trans-color hover:text-grey-8" @click="next">
+            <div class="flex flex-wrap justify-center text-grey-7 trans-color hover:text-grey-8">
                 <div class="puzzle-container">
                     <v-fade-transition>
                         <div :key="tick">
@@ -33,8 +33,10 @@
                         </div>
                     </v-fade-transition>
                 </div>
-                <div class="font-thin text-sm text-center tracking-wide w-full">
-                    Click the puzzle to get some inspiration
+                <div class="text-center w-full">
+                    <v-button @click="next">
+                        Click here for inspiration
+                    </v-button>
                 </div>
             </div>
         </v-grid-cell>
