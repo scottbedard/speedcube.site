@@ -39,7 +39,7 @@ class ApiController extends Controller
     {
         return response([
             'status' => 'invalid',
-            'errors' => $e->getFields(),
+            'errors' => $err->getFields(),
         ], 400);
     }
 

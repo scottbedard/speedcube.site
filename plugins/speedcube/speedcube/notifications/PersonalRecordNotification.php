@@ -34,13 +34,15 @@ class PersonalRecordNotification extends Notification implements ShouldQueue
     public function toTwitter($notifiable)
     {
         $user = $this->personalRecord->user;
+        $profile = $user->profile;
         $solve = $this->personalRecord->solve;
         $puzzle = $this->personalRecord->solve->scramble->puzzle;
         $url = "https://speedcube.site/replay/{$solve->id}";
+        $person = $profile->twitter_handle ? "@{$profile->twitter_handle}" : $user->username;
 
         $formattedTime = Utils::formatTime($solve->time);
 
-        $content = "Congrats to {$user->username} on their best ever {$puzzle} solve at {$formattedTime}!\nWatch the replay at {$url}";
+        $content = "{$person} just beat their {$puzzle} personal best with this {$formattedTime} second solve!\n{$url}";
 
         return new TwitterStatusUpdate($content);
     }

@@ -11,10 +11,10 @@
                 <p class="leading-normal mb-8">
                     Want to share your best solves with the world? Enable Twitter broadcasting and we'll tweet a link to view the replay when you set a personal record.
                 </p>
-                <v-form @submit="save">
+                <v-form ref="form" @submit="save">
                     <!-- toggle -->
                     <v-form-field
-                        name="broadcasting"
+                        name="twitterBroadcasting"
                         :value="form.broadcasting">
                         <v-switch v-model="form.broadcasting" :disabled="loading">
                             <div class="text-grey-6" slot="off">
@@ -31,7 +31,7 @@
                         <div v-if="form.broadcasting" class="pt-8">
                             <v-form-field
                                 label="Twitter Handle"
-                                name="handle"
+                                name="twitterHandle"
                                 :value="form.handle">
                                 <v-input
                                     v-model="form.handle"
@@ -86,6 +86,13 @@ export default {
                 const { profile } = response.data;
                 this.$store.commit('user/setProfile', profile);
                 this.$alert('Twitter broadcast settings saved.');
+            }, (err) => {
+                // failed
+                const status = get(err, 'response.data.status', 'unknown');
+
+                if (status === 'invalid') {
+                    this.$refs.form.handleValidationError(err);
+                }
             }).finally(() => {
                 // complete
                 this.loading = false;

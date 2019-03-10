@@ -4,7 +4,9 @@ namespace Speedcube\Speedcube\Http\Controllers;
 
 use Auth;
 use Exception;
+use October\Rain\Database\ModelException;
 use Speedcube\Speedcube\Classes\ApiController;
+use ValidationException;
 
 class ProfileController extends ApiController
 {
@@ -28,8 +30,11 @@ class ProfileController extends ApiController
             return $this->success([
                 'profile' => $profile,
             ]);
-        } catch (Exception $err) {
-            return $this->failed($err);
-        }
+        } catch (ModelException $err) {
+            return $this->invalid($err);  
+        } 
+        // catch (Exception $err) {
+        //     return $this->failed($err);
+        // }
     }
 }
