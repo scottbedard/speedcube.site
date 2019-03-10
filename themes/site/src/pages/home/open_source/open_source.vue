@@ -1,7 +1,7 @@
 <template functional>
     <div>
         <h2 class="font-thin leading-normal mb-4 text-2xl text-grey-8">
-            100% open source
+            100% Open Source
         </h2>
         <p class="font-thin leading-loose text-grey-7">
             If you know your way around PHP or Javascript, by all means get involved!

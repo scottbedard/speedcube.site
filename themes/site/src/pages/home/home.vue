@@ -2,7 +2,7 @@
     <v-page padded>
         <v-margin padded>
             <!-- about -->
-            <div class="mb-8 md:mb-16 lg:mb-32">
+            <div class="mb-8 md:mb-16 lg:mb-24">
                 <v-about />
             </div>
 
