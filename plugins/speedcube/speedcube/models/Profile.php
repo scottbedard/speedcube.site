@@ -16,7 +16,7 @@ class Profile extends Model
      */
     public $attributes = [
         'twitter_broadcasting' => true,
-        'twitter_handle' => '',
+        'twitter_handle'       => '',
     ];
 
     /**
@@ -60,7 +60,7 @@ class Profile extends Model
      */
     public $customMessages = [
         'twitter_handle:between' => 'Twitter handles must be between 5 and 15 characters long.',
-        'twitter_handle.regex' => 'Twitter handles may only contain letters, numbers, and underscores.',
+        'twitter_handle.regex'   => 'Twitter handles may only contain letters, numbers, and underscores.',
     ];
 
     /**
