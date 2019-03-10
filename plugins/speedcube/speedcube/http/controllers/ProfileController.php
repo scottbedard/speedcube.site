@@ -6,7 +6,6 @@ use Auth;
 use Exception;
 use October\Rain\Database\ModelException;
 use Speedcube\Speedcube\Classes\ApiController;
-use ValidationException;
 
 class ProfileController extends ApiController
 {
@@ -31,8 +30,8 @@ class ProfileController extends ApiController
                 'profile' => $profile,
             ]);
         } catch (ModelException $err) {
-            return $this->invalid($err);  
-        } 
+            return $this->invalid($err);
+        }
         // catch (Exception $err) {
         //     return $this->failed($err);
         // }
