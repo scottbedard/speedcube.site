@@ -1,7 +1,7 @@
 <template functional>
     <div>
         <h2 class="font-thin leading-normal mb-4 text-2xl text-grey-8">
-            Enjoy a Details Solve History
+            Enjoy a Detailed Solve History
         </h2>
         <p class="font-thin leading-loose text-grey-7">
             Every solve performed on the site is saved and analyzed. This means you can drill
