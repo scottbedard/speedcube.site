@@ -3,9 +3,11 @@
 namespace Speedcube\Speedcube\Tests\Unit\Models;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Notification;
 use Speedcube\Speedcube\Models\PersonalRecord;
 use Speedcube\Speedcube\Models\Scramble;
 use Speedcube\Speedcube\Models\Solve;
+use Speedcube\Speedcube\Notifications\PersonalRecordNotification;
 use Speedcube\Speedcube\Tests\Factory;
 use Speedcube\Speedcube\Tests\PluginTestCase;
 
@@ -138,6 +140,47 @@ class SolveTest extends PluginTestCase
         // sally's first solve should be closed, and johns solve should still be pending
         $this->assertEquals('pending', $solve1->fresh()->status);
         $this->assertEquals('dnf', $solve2->fresh()->status);
+    }
+
+    public function test_personal_records_dispatch_a_twitter_notification()
+    {
+        // create a user, twitter broadcasting is on by default
+        $user = Factory::registerUser();
+
+        // complete a solve which sets a personal record
+        $scramble1 = Factory::createScrambleWithTurns('R');
+
+        $solve1 = Factory::create(new Solve, [
+            'user_id' => $user->id,
+            'scramble_id' => $scramble1->id,
+        ]);
+
+        $solve1->complete('0#START 4000:R- 5000#END');
+        
+        // a twitter notification should have been fired for the personal record
+        $personalRecord = $user->records()->first();
+
+        Notification::assertSentToTimes($personalRecord, PersonalRecordNotification::class, 1);
+    }
+
+    public function test_personal_records_do_not_dispatch_a_twitter_notification_when_broadcasting_is_disabled()
+    {
+        // create a user and disable twitter broadcasting
+        $user = Factory::registerUser();
+        $user->profile->update(['twitter_broadcasting' => false]);
+
+        // complete a solve which sets a personal record
+        $scramble1 = Factory::createScrambleWithTurns('R');
+
+        $solve1 = Factory::create(new Solve, [
+            'user_id' => $user->id,
+            'scramble_id' => $scramble1->id,
+        ]);
+
+        $solve1->complete('0#START 4000:R- 5000#END');
+        
+        // no notifications should have been sent
+        Notification::assertNothingSent();
     }
 
     //

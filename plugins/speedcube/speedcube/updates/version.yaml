@@ -9,3 +9,7 @@
 1.0.1:
   - Add replay count to solves table
   - add_replay_count_column.php
+
+1.0.2:
+  - Create user profiles
+  - create_profiles_table.php

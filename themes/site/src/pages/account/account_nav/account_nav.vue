@@ -14,6 +14,11 @@
                 :to="{ name: 'account:security' }">
                 Security
             </v-account-link>
+            <v-account-link
+                icon="fa-bullhorn"
+                :to="{ name: 'account:notifications' }">
+                Notifications
+            </v-account-link>
         </v-card>
     </nav>
 </template>

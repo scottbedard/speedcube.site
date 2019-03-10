@@ -28,6 +28,10 @@ $easing: ease-in-out;
     transition: height $duration $easing;
 }
 
+.trans-left {
+    transition: left $duration $easing;
+}
+
 .trans-opacity {
     transition: opacity $duration $easing;
 }
@@ -55,6 +59,12 @@ $easing: ease-in-out;
     transition:
         background $duration $easing,
         border $duration $easing;
+}
+
+.trans-bg.trans-left {
+    transition:
+        background-color $duration $easing,
+        left $duration $easing;
 }
 
 .trans-bg.trans-border.trans-color {
