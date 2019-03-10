@@ -4,6 +4,8 @@ namespace Speedcube\Speedcube\Console;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Notification;
+use Mail;
 use RainLab\User\Models\User;
 use Speedcube\Speedcube\Classes\Cube;
 use Speedcube\Speedcube\Models\Scramble;
@@ -30,6 +32,9 @@ class SeedCommand extends Command
      */
     public function handle()
     {
+        Mail:: fake();
+        Notification::fake();
+
         $this->output->writeln("Seeding fake data...\n");
 
         $this->seedUsers();
