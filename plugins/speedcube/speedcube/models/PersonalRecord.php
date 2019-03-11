@@ -79,7 +79,7 @@ class PersonalRecord extends Model
 
     public function scopePuzzle($query, $puzzle)
     {
-        return $query->whereHas('solve.scramble', function($scramble) use ($puzzle) {
+        return $query->whereHas('solve.scramble', function ($scramble) use ($puzzle) {
             $scramble->where('puzzle', $puzzle);
         });
     }

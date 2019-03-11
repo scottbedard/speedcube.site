@@ -31,15 +31,15 @@ class RecordsController extends ApiController
             $records = PersonalRecord::puzzle($puzzle)
                 ->joinSolve()
                 ->select(
-                    'speedcube_speedcube_personal_records.id', 
-                    'speedcube_speedcube_personal_records.solve_id', 
+                    'speedcube_speedcube_personal_records.id',
+                    'speedcube_speedcube_personal_records.solve_id',
                     'speedcube_speedcube_personal_records.user_id'
                 )
                 ->with([
-                    'solve' => function($solve) {
+                    'solve' => function ($solve) {
                         $solve->select('created_at', 'id', 'moves', 'time');
                     },
-                    'user' => function($user) {
+                    'user' => function ($user) {
                         $user->select('id', 'name', 'username');
                     },
                 ])
@@ -47,15 +47,15 @@ class RecordsController extends ApiController
                 ->skip(($page - 1) * $pageSize)
                 ->take($pageSize)
                 ->get();
-            
+
             return $this->success([
                 'pagination' => [
                     'current_page' => $page,
-                    'last_page' => $lastPage,
-                    'page_size' => $pageSize,
-                    'total' => $total,
+                    'last_page'    => $lastPage,
+                    'page_size'    => $pageSize,
+                    'total'        => $total,
                 ],
-                'puzzle' => $puzzle,
+                'puzzle'  => $puzzle,
                 'records' => $records,
             ]);
         } catch (Exception $err) {
