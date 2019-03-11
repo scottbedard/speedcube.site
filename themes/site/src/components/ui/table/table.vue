@@ -14,6 +14,7 @@
 /* eslint-disable no-use-before-define */
 import { bindAll } from 'spyfu-vue-functional';
 import { isFunction, isObject } from 'lodash-es';
+import defaultCellComponent from './default_cell.vue';
 
 function normalizeColumn(col) {
     return {
@@ -40,7 +41,7 @@ function headerCell(h, col) {
 //
 // row
 //
-function tr(h, context, row, rowIndex) {
+function tr(h, scopedSlots, context, row, rowIndex) {
     const { schema } = context.props;
     const key = `row_${rowIndex}`;
 
@@ -59,14 +60,14 @@ function tr(h, context, row, rowIndex) {
     }
 
     return <tr key={key} {...bindings}>
-        {schema.map((col, colIndex) => rowCell(h, row, rowIndex, col, colIndex))}
+        {schema.map((col, colIndex) => rowCell(h, scopedSlots, row, rowIndex, col, colIndex))}
     </tr>;
 }
 
 //
 // row cell
 //
-function rowCell(h, row, rowIndex, col, colIndex) {
+function rowCell(h, scopedSlots, row, rowIndex, col, colIndex) {
     const { align, verticalAlign } = normalizeColumn(col);
     const bindings = { class: [] };
     const value = row[col.key];
@@ -85,7 +86,7 @@ function rowCell(h, row, rowIndex, col, colIndex) {
 
     // custom cell types
     if (isObject(col.cell)) {
-        const Cell = col.cell;
+        const Cell = col.cell || defaultCellComponent;
 
         return <td {...bindings}>
             <Cell
@@ -96,6 +97,21 @@ function rowCell(h, row, rowIndex, col, colIndex) {
                 value={value}
             />
         </td>;
+    }
+
+    // slot cells
+    else if (typeof scopedSlots[col.key] !== 'undefined') {
+        const slot = scopedSlots[col.key]({
+            col,
+            colIndex,
+            row,
+            rowIndex,
+            value,
+        });
+
+        return <td {...bindings }>
+            {slot}
+        </td>
     }
 
     // string cells
@@ -110,44 +126,21 @@ function rowCell(h, row, rowIndex, col, colIndex) {
 export default {
     render(h, context) {
         const bindings = bindAll(context);
+        const { scopedSlots } = context;
         const { data, headers, loading, schema } = context.props;
-        const empty = data.length === 0;
 
-        return <div class="v-table">
-            <v-collapse-transition>
-
-                {/* loading */}
-                { loading
-                    && <div class="text-center" key="loading">
-                        <v-spinner />
-                    </div>
-                }
-
-                {/* empty */}
-                { !loading && empty
-                    && <div key="empty">
-                        {context.slots().empty}
-                    </div>
-                }
-
-                {/* table */}
-                { !loading && !empty
-                    && <table class="w-full" key="table"
-                        {...bindings}>
-                        { (headers === undefined || headers === true)
-                            && <thead>
-                                <tr>
-                                    {schema.map(col => headerCell(h, col))}
-                                </tr>
-                            </thead>
-                        }
-                        <tbody>
-                            {data.map((row, index) => tr(h, context, row, index))}
-                        </tbody>
-                    </table>
-                }
-            </v-collapse-transition>
-        </div>;
+        return <table class="v-table w-full" {...bindings}>
+            { (headers === undefined || headers === true)
+                && <thead>
+                    <tr>
+                        {schema.map(col => headerCell(h, col))}
+                    </tr>
+                </thead>
+            }
+            <tbody>
+                {data.map((row, index) => tr(h, scopedSlots, context, row, index))}
+            </tbody>
+        </table>;
     },
     functional: true,
     props: {
@@ -156,10 +149,6 @@ export default {
             type: Array,
         },
         headers: {
-            type: Boolean,
-        },
-        loading: {
-            default: false,
             type: Boolean,
         },
         schema: {

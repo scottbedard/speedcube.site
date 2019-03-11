@@ -15,16 +15,16 @@ class RecordsController extends ApiController
      */
     public function index()
     {
-        $pageSize = 20;
-
         try {
             $data = input();
+            $pageSize = 20;
             $puzzle = strtolower(array_get($data, 'puzzle', '3x3'));
 
             // count the number of records for this puzzle
             $total = PersonalRecord::puzzle($puzzle)->count();
-            $lastPage = ceil($total / $pageSize);
 
+            // calculate the current and last page, keeping the current page within bounds
+            $lastPage = ceil($total / $pageSize);
             $page = min($lastPage, max(1, (int) array_get($data, 'page', 1)));
 
             // get the personal records and order them by time
