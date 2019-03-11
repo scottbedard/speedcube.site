@@ -66,4 +66,21 @@ class PersonalRecord extends Model
             $this->notify(new PersonalRecordNotification($this));
         }
     }
+
+    public function scopeJoinSolve($query)
+    {
+        $query->join(
+            'speedcube_speedcube_solves',
+            'speedcube_speedcube_solves.id',
+            '=',
+            'speedcube_speedcube_personal_records.solve_id'
+        );
+    }
+
+    public function scopePuzzle($query, $puzzle)
+    {
+        return $query->whereHas('solve.scramble', function($scramble) use ($puzzle) {
+            $scramble->where('puzzle', $puzzle);
+        });
+    }
 }
