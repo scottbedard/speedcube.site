@@ -1,11 +1,25 @@
 <style lang="scss" scoped>
     .v-table {
+        /deep/ thead {
+
+        }
+
         /deep/ thead th {
-            padding: 0.5rem 0;
+            padding: 1rem;
         }
 
         /deep/ tbody td {
-            padding: 0.5rem 0;
+            padding: 1rem;
+        }
+
+        /deep/ tbody tr {
+            &:hover {
+                @apply bg-grey-4;
+            }
+        }
+
+        /deep/ tbody tr:nth-child(odd) {
+
         }
     }
 </style>
@@ -14,10 +28,12 @@
 /* eslint-disable no-use-before-define */
 import { bindAll } from 'spyfu-vue-functional';
 import { isFunction, isObject } from 'lodash-es';
+import { eventPassedThroughTag } from '@/app/utils/dom';
 
 function normalizeColumn(col) {
     return {
         align: 'left',
+        headerClass: '',
         verticalAlign: 'top',
         ...col,
     };
@@ -27,11 +43,13 @@ function normalizeColumn(col) {
 // header cell
 //
 function headerCell(h, col) {
-    const { align } = normalizeColumn(col);
+    const { align, headerClass } = normalizeColumn(col);
 
     return <th class={[
+        'font-bold',
         align === 'left' && 'text-left',
         align === 'right' && 'text-right',
+        headerClass,
     ]}>
         {col.header}
     </th>;
@@ -54,11 +72,21 @@ function tr(h, scopedSlots, context, row, rowIndex) {
         bindings.class = 'cursor-pointer';
 
         bindings.on.click = (event) => {
+            if (
+                eventPassedThroughTag(event, 'a')
+                || eventPassedThroughTag(event, 'button')
+            ) {
+                return;
+            }
+
             context.listeners['row-click']({ event, index: rowIndex, row });
         };
     }
 
-    return <tr key={key} {...bindings}>
+    return <tr
+        class='trans-bg'
+        key={key}
+        {...bindings}>
         {schema.map((col, colIndex) => rowCell(h, scopedSlots, row, rowIndex, col, colIndex))}
     </tr>;
 }
@@ -128,18 +156,20 @@ export default {
         const { scopedSlots } = context;
         const { data, headers, schema } = context.props;
 
-        return <table class="v-table w-full" {...bindings}>
-            { (headers === undefined || headers === true)
-                && <thead>
-                    <tr>
-                        {schema.map(col => headerCell(h, col))}
-                    </tr>
-                </thead>
-            }
-            <tbody>
-                {data.map((row, index) => tr(h, scopedSlots, context, row, index))}
-            </tbody>
-        </table>;
+        return <div class="v-table">
+            <table class="w-full" {...bindings}>
+                { (headers === undefined || headers === true)
+                    && <thead>
+                        <tr>
+                            {schema.map(col => headerCell(h, col))}
+                        </tr>
+                    </thead>
+                }
+                <tbody class="text-sm">
+                    {data.map((row, index) => tr(h, scopedSlots, context, row, index))}
+                </tbody>
+            </table>
+        </div>;
     },
     functional: true,
     props: {

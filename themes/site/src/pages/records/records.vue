@@ -1,6 +1,30 @@
 <template>
     <v-page padded>
         <v-margin padded>
+            <h1 class="font-thin mb-4 text-center">
+                All Time Records
+            </h1>
+
+            <div class="font-thin mb-8 text-center text-grey-7 text-lg">
+                These are the fastest solves ever performed on the site.
+            </div>
+
+            <div class="mb-8 text-center">
+                <router-link
+                    v-for="puzzle in puzzles"
+                    class="inline-block mx-4 text-base"
+                    :class="
+                        puzzleQuery !== puzzle.slug && 'text-grey-6'
+                    "
+                    :key="puzzle.slug"
+                    :to="{
+                        name: 'records',
+                        query: query(puzzle.slug),
+                    }">
+                    {{ puzzle.title }}
+                </router-link>
+            </div>
+
             <v-fade-transition>
                 <!-- loading -->
                 <div v-if="loading" class="text-center" key="loading">
@@ -8,7 +32,10 @@
                 </div>
 
                 <!-- empty -->
-                <div v-else-if="empty" key="empty">
+                <div
+                    class="text-grey-6 text-center"
+                    v-else-if="empty"
+                    key="empty">
                     There are no records to display.
                 </div>
 
@@ -25,6 +52,7 @@
 </template>
 
 <script>
+import { puzzles } from '@/app/constants';
 import { getPersonalRecords } from '@/app/repositories/personal_records';
 import { get, uniqueId } from 'lodash-es';
 import recordsTableComponent from './records_table/records_table.vue';
@@ -53,6 +81,15 @@ export default {
         empty() {
             return this.records.length === 0;
         },
+        puzzles() {
+            return puzzles;
+        },
+        puzzleQuery() {
+            return get(this, '$route.query.puzzle', '3x3');
+        },
+        query() {
+            return puzzle => ({ ...this.$route.query, puzzle });
+        },
     },
     methods: {
         fetch() {
@@ -69,8 +106,6 @@ export default {
                 page: get(this.$route, 'query.page', 1),
                 puzzle: get(this.$route, 'query.puzzle', '3x3'),
             };
-
-            console.log('params', params);
 
             getPersonalRecords(params).then((response) => {
                 // success

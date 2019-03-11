@@ -1,13 +1,14 @@
 <style lang="scss" scoped>
     .v-card {
-        // /deep/ .v-input > div {
-        //     box-shadow: none;
-        //     background-color: config('colors.grey-lighter');
+        /deep/ > .v-table tr {
+            td:first-child, th:first-child {
+                @apply pl-6;
+            }
 
-        //     input:-webkit-autofill {
-        //         -webkit-box-shadow: 0 0 0 30px config('colors.grey-lighter') inset;
-        //     }
-        // }
+            td:last-child, th:last-child {
+                @apply pr-6;
+            }
+        }
     }
 </style>
 
