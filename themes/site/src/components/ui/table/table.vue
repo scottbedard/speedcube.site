@@ -14,7 +14,6 @@
 /* eslint-disable no-use-before-define */
 import { bindAll } from 'spyfu-vue-functional';
 import { isFunction, isObject } from 'lodash-es';
-import defaultCellComponent from './default_cell.vue';
 
 function normalizeColumn(col) {
     return {
@@ -86,7 +85,7 @@ function rowCell(h, scopedSlots, row, rowIndex, col, colIndex) {
 
     // custom cell types
     if (isObject(col.cell)) {
-        const Cell = col.cell || defaultCellComponent;
+        const Cell = col.cell;
 
         return <td {...bindings}>
             <Cell
@@ -100,7 +99,7 @@ function rowCell(h, scopedSlots, row, rowIndex, col, colIndex) {
     }
 
     // slot cells
-    else if (typeof scopedSlots[col.key] !== 'undefined') {
+    if (typeof scopedSlots[col.key] !== 'undefined') {
         const slot = scopedSlots[col.key]({
             col,
             colIndex,
@@ -111,7 +110,7 @@ function rowCell(h, scopedSlots, row, rowIndex, col, colIndex) {
 
         return <td {...bindings }>
             {slot}
-        </td>
+        </td>;
     }
 
     // string cells
@@ -127,7 +126,7 @@ export default {
     render(h, context) {
         const bindings = bindAll(context);
         const { scopedSlots } = context;
-        const { data, headers, loading, schema } = context.props;
+        const { data, headers, schema } = context.props;
 
         return <table class="v-table w-full" {...bindings}>
             { (headers === undefined || headers === true)

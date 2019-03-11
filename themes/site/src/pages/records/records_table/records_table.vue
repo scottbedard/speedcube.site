@@ -24,15 +24,13 @@ export default {
         formattedData() {
             const startRow = ((this.pagination.currentPage - 1) * this.pagination.pageSize) + 1;
 
-            return this.records.map((record, index) => {
-                return {
-                    id: record.id,
-                    moves: record.solve.moves,
-                    rank: startRow + index,
-                    time: record.solve.time,
-                    user: record.user,
-                };
-            });
+            return this.records.map((record, index) => ({
+                id: record.id,
+                moves: record.solve.moves,
+                rank: startRow + index,
+                time: record.solve.time,
+                user: record.user,
+            }));
         },
         schema() {
             return [

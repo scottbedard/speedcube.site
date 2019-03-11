@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { get } from 'axios';
 
 // get personal records
 export function getPersonalRecords(params = {}) {

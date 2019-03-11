@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { getPersonalRecords } from '@/app/repositories/personal_records'
+import { getPersonalRecords } from '@/app/repositories/personal_records';
 import { get, uniqueId } from 'lodash-es';
 import recordsTableComponent from './records_table/records_table.vue';
 
@@ -71,7 +71,7 @@ export default {
             };
 
             console.log('params', params);
-            
+
             getPersonalRecords(params).then((response) => {
                 // success
                 if (this.requestId === requestId) {
