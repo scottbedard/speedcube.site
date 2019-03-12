@@ -69,7 +69,7 @@ export default {
             ];
         },
         tps() {
-            return row => round((row.time / row.moves) / 1000, 1);
+            return row => round(1000 / (row.time / row.moves), 1);
         },
     },
     methods: {
