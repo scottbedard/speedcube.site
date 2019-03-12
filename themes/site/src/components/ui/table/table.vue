@@ -1,11 +1,25 @@
 <style lang="scss" scoped>
     .v-table {
+        /deep/ thead {
+
+        }
+
         /deep/ thead th {
-            padding: 0.5rem 0;
+            padding: 1rem;
         }
 
         /deep/ tbody td {
-            padding: 0.5rem 0;
+            padding: 1rem;
+        }
+
+        /deep/ tbody tr {
+            &:hover {
+                @apply bg-grey-4;
+            }
+        }
+
+        /deep/ tbody tr:nth-child(odd) {
+
         }
     }
 </style>
@@ -14,10 +28,12 @@
 /* eslint-disable no-use-before-define */
 import { bindAll } from 'spyfu-vue-functional';
 import { isFunction, isObject } from 'lodash-es';
+import { eventPassedThroughTag } from '@/app/utils/dom';
 
 function normalizeColumn(col) {
     return {
         align: 'left',
+        headerClass: '',
         verticalAlign: 'top',
         ...col,
     };
@@ -27,11 +43,13 @@ function normalizeColumn(col) {
 // header cell
 //
 function headerCell(h, col) {
-    const { align } = normalizeColumn(col);
+    const { align, headerClass } = normalizeColumn(col);
 
     return <th class={[
+        'font-bold',
         align === 'left' && 'text-left',
         align === 'right' && 'text-right',
+        headerClass,
     ]}>
         {col.header}
     </th>;
@@ -40,7 +58,7 @@ function headerCell(h, col) {
 //
 // row
 //
-function tr(h, context, row, rowIndex) {
+function tr(h, scopedSlots, context, row, rowIndex) {
     const { schema } = context.props;
     const key = `row_${rowIndex}`;
 
@@ -54,19 +72,29 @@ function tr(h, context, row, rowIndex) {
         bindings.class = 'cursor-pointer';
 
         bindings.on.click = (event) => {
+            if (
+                eventPassedThroughTag(event, 'a')
+                || eventPassedThroughTag(event, 'button')
+            ) {
+                return;
+            }
+
             context.listeners['row-click']({ event, index: rowIndex, row });
         };
     }
 
-    return <tr key={key} {...bindings}>
-        {schema.map((col, colIndex) => rowCell(h, row, rowIndex, col, colIndex))}
+    return <tr
+        class='trans-bg'
+        key={key}
+        {...bindings}>
+        {schema.map((col, colIndex) => rowCell(h, scopedSlots, row, rowIndex, col, colIndex))}
     </tr>;
 }
 
 //
 // row cell
 //
-function rowCell(h, row, rowIndex, col, colIndex) {
+function rowCell(h, scopedSlots, row, rowIndex, col, colIndex) {
     const { align, verticalAlign } = normalizeColumn(col);
     const bindings = { class: [] };
     const value = row[col.key];
@@ -98,6 +126,21 @@ function rowCell(h, row, rowIndex, col, colIndex) {
         </td>;
     }
 
+    // slot cells
+    if (typeof scopedSlots[col.key] !== 'undefined') {
+        const slot = scopedSlots[col.key]({
+            col,
+            colIndex,
+            row,
+            rowIndex,
+            value,
+        });
+
+        return <td {...bindings }>
+            {slot}
+        </td>;
+    }
+
     // string cells
     return <td {...bindings}>
         {row[col.key]}
@@ -110,43 +153,22 @@ function rowCell(h, row, rowIndex, col, colIndex) {
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { data, headers, loading, schema } = context.props;
-        const empty = data.length === 0;
+        const { scopedSlots } = context;
+        const { data, headers, schema } = context.props;
 
         return <div class="v-table">
-            <v-collapse-transition>
-
-                {/* loading */}
-                { loading
-                    && <div class="text-center" key="loading">
-                        <v-spinner />
-                    </div>
+            <table class="hidden w-full sm:table" {...bindings}>
+                { (headers === undefined || headers === true)
+                    && <thead>
+                        <tr>
+                            {schema.map(col => headerCell(h, col))}
+                        </tr>
+                    </thead>
                 }
-
-                {/* empty */}
-                { !loading && empty
-                    && <div key="empty">
-                        {context.slots().empty}
-                    </div>
-                }
-
-                {/* table */}
-                { !loading && !empty
-                    && <table class="w-full" key="table"
-                        {...bindings}>
-                        { (headers === undefined || headers === true)
-                            && <thead>
-                                <tr>
-                                    {schema.map(col => headerCell(h, col))}
-                                </tr>
-                            </thead>
-                        }
-                        <tbody>
-                            {data.map((row, index) => tr(h, context, row, index))}
-                        </tbody>
-                    </table>
-                }
-            </v-collapse-transition>
+                <tbody class="text-sm">
+                    {data.map((row, index) => tr(h, scopedSlots, context, row, index))}
+                </tbody>
+            </table>
         </div>;
     },
     functional: true,
@@ -156,10 +178,6 @@ export default {
             type: Array,
         },
         headers: {
-            type: Boolean,
-        },
-        loading: {
-            default: false,
             type: Boolean,
         },
         schema: {

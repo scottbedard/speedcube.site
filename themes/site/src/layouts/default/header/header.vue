@@ -13,7 +13,7 @@
                         <v-nav-link :to="{ name: 'solve', params: { puzzle: '3x3' }}">
                             solve
                         </v-nav-link>
-                        <v-nav-link :to="{ name: 'records', params: { puzzle: '3x3' }}">
+                        <v-nav-link :to="{ name: 'records' }">
                             records
                         </v-nav-link>
                     </div>
