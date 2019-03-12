@@ -26,7 +26,7 @@ import scatterChartComponent from './charts/scatter_chart.vue';
 import selectComponent from './ui/select.vue';
 import spinnerComponent from './ui/spinner.vue';
 import switchComponent from './ui/switch.vue';
-import tableComponent from './ui/table.vue';
+import tableComponent from './ui/table/table.vue';
 import timerComponent from './ui/timer.vue';
 import uploadButtonComponent from './ui/upload_button.vue';
 

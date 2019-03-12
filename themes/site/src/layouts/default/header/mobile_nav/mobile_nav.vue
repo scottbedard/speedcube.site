@@ -54,7 +54,7 @@
                     </div>
                     <router-link
                         class="block mb-4"
-                        :to="{ name: 'account:profile', params: { puzzle: '3x3' }}">
+                        :to="{ name: 'account:profile' }">
                         Manage Account
                     </router-link>
                     <router-link

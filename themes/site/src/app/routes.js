@@ -102,7 +102,7 @@ export default function (store) {
                 //
                 {
                     name: 'records',
-                    path: '/records/:puzzle',
+                    path: '/records',
                     component: () => import('@/pages/records/records.vue' /* webpackChunkName: "records" */),
                 },
 

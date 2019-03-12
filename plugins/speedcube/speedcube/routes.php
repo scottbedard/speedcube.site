@@ -10,6 +10,9 @@ Route::prefix('api/speedcube/speedcube')
         // any user may access these
         //
 
+        // records
+        Route::get('records', 'Speedcube\Speedcube\Http\Controllers\RecordsController@index');
+
         // scrambles
         Route::post('scrambles', 'Speedcube\Speedcube\Http\Controllers\ScramblesController@create');
 
