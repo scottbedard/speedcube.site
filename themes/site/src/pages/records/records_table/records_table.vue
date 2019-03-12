@@ -2,7 +2,37 @@
     <div>
         <div class="max-w-md mx-auto">
             <v-card>
+                <!-- mobile -->
+                <div class="sm:hidden">
+                    <router-link
+                        v-for="row in formattedData"
+                        class="block group px-6 py-4 hover:bg-grey-4"
+                        :key="row.id"
+                        :to="{
+                            name: 'replay',
+                            params: {
+                                id: row.solveId,
+                            },
+                        }">
+                        <div class="font-bold mb-2 text-lg">{{ row.user.username }}</div>
+                        <div class="flex text-sm">
+                            <div class="pr-2">
+                                <div>Rank</div>
+                                <div>Turns</div>
+                                <div>Final Time</div>
+                            </div>
+                            <div>
+                                <div>{{ row.rank }}</div>
+                                <div>{{ row.moves }}</div>
+                                <div>{{ row.time | shortTimer }}</div>
+                            </div>
+                        </div>
+                    </router-link>
+                </div>
+
+                <!-- desktop -->
                 <v-table
+                    class="hidden sm:table"
                     :data="formattedData"
                     :headers="true"
                     :schema="schema"
@@ -19,22 +49,6 @@
                     <!-- time -->
                     <template v-slot:time="{ value }">
                         {{ value | shortTimer }}
-                    </template>
-
-                    <!-- replay -->
-                    <template v-slot:replay="{ row, value }">
-                        <div class="text-center">
-                            <router-link
-                                title="Watch Replay"
-                                :to="{
-                                    name: 'replay',
-                                    params: {
-                                        id: row.solveId,
-                                    },
-                                }">
-                                <i class="fa fa-film"></i>
-                            </router-link>
-                        </div>
                     </template>
                 </v-table>
             </v-card>
@@ -79,10 +93,6 @@ export default {
                     align: 'right',
                     header: 'Final Time',
                     key: 'time',
-                },
-                {
-                    headerClass: 'w-16',
-                    key: 'replay',
                 },
             ];
         },

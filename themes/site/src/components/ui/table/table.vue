@@ -157,7 +157,7 @@ export default {
         const { data, headers, schema } = context.props;
 
         return <div class="v-table">
-            <table class="w-full" {...bindings}>
+            <table class="hidden w-full sm:table" {...bindings}>
                 { (headers === undefined || headers === true)
                     && <thead>
                         <tr>

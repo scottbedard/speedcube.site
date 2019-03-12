@@ -1,12 +1,14 @@
 <style lang="scss" scoped>
     .v-card {
-        /deep/ > .v-table tr {
-            td:first-child, th:first-child {
-                @apply pl-6;
-            }
+        /deep/ > .v-table {
+            tr {
+                td:first-child, th:first-child {
+                    @apply pl-6;
+                }
 
-            td:last-child, th:last-child {
-                @apply pr-6;
+                td:last-child, th:last-child {
+                    @apply pr-6;
+                }
             }
         }
     }
