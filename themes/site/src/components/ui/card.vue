@@ -3,11 +3,11 @@
         /deep/ > .v-table {
             tr {
                 td:first-child, th:first-child {
-                    @apply pl-6;
+                    @apply pl-4;
                 }
 
                 td:last-child, th:last-child {
-                    @apply pr-6;
+                    @apply pr-4;
                 }
             }
         }

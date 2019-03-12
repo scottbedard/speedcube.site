@@ -1,54 +1,35 @@
 <template>
     <div>
-        <div class="max-w-md mx-auto">
+        <div class="max-w-sm mx-auto">
             <v-card>
-                <!-- mobile -->
-                <div class="sm:hidden">
-                    <router-link
-                        v-for="row in formattedData"
-                        class="block group px-6 py-4 hover:bg-grey-4"
-                        :key="row.id"
-                        :to="{
-                            name: 'replay',
-                            params: {
-                                id: row.solveId,
-                            },
-                        }">
-                        <div class="font-bold mb-2 text-lg">{{ row.user.username }}</div>
-                        <div class="flex text-sm">
-                            <div class="pr-2">
-                                <div>Rank</div>
-                                <div>Turns</div>
-                                <div>Final Time</div>
-                            </div>
-                            <div>
-                                <div>{{ row.rank }}</div>
-                                <div>{{ row.moves }}</div>
-                                <div>{{ row.time | shortTimer }}</div>
-                            </div>
-                        </div>
-                    </router-link>
-                </div>
-
                 <!-- desktop -->
                 <v-table
-                    class="hidden sm:table"
                     :data="formattedData"
-                    :headers="true"
+                    :headers="false"
                     :schema="schema"
                     @row-click="onRowClick">
                     <!-- user -->
-                    <template v-slot:user="{ value }">
-                        <router-link
-                            :title="`View ${value.username}'s stats`"
-                            :to="{ name: 'users:show', params: { username: value.username }}">
+                    <template v-slot:user="{ row, value }">
+                        <div class="mb-2 text-lg">
                             {{ value.username }}
-                        </router-link>
+                        </div>
+                        <div class="font-thin text-grey-7 text-xs">
+                            <div class="xs:hidden">
+                                Rank: #{{ row.rank }}
+                            </div>
+                            <div>
+                                <span class="hidden xs:inline">#{{ row.rank }},</span> {{ row.solve.createdAt | datestamp }}
+                            </div>
+                            <div class="xs:hidden">
+                                {{ row.moves }} turns at {{ tps(row) }} tps
+                            </div>
+                        </div>
                     </template>
 
                     <!-- time -->
-                    <template v-slot:time="{ value }">
-                        {{ value | shortTimer }}
+                    <template v-slot:time="{ row, value }">
+                        <div class="mb-2 text-lg">{{ value | shortTimer }}</div>
+                        <div class="font-thin hidden text-grey-7 text-xs xs:block">{{ row.moves }} turns at {{ tps(row) }} tps</div>
                     </template>
                 </v-table>
             </v-card>
@@ -57,6 +38,8 @@
 </template>
 
 <script>
+import { round } from 'lodash-es';
+
 export default {
     computed: {
         formattedData() {
@@ -66,8 +49,8 @@ export default {
                 id: record.id,
                 moves: record.solve.moves,
                 rank: startRow + index,
+                solve: record.solve,
                 time: record.solve.time,
-                solveId: record.solve.id,
                 user: record.user,
             }));
         },
@@ -75,26 +58,18 @@ export default {
             return [
                 {
                     align: 'left',
-                    header: 'Rank',
-                    headerClass: 'w-20',
-                    key: 'rank',
-                },
-                {
-                    align: 'left',
                     header: 'User',
                     key: 'user',
                 },
                 {
                     align: 'right',
-                    header: 'Turns',
-                    key: 'moves',
-                },
-                {
-                    align: 'right',
-                    header: 'Final Time',
+                    header: 'Time',
                     key: 'time',
                 },
             ];
+        },
+        tps() {
+            return row => round((row.time / row.moves) / 1000, 1);
         },
     },
     methods: {
@@ -102,7 +77,7 @@ export default {
             this.$router.push({
                 name: 'replay',
                 params: {
-                    id: row.solveId,
+                    id: row.solve.id,
                 },
             });
         },
