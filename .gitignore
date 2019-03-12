@@ -19,5 +19,4 @@ selenium.php
 nbproject
 
 # october
-plugins/*
-!plugins/speedcube
+plugins/bedard/debugbar
