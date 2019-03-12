@@ -5,15 +5,6 @@ jobs:
       - image: circleci/php:7.2-node-browsers
     steps:
       - checkout
-      - run:
-          name: Install plugins
-          command: |
-            git clone git@github.com:octoberrain/drivers-plugin.git ./plugins/october/drivers
-            git clone git@github.com:rainlab/blog-plugin.git ./plugins/rainlab/blog
-            git clone git@github.com:rainlab/googleanalytics-plugin.git ./plugins/rainlab/googleanalytics
-            git clone git@github.com:rainlab/user-plugin.git ./plugins/rainlab/user
-            git clone git@github.com:scottbedard/analyticsextension.git ./plugins/bedard/analyticsextension
-            git clone git@github.com:vuetober/rainlab-user-api.git ./plugins/vuetober/rainlabuserapi
       - restore_cache:
           key: -v3-{{ checksum "composer.lock" }}-{{ checksum "themes/site/yarn.lock" }}
       - run:
