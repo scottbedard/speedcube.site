@@ -70,7 +70,7 @@ export default {
         },
         tps() {
             return row => round((row.time / row.moves) / 1000, 1);
-        }
+        },
     },
     methods: {
         onRowClick({ row }) {
