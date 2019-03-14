@@ -1,0 +1,27 @@
+<div class="report-widget">
+    <h3><?= e($this->property('title')) ?></h3>
+
+    <?php if (!isset($error)): ?>
+        <div 
+            class="control-chart 
+                <?= $this->property('center') ? 'centered' : null ?>
+                 <?= $this->property('legendAsTable') ? null : 'wrap-legend' ?>
+                " 
+            data-control="chart-pie" 
+            data-size="<?= $this->property('reportSize') ?>"
+            <?php if ($this->property('displayTotal')): ?> data-center-text="<?= $total ?>"<?php endif; ?>
+        >
+            <ul>
+                <?php foreach ($rows as $row): ?>
+                    <li><?= e($row[0]) ?> <span><?= $row[1] ?></span></li>
+                <?php endforeach ?>
+            </ul>
+        </div>
+    <?php else: ?>
+        <p class="flash-message static warning"><?= e($error) ?></p>
+    <?php endif ?>
+
+    <?php if ($this->property('description')): ?>
+        <p class="report-description"><?= $this->property('description') ?></p>
+    <?php endif ?>
+</div>

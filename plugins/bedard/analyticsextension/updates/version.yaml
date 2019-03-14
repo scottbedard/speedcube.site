@@ -1,0 +1,4 @@
+1.0.1: First version of Bedard.AnalyticsExtention
+1.0.2: Minor fix to prevent errors in PHP 5.4 and below
+1.0.3: Minor change for release candidate.
+1.0.4: Add Russian translation
