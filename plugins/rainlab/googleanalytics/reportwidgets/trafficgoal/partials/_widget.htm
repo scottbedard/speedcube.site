@@ -1,0 +1,12 @@
+<div class="report-widget">
+    <h3><?= e($this->property('title')) ?></h3>
+
+    <?php if (!isset($error)): ?>
+        <div class="title-value" data-control="goal-meter" data-value="<?= $percentage ?>">
+            <p><?= e(trans('rainlab.googleanalytics::lang.strings.current')) ?>: <?= $total ?></p>
+            <p class="description"><?= e(trans('rainlab.googleanalytics::lang.strings.goal')) ?>: <?= e($this->property('goal')) ?></p>
+        </div>
+    <?php else: ?>
+        <p class="flash-message static warning"><?= e($error) ?></p>
+    <?php endif ?>
+</div>

@@ -1,0 +1,41 @@
+<div class="report-widget">
+    <h3><?= e($this->property('title')) ?></h3>
+
+    <?php if (!isset($error)): ?>
+        <div class="table-container">
+            <table class="table data" data-control="rowlink">
+                <thead>
+                    <tr>
+                        <th><span><?= e(trans('rainlab.googleanalytics::lang.strings.page_url')) ?></span></th>
+                        <th><span><?= e(trans('rainlab.googleanalytics::lang.strings.pageviews')) ?></span></th>
+                        <th><span>% <?= e(trans('rainlab.googleanalytics::lang.strings.pageviews')) ?></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($rows as $row):
+                        $percentage = $total > 0 ? round($row[1]/$total*100, 2) : 0;
+                        $url = $row[0];
+                    ?>
+                        <tr>
+                            <td><a href="<?= $url ?>" target="_blank"><?= e($row[0]) ?></a></td>
+                            <td><a href="<?= $url ?>" target="_blank"><?= e($row[1]) ?></a></td>
+                            <td>
+                                <div class="progress">
+                                    <div class="bar" style="width: <?= $percentage.'%' ?>"></div>
+                                    <a href="<?= $url ?>" target="_blank"><?= $percentage.'%' ?></a>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                    <?php if (!count($rows)): ?>
+                        <tr>
+                            <td colspan="3"><?= e(trans('rainlab.googleanalytics::lang.widgets.noresult_toppages')) ?></td>
+                        </tr>
+                    <?php endif ?>
+                </tbody>
+            </table>
+        </div>
+    <?php else: ?>
+        <p class="flash-message static warning"><?= e($error) ?></p>
+    <?php endif ?>
+</div>
