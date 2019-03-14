@@ -453,11 +453,16 @@ export default {
             const scrambleRequest = postCreateScramble(this.puzzle);
             const pseudoScramble = this.$options.puzzle.pseudoScramble();
 
-            // update the puzzle's state and begin the inspection
+            // disable turning during the scramble
+            this.disableTurning();
+
+            // update the puzzle's state
             Promise.all([scrambleRequest, pseudoScramble]).then(([response]) => {
                 this.scrambleId = response.data.id;
                 this.$options.puzzle.applyState(response.data.scrambledState);
 
+                // re-enable turning and begin the inspection
+                this.enableTurning();
                 this.beginInspection();
             });
         },
