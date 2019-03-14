@@ -18,10 +18,10 @@
                         :value="form.broadcasting">
                         <v-switch v-model="form.broadcasting" :disabled="loading">
                             <div class="text-grey-6" slot="off">
-                                Twitter broadcasting is disabled
+                                Broadcasting is disabled
                             </div>
                             <div slot="on">
-                                Twitter broadcasting is enabled
+                                Broadcasting is enabled
                             </div>
                         </v-switch>
                     </v-form-field>
