@@ -5,6 +5,10 @@ jobs:
       - image: circleci/php:7.2-node-browsers
     steps:
       - checkout
+      - run:
+          name: Install plugins
+          command: |
+            git clone git@github.com:vuetober/rainlab-user-api.git ./plugins/vuetober/rainlabuserapi
       - restore_cache:
           key: -v3-{{ checksum "composer.lock" }}-{{ checksum "themes/site/yarn.lock" }}
       - run:

@@ -18,5 +18,7 @@ selenium.php
 # for netbeans
 nbproject
 
-# october
+# october plugins
+# anything used via oc marketplace should not be in gitignore
 plugins/bedard/debugbar
+plugins/vuetober/rainlabuserapi
