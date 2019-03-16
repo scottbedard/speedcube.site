@@ -22,7 +22,7 @@ class CreatePersonalRecordAveragesTable extends Migration
             $table->engine = 'InnoDB';
             $table->integer('personal_record_average_id')->unsigned();
             $table->integer('solve_id')->unsigned();
-            $table->primary(['personal_record_average_id', 'solve_id']);
+            $table->primary(['personal_record_average_id', 'solve_id'], 'average_solve_id');
         });
     }
 
