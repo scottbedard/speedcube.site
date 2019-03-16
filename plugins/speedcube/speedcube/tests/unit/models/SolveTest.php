@@ -248,6 +248,39 @@ class SolveTest extends PluginTestCase
         $this->assertEquals(6000, $currentRecordAverage->average_time);
     }
 
+    public function test_no_average_is_created_when_multiple_dnf_solves_are_present()
+    {
+        $user = Factory::registerUser();
+        
+        // create a handful of solves with values from this array
+        $times = [
+            8000,
+            7000,
+            6000,
+            'dnf',
+            'dnf',
+        ];
+
+        foreach ($times as $endTime) {
+            $scramble = Factory::createScrambleWithTurns('R');
+            
+            $solve = Factory::create(new Solve, [
+                'user_id' => $user->id,
+                'scramble_id' => $scramble->id,
+            ]);
+
+            if ($endTime === 'dnf') {
+                $solve->abort();
+            } else {
+                $turnTime = $endTime / 2;
+                $solve->complete("0#START {$turnTime}:R- {$endTime}#END");
+            }
+        }
+        
+        // no averages should have been created
+        $this->assertEquals(0, $user->recordAverages()->count());
+    }
+
     //
     // scopes
     //
