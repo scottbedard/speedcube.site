@@ -65,7 +65,7 @@
                     <!-- solving / solved -->
                     <div v-else-if="solving || solved" key="solving">
                         <div
-                            class="font-thin text-center text-4xl trans-color"
+                            class="font-thin mb-4 text-center text-4xl trans-color"
                             :class="{
                                 'text-grey-6': !solved,
                                 'text-grey-7': solved,
@@ -76,13 +76,40 @@
                                 :started-at="solveStartedAt"
                             />
                         </div>
-                        <p class="font-thin mt-4 mb-8 text-grey-6">press space to scramble</p>
+
+                        <!-- stats -->
+                        <v-fade-transition :enter-delay="200">
+                            <div v-if="!inspecting && !solving">
+                                <div class="mb-8">
+                                    <v-stats
+                                        :last5="last5Solves"
+                                        :record-average="recordAverage"
+                                        :solves="solves"
+                                    />
+                                </div>
+                                <v-button primary @click="scramble">
+                                    Scramble
+                                </v-button>
+                            </div>
+                        </v-fade-transition>
                     </div>
 
                     <!-- dnf -->
                     <div v-else-if="dnf" key="dnf">
                         <div class="font-thin text-center text-grey-6 text-4xl">DNF</div>
+
                         <p class="font-thin mt-4 mb-8 text-grey-6">press space to scramble</p>
+
+                        <!-- stats -->
+                        <v-fade-transition :enter-delay="200">
+                            <div v-if="!inspecting && !solving">
+                                <v-stats
+                                    :last-5="last5Solves"
+                                    :record-average="recordAverage"
+                                    :solves="solves"
+                                />
+                            </div>
+                        </v-fade-transition>
                     </div>
 
                     <!-- idle -->
@@ -142,6 +169,7 @@ import { postSolve } from '@/app/repositories/solves';
 import { puzzles } from '@/app/constants';
 import appearanceOptions from './appearance_options';
 import defaultKeyboardConfigs from './default_keyboard_configs';
+import statsComponent from './stats/stats.vue';
 
 export default {
     created() {
@@ -149,6 +177,9 @@ export default {
     },
     data() {
         return {
+            // visibility of puzzle appearance controls
+            appearanceIsVisible: false,
+
             // visilbility of keyboard controls editor
             controlsAreVisible: false,
 
@@ -173,8 +204,8 @@ export default {
             // inspection start time
             inspectionStartedAt: 0,
 
-            // visibility of puzzle appearance controls
-            appearanceIsVisible: false,
+            // last 5 solves the authenticated user has performed
+            last5Solves: [],
 
             // pending puzzle config
             pendingConfig: null,
@@ -184,6 +215,9 @@ export default {
 
             // enables key listeners
             puzzleIsTurnable: true,
+
+            // the user's current PersonalRecordAverage for this puzzle
+            recordAverage: null,
 
             // id of the scramble model
             scrambleId: 0,
@@ -213,6 +247,7 @@ export default {
     components: {
         'v-appearance': () => import('./appearance/appearance.vue'),
         'v-controls': () => import('./controls/controls.vue'),
+        'v-stats': () => import('./stats/stats.vue'),
     },
     computed: {
         ...mapGetters('user', [
@@ -285,8 +320,10 @@ export default {
                 scrambleId: this.scrambleId,
                 solution: this.solution,
             }).then((response) => {
-                const { solve } = response.data;
+                const { last5, recordAverage, solve } = response.data;
 
+                this.last5Solves = last5;
+                this.recordAverage = recordAverage;
                 this.solves.push(solve);
             });
         },
@@ -338,8 +375,10 @@ export default {
                 solution: this.solution,
             }).then((response) => {
                 // success
-                const { solve } = response.data;
+                const { last5, recordAverage, solve } = response.data;
 
+                this.last5Solves = last5;
+                this.recordAverage = recordAverage;
                 this.solves.push(solve);
             });
         },

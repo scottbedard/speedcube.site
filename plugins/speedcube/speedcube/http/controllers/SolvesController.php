@@ -54,12 +54,13 @@ class SolvesController extends ApiController
             // fetch the last 5 solves and record average for this puzzle
             $last5 = [];
             $recordAverage = null;
+            $recordSingle = null;
 
             if ($user) {
                 $last5 = Solve::completeOrDnf()
                     ->puzzle($scramble->puzzle)
                     ->orderBy('id', 'desc')
-                    ->select('id', 'time')
+                    ->select('id', 'status', 'time')
                     ->where('user_id', $user->id)
                     ->limit(5)
                     ->get();

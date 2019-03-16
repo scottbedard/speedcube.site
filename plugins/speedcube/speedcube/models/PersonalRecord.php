@@ -62,7 +62,10 @@ class PersonalRecord extends Model
      */
     protected function broadcastTwitterNotification()
     {
-        if ($this->user->profile->twitter_broadcasting) {
+        if (
+            env('TWITTER_BROADCASTING') === true && 
+            $this->user->profile->twitter_broadcasting
+        ) {
             $this->notify(new PersonalRecordNotification($this));
         }
     }
