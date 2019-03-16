@@ -33,6 +33,11 @@ class PersonalRecordNotification extends Notification implements ShouldQueue
      */
     public function toTwitter($notifiable)
     {
+        // only twitter broadcast if it's enabled
+        if (!env('TWITTER_BROADCASTING')) {
+            return;
+        }
+
         $user = $this->personalRecord->user;
         $profile = $user->profile;
         $solve = $this->personalRecord->solve;
