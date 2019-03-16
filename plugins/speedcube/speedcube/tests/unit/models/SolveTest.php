@@ -196,8 +196,8 @@ class SolveTest extends PluginTestCase
             8000,
             7000,
             6000,
-            5000, // <- fastest, discarded
-            'dnf', // <- slowest, discarded
+            5000, // <- fastest
+            'dnf', // <- slowest
         ];
 
         foreach ($times as $endTime) {
@@ -279,6 +279,38 @@ class SolveTest extends PluginTestCase
         
         // no averages should have been created
         $this->assertEquals(0, $user->recordAverages()->count());
+    }
+
+    public function test_fastest_and_slowest_are_discared_when_no_dnf_is_present()
+    {
+        $user = Factory::registerUser();
+        
+        // create a handful of solves with values from this array
+        $times = [
+            8000, // <- slowest
+            7000,
+            6000,
+            5000,
+            4000, // <- fastest
+        ];
+
+        foreach ($times as $endTime) {
+            $scramble = Factory::createScrambleWithTurns('R');
+            
+            $solve = Factory::create(new Solve, [
+                'user_id' => $user->id,
+                'scramble_id' => $scramble->id,
+            ]);
+
+            $turnTime = $endTime / 2;
+            $solve->complete("0#START {$turnTime}:R- {$endTime}#END");
+        }
+
+        $recordAverages = $user->recordAverages()->get();
+
+        // one record average should have been created
+        $this->assertEquals(1, $recordAverages->count());
+        $this->assertEquals(6000, $recordAverages->first()->average_time);
     }
 
     //
