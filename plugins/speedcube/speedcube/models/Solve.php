@@ -71,6 +71,15 @@ class Solve extends Model
         'user'     => 'RainLab\User\Models\User',
     ];
 
+    public $belongsToMany = [
+        'recordAverages' => [
+            'Speedcube\Speedcube\Models\PersonalRecordAverage',
+            'key' => 'solve_id',
+            'otherKey' => 'personal_record_average_id',
+            'table' => 'speedcube_speedcube_personal_record_average_solve',
+        ],
+    ];
+
     /**
      * Abort a solve.
      *
@@ -82,6 +91,7 @@ class Solve extends Model
         $this->status = 'dnf';
 
         $this->save();
+        $this->checkPersonalRecordAverages();
     }
 
     /**
@@ -126,6 +136,105 @@ class Solve extends Model
         elseif ($record->solve->time > $this->time) {
             $record->solve_id = $this->id;
             $record->save();
+        }
+    }
+
+    /**
+     * Check for a personal record average.
+     *
+     * @return void
+     */
+    protected function checkPersonalRecordAverages()
+    {
+        // do nothing if this is a guest solve
+        if (!$this->user_id) {
+            return;
+        }
+
+        // personal record averages of 5
+        $solves = self::completeOrDnf()
+            ->where('user_id', $this->user_id)
+            ->puzzle($this->scramble->puzzle)
+            ->select('id', 'status', 'user_id', 'time')
+            ->orderBy('id', 'desc')
+            ->limit(5)
+            ->get();
+
+        $solveIds = $solves->pluck('id');
+
+        // do nothing if we have less than 5 serves
+        // or there is more than one dnf present
+        if ($solves->count() < 5) {
+            return;
+        }
+
+        $dnfCount = $solves->filter(function ($solve) {
+            return $solve->status === 'dnf';
+        })->count();
+        
+        if ($dnfCount > 1) {
+            return;
+        }
+        
+        // discard the slowest solve, or the dnf if present
+        $averagedSolves = $solves->toBase();
+
+        if ($dnfCount === 1) {
+            $averagedSolves = $averagedSolves->filter(function ($solve) {
+                return $solve->status === 'complete';
+            });
+        } else {
+            // discard slowest solve, paying special attention not to
+            // remove two slowest solves that had the same time
+            $slowest = $averagedSolves->sortByDesc('time')->first()->time;
+
+            $removedSlowest = false;
+            
+            $averagedSolves = $averagedSolves->filter(function ($solve) use ($slowest, $removedSlowest) {
+                if (!$removedSlowest && $solve->time === $slowest) {
+                    $removedSlowest = true;
+                    return false;
+                }
+    
+                return true;
+            });
+        }
+
+        // discard fastest solve, paying special attention not to
+        // remove two fastest solves that had the same time
+        $fastest = $averagedSolves->sortBy('time')->first()->time;
+        
+        $removedFastest = false;
+
+        $averagedSolves = $averagedSolves->filter(function ($solve) use ($fastest, $removedFastest) {
+            if (!$removedFastest && $solve->time === $fastest) {
+                $removedFastest = true;
+                return false;
+            }
+
+            return true;
+        });
+
+        // finally, we can check if this set a personal record for the user
+        $averageTime = $averagedSolves->avg('time');
+
+        $previousRecordAverage = $this->user
+            ->recordAverages()
+            ->puzzle($this->scramble->puzzle)
+            ->orderBy('time', 'desc')
+            ->first();
+
+        if (!$previousRecordAverage || $averageTime < $previousRecordAverage->average_time) {
+            $this->user
+                ->recordAverages()
+                ->create([
+                    'average_time' => $averageTime,
+                    'previous_id' => $previousRecordAverage ? $previousRecordAverage->id : null,
+                    'puzzle' => $this->scramble->puzzle,
+                    'user_id' => $this->user_id,
+                ])
+                ->solves()
+                ->sync($solveIds);
         }
     }
 
@@ -182,6 +291,7 @@ class Solve extends Model
         }
 
         $this->save();
+        $this->checkPersonalRecordAverages();
 
         if ($this->status === 'complete') {
             $this->checkPersonalRecords();
@@ -265,6 +375,13 @@ class Solve extends Model
     public function scopeCompleted($query)
     {
         return $query->where('status', 'complete');
+    }
+
+    public function scopeCompleteOrDnf($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('status', 'complete')->orWhere('status', 'dnf');
+        });
     }
 
     public function scopeDnf($query)

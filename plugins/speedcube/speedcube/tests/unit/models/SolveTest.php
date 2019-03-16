@@ -5,6 +5,7 @@ namespace Speedcube\Speedcube\Tests\Unit\Models;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Notification;
 use Speedcube\Speedcube\Models\PersonalRecord;
+use Speedcube\Speedcube\Models\PersonalRecordAverage;
 use Speedcube\Speedcube\Models\Scramble;
 use Speedcube\Speedcube\Models\Solve;
 use Speedcube\Speedcube\Notifications\PersonalRecordNotification;
@@ -181,6 +182,70 @@ class SolveTest extends PluginTestCase
         
         // no notifications should have been sent
         Notification::assertNothingSent();
+    }
+
+    //
+    // personal record average relationship
+    //
+    public function test_creating_solves_created_a_personal_record_average()
+    {
+        $user = Factory::registerUser();
+        
+        // create a handful of solves with values from this array
+        $times = [
+            8000,
+            7000,
+            6000,
+            5000, // <- fastest, discarded
+            'dnf', // <- slowest, discarded
+        ];
+
+        foreach ($times as $endTime) {
+            $scramble = Factory::createScrambleWithTurns('R');
+            
+            $solve = Factory::create(new Solve, [
+                'user_id' => $user->id,
+                'scramble_id' => $scramble->id,
+            ]);
+
+            if ($endTime === 'dnf') {
+                $solve->abort();
+            } else {
+                $turnTime = $endTime / 2;
+                $solve->complete("0#START {$turnTime}:R- {$endTime}#END");
+            }
+        }
+
+        $recordAverages = $user->recordAverages()->get();
+
+        // one record average should have been created
+        $this->assertEquals(1, $recordAverages->count());
+        $this->assertEquals(7000, $recordAverages->first()->average_time);
+        $this->assertNull($recordAverages->first()->previous_id);
+
+        // adding a faster solve should improve the average
+        Factory::create(new Solve, [
+            'user_id' => $user->id,
+            'scramble_id' => Factory::createScrambleWithTurns('R')->id,
+        ])->complete("0#START 2000:R- 4000#END");
+
+        $recordAverages = $user->recordAverages()->get();
+        $currentRecordAverage = $user->recordAverages()->current()->first();
+
+        $this->assertEquals(2, $recordAverages->count());
+        $this->assertEquals(6000, $currentRecordAverage->average_time);
+
+        // and adding a slower solve should not effect the averages
+        Factory::create(new Solve, [
+            'user_id' => $user->id,
+            'scramble_id' => Factory::createScrambleWithTurns('R')->id,
+        ])->complete("0#START 5000:R- 10000#END");
+
+        $recordAverages = $user->recordAverages()->get();
+        $currentRecordAverage = $user->recordAverages()->current()->first();
+
+        $this->assertEquals(2, $recordAverages->count());
+        $this->assertEquals(6000, $currentRecordAverage->average_time);
     }
 
     //

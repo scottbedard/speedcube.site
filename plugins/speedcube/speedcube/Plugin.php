@@ -94,6 +94,7 @@ class Plugin extends PluginBase
             // relationships
             $model->hasMany['configs'] = 'SpeedCube\SpeedCube\Models\Config';
             $model->hasMany['keyboardConfigs'] = 'Speedcube\Speedcube\Models\KeyboardConfig';
+            $model->hasMany['recordAverages'] = 'Speedcube\Speedcube\Models\PersonalRecordAverage';
             $model->hasMany['records'] = 'Speedcube\Speedcube\Models\PersonalRecord';
             $model->hasMany['solves'] = 'Speedcube\Speedcube\Models\Solve';
             $model->hasOne['profile'] = 'Speedcube\Speedcube\Models\Profile';
