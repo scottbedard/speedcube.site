@@ -221,7 +221,7 @@ class Solve extends Model
         $previousRecordAverage = $this->user
             ->recordAverages()
             ->puzzle($this->scramble->puzzle)
-            ->orderBy('time', 'desc')
+            ->current()
             ->first();
 
         if (!$previousRecordAverage || $averageTime < $previousRecordAverage->average_time) {

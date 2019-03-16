@@ -40,7 +40,7 @@ class PersonalRecordAverage extends Model
     ];
 
     public $hasOne = [
-        'nextPersonalRecordAverage' => [
+        'nextRecordAverage' => [
             'Speedcube\Speedcube\Models\PersonalRecordAverage',
             'key' => 'previous_id',
         ],
@@ -51,7 +51,7 @@ class PersonalRecordAverage extends Model
     //
     public function scopeCurrent($query)
     {
-        return $query->doesntHave('nextPersonalRecordAverage');
+        return $query->doesntHave('nextRecordAverage');
     }
 
     public function scopePuzzle($query, $puzzle)
