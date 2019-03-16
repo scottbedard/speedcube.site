@@ -51,8 +51,31 @@ class SolvesController extends ApiController
                 $solve->complete($solution);
             }
 
+            // fetch the last 5 solves and record average for this puzzle
+            $last5 = [];
+            $recordAverage = null;
+
+            if ($user) {
+                $last5 = Solve::completeOrDnf()
+                    ->puzzle($scramble->puzzle)
+                    ->orderBy('id', 'desc')
+                    ->select('id', 'time')
+                    ->where('user_id', $user->id)
+                    ->limit(5)
+                    ->get();
+
+                $recordAverage = $user
+                    ->recordAverages()
+                    ->puzzle($scramble->puzzle)
+                    ->current()
+                    ->with('solves:id,time')
+                    ->first();
+            }
+
             return $this->success([
-                'solve' => $solve->toArray(),
+                'last5' => $last5,
+                'recordAverage' => $recordAverage,
+                'solve' => $solve,
             ]);
         }
 

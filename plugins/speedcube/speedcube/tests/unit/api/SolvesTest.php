@@ -69,7 +69,6 @@ class SolvesApiTest extends PluginTestCase
         ]);
 
         $response->assertStatus(200);
-
         $data = json_decode($response->getContent(), true);
 
         // one solve should now exist in our database
@@ -78,6 +77,33 @@ class SolvesApiTest extends PluginTestCase
         $this->assertEquals(1, Solve::count());
         $this->assertEquals($user->id, $solve->user_id);
         $this->assertEquals(4000, $solve->time);
+        $this->assertEquals(1, count($data['last5']));
+        $this->assertNull($data['recordAverage']);
+
+        // adding 5 more solves should return a record average
+        for ($i = 0; $i < 3; $i++) {
+            Factory::create(new Solve, [
+                'user_id' => $user->id,
+                'scramble_id' => self::createScramble('R')->id,
+            ])->complete("0#START 5000:R- 10000#END");
+        }
+
+        $scramble2 = self::createScramble('R');
+
+        $solve2 = Factory::create(new Solve, [
+            'scramble_id' => $scramble2->id,
+            'user_id' => $user->id,
+        ]);
+
+        $response2 = $this->post("/api/speedcube/speedcube/solves", [
+            'config' => '{"colors":["#000","#111","#222","#333","#444","#555"]}',
+            'scrambleId' => $scramble2->id,
+            'solution' => '100:X 200:X- 1000#START 2000:R 3000:U- 4000:R- 5000#END',
+        ]);
+
+        $data2 = json_decode($response2->getContent(), true);
+        
+        $this->assertEquals(1, $data2['recordAverage']['id']);
     }
     
     public function test_completing_a_solve_with_an_incorrect_solution()
