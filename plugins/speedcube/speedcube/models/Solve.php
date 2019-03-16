@@ -190,9 +190,10 @@ class Solve extends Model
 
             $removedSlowest = false;
             
-            $averagedSolves = $averagedSolves->filter(function ($solve) use ($slowest, $removedSlowest) {
-                if (!$removedSlowest && $solve->time === $slowest) {
+            $averagedSolves = $averagedSolves->filter(function ($solve) use ($slowest, &$removedSlowest) {
+                if ($removedSlowest === false && $solve->time === $slowest) {
                     $removedSlowest = true;
+
                     return false;
                 }
     
@@ -206,9 +207,10 @@ class Solve extends Model
         
         $removedFastest = false;
 
-        $averagedSolves = $averagedSolves->filter(function ($solve) use ($fastest, $removedFastest) {
-            if (!$removedFastest && $solve->time === $fastest) {
+        $averagedSolves = $averagedSolves->filter(function ($solve) use ($fastest, &$removedFastest) {
+            if ($removedFastest === false && $solve->time === $fastest) {
                 $removedFastest = true;
+
                 return false;
             }
 

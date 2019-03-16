@@ -313,6 +313,66 @@ class SolveTest extends PluginTestCase
         $this->assertEquals(6000, $recordAverages->first()->average_time);
     }
 
+    public function test_averages_are_calculated_correctly_with_multiple_slowest_solves()
+    {
+        $user = Factory::registerUser();
+        
+        // create a handful of solves with values from this array
+        $times = [
+            7000, // <- slowest
+            7000, // <- slowest
+            6000,
+            5000,
+            4000, // <- fastest
+        ];
+
+        foreach ($times as $endTime) {
+            $scramble = Factory::createScrambleWithTurns('R');
+            
+            $solve = Factory::create(new Solve, [
+                'user_id' => $user->id,
+                'scramble_id' => $scramble->id,
+            ]);
+
+            $turnTime = $endTime / 2;
+            $solve->complete("0#START {$turnTime}:R- {$endTime}#END");
+        }
+
+        $recordAverage = $user->recordAverages()->first();
+
+        $this->assertEquals(6000, $recordAverage->average_time);
+    }
+
+    public function test_averages_are_calculated_correctly_with_multiple_fastest_solves()
+    {
+        $user = Factory::registerUser();
+        
+        // create a handful of solves with values from this array
+        $times = [
+            7000, // <- slowest
+            6000,
+            5000,
+            4000, // <- fastest
+            4000, // <- fastest
+        ];
+
+        foreach ($times as $endTime) {
+            $scramble = Factory::createScrambleWithTurns('R');
+            
+            $solve = Factory::create(new Solve, [
+                'user_id' => $user->id,
+                'scramble_id' => $scramble->id,
+            ]);
+
+            $turnTime = $endTime / 2;
+            $solve->complete("0#START {$turnTime}:R- {$endTime}#END");
+        }
+
+        $recordAverage = $user->recordAverages()->first();
+
+        $this->assertEquals(5000, $recordAverage->average_time);
+    }
+
     //
     // scopes
     //
