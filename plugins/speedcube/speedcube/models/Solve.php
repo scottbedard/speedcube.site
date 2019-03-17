@@ -59,6 +59,13 @@ class Solve extends Model
     ];
 
     /**
+     * @var array Hidden fields
+     */
+    protected $hidden = [
+        'pivot',
+    ];
+
+    /**
      * @var array Jsonable fields
      */
     protected $jsonable = [];

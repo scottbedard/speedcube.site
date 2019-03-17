@@ -28,6 +28,13 @@ class PersonalRecordAverage extends Model
     ];
 
     /**
+     * @var array Hidden fields
+     */
+    protected $hidden = [
+        'pivot',
+    ];
+
+    /**
      * @var array Relations
      */
     public $belongsToMany = [
@@ -57,5 +64,10 @@ class PersonalRecordAverage extends Model
     public function scopePuzzle($query, $puzzle)
     {
         return $query->where('puzzle', $puzzle);
+    }
+
+    public function scopeWithSolveSummary($query)
+    {
+        return $query->with('solves:id,status,time');
     }
 }

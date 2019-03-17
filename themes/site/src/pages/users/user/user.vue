@@ -34,7 +34,10 @@
 
                         <v-grid padded>
                             <v-grid-cell md="4" lg="3">
-                                <v-records :records="records" />
+                                <v-records
+                                    :record-averages="recordAverages"
+                                    :records="records"
+                                />
                             </v-grid-cell>
                             <v-grid-cell md="8" lg="9">
                                 <v-recent-solves :solves="solves" />
@@ -70,6 +73,7 @@ export default {
     data() {
         return {
             overviewIsLoading: false,
+            recordAverages: [],
             records: [],
             totals: [],
             solves: [],
@@ -94,12 +98,13 @@ export default {
 
             getOverview(this.$route.params.username).then((response) => {
                 // success
-                const { records, solves, totals, user } = response.data;
+                const { recordAverages, records, solves, totals, user } = response.data;
 
-                this.user = user;
-                this.solves = solves;
+                this.recordAverages = recordAverages;
                 this.records = records;
+                this.solves = solves;
                 this.totals = totals;
+                this.user = user;
             }).finally(() => {
                 // complete
                 this.overviewIsLoading = false;

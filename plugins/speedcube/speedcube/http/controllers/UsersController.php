@@ -36,6 +36,19 @@ class UsersController extends ApiController
                 ])
                 ->get();
 
+            // fetch record averages
+            $recordAverages = $user->recordAverages()
+                    ->current()
+                    ->select([
+                        'average_time',
+                        'created_at',
+                        'id',
+                        'puzzle',
+                        'user_id',
+                    ])
+                    ->withSolveSummary()
+                    ->get();
+
             // fetch puzzle breakdown
             $totals = $user->solves()
                 ->completed()
@@ -56,9 +69,10 @@ class UsersController extends ApiController
                 ->get();
 
             return $this->success([
-                'records' => $records,
-                'solves'  => $solves,
-                'totals'  => $totals,
+                'recordAverages' => $recordAverages,
+                'records'        => $records,
+                'solves'         => $solves,
+                'totals'         => $totals,
                 'user'    => [
                     'avatar'     => $user->avatar,
                     'created_at' => (string) $user->created_at,
