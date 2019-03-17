@@ -422,4 +422,24 @@ class SolveTest extends PluginTestCase
         $this->assertEquals($solve->id, $result->id);
         $this->assertEquals('3x3', $result->puzzle);
     }
+
+    public function test_fewest_moves_scope()
+    {
+        // solve 1 will have two moves
+        $solve1 = Factory::create(new Solve, [
+            'scramble_id' => Factory::createScrambleWithTurns('R U')->id,
+        ]);
+
+        $solve1->complete('0#START 1000:U- 2000:R- 3000#END');
+
+        // solve 2 will have 1 move
+        $solve2= Factory::create(new Solve, [
+            'scramble_id' => Factory::createScrambleWithTurns('R')->id,
+        ]);
+
+
+        $solve2->complete('0#START 2000:R- 3000#END');
+        
+        $this->assertEquals($solve2->id, Solve::fewestMoves()->first()->id);
+    }
 }

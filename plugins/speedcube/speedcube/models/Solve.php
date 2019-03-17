@@ -354,16 +354,6 @@ class Solve extends Model
     }
 
     /**
-     * Parse a turn.
-     *
-     * @return array
-     */
-    public function getTimestampForTurn($turn)
-    {
-        return (int) explode(':', $turn)[0];
-    }
-
-    /**
      * Scopes.
      */
     public function scopeAbandoned($query)
@@ -401,11 +391,6 @@ class Solve extends Model
     public function scopeFastest($query)
     {
         return $query->orderBy('time', 'asc');
-    }
-
-    public function scopeFindByToken($query, $token)
-    {
-        return $query->whereToken($token)->find();
     }
 
     public function scopeFewestMoves($query)
