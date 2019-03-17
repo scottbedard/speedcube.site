@@ -42,37 +42,45 @@
             <h3 class="mt-8 mb-4 text-grey-6 text-xl">
                 Record Averages
             </h3>
-            <v-card>
-                <div
-                    v-for="recordAverage in sortedRecordAverages"
-                    class="px-6 py-4 text-grey-7"
-                    :key="recordAverage.id">
-                    <div class="flex justify-between">
-                        <div>
-                            <div class="mb-2 text-grey-8">
-                                {{ recordAverage.puzzle }}
-                            </div>
-                            <time class="block text-xs text-grey-7" :datetime="recordAverage.createdAt">
-                                {{ recordAverage.createdAt | datestamp }}
-                            </time>
-                            <div class="flex mt-2 text-xs">
-                                <router-link
-                                    v-for="solve in recordAverage.solves"
-                                    class="mr-4"
-                                    title="Click to watch replay"
-                                    :key="solve.id"
-                                    :to="{
-                                        name: 'replay',
-                                        params: {
-                                            id: solve.id,
-                                        },
-                                    }">
-                                    {{ solve.time | shortTimer }}
-                                </router-link>
+            <v-card
+                v-for="recordAverage in sortedRecordAverages"
+                class="mb-8 px-6 py-4 text-grey-7"
+                :key="recordAverage.id">
+                <div class="flex justify-between">
+                    <div>
+                        <div class="mb-2 text-grey-8">
+                            {{ recordAverage.puzzle }}
+                        </div>
+                        <time class="block text-xs text-grey-7" :datetime="recordAverage.createdAt">
+                            {{ recordAverage.createdAt | datestamp }}
+                        </time>
+                        <div class="mt-2">
+                            <div class="flex flex-wrap -mx-2 -my-1 overflow-hidden text-xs">
+                                <template v-for="solve in recordAverage.solves">
+                                    <router-link
+                                        v-if="solve.status === 'complete'"
+                                        class="mx-2 my-1"
+                                        title="Click to watch replay"
+                                        :key="solve.id"
+                                        :to="{
+                                            name: 'replay',
+                                            params: {
+                                                id: solve.id,
+                                            },
+                                        }">
+                                        {{ solve.time | shortTimer }}
+                                    </router-link>
+                                    <div
+                                        v-else
+                                        class="mx-2 my-1"
+                                        :key="solve.id">
+                                        DNF
+                                    </div>
+                                </template>
                             </div>
                         </div>
-                        <div class="text-grey-8">{{ recordAverage.averageTime | shortTimer }}</div>
                     </div>
+                    <div class="text-grey-8">{{ recordAverage.averageTime | shortTimer }}</div>
                 </div>
             </v-card>
         </div>
