@@ -373,6 +373,17 @@ class SolveTest extends PluginTestCase
         $this->assertEquals(5000, $recordAverage->average_time);
     }
 
+    public function test_zero_is_returned_when_an_event_doesnt_exist_in_solution()
+    {
+        $solve = Factory::create(new Solve, [
+            'scramble_id' => Factory::createScrambleWithTurns('R')->id,
+        ]);
+
+        $solve->complete("0#START 1000:R- 2000#END");
+
+        $this->assertEquals(0, $solve->getEventTimestamp('TEST'));
+    }
+
     //
     // scopes
     //
