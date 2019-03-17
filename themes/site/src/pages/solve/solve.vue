@@ -86,7 +86,7 @@
                                         :record-average="recordAverage"
                                         :solves="solves"
                                     />
-                                </div> 
+                                </div>
                                 <v-button primary @click="scramble">
                                     Scramble
                                 </v-button>
@@ -107,7 +107,7 @@
                                         :record-average="recordAverage"
                                         :solves="solves"
                                     />
-                                </div> 
+                                </div>
                                 <v-button primary @click="scramble">
                                     Scramble
                                 </v-button>
@@ -172,7 +172,6 @@ import { postSolve } from '@/app/repositories/solves';
 import { puzzles } from '@/app/constants';
 import appearanceOptions from './appearance_options';
 import defaultKeyboardConfigs from './default_keyboard_configs';
-import statsComponent from './stats/stats.vue';
 
 export default {
     created() {

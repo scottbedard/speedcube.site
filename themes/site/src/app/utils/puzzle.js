@@ -50,7 +50,7 @@ export function calculateAverage(times) {
     } else {
         const slowest = Math.max(...times);
 
-        for (let i = 0; i < times.length; i++) {
+        for (let i = 0; i < times.length; i += 1) {
             if (times[i] === slowest) {
                 times.splice(i, 1);
                 break;
@@ -61,7 +61,7 @@ export function calculateAverage(times) {
     // remove high
     const fastest = Math.min(...times);
 
-    for (let i = 0; i < times.length; i++) {
+    for (let i = 0; i < times.length; i += 1) {
         if (times[i] === fastest) {
             times.splice(i, 1);
             break;

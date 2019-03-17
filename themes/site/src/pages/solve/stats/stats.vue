@@ -54,9 +54,7 @@ export default {
             'isAuthenticated',
         ]),
         avgOf5() {
-            const times = this.sortedLast5.map(solve => {
-                return solve.status === 'complete' ? solve.time : 'dnf';
-            });
+            const times = this.sortedLast5.map(solve => (solve.status === 'complete' ? solve.time : 'dnf'));
 
             return calculateAverage(times);
         },
@@ -64,10 +62,8 @@ export default {
             if (this.isAuthenticated && Array.isArray(this.last5)) {
                 return sortBy(this.last5, 'id');
             }
-            
-            return this.solves.slice(-5).map(solve => {
-                return { id: solve.id, status: solve.status, time: solve.time };
-            });
+
+            return this.solves.slice(-5).map(solve => ({ id: solve.id, status: solve.status, time: solve.time }));
         },
     },
     props: [
