@@ -1,3 +1,9 @@
+<style lang="scss" scoped>
+    .v-card-link + .v-card-link{
+        border-top: 1px solid config('colors.grey-2');
+    }
+</style>
+
 <script>
 import { bindAll } from 'spyfu-vue-functional';
 
@@ -7,7 +13,7 @@ export default {
         const { to } = context.props;
 
         return <router-link
-            class="block px-6 py-4 trans-bg hover:bg-grey-4"
+            class="v-card-link block px-6 py-4 trans-bg hover:bg-grey-4"
             to={to}
             {...bindings}>
             {context.slots().default}
