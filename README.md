@@ -1,7 +1,8 @@
 # [speedcube.site](https://speedcube.site)
 
 [![Uptime](https://img.shields.io/uptimerobot/ratio/7/m781868813-fbc9defa79cd3ab6d0c548ef.svg?style=flat)](https://uptimerobot.com/dashboard.php#781868813)
-[![Build](https://img.shields.io/circleci/project/github/scottbedard/speedcube.site/master.svg)](https://circleci.com/gh/scottbedard/speedcube.site)
+[![Master Build](https://img.shields.io/circleci/project/github/scottbedard/speedcube.site/master.svg?label=master)](https://circleci.com/gh/scottbedard/speedcube.site/tree/master)
+[![Dev Build](https://img.shields.io/circleci/project/github/scottbedard/speedcube.site/dev.svg?label=dev)](https://circleci.com/gh/scottbedard/speedcube.site/tree/dev)
 [![Coverage](https://img.shields.io/codecov/c/github/scottbedard/speedcube.site/master.svg)](https://codecov.io/gh/scottbedard/speedcube.site)
 [![Dependencies](https://img.shields.io/david/scottbedard/speedcube.site.svg?path=themes%2Fsite&style=flat)](https://david-dm.org/scottbedard/speedcube.site?path=themes%2Fsite)
 [![Dev dependencies](https://img.shields.io/david/dev/scottbedard/speedcube.site.svg?path=themes%2Fsite)](https://david-dm.org/scottbedard/speedcube.site?path=themes%2Fsite&type=dev)
