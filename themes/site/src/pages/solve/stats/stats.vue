@@ -1,8 +1,9 @@
 <template>
-    <div>
+    <div class="text-sm">
         <!-- last 5 -->
-        <div v-if="last5" class="text-sm">
+        <div>
             <div class="flex flex-wrap justify-center mb-2 text-center">
+                <div class="text-grey-6">Recent Solves:</div>
                 <template v-for="solve in sortedLast5">
                     <div class="px-2" :key="solve.id">
                         <span
@@ -25,32 +26,48 @@
                     </div>
                 </template>
             </div>
+        </div>
 
-            <div class="flex flex-wrap justify-center text-center text-grey-6 text-sm">
-                <div v-if="last5" class="m-2">
-                    Avg: {{ avgOf5 | shortTimer }}
-                </div>
-                <div v-if="recordAverage" class="m-2">
-                    Record Avg: {{ recordAverage.averageTime | shortTimer }}
-                </div>
+        <div class="flex flex-wrap justify-center text-center text-grey-6 text-sm">
+            <div class="m-2">
+                Average:<span class="px-2">
+                    <template v-if="sortedLast5.length < 5">TBD</template>
+                    <template v-else-if="avgOf5 === -1">DNF</template>
+                    <template v-else>{{ avgOf5 | shortTimer }}</template>
+                </span>
+            </div>
+            <div v-if="recordAverage" class="m-2">
+                Record Average:<span class="px-2">{{ recordAverage.averageTime | shortTimer }}</span>
             </div>
         </div>
-        <!-- <pre class="text-xs text-left">{{ $props }}</pre> -->
     </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { sortBy } from 'lodash-es';
+import { calculateAverage } from '@/app/utils/puzzle';
 
 export default {
     computed: {
+        ...mapGetters('user', [
+            'isAuthenticated',
+        ]),
         avgOf5() {
-            return 12345;
+            const times = this.sortedLast5.map(solve => {
+                return solve.status === 'complete' ? solve.time : 'dnf';
+            });
+
+            return calculateAverage(times);
         },
         sortedLast5() {
-            return Array.isArray(this.last5)
-                ? sortBy(this.last5, 'id')
-                : [];
+            if (this.isAuthenticated && Array.isArray(this.last5)) {
+                return sortBy(this.last5, 'id');
+            }
+            
+            return this.solves.slice(-5).map(solve => {
+                return { id: solve.id, status: solve.status, time: solve.time };
+            });
         },
     },
     props: [

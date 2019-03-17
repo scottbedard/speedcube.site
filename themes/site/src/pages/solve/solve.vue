@@ -65,7 +65,7 @@
                     <!-- solving / solved -->
                     <div v-else-if="solving || solved" key="solving">
                         <div
-                            class="font-thin mb-4 text-center text-4xl trans-color"
+                            class="font-thin mb-8 text-center text-4xl trans-color"
                             :class="{
                                 'text-grey-6': !solved,
                                 'text-grey-7': solved,
@@ -86,7 +86,7 @@
                                         :record-average="recordAverage"
                                         :solves="solves"
                                     />
-                                </div>
+                                </div> 
                                 <v-button primary @click="scramble">
                                     Scramble
                                 </v-button>
@@ -96,18 +96,21 @@
 
                     <!-- dnf -->
                     <div v-else-if="dnf" key="dnf">
-                        <div class="font-thin text-center text-grey-6 text-4xl">DNF</div>
-
-                        <p class="font-thin mt-4 mb-8 text-grey-6">press space to scramble</p>
+                        <div class="font-thin mb-8 text-center text-grey-6 text-4xl">DNF</div>
 
                         <!-- stats -->
                         <v-fade-transition :enter-delay="200">
                             <div v-if="!inspecting && !solving">
-                                <v-stats
-                                    :last-5="last5Solves"
-                                    :record-average="recordAverage"
-                                    :solves="solves"
-                                />
+                                <div class="mb-8">
+                                    <v-stats
+                                        :last5="last5Solves"
+                                        :record-average="recordAverage"
+                                        :solves="solves"
+                                    />
+                                </div> 
+                                <v-button primary @click="scramble">
+                                    Scramble
+                                </v-button>
                             </div>
                         </v-fade-transition>
                     </div>
