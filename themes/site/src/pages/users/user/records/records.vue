@@ -42,7 +42,7 @@
             <h3 class="mt-8 mb-4 text-grey-6 text-xl">
                 Record Averages
             </h3>
-            <v-card>
+            <v-card v-if="recordAverages.length > 0">
                 <div
                     v-for="(recordAverage, index) in sortedRecordAverages"
                     class="px-6 py-4 text-grey-7"
@@ -87,6 +87,9 @@
                         <div class="text-grey-8">{{ recordAverage.averageTime | shortTimer }}</div>
                     </div>
                 </div>
+            </v-card>
+            <v-card v-else padded>
+                <div class="leading-normal text-center text-grey-6">No record averages have been set yet.</div>
             </v-card>
         </div>
 
