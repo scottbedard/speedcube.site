@@ -2,17 +2,18 @@
     <v-grid padded>
         <v-grid-cell lg="7">
             <div class="text-center lg:mt-12 lg:pr-20 lg:text-left">
-                <h1 class="font-thin leading-normal mb-4 text-4xl text-grey-8">
-                    A free and open place for speed cubing
+                <h1 class="font-thin leading-normal mb-8 text-5xl text-grey-8">
+                    The online cube that never pops.
                 </h1>
-                <p class="font-thin leading-loose mb-8 text-grey-7">
-                    We're a community built by and for speed cubers. Our mission is to be a free and fair
-                    place to compete and enjoy the puzzles we all love. We're currently in a public beta,
-                    please report any issues or bugs that you encounter.
+                <p class="font-thin leading-loose mb-12 text-grey-7 text-lg">
+                    Your keyboard is the controller. Customize it as much as you
+                    want, or stick with the defaults. After some practice, it will 
+                    feel like you're holding it in your hands.
                 </p>
                 <div class="-m-4">
                     <v-button
                         class="m-4"
+                        primary
                         :to="{
                             name: 'solve',
                             params: {
@@ -29,7 +30,7 @@
                                 puzzle: '3x3',
                             },
                         }">
-                        See current records
+                        See the current records
                     </v-button>
                 </div>
                 <!-- <p class="font-thin leading-loose text-grey-7">

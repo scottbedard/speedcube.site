@@ -7,18 +7,12 @@
 <template>
     <v-grid padded>
         <v-grid-cell class="lg:order-2" lg="7">
-            <h2 class="font-thin leading-normal mb-4 text-2xl text-grey-8 lg:mt-12">
-                Make the puzzles your own
+            <h2 class="font-thin leading-normal mb-8 text-2xl text-grey-8 lg:mt-12">
+                Make things look however you want.
             </h2>
-            <p class="font-thin leading-loose mb-4 text-grey-7">
-                Our puzzles are built to be customized, make everything look exactly the way you want.
-                You have control over everything from colors to sticker positioning, and even
-                the camera angle.
-            </p>
-            <p class="font-thin leading-loose text-grey-7">
-                Once everything looks perfect, make sure it feels just as good. Your keyboard
-                is the controller. Map any key to whatever turn feels right. After a bit of practice
-                it'll feel like a real puzzle in your hands, except it never pops.
+            <p class="font-thin leading-loose text-grey-7 text-lg">
+                These puzzles are built to be customized. Fine tune everything 
+                from the colors, to sticker position, and even the viewing angle.
             </p>
         </v-grid-cell>
         <v-grid-cell class="lg:order-1" lg="5">
