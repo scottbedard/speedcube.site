@@ -16,9 +16,11 @@ class KeyboardConfigController extends ApiController
     public function save()
     {
         $data = input();
+        $user = Auth::getUser();
+        $user->touchLastSeen();
+
         $config = array_get($data, 'config', []);
         $puzzle = array_get($data, 'puzzle', '');
-        $user = Auth::getUser();
 
         // find the user's keyboard config
         $model = $user

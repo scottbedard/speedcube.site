@@ -27,6 +27,8 @@ class ScramblesController extends ApiController
 
         // create a solve if the user is signed in
         if ($user) {
+            $user->touchLastSeen();
+
             $scramble->solves()->create([
                 'scramble_id' => $scramble->id,
                 'user_id'     => $user->id,

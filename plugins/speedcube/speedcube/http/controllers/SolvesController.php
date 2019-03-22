@@ -21,6 +21,7 @@ class SolvesController extends ApiController
     {
         try {
             $user = Auth::getUser();
+            $user->touchLastSeen();
 
             $data = input();
             $abort = array_get($data, 'abort', false);
