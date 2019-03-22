@@ -10,8 +10,8 @@ import { isCubeTurn } from '@/app/utils/puzzle';
  *
  * @const {Object}
  */
-const defaultConfig = {
-    colors: [
+const defaultConfig = {  
+    colors: [  
         '#FFEE5D',
         '#EFAA18',
         '#2589E2',
@@ -19,13 +19,13 @@ const defaultConfig = {
         '#5CBD60',
         '#F0F0F0',
     ],
-    cameraAngle: 60,
-    cameraDistance: 2000,
-    innerBrightness: 40,
-    stickerElevation: 10,
-    stickerRadius: 25,
-    stickerSpacing: 15,
-    turnDuration: 75,
+    cameraAngle: 52,
+    cameraDistance: 2134,
+    innerBrightness: 82,
+    stickerElevation: 15,
+    stickerRadius: 9,
+    stickerSpacing: 18,
+    turnDuration: 82
 };
 
 /**
