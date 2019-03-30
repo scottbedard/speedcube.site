@@ -27,8 +27,8 @@
                 Privacy Policy
             </h2>
             <div class="max-w-lg mb-16">
-                <p>Usernames, profile pictures, solves, and personal records are all considered public information. This means it may published on records and stats pages. Additionally, this information may be broadcast to other users.</p>
-                <p>While we collect email addresses from our users, this information will never be shared with anyone. Users who have forgotten their credentials may reset their passwords by having a one-time reset link emailed to them.</p>
+                <p>Your stats page is publicly viewable, and your replays may appear on record pages.</p>
+                <p>We collect email addresses only for account purposes. Users may reset their passwords by having a one-time link emailed to them.</p>
             </div>
         </v-margin>
     </v-page>
