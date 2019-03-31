@@ -1,6 +1,43 @@
 version: 2
 jobs:
-  backend:
+  backend_coverage:
+    docker:
+      - image: circleci/php:7.2-node-browsers
+    steps:
+      - checkout
+      - run:
+          name: Install plugins
+          command: |
+            git clone git@github.com:vuetober/rainlab-user-api.git ./plugins/vuetober/rainlabuserapi
+      - restore_cache:
+          key: -v3-{{ checksum "composer.lock" }}-{{ checksum "themes/site/yarn.lock" }}
+      - run:
+          name: Install dependencies
+          command: |
+            wget https://getcomposer.org/composer.phar
+            php composer.phar install --no-interaction
+            sudo composer self-update
+            composer install
+            (cd ./plugins/speedcube/speedcube && composer install)
+            (cd ./themes/site && yarn install)
+      - save_cache:
+          key: -v3-{{ checksum "composer.lock" }}-{{ checksum "themes/site/yarn.lock" }}
+          paths:
+            - "vendor"
+            - "themes/site/node_modules"
+      - run:
+          name: Configure environment
+          command: |
+            cp .env.example .env
+      - run:
+          name: Generate backend coverage
+          command: |
+            (cd ./plugins/speedcube/speedcube && vendor/bin/phpunit --coverage-clover clover.xml)
+      - run:
+          name: Codecov
+          command: |
+            (cd ./plugins/speedcube/speedcube && bash <(curl -s https://codecov.io/bash) -t 5c7c532d-d106-480a-b67e-d2af48ce8f56 -cF php)
+  backend_test:
     docker:
       - image: circleci/php:7.2-node-browsers
     steps:
@@ -32,11 +69,7 @@ jobs:
       - run:
           name: Test backend
           command: |
-            (cd ./plugins/speedcube/speedcube && vendor/bin/phpunit --coverage-clover clover.xml)
-      - run:
-          name: Codecov
-          command: |
-            (cd ./plugins/speedcube/speedcube && bash <(curl -s https://codecov.io/bash) -t 5c7c532d-d106-480a-b67e-d2af48ce8f56 -cF php)
+            (cd ./plugins/speedcube/speedcube && vendor/bin/phpunit)
   frontend:
     docker:
       - image: circleci/php:7.2-node-browsers
@@ -77,9 +110,12 @@ workflows:
   version: 2
   tests:
     jobs:
-      - backend
+      - backend_test
       - frontend
       - deploy:
           requires:
-            - backend
+            - backend_test
             - frontend
+      - backend_coverage
+          requires:
+            - backend_test
