@@ -13,6 +13,42 @@ const mount = factory({
 //
 // fixtures
 //
+function freshFixture() {
+    // get: /api/speedcube/speedcube/users/user
+    return {  
+        "id":9,
+        "name":null,
+        "email":"john@example.com",
+        "permissions":null,
+        "is_activated":true,
+        "activated_at":"2019-03-31 07:42:11",
+        "last_login":"2019-03-31 07:42:11",
+        "created_at":"2019-03-31 07:42:11",
+        "updated_at":"2019-03-31 07:42:11",
+        "username":"test6",
+        "surname":null,
+        "deleted_at":null,
+        "last_seen":"2019-03-31 07:50:41",
+        "is_guest":0,
+        "is_superuser":0,
+        "avatar":null,
+        "configs":[  
+    
+        ],
+        "keyboard_configs":[  
+    
+        ],
+        "profile":{  
+            "id":9,
+            "user_id":9,
+            "twitter_broadcasting":false,
+            "twitter_handle":"",
+            "created_at":"2019-03-31 07:42:11",
+            "updated_at":"2019-03-31 07:42:11"
+        }
+    }
+}
+
 function userFixture() {
     return {
         activatedAt: '2018-11-04 23:21:54',
@@ -35,6 +71,9 @@ function userFixture() {
 describe('create account page', function() {
     beforeEach(function() {
         stubRequests({
+            get: {
+                '/api/rainlab/user/user': freshFixture,
+            },
             post: {
                 '/api/rainlab/user/register': userFixture,
             },
