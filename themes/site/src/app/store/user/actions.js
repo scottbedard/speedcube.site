@@ -1,4 +1,5 @@
 import {
+    getAuthenticatedUser,
     getSignout,
     postResetPassword,
     postSendResetEmail,
@@ -15,6 +16,23 @@ import {
 // actions
 //
 export default {
+    // refresh the current user
+    fresh({ commit }) {
+        commit('setFreshIsLoading', true);
+
+        const request = getAuthenticatedUser();
+
+        request.then((response) => {
+            // success
+            commit('setUser', response.data);
+        }).finally(() => {
+            // complete
+            commit('setFreshIsLoading', false);
+        });
+
+        return request;
+    },
+
     // save a user's puzzle configuration
     saveConfig({ commit }, payload) {
         const request = postConfig(payload);
@@ -48,6 +66,8 @@ export default {
         }).finally(() => {
             // complete
             commit('setSigninIsLoading', false);
+
+            console.log('signed in');
         });
 
         return authRequest;

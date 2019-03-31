@@ -36,7 +36,7 @@
                                 <v-input
                                     v-model="form.handle"
                                     autofocus
-                                    placeholder="Please enter your Twitter handle"
+                                    placeholder="Optionally enter a twitter handle for tagging"
                                     :disabled="loading"
                                 />
                             </v-form-field>
@@ -68,7 +68,7 @@ export default {
     data() {
         return {
             form: {
-                broadcasting: get(this.$store.state, 'user.user.profile.twitterBroadcasting', true),
+                broadcasting: get(this.$store.state, 'user.user.profile.twitterBroadcasting', false),
                 handle: get(this.$store.state, 'user.user.profile.twitterHandle', ''),
             },
             loading: false,

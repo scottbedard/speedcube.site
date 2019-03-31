@@ -147,6 +147,7 @@ class SolveTest extends PluginTestCase
     {
         // create a user, twitter broadcasting is on by default
         $user = Factory::registerUser();
+        $user->profile->update(['twitter_broadcasting' => true]);
 
         // complete a solve which sets a personal record
         $scramble1 = Factory::createScrambleWithTurns('R');

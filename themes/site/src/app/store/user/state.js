@@ -23,6 +23,9 @@ export default function () {
         // loading state for puzzle configs
         configsAreLoading: false,
 
+        // loading state for user refresh
+        freshIsLoading: false,
+
         // loading state for authentication requests
         signinIsLoading: false,
 

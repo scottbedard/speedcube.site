@@ -10,6 +10,15 @@ export function deleteAvatar() {
 }
 
 /**
+ * Get the authenticated user.
+ *
+ * @return {Promise}
+ */
+export function getAuthenticatedUser() {
+    return axios.get('/api/rainlab/user/user');
+}
+
+/**
  * Get a user's stats overview.
  *
  * @param  {string}     username

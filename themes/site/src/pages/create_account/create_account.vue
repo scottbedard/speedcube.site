@@ -131,8 +131,9 @@ export default {
                 password_confirmation: this.passwordConfirmation,
             }).then((response) => {
                 // success
-                this.$store.commit('user/setUser', response.data);
-                this.$router.push({ name: 'home' });
+                return this.$store.dispatch('user/fresh').then(() => {
+                    this.$router.push({ name: 'home' });
+                });
             }, (err) => {
                 // failed
                 const status = get(err, 'response.data.status');

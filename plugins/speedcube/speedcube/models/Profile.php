@@ -15,7 +15,7 @@ class Profile extends Model
      * @var array Attributes
      */
     public $attributes = [
-        'twitter_broadcasting' => true,
+        'twitter_broadcasting' => false,
         'twitter_handle'       => '',
     ];
 
