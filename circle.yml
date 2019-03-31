@@ -116,6 +116,6 @@ workflows:
           requires:
             - backend_test
             - frontend
-      - backend_coverage
+      - backend_coverage:
           requires:
             - backend_test
