@@ -8876,8 +8876,8 @@ thread-loader@^1.1.5:
     loader-utils "^1.1.0"
 
 three@^0.102.0:
-  version "0.102.0"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.102.0.tgz#b26a7212d95f1ea043ab94598d55973ebe110cbb"
+  version "0.102.1"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.102.1.tgz#fc08b6b11860cf59e8cd45b7e90e34d1d1a8cbd6"
 
 throttleit@^1.0.0:
   version "1.0.0"
