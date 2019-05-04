@@ -112,9 +112,15 @@ export default {
             return sortBy(this.records, record => get(record, 'solve.scramble.puzzle'));
         },
     },
-    props: [
-        'recordAverages',
-        'records',
-    ],
+    props: {
+        recordAverages: {
+            default: () => [],
+            type: Array,
+        },
+        records: {
+            default: () => [],
+            type: Array,
+        },
+    },
 };
 </script>
