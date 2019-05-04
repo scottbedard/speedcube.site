@@ -66,8 +66,6 @@ export default {
         }).finally(() => {
             // complete
             commit('setSigninIsLoading', false);
-
-            console.log('signed in');
         });
 
         return authRequest;
