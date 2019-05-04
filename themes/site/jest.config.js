@@ -1,6 +1,11 @@
 module.exports = {
-    setupFiles: [
-        '<rootDir>/tests/utils.js',
+    collectCoverageFrom: [
+        '**/*.{js,vue}',
+    ],
+    coveragePathIgnorePatterns: [
+        '/node_modules/',
+        '/tests/',
+        '/tests_old/',
     ],
     moduleFileExtensions: [
         'js',
@@ -11,6 +16,9 @@ module.exports = {
     moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1'
     },
+    setupFiles: [
+        '<rootDir>/tests/utils.js',
+    ],
     snapshotSerializers: [
         'jest-serializer-vue',
     ],
