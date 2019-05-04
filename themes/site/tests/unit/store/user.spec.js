@@ -35,11 +35,11 @@ describe('user store', function() {
             const store = createStore();
             const request = store.dispatch('user/syncConfigs');
 
-            expect(axios.get).to.have.been.calledWith('/api/speedcube/speedcube/config');
-            expect(store.state.user.configsAreLoading).to.be.true;
+            expect(axios.get).toHaveBeenCalledWith('/api/speedcube/speedcube/config');
+            expect(store.state.user.configsAreLoading).toBe(true);
 
             setTimeout(() => {
-                expect(store.state.user.configsAreLoading).to.be.false;
+                expect(store.state.user.configsAreLoading).toBe(false);
                 done();
             }, 10);
         });
