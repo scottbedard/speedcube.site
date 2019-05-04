@@ -7,6 +7,8 @@ import { factory as spyfuVueFactory } from 'spyfu-vue-factory';
 import { get, isFunction } from 'lodash-es';
 import { when } from 'jest-when';
 
+Vue.config.productionTip = false;
+Vue.config.devtools = false;
 // //
 // // test sandbox
 // // these are reset after each test
