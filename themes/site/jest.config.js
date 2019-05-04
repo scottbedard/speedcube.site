@@ -3,7 +3,6 @@ module.exports = {
         '<rootDir>/src/**/*.{js,vue}',
         '!<rootDir>/node_modules/',
         '!<rootDir>/tests/',
-        '!<rootDir>/tests_old/',
     ],
     coverageReporters: [
         'lcov',
