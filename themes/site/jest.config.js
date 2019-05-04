@@ -20,6 +20,7 @@ module.exports = {
         '^@/(.*)$': '<rootDir>/src/$1'
     },
     setupFiles: [
+        'jest-canvas-mock',
         '<rootDir>/tests/utils.js',
     ],
     snapshotSerializers: [
