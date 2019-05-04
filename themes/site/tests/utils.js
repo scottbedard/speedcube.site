@@ -1,4 +1,5 @@
 import Vue from 'vue/dist/vue.common.js';
+import VueRuntime from 'vue/dist/vue.runtime.common.dev.js';
 import axios from 'axios';
 import boot from '@/app/boot';
 import modules from '@/app/store';
@@ -7,18 +8,11 @@ import { factory as spyfuVueFactory } from 'spyfu-vue-factory';
 import { get, isFunction } from 'lodash-es';
 import { when } from 'jest-when';
 
-Vue.config.productionTip = false;
-Vue.config.devtools = false;
-// //
-// // test sandbox
-// // these are reset after each test
-// //
-// window.sandbox = sinon.createSandbox();
-// window.spy = sandbox.spy;
-// window.stub = sandbox.stub;
+VueRuntime.config.productionTip = false;
+VueRuntime.config.devtools = false;
 
 //
-// mock axios
+// axios mock
 //
 jest.mock('axios');
 
