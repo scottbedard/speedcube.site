@@ -1,11 +1,14 @@
 module.exports = {
     collectCoverageFrom: [
-        '**/*.{js,vue}',
+        '<rootDir>/src/**/*.{js,vue}',
+        '!<rootDir>/node_modules/',
+        '!<rootDir>/tests/',
+        '!<rootDir>/tests_old/',
     ],
-    coveragePathIgnorePatterns: [
-        '/node_modules/',
-        '/tests/',
-        '/tests_old/',
+    coverageReporters: [
+        'lcov',
+        'text',
+        'text-summary',
     ],
     moduleFileExtensions: [
         'js',
