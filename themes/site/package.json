@@ -8,31 +8,6 @@
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },
-  "nyc": {
-    "check-coverage": true,
-    "per-file": true,
-    "lines": 90,
-    "statements": 90,
-    "functions": 90,
-    "branches": 90,
-    "include": [
-      "src/**/*.{js,vue}"
-    ],
-    "exclude": [
-      "node_modules/**/*.js",
-      "tests/**/*.{js,vue}"
-    ],
-    "reporter": [
-      "lcov",
-      "text",
-      "text-summary"
-    ],
-    "extension": [
-      ".js"
-    ],
-    "cache": true,
-    "all": true
-  },
   "dependencies": {
     "axios": "^0.18.0",
     "bedard-cube": "^1.0.0-beta.0",
@@ -60,6 +35,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.3",
     "@vue/cli-plugin-eslint": "^3.0.3",
+    "@vue/cli-plugin-unit-jest": "^3.7.0",
     "@vue/cli-service": "^3.0.3",
     "@vue/eslint-config-airbnb": "^4.0.0",
     "@vue/test-utils": "^1.0.0-beta.20",
