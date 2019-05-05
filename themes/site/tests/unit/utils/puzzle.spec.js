@@ -17,7 +17,7 @@ describe('puzzle utils', function() {
         ];
 
         specs.forEach(({ times, result }) => {
-            expect(calculateAverage(times)).to.equal(result, `times: ${JSON.stringify(times)}`);
+            expect(calculateAverage(times)).toBe(result, `times: ${JSON.stringify(times)}`);
         });
     });
 });

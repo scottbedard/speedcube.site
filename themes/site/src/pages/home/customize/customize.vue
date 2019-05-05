@@ -11,7 +11,7 @@
                 Make things look however you want.
             </h2>
             <p class="font-thin leading-loose text-grey-7 text-lg">
-                These puzzles are built to be customized. Fine tune everything 
+                These puzzles are built to be customized. Fine tune everything
                 from the colors, to sticker position, and even the viewing angle.
             </p>
         </v-grid-cell>

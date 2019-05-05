@@ -3,18 +3,18 @@
 //
 describe('<v-input>', function() {
     it('renders an input element', function() {
-        vm = mount({
+        const vm = mount({
             template: `<v-input placeholder="foo" />`,
         });
 
         const inputEl = vm.$el.querySelector('input');
 
-        expect(inputEl).not.to.be.null;
-        expect(inputEl.getAttribute('placeholder')).to.equal('foo');
+        expect(inputEl).not.toBe(null);
+        expect(inputEl.getAttribute('placeholder')).toBe('foo');
     });
 
     it('interfaces with v-model', function() {
-        vm = mount({
+        const vm = mount({
             data() {
                 return {
                     value: 'foo',
@@ -25,34 +25,34 @@ describe('<v-input>', function() {
 
         const inputEl = vm.$el.querySelector('input');
         
-        expect(inputEl.value).to.equal('foo');
+        expect(inputEl.value).toBe('foo');
 
         input('bar', inputEl);
         
-        expect(vm.value).to.equal('bar');
+        expect(vm.value).toBe('bar');
     });
 
     it('accepts an id', function() {
-        vm = mount({
+        const vm = mount({
             template: `<v-input id="hello" />`,
         });
 
-        expect(vm.$el.querySelector('input').getAttribute('id')).to.equal('hello');
+        expect(vm.$el.querySelector('input').getAttribute('id')).toBe('hello');
     });
 
     it('accepts a placeholder', function() {
-        vm = mount({
+        const vm = mount({
             template: `<v-input placeholder="hello" />`,
         });
 
-        expect(vm.$el.querySelector('input').getAttribute('placeholder')).to.equal('hello');
+        expect(vm.$el.querySelector('input').getAttribute('placeholder')).toBe('hello');
     });
 
     it('accepts a type', function() {
-        vm = mount({
+        const vm = mount({
             template: `<v-input type="password" />`,
         });
 
-        expect(vm.$el.querySelector('input').getAttribute('type')).to.equal('password');
+        expect(vm.$el.querySelector('input').getAttribute('type')).toBe('password');
     });
 });

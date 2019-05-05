@@ -4,9 +4,9 @@
 //
 describe('<v-form> & <v-form-field>', function() {
     it('emits a submit event', function(done) {
-        const onSubmit = stub();
+        const onSubmit = jest.fn();
 
-        vm = mount({
+        const vm = mount({
             methods: {
                 onSubmit,
             },
@@ -16,11 +16,11 @@ describe('<v-form> & <v-form-field>', function() {
         submit(vm.$el);
 
         setTimeout(() => {
-            expect(onSubmit).to.have.been.called;
+            expect(onSubmit).toHaveBeenCalled();
 
             done();
         }, 10);
     });
 
-    it('doesnt emit a submit event if validation fails');
+    // it('doesnt emit a submit event if validation fails');
 });

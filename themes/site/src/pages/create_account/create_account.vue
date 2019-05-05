@@ -129,12 +129,10 @@ export default {
                 username: this.username,
                 password: this.password,
                 password_confirmation: this.passwordConfirmation,
-            }).then((response) => {
+            }).then(() => this.$store.dispatch('user/fresh').then(() => {
                 // success
-                return this.$store.dispatch('user/fresh').then(() => {
-                    this.$router.push({ name: 'home' });
-                });
-            }, (err) => {
+                this.$router.push({ name: 'home' });
+            }), (err) => {
                 // failed
                 const status = get(err, 'response.data.status');
 

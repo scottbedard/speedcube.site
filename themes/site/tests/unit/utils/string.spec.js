@@ -16,7 +16,7 @@ describe('string utils', function() {
         };
 
         Object.keys(tests).forEach(key => {
-            expect(formatTime(key)).to.equal(tests[key]);
+            expect(formatTime(key)).toBe(tests[key]);
         });
     });
 });

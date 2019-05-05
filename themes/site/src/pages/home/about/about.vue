@@ -7,7 +7,7 @@
                 </h1>
                 <p class="font-thin leading-loose mb-12 text-grey-7 text-lg">
                     Your keyboard is the controller. Customize it as much as you
-                    want, or stick with the defaults. After some practice, it will 
+                    want, or stick with the defaults. After some practice, it will
                     feel like you're holding it in your hands.
                 </p>
                 <div class="-m-4">

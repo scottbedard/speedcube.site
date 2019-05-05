@@ -1,3 +1,4 @@
-import Vue from 'vue';
+export default function(Vue) {
+    Vue.filter('locale', value => Number(value).toLocaleString());
+}
 
-Vue.filter('locale', value => Number(value).toLocaleString());

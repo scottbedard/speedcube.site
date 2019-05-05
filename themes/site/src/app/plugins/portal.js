@@ -1,4 +1,5 @@
 import PortalVue from 'portal-vue';
-import Vue from 'vue';
 
-Vue.use(PortalVue);
+export default function (Vue) {
+    Vue.use(PortalVue);
+}

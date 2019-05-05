@@ -1,5 +1,6 @@
-import Vue from 'vue';
 import { formatTime, formatShortTime } from '@/app/utils/string';
 
-Vue.filter('timer', formatTime);
-Vue.filter('shortTimer', formatShortTime);
+export default function(Vue) {
+    Vue.filter('timer', formatTime);
+    Vue.filter('shortTimer', formatShortTime);
+}

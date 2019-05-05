@@ -3,15 +3,15 @@
 //
 describe('<v-card>', function() {
     it('renders default content', function() {
-        vm = mount({
+        const vm = mount({
             template: `<v-card>Hello world</v-card>`,
         });
 
-        expect(vm.$el.textContent).to.equal('Hello world');
+        expect(vm.$el.textContent).toBe('Hello world');
     });
 
     it('supports a padded prop', function(done) {
-        vm = mount({
+        const vm = mount({
             data() {
                 return {
                     padded: false,
@@ -22,12 +22,12 @@ describe('<v-card>', function() {
 
         const hasPadding = el => el.className.split(' ').filter(c => /^p[xy]?-\d+$/g.test(c)).length > 0 ||
 
-        expect(hasPadding(vm.$el)).to.be.false;
+        expect(hasPadding(vm.$el)).toBe(false);
 
         vm.padded = true;
 
         vm.$nextTick(() => {
-            expect(hasPadding(vm.$el)).to.be.true;
+            expect(hasPadding(vm.$el)).toBe(true);
 
             done();
         });
