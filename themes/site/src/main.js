@@ -10,7 +10,9 @@ import guards from './app/guards';
 //
 // boot up our application
 //
-import './app/boot';
+import boot from './app/boot';
+
+boot(Vue);
 
 //
 // disable the production tip, we know what we're doing

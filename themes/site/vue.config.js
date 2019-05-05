@@ -5,19 +5,16 @@ const path = require('path');
 const purgecssWhitelist = require('./src/scss/whitelist');
 
 // constants
-const isTesting = process.env.NODE_ENV === 'test';
+const testing = process.env.NODE_ENV === 'test';
 
 // helper function to resolve relative directories and files
 const resolve = (...args) => path.resolve(__dirname, ...args);
 
 module.exports = {
     chainWebpack(config) {
-        if (isTesting) {
+        if (testing) {
             // disable eslint in the test environment
             config.module.rules.delete('eslint');
-
-            // mock all axios calls in our testing environment
-            config.resolve.alias.set('axios$', resolve('./tests/unit/mocks/axios'));
         }
     },
     configureWebpack() {
@@ -47,37 +44,11 @@ module.exports = {
         };
     },
     pluginOptions: {
-        karma: {
-            files: [
-                resolve('./tests/unit/index.js'),
-            ],
-            karmaConfig: {
-                browsers: [
-                    'ChromeHeadless',
-                ],
-                coverageReporter: {
-                    dir: './coverage',
-                    reporters: [
-                        { type: 'lcov', subdir: '.' },
-                        { type: 'text-summary' },
-                    ],
-                },
-                frameworks: [
-                    'mocha',
-                    'chai-dom',
-                    'sinon-chai',
-                ],
-                reporters: [
-                    'spec',
-                    'coverage',
-                ],
-            },
-        },
         moment: {
             locales: [
                 'en',
             ],
         },
     },
-    runtimeCompiler: isTesting,
+    runtimeCompiler: testing,
 };

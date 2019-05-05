@@ -1,5 +1,3 @@
-import Vue from 'vue';
-
 //
 // alert
 //
@@ -10,8 +8,10 @@ function alert(message, options = {}) {
 //
 // install
 //
-Vue.use({
-    install() {
-        Vue.prototype.$alert = alert;
-    },
-});
+export default function(Vue) {
+    Vue.use({
+        install() {
+            Vue.prototype.$alert = alert;
+        },
+    });
+}

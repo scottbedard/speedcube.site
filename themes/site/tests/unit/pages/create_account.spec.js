@@ -68,8 +68,8 @@ function userFixture() {
 //
 // specs
 //
-describe('create account page', function() {
-    beforeEach(function() {
+describe('create account page', () => {
+    beforeEach(() => {
         stubRequests({
             get: {
                 '/api/rainlab/user/user': freshFixture,
@@ -81,7 +81,7 @@ describe('create account page', function() {
     });
 
     it('registers a user when the form is submitted', async function() {
-        vm = mount({
+        const vm = mount({
             template: `<v-create-account />`,
         });
 
@@ -96,7 +96,7 @@ describe('create account page', function() {
         
         await timeout(10);
         
-        expect(axios.post).to.have.been.calledWithMatch(
+        expect(axios.post).toHaveBeenCalledWith(
             '/api/rainlab/user/register',
             {
                 email: 'john@example.com',
@@ -106,6 +106,6 @@ describe('create account page', function() {
             },
         );
 
-        expect(vm.$store.state.user.user.email).to.be.equal('john@example.com');
+        expect(vm.$store.state.user.user.email).toBe('john@example.com');
     });
 });

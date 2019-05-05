@@ -1,4 +1,5 @@
 import pluralize from 'pluralize';
-import Vue from 'vue';
 
-Vue.filter('pluralize', pluralize);
+export default function(Vue) {
+    Vue.filter('pluralize', pluralize);
+}

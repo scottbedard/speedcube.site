@@ -14,14 +14,14 @@ const mount = factory({
 //
 describe('default layout', function() {
     it('navigates home when logo is clicked', function() {
-        vm = mount({
+        const vm = mount({
             template: `<v-default-layout />`,
         });
 
-        const push = sinon.stub(vm.$router, 'push');
+        const push = jest.spyOn(vm.$router, 'push');
 
         click(vm.$el.querySelector('[data-logo]'));
 
-        expect(push).to.have.been.calledWithMatch({ name: 'home' });
+        expect(push).toHaveBeenCalledWith({ name: 'home' });
     });
 });

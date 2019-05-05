@@ -36,7 +36,7 @@ describe('user page', function() {
     });
 
     it('fetches data on initial load', async function() {
-        vm = mount({
+        const vm = mount({
             beforeCreate() {
                 this.$router.replace({
                     name: 'test',
@@ -50,7 +50,7 @@ describe('user page', function() {
 
         await timeout(20);
 
-        expect(axios.get).to.have.been.calledWith('/api/speedcube/speedcube/users/scott/overview');
+        expect(axios.get).toHaveBeenCalledWith('/api/speedcube/speedcube/users/scott/overview');
 
         vm.$router.replace({
             name: 'test',
@@ -61,6 +61,6 @@ describe('user page', function() {
 
         await timeout(20);
 
-        expect(axios.get).to.have.been.calledWith('/api/speedcube/speedcube/users/foo/overview');
+        expect(axios.get).toHaveBeenCalledWith('/api/speedcube/speedcube/users/foo/overview');
     });
 });

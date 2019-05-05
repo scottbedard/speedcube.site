@@ -22,22 +22,15 @@ describe('signout page', function() {
         });
     });
 
-    it('signs the user out', function(done) {
+    it('signs the user out', async () => {
         let push;
 
-        vm = mount({
-            beforeCreate() {
-                push = stub(this.$router, 'push');
-            },
+        const vm = mount({
             template: `<v-signout />`,
         });
 
-        expect(axios.get).to.have.been.calledWith('/api/rainlab/user/signout');
+        await timeout(10);
 
-        setTimeout(() => {
-            expect(push).to.have.been.calledWithMatch({ name: 'home' });
-
-            done();
-        }, 10);
+        expect(axios.get).toHaveBeenCalledWith('/api/rainlab/user/signout');
     });
 });
