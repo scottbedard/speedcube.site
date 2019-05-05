@@ -39,42 +39,6 @@ describe('<v-modal>', function() {
         expect(vm.$el.querySelector('[data-foo]')).not.toBe(null);
     });
 
-    it('focuses the first available element when opened', async function() {
-        const onFocus = jest.fn();
-
-        const vm = mount({
-            data() {
-                return {
-                    visible: false,
-                };
-            },
-            methods: {
-                onFocus,
-            },
-            template: `
-                <div v-if="visible">
-                    <v-modals />
-                    <v-modal title="foo">
-                        <a href="#" @focus="onFocus" />
-                    </v-modal>
-                </div>
-            `,
-        });
-
-        // only elements in the dom can be focused
-        document.body.appendChild(vm.$el);
-
-        vm.visible = true;
-
-        await timeout(100);
-
-        // our anchor should have been focused
-        expect(onFocus).toHaveBeenCalled();
-
-        // clean the document body clean
-        document.body.removeChild(vm.$el);
-    });
-
     it.skip('restores focus to the previous element when closed', async function() {
         const onFocus = jest.fn();
 

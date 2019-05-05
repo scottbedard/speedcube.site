@@ -30,5 +30,5 @@ export function getConfigFixture() {
                 updatedAt: '2019-05-04 14:45:29',
             },
         ],
-    }
+    };
 }

@@ -8,7 +8,7 @@ function alert(message, options = {}) {
 //
 // install
 //
-export default function(Vue) {
+export default function (Vue) {
     Vue.use({
         install() {
             Vue.prototype.$alert = alert;

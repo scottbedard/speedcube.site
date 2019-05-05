@@ -45,9 +45,9 @@ global.click = function click(el) {
     if (typeof el.click === 'function') {
         el.click();
     } else {
-        simulate('click', el);
+        global.simulate('click', el);
     }
-}
+};
 
 //
 // create a vue factory
@@ -69,13 +69,17 @@ global.factory = function factory(options = {}) {
         }, []);
     }
 
-    return spyfuVueFactory({
+    const vm = spyfuVueFactory({
         Vue,
         modules,
         routes: walk(routes()),
         ...options,
     });
-}
+
+    global._activeVms.push(vm);
+
+    return vm;
+};
 
 //
 // simulate an input event
@@ -84,7 +88,7 @@ global.input = function (value, el) {
     el.value = value;
 
     return simulate('input', el);
-}
+};
 
 //
 // default mount function
@@ -100,15 +104,15 @@ global.noop = () => {};
 // prevent store interactions before a component is mounted
 //
 window.preventInitialActions = function (vm) {
-    const dispatch = stub(vm.$store, 'dispatch');
+    const dispatch = jest.spyOn(vm.$store, 'dispatch');
 
-    vm.$once('hook:mounted', dispatch.restore);
+    vm.$once('hook:mounted', dispatch.mockRestore);
 };
 
 global.preventInitialMutations = function (vm) {
-    const commit = stub(vm.$store, 'commit');
+    const commit = jest.spyOn(vm.$store, 'commit');
 
-    vm.$once('hook:mounted', commit.restore);
+    vm.$once('hook:mounted', commit.mockRestore);
 };
 
 global.preventInitialization = function (vm) {
@@ -132,7 +136,7 @@ global.simulate = function (name, el, setupFn) {
 //
 // stub xhr requests
 //
-global.stubRequests = function(requests = {}) {
+global.stubRequests = function (requests = {}) {
     requests = {
         delete: {},
         get: {},
@@ -140,10 +144,10 @@ global.stubRequests = function(requests = {}) {
         post: {},
         put: {},
         ...requests,
-    }
+    };
 
-    Object.keys(requests).forEach(method => {
-        Object.keys(requests[method]).forEach(endpoint => {
+    Object.keys(requests).forEach((method) => {
+        Object.keys(requests[method]).forEach((endpoint) => {
             const fixture = get(requests, `${method}[${endpoint}]`);
             const response = isFunction(fixture) ? fixture() : fixture;
 
@@ -152,17 +156,17 @@ global.stubRequests = function(requests = {}) {
                 .mockReturnValue(
                     typeof response === 'boolean'
                         ? (response ? Promise.resolve({ data: {} }) : Promise.reject())
-                        : Promise.resolve({ data: response })
+                        : Promise.resolve({ data: response }),
                 );
         });
     });
-}
+};
 
 //
 // submit a form
 //
 global.submit = function (el, setupFn) {
-    simulate('submit', el, setupFn);
+    global.simulate('submit', el, setupFn);
 };
 
 //
