@@ -7130,8 +7130,8 @@ postcss@^6.0.1, postcss@^6.0.23, postcss@^6.0.9:
     supports-color "^5.4.0"
 
 postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.11, postcss@^7.0.14, postcss@^7.0.2, postcss@^7.0.5:
-  version "7.0.15"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.15.tgz#7f62bfff3437a8d358850792e1daee828e67e959"
+  version "7.0.16"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.16.tgz#48f64f1b4b558cb8b52c88987724359acb010da2"
   dependencies:
     chalk "^2.4.2"
     source-map "^0.6.1"
@@ -8934,9 +8934,9 @@ vue-cli-plugin-moment@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/vue-cli-plugin-moment/-/vue-cli-plugin-moment-0.1.1.tgz#457a0cafc9cd5aa0b8d9017cbd43dd9ddf1452ae"
 
-vue-cli-plugin-vuetober@^3.0.0-rc.1:
-  version "3.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/vue-cli-plugin-vuetober/-/vue-cli-plugin-vuetober-3.0.0-rc.1.tgz#cba599263e641125e39d765ec78feb66edac7e48"
+vue-cli-plugin-vuetober@^3.0.0-rc.2:
+  version "3.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-vuetober/-/vue-cli-plugin-vuetober-3.0.0-rc.2.tgz#a3e1398b8feb9643cdc6f8853e3dad655feaaad9"
   dependencies:
     write-file-webpack-plugin "^4.4.0"
 
