@@ -8,12 +8,26 @@ import { factory as spyfuVueFactory } from 'spyfu-vue-factory';
 import { get, isFunction } from 'lodash-es';
 import { when } from 'jest-when';
 
+// these functions are exposed globally to aid in
+// common testing tasks. they are designed to have
+// our tests mimick the actual usage of the component.
+// as an example of this, we render using dom apis.
+//
+// const vm = mount({
+//     template: `<some-awesome-component />`,
+// });
+//
+// the goal, is to have tests that not only feel more
+// natural, but also double as examples of our to use
+// the various components.
+
+// ignore warnings that dont apply in tests
 VueRuntime.config.productionTip = false;
 VueRuntime.config.devtools = false;
 
-//
-// axios mock
-//
+// axios is mocked globally throughout our application
+// if you import axios in a test, you will actually
+// get one of these mock implementations instead.
 jest.mock('axios');
 
 axios.mockImplementation(function () {
