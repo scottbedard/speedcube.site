@@ -8,12 +8,26 @@ import { factory as spyfuVueFactory } from 'spyfu-vue-factory';
 import { get, isFunction } from 'lodash-es';
 import { when } from 'jest-when';
 
+// these functions are exposed globally to aid in
+// common testing tasks. they are designed to have
+// our tests mimick the actual usage of the component.
+// as an example of this, we render using dom apis.
+//
+// const vm = mount({
+//     template: `<some-awesome-component />`,
+// });
+//
+// the goal, is to have tests that not only feel more
+// natural, but also double as examples of our to use
+// the various components.
+
+// ignore warnings that dont apply in tests
 VueRuntime.config.productionTip = false;
 VueRuntime.config.devtools = false;
 
-//
-// axios mock
-//
+// axios is mocked globally throughout our application
+// if you import axios in a test, you will actually
+// get one of these mock implementations instead.
 jest.mock('axios');
 
 axios.mockImplementation(function () {
@@ -31,9 +45,9 @@ global.click = function click(el) {
     if (typeof el.click === 'function') {
         el.click();
     } else {
-        simulate('click', el);
+        global.simulate('click', el);
     }
-}
+};
 
 //
 // create a vue factory
@@ -55,22 +69,31 @@ global.factory = function factory(options = {}) {
         }, []);
     }
 
-    return spyfuVueFactory({
+    const vm = spyfuVueFactory({
         Vue,
         modules,
         routes: walk(routes()),
         ...options,
     });
-}
+
+    // @todo: figure out if theres a way to hook into
+    // the end of the test so we can dispose of this vm
+
+    return vm;
+};
 
 //
 // simulate an input event
 //
-global.input = function (value, el) {
-    el.value = value;
+global.input = function (value, el, setupFn) {
+    return global.simulate('input', el, (e) => {
+        e.target.value = value;
 
-    return simulate('input', el);
-}
+        if (setupFn) {
+            setupFn(e);
+        }
+    });
+};
 
 //
 // default mount function
@@ -86,15 +109,15 @@ global.noop = () => {};
 // prevent store interactions before a component is mounted
 //
 window.preventInitialActions = function (vm) {
-    const dispatch = stub(vm.$store, 'dispatch');
+    const dispatch = jest.spyOn(vm.$store, 'dispatch');
 
-    vm.$once('hook:mounted', dispatch.restore);
+    vm.$once('hook:mounted', dispatch.mockRestore);
 };
 
 global.preventInitialMutations = function (vm) {
-    const commit = stub(vm.$store, 'commit');
+    const commit = jest.spyOn(vm.$store, 'commit');
 
-    vm.$once('hook:mounted', commit.restore);
+    vm.$once('hook:mounted', commit.mockRestore);
 };
 
 global.preventInitialization = function (vm) {
@@ -105,20 +128,25 @@ global.preventInitialization = function (vm) {
 //
 // simulate an event
 //
-global.simulate = function (name, el, setupFn) {
-    const e = new Event(name);
+global.simulate = function (name, el, setupFn, val) {
+    const event = new Event(name);
+
+    Object.defineProperty(event, 'target', {
+        value: el,
+        enumerable: true,
+    });
 
     if (setupFn) {
-        setupFn(e);
+        setupFn(event);
     }
 
-    return el.dispatchEvent(e);
+    return el.dispatchEvent(event);
 };
 
 //
 // stub xhr requests
 //
-global.stubRequests = function(requests = {}) {
+global.stubRequests = function (requests = {}) {
     requests = {
         delete: {},
         get: {},
@@ -126,10 +154,10 @@ global.stubRequests = function(requests = {}) {
         post: {},
         put: {},
         ...requests,
-    }
+    };
 
-    Object.keys(requests).forEach(method => {
-        Object.keys(requests[method]).forEach(endpoint => {
+    Object.keys(requests).forEach((method) => {
+        Object.keys(requests[method]).forEach((endpoint) => {
             const fixture = get(requests, `${method}[${endpoint}]`);
             const response = isFunction(fixture) ? fixture() : fixture;
 
@@ -138,17 +166,17 @@ global.stubRequests = function(requests = {}) {
                 .mockReturnValue(
                     typeof response === 'boolean'
                         ? (response ? Promise.resolve({ data: {} }) : Promise.reject())
-                        : Promise.resolve({ data: response })
+                        : Promise.resolve({ data: response }),
                 );
         });
     });
-}
+};
 
 //
 // submit a form
 //
 global.submit = function (el, setupFn) {
-    simulate('submit', el, setupFn);
+    global.simulate('submit', el, setupFn);
 };
 
 //
