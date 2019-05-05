@@ -76,7 +76,8 @@ global.factory = function factory(options = {}) {
         ...options,
     });
 
-    global._activeVms.push(vm);
+    // @todo: figure out if theres a way to hook into
+    // the end of the test so we can dispose of this vm
 
     return vm;
 };
@@ -84,10 +85,14 @@ global.factory = function factory(options = {}) {
 //
 // simulate an input event
 //
-global.input = function (value, el) {
-    el.value = value;
+global.input = function (value, el, setupFn) {
+    return global.simulate('input', el, (e) => {
+        e.target.value = value;
 
-    return simulate('input', el);
+        if (setupFn) {
+            setupFn(e);
+        }
+    });
 };
 
 //
@@ -123,14 +128,19 @@ global.preventInitialization = function (vm) {
 //
 // simulate an event
 //
-global.simulate = function (name, el, setupFn) {
-    const e = new Event(name);
+global.simulate = function (name, el, setupFn, val) {
+    const event = new Event(name);
+
+    Object.defineProperty(event, 'target', {
+        value: el,
+        enumerable: true,
+    });
 
     if (setupFn) {
-        setupFn(e);
+        setupFn(event);
     }
 
-    return el.dispatchEvent(e);
+    return el.dispatchEvent(event);
 };
 
 //

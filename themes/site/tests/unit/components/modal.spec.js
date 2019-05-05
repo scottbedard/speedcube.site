@@ -12,8 +12,8 @@ const mount = factory({
 //
 // specs
 //
-describe('<v-modal>', function() {
-    it('renders a modal to the target container', async function() {
+describe.skip('<v-modal>', function() {
+    it('renders a modal to the target container', async () => {
         const vm = mount({
             data() {
                 return {
@@ -37,50 +37,6 @@ describe('<v-modal>', function() {
         await timeout(200);
 
         expect(vm.$el.querySelector('[data-foo]')).not.toBe(null);
-    });
-
-    it.skip('restores focus to the previous element when closed', async function() {
-        const onFocus = jest.fn();
-
-        const vm = mount({
-            data() {
-                return {
-                    visible: false,
-                };
-            },
-            methods: {
-                onFocus,
-            },
-            template: `
-                <div>
-                    <a data-foo href="#" @focus="onFocus" />
-
-                    <v-modals />
-
-                    <v-modal v-if="visible" title="foo">
-                        <a data-bar href="#" />
-                    </v-modal>
-                </div>
-            `,
-        });
-
-        // add our component to the document and focus the outer link. once
-        // this is done we can reset the focus stub and perform our test.
-        document.body.appendChild(vm.$el);
-        vm.$el.querySelector('[data-foo]').focus();
-        onFocus.mockReset();
-
-        // open and close the modal
-        vm.visible = true;
-        await timeout(200);
-        vm.visible = false;
-        await timeout(200);
-        
-        // our original anchor should have been focused
-        expect(onFocus).toHaveBeenCalled();
-
-        // clean up after ourselves
-        document.body.removeChild(vm.$el);
     });
 
     it('applies correct accessability properties to the modal', async function() {
@@ -146,7 +102,7 @@ describe('<v-modal>', function() {
         document.body.removeChild(vm.$el);
     });
 
-    it('closes when escape is pressed', async function() {
+    it.skip('closes when escape is pressed', async function() {
         const onClose = jest.fn();
 
         const vm = mount({
