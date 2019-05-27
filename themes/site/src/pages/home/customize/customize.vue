@@ -12,9 +12,9 @@
             </h2>
             <p class="font-thin leading-loose mb-8 text-grey-7 text-lg">
                 Our puzzles are made to be customized. Fine tune everything
-                from the colors, to sticker position, even the viewing angle.
-                Your replays will save this configuration, so others can watch
-                the solve and see it exactly as you did.
+                from the color, to sticker positioning, and even the viewing
+                angle. Your replays will save this configuration, so others
+                can watch the solve and see it exactly as you did.
             </p>
             <p class="font-thin leading-loose text-grey-7 text-lg">
                 Key bindings are just as customizable. By default, they are designed
