@@ -120,7 +120,7 @@
                         v-else
                         key="idle">
                         <div class="mb-8">
-                            <v-button primary @click="scramble">
+                            <v-button @click="scramble">
                                 Scramble
                             </v-button>
 

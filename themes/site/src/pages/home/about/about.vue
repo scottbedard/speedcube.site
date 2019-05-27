@@ -15,6 +15,7 @@
                     <v-button
                         class="m-4"
                         primary
+                        title="Click to begin solving"
                         :to="{
                             name: 'solve',
                             params: {
@@ -25,13 +26,14 @@
                     </v-button>
                     <v-button
                         class="m-4"
+                        title="Click to view the current records"
                         :to="{
                             name: 'records',
                             params: {
                                 puzzle: '3x3',
                             },
                         }">
-                        See the current records
+                        Watch record solves
                     </v-button>
                 </div>
                 <!-- <p class="font-thin leading-loose text-grey-7">

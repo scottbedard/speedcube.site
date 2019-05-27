@@ -23,19 +23,35 @@ export default {
         // theme
         //
         if (primary) {
-            bindings.class.push('v-button-primary border-grey-7 text-grey-7 hover:border-primary-6 hover:text-primary-6');
+            bindings.class.push('v-button-primary');
+        
+            if (ghost) {
+                bindings.class.push('border-2 border-primary-5 text-primary-10 hover:border-primary-6 hover:text-grey-10');
+            } else {
+                bindings.class.push('bg-primary-5 text-primary-10 hover:bg-primary-6 hover:text-grey-10');
+            }
         } else if (danger) {
-            bindings.class.push('v-button-danger border-grey-7 text-grey-7 hover:border-danger-7 hover:text-danger-7');
+            bindings.class.push('v-button-danger');
+        
+            if (ghost) {
+                bindings.class.push('border-2 border-danger-6 text-danger-10 hover:border-danger-7 hover:text-grey-10');
+            } else {
+                bindings.class.push('bg-danger-6 text-danger-10 hover:bg-danger-7 hover:text-grey-10');
+            }
         } else {
-            bindings.class.push('border-grey-7 text-grey-7 hover:border-grey-8 hover:text-grey-8');
+            if (ghost) {
+                bindings.class.push('border-2 border-grey-6 text-grey-10 hover:border-grey-7 hover:text-grey-10');
+            } else {
+                bindings.class.push('bg-grey-5 text-grey-10 hover:bg-grey-7 hover:text-grey-10');
+            }
         }
 
-        //
-        // ghost
-        //
-        if (ghost) {
-            bindings.class.push('v-button-ghost');
-        }
+        // //
+        // // ghost
+        // //
+        // if (ghost) {
+        //     bindings.class.push('v-button-ghost');
+        // }
 
         //
         // size
@@ -58,7 +74,7 @@ export default {
         }
 
         return <Tag
-            class="border-2 border-solid cursor-pointer inline-flex items-center justify-center leading-normal rounded text-center text-xs tracking-wide trans-border trans-color uppercase focus:outline-none"
+            class="cursor-pointer font-bold inline-flex items-center justify-center leading-normal rounded-full text-center text-xs tracking-wide trans-bg trans-border trans-color uppercase focus:outline-none"
             href={href}
             to={to}
             type={type}
