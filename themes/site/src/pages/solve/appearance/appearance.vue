@@ -60,6 +60,7 @@
                     Cancel
                 </a>
                 <v-button
+                    primary
                     size="sm"
                     type="submit">
                     {{ isAuthenticated ? 'Save' : 'Apply' }}
