@@ -3,12 +3,13 @@
         <v-grid-cell lg="7">
             <div class="text-center lg:mt-12 lg:pr-20 lg:text-left">
                 <h1 class="font-thin leading-normal mb-8 text-5xl text-grey-8">
-                    The online cube that never pops.
+                    The online cube that never pops
                 </h1>
                 <p class="font-thin leading-loose mb-12 text-grey-7 text-lg">
-                    Your keyboard is the controller. Customize it as much as you
-                    want, or stick with the defaults. After some practice, it will
-                    feel like you're holding it in your hands.
+                    Say goodbye to plugins and extensions. We're a speed cubing
+                    platform that works on any modern browser. Your keyboard is the
+                    controller. Customize things as much or as little as you want.
+                    After some practice, it will feel like you're holding it in your hands.
                 </p>
                 <div class="-m-4">
                     <v-button

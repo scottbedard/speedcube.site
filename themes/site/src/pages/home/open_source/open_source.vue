@@ -4,9 +4,10 @@
             100% Open Source
         </h2>
         <p class="font-thin leading-loose text-grey-7 text-lg">
-            If you know your way around <a href="https://laravel.com" target="_blank">Laravel</a>,
+            If you know your way around <a href="https://laravel.com" target="_blank">Laravel</a>
             or <a href="https://vuejs.org" target="_blank">Vue</a>, by all means
-            get involved! The entire site is open source, <a href="https://github.com/scottbedard/speedcube.site" target="_blank">check us out on github</a>.
+            get involved! We are entirely open source, <a href="https://github.com/scottbedard/speedcube.site" target="_blank">you can find us on GitHub</a>.
+            There are so many feature we're hoping to implement, and can always use an extra set of hands.
         </p>
     </div>
 </template>
