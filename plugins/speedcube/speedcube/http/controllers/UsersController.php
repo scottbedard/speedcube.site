@@ -20,6 +20,9 @@ class UsersController extends ApiController
     public function find($username)
     {
         try {
+            $params = input();
+            $days = (int) array_get($params, 'days', 30);
+
             // fetch the user with their avatar
             $user = User::whereUsername($username)
                 ->with('avatar:attachment_id,attachment_type,disk_name')
@@ -64,7 +67,7 @@ class UsersController extends ApiController
                     'scramble_id',
                     'time',
                 ])
-                ->createdPastDays(30)
+                ->createdPastDays($days)
                 ->with('scramble:id,puzzle')
                 ->get();
 
