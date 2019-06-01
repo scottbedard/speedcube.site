@@ -34,7 +34,7 @@
                         </div>
                     </v-fade-transition>
                 </div>
-                <div class="font-bold text-grey-6 text-xs tracking-wide uppercase w-full">
+                <div class="font-bold text-grey-6 text-center text-sm tracking-wide w-full">
                     <div class="max-w-sm mx-auto sm:px-8">
                         <v-grid padded>
                             <v-grid-cell sm="6">

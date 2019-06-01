@@ -120,9 +120,25 @@
                         v-else
                         key="idle">
                         <div class="mb-8">
-                            <v-button @click="scramble">
-                                Scramble
-                            </v-button>
+                            <div class="mb-8">
+                                <v-button primary @click="scramble">
+                                    Scramble
+                                </v-button>
+                            </div>
+
+                            <!-- settings -->
+                            <div class="flex flex-wrap items-center justify-center text-xs tracking-wide uppercase">
+                                <div class="p-4 w-full sm:w-auto">
+                                    <v-button icon="fa-cog" ghost size="sm" @click="onAppearanceClick">
+                                        Customize
+                                    </v-button>
+                                </div>
+                                <div class="p-4 w-full sm:w-auto">
+                                    <v-button icon="fa-code" ghost size="sm" @click="onControlsClick">
+                                        Edit Key Bindings
+                                    </v-button>
+                                </div>
+                            </div>
 
                             <!-- other puzzles -->
                             <div class="flex items-center justify-center mt-4 text-center text-xs tracking-wide">
@@ -138,21 +154,6 @@
                                     }">
                                     {{ puzzles[key].title }}
                                 </router-link>
-                            </div>
-
-                            <!-- settings -->
-                            <div class="flex flex-wrap items-center justify-center text-xs tracking-wide uppercase">
-                                <div class="p-4 w-full sm:w-auto">
-                                    <a href="#" @click.prevent="onAppearanceClick">
-                                        Customize Puzzle
-                                    </a>
-                                </div>
-                                <div class="border-grey-6 border-b w-2" />
-                                <div class="p-4 w-full sm:w-auto">
-                                    <a href="#" @click.prevent="onControlsClick">
-                                        Edit Key Bindings
-                                    </a>
-                                </div>
                             </div>
                         </div>
                     </div>

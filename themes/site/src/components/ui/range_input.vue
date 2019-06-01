@@ -6,10 +6,10 @@
         :max="max"
         :min="min"
         :process-style="{
-            backgroundColor: '#0F609B',
+            backgroundColor: '#2680C2',
         }"
         :rail-style="{
-            backgroundColor: '#3E4C59',
+            backgroundColor: '#616E7C',
             border: 'none',
             boxShadow: 'none',
         }"
@@ -18,7 +18,7 @@
         <!-- dot -->
         <template slot="dot">
             <div
-                class="bg-grey-3 cursor-grab h-full rounded-half trans-bg w-full hover:bg-grey-4"
+                class="bg-grey-5 cursor-move h-full rounded-half trans-bg w-full hover:bg-grey-4"
             />
         </template>
     </vue-slider>

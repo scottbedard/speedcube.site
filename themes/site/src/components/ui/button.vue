@@ -17,7 +17,7 @@ import { bindAll } from 'spyfu-vue-functional';
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { danger, ghost, href, primary, size, to, type } = context.props;
+        const { danger, icon, ghost, href, primary, size, to, type } = context.props;
 
         //
         // theme
@@ -40,26 +40,17 @@ export default {
             }
         } else {
             if (ghost) {
-                bindings.class.push('border-2 border-grey-6 text-grey-10 hover:border-grey-7 hover:text-grey-10');
+                bindings.class.push('text-grey-6 hover:text-grey-8');
             } else {
                 bindings.class.push('bg-grey-5 text-grey-10 hover:bg-grey-7 hover:text-grey-10');
             }
         }
 
-        // //
-        // // ghost
-        // //
-        // if (ghost) {
-        //     bindings.class.push('v-button-ghost');
-        // }
-
         //
         // size
         //
-        if (size === 'sm') {
-            bindings.class.push('min-h-10 px-4 py-2');
-        } else if (size === 'md') {
-            bindings.class.push('min-h-12 px-8 py-2');
+        if (!ghost) {
+            bindings.class.push('px-8 py-4');
         }
 
         //
@@ -74,11 +65,12 @@ export default {
         }
 
         return <Tag
-            class="cursor-pointer font-bold inline-flex items-center justify-center leading-normal rounded-full text-center text-xs tracking-wide trans-bg trans-border trans-color uppercase focus:outline-none"
+            class="cursor-pointer font-bold inline-flex items-center justify-center leading-normal rounded-full text-center text-sm tracking-wide trans-bg trans-border trans-color uppercase focus:outline-none"
             href={href}
             to={to}
             type={type}
             {...bindings}>
+            {icon && <i class={['fa mr-2 text-lg', icon]} />}
             {context.slots().default}
         </Tag>;
     },
@@ -87,6 +79,9 @@ export default {
         danger: {
             default: false,
             type: Boolean,
+        },
+        icon: {
+            type: String,
         },
         ghost: {
             default: false,
