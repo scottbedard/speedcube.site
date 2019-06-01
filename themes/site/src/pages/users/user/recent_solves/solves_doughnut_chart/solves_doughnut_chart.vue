@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-wrap justify-center -m-4 overflow-hidden text-xs xs:justify-start">
+    <div class="flex flex-wrap justify-center -m-4 overflow-hidden text-sm xs:justify-start">
         <div class="m-4 relative h-32 w-32">
             <v-doughnut-chart
                 :chart-data="chartData"
@@ -29,7 +29,7 @@
                     :key="puzzle"
                     @click.prevent="toggle(puzzle)">
                     <i
-                        class="fa fa-circle mr-2 text-grey-6"
+                        class="fa fa-circle mr-2 text-grey-6 text-lg"
                         :style="{
                             color: isHidden(puzzle) ? 'inherit' : puzzles[puzzle].color,
                         }"
@@ -65,7 +65,7 @@ export default {
         },
         chartOptions() {
             return {
-                cutoutPercentage: 90,
+                cutoutPercentage: 85,
                 legend: {
                     display: false,
                 },
