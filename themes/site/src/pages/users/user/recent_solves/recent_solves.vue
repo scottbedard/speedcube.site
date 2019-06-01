@@ -27,14 +27,19 @@
                     </div>
 
                     <!-- doughnut chart / legend -->
-                    <div>
-                        <!-- <v-solves-doughnut-chart
+                    <div class="mb-8 px-6">
+                        <v-solves-doughnut-chart
                             :grouped-solves="groupedSolves"
                             :is-hidden="isHidden"
                             @toggle="toggle"
-                        /> -->
-                        <v-solves-table :solves="solves" />
+                        />
                     </div>
+                    
+                    <!-- table -->
+                    <v-solves-table
+                        :hidden="hidden"
+                        :solves="solves"
+                    />
                 </div>
                 <div
                     v-else

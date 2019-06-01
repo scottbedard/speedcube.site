@@ -21,15 +21,16 @@
             <div>
                 <a
                     v-for="(puzzle, index) in solvedPuzzles"
-                    class="flex items-center w-full"
+                    class="flex items-center text-sm w-full"
                     href="#"
+                    :alt="isHidden(puzzle) ? 'Click to show' : 'Click to hide'"
                     :class="{
-                        'mt-4': index > 0,
+                        'mt-2': index > 0,
                     }"
                     :key="puzzle"
                     @click.prevent="toggle(puzzle)">
                     <i
-                        class="fa fa-circle mr-2 text-grey-6 text-lg"
+                        class="fa fa-circle mr-2 text-grey-6 text-xs"
                         :style="{
                             color: isHidden(puzzle) ? 'inherit' : puzzles[puzzle].color,
                         }"
@@ -65,7 +66,7 @@ export default {
         },
         chartOptions() {
             return {
-                cutoutPercentage: 85,
+                cutoutPercentage: 90,
                 legend: {
                     display: false,
                 },

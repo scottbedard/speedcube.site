@@ -1,6 +1,7 @@
 <template>
     <div>
         <v-table
+            v-if="totalSolves > 0"
             row-title="Click to watch replay"
             :data="currentPage"
             :headers="true"
@@ -25,8 +26,8 @@
         <!-- pagination -->
         <div
             v-if="lastPageNumber > 1"
-            class="pt-4 px-4 text-right text-xs tracking-wide uppercase">
-            <div class="flex justify-end mb-2 text-grey-7">
+            class="px-6 py-4 text-right text-xs tracking-wide uppercase">
+            <div class="flex justify-end mb-4 text-grey-7">
                 Page {{ page }} of {{ lastPageNumber }}
             </div>
             <div class="flex justify-end">
@@ -57,7 +58,7 @@ export default {
     data() {
         return {
             page: 1,
-            pageSize: 10,
+            pageSize: 5,
         };
     },
     computed: {
@@ -67,19 +68,15 @@ export default {
             return this.filteredPuzzles.slice(start, start + this.pageSize);
         },
         lastPageNumber() {
-            return Math.ceil(this.filteredPuzzles.length / this.pageSize);
+            return Math.ceil(this.totalSolves/ this.pageSize);
         },
         nextPage() {
             return this.page < this.lastPageNumber;
         },
         filteredPuzzles() {
-            const puzzleIds = get(this.$route, 'query.puzzle', null);
-
-            if (puzzleIds === null) {
-                return this.solves;
-            }
-
-            return this.puzzle(puzzleIds);
+            return this.solves.filter(solve => {
+                return !this.hidden.includes(solve.scramble.puzzle);
+            });
         },
         prevPage() {
             return this.page > 1;
@@ -104,6 +101,9 @@ export default {
                 },
             ];
         },
+        totalSolves() {
+            return this.filteredPuzzles.length;
+        },
     },
     methods: {
         onNextPageClick() {
@@ -122,6 +122,7 @@ export default {
         },
     },
     props: [
+        'hidden',
         'solves',
     ],
 };
