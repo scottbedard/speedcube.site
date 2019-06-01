@@ -17,7 +17,7 @@ import { bindAll } from 'spyfu-vue-functional';
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { danger, icon, ghost, href, primary, size, to, type } = context.props;
+        const { danger, icon, ghost, href, primary, size, to, type, uppercase } = context.props;
 
         //
         // theme
@@ -47,9 +47,11 @@ export default {
         }
 
         //
-        // size
+        // spacing
         //
-        if (!ghost) {
+        if (ghost) {
+            bindings.class.push('p-4');
+        } else {
             bindings.class.push('px-8 py-4');
         }
 
@@ -64,8 +66,15 @@ export default {
             Tag = 'a';
         }
 
+        //
+        // uppercase
+        //
+        if (uppercase) {
+            bindings.class.push('uppercase');
+        }
+
         return <Tag
-            class="cursor-pointer font-bold inline-flex items-center justify-center leading-normal rounded-full text-center text-sm tracking-wide trans-bg trans-border trans-color uppercase focus:outline-none"
+            class="cursor-pointer font-bold inline-flex items-center justify-center leading-normal rounded-full text-center text-sm tracking-wide trans-bg trans-border trans-color focus:outline-none"
             href={href}
             to={to}
             type={type}
@@ -103,6 +112,10 @@ export default {
         },
         type: {
             type: String,
+        },
+        uppercase: {
+            default: true,
+            type: Boolean,
         },
     },
 };

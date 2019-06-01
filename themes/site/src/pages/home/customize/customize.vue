@@ -7,20 +7,21 @@
 <template>
     <v-grid padded>
         <v-grid-cell class="lg:order-2" lg="7">
-            <h2 class="font-thin leading-normal mb-8 text-2xl text-grey-8 lg:mt-12">
-                Make the puzzles your own
+            <h2 class="font-light leading-normal mb-8 text-3xl text-grey-8 lg:mt-12">
+                Make the puzzles your own.
             </h2>
-            <p class="font-thin leading-loose mb-8 text-grey-7 text-lg">
-                Our puzzles are made to be customized. Fine tune everything
-                from the color, to sticker positioning, and even the viewing
-                angle. Your replays will save this configuration, so others
-                can watch the solve and see it exactly as you did.
-            </p>
-            <p class="font-thin leading-loose text-grey-7 text-lg">
-                Key bindings are just as customizable. By default, they are designed
-                to mimick the way real finger tricks feel. Modify these bindings as
-                much or as little as you want to have the puzzles feeling just right.
-            </p>
+            <div class="leading-loose text-grey-7">
+                <p class="mb-8">
+                    Everything is customizable. Pick your colors, sticker positioning,
+                    even the camera angle. Your replays will save this configuration,
+                    so others will see the solve and see it exactly as you did.
+                </p>
+                <p>
+                    Key bindings are also configurable. By default, they mimick how
+                    real finger tricks feel. Modify these as much or as little as
+                    you like to have the puzzle feeling just right.
+                </p>
+            </div>
         </v-grid-cell>
         <v-grid-cell class="lg:order-1" lg="5">
             <div class="flex flex-wrap justify-center text-grey-7">
@@ -34,8 +35,8 @@
                         </div>
                     </v-fade-transition>
                 </div>
-                <div class="font-bold text-grey-6 text-center text-sm tracking-wide w-full">
-                    <div class="max-w-sm mx-auto sm:px-8">
+                <div class="text-grey-7 text-center text-sm tracking-wide w-full">
+                    <div class="max-w-md mx-auto sm:px-8">
                         <v-grid padded>
                             <v-grid-cell sm="6">
                                 <div class="mb-4">Camera Angle</div>

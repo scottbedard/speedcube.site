@@ -18,7 +18,7 @@
         <!-- dot -->
         <template slot="dot">
             <div
-                class="bg-grey-5 cursor-move h-full rounded-half trans-bg w-full hover:bg-grey-4"
+                class="bg-grey-5 cursor-ew-resize h-full rounded-half trans-bg w-full hover:bg-grey-4"
             />
         </template>
     </vue-slider>

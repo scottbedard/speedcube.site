@@ -3,13 +3,12 @@
         <v-grid-cell lg="7">
             <div class="text-center lg:mt-12 lg:pr-20 lg:text-left">
                 <h1 class="font-thin leading-normal mb-8 text-5xl text-grey-8">
-                    The online cube that never pops
+                    The online cube that never pops.
                 </h1>
-                <p class="font-thin leading-loose mb-12 text-grey-7 text-lg">
-                    Say goodbye to plugins and extensions. We're a speed cubing
-                    platform that works on any modern browser. Your keyboard is the
-                    controller. Customize things as much or as little as you want.
-                    After some practice, it will feel like you're holding it in your hands.
+                <p class="leading-loose mb-12 text-grey-7 text-lg">
+                    We're a speed cubing platform for any modern browser.
+                    Your keyboard is the controller. After some practice,
+                    it'll feel you're holding it in your hands.
                 </p>
                 <div class="-m-4">
                     <v-button
@@ -22,7 +21,7 @@
                                 puzzle: '3x3',
                             },
                         }">
-                        Start solving
+                        Start Solving
                     </v-button>
                     <v-button
                         class="m-4"
@@ -33,7 +32,7 @@
                                 puzzle: '3x3',
                             },
                         }">
-                        Watch record solves
+                        Watch Records
                     </v-button>
                 </div>
                 <!-- <p class="font-thin leading-loose text-grey-7">

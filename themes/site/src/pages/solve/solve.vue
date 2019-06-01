@@ -119,7 +119,7 @@
                     <div
                         v-else
                         key="idle">
-                        <div class="mb-8">
+                        <div class="text-center">
                             <div class="mb-8">
                                 <v-button primary @click="scramble">
                                     Scramble
@@ -127,33 +127,30 @@
                             </div>
 
                             <!-- settings -->
-                            <div class="flex flex-wrap items-center justify-center text-xs tracking-wide uppercase">
-                                <div class="p-4 w-full sm:w-auto">
-                                    <v-button icon="fa-cog" ghost size="sm" @click="onAppearanceClick">
-                                        Customize
-                                    </v-button>
-                                </div>
-                                <div class="p-4 w-full sm:w-auto">
-                                    <v-button icon="fa-code" ghost size="sm" @click="onControlsClick">
-                                        Edit Key Bindings
-                                    </v-button>
-                                </div>
+                            <div>
+                                <v-button icon="fa-cog" ghost size="sm" @click="onAppearanceClick">
+                                    Customize
+                                </v-button>
+                                <v-button icon="fa-code" ghost size="sm" @click="onControlsClick">
+                                    Edit Key Bindings
+                                </v-button>
                             </div>
 
                             <!-- other puzzles -->
-                            <div class="flex items-center justify-center mt-4 text-center text-xs tracking-wide">
-                                <router-link
+                            <div>
+                                <v-button
                                     v-for="key in puzzleKeys"
-                                    class="m-4"
+                                    ghost
                                     :key="key"
                                     :to="{
                                         name: 'solve',
                                         params: {
                                             puzzle: puzzles[key].slug,
                                         },
-                                    }">
+                                    }"
+                                    :uppercase="false">
                                     {{ puzzles[key].title }}
-                                </router-link>
+                                </v-button>
                             </div>
                         </div>
                     </div>
