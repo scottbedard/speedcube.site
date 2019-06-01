@@ -24,7 +24,7 @@
                     class="flex items-center w-full"
                     href="#"
                     :class="{
-                        'mt-2': index > 0,
+                        'mt-4': index > 0,
                     }"
                     :key="puzzle"
                     @click.prevent="toggle(puzzle)">
