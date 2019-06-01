@@ -69,9 +69,12 @@
                         v-text="scrambleText"
                         class="font-mono font-thin leading-loose max-w-md mx-auto leading-normal mb-12 text-grey-6 text-sm"
                     />
-                    <v-button @click="replay">
-                        Watch
-                    </v-button>
+                    <span class="p-4">
+                        <v-button primary @click="replay">Watch Replay</v-button>
+                    </span>
+                    <span class="p-4">
+                        <v-button :to="{ name: 'users:show', params: { username }}">View Stats</v-button>
+                    </span>
                 </div>
             </v-fade-transition>
         </v-margin>
