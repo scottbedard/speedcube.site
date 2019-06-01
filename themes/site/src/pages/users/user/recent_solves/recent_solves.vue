@@ -9,7 +9,7 @@
 <template>
     <div>
         <h3 class="mb-4 text-grey-6 text-xl">Recent Solves</h3>
-        <v-card padded>
+        <v-card>
             <div class="flex items-center justify-center">
                 <div
                     v-if="solves.length > 0"
@@ -17,7 +17,7 @@
                     class="w-full">
 
                     <!-- scatter chart -->
-                    <div class="mb-8">
+                    <div class="mb-8 px-6 pt-6">
                         <v-solves-scatter-chart
                             :grouped-solves="groupedSolves"
                             :is-hidden="isHidden"
@@ -28,11 +28,12 @@
 
                     <!-- doughnut chart / legend -->
                     <div>
-                        <v-solves-doughnut-chart
+                        <!-- <v-solves-doughnut-chart
                             :grouped-solves="groupedSolves"
                             :is-hidden="isHidden"
                             @toggle="toggle"
-                        />
+                        /> -->
+                        <v-solves-table :solves="solves" />
                     </div>
                 </div>
                 <div
@@ -51,6 +52,7 @@ import { get, sortBy } from 'lodash-es';
 import { puzzles } from '@/app/constants';
 import solvesDoughnutChartComponent from './solves_doughnut_chart/solves_doughnut_chart.vue';
 import solvesScatterChartComponent from './solves_scatter_chart/solves_scatter_chart.vue';
+import sovlesTableComponent from './solves_table/solves_table.vue';
 
 export default {
     data() {
@@ -62,6 +64,7 @@ export default {
     components: {
         'v-solves-doughnut-chart': solvesDoughnutChartComponent,
         'v-solves-scatter-chart': solvesScatterChartComponent,
+        'v-solves-table': sovlesTableComponent,
     },
     computed: {
         groupedSolves() {

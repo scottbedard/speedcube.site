@@ -1,15 +1,15 @@
 <style lang="scss" scoped>
     .v-table {
         /deep/ thead {
-
+            // ...
         }
 
         /deep/ thead th {
-            padding: 1rem;
+            @apply px-6 py-4;
         }
 
         /deep/ tbody td {
-            padding: 1rem;
+            @apply px-6 py-4;
         }
 
         /deep/ tbody tr {
@@ -19,7 +19,7 @@
         }
 
         /deep/ tbody tr:nth-child(odd) {
-
+            // ...
         }
     }
 </style>
@@ -63,9 +63,17 @@ function tr(h, scopedSlots, context, row, rowIndex) {
     const key = `row_${rowIndex}`;
 
     const bindings = {
+        attrs: {
+            one: 'two',
+        },
         class: [],
         on: {},
     };
+
+    // attach row titles
+    if (context.props.rowTitle) {
+        bindings.attrs.title = context.props.rowTitle;
+    }
 
     // attach row-click listener
     if (isFunction(context.listeners['row-click'])) {
@@ -179,6 +187,9 @@ export default {
         },
         headers: {
             type: Boolean,
+        },
+        rowTitle: {
+            type: String,
         },
         schema: {
             type: Array,
