@@ -40,7 +40,7 @@
                                 />
                             </v-grid-cell>
                             <v-grid-cell md="8" lg="9">
-                                <v-recent-solves :solves="solves" />
+                                <v-recent-solves :days="days" :solves="solves" @days="setDays" />
                             </v-grid-cell>
                         </v-grid>
                     </template>
@@ -72,6 +72,7 @@ export default {
     },
     data() {
         return {
+            days: 365,
             overviewIsLoading: false,
             recordAverages: [],
             records: [],
@@ -96,7 +97,7 @@ export default {
         fetchOverview() {
             this.overviewIsLoading = true;
 
-            getOverview(this.$route.params.username).then((response) => {
+            getOverview(this.$route.params.username, this.days).then((response) => {
                 // success
                 const { recordAverages, records, solves, totals, user } = response.data;
 
@@ -110,8 +111,12 @@ export default {
                 this.overviewIsLoading = false;
             });
         },
+        setDays(days) {
+            this.days = days;
+        },
     },
     watch: {
+        days: 'fetchOverview',
         $route: {
             deep: true,
             handler() {

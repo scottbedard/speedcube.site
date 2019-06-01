@@ -18,6 +18,11 @@
 
                     <!-- scatter chart -->
                     <div class="mb-8 px-6 pt-6">
+                        <div class="flex mb-6 justify-end text-xs tracking-wide">
+                            <a class="ml-4" href="#" :class="{ 'text-grey-8': days === 7 }" @click.prevent="setDays(7)">This Week</a>
+                            <a class="ml-4" href="#" :class="{ 'text-grey-8': days === 30 }" @click.prevent="setDays(30)">This Month</a>
+                            <a class="ml-4" href="#" :class="{ 'text-grey-8': days === 365 }" @click.prevent="setDays(365)">This Year</a>
+                        </div>
                         <v-solves-scatter-chart
                             :grouped-solves="groupedSolves"
                             :is-hidden="isHidden"
@@ -96,6 +101,9 @@ export default {
         },
     },
     methods: {
+        setDays(days) {
+            this.$emit('days', days);
+        },
         toggle(puzzle) {
             if (this.isHidden(puzzle)) {
                 this.hidden = this.hidden.filter(hiddenPuzzle => hiddenPuzzle !== puzzle);
@@ -105,6 +113,7 @@ export default {
         },
     },
     props: [
+        'days',
         'solves',
     ],
 };
