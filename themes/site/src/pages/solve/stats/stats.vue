@@ -2,18 +2,14 @@
     <div class="text-sm">
         <!-- last 5 -->
         <div>
-            <div class="flex flex-wrap justify-center mb-2 text-center">
-                <div class="text-grey-6">Recent Solves:</div>
+            <div class="flex flex-wrap justify-center mb-4 text-center">
+                <div class="text-grey-7">Recent Solves:</div>
                 <template v-for="solve in sortedLast5">
-                    <div class="px-2" :key="solve.id">
-                        <span
-                            v-if="solve.status === 'dnf'"
-                            class="text-grey-6">
-                            DNF
-                        </span>
+                    <div class="font-bold ml-4 text-grey-6" :key="solve.id">
+                        <span v-if="solve.status === 'dnf'" v-text="'DNF'" />
                         <router-link
                             v-else
-                            class="text-grey-6 hover:text-grey-8"
+                            class="hover:text-grey-8"
                             title="Click to watch replay"
                             :to="{
                                 name: 'replay',
@@ -28,9 +24,9 @@
             </div>
         </div>
 
-        <div class="flex flex-wrap justify-center text-center text-grey-6 text-sm">
+        <div class="flex flex-wrap justify-center text-center text-grey-7 text-sm">
             <div class="m-2">
-                Average:<span class="px-2">
+                Average:<span class="ml-4">
                     <template v-if="sortedLast5.length < 5">TBD</template>
                     <template v-else-if="avgOf5 === -1">DNF</template>
                     <template v-else>{{ avgOf5 | shortTimer }}</template>

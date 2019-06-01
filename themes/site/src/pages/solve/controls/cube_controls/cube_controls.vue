@@ -11,7 +11,7 @@
 <template>
     <div>
         <!-- copy -->
-        <p class="max-w-lg mb-12 text-grey-7 text-sm">
+        <p class="leading-loose max-w-lg mb-12 text-grey-7">
             These are your current key bindings, displayed in <b>&quot;key <i class="fa fa-angle-right px-2"></i> turn&quot;</b> format.
             The <b>&quot;key&quot;</b> represents the key on your keyboard, and the <b>&quot;turn&quot;</b> represents the puzzle turn to execute.
             Feel free to use the puzzle while the key binding editor is open, making a turn will highlight the associated binding if one exists.
@@ -19,7 +19,7 @@
 
         <!-- key bindings -->
         <div class="max-w-xl mx-auto mb-4 text-sm">
-            <div v-if="isAuthenticated" class="flex items-center pb-4 uppsercase text-xs tracking-wide">
+            <div v-if="isAuthenticated" class="flex items-center pb-4 uppsercase tracking-wide">
                 <a
                     class="flex items-center m-4 outline-none"
                     href="#"
@@ -170,20 +170,16 @@
                 <div v-else key="actions">
                     <div class="flex flex-wrap items-center justify-center -m-4 overflow-hidden pt-6 md:justify-end">
                         <!-- discard -->
-                        <a
-                            class="block m-4 uppercase text-xs tracking-wide hover:text-danger-7"
-                            href="#"
-                            :disabled="loading"
-                            @click.prevent="onCloseClick">
+                        <v-button danger ghost :disabled="loading" @click="onCloseClick">
                             Discard Changes
-                        </a>
+                        </v-button>
 
                         <!-- save -->
                         <v-button
                             class="m-4"
-                            href="#"
+                            primary
                             :disabled="loading"
-                            @click.prevent="onSaveClick">
+                            @click="onSaveClick">
                             Save
                         </v-button>
                     </div>

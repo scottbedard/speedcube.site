@@ -34,7 +34,7 @@ export default {
             bindings.class.push('v-button-danger');
         
             if (ghost) {
-                bindings.class.push('border-2 border-danger-6 text-danger-10 hover:border-danger-7 hover:text-grey-10');
+                bindings.class.push('text-grey-6 hover:text-danger-7');
             } else {
                 bindings.class.push('bg-danger-6 text-danger-10 hover:bg-danger-7 hover:text-grey-10');
             }
@@ -79,7 +79,7 @@ export default {
             to={to}
             type={type}
             {...bindings}>
-            {icon && <i class={['fa mr-2 text-lg', icon]} />}
+            {icon && <i class={['fa mr-3 text-lg', icon]} />}
             {context.slots().default}
         </Tag>;
     },

@@ -52,19 +52,15 @@
             </div>
 
             <!-- actions -->
-            <div class="mt-8 flex items-center justify-center">
-                <a
-                    class="mr-4 text-grey-7 text-xs tracking-wide uppercase hover:text-danger-7"
-                    href="#"
-                    @click.prevent="close">
-                    Cancel
-                </a>
-                <v-button
-                    primary
-                    size="sm"
-                    type="submit">
-                    {{ isAuthenticated ? 'Save' : 'Apply' }}
-                </v-button>
+            <div class="mt-4 flex items-center justify-center">
+                <div class="p-4">
+                    <v-button danger ghost @click="close">Cancel</v-button>
+                </div>
+                <div class="p-4">
+                    <v-button primary type="submit">
+                        {{ isAuthenticated ? 'Save' : 'Apply' }}
+                    </v-button>
+                </div>
             </div>
         </form>
     </div>

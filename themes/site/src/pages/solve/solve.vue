@@ -79,17 +79,22 @@
 
                         <!-- stats -->
                         <v-fade-transition :enter-delay="200">
-                            <div v-if="!inspecting && !solving">
-                                <div class="mb-8">
+                            <div v-if="true || (!inspecting && !solving)">
+                                <div class="mb-4">
                                     <v-stats
                                         :last5="last5Solves"
                                         :record-average="recordAverage"
                                         :solves="solves"
                                     />
                                 </div>
-                                <v-button primary @click="scramble">
-                                    Scramble
-                                </v-button>
+                                <div class="text-grey-5 text-sm">
+                                    <div class="mb-4">
+                                        press spacebar to scramble
+                                    </div>
+                                    <div>
+                                        press escape to exit
+                                    </div>
+                                </div>
                             </div>
                         </v-fade-transition>
                     </div>
@@ -128,11 +133,11 @@
 
                             <!-- settings -->
                             <div>
-                                <v-button icon="fa-cog" ghost size="sm" @click="onAppearanceClick">
-                                    Customize
+                                <v-button icon="fa-sliders" ghost size="sm" @click="onAppearanceClick">
+                                    Appearance
                                 </v-button>
                                 <v-button icon="fa-code" ghost size="sm" @click="onControlsClick">
-                                    Edit Key Bindings
+                                    Key Bindings
                                 </v-button>
                             </div>
 
@@ -409,6 +414,11 @@ export default {
             }
         },
         onKeyup(e) {
+            // reset everything if we're solved and escape was pressed
+            if (this.solved && e.key === 'Escape') {
+                this.reset();
+            }
+
             // do nothing if the puzzle is not turnable
             if (!this.puzzleIsTurnable) {
                 return;
