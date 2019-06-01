@@ -19,9 +19,24 @@
                     <!-- scatter chart -->
                     <div class="mb-8 px-6 pt-6">
                         <div class="flex mb-6 justify-end text-xs tracking-wide">
-                            <a class="ml-4" href="#" :class="{ 'text-grey-8': days === 7 }" @click.prevent="setDays(7)">This Week</a>
-                            <a class="ml-4" href="#" :class="{ 'text-grey-8': days === 30 }" @click.prevent="setDays(30)">This Month</a>
-                            <a class="ml-4" href="#" :class="{ 'text-grey-8': days === 365 }" @click.prevent="setDays(365)">This Year</a>
+                            <router-link 
+                                class="ml-4"
+                                :class="{ 'text-grey-8': days === 7 }"
+                                :to="{ query: { days: 7 }}">
+                                This Week
+                            </router-link>
+                            <router-link 
+                                class="ml-4"
+                                :class="{ 'text-grey-8': days === 30 }"
+                                :to="{ query: { days: 30 }}">
+                                This Month
+                            </router-link>
+                            <router-link 
+                                class="ml-4"
+                                :class="{ 'text-grey-8': days === 365 }"
+                                :to="{ query: { days: 365 }}">
+                                This Year
+                            </router-link>
                         </div>
                         <v-solves-scatter-chart
                             :grouped-solves="groupedSolves"
@@ -39,7 +54,7 @@
                             @toggle="toggle"
                         />
                     </div>
-                    
+
                     <!-- table -->
                     <v-solves-table
                         :hidden="hidden"

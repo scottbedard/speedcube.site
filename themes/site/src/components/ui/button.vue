@@ -24,7 +24,7 @@ export default {
         //
         if (primary) {
             bindings.class.push('v-button-primary');
-        
+
             if (ghost) {
                 bindings.class.push('border-2 border-primary-5 text-primary-10 hover:border-primary-6 hover:text-grey-10');
             } else {
@@ -32,18 +32,16 @@ export default {
             }
         } else if (danger) {
             bindings.class.push('v-button-danger');
-        
+
             if (ghost) {
                 bindings.class.push('text-grey-6 hover:text-danger-7');
             } else {
                 bindings.class.push('bg-danger-6 text-danger-10 hover:bg-danger-7 hover:text-grey-10');
             }
+        } else if (ghost) {
+            bindings.class.push('text-grey-6 hover:text-grey-8');
         } else {
-            if (ghost) {
-                bindings.class.push('text-grey-6 hover:text-grey-8');
-            } else {
-                bindings.class.push('bg-grey-5 text-grey-10 hover:bg-grey-7 hover:text-grey-10');
-            }
+            bindings.class.push('bg-grey-5 text-grey-10 hover:bg-grey-7 hover:text-grey-10');
         }
 
         //

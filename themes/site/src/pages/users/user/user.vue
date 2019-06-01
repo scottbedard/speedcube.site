@@ -72,7 +72,6 @@ export default {
     },
     data() {
         return {
-            days: 365,
             overviewIsLoading: false,
             recordAverages: [],
             records: [],
@@ -88,6 +87,9 @@ export default {
     computed: {
         avatarPath() {
             return get(this.user, 'avatar.path');
+        },
+        days() {
+            return this.$route.query.days || 30;
         },
         isLoading() {
             return this.overviewIsLoading;

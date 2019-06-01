@@ -68,15 +68,13 @@ export default {
             return this.filteredPuzzles.slice(start, start + this.pageSize);
         },
         lastPageNumber() {
-            return Math.ceil(this.totalSolves/ this.pageSize);
+            return Math.ceil(this.totalSolves / this.pageSize);
         },
         nextPage() {
             return this.page < this.lastPageNumber;
         },
         filteredPuzzles() {
-            return this.solves.filter(solve => {
-                return !this.hidden.includes(solve.scramble.puzzle);
-            });
+            return this.solves.filter(solve => !this.hidden.includes(solve.scramble.puzzle));
         },
         prevPage() {
             return this.page > 1;
