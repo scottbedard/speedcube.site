@@ -26,7 +26,11 @@ export function getAuthenticatedUser() {
  * @return {Promise}
  */
 export function getOverview(username, days = 30) {
-    return axios.get(`/api/speedcube/speedcube/users/${username}/overview?days=${days}`);
+    return axios.get(`/api/speedcube/speedcube/users/${username}/overview`, {
+        params: {
+            days,
+        },
+    });
 }
 
 /**

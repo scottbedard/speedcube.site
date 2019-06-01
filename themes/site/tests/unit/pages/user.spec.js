@@ -50,7 +50,7 @@ describe('user page', function() {
 
         await timeout(20);
 
-        expect(axios.get).toHaveBeenCalledWith('/api/speedcube/speedcube/users/scott/overview');
+        expect(axios.get).toHaveBeenCalledWith('/api/speedcube/speedcube/users/scott/overview', expect.anything());
 
         vm.$router.replace({
             name: 'test',
@@ -61,6 +61,6 @@ describe('user page', function() {
 
         await timeout(20);
 
-        expect(axios.get).toHaveBeenCalledWith('/api/speedcube/speedcube/users/foo/overview');
+        expect(axios.get).toHaveBeenCalledWith('/api/speedcube/speedcube/users/foo/overview', expect.anything());
     });
 });
