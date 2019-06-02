@@ -9,9 +9,9 @@
 
 ## Inspiration and project goals
 
-Several years ago, the excellent [hi-games.net](http://hi-games.net/) was created by Ryan Heise. This site was a lot of fun, and many talented people were using it. Unfortunately though, all good things have to end. [The web moved away from Java applets](https://blogs.oracle.com/java-platform-group/moving-to-a-plugin-free-web), which meant saying goodbye to a some great gaming sites.
+Several years ago, the excellent [hi-games.net](http://hi-games.net/) was created by Ryan Heise. This site was a lot of fun, and many talented people were using it. Unfortunately though, all good things have to end. [The web moved away from Java applets](https://blogs.oracle.com/java-platform-group/moving-to-a-plugin-free-web), which meant saying goodbye to some great gaming sites.
 
-That's where this project begins though, with modern browsers we can make something better. Our goal is to be a platform that just works. We currently support customizing, timed solves, replays, and in depth stats. We hope to someday host tournaments, provide memorization games, and much more.
+That's where this project begins though. Our goal is to be a platform that just works. We currently support customizing, timed solves, replays, and in depth stats. We hope to someday host tournaments, provide memorization games, and much more.
 
 ## Creating a local environment
 
