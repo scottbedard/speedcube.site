@@ -6,6 +6,9 @@
             :data="currentPage"
             :headers="true"
             :schema="schema"
+            :sort-dir="sortDir"
+            :sort-key="sortBy"
+            @header-click="onHeaderClick"
             @row-click="onRowClick">
             <!-- time -->
             <template v-slot:time="{ row, value }">
@@ -52,13 +55,15 @@
 </template>
 
 <script>
-import { get } from 'lodash-es';
+import { get, sortBy } from 'lodash-es';
 
 export default {
     data() {
         return {
             page: 1,
             pageSize: 10,
+            sortBy: 'date',
+            sortDir: 'desc',
         };
     },
     computed: {
@@ -74,7 +79,12 @@ export default {
             return this.page < this.lastPageNumber;
         },
         filteredPuzzles() {
-            return this.solves.filter(solve => !this.hidden.includes(solve.scramble.puzzle));
+            const solves = this.solves.filter(solve => !this.hidden.includes(solve.scramble.puzzle))
+            const sortedSolves = sortBy(solves, this.sortBy);
+
+            return this.sortDir === 'desc'
+                ? sortedSolves.reverse()
+                : sortedSolves;
         },
         prevPage() {
             return this.page > 1;
@@ -87,6 +97,7 @@ export default {
                 {
                     header: 'Date',
                     key: 'date',
+                    sortable: true,
                 },
                 {
                     header: 'Puzzle',
@@ -96,6 +107,7 @@ export default {
                     align: 'right',
                     header: 'Time',
                     key: 'time',
+                    sortable: true,
                 },
             ];
         },
@@ -106,6 +118,14 @@ export default {
     methods: {
         onNextPageClick() {
             this.page = Math.min(this.lastPageNumber, this.page + 1);
+        },
+        onHeaderClick({ col }) {
+            if (this.sortBy !== col.key) {
+                this.sortBy = col.key;
+                this.sortDir = 'desc';
+            } else {
+                this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
+            }
         },
         onPrevPageClick() {
             this.page = Math.max(1, this.page - 1);

@@ -34,6 +34,7 @@ function normalizeColumn(col) {
     return {
         align: 'left',
         headerClass: '',
+        sortable: false,
         verticalAlign: 'top',
         ...col,
     };
@@ -42,16 +43,29 @@ function normalizeColumn(col) {
 //
 // header cell
 //
-function headerCell(h, col) {
+function headerCell(h, context, col) {
     const { align, headerClass } = normalizeColumn(col);
+    const { sortDir, sortKey } = context.props;
+    const headerBindings = { on: {} };
 
-    return <th class={[
-        'font-bold',
-        align === 'left' && 'text-left',
-        align === 'right' && 'text-right',
-        headerClass,
-    ]}>
+    if (col.sortable && isFunction(context.listeners['header-click'])) {
+        headerBindings.on.click = e => {
+            context.listeners['header-click']({ col, event });
+        }
+    }
+
+    return <th
+        class={[
+            'font-bold',
+            align === 'left' && 'text-left',
+            align === 'right' && 'text-right',
+            headerClass,
+            col.sortable && 'cursor-pointer',
+        ]}
+        title={col.sortable && 'Click to sort'}
+        {...headerBindings}>
         {col.header}
+        {sortKey === col.key && <i class={['fa ml-2', sortDir === 'asc' ? 'fa-angle-up' : 'fa-angle-down' ]} />}
     </th>;
 }
 
@@ -169,7 +183,7 @@ export default {
                 { (headers === undefined || headers === true)
                     && <thead>
                         <tr>
-                            {schema.map(col => headerCell(h, col))}
+                            {schema.map(col => headerCell(h, context, col))}
                         </tr>
                     </thead>
                 }
@@ -193,6 +207,12 @@ export default {
         },
         schema: {
             type: Array,
+        },
+        sortDir: {
+            type: String,
+        },
+        sortKey: {
+            type: String,
         },
     },
 };
