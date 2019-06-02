@@ -36,4 +36,4 @@ $ yarn serve
 $ yarn test:unit
 ```
 
-Our application is built with [October CMS](https://octobercms.com), their documentation will be helpful when in the backend.
+Our application is built with [October CMS](https://octobercms.com), their documentation will be helpful when in the backend. If you're looking to get started on the frontend, let our [components page](https://speedcube.site/components) be your sandbox.

@@ -13,7 +13,7 @@ export default {
     '<v-modal>': () => import('./modal_example.vue'),
     '<v-number-transition>': () => import('./number_transition_example.vue'),
     '<v-range-input>': () => import('./range_input_example.vue'),
-    '<v-select>': () => import('./select_example.vue'),
+    // '<v-select>': () => import('./select_example.vue'),
     '<v-spinner>': () => import('./spinner_example.vue'),
     '<v-switch>': () => import('./switch_example.vue'),
 };
