@@ -9,21 +9,21 @@
 
 ## Inspiration and project goals
 
-Several years ago, the excellent [hi-games.net](http://hi-games.net/) was created by Ryan Heise. This site was a lot of fun, and many talented people were using it. Unfortunately though, it didn't age well. The biggest problem was that [browsers moved away from java applets](https://blogs.oracle.com/java-platform-group/moving-to-a-plugin-free-web). This deprecation effectively killed hi-games, and really all java based gaming sites.
+Several years ago, the excellent [hi-games.net](http://hi-games.net/) was created by Ryan Heise. This site was a lot of fun, and many talented people were using it. Unfortunately though, it didn't age well. The biggest problem was that [browsers were deprecating applets](https://blogs.oracle.com/java-platform-group/moving-to-a-plugin-free-web). This effectively killed hi-games, and really all java based gaming sites.
 
-That's where this project begins, and with modern browsers we can make something better. Our goal is to make a speed cubing platform **that just works**. With modern javascript, the sky is the limit. There are so many features we want to add, so expect to see things change from time to time. We currently provide in depth stats for each user, but hope to one day host tournaments, provide memorization games, and much more.
+That's where this project begins though, with modern browsers we can make something better. Our goal is to be a speed cubing platform that just works. We currently support customizing, timed solves, replays, and in depth stats. We hope to someday host tournaments, provide memorization games, and much more.
 
 ## Creating a local environment
 
 If you're familiar with [Laravel](https://laravel.com) or [Vue](https://vuejs.org), you're going to feel right at home. The recommended backend setup is a [Laravel Homestead](https://laravel.com/docs/homestead) box, but any environment that supports both PHP and Node should be fine.
 
 1. Clone this repository, and rename `.env.example` to `.env`
-2. Clone [`rainlab-user-api`](https://github.com/vuetober/rainlab-user-api) to `/plugins/vuetober/rainlab-user-api`
+2. Clone [`rainlab-user-api`](https://github.com/vuetober/rainlab-user-api) to `/plugins/vuetober/rainlabuserapi`
 3. Execute `composer install` from the root directory
 4. Execute `yarn install` from `/themes/site`
 5. Build databases with `php artisan october:up`
 
-Once this is done, the following commands should be available from `/themes/site`.
+Once this is done, the following commands will be available from `/themes/site`.
 
 ```bash
 # build production assets
@@ -36,4 +36,4 @@ $ yarn serve
 $ yarn test:unit
 ```
 
-Out application is built with [October CMS](https://github.com/octobercms/october), so be sure to check out their documentation when working in the backend.
+Our application is built with [October CMS](https://octobercms.com), their documentation will be helpful when in the backend.
