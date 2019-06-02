@@ -7,12 +7,33 @@
 [![Dependencies](https://img.shields.io/david/scottbedard/speedcube.site.svg?path=themes%2Fsite&style=flat)](https://david-dm.org/scottbedard/speedcube.site?path=themes%2Fsite)
 [![Dev dependencies](https://img.shields.io/david/dev/scottbedard/speedcube.site.svg?path=themes%2Fsite)](https://david-dm.org/scottbedard/speedcube.site?path=themes%2Fsite&type=dev)
 
-> **Warning:** This site is a work in progress. Feel free to try things out, but be aware that things may not work properly, and accounts may be reset at any time.
+## Inspiration and project goals
 
-### Inspiration and project goals
+Several years ago, the excellent [hi-games.net](http://hi-games.net/) was created by Ryan Heise. This site was a lot of fun, and many talented people were using it. Unfortunately though, it didn't age well. The biggest problem was that [browsers moved away from java applets](https://blogs.oracle.com/java-platform-group/moving-to-a-plugin-free-web). This deprecation effectively killed hi-games, and really all java based gaming sites.
 
-Several years ago, the excellent hi-games.net was created by Ryan Heise. This site was a lot of fun, and many talented speedcubers were using it. Unfortunately though, the site did not age well. There were a number of problems and things that could be improved. Most notably was it's reliance on Java Applets, [which have been deprecated for years](https://blogs.oracle.com/java-platform-group/moving-to-a-plugin-free-web). This deprecation effectively killed hi-games, and in the years since it has not been fixed.
+That's where this project begins, and with modern browsers we can make something better. Our goal is to make a speed cubing platform **that just works**. With modern javascript, the sky is the limit. There are so many features we want to add, so expect to see things change from time to time. We currently provide in depth stats for each user, but hope to one day host tournaments, provide memorization games, and much more.
 
-That's where this project begins. With modern browsers we can make something better. Our goal is to make a speed cubing platform **that just works**, with no plugins or special permissions required. To achieve this, we're using native web technologies that are available in all browsers.
+## Creating a local environment
 
-In addition to this, our goal is to be more than a site where you can simply record solves. There are so many features that we want to make. Our goal is to provide in depth stats for each user, host tournaments, provide memorization games to teach different algorithms, and much much more.
+If you're familiar with [Laravel](https://laravel.com) or [Vue](https://vuejs.org), you're going to feel right at home. The recommended backend setup is a [Laravel Homestead](https://laravel.com/docs/homestead) box, but any environment that supports both PHP and Node should be fine.
+
+1. Clone this repository, and rename `.env.example` to `.env`
+2. Clone [`rainlab-user-api`](https://github.com/vuetober/rainlab-user-api) to `/plugins/vuetober/rainlab-user-api`
+3. Execute `composer install` from the root directory
+4. Execute `yarn install` from `/themes/site`
+5. Build databases with `php artisan october:up`
+
+Once this is done, the following commands should be available from `/themes/site`.
+
+```bash
+# build production assets
+$ yarn build
+
+# start the development server and watch for changes
+$ yarn serve
+
+# run tests
+$ yarn test:unit
+```
+
+Out application is built with [October CMS](https://github.com/octobercms/october), so be sure to check out their documentation when working in the backend.
