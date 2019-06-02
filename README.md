@@ -13,9 +13,9 @@ Several years ago, the excellent [hi-games.net](http://hi-games.net/) was create
 
 That's where this project begins though. Our goal is to be a platform that just works. We currently support customizing, timed solves, replays, and in depth stats. We hope to someday host tournaments, provide memorization games, and much more.
 
-## Creating a local environment
+## Setting up a local environment
 
-If you're familiar with [Laravel](https://laravel.com) or [Vue](https://vuejs.org), you're going to feel right at home. The recommended backend setup is a [Laravel Homestead](https://laravel.com/docs/homestead) box, but any environment that supports both PHP and Node should be fine.
+If you're familiar with [Laravel](https://laravel.com) or [Vue](https://vuejs.org), you're going to feel right at home. The recommended backend is a [Laravel Homestead](https://laravel.com/docs/homestead) box, but any environment that supports both PHP and Node should be fine.
 
 1. Clone this repository, and rename `.env.example` to `.env`
 2. Clone [`rainlab-user-api`](https://github.com/vuetober/rainlab-user-api) to `/plugins/vuetober/rainlabuserapi`
