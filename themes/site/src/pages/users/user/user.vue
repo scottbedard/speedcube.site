@@ -89,7 +89,7 @@ export default {
             return get(this.user, 'avatar.path');
         },
         days() {
-            return this.$route.query.days || 30;
+            return this.$route.query.days || 365;
         },
         isLoading() {
             return this.overviewIsLoading;
