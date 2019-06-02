@@ -9,7 +9,7 @@
 
 ## Inspiration and project goals
 
-Several years ago, the excellent [hi-games.net](http://hi-games.net/) was created by Ryan Heise. This site was a lot of fun, and many talented people were using it. Unfortunately though, it didn't age well. The biggest problem was that [browsers were deprecating applets](https://blogs.oracle.com/java-platform-group/moving-to-a-plugin-free-web). This effectively killed hi-games, and really all java based gaming sites.
+Several years ago, the excellent [hi-games.net](http://hi-games.net/) was created by Ryan Heise. This site was a lot of fun, and many talented people were using it. Unfortunately though, it no longer works in pretty much any browser. [The web moved away from Java applets](https://blogs.oracle.com/java-platform-group/moving-to-a-plugin-free-web), which killed hi-games.net and many other gaming sites.
 
 That's where this project begins though, with modern browsers we can make something better. Our goal is to be a speed cubing platform that just works. We currently support customizing, timed solves, replays, and in depth stats. We hope to someday host tournaments, provide memorization games, and much more.
 
