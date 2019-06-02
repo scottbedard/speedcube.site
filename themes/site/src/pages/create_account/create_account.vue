@@ -2,15 +2,9 @@
     <v-page padded>
         <v-margin padded>
             <!-- title -->
-            <div class="text-center">
-                <h1 class="font-thin mb-4 text-3xl text-grey-9 tracking-wide">
-                    Let's get you an account!
-                </h1>
-                <div class="leading-normal text-grey-7">
-                    Please be aware, this site is under heavy development.<br class="hidden sm:inline" />
-                    Things may not work properly, and stats may be reset at any time.
-                </div>
-            </div>
+            <h1 class="font-thin mb-4 text-3xl text-grey-9 text-center tracking-wide">
+                Let's get you an account!
+            </h1>
 
             <!-- form -->
             <v-card class="max-w-sm mx-auto mt-12" padded>
