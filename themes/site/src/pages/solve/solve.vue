@@ -79,7 +79,7 @@
 
                         <!-- stats -->
                         <v-fade-transition :enter-delay="200">
-                            <div v-if="true || (!inspecting && !solving)">
+                            <div v-if="!inspecting && !solving">
                                 <div class="mb-4">
                                     <v-stats
                                         :last5="last5Solves"
