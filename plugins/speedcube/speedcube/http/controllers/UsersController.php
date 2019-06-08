@@ -184,6 +184,7 @@ class UsersController extends ApiController
 
             $solves = $user
                 ->solves()
+                ->completed()
                 ->select([
                     'created_at',
                     'id',
