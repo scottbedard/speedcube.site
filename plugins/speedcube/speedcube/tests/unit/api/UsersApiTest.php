@@ -112,4 +112,47 @@ class UsersApiTest extends PluginTestCase
         $this->assertEquals(1, count($data['solves']));
         $this->assertEquals($solve->id, $data['solves'][0]['id']);
     }
+
+    public function test_getting_solves_for_certain_puzzles()
+    {
+        $user = Factory::registerUser();
+        
+        // create some solves over a few days
+        $scrambleA = Factory::createScrambleWithTurns('R U R-', '2x2');
+        $scrambleB = Factory::createScrambleWithTurns('R U R-', '3x3');
+        $scrambleC = Factory::createScrambleWithTurns('R U R-', '4x4');
+
+        $solveA = Factory::create(new Solve, [
+            'created_at' => Carbon::now()->subDays(4),
+            'scramble_id' => $scrambleA->id,
+            'user_id' => $user->id,
+        ]);
+        
+        $solveA->complete('0#START 100:R 200:U- 300:R- 400#END');
+
+        $solveB = Factory::create(new Solve, [
+            'created_at' => Carbon::now()->subDays(2),
+            'scramble_id' => $scrambleB->id,
+            'user_id' => $user->id,
+        ]);
+        
+        $solveB->complete('0#START 100:R 200:U- 300:R- 400#END');
+
+        Factory::create(new Solve, [
+            'created_at' => Carbon::now(),
+            'scramble_id' => $scrambleC->id,
+            'user_id' => $user->id,
+        ])->complete('0#START 100:R 200:U- 300:R- 400#END');
+        
+        // fetch only the 2x2 and 3x3 solves
+        $response = $this->get("/api/speedcube/speedcube/users/{$user->username}/solves?puzzle=2x2,3x3&order=id,asc");
+        $response->assertStatus(200);
+
+        $data = json_decode($response->getContent(), true);
+        
+        // we should have gotten only that solve
+        $this->assertEquals(2, count($data['solves']));
+        $this->assertEquals($solveA->id, $data['solves'][0]['id']);
+        $this->assertEquals($solveB->id, $data['solves'][1]['id']);
+    }
 }

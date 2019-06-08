@@ -38,11 +38,14 @@ class Factory
      * Create a scramble with a given set of turns.
      * 
      * @param  string   $turns
+     * @param  string   $puzzle
      * @return Scramble
      */
-    public static function createScrambleWithTurns($turns = '')
+    public static function createScrambleWithTurns($turns = '', $puzzle = '3x3')
     {
-        $scramble = self::create(new Scramble, ['puzzle' => '3x3']);
+        $scramble = self::create(new Scramble, [
+            'puzzle' => $puzzle,
+        ]);
 
         $scramble->scramble = $turns;
 
