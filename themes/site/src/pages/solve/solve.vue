@@ -75,26 +75,24 @@
                                 :display-time="solveCompletedTime"
                                 :started-at="solveStartedAt"
                             />
+                            <p v-if="solving" class="font-thin mt-4 text-grey-6 text-base">press escape to quit</p>
                         </div>
 
                         <!-- stats -->
                         <v-fade-transition :enter-delay="200">
                             <div v-if="!inspecting && !solving">
-                                <div class="mb-4">
+                                <div v-if="solves.length > 1" class="mb-8">
                                     <v-stats
                                         :last5="last5Solves"
                                         :record-average="recordAverage"
                                         :solves="solves"
                                     />
                                 </div>
-                                <div class="text-grey-5 text-sm">
-                                    <div class="mb-4">
-                                        press spacebar to scramble
-                                    </div>
-                                    <div>
-                                        press escape to exit
-                                    </div>
-                                </div>
+                                <v-toolbar
+                                    @scramble="scramble"
+                                    @appearance="onAppearanceClick"
+                                    @controls="onControlsClick"
+                                />
                             </div>
                         </v-fade-transition>
                     </div>
@@ -106,16 +104,18 @@
                         <!-- stats -->
                         <v-fade-transition :enter-delay="200">
                             <div v-if="!inspecting && !solving">
-                                <div class="mb-8">
+                                <div v-if="solves.length > 1" class="mb-8">
                                     <v-stats
                                         :last5="last5Solves"
                                         :record-average="recordAverage"
                                         :solves="solves"
                                     />
                                 </div>
-                                <v-button primary @click="scramble">
-                                    Scramble
-                                </v-button>
+                                <v-toolbar
+                                    @scramble="scramble"
+                                    @appearance="onAppearanceClick"
+                                    @controls="onControlsClick"
+                                />
                             </div>
                         </v-fade-transition>
                     </div>
@@ -124,40 +124,14 @@
                     <div
                         v-else
                         key="idle">
-                        <div class="text-center">
-                            <div class="mb-8">
-                                <v-button primary @click="scramble">
-                                    Scramble
-                                </v-button>
-                            </div>
-
-                            <!-- settings -->
-                            <div>
-                                <v-button icon="fa-sliders" ghost size="sm" @click="onAppearanceClick">
-                                    Appearance
-                                </v-button>
-                                <v-button icon="fa-code" ghost size="sm" @click="onControlsClick">
-                                    Key Bindings
-                                </v-button>
-                            </div>
-
-                            <!-- other puzzles -->
-                            <div>
-                                <v-button
-                                    v-for="key in puzzleKeys"
-                                    ghost
-                                    :key="key"
-                                    :to="{
-                                        name: 'solve',
-                                        params: {
-                                            puzzle: puzzles[key].slug,
-                                        },
-                                    }"
-                                    :uppercase="false">
-                                    {{ puzzles[key].title }}
-                                </v-button>
-                            </div>
-                        </div>
+                        <p class="leading-normal max-w-sm mb-8 mx-auto text-center text-left text-grey-7">
+                            Use your keyboard to get a feel for the cube. Default key bindings mimick the way real finger tricks feel.
+                        </p>
+                        <v-toolbar
+                            @scramble="scramble"
+                            @appearance="onAppearanceClick"
+                            @controls="onControlsClick"
+                        />
                     </div>
                 </v-fade-transition>
             </div>
@@ -172,9 +146,9 @@ import { bindExternalEvent } from 'spyfu-vue-utils';
 import { jsonToObject } from '@/app/utils/object';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postSolve } from '@/app/repositories/solves';
-import { puzzles } from '@/app/constants';
 import appearanceOptions from './appearance_options';
 import defaultKeyboardConfigs from './default_keyboard_configs';
+import toolbarComponent from './toolbar/toolbar.vue';
 
 export default {
     created() {
@@ -253,6 +227,7 @@ export default {
         'v-appearance': () => import('./appearance/appearance.vue'),
         'v-controls': () => import('./controls/controls.vue'),
         'v-stats': () => import('./stats/stats.vue'),
+        'v-toolbar': toolbarComponent,
     },
     computed: {
         ...mapGetters('user', [
@@ -293,14 +268,8 @@ export default {
 
             return { ...this.defaultConfig, ...this.guestConfig };
         },
-        puzzleKeys() {
-            return Object.keys(this.puzzles);
-        },
         puzzleOptions() {
             return appearanceOptions[this.puzzle];
-        },
-        puzzles() {
-            return puzzles;
         },
         solution() {
             return this.history.join(' ');
