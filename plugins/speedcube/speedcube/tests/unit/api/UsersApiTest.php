@@ -3,6 +3,7 @@
 namespace Speedcube\Speedcube\Tests\Unit\Api;
 
 use Auth;
+use Carbon\Carbon;
 use RainLab\User\Models\User;
 use Speedcube\Speedcube\Models\Solve;
 use Speedcube\Speedcube\Tests\Factory;
@@ -67,5 +68,48 @@ class UsersApiTest extends PluginTestCase
 
         // we should have 10 of them
         $this->assertEquals(10, count($data['solves']));
+    }
+
+    public function test_getting_solves_between_date_range()
+    {
+        $user = Factory::registerUser();
+        
+        // create some solves over a few days
+        $before = Factory::createScrambleWithTurns('R U R-');
+        $during = Factory::createScrambleWithTurns('R U R-');
+        $after = Factory::createScrambleWithTurns('R U R-');
+
+        Factory::create(new Solve, [
+            'created_at' => Carbon::now()->subDays(4),
+            'scramble_id' => $before->id,
+            'user_id' => $user->id,
+        ])->complete('0#START 100:R 200:U- 300:R- 400#END');
+
+        $solve = Factory::create(new Solve, [
+            'created_at' => Carbon::now()->subDays(2),
+            'scramble_id' => $during->id,
+            'user_id' => $user->id,
+        ]);
+        
+        $solve->complete('0#START 100:R 200:U- 300:R- 400#END');
+
+        Factory::create(new Solve, [
+            'created_at' => Carbon::now(),
+            'scramble_id' => $after->id,
+            'user_id' => $user->id,
+        ])->complete('0#START 100:R 200:U- 300:R- 400#END');
+        
+        // fetch only the middle solve
+        $start = Carbon::now()->subDays(3)->toDateTimeString();
+        $end = Carbon::now()->subDays(1)->toDateTimeString();
+
+        $response = $this->get("/api/speedcube/speedcube/users/{$user->username}/solves?date={$start},{$end}");
+        $response->assertStatus(200);
+
+        $data = json_decode($response->getContent(), true);
+        
+        // we should have gotten only that solve
+        $this->assertEquals(1, count($data['solves']));
+        $this->assertEquals($solve->id, $data['solves'][0]['id']);
     }
 }

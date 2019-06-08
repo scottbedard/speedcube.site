@@ -183,12 +183,12 @@ class UsersController extends ApiController
             $order = array_get($params, 'order', 'created_at,desc');
             $pageSize = 20;
             $puzzle = array_get($params, 'puzzle', null);
-            $status = array_get($params, 'status', null);
 
             $user = User::whereUsername($username)->firstOrFail();
 
             $query = $user
                 ->solves()
+                ->completed()
                 ->withPuzzleId()
                 ->select([
                     'created_at',
@@ -210,11 +210,6 @@ class UsersController extends ApiController
                         ->where('created_at', '>=', $start)
                         ->where('created_at', '<=', $end);
                 });
-            }
-
-            // status
-            if ($status) {
-                $query->where('status', $status);
             }
 
             // order
