@@ -184,6 +184,11 @@ class SolvesController extends ApiController
         }
     }
 
+    /**
+     * Fetch a random solve.
+     * 
+     * @return Response
+     */
     public function random()
     {
         try {
