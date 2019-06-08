@@ -449,6 +449,11 @@ class Solve extends Model
         return $query->where('created_at', '>=', Carbon::now()->startOfMonth());
     }
 
+    public function scopeWithPuzzleId($query)
+    {
+        return $query->with('scramble:id,puzzle');
+    }
+
     public function scopeWithUserSummary($query)
     {
         return $query->with([

@@ -2,6 +2,7 @@
 
 namespace Speedcube\Speedcube\Http\Controllers;
 
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use RainLab\User\Models\User;
@@ -178,25 +179,68 @@ class UsersController extends ApiController
     {
         try {
             $params = input();
-            $days = (int) array_get($params, 'days', 30);
+            $date = array_get($params, 'date', null);
+            $order = array_get($params, 'order', 'created_at,desc');
+            $pageSize = 20;
+            $puzzle = array_get($params, 'puzzle', null);
+            $status = array_get($params, 'status', null);
 
             $user = User::whereUsername($username)->firstOrFail();
 
-            $solves = $user
+            $query = $user
                 ->solves()
-                ->completed()
+                ->withPuzzleId()
                 ->select([
                     'created_at',
                     'id',
                     'moves',
+                    'scramble_id',
                     'status',
                     'time',
-                ])
-                ->createdPastDays($days)
-                ->get();
+                ]);
+
+            // date
+            if ($date) {
+                $parts = explode(',', $date);
+                $start = Carbon::parse(trim($parts[0]));
+                $end = Carbon::parse(trim($parts[1]));
+
+                $query->where(function($date) use ($start, $end) {
+                    $date
+                        ->where('created_at', '>=', $start)
+                        ->where('created_at', '<=', $end);
+                });
+            }
+
+            // status
+            if ($status) {
+                $query->where('status', $status);
+            }
+
+            // order
+            if ($order) {
+                $parts = explode(',', $order);
+                $column = trim($parts[0]);
+                $direction = trim($parts[1]);
+
+                $query->orderBy($column, $direction);
+            }
+
+            // puzzle
+            if ($puzzle) {
+                $query->puzzles(explode(',', $puzzle));
+            }
+
+            // fetch paginated results
+            $results = $query->paginate($pageSize);
 
             return $this->success([
-                'solves' => $solves->toArray(),
+                'pagination' => [
+                    'currentPage' => $results->currentPage(),
+                    'lastPage' => $results->lastPage(),
+                    'results' => $results->total(),
+                ],
+                'solves' => $results->items(),
             ]);
         }
 
