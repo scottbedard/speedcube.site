@@ -43,6 +43,17 @@ export function getSignout() {
 }
 
 /**
+ * Get solves for a given user.
+ *
+ * @param  {string}     username
+ * @param  {Object}     params
+ * @return {Promise}
+ */
+export function getUserSolves(username, params = {}) {
+    return axios.get(`/api/speedcube/speedcube/users/${username}/solves`, { params });
+}
+
+/**
  * Get users.
  *
  * @param  {Object}     params
