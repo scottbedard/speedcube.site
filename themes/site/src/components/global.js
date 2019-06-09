@@ -8,6 +8,7 @@ import collapseTransitionComponent from './transitions/collapse.vue';
 import colorInputComponent from './ui/color_input.vue';
 import countdownComponent from './ui/countdown.vue';
 import cubeColorPickerComponent from './ui/cube_color_picker.vue';
+import dateInputComponent from './ui/date_input.vue';
 import doughnutChartComponent from './charts/doughnut_chart.vue';
 import errorMessageComponent from './ui/error_message.vue';
 import fadeTransitionComponent from './transitions/fade.vue';
@@ -69,6 +70,7 @@ export default {
     'v-color-input': colorInputComponent,
     'v-countdown': countdownComponent,
     'v-cube-color-picker': cubeColorPickerComponent,
+    'v-date-input': dateInputComponent,
     'v-error-message': errorMessageComponent,
     'v-form': formComponent,
     'v-form-field': formFieldComponent,
