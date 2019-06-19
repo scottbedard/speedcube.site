@@ -7,6 +7,11 @@
 [![Dependencies](https://img.shields.io/david/scottbedard/speedcube.site.svg?path=themes%2Fsite&style=flat)](https://david-dm.org/scottbedard/speedcube.site?path=themes%2Fsite)
 [![Dev dependencies](https://img.shields.io/david/dev/scottbedard/speedcube.site.svg?path=themes%2Fsite)](https://david-dm.org/scottbedard/speedcube.site?path=themes%2Fsite&type=dev)
 
+[![2x2](https://img.shields.io/endpoint.svg?url=https://speedcube.site/api/speedcube/speedcube/shields/2x2)](https://speedcube.site/api/speedcube/speedcube/shields/2x2/replay)
+[![3x3](https://img.shields.io/endpoint.svg?url=https://speedcube.site/api/speedcube/speedcube/shields/3x3)](https://speedcube.site/api/speedcube/speedcube/shields/3x3/replay)
+[![4x4](https://img.shields.io/endpoint.svg?url=https://speedcube.site/api/speedcube/speedcube/shields/4x4)](https://speedcube.site/api/speedcube/speedcube/shields/4x4/replay)
+[![5x5](https://img.shields.io/endpoint.svg?url=https://speedcube.site/api/speedcube/speedcube/shields/5x5)](https://speedcube.site/api/speedcube/speedcube/shields/5x5/replay)
+
 ## Inspiration and project goals
 
 Several years ago, the excellent [hi-games.net](http://hi-games.net/) was created by Ryan Heise. This site was a lot of fun, and many talented speed cubers were using it. Unfortunately though, the site didn't age well. [The web moved away from Java applets](https://blogs.oracle.com/java-platform-group/moving-to-a-plugin-free-web), which effectively killed all Java or Flash based gaming sites.
