@@ -13,8 +13,14 @@
                 @turn-start="recordTurn"
             />
 
+            <!-- mobile warning -->
+            <p class="leading-normal text-center text-grey-7 sm:hidden">
+                We don't support mobile solving yet. You're welcome to use the rest
+                of the site, but for now a keyboard is required to perform solves.
+            </p>
+
             <!-- controls -->
-            <div class="text-center">
+            <div class="hidden text-center sm:block">
                 <v-fade-transition>
                     <!-- appearance -->
                     <div
