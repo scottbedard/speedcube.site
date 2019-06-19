@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { get, sortBy } from 'lodash-es';
+import { sortBy } from 'lodash-es';
 
 export default {
     data() {
@@ -79,7 +79,7 @@ export default {
             return this.page < this.lastPageNumber;
         },
         filteredPuzzles() {
-            const solves = this.solves.filter(solve => !this.hidden.includes(solve.scramble.puzzle))
+            const solves = this.solves.filter(solve => !this.hidden.includes(solve.scramble.puzzle));
             const sortedSolves = sortBy(solves, this.sortBy);
 
             return this.sortDir === 'desc'

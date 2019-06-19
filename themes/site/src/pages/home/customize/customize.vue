@@ -95,73 +95,14 @@
 </template>
 
 <script>
-import { random, sample, shuffle } from 'lodash-es';
+import { sample } from 'lodash-es';
 
 const initialPuzzles = [
     {
         config: '{"colors":["#FFEE5D","#EFAA18","#2589E2","#EC6157","#5CBD60","#F0F0F0"],"stickerSpacing":18,"stickerElevation":15,"stickerRadius":9,"innerBrightness":82,"cameraAngle":52,"cameraDistance":2134,"turnDuration":82}',
         puzzle: '3x3',
     },
-    // ...
 ];
-
-// function randomConfig() {
-//     return {
-//         colors: shuffle([
-//             sample([
-//                 // yellows
-//                 '#F7D070', '#F9DA8B', '#F8E3A3', // dull
-//                 '#F7C948', '#FADB5F', '#FCE588', // vivid
-//             ]),
-
-//             sample([
-//                 // oranges
-//                 '#E67635', '#EF8E58', '#FAB38B', // dull
-//                 '#fa7a47', '#ff9f71', '#ffb893', // vivid
-//             ]),
-//             sample([
-//                 // blues
-//                 '#4098D7', '#62B0E8', '#84C5F4', // dull
-//                 '#2186EB', '#47A3F3', '#7CC4FA', // vivid
-
-//                 // purples
-//                 '#724BB7', '#8662C7', '#A081D9', // dull
-//                 '#9446ED', '#A368FC', '#B990FF', // vivid
-//             ]),
-//             sample([
-//                 // reds
-//                 '#D64545', '#E66A6A', '#F29B9B', // dull
-//                 '#EF4E4E', '#F86A6A', '#FF9B9B', // vivid
-
-//                 // pinks
-//                 '#DA4A91', '#E668A7', '#F191C1', // dull
-//             ]),
-//             sample([
-//                 // greens
-//                 '#57AE5B', '#7BC47F', '#A3D9A5', // dull
-//                 '#3EBD93', '#65D6AD', '#8EEDC7', // vivid
-
-//                 // teals
-//                 '#008080', '#66b2b2', '#b2d8d8',
-//             ]),
-//             sample([
-//                 // whites
-//                 '#FFFFFF', '#F5F5F5', '#EEEEEE', '#E5E5E5',
-//             ]),
-//         ]),
-//         stickerSpacing: random(1, 30),
-//         stickerElevation: random(1, 15),
-//         stickerRadius: random(0, 50),
-//         innerBrightness: random(20, 80),
-//         cameraAngle: random(55, 65),
-//         cameraDistance: 2000,
-//         turnDuration: 0,
-//     };
-// }
-
-function randomPuzzle() {
-    return sample(['2x2', '3x3', '4x4', '5x5']);
-}
 
 export default {
     data() {
@@ -172,13 +113,6 @@ export default {
             puzzle,
             tick: 0,
         };
-    },
-    methods: {
-        next() {
-            this.config = randomConfig();
-            this.puzzle = randomPuzzle();
-            this.tick += 1;
-        },
     },
 };
 </script>

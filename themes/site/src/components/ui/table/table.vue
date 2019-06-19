@@ -49,9 +49,9 @@ function headerCell(h, context, col) {
     const headerBindings = { on: {} };
 
     if (col.sortable && isFunction(context.listeners['header-click'])) {
-        headerBindings.on.click = e => {
+        headerBindings.on.click = (event) => {
             context.listeners['header-click']({ col, event });
-        }
+        };
     }
 
     return <th
@@ -65,7 +65,7 @@ function headerCell(h, context, col) {
         title={col.sortable && 'Click to sort'}
         {...headerBindings}>
         {col.header}
-        {sortKey === col.key && <i class={['fa ml-2', sortDir === 'asc' ? 'fa-angle-up' : 'fa-angle-down' ]} />}
+        {sortKey === col.key && <i class={['fa ml-2', sortDir === 'asc' ? 'fa-angle-up' : 'fa-angle-down']} />}
     </th>;
 }
 

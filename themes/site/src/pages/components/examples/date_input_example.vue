@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import exampleComponent from '../example.vue';
 import moment from 'moment';
+import exampleComponent from '../example.vue';
 
 export default {
     data() {

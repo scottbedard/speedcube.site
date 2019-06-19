@@ -135,30 +135,30 @@ export default {
     computed: {
         calendar() {
             // calculate start of month padding
-            let previousMonth = [];
+            const previousMonth = [];
             const lastDayOfLastMonth = this.momentValue.clone().startOf('month');
 
-            for (let i = 0, end = lastDayOfLastMonth.format('d'); i < end; i++) {
+            for (let i = 0, end = lastDayOfLastMonth.format('d'); i < end; i += 1) {
                 previousMonth.push(lastDayOfLastMonth.clone().subtract(end - i, 'day').format('YYYY-MM-DD'));
             }
 
             // calculate this month's day values
-            let currentMonth = [];
+            const currentMonth = [];
             const firstDayOfMonth = this.momentValue.clone().startOf('month');
             const daysInMonth = firstDayOfMonth.daysInMonth();
 
-            for (let i = 0, end = firstDayOfMonth.daysInMonth(); i < end; i++) {
+            for (let i = 0; i < daysInMonth; i += 1) {
                 currentMonth.push(firstDayOfMonth.clone().add(i, 'day').format('YYYY-MM-DD'));
             }
-            
+
             // calculate end of month padding
-            let nextMonth = [];
+            const nextMonth = [];
             const firstDayOfNextMonth = this.momentValue.clone().endOf('month').startOf('day').add(1, 'day');
 
-            for (let i = 0; i < 6; i++) {
-                let day = firstDayOfNextMonth.clone().add(i, 'day');
+            for (let i = 0; i < 6; i += 1) {
+                const day = firstDayOfNextMonth.clone().add(i, 'day');
 
-                if (day.format('d') == 0) {
+                if (day.format('d') === '0') {
                     break;
                 }
 

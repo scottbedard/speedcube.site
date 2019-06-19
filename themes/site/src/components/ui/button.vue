@@ -17,7 +17,7 @@ import { bindAll } from 'spyfu-vue-functional';
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { danger, icon, ghost, href, primary, size, to, type, uppercase } = context.props;
+        const { danger, icon, ghost, href, primary, to, type, uppercase } = context.props;
 
         //
         // theme
@@ -100,10 +100,6 @@ export default {
         primary: {
             default: false,
             type: Boolean,
-        },
-        size: {
-            default: 'md',
-            type: String,
         },
         to: {
             type: Object,
