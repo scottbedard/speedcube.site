@@ -16,6 +16,9 @@ Route::prefix('api/speedcube/speedcube')
         // scrambles
         Route::post('scrambles', 'Speedcube\Speedcube\Http\Controllers\ScramblesController@create');
 
+        // shields
+        Route::get('shields/{puzzle}', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@puzzle');
+
         // solves
         Route::get('solves/highlighted', 'Speedcube\Speedcube\Http\Controllers\SolvesController@highlighted');
         Route::get('solves/random', 'Speedcube\Speedcube\Http\Controllers\SolvesController@random');

@@ -62,6 +62,18 @@ class Utils
     }
 
     /**
+     * Format time and trim leading zeros.
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    public static function formatShortTime($value)
+    {
+        return preg_replace('/^[0:]*/', '', self::formatTime($value));
+    }
+
+    /**
      * Test if a string is JSON.
      *
      * @param {string} $source
