@@ -29,7 +29,16 @@ class ShieldsController extends ApiController
      */
     public function puzzle($puzzle)
     {
-        $solve = self::findRecordSingle($puzzle);
+        try {
+            $solve = self::findRecordSingle($puzzle);
+        } catch (\Exception $e) {
+            return [
+                'color' => 'lightgrey',
+                'label' => $puzzle,
+                'message' => 'not found',
+                'schemaVersion' => 1,
+            ]; 
+        }
 
         return [
             'color' => 'orange',

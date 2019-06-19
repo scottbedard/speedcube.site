@@ -126,4 +126,16 @@ class ShieldsApiTest extends PluginTestCase
         $response = $this->get('/shields/single/3x3/replay');
         $response->assertRedirect("/replay/{$solve->id}");
     }
+
+    public function test_error_if_solve_is_not_found()
+    {
+        // attempt to fetch the non-existant record solve
+        $response = $this->get('/shields/single/3x3');
+        $response->assertStatus(200);
+
+        // our badge should display an error
+        $data = json_decode($response->getContent(), true);
+        $this->assertEquals('3x3', $data['label']);
+        $this->assertEquals('not found', $data['message']);
+    }
 }
