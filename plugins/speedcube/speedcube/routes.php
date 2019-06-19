@@ -1,7 +1,11 @@
 
 <?php
 
+// shields
+Route::get('shields/{puzzle}', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@puzzle');
+Route::get('shields/{puzzle}/replay', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@replay');
 
+// api
 Route::prefix('api/speedcube/speedcube')
     ->middleware('web', 'Speedcube\Speedcube\Http\Middleware\CamelCase')
     ->group(function () {
@@ -15,10 +19,6 @@ Route::prefix('api/speedcube/speedcube')
 
         // scrambles
         Route::post('scrambles', 'Speedcube\Speedcube\Http\Controllers\ScramblesController@create');
-
-        // shields
-        Route::get('shields/{puzzle}/replay', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@replay');
-        Route::get('shields/{puzzle}', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@puzzle');
 
         // solves
         Route::get('solves/highlighted', 'Speedcube\Speedcube\Http\Controllers\SolvesController@highlighted');
