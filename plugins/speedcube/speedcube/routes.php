@@ -17,6 +17,7 @@ Route::prefix('api/speedcube/speedcube')
         Route::post('scrambles', 'Speedcube\Speedcube\Http\Controllers\ScramblesController@create');
 
         // shields
+        Route::get('shields/{puzzle}/replay', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@replay');
         Route::get('shields/{puzzle}', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@puzzle');
 
         // solves

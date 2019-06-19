@@ -15,7 +15,22 @@ use Speedcube\Speedcube\Classes\Utils;
 
 class ShieldsController extends ApiController
 {
+    /**
+     * Redirect to replay page so badges can link to solves
+     */
+    public function replay($puzzle)
+    {
+        $solve = Solve::completed()
+            ->fastest()
+            ->puzzle($puzzle)
+            ->firstOrFail();
 
+        return redirect("/replay/{$solve->id}");
+    }
+
+    /**
+     * Fetch JSON data for use with shields.io
+     */
     public function puzzle($puzzle)
     {
         $solve = Solve::completed()
