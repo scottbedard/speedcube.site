@@ -42,7 +42,7 @@ class ShieldsApiTest extends PluginTestCase
         ]);
 
         // fetch the record solve
-        $response = $this->get('/shields/3x3');
+        $response = $this->get('/shields/single/3x3');
         $response->assertStatus(200);
 
         // our badge should display the record time
@@ -92,7 +92,7 @@ class ShieldsApiTest extends PluginTestCase
         ]);
 
         // fetch user 2's record solve
-        $response = $this->get("/shields/3x3?username={$user2->username}");
+        $response = $this->get("/shields/single/3x3?username={$user2->username}");
         $response->assertStatus(200);
 
         // our badge should display user 2's record solve time
@@ -123,7 +123,7 @@ class ShieldsApiTest extends PluginTestCase
         ]);
 
         // we should be redirected to the replay url
-        $response = $this->get('/shields/3x3/replay');
+        $response = $this->get('/shields/single/3x3/replay');
         $response->assertRedirect("/replay/{$solve->id}");
     }
 }

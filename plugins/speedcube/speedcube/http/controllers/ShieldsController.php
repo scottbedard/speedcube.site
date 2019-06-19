@@ -63,6 +63,7 @@ class ShieldsController extends ApiController
 
         return $query
             ->fastest()
+            ->remember(10)
             ->firstOrFail();
     }
 }
