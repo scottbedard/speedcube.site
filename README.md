@@ -7,11 +7,6 @@
 [![Dependencies](https://img.shields.io/david/scottbedard/speedcube.site.svg?path=themes%2Fsite&style=flat)](https://david-dm.org/scottbedard/speedcube.site?path=themes%2Fsite)
 [![Dev dependencies](https://img.shields.io/david/dev/scottbedard/speedcube.site.svg?path=themes%2Fsite)](https://david-dm.org/scottbedard/speedcube.site?path=themes%2Fsite&type=dev)
 
-[![2x2](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/2x2)](https://speedcube.site/shields/single/2x2/replay)
-[![3x3](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/3x3)](https://speedcube.site/shields/single/3x3/replay)
-[![4x4](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/4x4)](https://speedcube.site/shields/single/4x4/replay)
-[![5x5](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/5x5)](https://speedcube.site/shields/single/5x5/replay)
-
 ## Inspiration and project goals
 
 Several years ago, the excellent [hi-games.net](http://hi-games.net/) was created by Ryan Heise. This site was a lot of fun, and many talented speed cubers were using it. Unfortunately though, the site didn't age well. [The web moved away from Java applets](https://blogs.oracle.com/java-platform-group/moving-to-a-plugin-free-web), which effectively killed all Java or Flash based gaming sites.
@@ -43,3 +38,23 @@ $ yarn test:unit
 
 Our application is built with [October CMS](https://octobercms.com), their documentation will be helpful when in the backend. If you're looking to get started on the frontend, use our [`/components`](https://speedcube.site/components) route as a sandbox.
 
+## Badges
+
+We support [shields.io badges](https://shields.io/endpoint), so show the world how fast you are! Here are the current site records.
+
+[![2x2](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/2x2)](https://speedcube.site/shields/single/2x2/replay)
+[![3x3](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/3x3)](https://speedcube.site/shields/single/3x3/replay)
+[![4x4](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/4x4)](https://speedcube.site/shields/single/4x4/replay)
+[![5x5](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/5x5)](https://speedcube.site/shields/single/5x5/replay)
+
+To generate a badge, use the following URL
+
+```
+https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/3x3
+```
+
+Use the following URL to link to replays. Appending `?username=whatever` to either url will scope the results to a specific user.
+
+```
+https://speedcube.site/shields/single/3x3/replay
+```
