@@ -77,7 +77,7 @@ class PersonalRecordAverage extends Model
 
     public function scopeFastest($query)
     {
-        return $query->orderBy('time', 'asc');
+        return $query->orderBy('average_time', 'asc');
     }
 
     public function scopePuzzle($query, $puzzle)
