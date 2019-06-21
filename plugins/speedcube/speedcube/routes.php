@@ -2,8 +2,9 @@
 <?php
 
 // shields
-Route::get('shields/single/{puzzle}', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@puzzle');
-Route::get('shields/single/{puzzle}/replay', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@replay');
+Route::get('shields/average/{puzzle}', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@average');
+Route::get('shields/single/{puzzle}', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@single');
+Route::get('shields/single/{puzzle}/replay', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@singleRedirect');
 
 // api
 Route::prefix('api/speedcube/speedcube')

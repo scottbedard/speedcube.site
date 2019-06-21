@@ -8,6 +8,16 @@ use Model;
 class PersonalRecordAverage extends Model
 {
     /**
+     * @var array Attribute casting
+     */
+    protected $casts = [
+        'average_time' => 'integer',
+        'id' => 'integer',
+        'previous_id' => 'integer',
+        'user_id' => 'integer',
+    ];
+
+    /**
      * @var string The database table used by the model.
      */
     public $table = 'speedcube_speedcube_personal_record_averages';
@@ -37,6 +47,10 @@ class PersonalRecordAverage extends Model
     /**
      * @var array Relations
      */
+    public $belongsTo = [
+        'user' => 'RainLab\User\Models\User',
+    ];
+
     public $belongsToMany = [
         'solves' => [
             'Speedcube\Speedcube\Models\Solve',
@@ -64,6 +78,13 @@ class PersonalRecordAverage extends Model
     public function scopePuzzle($query, $puzzle)
     {
         return $query->where('puzzle', $puzzle);
+    }
+
+    public function scopeUsername($query, $username)
+    {
+        $query->whereHas('user', function($user) use ($username) {
+            $user->where('username', $username);
+        });
     }
 
     public function scopeWithSolveSummary($query)

@@ -4,6 +4,7 @@ namespace Speedcube\Speedcube\Tests\Unit\Api;
 
 use Auth;
 use Speedcube\Speedcube\Classes\Utils;
+use Speedcube\Speedcube\Models\PersonalRecordAverage;
 use Speedcube\Speedcube\Models\Scramble;
 use Speedcube\Speedcube\Models\Solve;
 use Speedcube\Speedcube\Tests\Factory;
@@ -47,7 +48,7 @@ class ShieldsApiTest extends PluginTestCase
 
         // our badge should display the record time
         $data = json_decode($response->getContent(), true);
-        $this->assertEquals($scramble->puzzle, $data['label']);
+        $this->assertEquals('3x3 single', $data['label']);
         $this->assertEquals(Utils::formatShortTime($solve->fresh()->time), $data['message']);
     }
 
@@ -97,7 +98,7 @@ class ShieldsApiTest extends PluginTestCase
 
         // our badge should display user 2's record solve time
         $data = json_decode($response->getContent(), true);
-        $this->assertEquals($scramble2->puzzle, $data['label']);
+        $this->assertEquals('3x3 single', $data['label']);
         $this->assertEquals(Utils::formatShortTime($solve2->fresh()->time), $data['message']);
     }
 
@@ -127,7 +128,7 @@ class ShieldsApiTest extends PluginTestCase
         $response->assertRedirect("/replay/{$solve->id}");
     }
 
-    public function test_error_if_solve_is_not_found()
+    public function test_fetching_record_solve_that_doesnt_exist()
     {
         // attempt to fetch the non-existant record solve
         $response = $this->get('/shields/single/3x3');
@@ -135,7 +136,102 @@ class ShieldsApiTest extends PluginTestCase
 
         // our badge should display an error
         $data = json_decode($response->getContent(), true);
-        $this->assertEquals('3x3', $data['label']);
-        $this->assertEquals('not found', $data['message']);
+        $this->assertEquals('3x3 single', $data['label']);
+        $this->assertEquals('no solves', $data['message']);
+    }
+
+    public function test_fetching_record_average_for_a_puzzle()
+    {
+        // scaffold and authenticate a user
+        $user = Factory::registerUser();
+        Auth::login($user);
+
+        // create enough solves to set a record average
+        for ($i = 0 ; $i < 5; $i++) {
+            $scramble = self::createScramble('R U R-');
+
+            $solve = Factory::create(new Solve, [
+                'scramble_id' => $scramble->id,
+                'user_id' => $user->id,
+            ]);
+
+            $this->post("/api/speedcube/speedcube/solves", [
+                'config' => '{"colors":["#000","#111","#222","#333","#444","#555"]}',
+                'scrambleId' => $scramble->id,
+                'solution' => '100:X 200:X- 1000#START 2000:R 3000:U- 4000:R- 5000#END',
+            ]);
+        }
+
+        // fetch the record average
+        $response = $this->get('/shields/average/3x3');
+        $response->assertStatus(200);
+
+        // our badge should have the record average
+        $data = json_decode($response->getContent(), true);
+        $this->assertEquals('3x3 avg', $data['label']);
+        $this->assertEquals('4.00', $data['message']);
+    }
+
+    public function test_fetching_record_average_without_enough_solves()
+    {
+        // fetch the record average
+        $response = $this->get('/shields/average/3x3');
+        $response->assertStatus(200);
+
+        // our badge should have the error message
+        $data = json_decode($response->getContent(), true);
+        $this->assertEquals('3x3 avg', $data['label']);
+        $this->assertEquals('not enough solves', $data['message']);
+    }
+
+    public function test_fetching_record_average_for_a_puzzle_and_username()
+    {
+        // scaffold and authenticate a pair of users
+        $user1 = Factory::registerUser();
+        Auth::login($user1);
+
+        // create some 4 second solves for user 1
+        for ($i = 0 ; $i < 5; $i++) {
+            $scramble = self::createScramble('R U R-');
+
+            $solve = Factory::create(new Solve, [
+                'scramble_id' => $scramble->id,
+                'user_id' => $user1->id,
+            ]);
+
+            $this->post("/api/speedcube/speedcube/solves", [
+                'config' => '{"colors":["#000","#111","#222","#333","#444","#555"]}',
+                'scrambleId' => $scramble->id,
+                'solution' => '100:X 200:X- 1000#START 2000:R 3000:U- 4000:R- 5000#END',
+            ]);
+        }
+
+        $user2 = Factory::registerUser();
+        Auth::login($user2);
+
+        // create some 5 second solves for user 2
+        for ($i = 0 ; $i < 5; $i++) {
+            $scramble = self::createScramble('R U R-');
+
+            $solve = Factory::create(new Solve, [
+                'scramble_id' => $scramble->id,
+                'user_id' => $user2->id,
+            ]);
+
+            $this->post("/api/speedcube/speedcube/solves", [
+                'config' => '{"colors":["#000","#111","#222","#333","#444","#555"]}',
+                'scrambleId' => $scramble->id,
+                'solution' => '100:X 200:X- 1000#START 2000:R 3000:U- 5000:R- 6000#END',
+            ]);
+        }
+
+        // fetch the record average
+        $response = $this->get("/shields/average/3x3?username={$user2->username}");
+        $response->assertStatus(200);
+
+        // // our badge should have the record average
+        $data = json_decode($response->getContent(), true);
+        $this->assertEquals('3x3 avg', $data['label']);
+        $this->assertEquals('5.00', $data['message']);
     }
 }

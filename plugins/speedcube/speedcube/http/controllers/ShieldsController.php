@@ -3,18 +3,82 @@
 namespace Speedcube\Speedcube\Http\Controllers;
 
 use Speedcube\Speedcube\Classes\ApiController;
-use Speedcube\Speedcube\Models\Solve;
 use Speedcube\Speedcube\Classes\Utils;
+use Speedcube\Speedcube\Models\PersonalRecordAverage;
+use Speedcube\Speedcube\Models\Solve;
 
 class ShieldsController extends ApiController
 {
+    /**
+     * Fetch a record average.
+     * 
+     * @param  string   $puzzle
+     * @return \Speedcube\Speedcube\Models\PersonalRecordAverage
+     */
+    public function average($puzzle)
+    {
+        try {
+            $username = input('username');
+
+            $query = PersonalRecordAverage::current()
+                ->puzzle($puzzle);
+
+            if ($username) {
+                $query->username($username);
+            }
+
+            $record = $query->firstOrFail();
+        } catch (\Exception $e) {
+            return [
+                'color' => 'lightgrey',
+                'label' => "{$puzzle} avg",
+                'message' => 'not enough solves',
+                'schemaVersion' => 1,
+            ];
+        }
+
+        return [
+            'color' => 'orange',
+            'label' => "{$puzzle} avg",
+            'message' => Utils::formatShortTime($record->average_time),
+            'schemaVersion' => 1,
+        ];
+    }
+
+    /**
+     * Fetch JSON data for use with shields.io
+     * 
+     * @param  string   $puzzle
+     * @return Response
+     */
+    public function single($puzzle)
+    {
+        try {
+            $solve = self::findRecordSingle($puzzle);
+        } catch (\Exception $e) {
+            return [
+                'color' => 'lightgrey',
+                'label' => "{$puzzle} single",
+                'message' => 'no solves',
+                'schemaVersion' => 1,
+            ]; 
+        }
+
+        return [
+            'color' => 'orange',
+            'label' => "{$puzzle} single",
+            'message' => Utils::formatShortTime($solve->time),
+            'schemaVersion' => 1,
+        ];
+    }
+
     /**
      * Redirect to replay page so badges can link to solves
      * 
      * @param  string       $puzzle
      * @return Redirect
      */
-    public function replay($puzzle)
+    public function singleRedirect($puzzle)
     {
         $solve = self::findRecordSingle($puzzle);
 
@@ -22,37 +86,9 @@ class ShieldsController extends ApiController
     }
 
     /**
-     * Fetch JSON data for use with shields.io
-     * 
-     * @param  string       $puzzle
-     * @return Response
-     */
-    public function puzzle($puzzle)
-    {
-        try {
-            $solve = self::findRecordSingle($puzzle);
-        } catch (\Exception $e) {
-            return [
-                'color' => 'lightgrey',
-                'label' => $puzzle,
-                'message' => 'not found',
-                'schemaVersion' => 1,
-            ]; 
-        }
-
-        return [
-            'color' => 'orange',
-            'label' => $puzzle,
-            'message' => Utils::formatShortTime($solve->time),
-            'schemaVersion' => 1,
-        ];
-    }
-
-    /**
      * Fetch a record single solve.
      * 
-     * @param  string                               $puzzle
-     * @param  string|null                          $username
+     * @param  string   $puzzle
      * @return \Speedcube\Speedcube\Models\Solve
      */
     private function findRecordSingle($puzzle)
