@@ -25,8 +25,8 @@ class ShieldsController extends ApiController
         try {
             $username = input('username');
 
-            $query = PersonalRecordAverage::current()
-                ->puzzle($puzzle);
+            $query = PersonalRecordAverage::puzzle($puzzle)
+                ->fastest();
 
             if ($username) {
                 $query->username($username);

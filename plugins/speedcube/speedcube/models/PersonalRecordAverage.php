@@ -75,6 +75,11 @@ class PersonalRecordAverage extends Model
         return $query->doesntHave('nextRecordAverage');
     }
 
+    public function scopeFastest($query)
+    {
+        return $query->orderBy('time', 'asc');
+    }
+
     public function scopePuzzle($query, $puzzle)
     {
         return $query->where('puzzle', $puzzle);
