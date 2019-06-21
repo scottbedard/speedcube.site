@@ -40,21 +40,27 @@ Our application is built with [October CMS](https://octobercms.com), their docum
 
 ## Badges
 
-We support [shields.io badges](https://shields.io/endpoint), so show the world how fast you are! Here are the current site records.
+We support [shields.io endpoint badges](https://shields.io/endpoint). To demonstrate how they work, here are the current site records.
 
-[![2x2](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/2x2)](https://speedcube.site/shields/single/2x2/replay)
-[![3x3](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/3x3)](https://speedcube.site/shields/single/3x3/replay)
-[![4x4](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/4x4)](https://speedcube.site/shields/single/4x4/replay)
-[![5x5](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/5x5)](https://speedcube.site/shields/single/5x5/replay)
+[![2x2 single](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/2x2)](https://speedcube.site/shields/single/2x2/replay)
+[![3x3 single](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/3x3)](https://speedcube.site/shields/single/3x3/replay)
+[![4x4 single](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/4x4)](https://speedcube.site/shields/single/4x4/replay)
+[![5x5 single](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/5x5)](https://speedcube.site/shields/single/5x5/replay)
 
-To generate a badge, use the following URL
+![2x2 avg](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/average/2x2)
+![3x3 avg](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/average/3x3)
+![4x4 avg](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/average/4x4)
+![5x5 avg](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/average/5x5)
+
+To generate a badge, use the following URLs
 
 ```
-https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/3x3
+https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/{puzzle}
+https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/average/{puzzle}
 ```
 
-Use the following URL to link to replays. Appending `?username=whatever` to either url will scope the results to a specific user.
+Use the following URL to link to a replay for the single solve.
 
 ```
-https://speedcube.site/shields/single/3x3/replay
+https://speedcube.site/shields/single/{puzzle}/replay
 ```
