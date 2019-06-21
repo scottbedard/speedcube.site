@@ -47,11 +47,6 @@ We support [shields.io endpoint badges](https://shields.io/endpoint). To demonst
 [![4x4 single](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/4x4)](https://speedcube.site/shields/single/4x4/replay)
 [![5x5 single](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/single/5x5)](https://speedcube.site/shields/single/5x5/replay)
 
-![2x2 avg](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/average/2x2)
-![3x3 avg](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/average/3x3)
-![4x4 avg](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/average/4x4)
-![5x5 avg](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/average/5x5)
-
 To generate a badge, use the following URLs
 
 ```
