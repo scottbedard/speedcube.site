@@ -62,5 +62,5 @@ https://speedcube.site/shields/single/{puzzle}/replay
 
 All customization options are supported. To demonstrate this, here is a badge with various custom settings. For more information on customization, [refer to shields.io's documentation](https://shields.io/#styles).
 
-![3x3 avg 5](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/average/3x3&color=blue&style=for-the-badge)
+[![3x3 avg 5](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/average/3x3&color=blue&style=for-the-badge)](https://img.shields.io/endpoint.svg?url=https://speedcube.site/shields/average/3x3&color=blue&style=for-the-badge)
 
