@@ -10,6 +10,11 @@ use Speedcube\Speedcube\Models\Solve;
 class ShieldsController extends ApiController
 {
     /**
+     * @const int
+     */
+    const CACHE_DURATION = 10;
+
+    /**
      * Fetch a record average.
      * 
      * @param  string   $puzzle
@@ -27,7 +32,9 @@ class ShieldsController extends ApiController
                 $query->username($username);
             }
 
-            $record = $query->firstOrFail();
+            $record = $query
+                ->remember(self::CACHE_DURATION)
+                ->firstOrFail();
         } catch (\Exception $e) {
             return [
                 'color' => 'lightgrey',
@@ -108,7 +115,7 @@ class ShieldsController extends ApiController
 
         return $query
             ->fastest()
-            ->remember(10)
+            ->remember(self::CACHE_DURATION)
             ->firstOrFail();
     }
 }
