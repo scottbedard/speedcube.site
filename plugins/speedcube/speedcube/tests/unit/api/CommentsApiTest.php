@@ -12,7 +12,6 @@ class CommentsApiTest extends PluginTestCase
     {
         // scaffold a user and solve
         $user = Factory::authenticatedUser();
-
         $solve = Factory::completedSolve($user);
 
         // comment on the solve
@@ -39,7 +38,6 @@ class CommentsApiTest extends PluginTestCase
     {
         // scaffold a user, solve, and comment
         $user = Factory::authenticatedUser();
-
         $solve = Factory::completedSolve($user);
         
         // add a handful of comments to the solve
@@ -61,5 +59,23 @@ class CommentsApiTest extends PluginTestCase
         $this->assertEquals(1, $data['pagination']['currentPage']);
         $this->assertEquals(2, $data['pagination']['lastPage']);
         $this->assertEquals(30, $data['pagination']['results']);
+    }
+
+    public function test_fetching_solves_that_dont_exist()
+    {
+        // scaffold a user, solve, and comment
+        $user = Factory::authenticatedUser();
+        $solve = Factory::completedSolve($user);
+        
+        // fetch the comments for our solve
+        $response = $this->get("/api/speedcube/speedcube/comments/solve/{$solve->id}");
+        $response->assertStatus(200);
+
+        // no comments should be returned
+        $data = json_decode($response->getContent(), true);
+        $this->assertEquals(0, count($data['comments']));
+        $this->assertEquals(1, $data['pagination']['currentPage']);
+        $this->assertEquals(1, $data['pagination']['lastPage']);
+        $this->assertEquals(0, $data['pagination']['results']);
     }
 }
