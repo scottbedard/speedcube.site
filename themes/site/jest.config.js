@@ -17,6 +17,7 @@ module.exports = {
     ],
     moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1',
+        '^~/(.*)$': '<rootDir>/tests/$1',
     },
     setupFiles: [
         'jest-canvas-mock',

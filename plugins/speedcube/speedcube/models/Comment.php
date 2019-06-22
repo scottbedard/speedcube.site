@@ -74,4 +74,13 @@ class Comment extends Model
             $q->where('commentable_type', $model)->where('commentable_id', $id);
         });
     }
+
+    public function scopeWithUserSummary($query)
+    {
+        return $query->with([
+            'user' => function ($user) {
+                $user->select(['id', 'name', 'username']);
+            },
+        ]);
+    }
 }

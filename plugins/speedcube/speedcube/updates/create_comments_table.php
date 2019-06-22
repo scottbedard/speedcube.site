@@ -11,7 +11,7 @@ class CreateCommentsTable extends Migration
         Schema::create('speedcube_speedcube_comments', function(Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->morphs('commentable');
+            $table->morphs('commentable', 'commentable_index');
             $table->integer('user_id')->unsigned();
             $table->text('body');
             $table->timestamps();

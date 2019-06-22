@@ -6,6 +6,7 @@ import cardLinkComponent from './ui/card_link.vue';
 import checkboxComponent from './ui/checkbox.vue';
 import collapseTransitionComponent from './transitions/collapse.vue';
 import colorInputComponent from './ui/color_input.vue';
+import commentsComponent from './ui/comments.vue';
 import countdownComponent from './ui/countdown.vue';
 import cubeColorPickerComponent from './ui/cube_color_picker.vue';
 import dateInputComponent from './ui/date_input.vue';
@@ -68,6 +69,7 @@ export default {
     'v-card-link': cardLinkComponent,
     'v-checkbox': checkboxComponent,
     'v-color-input': colorInputComponent,
+    'v-comments': commentsComponent,
     'v-countdown': countdownComponent,
     'v-cube-color-picker': cubeColorPickerComponent,
     'v-date-input': dateInputComponent,

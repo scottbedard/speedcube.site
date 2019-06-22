@@ -76,10 +76,18 @@
                         </div>
 
                         <v-fade-transition>
-                            <div
-                                v-if="solved"
-                                class="font-thin mt-4 text-center text-grey-6">
-                                press space to watch again
+                            <div v-if="solved">
+                                <div class="font-thin mt-4 text-center text-grey-6">
+                                    press space to watch again
+                                </div>
+                                <div class="max-w-sm mt-12 mx-auto">
+                                    <v-comments
+                                        type="solve"
+                                        :id="solve.id"
+                                        @blur="commentFocus = false"
+                                        @focus="commentFocus = true"
+                                    />
+                                </div>
                             </div>
                         </v-fade-transition>
                     </div>
@@ -91,7 +99,7 @@
                         key="ready">
                         <div
                             v-text="scrambleText"
-                            class="leading-loose max-w-md mb-8 mx-auto text-grey-7 text-xl text-grey-6 tracking-wide"
+                            class="leading-loose max-w-md mb-8 mx-auto text-grey-7 text-grey-6 tracking-wide"
                         />
                         <div class="flex flex-wrap justify-center overflow-hidden">
                             <div class="mb-8 px-4">
@@ -100,6 +108,16 @@
                             <div class="px-4">
                                 <v-button :to="{ name: 'users:show', params: { username }}">View Stats</v-button>
                             </div>
+                        </div>
+                        
+                        <!-- comments -->
+                        <div class="max-w-sm mt-12 mx-auto">
+                            <v-comments
+                                type="solve"
+                                :id="solve.id"
+                                @blur="commentFocus = false"
+                                @focus="commentFocus = true"
+                            />
                         </div>
                     </div>
                 </v-fade-transition>
@@ -127,6 +145,9 @@ export default {
     },
     data() {
         return {
+            // if the comments field is focused
+            commentFocus: false,
+
             // loading state for the initial fetch
             loading: false,
 
@@ -310,6 +331,11 @@ export default {
             });
         },
         onKeyup(e) {
+            // do nothing if the comment field is focused
+            if (this.commentFocus) {
+                return;
+            }
+
             // replay the solve on space when not already playing
             if (e.key === ' ') {
                 this.replay();

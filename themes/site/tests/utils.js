@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Vue from 'vue/dist/vue.common.js';
 import VueRuntime from 'vue/dist/vue.runtime.common.dev.js';
 import axios from 'axios';
@@ -185,3 +186,37 @@ global.submit = function (el, setupFn) {
 global.timeout = function (ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 };
+
+//
+// user
+//
+global.user = function() {
+    return {  
+        activatedAt: '2019-03-26 18:15:03',
+        avatar: null,
+        configs: [],
+        createdAt: '2019-03-26 18:15:03',
+        deletedAt: null,
+        email: 'user@example.com',
+        id: 1,
+        isActivated: true,
+        isGuest: 0,
+        isSuperuser: 0,
+        keyboardConfigs: [],
+        lastLogin: '2019-06-22 20:03:15',
+        lastSeen: '2019-06-22 21:30:11',
+        name: null,
+        permissions: null,
+        profile: {
+            id: 2,
+            userId: 2,
+            twitterBroadcasting: false,
+            twitterHandle: '',
+            createdAt: '2019-06-22 21:15:44',
+            updatedAt: '2019-06-22 21:15:44',
+        } ,
+        surname: null,
+        updatedAt: '2019-06-22 20:03:15',
+        username: 'scott',
+    }
+}

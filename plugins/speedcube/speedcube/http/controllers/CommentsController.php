@@ -44,7 +44,7 @@ class CommentsController extends ApiController
         //
         // query
         //
-        $query = Comment::for($type, $id);
+        $query = Comment::for($type, $id)->withUserSummary();
 
         if ($order) {
             $parts = explode(',', $order);
