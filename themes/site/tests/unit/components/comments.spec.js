@@ -44,7 +44,7 @@ describe('<v-comments>', () => {
 
         expect(axios.get).toHaveBeenCalledWith('/api/speedcube/speedcube/comments/solve/2');
 
-        await timeout(100);
+        await timeout(200);
 
         expect(vm.$el.querySelector('[data-loading]')).toBe(null);
         expect(vm.$el.querySelector('[data-comments]')).not.toBe(null);
@@ -91,7 +91,7 @@ describe('<v-comments>', () => {
             template: `<v-comments id="1" type="solve" />`,
         });
 
-        await timeout(100);
+        await timeout(200);
 
         expect(vm.$el.querySelector('[data-empty]')).not.toBe(null);
     });
