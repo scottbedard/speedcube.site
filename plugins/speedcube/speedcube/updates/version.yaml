@@ -17,3 +17,7 @@
 1.0.3:
   - Track record averages
   - create_personal_record_averages_table.php
+
+1.0.4:
+  - Comments
+  - create_comments_table.php

@@ -15,6 +15,46 @@ use Speedcube\Speedcube\Models\Solve;
 class Factory
 {
     /**
+     * Create a fully authenticated user.
+     * 
+     * @return \RainLab\User\Models\User
+     */
+    public static function authenticatedUser()
+    {
+        $user = self::registerUser();
+        
+        Auth::login($user);
+
+        return $user;
+    }
+
+    /**
+     * Create and complete a solve.
+     * 
+     * @param  \RainLab\User\Models\User            $user
+     * @param  integer                              $duration
+     * @param  string                               $puzzle
+     * @return \Speedcube\Speedcube\Models\Solve
+     */
+    public static function completedSolve($user, $duration = 5000, $puzzle = '3x3')
+    {
+        $scramble = self::create(new Scramble, ['puzzle' => $puzzle]);
+        $scramble->scramble = 'R U R-';
+        $scramble->save();
+
+        $solve = Factory::create(new Solve, [
+            'scramble_id' => $scramble->id,
+            'user_id' => $user->id,
+        ]);
+
+        $endAt = $duration + 1000;
+
+        $solve ->complete("100:X 200:X- 1000#START 2000:R 3000:U- 4000:R- {$endAt}#END");
+
+        return $solve;
+    }
+
+    /**
      * Create a model and save it to the database.
      *
      * @param  Model    $model  Model to create

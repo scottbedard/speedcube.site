@@ -87,6 +87,13 @@ class Solve extends Model
         ],
     ];
 
+    public $morphMany = [
+        'comments' => [
+            'Speedcube\Speedcube\Models\Comment',
+            'name' => 'commentable',
+        ],
+    ];
+
     /**
      * Abort a solve.
      *
