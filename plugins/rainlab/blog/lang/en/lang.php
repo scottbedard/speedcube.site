@@ -18,10 +18,16 @@ return [
         'access_other_posts' => 'Manage other users blog posts',
         'access_import_export' => 'Allowed to import and export posts',
         'access_publish' => 'Allowed to publish posts',
+        'manage_settings' => 'Manage blog settings',
         'delete_confirm' => 'Are you sure?',
         'chart_published' => 'Published',
         'chart_drafts' => 'Drafts',
-        'chart_total' => 'Total'
+        'chart_total' => 'Total',
+        'settings_description' => 'Manage blog settings',
+        'show_all_posts_label' => 'Show all posts to backend users',
+        'show_all_posts_comment' => 'Display both published and unpublished posts on the frontend to backend users',
+        'tab_general' => 'General'
+
     ],
     'posts' => [
         'list_title' => 'Manage the blog posts',
@@ -119,9 +125,11 @@ return [
         'posts_post' => 'Post page',
         'posts_post_description' => 'Name of the blog post page file for the "Learn more" links. This property is used by the default component partial.',
         'posts_except_post' => 'Except post',
-        'posts_except_post_description' => 'Enter ID/URL or variable with post ID/URL you want to exclude',
+        'posts_except_post_description' => 'Enter ID/URL or variable with post ID/URL you want to exclude. You may use a comma-separated list to specify multiple posts.',
+        'posts_except_post_validation' => 'Post exceptions must be a single slug or ID, or a comma-separated list of slugs and IDs',
         'posts_except_categories' => 'Except categories',
         'posts_except_categories_description' => 'Enter a comma-separated list of category slugs or variable with such a list of categories you want to exclude',
+        'posts_except_categories_validation' => 'Category exceptions must be a single category slug, or a comma-separated list of slugs',
         'rssfeed_blog' => 'Blog page',
         'rssfeed_blog_description' => 'Name of the main blog page file for generating links. This property is used by the default component partial.',
         'rssfeed_title' => 'RSS Feed',

@@ -4,50 +4,60 @@ use Lang;
 use Redirect;
 use BackendAuth;
 use Cms\Classes\Page;
-use Cms\Classes\ComponentBase;
+use October\Rain\Database\Model;
+use October\Rain\Database\Collection;
 use RainLab\Blog\Models\Post as BlogPost;
+use RainLab\Blog\Classes\ComponentAbstract;
 use RainLab\Blog\Models\Category as BlogCategory;
+use RainLab\Blog\Models\Settings as BlogSettings;
 
-class Posts extends ComponentBase
+class Posts extends ComponentAbstract
 {
     /**
      * A collection of posts to display
+     *
      * @var Collection
      */
     public $posts;
 
     /**
      * Parameter to use for the page number
+     *
      * @var string
      */
     public $pageParam;
 
     /**
-     * If the post list should be filtered by a category, the model to use.
+     * If the post list should be filtered by a category, the model to use
+     *
      * @var Model
      */
     public $category;
 
     /**
-     * Message to display when there are no messages.
+     * Message to display when there are no messages
+     *
      * @var string
      */
     public $noPostsMessage;
 
     /**
-     * Reference to the page name for linking to posts.
+     * Reference to the page name for linking to posts
+     *
      * @var string
      */
     public $postPage;
 
     /**
-     * Reference to the page name for linking to categories.
+     * Reference to the page name for linking to categories
+     *
      * @var string
      */
     public $categoryPage;
 
     /**
-     * If the post list should be ordered by another attribute.
+     * If the post list should be ordered by another attribute
+     *
      * @var string
      */
     public $sortOrder;
@@ -113,17 +123,19 @@ class Posts extends ComponentBase
                 'title'             => 'rainlab.blog::lang.settings.posts_except_post',
                 'description'       => 'rainlab.blog::lang.settings.posts_except_post_description',
                 'type'              => 'string',
-                'validationPattern' => 'string',
+                'validationPattern' => '^[a-z0-9\-_,\s]+$',
                 'validationMessage' => 'rainlab.blog::lang.settings.posts_except_post_validation',
                 'default'           => '',
                 'group'             => 'rainlab.blog::lang.settings.group_exceptions',
             ],
             'exceptCategories' => [
-                'title'       => 'rainlab.blog::lang.settings.posts_except_categories',
-                'description' => 'rainlab.blog::lang.settings.posts_except_categories_description',
-                'type'        => 'string',
-                'default'     => '',
-                'group'       => 'rainlab.blog::lang.settings.group_exceptions',
+                'title'             => 'rainlab.blog::lang.settings.posts_except_categories',
+                'description'       => 'rainlab.blog::lang.settings.posts_except_categories_description',
+                'type'              => 'string',
+                'validationPattern' => '^[a-z0-9\-_,\s]+$',
+                'validationMessage' => 'rainlab.blog::lang.settings.posts_except_categories_validation',
+                'default'           => '',
+                'group'             => 'rainlab.blog::lang.settings.group_exceptions',
             ],
         ];
     }
@@ -196,20 +208,37 @@ class Posts extends ComponentBase
             'search'           => trim(input('search')),
             'category'         => $category,
             'published'        => $isPublished,
-            'exceptPost'       => $this->property('exceptPost'),
+            'exceptPost'       => is_array($this->property('exceptPost'))
+                ? $this->property('exceptPost')
+                : preg_split('/,\s*/', $this->property('exceptPost'), -1, PREG_SPLIT_NO_EMPTY),
             'exceptCategories' => is_array($this->property('exceptCategories'))
                 ? $this->property('exceptCategories')
-                : explode(',', $this->property('exceptCategories')),
+                : preg_split('/,\s*/', $this->property('exceptCategories'), -1, PREG_SPLIT_NO_EMPTY),
         ]);
 
         /*
          * Add a "url" helper attribute for linking to each post and category
          */
-        $posts->each(function($post) {
-            $post->setUrl($this->postPage, $this->controller);
+        $blogPostComponent = $this->getComponent('blogPost', $this->postPage);
+        $blogPostsComponent = $this->getComponent('blogPosts', $this->categoryPage);
 
-            $post->categories->each(function($category) {
-                $category->setUrl($this->categoryPage, $this->controller);
+        $posts->each(function ($post) use ($blogPostComponent, $blogPostsComponent) {
+            $post->setUrl(
+                $this->postPage,
+                $this->controller,
+                [
+                    'slug' => $this->urlProperty($blogPostComponent, 'slug')
+                ]
+            );
+
+            $post->categories->each(function ($category) use ($blogPostsComponent) {
+                $category->setUrl(
+                    $this->categoryPage,
+                    $this->controller,
+                    [
+                        'slug' => $this->urlProperty($blogPostsComponent, 'categoryFilter')
+                    ]
+                );
             });
         });
 
@@ -237,6 +266,6 @@ class Posts extends ComponentBase
     {
         $backendUser = BackendAuth::getUser();
 
-        return $backendUser && $backendUser->hasAccess('rainlab.blog.access_posts');
+        return $backendUser && $backendUser->hasAccess('rainlab.blog.access_posts') && BlogSettings::get('show_all_posts', true);
     }
 }

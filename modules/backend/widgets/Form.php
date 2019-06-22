@@ -159,7 +159,10 @@ class Form extends WidgetBase
      */
     protected function loadAssets()
     {
-        $this->addJs('js/october.form.js', 'core');
+        $this->addJs('js/october.form.js', [
+            'build' => 'core',
+            'cache'  => 'false'
+        ]);
     }
 
     /**
@@ -1076,7 +1079,7 @@ class Form extends WidgetBase
             : null;
 
         return $field->getValueFromData(
-            $this->data, 
+            $this->data,
             is_string($defaultValue) ? trans($defaultValue) : $defaultValue
         );
     }
@@ -1181,6 +1184,11 @@ class Form extends WidgetBase
          */
         foreach ($this->formWidgets as $field => $widget) {
             $parts = HtmlHelper::nameToArray($field);
+
+            if ((isset($widget->config->disabled) && $widget->config->disabled)
+                || (isset($widget->config->hidden) && $widget->config->hidden)) {
+                continue;
+            }
 
             $widgetValue = $widget->getSaveValue($this->dataArrayGet($result, $parts));
             $this->dataArraySet($result, $parts, $widgetValue);
