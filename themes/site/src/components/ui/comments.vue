@@ -96,6 +96,7 @@ export default {
             return this.comments.length < 1;
         },
         model() {
+            /* istanbul ignore else */
             if (this.type === 'solve') {
                 return 'Speedcube\\Speedcube\\Models\\Solve';
             }
