@@ -98,6 +98,10 @@ class Plugin extends PluginBase
             $model->hasMany['records'] = 'Speedcube\Speedcube\Models\PersonalRecord';
             $model->hasMany['solves'] = 'Speedcube\Speedcube\Models\Solve';
             $model->hasOne['profile'] = 'Speedcube\Speedcube\Models\Profile';
+            $model->morphMany['comments'] = [
+                'Speedcube\Speedcube\Models\Comment',
+                'name' => 'commentable',
+            ];
 
             // create a profile when a user registers
             $model->bindEvent('model.afterCreate', function () use ($model) {

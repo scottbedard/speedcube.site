@@ -15,6 +15,10 @@ Route::prefix('api/speedcube/speedcube')
         // any user may access these
         //
 
+        // comments
+        // more comment endpoints are behind the auth middleware
+        Route::get('comments/{type}/{id}', 'Speedcube\Speedcube\Http\Controllers\CommentsController@find');
+
         // records
         Route::get('records', 'Speedcube\Speedcube\Http\Controllers\RecordsController@index');
 

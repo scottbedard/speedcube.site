@@ -6,14 +6,19 @@ use Carbon\Carbon;
 
 trait CarbonScopes
 {
+
     /**
-     * Records created after a number of days ago.
+     * Query scopes
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int                                   $days
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeCreatedPastDays($query, $days)
     {
         $query->where('created_at', '>=', Carbon::now()->subDays($days)->startOfDay());
+    }
+
+    public function scopeNewest($query)
+    {
+        $query->orderBy('created_at', 'desc');
     }
 }

@@ -7,7 +7,8 @@ use Model;
  */
 class Comment extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use \October\Rain\Database\Traits\Validation,
+        \Speedcube\Speedcube\Traits\CarbonScopes;
 
     /**
      * @var array Attribute casting
@@ -15,6 +16,7 @@ class Comment extends Model
     protected $casts = [
         'commentable_id' => 'integer',
         'id' => 'integer',
+        'user_id' => 'integer',
     ];
     
     /**
@@ -34,7 +36,6 @@ class Comment extends Model
         'body',
         'commentable_id',
         'commentable_type',
-        'user_id',
     ];
 
     /**
@@ -59,10 +60,18 @@ class Comment extends Model
     ];
 
     /**
-     * @var array Validation error messages
+     * Query scopes.
      */
-    public $customMessages = [
-        'twitter_handle:between' => 'Twitter handles must be between 5 and 15 characters long.',
-        'twitter_handle.regex'   => 'Twitter handles may only contain letters, numbers, and underscores.',
-    ];
+    public function scopeFor($query, $type, $id)
+    {
+        $model = '';
+
+        if ($type === 'solve') {
+            $model = 'Speedcube\Speedcube\Models\Solve';
+        }
+
+        return $query->where(function ($q) use ($model, $id) {
+            $q->where('commentable_type', $model)->where('commentable_id', $id);
+        });
+    }
 }

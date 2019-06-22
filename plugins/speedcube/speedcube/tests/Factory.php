@@ -75,6 +75,16 @@ class Factory
     }
 
     /**
+     * Comment
+     */    
+    public static function comment(array $data = [])
+    {
+        return [
+            // ...
+        ];
+    }
+
+    /**
      * Create a scramble with a given set of turns.
      * 
      * @param  string   $turns
@@ -107,6 +117,7 @@ class Factory
 
         switch (get_class($model)) {
             case 'RainLab\User\Models\User': $seed = self::user($data); break;
+            case 'Speedcube\Speedcube\Models\Comment': $seed = self::comment($data); break;
             case 'Speedcube\Speedcube\Models\Config': $seed = self::config($data); break;
             case 'Speedcube\Speedcube\Models\KeyboardConfig': $seed = self::keyboardConfig($data); break;
             case 'Speedcube\Speedcube\Models\Scramble': $seed = self::scramble($data); break;
