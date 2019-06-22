@@ -4,5 +4,11 @@
 
 fields:
     id:
-        label: ID
         disabled: true
+        label: ID
+        span: left
+
+    body:
+        label: Body
+        span: left
+        type: textarea

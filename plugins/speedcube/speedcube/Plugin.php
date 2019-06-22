@@ -186,6 +186,12 @@ class Plugin extends PluginBase
                         'permissions' => ['speedcube.speedcube.access_solves'],
                         'url'         => Backend::url('speedcube/speedcube/solves'),
                     ],
+                    'comments' => [
+                        'icon' => 'icon-comment-o',
+                        'label' => 'Comments',
+                        'permissions' => ['speedcube.speedcube.access_comments'],
+                        'url' => Backend::url('speedcube/speedcube/comments'),
+                    ],
                 ],
                 'url' => Backend::url('speedcube/speedcube/solves'),
             ],

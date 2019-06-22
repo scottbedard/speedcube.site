@@ -16,10 +16,19 @@ class Comments extends Controller
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
 
+    public $requiredPermissions = [
+        'speedcube.speedcube.access_comments',
+    ];
+
     public function __construct()
     {
         parent::__construct();
 
         BackendMenu::setContext('Speedcube.Speedcube', 'speedcube', 'comments');
+    }
+
+    public function listExtendQuery($query)
+    {
+        return $query->withUserSummary();
     }
 }
