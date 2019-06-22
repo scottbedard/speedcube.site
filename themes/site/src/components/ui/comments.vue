@@ -101,6 +101,7 @@ export default {
                 return 'Speedcube\\Speedcube\\Models\\Solve';
             }
 
+            /* istanbul ignore next */
             return '';
         },
     },
