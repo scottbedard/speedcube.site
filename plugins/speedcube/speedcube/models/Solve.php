@@ -415,18 +415,6 @@ class Solve extends Model
         )->addSelect('speedcube_speedcube_scrambles.puzzle');
     }
 
-    public function scopeLastMonth($query)
-    {
-        return $query->where(function ($q) {
-            $startOfMonth = Carbon::now()->startOfMonth();
-            $startOfLastMonth = Carbon::now()->startOfMonth()->subMonths(1);
-
-            return $q
-                ->where('created_at', '>=', $startOfLastMonth)
-                ->where('created_at', '<', $startOfMonth);
-        });
-    }
-
     public function scopeNotPending($query)
     {
         return $query->where('status', '<>', 'pending');
@@ -449,11 +437,6 @@ class Solve extends Model
         return $query->whereHas('scramble', function ($scramble) use ($puzzles) {
             $scramble->whereIn('puzzle', $puzzles);
         });
-    }
-
-    public function scopeThisMonth($query)
-    {
-        return $query->where('created_at', '>=', Carbon::now()->startOfMonth());
     }
 
     public function scopeWithPuzzleId($query)

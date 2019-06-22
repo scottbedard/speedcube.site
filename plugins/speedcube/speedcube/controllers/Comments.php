@@ -2,6 +2,7 @@
 
 use BackendMenu;
 use Backend\Classes\Controller;
+use Speedcube\Speedcube\Models\Comment;
 
 /**
  * Comments Back-end Controller
@@ -27,8 +28,20 @@ class Comments extends Controller
         BackendMenu::setContext('Speedcube.Speedcube', 'speedcube', 'comments');
     }
 
+    public function index()
+    {
+        $this->loadScoreboard();
+        $this->asExtension('ListController')->index();
+    }
+
     public function listExtendQuery($query)
     {
         return $query->withUserSummary();
+    }
+
+    protected function loadScoreboard()
+    {
+        $this->vars['thisMonth'] = Comment::thisMonth()->count();
+        $this->vars['lastMonth'] = Comment::lastMonth()->count();
     }
 }
