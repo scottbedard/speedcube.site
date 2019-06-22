@@ -2,83 +2,108 @@
     <v-page padded>
         <v-margin padded>
             <template v-if="!loading">
-                <!-- header -->
-                <h1 class="font-thin mb-4 text-center text-grey-6">
-                    <template v-if="username">
-                        <router-link class="text-grey-6" :to="{ name: 'users:show', params: { username }}">{{ username }}'s</router-link>
-                    </template>
-                    <template v-else>
-                        A guest's
-                    </template>
-                    {{ solveTitle }} solve
+                <h1 class="mb-8 text-center">
+                    <router-link
+                        v-if="username"
+                        class="text-grey-8 hover:text-grey-10" 
+                        :to="{
+                            name: 'users:show',
+                            params: {
+                                username
+                            },
+                        }">
+                        {{ username }}
+                    </router-link>
+                    <span v-else>Guest</span>
                 </h1>
 
-                <div class="text-center text-grey-6">
-                    <time :datetime="solve.createdAt">{{ createdAt | datestamp }}</time>
-                </div>
-            </template>
-
-            <!-- puzzle -->
-            <div class="mb-4">
-                <v-puzzle
-                    :config="puzzleConfig"
-                    :puzzle="puzzle"
-                    @ready="onReady"
-                />
-            </div>
-
-            <v-fade-transition>
-                <!-- inspecting -->
-                <div
-                    v-if="inspecting"
-                    key="inspecting">
-                    <!-- @todo: add countdown clock -->
-                </div>
-
-                <!-- solving -->
-                <div
-                    v-else-if="solving || solved"
-                    key="solving">
-                    <div
-                        class="font-thin text-center text-4xl trans-color"
-                        :class="{
-                            'text-grey-6': playing,
-                            'text-grey-7': !playing,
-                        }">
-                        <v-timer
-                            :started-at="startedAt"
-                            :display-time="time"
-                        />
+                <div class="flex flex-wrap -mx-8 -my-4 justify-center overflow-hidden text-center">
+                    <!-- date -->
+                    <div class="px-8 py-4">
+                        <div class="font-bold leading-normal mb-1 text-xs text-grey-6 tracking-wide uppercase">Date</div>
+                        <time class="text-lg text-grey-8" :datetime="solve.createdAt">{{ createdAt | datestamp }}</time>
                     </div>
 
-                    <v-fade-transition>
-                        <div
-                            v-if="solved"
-                            class="font-thin mt-4 text-center text-grey-6">
-                            press space to watch again
-                        </div>
-                    </v-fade-transition>
+                    <!-- time -->
+                    <div class="px-8 py-4">
+                        <div class="font-bold leading-normal mb-1 text-xs text-grey-6 tracking-wide uppercase">Time</div>
+                        <div class="text-lg text-grey-8">{{ solve.time | shortTimer }}</div>
+                    </div>
+
+                    <!-- total turns -->
+                    <div class="px-8 py-4">
+                        <div class="font-bold leading-normal mb-1 text-xs text-grey-6 tracking-wide uppercase">Turns</div>
+                        <div class="text-lg text-grey-8">{{ solve.moves }}</div>
+                    </div>
+
+                    <!-- turns per sec -->
+                    <div class="px-8 py-4">
+                        <div class="font-bold leading-normal mb-1 text-xs text-grey-6 tracking-wide uppercase">Turns Per Second</div>
+                        <div class="text-lg text-grey-8">{{ turnsPerSecond }}</div>
+                    </div>
                 </div>
 
-                <!-- ready -->
-                <div
-                    v-else
-                    class="text-center"
-                    key="ready">
-                    <div
-                        v-text="scrambleText"
-                        class="font-mono font-thin leading-loose max-w-md mx-auto leading-normal mb-12 text-grey-6 text-sm"
+                <div class="my-8">
+                    <v-puzzle
+                        :config="puzzleConfig"
+                        :puzzle="puzzle"
+                        @ready="onReady"
                     />
-                    <div class="flex flex-wrap justify-center overflow-hidden">
-                        <div class="mb-8 px-4">
-                            <v-button primary @click="replay">Watch Replay</v-button>
+                </div>
+
+                <v-fade-transition>
+                    <!-- inspecting -->
+                    <div
+                        v-if="inspecting"
+                        key="inspecting">
+                        <!-- @todo: add countdown clock -->
+                    </div>
+
+                    <!-- solving -->
+                    <div
+                        v-else-if="solving || solved"
+                        key="solving">
+                        <div
+                            class="font-thin text-center text-4xl trans-color"
+                            :class="{
+                                'text-grey-6': playing,
+                                'text-grey-7': !playing,
+                            }">
+                            <v-timer
+                                :started-at="startedAt"
+                                :display-time="time"
+                            />
                         </div>
-                        <div class="px-4">
-                            <v-button :to="{ name: 'users:show', params: { username }}">View Stats</v-button>
+
+                        <v-fade-transition>
+                            <div
+                                v-if="solved"
+                                class="font-thin mt-4 text-center text-grey-6">
+                                press space to watch again
+                            </div>
+                        </v-fade-transition>
+                    </div>
+
+                    <!-- ready -->
+                    <div
+                        v-else
+                        class="text-center"
+                        key="ready">
+                        <div
+                            v-text="scrambleText"
+                            class="leading-loose max-w-md mb-8 mx-auto text-grey-7 text-xl text-grey-6 tracking-wide"
+                        />
+                        <div class="flex flex-wrap justify-center overflow-hidden">
+                            <div class="mb-8 px-4">
+                                <v-button primary @click="replay">Watch Replay</v-button>
+                            </div>
+                            <div class="px-4">
+                                <v-button :to="{ name: 'users:show', params: { username }}">View Stats</v-button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </v-fade-transition>
+                </v-fade-transition>
+            </template>
         </v-margin>
     </v-page>
 </template>
@@ -88,7 +113,7 @@ import { bindExternalEvent, componentTimeout } from 'spyfu-vue-utils';
 import { formatShortTimeSentence } from '@/app/utils/string';
 import { getSolve, getRandomSolve, postReplay } from '@/app/repositories/solves';
 import { jsonToObject } from '@/app/utils/object';
-import { get } from 'lodash-es';
+import { get, round } from 'lodash-es';
 
 export default {
     created() {
@@ -158,6 +183,9 @@ export default {
                     turn,
                 };
             });
+        },
+        turnsPerSecond() {
+            return round(1000 / this.solve.averageSpeed, 2);
         },
         username() {
             return get(this.solve, 'user.username', '');
