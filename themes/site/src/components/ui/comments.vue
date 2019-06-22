@@ -33,7 +33,7 @@
             <div
                 v-if="fetching"
                 class="text-center"
-                data-loading 
+                data-loading
                 key="loading">
                 <v-spinner />
             </div>
@@ -50,7 +50,7 @@
                 <div
                     v-for="(comment, index) in comments"
                     :class="{
-                        'mt-12': index > 0,   
+                        'mt-12': index > 0,
                     }"
                     :key="comment.id">
                     <div class="bg-grey-3 mb-2 p-4 rounded">
@@ -131,7 +131,7 @@ export default {
                 commentable_type: this.model,
             };
 
-            postComment(payload).then((response) => {
+            postComment(payload).then(() => {
                 // success
                 this.fetchComments();
             }).finally(() => {

@@ -5,7 +5,7 @@
                 <h1 class="mb-8 text-center">
                     <router-link
                         v-if="username"
-                        class="text-grey-8 hover:text-grey-10" 
+                        class="text-grey-8 hover:text-grey-10"
                         :to="{
                             name: 'users:show',
                             params: {
@@ -109,7 +109,7 @@
                                 <v-button :to="{ name: 'users:show', params: { username }}">View Stats</v-button>
                             </div>
                         </div>
-                        
+
                         <!-- comments -->
                         <div class="max-w-sm mt-12 mx-auto">
                             <v-comments
