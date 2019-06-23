@@ -5,6 +5,7 @@
 Route::get('shields/average/{puzzle}', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@average');
 Route::get('shields/single/{puzzle}', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@single');
 Route::get('shields/single/{puzzle}/replay', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@singleRedirect');
+Route::get('shields/total/{puzzle?}', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@total');
 
 // api
 Route::prefix('api/speedcube/speedcube')

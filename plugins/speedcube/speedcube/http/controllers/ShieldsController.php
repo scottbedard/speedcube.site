@@ -18,7 +18,7 @@ class ShieldsController extends ApiController
      * Fetch a record average.
      * 
      * @param  string   $puzzle
-     * @return \Speedcube\Speedcube\Models\PersonalRecordAverage
+     * @return Array
      */
     public function average($puzzle)
     {
@@ -56,7 +56,7 @@ class ShieldsController extends ApiController
      * Fetch JSON data for use with shields.io
      * 
      * @param  string   $puzzle
-     * @return Response
+     * @return Array
      */
     public function single($puzzle)
     {
@@ -90,6 +90,38 @@ class ShieldsController extends ApiController
         $solve = self::findRecordSingle($puzzle);
 
         return redirect("/replay/{$solve->id}");
+    }
+
+    /**
+     * Fetch total solves.
+     * 
+     * @return Array
+     */
+    public function total($puzzle = null)
+    {
+        $params = input();
+        $username = array_get($params, 'username');
+
+        $query = Solve::completed();
+
+        if ($puzzle) {
+            $query->puzzle($puzzle);
+        }
+
+        if ($username) {
+            $query->username($username);
+        }
+
+        $result = $query
+            ->remember(self::CACHE_DURATION)
+            ->count();
+
+        return [
+            'color' => 'orange',
+            'label' => $puzzle ? "{$puzzle} solves" : 'total solves',
+            'message' => $result,
+            'schemaVersion' => 1,
+        ];
     }
 
     /**

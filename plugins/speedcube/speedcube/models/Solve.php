@@ -439,6 +439,13 @@ class Solve extends Model
         });
     }
 
+    public function scopeUsername($query, $username)
+    {
+        $query->whereHas('user', function($user) use ($username) {
+            $user->where('username', $username);
+        });
+    }
+
     public function scopeWithPuzzleId($query)
     {
         return $query->with('scramble:id,puzzle');

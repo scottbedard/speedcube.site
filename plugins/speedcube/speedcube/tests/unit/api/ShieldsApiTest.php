@@ -234,4 +234,52 @@ class ShieldsApiTest extends PluginTestCase
         $this->assertEquals('3x3 avg', $data['label']);
         $this->assertEquals('5.00', $data['message']);
     }
+
+    public function test_fetching_solves_count()
+    {
+        $user = Factory::authenticatedUser();
+
+        Factory::completedSolve($user);
+
+        $response = $this->get('/shields/total');
+        $response->assertStatus(200);
+
+        $data = json_decode($response->getContent(), true);
+        $this->assertEquals('total solves', $data['label']);
+        $this->assertEquals(1, $data['message']);
+    }
+
+    public function test_fetching_solves_count_for_a_specific_puzzle()
+    {
+        $user = Factory::registerUser();
+        Factory::completedSolve($user, 5000, '2x2');
+        Factory::completedSolve($user, 5000, '3x3');
+        Factory::completedSolve($user, 5000, '3x3');
+
+        $response = $this->get('/shields/total/3x3');
+        $response->assertStatus(200);
+
+        $data = json_decode($response->getContent(), true);
+        $this->assertEquals('3x3 solves', $data['label']);
+        $this->assertEquals(2, $data['message']);
+    }
+
+    public function test_fetching_solves_count_for_a_specific_user()
+    {
+        // create some solves for user 1
+        $user1 = Factory::registerUser();
+        Factory::completedSolve($user1);
+
+        // create some solves for user 2
+        $user2 = Factory::registerUser();
+        Factory::completedSolve($user2);
+        Factory::completedSolve($user2);
+
+        // fetch user 2's solves
+        $response = $this->get("/shields/total?username={$user2->username}");
+        $response->assertStatus(200);
+
+        $data = json_decode($response->getContent(), true);
+        $this->assertEquals(2, $data['message']);
+    }
 }
