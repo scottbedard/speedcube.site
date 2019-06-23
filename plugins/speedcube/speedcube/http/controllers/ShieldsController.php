@@ -119,7 +119,7 @@ class ShieldsController extends ApiController
         return [
             'color' => 'orange',
             'label' => $puzzle ? "{$puzzle} solves" : 'total solves',
-            'message' => $result,
+            'message' => number_format($result),
             'schemaVersion' => 1,
         ];
     }
