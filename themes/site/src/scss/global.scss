@@ -32,6 +32,10 @@ h5 {
     font-weight: normal;
 }
 
+p {
+    @apply leading-loose;
+}
+
 ::selection {
     background-color: config('colors.primary-8'); /* WebKit/Blink Browsers */
     color: config('colors.grey-9');

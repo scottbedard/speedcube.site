@@ -7,11 +7,11 @@ export default {
         const { padded } = context.props;
 
         if (padded) {
-            bindings.class.push('px-6 trans-padding md:px-8');
+            bindings.class.push('px-4 trans-padding md:px-6');
         }
 
         return <div
-            class="max-w-4xl mx-auto"
+            class="max-w-6xl mx-auto"
             {...bindings}>
             {context.slots().default}
         </div>;
