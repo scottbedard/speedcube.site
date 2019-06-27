@@ -8917,9 +8917,9 @@ thread-loader@^2.1.2:
     loader-utils "^1.1.0"
     neo-async "^2.6.0"
 
-three@^0.105.2:
-  version "0.105.2"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.105.2.tgz#d135f1549bdcf5a9acd904ba3dbf9198a0268984"
+three@^0.106.0:
+  version "0.106.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.106.0.tgz#dacd023c2cd1381e566d8561a226ba97b2fcb45f"
 
 throat@^4.0.0:
   version "4.1.0"
