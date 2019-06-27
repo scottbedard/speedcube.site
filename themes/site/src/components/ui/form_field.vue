@@ -5,14 +5,14 @@
 
     .v-form-field[data-invalid] {
         /deep/ .v-input {
-            border-color: config('colors.red-light') !important;
+            border-color: theme('colors.red-light') !important;
 
             input {
                 // these selectors aren't standardized, and are buggy when
                 // chained together. using this mixin allows us to side
                 // step the issue without repeating placeholder css.
                 @mixin placeholder {
-                    color: config('colors.red-light');
+                    color: theme('colors.red-light');
                 }
 
                 &:-ms-input-placeholder { @include placeholder } // <- IE >= 10
@@ -32,10 +32,10 @@
         }
 
         /deep/ a {
-            color: config('colors.grey-7');
+            color: theme('colors.grey-7');
 
             &:hover {
-                color: config('colors.primary-6');
+                color: theme('colors.primary-6');
             }
         }
     }

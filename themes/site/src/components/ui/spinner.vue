@@ -6,7 +6,7 @@
     }
 
     path {
-        stroke: config('colors.grey-5');
+        stroke: theme('colors.grey-5');
     }
 
     @keyframes spin {

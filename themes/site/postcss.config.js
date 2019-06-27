@@ -2,7 +2,7 @@ module.exports = {
     plugins: {
         'postcss-import': {},
         'postcss-url': {},
-        tailwindcss: './tailwind.js',
+        tailwindcss: './tailwind.config.js',
         autoprefixer: {},
     },
 };

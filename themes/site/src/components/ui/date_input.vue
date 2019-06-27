@@ -53,7 +53,7 @@
             <transition name="calendar">
                 <div
                     v-if="expanded"
-                    class="absolute calendar bg-grey-8 max-w-xs pin-l-half pin-t-half p-4 rounded shadow text-grey-2 text-sm trans-opacity trans-transform w-full"
+                    class="absolute calendar bg-grey-8 max-w-xs left-half top-half p-4 rounded shadow text-grey-2 text-sm trans-opacity trans-transform w-full"
                     @click.stop>
                     <!-- header -->
                     <div class="flex items-center justify-between">
