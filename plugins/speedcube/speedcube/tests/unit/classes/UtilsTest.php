@@ -21,4 +21,11 @@ class UtilsTest extends PluginTestCase
             $this->assertEquals($expected, Utils::formatTime($time));
         }
     }
+
+    public function test_ends_with()
+    {
+        $this->assertTrue(Utils::endsWith('abc', ''));
+        $this->assertTrue(Utils::endsWith('abc', 'c'));
+        $this->assertFalse(Utils::endsWith('abc', 'b'));
+    }
 }
