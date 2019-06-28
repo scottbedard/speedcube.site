@@ -28,6 +28,6 @@ class CubeTest extends PluginTestCase
 
     public function test_reversing_a_scramble()
     {
-        $this->assertEquals('U R U- R-', Cube::reverseScramble('R U R- U-'));
+        $this->assertEquals('U R L2 U- R-', Cube::reverseScramble('R U L2 R- U-'));
     }
 }
