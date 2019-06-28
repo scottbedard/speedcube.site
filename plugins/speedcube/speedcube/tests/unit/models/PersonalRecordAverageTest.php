@@ -11,18 +11,26 @@ class PersonalRecordAverageTest extends PluginTestCase
 {
     public function test_eager_loading_user_summary()
     {
+        // create a user and enough solves for an average
         $user = Factory::registerUser();
-        $solve1 = Factory::completedSolve($user);
-        $solve2 = Factory::completedSolve($user);
-        $solve2 = Factory::completedSolve($user);
-        $solve2 = Factory::completedSolve($user);
-        $solve2 = Factory::completedSolve($user);
+
+        Factory::completedSolve($user);
+        Factory::completedSolve($user);
+        Factory::completedSolve($user);
+        Factory::completedSolve($user);
+        Factory::completedSolve($user);
         
+        // fetch the first (any only) personal record average
         $avg = PersonalRecordAverage::withSolveSummary()
             ->first()
             ->toArray();
 
+        // information about our solves should have been eager loaded
         $this->assertEquals(5, count($avg['solves']));
-        $this->assertEquals(['id', 'status', 'time'], array_keys($avg['solves'][0]));
+        
+        $this->assertEquals(
+            ['id', 'status', 'time'],
+            array_keys($avg['solves'][0])
+        );
     }
 }
