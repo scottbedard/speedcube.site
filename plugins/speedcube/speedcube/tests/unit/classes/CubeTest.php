@@ -25,4 +25,9 @@ class CubeTest extends PluginTestCase
             ],
         ]);
     }
+
+    public function test_reversing_a_scramble()
+    {
+        $this->assertEquals('U R U- R-', Cube::reverseScramble('R U R- U-'));
+    }
 }
