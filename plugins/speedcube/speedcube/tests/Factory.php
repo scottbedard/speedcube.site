@@ -120,6 +120,7 @@ class Factory
             case 'Speedcube\Speedcube\Models\Comment': $seed = self::comment($data); break;
             case 'Speedcube\Speedcube\Models\Config': $seed = self::config($data); break;
             case 'Speedcube\Speedcube\Models\KeyboardConfig': $seed = self::keyboardConfig($data); break;
+            case 'Speedcube\Speedcube\Models\PersonalRecordAverage': $seed = self::personalRecordAverage($data); break;
             case 'Speedcube\Speedcube\Models\Scramble': $seed = self::scramble($data); break;
             case 'Speedcube\Speedcube\Models\Solve': $seed = self::solve($data); break;
         }
@@ -205,6 +206,16 @@ class Factory
      * KeyboardConfig
      */
     public static function keyboardConfig(array $data = [])
+    {
+        return [
+            // ...
+        ];
+    }
+
+    /**
+     * PersonalRecordAverage
+     */
+    public static function personalRecordAverage(array $data = [])
     {
         return [
             // ...
