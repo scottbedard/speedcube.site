@@ -16,5 +16,6 @@ export default {
     '<v-range-input>': () => import('./range_input_example.vue'),
     '<v-spinner>': () => import('./spinner_example.vue'),
     '<v-switch>': () => import('./switch_example.vue'),
+    three: () => import('./three_example.vue'),
     // '<v-select>': () => import('./select_example.vue'),
 };

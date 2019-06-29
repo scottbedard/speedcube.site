@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import { noop } from 'lodash-es';
 import { Scene } from 'three';
 
 export default {
