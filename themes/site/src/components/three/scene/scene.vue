@@ -1,7 +1,11 @@
+<style lang="scss" scoped>
+    div {
+        padding-top: 100%;
+    }
+</style>
+
 <template>
-    <div>
-        <slot />
-    </div>
+    <div class="border-4 border-danger-5"><slot /></div>
 </template>
 
 <script>
@@ -14,11 +18,12 @@ export default {
             camera: null,
             scene: new Scene(),
         };
-
-        this.$root.$emit('scene-created', this);
+    },
+    mounted() {
+        this.$root.$emit('scene-add', this);
     },
     destroyed() {
-        this.$root.$emit('scene-destroyed', this);
+        this.$root.$emit('scene-remove', this);
     },
     methods: {
         registerCamera(camera) {
@@ -29,5 +34,8 @@ export default {
         },
     },
     name: 'scene',
+    props: {
+        // ...
+    },
 };
 </script>

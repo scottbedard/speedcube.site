@@ -9,8 +9,10 @@ export default {
         this.$options.scene = findAncestor(this, 'scene');
 
         this.$options.three = {
-            camera: new PerspectiveCamera(60, 1, 1, 10000),
+            camera: new PerspectiveCamera(50, 1, 1, 10),
         };
+
+        this.$options.three.camera.position.z = 2;
 
         // register our camera with the parent scene, and remove
         // the relationship when this component is destroyed.
