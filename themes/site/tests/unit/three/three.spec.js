@@ -1,7 +1,7 @@
 /* eslint-disable */
-import cameraComponent from '@/components/renderer/camera/camera.vue';
-import rendererComponent from '@/components/renderer/renderer.vue';
-import sceneComponent from '@/components/renderer/scene/scene.vue';
+import cameraComponent from '@/components/three/camera/camera.vue';
+import rendererComponent from '@/components/three/renderer/renderer.vue';
+import sceneComponent from '@/components/three/scene/scene.vue';
 import THREE from 'three';
 
 //
