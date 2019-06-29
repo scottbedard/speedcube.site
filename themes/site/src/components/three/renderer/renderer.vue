@@ -1,6 +1,9 @@
 <template>
     <canvas
         class="absolute h-full pin-l pin-t pointer-events-none w-full"
+        :class="{
+            hidden: empty,
+        }"
         :height="height"
         :style="{
             transform: `translateY(${scrollY}px)`,

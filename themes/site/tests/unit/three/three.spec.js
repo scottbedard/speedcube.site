@@ -108,7 +108,7 @@ describe('renderer', () => {
             });
 
             expect(vm.$refs.renderer.scrollY).toBe(10);
-            expect(global.window.getComputedStyle(vm.$el).getPropertyValue('transform')).toBe('translateY(10px)');
+            expect(window.getComputedStyle(vm.$el).getPropertyValue('transform')).toBe('translateY(10px)');
 
             global.window.scrollY = 20;
             global.window.dispatchEvent(new Event('scroll'));
@@ -116,7 +116,7 @@ describe('renderer', () => {
             await vm.$nextTick();
 
             expect(vm.$refs.renderer.scrollY).toBe(20);
-            expect(global.window.getComputedStyle(vm.$el).getPropertyValue('transform')).toBe('translateY(20px)');
+            expect(window.getComputedStyle(vm.$el).getPropertyValue('transform')).toBe('translateY(20px)');
         });
 
         it('tracks browser dimensions', async () => {
@@ -170,6 +170,29 @@ describe('renderer', () => {
             await timeout(20);
 
             expect(window.requestAnimationFrame.mock.calls.length).toBe(calls);
+        });
+
+        it('hides the canvas when there are no scenes to render', async () => {
+            const vm = mount({
+                data() {
+                    return {
+                        scene: false,
+                    };
+                },
+                template: `
+                    <div>
+                        <v-renderer ref="renderer" />
+                        <v-scene v-if="scene" />
+                    </div>
+                `,
+            });
+            
+            expect(vm.$refs.renderer.$el.classList.contains('hidden')).toBe(true);
+
+            vm.scene = true;
+            await vm.$nextTick();
+            
+            expect(vm.$refs.renderer.$el.classList.contains('hidden')).toBe(false);
         });
     });
 
