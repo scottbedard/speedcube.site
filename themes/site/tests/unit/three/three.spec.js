@@ -2,7 +2,12 @@
 import cameraComponent from '@/components/three/camera/camera.vue';
 import rendererComponent from '@/components/three/renderer/renderer.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
-import THREE from 'three';
+
+import {
+    PerspectiveCamera,
+    Scene,
+    WebGLRenderer,
+} from 'three';
 
 //
 // mocks
@@ -18,7 +23,7 @@ jest.mock('three', () => {
                     x: 0,
                     y: 0,
                     z: 0,
-                }
+                },
             };
         }),
 
@@ -60,9 +65,9 @@ describe('renderer', () => {
         global.window.scrollY = 0;
 
         // reset threejs mocks
-        THREE.PerspectiveCamera.mockClear();
-        THREE.Scene.mockClear();
-        THREE.WebGLRenderer.mockClear();
+        PerspectiveCamera.mockClear();
+        Scene.mockClear();
+        WebGLRenderer.mockClear();
         
         jest.spyOn(window, 'requestAnimationFrame');
     });
@@ -80,14 +85,14 @@ describe('renderer', () => {
                 created() {
                     // since our WebGLRenderer needs a canvas element
                     // to render to, it shouldn't be instantiated yet
-                    expect(THREE.WebGLRenderer).not.toHaveBeenCalled();
+                    expect(WebGLRenderer).not.toHaveBeenCalled();
                 },
                 template: `<v-renderer />`,
             });
 
             // now that the component has mounted, our renderer
             // should be created with our <canvas> element
-            expect(THREE.WebGLRenderer).toHaveBeenCalledWith({
+            expect(WebGLRenderer).toHaveBeenCalledWith({
                 alpha: true,
                 antialias: true,
                 canvas: vm.$el,
@@ -251,6 +256,49 @@ describe('renderer', () => {
             await vm.$nextTick();
 
             expect(vm.$refs.scene.$options.three.camera).toBe(null);
+        });
+
+        it('positions the camera when the angle or distance changes', async () => {
+            const vm = mount({
+                data() {
+                    return {
+                        angle: 10,
+                        distance: 10,
+                    };
+                },
+                template: `
+                    <v-scene>
+                        <v-camera ref="camera" :angle="angle" :distance="distance" />
+                    </v-scene>
+                `,
+            });
+
+            const { camera } = vm.$refs.camera.$options.three;
+
+            // our initial position should be set
+            expect(camera.position.set).toHaveBeenCalledWith(0, 9.84807753012208, 1.7364817766693033);
+            expect(camera.lookAt).toHaveBeenCalledWith(0, 0, 0);
+
+            // clear mocks and adjust angle
+            camera.lookAt.mockClear();
+            camera.position.set.mockClear();
+
+            vm.angle = 20;
+            await vm.$nextTick();
+
+            // the camera should be repositioned
+            expect(camera.lookAt).toHaveBeenCalledWith(0, 0, 0);
+            expect(camera.position.set).toHaveBeenCalledWith(0, 9.396926207859085, 3.420201433256687);
+
+            // clear mocks and adjust distance
+            camera.lookAt.mockClear();
+            camera.position.set.mockClear();
+
+            vm.distance = 20;
+            await vm.$nextTick();
+
+            expect(camera.lookAt).toHaveBeenCalledWith(0, 0, 0);
+            expect(camera.position.set).toHaveBeenCalledWith(0, 18.79385241571817, 6.840402866513374);
         });
     });
 });

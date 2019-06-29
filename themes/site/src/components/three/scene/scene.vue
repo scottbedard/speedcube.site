@@ -13,10 +13,11 @@ import { Scene } from 'three';
 
 export default {
     created() {
-        // initialize our non-reactive state
+        const scene = new Scene();
+
         this.$options.three = {
             camera: null,
-            scene: new Scene(),
+            scene,
         };
     },
     mounted() {
