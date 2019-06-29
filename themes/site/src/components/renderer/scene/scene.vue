@@ -22,8 +22,8 @@ export default {
         this.$root.$emit('scene-destroyed', this);
     },
     methods: {
-        registerCamera(vm) {
-            this.$options.three.camera = vm.$options.camera;
+        registerCamera(camera) {
+            this.$options.three.camera = camera;
         },
         unregisterCamera() {
             this.$options.three.camera = null;
