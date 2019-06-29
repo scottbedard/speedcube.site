@@ -9,12 +9,23 @@ import THREE from 'three';
 //
 jest.mock('three', () => {
     return {
+        // PerspectiveCamera
         PerspectiveCamera: jest.fn().mockImplementation(() => {
             return {
-                position: { x: 0, y: 0, z: 0 }
+                lookAt: jest.fn(),
+                position: {
+                    set: jest.fn(),
+                    x: 0,
+                    y: 0,
+                    z: 0,
+                }
             };
         }),
+
+        // Scene
         Scene: jest.fn(),
+
+        // WebGLRenderer
         WebGLRenderer: jest.fn().mockImplementation(() => {
             return {
                 clear: jest.fn(),

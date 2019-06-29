@@ -16,3 +16,13 @@ export function formatSolveTime(time) {
 
     return `${sec}.${ms}`;
 }
+
+/**
+ * Convert degrees to radians.
+ *
+ * @param  {Number} degrees
+ * @return {Number}
+ */
+export function degreesToRadians(degrees) {
+    return degrees * (Math.PI / 180);
+}

@@ -14,7 +14,7 @@ export default {
         scene.$options.three.scene.add(this.$options.three.ambientLight);
 
         this.$on('hook:destroyed', () => {
-
+            
         });
     },
     render: noop,

@@ -14,8 +14,8 @@
 
                 <!-- camera -->
                 <v-camera
-                    :angle="45"
-                    :distance="10"
+                    :angle="cameraAngle"
+                    :distance="cameraDistance"
                 />
 
                 <!-- action -->
@@ -25,6 +25,11 @@
                     :size="1"
                 />
             </v-scene>
+
+            <v-range-input v-model="cameraAngle" :min="0" :max="90" />
+            <v-range-input v-model="cameraDistance" :min="0" :max="100" />
+
+            <pre>{{ $data }}</pre>
         </div>
     </v-example>
 </template>
@@ -43,6 +48,12 @@ export default {
         'v-camera': cameraComponent,
         'v-example': exampleComponent,
         'v-scene': sceneComponent,
+    },
+    data() {
+        return {
+            cameraAngle: 45,
+            cameraDistance: 5,
+        };
     },
 };
 </script>
