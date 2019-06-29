@@ -66,22 +66,19 @@ export default {
             this.scenes = this.scenes.filter(existing => existing !== scene);
         },
         start() {
-            // do nothing if we're already running
-            if (this.running) {
-                return;
-            }
+            if (!this.running) {
+                this.running = true;
 
-            this.running = true;
+                const draw = () => {
+                    if (this.running) {
+                        this.draw();
 
-            const draw = () => {
-                if (this.running) {
-                    this.draw();
-
-                    window.requestAnimationFrame(draw);
+                        window.requestAnimationFrame(draw);
+                    }
                 }
+                
+                draw();
             }
-            
-            draw();
         },
         stop() {
             this.running = false;
