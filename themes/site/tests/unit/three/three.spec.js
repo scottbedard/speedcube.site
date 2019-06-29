@@ -245,12 +245,12 @@ describe('renderer', () => {
             vm.camera = true;
             await vm.$nextTick();
 
-            // expect(vm.$refs.scene.$options.three.camera).toBe(vm.$refs.camera.$options.three.camera);
+            expect(vm.$refs.scene.$options.three.camera).toBe(vm.$refs.camera.$options.three.camera);
 
-            // vm.camera = false;
-            // await vm.$nextTick();
+            vm.camera = false;
+            await vm.$nextTick();
 
-            // expect(vm.$refs.scene.$options.three.camera).toBe(null);
+            expect(vm.$refs.scene.$options.three.camera).toBe(null);
         });
     });
 });
