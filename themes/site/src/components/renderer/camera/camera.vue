@@ -3,17 +3,15 @@
 </template>
 
 <script>
-import { noop } from 'lodash-es';
+import { PerspectiveCamera } from 'three';
 import { findAncestor } from '@/app/utils/component';
+import { noop } from 'lodash-es';
 
 export default {
     created() {
+        // initialize non-reactive state
+        this.$options.camera = new PerspectiveCamera(60, 1, 1, 10000);
         this.registerWithScene();
-    },
-    data() {
-        return {
-            scene: undefined,
-        };
     },
     methods: {
         registerWithScene() {
@@ -23,7 +21,8 @@ export default {
 
             if (scene) {
                 scene.registerCamera(this);
-                this.$on('hook:destroyed', () => scene.unregisterCamera(this));
+
+                this.$on('hook:destroyed', scene.unregisterCamera);
             }
         }
     }

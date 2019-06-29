@@ -104,7 +104,7 @@ describe('renderer', () => {
     // camera
     //
     describe('<v-camera>', () => {
-        it('registers and unregisters with parent scene', async () => {
+        it('registers and unregisters itself with the parent scene', async () => {
             const vm = mount({
                 data() {
                     return {
@@ -118,17 +118,17 @@ describe('renderer', () => {
                 `,
             });
 
-            expect(vm.$refs.scene.camera).toBe(null);
+            expect(vm.$refs.scene.$options.three.camera).toBe(null);
 
             vm.camera = true;
             await vm.$nextTick();
 
-            expect(vm.$refs.scene.camera).toBe(vm.$refs.camera);
+            expect(vm.$refs.scene.$options.three.camera).toBe(vm.$refs.camera.$options.camera);
 
             vm.camera = false;
             await vm.$nextTick();
 
-            expect(vm.$refs.scene.camera).toBe(null);
+            expect(vm.$refs.scene.$options.three.camera).toBe(null);
         });
     });
 });
