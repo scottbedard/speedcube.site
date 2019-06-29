@@ -12,9 +12,15 @@
 <script>
 import { mapState } from 'vuex';
 import { bindExternalEvent } from 'spyfu-vue-utils';
+import { WebGLRenderer } from 'three';
 
 export default {
     created() {
+        // initialize non-reactive state
+        this.$options.three = {
+            renderer: null,
+        };
+
         // listen for scroll events on the window
         bindExternalEvent(this, window, 'scroll', () => {
             this.scrollY = window.scrollY;
@@ -29,6 +35,12 @@ export default {
             scenes: [],
             scrollY: window.scrollY,
         };
+    },
+    mounted() {
+        this.$options.three.renderer = new WebGLRenderer({
+            antialias: true,
+            canvas: this.$el,
+        });
     },
     computed: {
         ...mapState('browser', {

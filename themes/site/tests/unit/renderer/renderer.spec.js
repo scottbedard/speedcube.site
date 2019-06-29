@@ -2,6 +2,18 @@
 import cameraComponent from '@/components/renderer/camera/camera.vue';
 import rendererComponent from '@/components/renderer/renderer.vue';
 import sceneComponent from '@/components/renderer/scene/scene.vue';
+import THREE from 'three';
+
+//
+// mocks
+//
+jest.mock('three', () => {
+    return {
+        PerspectiveCamera: jest.fn(),
+        Scene: jest.fn(),
+        WebGLRenderer: jest.fn(),
+    };
+});
 
 //
 // factory
@@ -19,13 +31,37 @@ const mount = factory({
 //
 describe('renderer', () => {
     beforeEach(() => {
+        // reset window scroll position
         global.window.scrollY = 0;
+
+        // reset threejs mocks
+        THREE.PerspectiveCamera.mockClear();
+        THREE.Scene.mockClear();
+        THREE.WebGLRenderer.mockClear();
     });
 
     //
     // renderer
     //
     describe('<v-renderer>', () => {
+        it('creates a WebGLRenderer', () => {
+            const vm = mount({
+                created() {
+                    // since our WebGLRenderer needs a canvas element
+                    // to render to, it shouldn't be instantiated yet
+                    expect(THREE.WebGLRenderer).not.toHaveBeenCalled();
+                },
+                template: `<v-renderer />`,
+            });
+
+            // now that the component has mounted, our renderer
+            // should be created with our <canvas> element
+            expect(THREE.WebGLRenderer).toHaveBeenCalledWith({
+                antialias: true,
+                canvas: vm.$el,
+            });
+        });
+
         it('manages scenes', async () => {
             const vm = mount({
                 data() {
