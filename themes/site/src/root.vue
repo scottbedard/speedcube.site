@@ -6,10 +6,15 @@
         <v-fade-transition>
             <router-view />
         </v-fade-transition>
+
+        <!-- renderer -->
+        <v-renderer />
     </div>
 </template>
 
 <script>
+import rendererComponent from '@/components/three/renderer/renderer.vue';
+
 export default {
     created() {
         this.trackBrowserDimensions();
@@ -18,6 +23,9 @@ export default {
         //        breaks testability, but is hacked in so we can access logic
         //        from our redirects. we should make an app factory to fix this.
         window.app = this;
+    },
+    components: {
+        'v-renderer': rendererComponent,
     },
     methods: {
         trackBrowserDimensions() {

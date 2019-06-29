@@ -38,6 +38,12 @@ describe('renderer', () => {
         THREE.PerspectiveCamera.mockClear();
         THREE.Scene.mockClear();
         THREE.WebGLRenderer.mockClear();
+        
+        jest.spyOn(window, 'requestAnimationFrame');
+    });
+      
+    afterEach(() => {
+        window.requestAnimationFrame.mockRestore();
     });
 
     //
@@ -134,6 +140,37 @@ describe('renderer', () => {
             expect(Number(vm.$el.getAttribute('height'))).toBe(1000);
             expect(Number(vm.$el.getAttribute('width'))).toBe(1200);
         });  
+
+        it('runs a requestAnimationFrame loop', async () => {
+            const vm = mount({
+                data() {
+                    return {
+                        scene: false,
+                    };
+                },
+                template: `
+                    <div>
+                        <v-renderer />
+                        <v-scene v-if="scene" ref="scene" />
+                    </div>
+                `,
+            });
+
+            expect(window.requestAnimationFrame).not.toHaveBeenCalled();
+
+            vm.scene = true;
+            await vm.$nextTick();
+
+            expect(window.requestAnimationFrame).toHaveBeenCalled();
+
+            vm.scene = false;
+            await vm.$nextTick();
+
+            const calls = window.requestAnimationFrame.mock.calls.length;
+            await timeout(20);
+
+            expect(window.requestAnimationFrame.mock.calls.length).toBe(calls);
+        });
     });
 
     //

@@ -32,6 +32,7 @@ export default {
     },
     data() {
         return {
+            running: false,
             scenes: [],
             scrollY: window.scrollY,
         };
@@ -55,8 +56,41 @@ export default {
         addScene(scene) {
             this.scenes.push(scene);
         },
+        draw() {
+            // console.log('draw');
+        },
         removeScene(scene) {
             this.scenes = this.scenes.filter(existing => existing !== scene);
+        },
+        start() {
+            // do nothing if we're already running
+            if (this.running) {
+                return;
+            }
+
+            this.running = true;
+
+            const draw = () => {
+                if (this.running) {
+                    this.draw();
+
+                    window.requestAnimationFrame(draw);
+                }
+            }
+            
+            draw();
+        },
+        stop() {
+            this.running = false;
+        },
+    },
+    watch: {
+        empty(empty) {
+            if (empty) {
+                this.stop();
+            } else {
+                this.start();
+            }
         },
     },
 };
