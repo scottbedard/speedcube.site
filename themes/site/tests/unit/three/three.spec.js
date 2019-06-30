@@ -3,12 +3,17 @@ import cameraComponent from '@/components/three/camera/camera.vue';
 import lightComponent from '@/components/three/light/light.vue';
 import rendererComponent from '@/components/three/renderer/renderer.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
+import shapeComponent from '@/components/three/shape/shape.vue';
+import { roundedRectangle } from '@/components/three/geometries';
 
 import {
     AmbientLight,
+    Object3D,
     PerspectiveCamera,
     PointLight,
     Scene,
+    Shape,
+    ShapeBufferGeometry,
     WebGLRenderer,
 } from 'three';
 
@@ -35,6 +40,9 @@ jest.mock('three', () => {
                 },
             };
         }),
+
+        // Object3D
+        Object3D: jest.fn(),
 
         // PerspectiveCamera
         PerspectiveCamera: jest.fn(() => {
@@ -76,6 +84,18 @@ jest.mock('three', () => {
             };
         }),
 
+        // Shape
+        Shape: jest.fn(() => {
+            return {
+                lineTo: jest.fn(),
+                moveTo: jest.fn(),
+                quadraticCurveTo: jest.fn(),
+            };
+        }),
+
+        // ShapeBufferGeometry
+        ShapeBufferGeometry: jest.fn(),
+
         // WebGLRenderer
         WebGLRenderer: jest.fn(() => {
             return {
@@ -100,6 +120,7 @@ const mount = factory({
         'v-light': lightComponent,
         'v-renderer': rendererComponent,
         'v-scene': sceneComponent,
+        'v-shape': shapeComponent,
     },
 });
 
@@ -113,9 +134,12 @@ describe('renderer', () => {
 
         // reset threejs mocks
         AmbientLight.mockClear();
+        Object3D.mockClear();
         PerspectiveCamera.mockClear();
         PointLight.mockClear();
         Scene.mockClear();
+        Shape.mockClear();
+        ShapeBufferGeometry.mockClear();
         WebGLRenderer.mockClear();
         
         jest.spyOn(window, 'requestAnimationFrame');
@@ -123,6 +147,194 @@ describe('renderer', () => {
       
     afterEach(() => {
         window.requestAnimationFrame.mockRestore();
+    });
+
+    //
+    // camera
+    //
+    describe('<v-camera>', () => {
+        it('registers and unregisters itself with the parent scene', async () => {
+            const vm = mount({
+                data() {
+                    return {
+                        camera: false,
+                    };
+                },
+                template: `
+                    <v-scene ref="scene">
+                        <v-camera v-if="camera" ref="camera" />
+                    </v-scene>
+                `,
+            });
+
+            expect(vm.$refs.scene.$options.three.camera).toBe(null);
+
+            vm.camera = true;
+            await vm.$nextTick();
+
+            expect(vm.$refs.scene.$options.three.camera).toBe(vm.$refs.camera.$options.three.camera);
+
+            vm.camera = false;
+            await vm.$nextTick();
+
+            expect(vm.$refs.scene.$options.three.camera).toBe(null);
+        });
+
+        it('positions the camera when the angle or distance changes', async () => {
+            const vm = mount({
+                data() {
+                    return {
+                        angle: 10,
+                        distance: 10,
+                    };
+                },
+                template: `
+                    <v-scene>
+                        <v-camera ref="camera" :angle="angle" :distance="distance" />
+                    </v-scene>
+                `,
+            });
+
+            const { camera } = vm.$refs.camera.$options.three;
+
+            // our initial position should be set
+            expect(camera.position.set).toHaveBeenCalledWith(0, 9.84807753012208, 1.7364817766693033);
+            expect(camera.lookAt).toHaveBeenCalledWith(0, 0, 0);
+
+            // clear mocks and adjust angle
+            camera.lookAt.mockClear();
+            camera.position.set.mockClear();
+
+            vm.angle = 20;
+            await vm.$nextTick();
+
+            // the camera should be repositioned
+            expect(camera.lookAt).toHaveBeenCalledWith(0, 0, 0);
+            expect(camera.position.set).toHaveBeenCalledWith(0, 9.396926207859085, 3.420201433256687);
+
+            // clear mocks and adjust distance
+            camera.lookAt.mockClear();
+            camera.position.set.mockClear();
+
+            vm.distance = 20;
+            await vm.$nextTick();
+
+            expect(camera.lookAt).toHaveBeenCalledWith(0, 0, 0);
+            expect(camera.position.set).toHaveBeenCalledWith(0, 18.79385241571817, 6.840402866513374);
+        });
+    });
+
+    //
+    // light
+    //
+    describe('<v-light>', () => {
+        it('adds and removes itself from the parent scene', async () => {
+            const vm = mount({
+                data() {
+                    return {
+                        light: false,
+                    };
+                },
+                template: `
+                    <v-scene ref="scene">
+                        <v-light v-if="light" ref="light" />
+                    </v-scene>
+                `,
+            });
+
+            const { scene } = vm.$refs.scene.$options.three;
+            expect(scene.add).not.toHaveBeenCalled();
+
+            vm.light = true;
+            await vm.$nextTick();
+
+            const { light } = vm.$refs.light.$options.three;
+            expect(scene.add).toHaveBeenCalledWith(light);
+
+            vm.light = false;
+            await vm.$nextTick();
+
+            expect(scene.remove).toHaveBeenCalledWith(light);
+        });
+
+        it('updates when color or intensity changes', async () => {
+            const vm = mount({
+                data() {
+                    return {
+                        color: 0xffffff,
+                        intensity: 0.1,
+                    };
+                },
+                template: `
+                    <v-scene ref="scene">
+                        <v-light
+                            ref="light"
+                            :color="color"
+                            :intensity="intensity"
+                        />
+                    </v-scene>
+                `,
+            });
+
+            vm.intensity = 0.2;
+            await vm.$nextTick();
+
+            const { light } = vm.$refs.light.$options.three;
+            expect(light.intensity).toBe(0.2);
+
+            vm.color = 0xff0000;
+            await vm.$nextTick();
+
+            expect(light.color.setHex).toHaveBeenCalledWith(0xff0000);
+        });
+
+        it('updates when position is changed', async () => {
+            const vm = mount({
+                data() {
+                    return { x: 1, y: 2, z: 3 };
+                },
+                template: `
+                    <v-scene ref="scene">
+                        <v-light ref="light" :position="{ x, y, z }" />
+                    </v-scene>
+                `,
+            });
+
+            const { light } = vm.$refs.light.$options.three;
+            
+            expect(light.position.set).toHaveBeenCalledWith(1, 2, 3);
+
+            vm.x = 10;
+            vm.y = 20;
+            vm.z = 30;
+            await vm.$nextTick();
+            
+            expect(light.position.set).toHaveBeenCalledWith(10, 20, 30);
+        });
+
+        it('supports ambient lights', () => {
+            const vm = mount({
+                template: `
+                    <v-scene ref="scene">
+                        <v-light type="ambient" :color="0xff0000" :intensity="0.1" />
+                    </v-scene>
+                `,
+            });
+
+            expect(AmbientLight).toHaveBeenCalledWith(0xff0000, 0.1);
+        });
+
+        it('supports point lights', () => {
+            const vm = mount({
+                template: `
+                    <v-scene ref="scene">
+                        <v-light type="point" :color="0xff0000" :intensity="0.1" />
+                    </v-scene>
+                `,
+            });
+
+            expect(PointLight).toHaveBeenCalledWith(0xff0000, 0.1);
+        });
     });
 
     //
@@ -277,19 +489,23 @@ describe('renderer', () => {
     });
 
     //
-    // light
+    // sticker
+    // these are essentially just double-sided mesh geometries
     //
-    describe('<v-light>', () => {
+    describe('<v-shape>', () => {
         it('adds and removes itself from the parent scene', async () => {
             const vm = mount({
                 data() {
                     return {
-                        light: false,
+                        shape: false,
                     };
+                },
+                computed: {
+                    roundedRectangle: () => roundedRectangle(10, 10, 2),
                 },
                 template: `
                     <v-scene ref="scene">
-                        <v-light v-if="light" ref="light" />
+                        <v-shape v-if="shape" ref="shape" :geometry="roundedRectangle" />
                     </v-scene>
                 `,
             });
@@ -297,170 +513,16 @@ describe('renderer', () => {
             const { scene } = vm.$refs.scene.$options.three;
             expect(scene.add).not.toHaveBeenCalled();
 
-            vm.light = true;
+            vm.shape = true;
             await vm.$nextTick();
 
-            const { light } = vm.$refs.light.$options.three;
-            expect(scene.add).toHaveBeenCalledWith(light);
+            const { obj } = vm.$refs.shape.$options.three;
+            expect(scene.add).toHaveBeenCalledWith(obj);
 
-            vm.light = false;
+            vm.shape = false;
             await vm.$nextTick();
 
-            expect(scene.remove).toHaveBeenCalledWith(light);
-        });
-
-        it('updates when color or intensity changes', async () => {
-            const vm = mount({
-                data() {
-                    return {
-                        color: 0xffffff,
-                        intensity: 0.1,
-                    };
-                },
-                template: `
-                    <v-scene ref="scene">
-                        <v-light
-                            ref="light"
-                            :color="color"
-                            :intensity="intensity"
-                        />
-                    </v-scene>
-                `,
-            });
-
-            vm.intensity = 0.2;
-            await vm.$nextTick();
-
-            const { light } = vm.$refs.light.$options.three;
-            expect(light.intensity).toBe(0.2);
-
-            vm.color = 0xff0000;
-            await vm.$nextTick();
-
-            expect(light.color.setHex).toHaveBeenCalledWith(0xff0000);
-        });
-
-        it('updates when position is changed', async () => {
-            const vm = mount({
-                data() {
-                    return { x: 1, y: 2, z: 3 };
-                },
-                template: `
-                    <v-scene ref="scene">
-                        <v-light ref="light" :position="{ x, y, z }" />
-                    </v-scene>
-                `,
-            });
-
-            const { light } = vm.$refs.light.$options.three;
-            
-            expect(light.position.set).toHaveBeenCalledWith(1, 2, 3);
-
-            vm.x = 10;
-            vm.y = 20;
-            vm.z = 30;
-            await vm.$nextTick();
-            
-            expect(light.position.set).toHaveBeenCalledWith(10, 20, 30);
-        });
-
-        it('supports ambient lights', () => {
-            const vm = mount({
-                template: `
-                    <v-scene ref="scene">
-                        <v-light type="ambient" :color="0xff0000" :intensity="0.1" />
-                    </v-scene>
-                `,
-            });
-
-            expect(AmbientLight).toHaveBeenCalledWith(0xff0000, 0.1);
-        });
-
-        it('supports point lights', () => {
-            const vm = mount({
-                template: `
-                    <v-scene ref="scene">
-                        <v-light type="point" :color="0xff0000" :intensity="0.1" />
-                    </v-scene>
-                `,
-            });
-
-            expect(PointLight).toHaveBeenCalledWith(0xff0000, 0.1);
-        });
-    });
-
-    //
-    // camera
-    //
-    describe('<v-camera>', () => {
-        it('registers and unregisters itself with the parent scene', async () => {
-            const vm = mount({
-                data() {
-                    return {
-                        camera: false,
-                    };
-                },
-                template: `
-                    <v-scene ref="scene">
-                        <v-camera v-if="camera" ref="camera" />
-                    </v-scene>
-                `,
-            });
-
-            expect(vm.$refs.scene.$options.three.camera).toBe(null);
-
-            vm.camera = true;
-            await vm.$nextTick();
-
-            expect(vm.$refs.scene.$options.three.camera).toBe(vm.$refs.camera.$options.three.camera);
-
-            vm.camera = false;
-            await vm.$nextTick();
-
-            expect(vm.$refs.scene.$options.three.camera).toBe(null);
-        });
-
-        it('positions the camera when the angle or distance changes', async () => {
-            const vm = mount({
-                data() {
-                    return {
-                        angle: 10,
-                        distance: 10,
-                    };
-                },
-                template: `
-                    <v-scene>
-                        <v-camera ref="camera" :angle="angle" :distance="distance" />
-                    </v-scene>
-                `,
-            });
-
-            const { camera } = vm.$refs.camera.$options.three;
-
-            // our initial position should be set
-            expect(camera.position.set).toHaveBeenCalledWith(0, 9.84807753012208, 1.7364817766693033);
-            expect(camera.lookAt).toHaveBeenCalledWith(0, 0, 0);
-
-            // clear mocks and adjust angle
-            camera.lookAt.mockClear();
-            camera.position.set.mockClear();
-
-            vm.angle = 20;
-            await vm.$nextTick();
-
-            // the camera should be repositioned
-            expect(camera.lookAt).toHaveBeenCalledWith(0, 0, 0);
-            expect(camera.position.set).toHaveBeenCalledWith(0, 9.396926207859085, 3.420201433256687);
-
-            // clear mocks and adjust distance
-            camera.lookAt.mockClear();
-            camera.position.set.mockClear();
-
-            vm.distance = 20;
-            await vm.$nextTick();
-
-            expect(camera.lookAt).toHaveBeenCalledWith(0, 0, 0);
-            expect(camera.position.set).toHaveBeenCalledWith(0, 18.79385241571817, 6.840402866513374);
+            expect(scene.remove).toHaveBeenCalledWith(obj);
         });
     });
 });
