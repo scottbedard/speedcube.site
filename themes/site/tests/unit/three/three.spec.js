@@ -1,9 +1,11 @@
 /* eslint-disable */
+import ambientLightComponent from '@/components/three/ambient_light/ambient_light.vue';
 import cameraComponent from '@/components/three/camera/camera.vue';
 import rendererComponent from '@/components/three/renderer/renderer.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
 
 import {
+    AmbientLight,
     PerspectiveCamera,
     Scene,
     WebGLRenderer,
@@ -14,8 +16,21 @@ import {
 //
 jest.mock('three', () => {
     return {
+        // AmbientLight
+        AmbientLight: jest.fn(() => {
+            return {
+                color: {
+                    b: 0,
+                    g: 0,
+                    r: 0,
+                    setHex: jest.fn(),
+                },
+                intensity: 0,
+            };
+        }),
+
         // PerspectiveCamera
-        PerspectiveCamera: jest.fn().mockImplementation(() => {
+        PerspectiveCamera: jest.fn(() => {
             return {
                 lookAt: jest.fn(),
                 position: {
@@ -28,10 +43,15 @@ jest.mock('three', () => {
         }),
 
         // Scene
-        Scene: jest.fn(),
+        Scene: jest.fn(() => {
+            return {
+                add: jest.fn(),
+                remove: jest.fn(),
+            };
+        }),
 
         // WebGLRenderer
-        WebGLRenderer: jest.fn().mockImplementation(() => {
+        WebGLRenderer: jest.fn(() => {
             return {
                 clear: jest.fn(),
                 render: jest.fn(),
@@ -50,6 +70,7 @@ jest.mock('three', () => {
 //
 const mount = factory({
     components: {
+        'v-ambient-light': ambientLightComponent,
         'v-camera': cameraComponent,
         'v-renderer': rendererComponent,
         'v-scene': sceneComponent,
@@ -65,6 +86,7 @@ describe('renderer', () => {
         global.window.scrollY = 0;
 
         // reset threejs mocks
+        AmbientLight.mockClear();
         PerspectiveCamera.mockClear();
         Scene.mockClear();
         WebGLRenderer.mockClear();
@@ -224,6 +246,73 @@ describe('renderer', () => {
             await vm.$nextTick();
             
             expect(vm.$refs.renderer.$el.classList.contains('hidden')).toBe(false);
+        });
+    });
+
+    //
+    // ambient light
+    //
+    describe('<v-ambient-light>', () => {
+        it('adds and removes itself from the parent scene', async () => {
+            const vm = mount({
+                data() {
+                    return {
+                        light: false,
+                    };
+                },
+                template: `
+                    <v-scene ref="scene">
+                        <v-ambient-light v-if="light" ref="ambientLight" />
+                    </v-scene>
+                `,
+            });
+
+            const { scene } = vm.$refs.scene.$options.three;
+            expect(scene.add).not.toHaveBeenCalled();
+
+            vm.light = true;
+            await vm.$nextTick();
+
+            const { ambientLight } = vm.$refs.ambientLight.$options.three;
+            expect(scene.add).toHaveBeenCalledWith(ambientLight);
+
+            vm.light = false;
+            await vm.$nextTick();
+
+            expect(scene.remove).toHaveBeenCalledWith(ambientLight);
+        });
+
+        it('updates when color or intensity changes', async () => {
+            const vm = mount({
+                data() {
+                    return {
+                        color: 0xffffff,
+                        intensity: 0.1,
+                    };
+                },
+                template: `
+                    <v-scene ref="scene">
+                        <v-ambient-light
+                            ref="ambientLight"
+                            :color="color"
+                            :intensity="intensity"
+                        />
+                    </v-scene>
+                `,
+            });
+
+            expect(AmbientLight).toHaveBeenCalledWith(0xffffff, 0.1);
+
+            vm.intensity = 0.2;
+            await vm.$nextTick();
+
+            const { ambientLight } = vm.$refs.ambientLight.$options.three;
+            expect(ambientLight.intensity).toBe(0.2);
+
+            vm.color = 0xff0000;
+            await vm.$nextTick();
+
+            expect(ambientLight.color.setHex).toHaveBeenCalledWith(0xff0000);
         });
     });
 
