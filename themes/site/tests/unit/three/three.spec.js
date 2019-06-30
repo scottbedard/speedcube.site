@@ -1,12 +1,13 @@
 /* eslint-disable */
-import ambientLightComponent from '@/components/three/ambient_light/ambient_light.vue';
 import cameraComponent from '@/components/three/camera/camera.vue';
+import lightComponent from '@/components/three/light/light.vue';
 import rendererComponent from '@/components/three/renderer/renderer.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
 
 import {
     AmbientLight,
     PerspectiveCamera,
+    PointLight,
     Scene,
     WebGLRenderer,
 } from 'three';
@@ -42,6 +43,19 @@ jest.mock('three', () => {
             };
         }),
 
+        // AmbientLight
+        PointLight: jest.fn(() => {
+            return {
+                color: {
+                    b: 0,
+                    g: 0,
+                    r: 0,
+                    setHex: jest.fn(),
+                },
+                intensity: 0,
+            };
+        }),
+
         // Scene
         Scene: jest.fn(() => {
             return {
@@ -70,8 +84,8 @@ jest.mock('three', () => {
 //
 const mount = factory({
     components: {
-        'v-ambient-light': ambientLightComponent,
         'v-camera': cameraComponent,
+        'v-light': lightComponent,
         'v-renderer': rendererComponent,
         'v-scene': sceneComponent,
     },
@@ -88,6 +102,7 @@ describe('renderer', () => {
         // reset threejs mocks
         AmbientLight.mockClear();
         PerspectiveCamera.mockClear();
+        PointLight.mockClear();
         Scene.mockClear();
         WebGLRenderer.mockClear();
         
@@ -250,9 +265,9 @@ describe('renderer', () => {
     });
 
     //
-    // ambient light
+    // light
     //
-    describe('<v-ambient-light>', () => {
+    describe('<v-light>', () => {
         it('adds and removes itself from the parent scene', async () => {
             const vm = mount({
                 data() {
@@ -262,7 +277,7 @@ describe('renderer', () => {
                 },
                 template: `
                     <v-scene ref="scene">
-                        <v-ambient-light v-if="light" ref="ambientLight" />
+                        <v-light v-if="light" ref="light" />
                     </v-scene>
                 `,
             });
@@ -273,13 +288,13 @@ describe('renderer', () => {
             vm.light = true;
             await vm.$nextTick();
 
-            const { ambientLight } = vm.$refs.ambientLight.$options.three;
-            expect(scene.add).toHaveBeenCalledWith(ambientLight);
+            const { light } = vm.$refs.light.$options.three;
+            expect(scene.add).toHaveBeenCalledWith(light);
 
             vm.light = false;
             await vm.$nextTick();
 
-            expect(scene.remove).toHaveBeenCalledWith(ambientLight);
+            expect(scene.remove).toHaveBeenCalledWith(light);
         });
 
         it('updates when color or intensity changes', async () => {
@@ -292,8 +307,8 @@ describe('renderer', () => {
                 },
                 template: `
                     <v-scene ref="scene">
-                        <v-ambient-light
-                            ref="ambientLight"
+                        <v-light
+                            ref="light"
                             :color="color"
                             :intensity="intensity"
                         />
@@ -301,18 +316,40 @@ describe('renderer', () => {
                 `,
             });
 
-            expect(AmbientLight).toHaveBeenCalledWith(0xffffff, 0.1);
-
             vm.intensity = 0.2;
             await vm.$nextTick();
 
-            const { ambientLight } = vm.$refs.ambientLight.$options.three;
-            expect(ambientLight.intensity).toBe(0.2);
+            const { light } = vm.$refs.light.$options.three;
+            expect(light.intensity).toBe(0.2);
 
             vm.color = 0xff0000;
             await vm.$nextTick();
 
-            expect(ambientLight.color.setHex).toHaveBeenCalledWith(0xff0000);
+            expect(light.color.setHex).toHaveBeenCalledWith(0xff0000);
+        });
+
+        it('supports ambient lights', () => {
+            const vm = mount({
+                template: `
+                    <v-scene ref="scene">
+                        <v-light type="ambient" :color="0xff0000" :intensity="0.1" />
+                    </v-scene>
+                `,
+            });
+
+            expect(AmbientLight).toHaveBeenCalledWith(0xff0000, 0.1);
+        });
+
+        it('supports point lights', () => {
+            const vm = mount({
+                template: `
+                    <v-scene ref="scene">
+                        <v-light type="point" :color="0xff0000" :intensity="0.1" />
+                    </v-scene>
+                `,
+            });
+
+            expect(PointLight).toHaveBeenCalledWith(0xff0000, 0.1);
         });
     });
 
