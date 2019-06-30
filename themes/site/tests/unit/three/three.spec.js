@@ -27,6 +27,12 @@ jest.mock('three', () => {
                     setHex: jest.fn(),
                 },
                 intensity: 0,
+                position: {
+                    set: jest.fn(),
+                    x: 0,
+                    y: 0,
+                    z: 0,
+                },
             };
         }),
 
@@ -53,6 +59,12 @@ jest.mock('three', () => {
                     setHex: jest.fn(),
                 },
                 intensity: 0,
+                position: {
+                    set: jest.fn(),
+                    x: 0,
+                    y: 0,
+                    z: 0,
+                },
             };
         }),
 
@@ -326,6 +338,30 @@ describe('renderer', () => {
             await vm.$nextTick();
 
             expect(light.color.setHex).toHaveBeenCalledWith(0xff0000);
+        });
+
+        it('updates when position is changed', async () => {
+            const vm = mount({
+                data() {
+                    return { x: 1, y: 2, z: 3 };
+                },
+                template: `
+                    <v-scene ref="scene">
+                        <v-light ref="light" :position="{ x, y, z }" />
+                    </v-scene>
+                `,
+            });
+
+            const { light } = vm.$refs.light.$options.three;
+            
+            expect(light.position.set).toHaveBeenCalledWith(1, 2, 3);
+
+            vm.x = 10;
+            vm.y = 20;
+            vm.z = 30;
+            await vm.$nextTick();
+            
+            expect(light.position.set).toHaveBeenCalledWith(10, 20, 30);
         });
 
         it('supports ambient lights', () => {

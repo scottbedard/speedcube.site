@@ -11,9 +11,16 @@ export default {
         this.$options.three = {
             light,
         };
+        
+        // set light position
+        const { x, y, z } = this.position;
 
+        light.position.set(x, y, z);
+
+        // add light to scene
         scene.$options.three.scene.add(light);
 
+        // remove light from scene
         this.$on('hook:destroyed', () => {
             scene.$options.three.scene.remove(light);
         });
@@ -39,6 +46,10 @@ export default {
             default: 0.5,
             type: Number,
         },
+        position: {
+            default: () => ({ x: 0, y: 0, z: 0 }),
+            type: Object,
+        },
         type: {
             default: 'ambient',
             type: String,
@@ -55,6 +66,9 @@ export default {
             if (this.$options.three.light) {
                 this.$options.three.light.intensity = intensity;
             }
+        },
+        position({ x, y, z }) {
+            this.$options.three.light.position.set(x, y, z);
         },
     },
 };
