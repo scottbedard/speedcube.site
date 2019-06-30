@@ -8,6 +8,13 @@ import { roundedRectangle } from '@/components/three/geometries';
 
 import {
     AmbientLight,
+    BackSide,
+    FrontSide,
+    Group,
+    Mesh,
+    MeshBasicMaterial,
+    MeshLambertMaterial,
+    MeshPhongMaterial,
     Object3D,
     PerspectiveCamera,
     PointLight,
@@ -37,6 +44,49 @@ jest.mock('three', () => {
                     x: 0,
                     y: 0,
                     z: 0,
+                },
+            };
+        }),
+
+        // Group
+        Group: jest.fn(() => {
+            return {
+                add: jest.fn(),
+            };
+        }),
+
+        // Mesh
+        Mesh: jest.fn(() => {
+            return {
+                color: {
+                    setHex: jest.fn(),
+                },
+            };
+        }),
+
+        // MeshBasicMaterial
+        MeshBasicMaterial: jest.fn(() => {
+            return {
+                color: {
+                    setHex: jest.fn(),
+                },
+            };
+        }),
+
+        // MeshLambertMaterial
+        MeshLambertMaterial: jest.fn(() => {
+            return {
+                color: {
+                    setHex: jest.fn(),
+                },
+            };
+        }),
+
+        // MeshPhongMaterial
+        MeshPhongMaterial: jest.fn(() => {
+            return {
+                color: {
+                    setHex: jest.fn(),
                 },
             };
         }),
@@ -134,6 +184,11 @@ describe('renderer', () => {
 
         // reset threejs mocks
         AmbientLight.mockClear();
+        Group.mockClear();
+        Mesh.mockClear();
+        MeshBasicMaterial.mockClear();
+        MeshLambertMaterial.mockClear();
+        MeshPhongMaterial.mockClear();
         Object3D.mockClear();
         PerspectiveCamera.mockClear();
         PointLight.mockClear();
@@ -489,7 +544,7 @@ describe('renderer', () => {
     });
 
     //
-    // sticker
+    // shape
     // these are essentially just double-sided mesh geometries
     //
     describe('<v-shape>', () => {
@@ -516,13 +571,76 @@ describe('renderer', () => {
             vm.shape = true;
             await vm.$nextTick();
 
-            const { obj } = vm.$refs.shape.$options.three;
-            expect(scene.add).toHaveBeenCalledWith(obj);
+            const { group } = vm.$refs.shape.$options.three;
+            expect(scene.add).toHaveBeenCalledWith(group);
 
             vm.shape = false;
             await vm.$nextTick();
 
-            expect(scene.remove).toHaveBeenCalledWith(obj);
+            expect(scene.remove).toHaveBeenCalledWith(group);
         });
+
+        it('updates color when changed', async () => {
+            const vm = mount({
+                data() {
+                    return {
+                        color: 0xff0000,
+                    };
+                },
+                computed: {
+                    roundedRectangle: () => roundedRectangle(10, 10, 2),
+                },
+                template: `
+                    <v-scene ref="scene">
+                        <v-shape
+                            ref="shape"
+                            :color="color"
+                            :geometry="roundedRectangle"
+                        />
+                    </v-scene>
+                `,
+            });
+
+            const { innerMaterial, outerMaterial } = vm.$refs.shape.$options.three;
+
+            expect(innerMaterial.color.setHex).not.toHaveBeenCalled();
+            expect(outerMaterial.color.setHex).not.toHaveBeenCalled();
+
+            vm.color = 0x00ff00;
+            await vm.$nextTick();
+
+            expect(innerMaterial.color.setHex).toHaveBeenCalledWith(0x00ff00);
+            expect(outerMaterial.color.setHex).toHaveBeenCalledWith(0x00ff00);
+        });
+
+        it('updates inner opacity when changed', async () => {
+            const vm = mount({
+                data() {
+                    return {
+                        innerOpacity: 0.5,
+                    };
+                },
+                computed: {
+                    roundedRectangle: () => roundedRectangle(10, 10, 2),
+                },
+                template: `
+                    <v-scene ref="scene">
+                        <v-shape
+                            ref="shape"
+                            :color="0x00ff00"
+                            :inner-opacity="innerOpacity"
+                            :geometry="roundedRectangle"
+                        />
+                    </v-scene>
+                `,
+            });
+
+            vm.innerOpacity = 1;
+            await vm.$nextTick();
+
+            const { innerMaterial } = vm.$refs.shape.$options.three;
+
+            expect(innerMaterial.opacity).toBe(1);
+        })
     });
 });

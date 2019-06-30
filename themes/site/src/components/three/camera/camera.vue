@@ -7,7 +7,7 @@ import { degreesToRadians } from '@/app/utils/number';
 export default {
     created() {
         const scene = findAncestor(this, 'scene');
-        const camera = new PerspectiveCamera(50, 1, 1, 10);
+        const camera = new PerspectiveCamera(50, 1, 1, 100);
 
         this.$options.three = {
             camera,
