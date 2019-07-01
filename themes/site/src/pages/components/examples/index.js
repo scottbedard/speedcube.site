@@ -13,6 +13,7 @@ export default {
     '<v-input>': () => import('./input_example.vue'),
     '<v-modal>': () => import('./modal_example.vue'),
     '<v-number-transition>': () => import('./number_transition_example.vue'),
+    '<v-puzzle>': () => import('./puzzle_example.vue'),
     '<v-range-input>': () => import('./range_input_example.vue'),
     '<v-spinner>': () => import('./spinner_example.vue'),
     '<v-switch>': () => import('./switch_example.vue'),

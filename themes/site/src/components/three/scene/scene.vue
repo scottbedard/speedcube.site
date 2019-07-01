@@ -5,7 +5,7 @@
 </style>
 
 <template>
-    <div class="border-4 border-danger-5"><slot /></div>
+    <div><slot /></div>
 </template>
 
 <script>

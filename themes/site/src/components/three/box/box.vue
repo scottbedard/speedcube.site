@@ -1,10 +1,12 @@
 <script>
-import { noop } from 'lodash-es';
+import { get, noop } from 'lodash-es';
 import { findAncestor } from '@/app/utils/component';
 
 import {
-    BoxBufferGeometry,
-    MeshStandardMaterial,
+    CubeGeometry,
+    FrontSide,
+    MeshBasicMaterial,
+    MeshLambertMaterial,
     Mesh,
 } from 'three';
 
@@ -13,33 +15,66 @@ export default {
         // initialize non-reactive state
         const scene = findAncestor(this, 'scene');
 
-        // @todo: accept an object and destructure these values
-        const width = this.size;
-        const height = this.size;
-        const depth = this.size;
+        // create our box geometry
+        const { depth, height, width } = this.sizeValues;
 
-        const geometry = new BoxBufferGeometry(width, height, depth);
+        const geometry = new CubeGeometry(height, width, depth);
 
-        const material = new MeshStandardMaterial({
+        const material = new MeshLambertMaterial({
             color: this.color,
-            roughness: 0.5,
-            metalness: 0,
-            flatShading: true,
+            side: FrontSide,
+            // wireframe: true,
         });
 
         const mesh = new Mesh(geometry, material);
 
         this.$options.three = {
             geometry,
+            material,
             mesh,
         };
         
         scene.$options.three.scene.add(mesh);
     },
+    computed: {
+        sizeValues() {
+            if (typeof this.size === 'object') {
+                const depth = Number(get(this.size, 'depth', 0));
+                const height = Number(get(this.size, 'height', 0));
+                const width = Number(get(this.size, 'width', 0));
+
+                return { depth, height, width }
+            }
+
+            return {
+                depth: this.size,
+                height: this.size,
+                width: this.size,
+            }
+        },
+    },
     render: noop,
     props: {
         color: {
             default: 0xff0000,
+        },
+        size: {
+            default: 10,
+            type: Number,
+        },
+    },
+    watch: {
+        sizeValues: {
+            deep: true,
+            handler() {
+                // @todo: this needs to be improved
+                const { mesh } = this.$options.three;
+                const { depth, height, width } = this.sizeValues;
+
+                mesh.scale.x = width;
+                mesh.scale.y = height;
+                mesh.scale.z = depth;
+            },
         },
     },
 };
