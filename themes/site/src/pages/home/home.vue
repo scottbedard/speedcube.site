@@ -7,12 +7,12 @@
             </div>
 
             <!-- customize -->
-            <!-- <div class="mb-8 md:mb-16 lg:mb-32">
+            <div class="mb-8 md:mb-16 lg:mb-32">
                 <v-customize />
-            </div> -->
+            </div>
 
             <!-- stats / open source -->
-            <!-- <div class="pb-20">
+            <div class="pb-20">
                 <v-grid padded>
                     <v-grid-cell md="6">
                         <v-stats />
@@ -21,7 +21,7 @@
                         <v-open-source />
                     </v-grid-cell>
                 </v-grid>
-            </div> -->
+            </div>
         </v-margin>
     </v-page>
 </template>
