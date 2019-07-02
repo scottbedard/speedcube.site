@@ -20,7 +20,7 @@ export default {
 
         // store our non-reactive state for later use
         this.$options.three = {
-            axesHelper
+            axesHelper,
         };
     },
     render: noop,

@@ -5,7 +5,6 @@ import { findAncestor } from '@/app/utils/component';
 import {
     CubeGeometry,
     FrontSide,
-    MeshBasicMaterial,
     MeshLambertMaterial,
     Mesh,
 } from 'three';
@@ -33,7 +32,7 @@ export default {
             material,
             mesh,
         };
-        
+
         scene.$options.three.scene.add(mesh);
     },
     computed: {
@@ -43,14 +42,14 @@ export default {
                 const height = Number(get(this.size, 'height', 0));
                 const width = Number(get(this.size, 'width', 0));
 
-                return { depth, height, width }
+                return { depth, height, width };
             }
 
             return {
                 depth: this.size,
                 height: this.size,
                 width: this.size,
-            }
+            };
         },
     },
     render: noop,

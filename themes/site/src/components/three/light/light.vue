@@ -1,4 +1,5 @@
 <script>
+/* eslint-disable consistent-return */
 import { AmbientLight, PointLight } from 'three';
 import { findAncestor } from '@/app/utils/component';
 import { noop } from 'lodash-es';
@@ -11,7 +12,7 @@ export default {
         this.$options.three = {
             light,
         };
-        
+
         // set light position
         const { x, y, z } = this.position;
 
@@ -30,7 +31,7 @@ export default {
             if (this.type === 'ambient') {
                 return new AmbientLight(this.color, this.intensity);
             }
-            
+
             if (this.type === 'point') {
                 return new PointLight(this.color, this.intensity);
             }

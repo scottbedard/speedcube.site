@@ -58,7 +58,7 @@ export default {
 
             // create an object to attach our meshes to
             const group = new Group();
-            
+
             group.add(outerMesh);
             group.add(innerMesh);
 
@@ -129,7 +129,7 @@ export default {
         },
         innerOpacity(opacity) {
             const { innerMaterial } = this.$options.three;
-            
+
             if (innerMaterial) {
                 innerMaterial.opacity = opacity;
             }

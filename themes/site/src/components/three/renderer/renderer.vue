@@ -72,16 +72,16 @@ export default {
 
             this.updateSize();
 
-            this.scenes.forEach(scene => {
+            this.scenes.forEach((scene) => {
                 // get its position relative to the page's viewport
-                var rect = scene.$el.getBoundingClientRect();
+                const rect = scene.$el.getBoundingClientRect();
 
                 // only render visible scenes
                 if (
-                    rect.bottom < 0 ||
-                    rect.top > document.body.clientHeight ||
-                    rect.right < 0 ||
-                    rect.left > document.body.clientWidth
+                    rect.bottom < 0
+                    || rect.top > document.body.clientHeight
+                    || rect.right < 0
+                    || rect.left > document.body.clientWidth
                 ) {
                     return; // it's off screen
                 }
@@ -96,15 +96,14 @@ export default {
                 // set the viewport
                 const width = rect.right - rect.left;
                 const height = rect.bottom - rect.top;
-                const left = rect.left;
                 const bottom = document.body.clientHeight - rect.bottom;
 
-                this.$options.three.renderer.setViewport(left, bottom, width, height);
-                this.$options.three.renderer.setScissor(left, bottom, width, height);
-                
+                this.$options.three.renderer.setViewport(rect.left, bottom, width, height);
+                this.$options.three.renderer.setScissor(rect.left, bottom, width, height);
+
                 this.$options.three.renderer.render(
                     scene.$options.three.scene,
-                    scene.$options.three.camera
+                    scene.$options.three.camera,
                 );
             });
         },
@@ -121,8 +120,8 @@ export default {
 
                         window.requestAnimationFrame(render);
                     }
-                }
-                
+                };
+
                 render();
             }
         },
