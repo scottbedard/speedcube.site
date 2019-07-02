@@ -7,11 +7,8 @@
             </h1>
 
             <!-- form -->
-            <v-card class="max-w-sm mx-auto mt-12" padded>
-                <v-form
-                    class="max-w-sm mx-auto"
-                    ref="form"
-                    @submit="onSubmit">
+            <v-card class="max-w-md mx-auto mt-12" padded>
+                <v-form ref="form" @submit="onSubmit">
 
                     <!-- username -->
                     <v-form-field

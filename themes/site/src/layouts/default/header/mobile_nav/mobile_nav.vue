@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
     // https://jonsuh.com/hamburgers
-    $hamburger-hover-transition-duration: config('transitions.default');
+    $hamburger-hover-transition-duration: theme('transitions.default');
     $hamburger-layer-border-radius: 2px;
     $hamburger-layer-color: #CBD2D9;
     $hamburger-layer-height: 2px;
@@ -31,7 +31,7 @@
         <button
             aria-controls="navigation"
             aria-label="Menu"
-            class="absolute h-20 hamburger hamburger--elastic pin-t pin-r"
+            class="absolute h-20 hamburger hamburger--elastic top-0 right-0"
             type="button"
             :class="{ 'is-active': expanded }"
             @click="open">

@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
     .v-card-link + .v-card-link{
-        border-top: 1px solid config('colors.grey-2');
+        border-top: 1px solid theme('colors.grey-2');
     }
 </style>
 

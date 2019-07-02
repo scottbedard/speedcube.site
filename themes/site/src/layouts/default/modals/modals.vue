@@ -13,7 +13,7 @@
         <v-fade-transition>
             <div
                 v-if="modalsAreOpen"
-                class="backdrop fixed flex items-center justify-center overflow-y-scroll p-8 pin"
+                class="backdrop fixed flex items-center justify-center overflow-y-scroll p-8 top-0 left-0 right-0 bottom-0"
                 ref="backdrop">
                 <portal-target name="modal" />
             </div>

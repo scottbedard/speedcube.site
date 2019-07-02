@@ -2,7 +2,7 @@
     <div>
         <!-- form -->
         <form
-            class="max-w-lg mx-auto w-full"
+            class="max-w-3xl mx-auto w-full"
             @submit.prevent="onSubmit">
 
             <!-- options -->
