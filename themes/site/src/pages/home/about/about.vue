@@ -2,10 +2,10 @@
     <v-grid padded>
         <v-grid-cell lg="7">
             <div class="text-center lg:text-left">
-                <h1 class="font-thin my-3 text-5xl text-grey-8">
-                    The online cube that never pops.
+                <h1 class="font-thin mt-4 text-5xl text-grey-8">
+                    A free and open place for cubing.
                 </h1>
-                <p class="mb-3 text-grey-7 text-lg">
+                <p class="my-2 text-grey-7 text-lg">
                     We're a speed cubing platform for any modern browser.
                     Your keyboard is the controller. After some practice,
                     it'll feel you're holding it in your hands.
