@@ -86,6 +86,7 @@ class Cube
             if (Utils::endsWith($turn, '2')) {
                 return $turn;
             }
+
             if (Utils::endsWith($turn, '-')) {
                 return str_replace('-', '', $turn);
             }

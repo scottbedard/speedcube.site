@@ -7,7 +7,7 @@
 [![Dependencies](https://img.shields.io/david/scottbedard/speedcube.site.svg?path=themes%2Fsite&style=flat)](https://david-dm.org/scottbedard/speedcube.site?path=themes%2Fsite)
 [![Dev dependencies](https://img.shields.io/david/dev/scottbedard/speedcube.site.svg?path=themes%2Fsite)](https://david-dm.org/scottbedard/speedcube.site?path=themes%2Fsite&type=dev)
 
-![Total solves](https://img.shields.io/endpoint.svg?color=blue&url=https://speedcube.site/shields/total)
+[![Total solves](https://img.shields.io/endpoint.svg?color=blue&url=https://speedcube.site/shields/total)](https://speedcube.site/records)
 
 ## Inspiration and project goals
 
