@@ -136,10 +136,6 @@ module.exports = {
                 'monospace',
             ],
         },
-        margin: {
-            ...remScale,
-            ...utilScale,
-        },
         maxWidth: {
             xs: '20rem',
             sm: '24rem',
@@ -155,11 +151,15 @@ module.exports = {
         },
         screens: {
             xs: '480px',
-            sm: '640px',
+            sm: '576px',
             md: '768px',
-            lg: '1024px',
-            xl: '1280px',
+            lg: '992px',
+            xl: '1200px',
         },
+        spacing: {
+            ...remScale,
+            ...utilScale,
+        }
     },
     variants: {
         appearance: ['responsive'],
