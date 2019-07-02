@@ -45,7 +45,7 @@ export default {
                 tabindex={disabled ? '-1' : '0'}>
                 <div
                     data-dot
-                    class="absolute bg-grey-8 h-6 rounded-full shadow-xs trans-bg trans-left w-6 group-hover:bg-grey-9"
+                    class="absolute bg-grey-8 h-6 rounded-full shadow trans-bg trans-left w-6 group-hover:bg-grey-9"
                 />
             </div>
 

@@ -2,19 +2,21 @@
     <v-page padded>
         <v-margin padded>
             <!-- puzzle / controller -->
-            <v-puzzle
-                ref="puzzle"
-                :config="puzzleConfig"
-                :keyboard-config="keyboardConfig"
-                :puzzle="puzzle"
-                @default-config="setDefaultConfig"
-                @ready="onReady"
-                @turn-end="completeIfSolved"
-                @turn-start="recordTurn"
-            />
+            <div class="flex justify-center">
+                <v-puzzle
+                    ref="puzzle"
+                    :config="puzzleConfig"
+                    :keyboard-config="keyboardConfig"
+                    :puzzle="puzzle"
+                    @default-config="setDefaultConfig"
+                    @ready="onReady"
+                    @turn-end="completeIfSolved"
+                    @turn-start="recordTurn"
+                />
+            </div>
 
             <!-- mobile warning -->
-            <p class="leading-normal text-center text-grey-7 sm:hidden">
+            <p class="text-center text-grey-7 sm:hidden">
                 We don't support mobile solving yet. You're welcome to use the rest
                 of the site, but for now a keyboard is required to perform solves.
             </p>
@@ -130,7 +132,7 @@
                     <div
                         v-else
                         key="idle">
-                        <p class="leading-normal max-w-sm mb-8 mx-auto text-center text-left text-grey-7">
+                        <p class="leading-normal max-w-md mb-8 mx-auto text-center text-left text-grey-7">
                             Use your keyboard to get a feel for the cube. Default key bindings mimick the way real finger tricks feel.
                         </p>
                         <v-toolbar

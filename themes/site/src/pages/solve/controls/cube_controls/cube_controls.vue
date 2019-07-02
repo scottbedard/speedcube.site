@@ -11,14 +11,14 @@
 <template>
     <div>
         <!-- copy -->
-        <p class="leading-loose max-w-lg mb-12 text-grey-7">
+        <p class="leading-loose max-w-3xl mb-12 text-grey-7">
             These are your current key bindings, displayed in <b>&quot;key <i class="fa fa-angle-right px-2"></i> turn&quot;</b> format.
             The <b>&quot;key&quot;</b> represents the key on your keyboard, and the <b>&quot;turn&quot;</b> represents the puzzle turn to execute.
             Feel free to use the puzzle while the key binding editor is open, making a turn will highlight the associated binding if one exists.
         </p>
 
         <!-- key bindings -->
-        <div class="max-w-xl mx-auto mb-4 text-sm">
+        <div class="max-w-5xl mx-auto mb-4 text-sm">
             <div v-if="isAuthenticated" class="flex items-center pb-4 uppsercase tracking-wide">
                 <a
                     class="flex items-center m-4 outline-none"

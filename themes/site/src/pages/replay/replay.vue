@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                <div class="my-8">
+                <div class="flex justify-center my-8">
                     <v-puzzle
                         :config="puzzleConfig"
                         :puzzle="puzzle"

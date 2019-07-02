@@ -13,7 +13,7 @@
         <v-fade-transition>
             <div
                 v-if="isExpanded"
-                class="absolute mt-10 pin-t-full pin-r w-64 z-10">
+                class="absolute mt-10 top-full right-0 w-64 z-10">
                 <v-card class="overflow-hidden">
                     <v-dropdown-link icon="fa-user-circle-o" :to="{ name: 'account:profile' }">
                         My Account

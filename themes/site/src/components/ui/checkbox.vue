@@ -1,11 +1,11 @@
 <style lang="scss" scoped>
     .v-checkbox:hover [aria-checked=false][tabindex] {
-        border-color: config('colors.primary-2');
+        border-color: theme('colors.primary-2');
         opacity: 0.8;
     }
 
     path {
-        stroke: config('colors.primary-5');
+        stroke: theme('colors.primary-5');
     }
 </style>
 

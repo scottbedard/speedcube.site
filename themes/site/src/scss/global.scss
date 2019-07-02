@@ -6,12 +6,12 @@
 
 a {
     border: 0;
-    color: config('colors.grey-7');
+    color: theme('colors.grey-7');
     text-decoration: none;
     transition: color 150ms ease-in-out;
 
     &:hover {
-        color: config('colors.grey-8');
+        color: theme('colors.grey-8');
     }
 }
 
@@ -32,8 +32,11 @@ h5 {
     font-weight: normal;
 }
 
+p {
+    @apply leading-loose;
+}
+
 ::selection {
     background-color: config('colors.primary-8'); /* WebKit/Blink Browsers */
     color: config('colors.grey-9');
-
 }
