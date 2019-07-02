@@ -71,10 +71,12 @@ const scale = [
 ];
 
 const remScale = scale.reduce((obj, value) => {
-    obj[value] = `${value}rem`;
+    const rem = value / 4;
 
-    if (value) {
-        obj[-value] = `-${value}rem`;
+    obj[value] = `${rem}rem`;
+
+    if (value !== 0) {
+        obj[-value] = `-${rem}rem`;
     }
 
     return obj;
