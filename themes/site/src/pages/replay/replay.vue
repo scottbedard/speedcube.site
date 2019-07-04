@@ -2,7 +2,7 @@
     <v-page padded>
         <v-margin padded>
             <template v-if="!loading">
-                <h1 class="mb-8 text-center">
+                <h1 class="font-thin mb-8 text-center text-4xl">
                     <router-link
                         v-if="username"
                         class="text-grey-8 hover:text-grey-10"
@@ -80,7 +80,7 @@
                                 <div class="font-thin mt-4 text-center text-grey-6">
                                     press space to watch again
                                 </div>
-                                <div class="max-w-sm mt-12 mx-auto">
+                                <div class="max-w-md mt-12 mx-auto">
                                     <v-comments
                                         type="solve"
                                         :id="solve.id"
@@ -99,7 +99,7 @@
                         key="ready">
                         <div
                             v-text="scrambleText"
-                            class="leading-loose max-w-md mb-8 mx-auto text-grey-7 text-grey-6 tracking-wide"
+                            class="leading-loose max-w-lg mb-8 mx-auto text-grey-7 text-grey-6 tracking-wide"
                         />
                         <div class="flex flex-wrap justify-center overflow-hidden">
                             <div class="mb-8 px-4">
@@ -111,7 +111,7 @@
                         </div>
 
                         <!-- comments -->
-                        <div class="max-w-sm mt-12 mx-auto">
+                        <div class="max-w-md mt-12 mx-auto">
                             <v-comments
                                 type="solve"
                                 :id="solve.id"

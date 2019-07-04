@@ -23,7 +23,7 @@
 
                             <!-- user -->
                             <div>
-                                <h1 class="mb-1 text-grey-8">
+                                <h1 class="font-thin text-4xl">
                                     {{ user.username }}
                                 </h1>
                                 <div class="text-grey-5 text-sm">
