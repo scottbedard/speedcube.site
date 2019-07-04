@@ -19,7 +19,7 @@
                         <h1 class="font-thin mb-4 text-3xl text-grey-9 tracking-wide">
                             Let's get you a new password.
                         </h1>
-                        <p class="leading-normal max-w-lg mx-auto text-grey-7">
+                        <p class="leading-normal max-w-xl mx-auto text-grey-7">
                             Enter your email below, and we'll send you a one-time password reset link.
                         </p>
                     </div>

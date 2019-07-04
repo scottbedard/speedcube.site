@@ -1,7 +1,7 @@
 <template>
     <v-page padded>
         <v-margin padded>
-            <h1 class="font-thin mb-4 text-center">
+            <h1 class="font-thin mb-4 text-center text-4xl">
                 All Time Records
             </h1>
 
