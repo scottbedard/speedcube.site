@@ -24,6 +24,8 @@ export default {
             renderer: null,
         };
 
+        this.$options.scenes = [];
+
         // listen for scroll events on the window
         bindExternalEvent(this, window, 'scroll', () => {
             this.scrollY = window.scrollY;
@@ -36,7 +38,6 @@ export default {
     data() {
         return {
             running: false,
-            scenes: [],
             scrollY: window.scrollY,
         };
     },
@@ -47,84 +48,84 @@ export default {
             canvas: this.$el,
         });
 
-        this.$options.three.renderer.setPixelRatio(window.devicePixelRatio);
+        // this.$options.three.renderer.setPixelRatio(window.devicePixelRatio);
     },
-    computed: {
-        ...mapState('browser', {
-            height: state => state.dimensions.height || 0,
-            width: state => state.dimensions.width || 0,
-        }),
-        empty() {
-            return this.scenes.length === 0;
-        },
-    },
+    // computed: {
+    //     ...mapState('browser', {
+    //         height: state => state.dimensions.height || 0,
+    //         width: state => state.dimensions.width || 0,
+    //     }),
+    //     empty() {
+    //         return this.scenes.length === 0;
+    //     },
+    // },
     methods: {
-        addScene(scene) {
-            this.scenes.push(scene);
+        addScene(vm) {
+            this.$options.scenes.push(vm);
         },
         clear() {
             this.$options.three.renderer.setScissorTest(false);
             this.$options.three.renderer.clear();
             this.$options.three.renderer.setScissorTest(true);
         },
-        renderScenes() {
-            let cleared = false;
+    //     renderScenes() {
+    //         let cleared = false;
 
-            this.updateSize();
+    //         this.updateSize();
 
-            this.scenes.forEach((scene) => {
-                // get its position relative to the page's viewport
-                const rect = scene.$el.getBoundingClientRect();
+    //         this.scenes.forEach((scene) => {
+    //             // get its position relative to the page's viewport
+    //             const rect = scene.$el.getBoundingClientRect();
 
-                // only render visible scenes
-                if (
-                    rect.bottom < 0
-                    || rect.top > document.body.clientHeight
-                    || rect.right < 0
-                    || rect.left > document.body.clientWidth
-                ) {
-                    return; // it's off screen
-                }
+    //             // only render visible scenes
+    //             if (
+    //                 rect.bottom < 0
+    //                 || rect.top > document.body.clientHeight
+    //                 || rect.right < 0
+    //                 || rect.left > document.body.clientWidth
+    //             ) {
+    //                 return; // it's off screen
+    //             }
 
-                // @todo: this causes a flicker, find better way to prevent artifacts
-                if (!cleared) {
-                    cleared = true;
+    //             // @todo: this causes a flicker, find better way to prevent artifacts
+    //             if (!cleared) {
+    //                 cleared = true;
 
-                    this.clear();
-                }
+    //                 this.clear();
+    //             }
 
-                // set the viewport
-                const width = rect.right - rect.left;
-                const height = rect.bottom - rect.top;
-                const bottom = document.body.clientHeight - rect.bottom;
+    //             // set the viewport
+    //             const width = rect.right - rect.left;
+    //             const height = rect.bottom - rect.top;
+    //             const bottom = document.body.clientHeight - rect.bottom;
 
-                this.$options.three.renderer.setViewport(rect.left, bottom, width, height);
-                this.$options.three.renderer.setScissor(rect.left, bottom, width, height);
+    //             this.$options.three.renderer.setViewport(rect.left, bottom, width, height);
+    //             this.$options.three.renderer.setScissor(rect.left, bottom, width, height);
 
-                this.$options.three.renderer.render(
-                    scene.$options.three.scene,
-                    scene.$options.three.camera,
-                );
-            });
+    //             this.$options.three.renderer.render(
+    //                 scene.$options.three.scene,
+    //                 scene.$options.three.camera,
+    //             );
+    //         });
+    //     },
+        removeScene(vm) {
+            this.$options.scenes = this.$options.scenes.filter(existing => existing !== vm);
         },
-        removeScene(scene) {
-            this.scenes = this.scenes.filter(existing => existing !== scene);
-        },
-        start() {
-            if (!this.running) {
-                this.running = true;
+    //     start() {
+    //         if (!this.running) {
+    //             this.running = true;
 
-                const render = () => {
-                    if (this.running) {
-                        this.renderScenes();
+    //             const render = () => {
+    //                 if (this.running) {
+    //                     this.renderScenes();
 
-                        window.requestAnimationFrame(render);
-                    }
-                };
+    //                     window.requestAnimationFrame(render);
+    //                 }
+    //             };
 
-                render();
-            }
-        },
+    //             render();
+    //         }
+    //     },
         stop() {
             this.running = false;
         },
@@ -137,14 +138,14 @@ export default {
             }
         },
     },
-    watch: {
-        empty(empty) {
-            if (empty) {
-                this.stop();
-            } else {
-                this.start();
-            }
-        },
-    },
+    // watch: {
+    //     empty(empty) {
+    //         if (empty) {
+    //             this.stop();
+    //         } else {
+    //             this.start();
+    //         }
+    //     },
+    // },
 };
 </script>

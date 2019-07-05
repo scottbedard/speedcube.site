@@ -12,7 +12,7 @@
                 <v-light
                     type="ambient"
                     :color="0xffff00"
-                    :intensity="0.6"
+                    :intensity="0.8"
                 />
 
                 <!-- camera -->
