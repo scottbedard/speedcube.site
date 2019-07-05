@@ -70,7 +70,7 @@ export default {
             this.$options.three.renderer.clear();
             this.$options.three.renderer.setScissorTest(true);
         },
-    //     renderScenes() {
+        renderScenes() {
     //         let cleared = false;
 
     //         this.updateSize();
@@ -109,26 +109,26 @@ export default {
     //                 scene.$options.three.camera,
     //             );
     //         });
-    //     },
+        },
         removeScene(vm) {
             this.$options.scenes = this.$options.scenes.filter(existing => existing !== vm);
             this.sceneCount = this.$options.scenes.length;
         },
-    //     start() {
-    //         if (!this.running) {
-    //             this.running = true;
+        start() {
+            if (!this.running) {
+                this.running = true;
 
-    //             const render = () => {
-    //                 if (this.running) {
-    //                     this.renderScenes();
+                const render = () => {
+                    if (this.running) {
+                        this.renderScenes();
 
-    //                     window.requestAnimationFrame(render);
-    //                 }
-    //             };
+                        window.requestAnimationFrame(render);
+                    }
+                };
 
-    //             render();
-    //         }
-    //     },
+                render();
+            }
+        },
         stop() {
             this.running = false;
         },
@@ -141,14 +141,14 @@ export default {
             }
         },
     },
-    // watch: {
-    //     empty(empty) {
-    //         if (empty) {
-    //             this.stop();
-    //         } else {
-    //             this.start();
-    //         }
-    //     },
-    // },
+    watch: {
+        empty(empty) {
+            if (empty) {
+                this.stop();
+            } else {
+                this.start();
+            }
+        },
+    },
 };
 </script>
