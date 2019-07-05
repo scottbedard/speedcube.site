@@ -9,6 +9,7 @@ export default {
     },
     mounted() {
         this.addToParentObj();
+        this.setLocalPosition();
     },
     render() {
         return this.$slots.default;
@@ -43,6 +44,11 @@ export default {
                 parentObj.remove(obj);
             }
         },
+        setLocalPosition() {
+            const { obj } = this.$options.three;
+
+            obj.position.set(this.position.x, this.position.y, this.position.z);
+        },
     },
     props: {
         position: {
@@ -50,6 +56,12 @@ export default {
                 return { x: 0, y: 0, z: 0 };
             },
             type: Object,
+        },
+    },
+    watch: {
+        position: {
+            deep: true,
+            handler: 'setLocalPosition',
         },
     },
 };

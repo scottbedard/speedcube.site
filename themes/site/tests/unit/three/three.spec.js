@@ -51,4 +51,30 @@ describe('threejs', () => {
         expect(add).not.toHaveBeenCalled();
         expect(remove).toHaveBeenCalledWith(childObj);
     });
+
+    it('sets local position and updates when changed', async () => {
+        const vm = mount({
+            data() {
+                return {
+                    x: 1,
+                    y: 2,
+                    z: 3,
+                };
+            },
+            template: `
+                <v-obj ref="obj" :position="{ x, y, z }" />
+            `,
+        });
+
+        const { obj } = vm.$refs.obj.$options.three;
+
+        expect(obj.position).toEqual({ x: 1, y: 2, z: 3 });
+        
+        vm.x = 10;
+        vm.y = 20;
+        vm.z = 30;
+        await vm.$nextTick();
+        
+        expect(obj.position).toEqual({ x: 10, y: 20, z: 30 });
+    });
 });
