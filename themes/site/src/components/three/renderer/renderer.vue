@@ -38,6 +38,7 @@ export default {
     data() {
         return {
             running: false,
+            sceneCount: 0,
             scrollY: window.scrollY,
         };
     },
@@ -48,20 +49,21 @@ export default {
             canvas: this.$el,
         });
 
-        // this.$options.three.renderer.setPixelRatio(window.devicePixelRatio);
+        this.$options.three.renderer.setPixelRatio(window.devicePixelRatio);
     },
-    // computed: {
-    //     ...mapState('browser', {
-    //         height: state => state.dimensions.height || 0,
-    //         width: state => state.dimensions.width || 0,
-    //     }),
-    //     empty() {
-    //         return this.scenes.length === 0;
-    //     },
-    // },
+    computed: {
+        ...mapState('browser', {
+            height: state => state.dimensions.height || 0,
+            width: state => state.dimensions.width || 0,
+        }),
+        empty() {
+            return this.sceneCount === 0;
+        },
+    },
     methods: {
         addScene(vm) {
             this.$options.scenes.push(vm);
+            this.sceneCount = this.$options.scenes.length;
         },
         clear() {
             this.$options.three.renderer.setScissorTest(false);
@@ -110,6 +112,7 @@ export default {
     //     },
         removeScene(vm) {
             this.$options.scenes = this.$options.scenes.filter(existing => existing !== vm);
+            this.sceneCount = this.$options.scenes.length;
         },
     //     start() {
     //         if (!this.running) {

@@ -42,7 +42,6 @@ jest.mock('three', () => {
 //
 describe('<v-scene>', () => {
     beforeEach(() => {
-        // PerspectiveCamera.mockClear();
         WebGLRenderer.mockClear();
     });
 
