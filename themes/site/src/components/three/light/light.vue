@@ -1,30 +1,12 @@
 <script>
 /* eslint-disable consistent-return */
+import base from '../base';
 import { AmbientLight, PointLight } from 'three';
 import { findAncestor } from '@/app/utils/component';
-import { noop } from 'lodash-es';
 
 export default {
     created() {
-        const scene = findAncestor(this, 'scene');
-        const light = this.createLight();
-
-        this.$options.three = {
-            light,
-        };
-
-        // set light position
-        const { x, y, z } = this.position;
-
-        light.position.set(x, y, z);
-
-        // add light to scene
-        scene.$options.three.scene.add(light);
-
-        // remove light from scene
-        this.$on('hook:destroyed', () => {
-            scene.$options.three.scene.remove(light);
-        });
+        this.$options.three.obj = this.createLight();
     },
     methods: {
         createLight() {
@@ -37,7 +19,9 @@ export default {
             }
         },
     },
-    render: noop,
+    mixins: [
+        base,
+    ],
     props: {
         color: {
             default: 0xffffff,
@@ -61,15 +45,13 @@ export default {
     },
     watch: {
         color(color) {
-            this.$options.three.light.color.setHex(color);
+            this.$options.three.obj.color.setHex(color);
         },
         intensity(intensity) {
-            if (this.$options.three.light) {
-                this.$options.three.light.intensity = intensity;
-            }
+            this.$options.three.obj.intensity = intensity;
         },
         position({ x, y, z }) {
-            this.$options.three.light.position.set(x, y, z);
+            this.$options.three.obj.position.set(x, y, z);
         },
     },
 };

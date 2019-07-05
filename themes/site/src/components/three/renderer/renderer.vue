@@ -71,23 +71,38 @@ export default {
             this.$options.three.renderer.setScissorTest(true);
         },
         renderScenes() {
-    //         let cleared = false;
+            this.updateSize();
 
-    //         this.updateSize();
+            this.$options.scenes.forEach((scene) => {
+                // get its position relative to the page's viewport
+                const rect = scene.$el.getBoundingClientRect() || { bottom: 0, top: 0, right: 0, left: 0 };
+
+                // only render visible scenes
+                if (
+                    rect.bottom < 0
+                    || rect.top > document.body.clientHeight
+                    || rect.right < 0
+                    || rect.left > document.body.clientWidth
+                ) {
+                    return; // it's off screen
+                }
+
+                // set the viewport
+                const width = rect.right - rect.left;
+                const height = rect.bottom - rect.top;
+                const bottom = document.body.clientHeight - rect.bottom;
+
+                this.$options.three.renderer.setViewport(rect.left, bottom, width, height);
+                this.$options.three.renderer.setScissor(rect.left, bottom, width, height);
+
+                this.$options.three.renderer.render(
+                    scene.$options.three.obj,
+                    scene.$options.three.camera,
+                );
+            });
 
     //         this.scenes.forEach((scene) => {
-    //             // get its position relative to the page's viewport
-    //             const rect = scene.$el.getBoundingClientRect();
 
-    //             // only render visible scenes
-    //             if (
-    //                 rect.bottom < 0
-    //                 || rect.top > document.body.clientHeight
-    //                 || rect.right < 0
-    //                 || rect.left > document.body.clientWidth
-    //             ) {
-    //                 return; // it's off screen
-    //             }
 
     //             // @todo: this causes a flicker, find better way to prevent artifacts
     //             if (!cleared) {

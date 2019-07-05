@@ -21,6 +21,7 @@ jest.mock('three', () => {
                 setPixelRatio: jest.fn(),
                 setScissor: jest.fn(),
                 setScissorTest: jest.fn(),
+                setSize: jest.fn(),
                 setViewport: jest.fn(),
             };
         }),
@@ -42,6 +43,15 @@ describe('<v-renderer>', () => {
         jest.spyOn(window, 'requestAnimationFrame');
 
         WebGLRenderer.mockClear();
+
+        // Element.prototype.getBoundingClientRect = jest.fn(() => ({
+        //     width: 120,
+        //     height: 120,
+        //     top: 0,
+        //     left: 0,
+        //     bottom: 0,
+        //     right: 0,
+        // }));
     });
       
     afterEach(() => {
@@ -151,7 +161,7 @@ describe('<v-renderer>', () => {
             },
             template: `
                 <div>
-                    <v-renderer />
+                    <v-renderer ref="renderer" />
                     <v-scene v-if="scene" ref="scene" />
                 </div>
             `,
@@ -172,6 +182,29 @@ describe('<v-renderer>', () => {
 
         expect(window.requestAnimationFrame.mock.calls.length).toBe(calls);
     });
+
+    it('sets the size of the renderer', async () => {
+        const vm = mount({
+            template: `<v-renderer ref="renderer" />`,
+        }, {
+            browser: {
+                dimensions: {
+                    height: 600,
+                    width: 800,
+                },
+            },
+        });
+
+        const { renderer } = vm.$refs.renderer.$options.three;
+
+        expect(renderer.setSize).not.toHaveBeenCalled();
+
+        vm.$store.commit('browser/setDimensions', { height: 1000, width: 1200 });
+        vm.$refs.renderer.renderScenes();
+        await vm.$nextTick();
+
+        expect(renderer.setSize).toHaveBeenCalled();
+    })
 
     it('hides the canvas when there are no scenes to render', async () => {
         const vm = mount({

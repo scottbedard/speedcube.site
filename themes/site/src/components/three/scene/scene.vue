@@ -1,3 +1,7 @@
+<template>
+    <div><slot /></div>
+</template>
+
 <script>
 import base from '../base';
 import { Scene, PerspectiveCamera } from 'three';
