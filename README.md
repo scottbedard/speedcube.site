@@ -11,9 +11,9 @@
 
 ## Inspiration and project goals
 
-Several years ago, the excellent [hi-games.net](http://hi-games.net/) was created by Ryan Heise. This site was a lot of fun, and many talented speed cubers were using it. Unfortunately though, the site didn't age well. [The web moved away from Java applets](https://blogs.oracle.com/java-platform-group/moving-to-a-plugin-free-web), which effectively killed all Java or Flash based gaming sites.
+Several years ago, the excellent [hi-games.net](http://hi-games.net/) was created by Ryan Heise. This site was a lot of fun, and many talented speed cubers were using it. Unfortunately though, it did not age well. [The web moved away from Java applets](https://blogs.oracle.com/java-platform-group/moving-to-a-plugin-free-web), which effectively killed all Java and Flash based gaming sites.
 
-That's where this project begins though. Our goal is to be a platform that works in any modern browser. We currently support timed solving, customization, replays, and in depth stats. We hope to someday host tournaments, provide memorization games, and so much more.
+That's where this project begins though. Our goal is to be a platform that works with any modern browser. We currently support timed solving, customization, replays, and in depth stats. We hope to someday host tournaments, provide memorization games, and so much more.
 
 ## Setting up a local environment
 
