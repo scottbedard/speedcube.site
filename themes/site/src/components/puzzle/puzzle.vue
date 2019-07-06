@@ -36,8 +36,8 @@ import sceneComponent from '@/components/three/scene/scene.vue';
 export default {
     data() {
         return {
-            cameraAngle: 55,
-            cameraDistance: 100,
+            cameraAngle: 90,
+            cameraDistance: 300,
         };
     },
     components: {
