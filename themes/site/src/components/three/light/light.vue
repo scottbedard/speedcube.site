@@ -47,9 +47,6 @@ export default {
         intensity(intensity) {
             this.$options.three.obj.intensity = intensity;
         },
-        position({ x, y, z }) {
-            this.$options.three.obj.position.set(x, y, z);
-        },
     },
 };
 </script>
