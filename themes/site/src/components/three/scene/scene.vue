@@ -1,5 +1,5 @@
 <template>
-    <div><slot /></div>
+    <div class="absolute h-full w-full"><slot /></div>
 </template>
 
 <script>

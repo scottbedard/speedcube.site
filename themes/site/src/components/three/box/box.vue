@@ -1,6 +1,5 @@
 <script>
-import { get, noop } from 'lodash-es';
-import { findAncestor } from '@/app/utils/component';
+import { get } from 'lodash-es';
 
 import {
     CubeGeometry,
@@ -9,11 +8,10 @@ import {
     Mesh,
 } from 'three';
 
+import base from '../base';
+
 export default {
     created() {
-        // initialize non-reactive state
-        const scene = findAncestor(this, 'scene');
-
         // create our box geometry
         const { depth, height, width } = this.sizeValues;
 
@@ -27,13 +25,9 @@ export default {
 
         const mesh = new Mesh(geometry, material);
 
-        this.$options.three = {
-            geometry,
-            material,
-            mesh,
-        };
-
-        scene.$options.three.scene.add(mesh);
+        this.$options.three.geometry = geometry;
+        this.$options.three.material = material;
+        this.$options.three.obj = mesh;
     },
     computed: {
         sizeValues() {
@@ -52,7 +46,9 @@ export default {
             };
         },
     },
-    render: noop,
+    mixins: [
+        base,
+    ],
     props: {
         color: {
             default: 0xff0000,

@@ -4,24 +4,41 @@
             These are some of our lower level 3D rendering components.
         </p>
 
-        <div class="max-w-xs mx-auto my-8">
-            <v-scene>
-                <v-axes-helper />
+        <div class="my-8">
 
-                <!-- lights -->
-                <v-light
-                    type="ambient"
-                    :color="0xffff00"
-                    :intensity="0.8"
-                />
+            <!--
+                scenes are absolutely positioned and completely fill their
+                container. these wrapper elements simply turn the scene
+                into a responsive square.
+            -->
+            <div class="max-w-xs mx-auto">
+                <div class="border-4 border-dotted border-grey-4 pb-full relative">
 
-                <!-- action -->
-                <v-box
-                    :color="0x00ff00"
-                    :position="{ x: 0, y: 0, z: 0 }"
-                    :size="25"
-                />
-            </v-scene>
+                    <v-scene :camera-angle="45" :camera-distance="60">
+                        <v-axes-helper />
+
+                        <!-- lights -->
+                        <v-light
+                            type="ambient"
+                            :color="0xffff00"
+                            :intensity="0.8"
+                        />
+                        
+                        <v-light
+                            type="point"
+                            :color="0xffff00"
+                            :intensity="0.8"
+                        />
+
+                        <!-- action -->
+                        <v-box
+                            :color="0xFFff00"
+                            :position="{ x: 0, y: 0, z: 0 }"
+                            :size="25"
+                        />
+                    </v-scene>
+                </div>
+            </div>
         </div>
 
         <div class="max-w-sm mx-auto">

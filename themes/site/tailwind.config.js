@@ -70,6 +70,11 @@ const scale = [
     192, // 48rem
 ];
 
+const relativeScale = {
+    'half': '50%',
+    'full': '100%',
+};
+
 const remScale = scale.reduce((obj, value) => {
     const rem = value / 4;
 
@@ -157,6 +162,7 @@ module.exports = {
             xl: '1200px',
         },
         spacing: {
+            ...relativeScale,
             ...remScale,
             ...utilScale,
         }
