@@ -34,6 +34,33 @@ describe('<v-shape>', () => {
         expect(outerMesh.type).toBe('Mesh');
     });
 
+    it('disposes of geometries and materials when destroyed', async () => {
+        const vm = mount({
+            data() {
+                return {
+                    geometry: roundedRectangle(1, 1, 0),
+                    show: true,
+                };
+            },
+            template: `<v-shape v-if="show" ref="shape" :geometry="geometry" />`,
+        });
+
+        const { innerMaterial, innerMesh, outerMaterial, outerMesh } = vm.$refs.shape.$options.three;
+
+        const innerGeometryDispose = jest.spyOn(innerMesh.geometry, 'dispose');
+        const innerMaterialDispose = jest.spyOn(innerMaterial, 'dispose');
+        const outerGeometryDispose = jest.spyOn(outerMesh.geometry, 'dispose');
+        const outerMaterialDispose = jest.spyOn(outerMaterial, 'dispose');
+
+        vm.show = false;
+        await vm.$nextTick();
+
+        expect(innerGeometryDispose).toHaveBeenCalled();
+        expect(innerMaterialDispose).toHaveBeenCalled();
+        expect(outerGeometryDispose).toHaveBeenCalled();
+        expect(outerMaterialDispose).toHaveBeenCalled();
+    });
+
     it('updates color when changed', async () => {
         const vm = mount({
             data() {

@@ -41,6 +41,7 @@ export default {
     },
     destroyed() {
         this.disposeGeometries();
+        this.disposeMaterials();
     },
     methods: {
         disposeGeometries() {
@@ -48,6 +49,12 @@ export default {
 
             innerMesh.geometry.dispose();
             outerMesh.geometry.dispose();
+        },
+        disposeMaterials() {
+            const { innerMaterial, outerMaterial } = this.$options.three;
+
+            innerMaterial.dispose();
+            outerMaterial.dispose();
         },
     },
     mixins: [
