@@ -22,7 +22,7 @@
             />
             
             <!-- cube -->
-            <v-cube />
+            <v-cube :turn-progress="turnProgress / 100" />
         </v-scene>
     </div>
 </template>
@@ -45,6 +45,15 @@ export default {
         'v-cube': cubeComponent,
         'v-light': lightComponent,
         'v-scene': sceneComponent,
+    },
+    methods: {
+        // ...
+    },
+    props: {
+        turnProgress: {
+            default: 0,
+            type: Number,
+        },
     },
 };
 </script>

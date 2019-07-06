@@ -3,18 +3,20 @@
         <v-shape
             :color="0xff0000"
             :geometry="roundedRectangle"
-            :position="{ x: -35, y: -10 }"
+            :position="{ x: -35, y: -10, z: 20 }"
         />
-        <v-shape
-            :color="0xffff00"
-            :geometry="roundedRectangle"
-            :position="{ x: -10, y: -10 }"
-        />
-        <v-shape
-            :color="0x0000ff"
-            :geometry="roundedRectangle"
-            :position="{ x: 15, y: -10 }"
-        />
+        <v-obj :rotation="rotation">
+            <v-shape
+                :color="0xffff00"
+                :geometry="roundedRectangle"
+                :position="{ x: -10, y: -10, z: 20 }"
+            />
+            <v-shape
+                :color="0x0000ff"
+                :geometry="roundedRectangle"
+                :position="{ x: 15, y: -10, z: 20 }"
+            />
+        </v-obj>
     </v-obj>
 </template>
 
@@ -25,15 +27,32 @@ import boxComponent from '@/components/three/box/box.vue';
 import { roundedRectangle } from '@/components/three/geometries';
 
 export default {
-    computed: {
-        roundedRectangle() {
-            return roundedRectangle(20, 20, 3);
-        },
-    },
     components: {
         'v-box': boxComponent,
         'v-obj': objComponent,
         'v-shape': shapeComponent,
+    },
+    computed: {
+        roundedRectangle() {
+            return roundedRectangle(20, 20, 3);
+        },
+        rotation() {
+            return {
+                x: 90 * this.turnProgress,
+            }
+        },
+    },
+    props: {
+        currentTurn: {
+            type: String,
+        },
+        turnProgress: {
+            default: 0,
+            type: Number,
+        },
+    },
+    watch: {
+        
     },
 };
 </script>
