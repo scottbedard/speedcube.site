@@ -17,10 +17,12 @@ const mount = factory({
 describe('<v-shape>', () => {
     it('creates a shape group', () => {
         const vm = mount({
-            computed: {
-                roundedRectangle: () => roundedRectangle(10, 10, 2),
+            data() {
+                return {
+                    geometry: roundedRectangle(10, 10, 2)
+                };
             },
-            template: `<v-shape ref="shape" :geometry="roundedRectangle" />`,
+            template: `<v-shape ref="shape" :geometry="geometry" />`,
         });
         
         const { innerMaterial, innerMesh, obj, outerMaterial, outerMesh } = vm.$refs.shape.$options.three;
@@ -37,18 +39,10 @@ describe('<v-shape>', () => {
             data() {
                 return {
                     color: 0xff0000,
+                    geometry: roundedRectangle(10, 10, 2)
                 };
             },
-            computed: {
-                roundedRectangle: () => roundedRectangle(10, 10, 2),
-            },
-            template: `
-                <v-shape
-                    ref="shape"
-                    :color="color"
-                    :geometry="roundedRectangle"
-                />
-            `,
+            template: `<v-shape ref="shape" :color="color" :geometry="geometry" />`,
         });
 
         const { innerMaterial, outerMaterial } = vm.$refs.shape.$options.three;
@@ -91,5 +85,34 @@ describe('<v-shape>', () => {
         await vm.$nextTick();
 
         expect(innerMaterial.opacity).toBe(0.75);
+    });
+
+    it('updates geometry when changed', async () => {
+        const vm = mount({
+            data() {
+                return {
+                    geometry: roundedRectangle(1, 1, 0),
+                };
+            },
+            template: `<v-shape ref="shape" :geometry="geometry" />`,
+        });
+
+        // spy on necessary dispose functions
+        const { innerMesh, outerMesh } = vm.$refs.shape.$options.three;
+        const innerDispose = jest.spyOn(innerMesh.geometry, 'dispose');
+        const outerDispose = jest.spyOn(outerMesh.geometry, 'dispose');
+
+        // set our geometry to a larger square
+        const newGeometry = roundedRectangle(2, 2, 0);
+        vm.geometry = newGeometry;
+        await vm.$nextTick();
+
+        // our old geometries should be cleaned up
+        expect(innerDispose).toHaveBeenCalled();
+        expect(outerDispose).toHaveBeenCalled();
+
+        // and the new geometries should be applied to the meshes
+        expect(innerMesh.geometry).toBe(newGeometry);
+        expect(outerMesh.geometry).toBe(newGeometry);
     });
 });
