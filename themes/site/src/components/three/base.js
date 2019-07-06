@@ -47,7 +47,9 @@ export default {
         setLocalPosition() {
             const { obj } = this.$options.three;
 
-            obj.position.set(this.position.x, this.position.y, this.position.z);
+            if (obj) {
+                obj.position.set(this.position.x, this.position.y, this.position.z);
+            }
         },
     },
     props: {

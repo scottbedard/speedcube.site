@@ -1,25 +1,16 @@
 /* eslint-disable */
-import base from '@/components/three/base';
-
-import {
-    Object3D,
-} from 'three';
+import objComponent from '@/components/three/obj/obj.vue';
 
 //
 // factory
 //
 const mount = factory({
     components: {
-        'v-obj': {
-            created() {
-                this.$options.three.obj = new Object3D();
-            },
-            mixins: [base],
-        },
+        'v-obj': objComponent,
     },
 });
 
-describe('threejs', () => {
+describe('<v-obj>', () => {
     it('adds and removes itself from parent objects', async () => {
         const vm = mount({
             data: () => ({ child: false }),
