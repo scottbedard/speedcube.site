@@ -18,14 +18,14 @@ export default {
             this.removeFromParentObj();
 
             // create a mesh for each side of our shape
-            const outerMaterial = this.createMaterial({
+            const outerMaterial = new MeshLambertMaterial({
                 color: this.color,
                 side: FrontSide,
             });
 
             const outerMesh = new Mesh(this.geometry, outerMaterial);
 
-            const innerMaterial = this.createMaterial({
+            const innerMaterial = new MeshLambertMaterial({
                 color: this.color,
                 opacity: this.innerOpacity,
                 side: BackSide,
@@ -47,9 +47,6 @@ export default {
             this.$options.three.outerMesh = outerMesh;
 
             this.addToParentObj();
-        },
-        createMaterial(options = {}) {
-            return new MeshLambertMaterial(options);
         },
     },
     mixins: [
@@ -76,20 +73,14 @@ export default {
         color(color) {
             const { innerMaterial, outerMaterial } = this.$options.three;
 
-            if (innerMaterial && outerMaterial) {
-                innerMaterial.color.setHex(color);
-                outerMaterial.color.setHex(color);
-            }
+            innerMaterial.color.setHex(color);
+            outerMaterial.color.setHex(color);
         },
-        geometry() {
-            this.refreshGroup();
-        },
+        geometry: 'refreshGroup',
         innerOpacity(opacity) {
             const { innerMaterial } = this.$options.three;
 
-            if (innerMaterial) {
-                innerMaterial.opacity = opacity;
-            }
+            innerMaterial.opacity = opacity;
         },
     },
 };
