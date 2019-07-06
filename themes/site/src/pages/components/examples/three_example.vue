@@ -37,7 +37,7 @@
 
                         <!-- action -->
                         <v-box
-                            :color="0xeeee00"
+                            :color="0xffff00"
                             :position="position"
                             :size="50"
                         />

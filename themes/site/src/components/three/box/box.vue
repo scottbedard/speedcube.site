@@ -32,9 +32,9 @@ export default {
     computed: {
         sizeValues() {
             if (typeof this.size === 'object') {
-                const depth = Number(get(this.size, 'depth', 0));
-                const height = Number(get(this.size, 'height', 0));
-                const width = Number(get(this.size, 'width', 0));
+                const depth = get(this.size, 'depth', 0);
+                const height = get(this.size, 'height', 0);
+                const width = get(this.size, 'width', 0);
 
                 return { depth, height, width };
             }
@@ -51,25 +51,18 @@ export default {
     ],
     props: {
         color: {
-            default: 0xff0000,
+            default: 0xffffff,
         },
         size: {
             default: 10,
-            type: Number,
+            type: [Number, Object],
         },
     },
     watch: {
-        sizeValues: {
-            deep: true,
-            handler() {
-                // @todo: this needs to be improved
-                const { mesh } = this.$options.three;
-                const { depth, height, width } = this.sizeValues;
+        color(color) {
+            const { material } = this.$options.three;
 
-                mesh.scale.x = width;
-                mesh.scale.y = height;
-                mesh.scale.z = depth;
-            },
+            material.color.setHex(color);
         },
     },
 };
