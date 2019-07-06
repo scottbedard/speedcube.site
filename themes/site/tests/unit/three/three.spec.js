@@ -1,5 +1,6 @@
 /* eslint-disable */
 import objComponent from '@/components/three/obj/obj.vue';
+import { degreesToRadians } from '@/app/utils/number';
 
 //
 // factory
@@ -67,5 +68,35 @@ describe('<v-obj>', () => {
         await vm.$nextTick();
         
         expect(obj.position).toEqual({ x: 10, y: 20, z: 30 });
+    });
+
+    it('sets local rotation and updates when changed', async () => {
+        const vm = mount({
+            data() {
+                return {
+                    x: 1,
+                    y: 2,
+                    z: 3,
+                };
+            },
+            template: `
+                <v-obj ref="obj" :rotation="{ x, y, z }" />
+            `,
+        });
+
+        const { obj } = vm.$refs.obj.$options.three;
+
+        expect(obj.rotation.x).toBe(degreesToRadians(1));
+        expect(obj.rotation.y).toBe(degreesToRadians(2));
+        expect(obj.rotation.z).toBe(degreesToRadians(3));
+
+        vm.x = 10;
+        vm.y = 20;
+        vm.z = 30;
+        await vm.$nextTick();
+
+        expect(obj.rotation.x).toBe(degreesToRadians(10));
+        expect(obj.rotation.y).toBe(degreesToRadians(20));
+        expect(obj.rotation.z).toBe(degreesToRadians(30));
     });
 });
