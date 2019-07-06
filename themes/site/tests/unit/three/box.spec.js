@@ -14,7 +14,29 @@ const mount = factory({
 //
 // specs
 //
-describe('<v-light>', () => {
+describe('<v-box>', () => {
+    it('disposes geometry and material when destroyed', async () => {
+        const vm = mount({
+            data() {
+                return {
+                    box: true,
+                };
+            },
+            template: `<v-box v-if="box" ref="box" />`,
+        });
+
+        const { geometry, material } = vm.$refs.box.$options.three;
+
+        const disposeGeometry = jest.spyOn(geometry, 'dispose');
+        const disposeMaterial = jest.spyOn(material, 'dispose');
+
+        vm.box = false;
+        await vm.$nextTick();
+
+        expect(disposeGeometry).toHaveBeenCalled();
+        expect(disposeMaterial).toHaveBeenCalled();
+    });
+
     it('updates when color changes', async () => {
         const vm = mount({
             data() {

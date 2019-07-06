@@ -29,6 +29,10 @@ export default {
         this.$options.three.material = material;
         this.$options.three.obj = mesh;
     },
+    destroyed() {
+        this.disposeGeometry();
+        this.disposeMaterial();
+    },
     computed: {
         sizeValues() {
             if (typeof this.size === 'object') {
@@ -44,6 +48,18 @@ export default {
                 height: this.size,
                 width: this.size,
             };
+        },
+    },
+    methods: {
+        disposeGeometry() {
+            const { geometry } = this.$options.three;
+
+            geometry.dispose();
+        },
+        disposeMaterial() {
+            const { material } = this.$options.three;
+
+            material.dispose();
         },
     },
     mixins: [
