@@ -1,14 +1,15 @@
 <template>
     <v-example title="three">
         <p>
-            These are some of our lower level 3D rendering components.
+            These are some of our low-level 3D rendering components,
+            which are used to construct the higher-level puzzle components.
         </p>
 
         <div class="my-8">
 
             <!--
                 scenes are absolutely positioned and completely fill their
-                container. these wrapper elements simply turn the scene
+                containers. these wrapper elements simply turn the scene
                 into a responsive square.
             -->
             <div class="max-w-xs mx-auto">

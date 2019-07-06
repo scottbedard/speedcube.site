@@ -2,7 +2,11 @@
     <v-example title="<v-puzzle>">
         <p>Our base component to manipulate and render puzzles.</p>
 
-        <v-puzzle />
+        <div class="max-w-xs mx-auto">
+            <div class="border-4 border-dotted border-grey-4 pb-full relative">
+                <v-puzzle />
+            </div>
+        </div>
     </v-example>
 </template>
 

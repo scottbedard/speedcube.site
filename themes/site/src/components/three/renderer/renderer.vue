@@ -71,6 +71,7 @@ export default {
             this.$options.three.renderer.setScissorTest(true);
         },
         renderScenes() {
+            this.clear();
             this.updateSize();
 
             this.$options.scenes.forEach((scene) => {
