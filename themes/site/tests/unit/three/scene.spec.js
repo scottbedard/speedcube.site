@@ -45,6 +45,40 @@ describe('<v-scene>', () => {
         WebGLRenderer.mockClear();
     });
 
+    it('instantiates a scene', () => {
+        const vm = mount({
+            template: `<v-scene ref="scene" />`,
+        });
+
+        expect(vm.$refs.scene.$options.three.obj.type).toBe('Scene');
+    });
+
+    it('instantiates a camera', () => {
+        const vm = mount({
+            template: `<v-scene ref="scene" />`,
+        });
+
+        expect(vm.$refs.scene.$options.three.camera.type).toBe('PerspectiveCamera');
+    });
+
+    it.only('disposes the scene when destroyed', async () => {
+        const vm = mount({
+            data() {
+                return {
+                    scene: true,
+                };
+            },
+            template: `<v-scene v-if="scene" ref="scene" />`,
+        });
+
+        const dispose = jest.spyOn(vm.$refs.scene.$options.three.obj, 'dispose');
+
+        vm.scene = false;
+        await vm.$nextTick();
+
+        expect(dispose).toHaveBeenCalled();
+    });
+
     it('adds and removes itself from the renderer', async () => {
         const vm = mount({
             data() {
@@ -72,22 +106,6 @@ describe('<v-scene>', () => {
         await vm.$nextTick();
 
         expect(vm.$refs.renderer.$options.scenes).toEqual([]);
-    });
-
-    it('instantiates a scene', () => {
-        const vm = mount({
-            template: `<v-scene ref="scene" />`,
-        });
-
-        expect(vm.$refs.scene.$options.three.obj.type).toBe('Scene');
-    });
-
-    it('instantiates a camera', () => {
-        const vm = mount({
-            template: `<v-scene ref="scene" />`,
-        });
-
-        expect(vm.$refs.scene.$options.three.camera.type).toBe('PerspectiveCamera');
     });
 
     it('sets the initial camera position and reacts to changes', async () => {

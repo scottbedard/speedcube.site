@@ -19,6 +19,8 @@ export default {
     },
     destroyed() {
         this.$root.$emit('scene-remove', this);
+
+        this.disposeScene();
     },
     computed: {
         cameraPosition() {
@@ -30,6 +32,11 @@ export default {
         },
     },
     methods: {
+        disposeScene() {
+            const { obj: scene } = this.$options.three;
+            
+            scene.dispose();
+        },
         syncCameraPosition() {
             const { camera } = this.$options.three;
             const { opposite, adjacent } = this.cameraPosition;
