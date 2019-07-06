@@ -219,4 +219,33 @@ describe('<v-renderer>', () => {
         
         expect(vm.$refs.renderer.$el.classList.contains('hidden')).toBe(false);
     });
+
+    it('skips rendering off-screen scenes', () => {
+        const vm = mount({
+            template: `
+                <div>
+                    <v-renderer ref="renderer" />
+                    <v-scene ref="scene" />
+                </div>
+            `,
+        });
+
+        const { renderer, scene } = vm.$refs;
+
+        const render = jest.spyOn(renderer.$options.three.renderer, 'render');
+        
+        scene.$el.getBoundingClientRect = jest.fn(() => {
+            return { bottom: -1, left: 0, right: 0, top: 0 }
+        });
+
+        expect(render).not.toHaveBeenCalled();
+
+        scene.$el.getBoundingClientRect = jest.fn(() => {
+            return { bottom: 0, left: 0, right: 0, top: 0 }
+        });
+
+        renderer.renderScenes();
+
+        expect(render).toHaveBeenCalled();
+    });
 });
