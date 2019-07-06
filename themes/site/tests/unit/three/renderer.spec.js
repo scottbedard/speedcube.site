@@ -43,15 +43,6 @@ describe('<v-renderer>', () => {
         jest.spyOn(window, 'requestAnimationFrame');
 
         WebGLRenderer.mockClear();
-
-        // Element.prototype.getBoundingClientRect = jest.fn(() => ({
-        //     width: 120,
-        //     height: 120,
-        //     top: 0,
-        //     left: 0,
-        //     bottom: 0,
-        //     right: 0,
-        // }));
     });
       
     afterEach(() => {

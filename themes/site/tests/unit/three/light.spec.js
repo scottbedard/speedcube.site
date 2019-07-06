@@ -46,4 +46,28 @@ describe('<v-light>', () => {
         await vm.$nextTick();
         expect(light.intensity).toBe(0.2);
     });
+
+    it('supports ambient lights', () => {
+        const AmbientLight = jest.spyOn(require('three'), 'AmbientLight');
+
+        const vm = mount({
+            template: `<v-light type="ambient" :color="0xff0000" :intensity="0.1" />`,
+        });
+
+        expect(AmbientLight).toHaveBeenCalledWith(0xff0000, 0.1);
+
+        AmbientLight.mockRestore();
+    });
+
+    it('supports point lights', () => {
+        const PointLight = jest.spyOn(require('three'), 'PointLight');
+
+        const vm = mount({
+            template: `<v-light type="point" :color="0xff0000" :intensity="0.1" />`,
+        });
+
+        expect(PointLight).toHaveBeenCalledWith(0xff0000, 0.1);
+
+        PointLight.mockRestore();
+    });
 });
