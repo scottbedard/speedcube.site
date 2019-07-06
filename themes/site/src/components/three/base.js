@@ -48,7 +48,14 @@ export default {
             const { obj } = this.$options.three;
 
             if (obj) {
-                obj.position.set(this.position.x, this.position.y, this.position.z);
+                const { x, y, z } = {
+                    x: 0,
+                    y: 0,
+                    z: 0,
+                    ...this.position,
+                };
+
+                obj.position.set(x, y, z);
             }
         },
     },
