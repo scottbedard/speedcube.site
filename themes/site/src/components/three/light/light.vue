@@ -1,8 +1,6 @@
 <script>
-/* eslint-disable consistent-return */
-import base from '../base';
 import { AmbientLight, PointLight } from 'three';
-import { findAncestor } from '@/app/utils/component';
+import base from '../base';
 
 export default {
     created() {
@@ -13,7 +11,7 @@ export default {
             if (this.type === 'point') {
                 return new PointLight(this.color, this.intensity);
             }
-            
+
             // default to ambient
             return new AmbientLight(this.color, this.intensity);
         },

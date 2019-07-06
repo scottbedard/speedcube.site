@@ -101,29 +101,29 @@ export default {
                 );
             });
 
-    //         this.scenes.forEach((scene) => {
+            //         this.scenes.forEach((scene) => {
 
 
-    //             // @todo: this causes a flicker, find better way to prevent artifacts
-    //             if (!cleared) {
-    //                 cleared = true;
+            //             // @todo: this causes a flicker, find better way to prevent artifacts
+            //             if (!cleared) {
+            //                 cleared = true;
 
-    //                 this.clear();
-    //             }
+            //                 this.clear();
+            //             }
 
-    //             // set the viewport
-    //             const width = rect.right - rect.left;
-    //             const height = rect.bottom - rect.top;
-    //             const bottom = document.body.clientHeight - rect.bottom;
+            //             // set the viewport
+            //             const width = rect.right - rect.left;
+            //             const height = rect.bottom - rect.top;
+            //             const bottom = document.body.clientHeight - rect.bottom;
 
-    //             this.$options.three.renderer.setViewport(rect.left, bottom, width, height);
-    //             this.$options.three.renderer.setScissor(rect.left, bottom, width, height);
+            //             this.$options.three.renderer.setViewport(rect.left, bottom, width, height);
+            //             this.$options.three.renderer.setScissor(rect.left, bottom, width, height);
 
-    //             this.$options.three.renderer.render(
-    //                 scene.$options.three.scene,
-    //                 scene.$options.three.camera,
-    //             );
-    //         });
+            //             this.$options.three.renderer.render(
+            //                 scene.$options.three.scene,
+            //                 scene.$options.three.camera,
+            //             );
+            //         });
         },
         removeScene(vm) {
             this.$options.scenes = this.$options.scenes.filter(existing => existing !== vm);

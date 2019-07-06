@@ -1,6 +1,4 @@
 <script>
-import base from '../base';
-
 import {
     BackSide,
     FrontSide,
@@ -8,6 +6,8 @@ import {
     Mesh,
     MeshLambertMaterial,
 } from 'three';
+import base from '../base';
+
 
 export default {
     created() {

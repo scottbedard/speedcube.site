@@ -15,12 +15,6 @@
                     :intensity="0.8"
                 />
 
-                <!-- camera -->
-                <v-camera
-                    :angle="cameraAngle"
-                    :distance="60"
-                />
-
                 <!-- action -->
                 <v-box
                     :color="0x00ff00"
@@ -42,7 +36,6 @@
 <script>
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
 import boxComponent from '@/components/three/box/box.vue';
-import cameraComponent from '@/components/three/camera/camera.vue';
 import exampleComponent from '../example.vue';
 import lightComponent from '@/components/three/light/light.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
@@ -54,7 +47,6 @@ export default {
     components: {
         'v-axes-helper': axesHelperComponent,
         'v-box': boxComponent,
-        'v-camera': cameraComponent,
         'v-example': exampleComponent,
         'v-light': lightComponent,
         'v-scene': sceneComponent,
