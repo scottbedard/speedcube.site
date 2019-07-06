@@ -1,43 +1,21 @@
 <script>
-import { noop } from 'lodash-es';
-import { findAncestor } from '@/app/utils/component';
+import base from '../base';
+
 import {
     BackSide,
     FrontSide,
     Group,
     Mesh,
-    MeshBasicMaterial,
     MeshLambertMaterial,
-    MeshPhongMaterial,
 } from 'three';
 
 export default {
     created() {
-        this.$options.three = {
-            group: null,
-            innerMaterial: null,
-            innerMesh: null,
-            outerMaterial: null,
-            outerMesh: null,
-        };
-
-        // create our mesh group and add to scene
         this.refreshGroup();
-
-        // remove object from scene
-        this.$on('hook:destroyed', () => this.removeGroup());
     },
     methods: {
-        addGroup() {
-            const scene = findAncestor(this, 'scene');
-            const { group } = this.$options.three;
-
-            if (scene && group) {
-                scene.$options.three.scene.add(group);
-            }
-        },
         refreshGroup() {
-            this.removeGroup();
+            this.removeFromParentObj();
 
             // create a mesh for each side of our shape
             const outerMaterial = this.createMaterial({
@@ -62,35 +40,21 @@ export default {
             group.add(outerMesh);
             group.add(innerMesh);
 
-            this.$options.three.group = group;
+            this.$options.three.obj = group;
             this.$options.three.innerMaterial = innerMaterial;
             this.$options.three.innerMesh = innerMesh;
             this.$options.three.outerMaterial = outerMaterial;
             this.$options.three.outerMesh = outerMesh;
 
-            this.addGroup();
+            this.addToParentObj();
         },
         createMaterial(options = {}) {
-            if (this.material === 'lambert') {
-                return new MeshLambertMaterial(options);
-            }
-
-            if (this.material === 'phong') {
-                return new MeshPhongMaterial(options);
-            }
-
-            return new MeshBasicMaterial(options);
-        },
-        removeGroup() {
-            const scene = findAncestor(this, 'scene');
-            const { group } = this.$options.three;
-
-            if (scene && group) {
-                scene.$options.three.scene.remove(group);
-            }
+            return new MeshLambertMaterial(options);
         },
     },
-    render: noop,
+    mixins: [
+        base,
+    ],
     props: {
         color: {
             default: 0xffffff,
@@ -102,13 +66,6 @@ export default {
         },
         geometry: {
             required: true,
-        },
-        material: {
-            default: 'lambert',
-            type: String,
-            validator(material) {
-                return ['basic', 'lambert', 'phong'].includes(material);
-            },
         },
         outerOpacity: {
             default: 1,
