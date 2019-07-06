@@ -22,7 +22,10 @@
             />
             
             <!-- cube -->
-            <v-cube :turn-progress="turnProgress / 100" />
+            <v-cube
+                :config="config"
+                :turn-progress="turnProgress / 100"
+            />
         </v-scene>
     </div>
 </template>
@@ -32,24 +35,31 @@ import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue'
 import cubeComponent from './cube/cube.vue';
 import lightComponent from '@/components/three/light/light.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
+import { get } from 'lodash-es';
 
 export default {
-    data() {
-        return {
-            cameraAngle: 90,
-            cameraDistance: 300,
-        };
-    },
     components: {
         'v-axes-helper': axesHelperComponent,
         'v-cube': cubeComponent,
         'v-light': lightComponent,
         'v-scene': sceneComponent,
     },
+    computed: {
+        cameraAngle() {
+            return get(this.config, 'cameraAngle', 0);
+        },
+        cameraDistance() {
+            return get(this.config, 'cameraDistance', 100);
+        },
+    },
     methods: {
         // ...
     },
     props: {
+        config: {
+            default: () => ({}),
+            type: Object,
+        },
         turnProgress: {
             default: 0,
             type: Number,

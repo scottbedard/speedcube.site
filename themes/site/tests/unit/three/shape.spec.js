@@ -39,10 +39,10 @@ describe('<v-shape>', () => {
             data() {
                 return {
                     geometry: roundedRectangle(1, 1, 0),
-                    show: true,
+                    shape: true,
                 };
             },
-            template: `<v-shape v-if="show" ref="shape" :geometry="geometry" />`,
+            template: `<v-shape v-if="shape" ref="shape" :geometry="geometry" />`,
         });
 
         const { innerMaterial, innerMesh, outerMaterial, outerMesh } = vm.$refs.shape.$options.three;
@@ -52,7 +52,7 @@ describe('<v-shape>', () => {
         const outerGeometryDispose = jest.spyOn(outerMesh.geometry, 'dispose');
         const outerMaterialDispose = jest.spyOn(outerMaterial, 'dispose');
 
-        vm.show = false;
+        vm.shape = false;
         await vm.$nextTick();
 
         expect(innerGeometryDispose).toHaveBeenCalled();
@@ -88,20 +88,11 @@ describe('<v-shape>', () => {
         const vm = mount({
             data() {
                 return {
+                    geometry: roundedRectangle(10, 10, 2),
                     innerOpacity: 0.5,
                 };
             },
-            computed: {
-                roundedRectangle: () => roundedRectangle(10, 10, 2),
-            },
-            template: `
-                <v-shape
-                    ref="shape"
-                    :color="0x00ff00"
-                    :inner-opacity="innerOpacity"
-                    :geometry="roundedRectangle"
-                />
-            `,
+            template: `<v-shape ref="shape" :geometry="geometry" :inner-opacity="innerOpacity" />`,
         });
 
         const { innerMaterial } = vm.$refs.shape.$options.three;
