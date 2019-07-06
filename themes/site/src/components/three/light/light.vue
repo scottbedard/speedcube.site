@@ -10,13 +10,12 @@ export default {
     },
     methods: {
         createLight() {
-            if (this.type === 'ambient') {
-                return new AmbientLight(this.color, this.intensity);
-            }
-
             if (this.type === 'point') {
                 return new PointLight(this.color, this.intensity);
             }
+            
+            // default to ambient
+            return new AmbientLight(this.color, this.intensity);
         },
     },
     mixins: [
