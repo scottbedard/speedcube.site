@@ -61,7 +61,7 @@ describe('<v-scene>', () => {
         expect(vm.$refs.scene.$options.three.camera.type).toBe('PerspectiveCamera');
     });
 
-    it.only('disposes the scene when destroyed', async () => {
+    it('disposes the scene when destroyed', async () => {
         const vm = mount({
             data() {
                 return {
