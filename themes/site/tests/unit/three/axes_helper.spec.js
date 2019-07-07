@@ -1,5 +1,4 @@
 /* eslint-disable */
-import boxComponent from '@/components/three/box/box.vue';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
 
 //
