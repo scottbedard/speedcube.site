@@ -40,16 +40,9 @@ export default {
         this.$options.three.outerMesh = outerMesh;
     },
     destroyed() {
-        this.disposeGeometries();
         this.disposeMaterials();
     },
     methods: {
-        disposeGeometries() {
-            const { innerMesh, outerMesh } = this.$options.three;
-
-            innerMesh.geometry.dispose();
-            outerMesh.geometry.dispose();
-        },
         disposeMaterials() {
             const { innerMaterial, outerMaterial } = this.$options.three;
 
@@ -86,8 +79,6 @@ export default {
         },
         geometry(geometry) {
             const { innerMesh, outerMesh } = this.$options.three;
-
-            this.disposeGeometries();
 
             innerMesh.geometry = geometry;
             outerMesh.geometry = geometry;

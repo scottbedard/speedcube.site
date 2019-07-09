@@ -34,7 +34,7 @@ describe('<v-shape>', () => {
         expect(outerMesh.type).toBe('Mesh');
     });
 
-    it('disposes of geometries and materials when destroyed', async () => {
+    it('disposes of materials when destroyed', async () => {
         const vm = mount({
             data() {
                 return {
@@ -45,19 +45,15 @@ describe('<v-shape>', () => {
             template: `<v-shape v-if="shape" ref="shape" :geometry="geometry" />`,
         });
 
-        const { innerMaterial, innerMesh, outerMaterial, outerMesh } = vm.$refs.shape.$options.three;
+        const { innerMaterial, outerMaterial } = vm.$refs.shape.$options.three;
 
-        const innerGeometryDispose = jest.spyOn(innerMesh.geometry, 'dispose');
         const innerMaterialDispose = jest.spyOn(innerMaterial, 'dispose');
-        const outerGeometryDispose = jest.spyOn(outerMesh.geometry, 'dispose');
         const outerMaterialDispose = jest.spyOn(outerMaterial, 'dispose');
 
         vm.shape = false;
         await vm.$nextTick();
 
-        expect(innerGeometryDispose).toHaveBeenCalled();
         expect(innerMaterialDispose).toHaveBeenCalled();
-        expect(outerGeometryDispose).toHaveBeenCalled();
         expect(outerMaterialDispose).toHaveBeenCalled();
     });
 
@@ -117,17 +113,11 @@ describe('<v-shape>', () => {
 
         // spy on necessary dispose functions
         const { innerMesh, outerMesh } = vm.$refs.shape.$options.three;
-        const innerDispose = jest.spyOn(innerMesh.geometry, 'dispose');
-        const outerDispose = jest.spyOn(outerMesh.geometry, 'dispose');
 
         // set our geometry to a larger square
         const newGeometry = roundedRectangle(2, 2, 0);
         vm.geometry = newGeometry;
         await vm.$nextTick();
-
-        // our old geometries should be cleaned up
-        expect(innerDispose).toHaveBeenCalled();
-        expect(outerDispose).toHaveBeenCalled();
 
         // and the new geometries should be applied to the meshes
         expect(innerMesh.geometry).toBe(newGeometry);
