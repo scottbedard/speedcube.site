@@ -98,6 +98,9 @@ import { roundedRectangle } from '@/components/three/geometries';
 import { get } from 'lodash-es';
 
 export default {
+    destroyed() {
+        this.geometry.dispose();
+    },
     components: {
         'v-box': boxComponent,
         'v-obj': objComponent,
@@ -193,7 +196,9 @@ export default {
         },
     },
     watch: {
-        
+        geometry(newGeometry, oldGeometry) {
+            oldGeometry.dispose();
+        },
     },
 };
 </script>
