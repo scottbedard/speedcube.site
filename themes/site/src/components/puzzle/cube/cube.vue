@@ -24,7 +24,7 @@
             next, we'll create an object to hold the stickers
             that are being turned and rotate it
         -->
-        <v-obj>
+        <v-obj v-if="parsedTurn" :rotation="rotation">
             <v-cube-position
                 :col-map="colMap"
                 :colors="colors"
@@ -86,6 +86,13 @@ export default {
             
             return null;
         },
+        rotation() {
+            const { axis, degrees } = this.turnDetails;
+
+            return {
+                [axis]: degrees * this.turnProgress,
+            };
+        },
         rowMap() {
             return new Array(this.stickersPerFace).fill().map((val, i) => Math.floor(i / this.model.size));
         },
@@ -103,6 +110,47 @@ export default {
         },
         stickerSpacing() {
             return get(this.config, 'stickerSpacing', 0.2);
+        },
+        turnDetails() {
+            if (!this.parsedTurn) {
+                return null;
+            }
+
+            const { target, rotation } = this.parsedTurn;
+            let axis;
+            let degrees;
+
+            // helper function to get turn degrees. note that the
+            // clockwise / counter-clickwise degrees might seem
+            // backwards. this is because we're turning from the
+            // context of our scene's world axis, not the face.
+            /* eslint-disable-next-line no-nested-ternary */
+            const deg = (cw, ccw) => (rotation === 2 ? 180 : (rotation === -1 ? ccw : cw));
+
+            if (['X', 'Y', 'Z'].includes(target)) {
+                axis = target.toLowerCase();
+                degrees = deg(-90, 90);
+            } else if (target === 'U') {
+                axis = 'y';
+                degrees = deg(-90, 90);
+            } else if (target === 'L') {
+                axis = 'x';
+                degrees = deg(90, -90);
+            } else if (target === 'F') {
+                axis = 'z';
+                degrees = deg(-90, 90);
+            } else if (target === 'R') {
+                axis = 'x';
+                degrees = deg(-90, 90);
+            } else if (target === 'B') {
+                axis = 'z';
+                degrees = deg(90, -90);
+            } else if (target === 'D') {
+                axis = 'y';
+                degrees = deg(90, -90);
+            }
+
+            return { axis, degrees };
         },
         turnStickers() {
             if (this.parsedTurn) {

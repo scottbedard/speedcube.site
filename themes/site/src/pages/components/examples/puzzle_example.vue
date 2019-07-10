@@ -25,7 +25,7 @@
             </div>
             <div class="mb-4">
                 <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Turn Progress</label>
-                <v-range-input v-model="turnProgress" :min="-100" :max="100" />
+                <v-range-input v-model="turnProgress" :min="0" :max="100" />
             </div>
             <div class="mb-4">
                 <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Camera Angle</label>
@@ -60,7 +60,7 @@ export default {
         return {
             cameraAngle: 45,
             cameraDistance: 250,
-            currentTurn: 'R',
+            currentTurn: 'U',
             innerOpacity: 80,
             stickerElevation: 20,
             stickerSpacing: 20,
