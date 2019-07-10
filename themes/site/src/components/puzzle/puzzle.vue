@@ -60,6 +60,9 @@ export default {
             default: () => ({}),
             type: Object,
         },
+        currentTurn: {
+            type: String,
+        },
         turnProgress: {
             default: 0,
             type: Number,

@@ -71,7 +71,8 @@ export default {
             this.$options.three.renderer.setScissorTest(true);
         },
         renderScenes() {
-            this.clear();
+            let cleared = false;
+            
             this.updateSize();
 
             this.$options.scenes.forEach((scene) => {
@@ -86,6 +87,13 @@ export default {
                     || rect.left > document.body.clientWidth
                 ) {
                     return; // it's off screen
+                }
+
+                // clear the renderer if we haven't already
+                if (!cleared) {
+                    this.clear();
+
+                    cleared = true;
                 }
 
                 // set the viewport
