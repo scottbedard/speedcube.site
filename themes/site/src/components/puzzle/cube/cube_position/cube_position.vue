@@ -3,7 +3,7 @@
         <!-- u -->
         <v-obj :rotation="{ x: -90 }">
             <v-shape
-                v-for="(sticker, index) in model.state.U"
+                v-for="(sticker, index) in stickers('U')"
                 :color="0xffff00"
                 :geometry="geometry"
                 :inner-opacity="innerOpacity"
@@ -15,7 +15,7 @@
         <!-- l -->
         <v-obj :rotation="{ y: -90 }">
             <v-shape
-                v-for="(value, index) in model.state.L"
+                v-for="(value, index) in  stickers('L')"
                 :color="0x00ff00"
                 :geometry="geometry"
                 :inner-opacity="innerOpacity"
@@ -26,7 +26,7 @@
 
         <!-- f -->
         <v-shape
-            v-for="(value, index) in model.state.F"
+            v-for="(value, index) in stickers('F')"
             :color="0xff0000"
             :geometry="geometry"
             :inner-opacity="innerOpacity"
@@ -37,7 +37,7 @@
         <!-- r -->
         <v-obj :rotation="{ y: 90 }">
             <v-shape
-                v-for="(value, index) in model.state.R"
+                v-for="(value, index) in stickers('R')"
                 :color="0x0000ff"
                 :geometry="geometry"
                 :inner-opacity="innerOpacity"
@@ -49,7 +49,7 @@
         <!-- b -->
         <v-obj :rotation="{ y: 180 }">
             <v-shape
-                v-for="(value, index) in model.state.B"
+                v-for="(value, index) in stickers('B')"
                 :color="0x00ffff"
                 :geometry="geometry"
                 :inner-opacity="innerOpacity"
@@ -61,7 +61,7 @@
         <!-- d -->
         <v-obj :rotation="{ x: 90 }">
             <v-shape
-                v-for="(sticker, index) in model.state.D"
+                v-for="(sticker, index) in stickers('D')"
                 :color="0xffffff"
                 :geometry="geometry"
                 :inner-opacity="innerOpacity"
@@ -86,19 +86,6 @@ export default {
         'v-shape': shapeComponent,
     },
     computed: {
-        colMap() {
-            return new Array(this.stickersPerFace).fill().map((val, i) => i % this.model.size);
-        },
-        colors() {
-            return get(this.config, 'colors', [
-                '#ff0000',
-                '#00ff00',
-                '#0000ff',
-                '#00ffff',
-                '#ffff00',
-                '#ffffff',
-            ]);
-        },
         cubeSize() {
             return (this.stickerSize * this.model.size) + (this.gapCount * this.gapSize);
         },
@@ -114,17 +101,8 @@ export default {
         halfStickerSize() {
             return this.stickerSize / 2;
         },
-        innerOpacity() {
-            return get(this.config, 'innerOpacity', 0.8);
-        },
-        rowMap() {
-            return new Array(this.stickersPerFace).fill().map((val, i) => Math.floor(i / this.model.size));
-        },
-        stickerElevation() {
-            return get(this.config, 'stickerElevation', 0.2);
-        },
-        stickersPerFace() {
-            return this.model.size ** 2;
+        stickers() {
+            return face => this.model.state[face].filter(this.filter);
         },
         stickerPositions() {
             const position = index => {
@@ -140,15 +118,21 @@ export default {
 
             return new Array(this.stickersPerFace).fill().map((v, i) => position(i));
         },
-        stickerSpacing() {
-            return get(this.config, 'stickerSpacing', 0.2);
-        },
     },
     props: [
+        'colMap',
+        'colors',
         'config',
+        'filter',
         'geometry',
+        'innerOpacity',
         'model',
+        'rowMap',
+        'stickerElevation',
         'stickerSize',
+        'stickerSpacing',
+        'stickersPerFace',
+        'turnStickers',
     ],
 };
 </script>

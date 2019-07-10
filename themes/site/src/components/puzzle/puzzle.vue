@@ -23,6 +23,7 @@
             
             <!-- cube -->
             <v-cube
+                :current-turn="currentTurn"
                 :config="config"
                 :turn-progress="turnProgress / 100"
             />
