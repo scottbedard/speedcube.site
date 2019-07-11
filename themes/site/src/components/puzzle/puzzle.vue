@@ -10,15 +10,14 @@
             <v-light
                 type="ambient"
                 :color="0xffffff"
-                :intensity="0.8"
-                :position="{ x: 0, y: 200, z: 200 }"
+                :intensity="0.5"
             />
 
             <v-light
                 type="point"
-                :color="0xffff00"
-                :intensity="0.2"
-                :position="{ x: 0, y: 200, z: 200 }"
+                :color="0xffffff"
+                :intensity="0.7"
+                :position="{ x: 0, y: 2000, z: 2000 }"
             />
 
             <!-- cube -->
