@@ -8,53 +8,53 @@
                 :geometry="geometry"
                 :inner-opacity="innerOpacity"
                 :key="`U-${index}`"
-                :position="stickerPositions[index]"
+                :position="stickerPosition('U', sticker)"
             />
         </v-obj>
 
         <!-- l -->
         <v-obj :rotation="{ y: -90 }">
             <v-shape
-                v-for="(value, index) in  stickers('L')"
+                v-for="(sticker, index) in  stickers('L')"
                 :color="0x00ff00"
                 :geometry="geometry"
                 :inner-opacity="innerOpacity"
                 :key="`L-${index}`"
-                :position="stickerPositions[index]"
+                :position="stickerPosition('L', sticker)"
             />
         </v-obj>
 
         <!-- f -->
         <v-shape
-            v-for="(value, index) in stickers('F')"
+            v-for="(sticker, index) in stickers('F')"
             :color="0xff0000"
             :geometry="geometry"
             :inner-opacity="innerOpacity"
             :key="`F-${index}`"
-            :position="stickerPositions[index]"
+            :position="stickerPosition('F', sticker)"
         />
 
         <!-- r -->
         <v-obj :rotation="{ y: 90 }">
             <v-shape
-                v-for="(value, index) in stickers('R')"
+                v-for="(sticker, index) in stickers('R')"
                 :color="0x0000ff"
                 :geometry="geometry"
                 :inner-opacity="innerOpacity"
                 :key="`L-${index}`"
-                :position="stickerPositions[index]"
+                :position="stickerPosition('R', sticker)"
             />
         </v-obj>
 
         <!-- b -->
         <v-obj :rotation="{ y: 180 }">
             <v-shape
-                v-for="(value, index) in stickers('B')"
+                v-for="(sticker, index) in stickers('B')"
                 :color="0x00ffff"
                 :geometry="geometry"
                 :inner-opacity="innerOpacity"
                 :key="`B-${index}`"
-                :position="stickerPositions[index]"
+                :position="stickerPosition('B', sticker)"
             />
         </v-obj>
 
@@ -66,7 +66,7 @@
                 :geometry="geometry"
                 :inner-opacity="innerOpacity"
                 :key="`D-${index}`"
-                :position="stickerPositions[index]"
+                :position="stickerPosition('D', sticker)"
             />
         </v-obj>
     </v-obj>
@@ -103,6 +103,16 @@ export default {
         },
         stickers() {
             return face => this.model.state[face].filter(this.filter);
+        },
+        stickerIndex() {
+            return (face, sticker) => this.model.state[face].findIndex(sticker);
+        },
+        stickerPosition() {
+            return (face, sticker) => {
+                const stickerIndex = this.model.state[face].findIndex(el => el === sticker);
+
+                return this.stickerPositions[stickerIndex];
+            }
         },
         stickerPositions() {
             const position = index => {

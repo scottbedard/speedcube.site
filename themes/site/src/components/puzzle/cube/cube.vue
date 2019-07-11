@@ -4,7 +4,7 @@
             render stickers not effected by the current
             turn in their default positions
         -->
-        <!-- <v-cube-position
+        <v-cube-position
             :col-map="colMap"
             :colors="colors"
             :config="config"
@@ -18,7 +18,7 @@
             :sticker-spacing="stickerSpacing"
             :stickers-per-face="stickersPerFace"
             :turn-stickers="turnStickers"
-        /> -->
+        />
 
         <!--
             next, we'll create an object to hold the stickers
@@ -81,7 +81,11 @@ export default {
         },
         parsedTurn() {
             if (this.currentTurn) {
-                return this.model.parseTurn(this.currentTurn);
+                const parsedTurn = this.model.parseTurn(this.currentTurn);
+
+                parsedTurn.depth = Math.min(parsedTurn.depth, this.model.size);
+
+                return parsedTurn;
             }
             
             return null;
