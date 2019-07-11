@@ -55,10 +55,23 @@ describe('<v-scene>', () => {
 
     it('instantiates a camera', () => {
         const vm = mount({
-            template: `<v-scene ref="scene" />`,
+            template: `
+                <v-scene
+                    ref="scene"
+                    :camera-aspect="2"
+                    :camera-far="3"
+                    :camera-fov="4"
+                    :camera-near="5"
+                />`,
         });
 
-        expect(vm.$refs.scene.$options.three.camera.type).toBe('PerspectiveCamera');
+        const { camera } = vm.$refs.scene.$options.three
+
+        expect(camera.type).toBe('PerspectiveCamera');
+        expect(camera.aspect).toBe(2);
+        expect(camera.far).toBe(3);
+        expect(camera.fov).toBe(4);
+        expect(camera.near).toBe(5);
     });
 
     it('disposes the scene when destroyed', async () => {

@@ -10,7 +10,7 @@ import { degreesToRadians } from '@/app/utils/number';
 export default {
     created() {
         this.$options.three.obj = new Scene();
-        this.$options.three.camera = new PerspectiveCamera();
+        this.$options.three.camera = new PerspectiveCamera(this.cameraFov, this.cameraAspect, this.cameraNear, this.cameraFar);
 
         this.syncCameraPosition();
     },
@@ -54,8 +54,24 @@ export default {
             default: 0,
             type: Number,
         },
+        cameraAspect: {
+            default: 1,
+            type: Number,
+        },
         cameraDistance: {
             default: 0,
+            type: Number,
+        },
+        cameraFar: {
+            default: 10000,
+            type: Number,
+        },
+        cameraFov: {
+            default: 60,
+            type: Number,
+        },
+        cameraNear: {
+            default: 1,
             type: Number,
         },
     },
