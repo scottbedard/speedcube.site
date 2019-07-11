@@ -22,7 +22,6 @@ import marginComponent from './containers/margin.vue';
 import modalComponent from './ui/modal.vue';
 import numberTransitionComponent from './transitions/number.vue';
 import pageComponent from './containers/page.vue';
-import puzzleComponent from './puzzle/puzzle.vue';
 import rangeInputComponent from './ui/range_input.vue';
 import scatterChartComponent from './charts/scatter_chart.vue';
 import selectComponent from './ui/select.vue';
@@ -46,11 +45,6 @@ export default {
     'v-grid-cell': gridCellComponent,
     'v-margin': marginComponent,
     'v-page': pageComponent,
-
-    //
-    // puzzle
-    //
-    'v-puzzle': puzzleComponent,
 
     //
     // transitions
