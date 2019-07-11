@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { bindExternalEvent } from 'spyfu-vue-utils';
 import rendererComponent from '@/components/three/renderer/renderer.vue';
 
 export default {
@@ -29,16 +30,16 @@ export default {
     },
     methods: {
         trackBrowserDimensions() {
-            const onResize = () => {
+            const sync = () => {
                 this.$store.commit('browser/setDimensions', {
                     width: window.innerWidth,
                     height: window.innerHeight,
                 });
             };
 
-            window.addEventListener('resize', onResize);
+            bindExternalEvent(this, window, 'resize', sync);
 
-            onResize();
+            sync();
         },
     },
 };
