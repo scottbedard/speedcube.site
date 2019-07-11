@@ -1,7 +1,7 @@
 <template>
     <v-example title="<v-puzzle>">
         <p>Our base component to manipulate and render puzzles.</p>
-
+        
         <div class="max-w-sm mx-auto">
             <div class="border-4 border-dotted border-grey-4 pb-full relative">
                 <v-puzzle
@@ -13,7 +13,7 @@
                         stickerSpacing: stickerSpacing / 100,
                     }"
                     :current-turn="currentTurn"
-                    :turn-progress="turnProgress"
+                    :turn-progress="turnProgress / 100"
                 />
             </div>
         </div>
@@ -64,7 +64,7 @@ export default {
             innerOpacity: 80,
             stickerElevation: 20,
             stickerSpacing: 20,
-            turnProgress: 0,
+            turnProgress: 25,
         };
     },
     components: {
