@@ -72,9 +72,9 @@
 </template>
 
 <script>
+import { isBoolean, isFunction, isString, isUndefined } from 'lodash-es';
 import * as validators from '@/app/utils/validators';
 import { findAncestor } from '@/app/utils/component';
-import { isBoolean, isFunction, isString, isUndefined } from 'lodash-es';
 
 //
 // default error messages

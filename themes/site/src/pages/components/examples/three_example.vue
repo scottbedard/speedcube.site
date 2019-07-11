@@ -27,7 +27,7 @@
                             :intensity="0.8"
                             :position="{ x: 0, y: 200, z: 200 }"
                         />
-                        
+
                         <v-light
                             type="point"
                             :color="0xffff00"

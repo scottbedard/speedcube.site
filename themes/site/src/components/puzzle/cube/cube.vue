@@ -46,17 +46,17 @@
 
 <script>
 import Cube from 'bedard-cube';
+import { get } from 'lodash-es';
 import cubePositionComponent from './cube_position/cube_position.vue';
 import objComponent from '@/components/three/obj/obj.vue';
 import { getStickersEffectedByTurn } from './utils';
 import { roundedRectangle } from '@/components/three/geometries';
-import { get } from 'lodash-es';
 
 const defaultConfig = {
     colors: ['#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ffff00', '#ffffff'],
     stickerElevation: 0.2,
     stickerRadius: 0.2,
-}
+};
 
 export default {
     destroyed() {
@@ -87,7 +87,7 @@ export default {
 
                 return parsedTurn;
             }
-            
+
             return null;
         },
         rotation() {
@@ -164,7 +164,7 @@ export default {
                     console.error('Invalid turn', this.currentTurn);
                 }
             }
-            
+
             return [];
         },
     },

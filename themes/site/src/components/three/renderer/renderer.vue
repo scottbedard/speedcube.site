@@ -72,7 +72,7 @@ export default {
         },
         renderScenes() {
             let cleared = false;
-            
+
             this.updateSize();
 
             this.$options.scenes.forEach((scene) => {

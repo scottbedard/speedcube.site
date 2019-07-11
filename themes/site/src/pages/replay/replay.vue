@@ -128,10 +128,10 @@
 
 <script>
 import { bindExternalEvent, componentTimeout } from 'spyfu-vue-utils';
+import { get, round } from 'lodash-es';
 import { formatShortTimeSentence } from '@/app/utils/string';
 import { getSolve, getRandomSolve, postReplay } from '@/app/repositories/solves';
 import { jsonToObject } from '@/app/utils/object';
-import { get, round } from 'lodash-es';
 
 export default {
     created() {

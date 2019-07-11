@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import base from '../base';
 import { Object3D } from 'three';
+import base from '../base';
 
 export default {
     created() {

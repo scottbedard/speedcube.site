@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import { formatTime } from '@/app/utils/string';
 import { componentInterval } from 'spyfu-vue-utils';
+import { formatTime } from '@/app/utils/string';
 
 export default {
     created() {

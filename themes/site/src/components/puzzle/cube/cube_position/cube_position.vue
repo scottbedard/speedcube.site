@@ -76,8 +76,6 @@
 import boxComponent from '@/components/three/box/box.vue';
 import objComponent from '@/components/three/obj/obj.vue';
 import shapeComponent from '@/components/three/shape/shape.vue';
-import { roundedRectangle } from '@/components/three/geometries';
-import { get } from 'lodash-es';
 
 export default {
     components: {
@@ -112,10 +110,10 @@ export default {
                 const stickerIndex = this.model.state[face].findIndex(el => el === sticker);
 
                 return this.stickerPositions[stickerIndex];
-            }
+            };
         },
         stickerPositions() {
-            const position = index => {
+            const position = (index) => {
                 const col = this.colMap[index];
                 const row = this.rowMap[index];
 
@@ -123,8 +121,8 @@ export default {
                     x: -this.halfCubeSize + (col * this.gapSize) + (col * this.stickerSize),
                     y: (this.halfCubeSize - this.stickerSize) - ((row * this.gapSize) + (row * this.stickerSize)),
                     z: this.halfCubeSize + (this.stickerElevation * this.stickerSize),
-                }; 
-            }
+                };
+            };
 
             return new Array(this.stickersPerFace).fill().map((v, i) => position(i));
         },

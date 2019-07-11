@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import base from '../base';
 import { Scene, PerspectiveCamera } from 'three';
+import base from '../base';
 import { degreesToRadians } from '@/app/utils/number';
 
 export default {
@@ -34,7 +34,7 @@ export default {
     methods: {
         disposeScene() {
             const { obj: scene } = this.$options.three;
-            
+
             scene.dispose();
         },
         syncCameraPosition() {

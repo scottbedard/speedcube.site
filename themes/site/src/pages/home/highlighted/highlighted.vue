@@ -24,11 +24,11 @@
 </template>
 
 <script>
+import { get } from 'lodash-es';
 import { formatShortTimeSentence } from '@/app/utils/string';
 import { getHighlightedSolve } from '@/app/repositories/solves';
 import { jsonToObject } from '@/app/utils/object';
 import { puzzles } from '@/app/constants';
-import { get } from 'lodash-es';
 
 export default {
     created() {

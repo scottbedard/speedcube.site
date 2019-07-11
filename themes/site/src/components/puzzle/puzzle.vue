@@ -13,14 +13,14 @@
                 :intensity="0.8"
                 :position="{ x: 0, y: 200, z: 200 }"
             />
-            
+
             <v-light
                 type="point"
                 :color="0xffff00"
                 :intensity="0.2"
                 :position="{ x: 0, y: 200, z: 200 }"
             />
-            
+
             <!-- cube -->
             <v-cube
                 :current-turn="currentTurn"
@@ -32,11 +32,11 @@
 </template>
 
 <script>
+import { get } from 'lodash-es';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
 import cubeComponent from './cube/cube.vue';
 import lightComponent from '@/components/three/light/light.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
-import { get } from 'lodash-es';
 
 export default {
     components: {
