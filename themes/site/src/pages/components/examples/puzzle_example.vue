@@ -19,9 +19,14 @@
         </div>
 
         <div class="max-w-sm mt-8 mx-auto">
-            <div class="mb-4">
-                <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Current Turn</label>
-                <v-input v-model="currentTurn" />
+            <div class="mb-8">
+                <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Turn</label>
+                <div class="flex">
+                    <div class="flex-1 pr-4">
+                        <v-input v-model="currentTurn" />
+                    </div>
+                    <v-button @click="turn">Apply</v-button>
+                </div>
             </div>
             <div class="mb-4">
                 <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Turn Progress</label>
@@ -54,6 +59,7 @@
 <script>
 import exampleComponent from '../example.vue';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
+import { componentEase } from 'spyfu-vue-utils';
 
 export default {
     data() {
@@ -72,8 +78,13 @@ export default {
         'v-puzzle': puzzleComponent,
     },
     methods: {
-        go() {
-            console.log('go');
+        turn() {
+            const easeInOutQuart = [0.77, 0, 0.175, 1];
+            const turn = this.currentTurn;
+
+            componentEase(this, (val) => {
+                this.turnProgress = val * 100;
+            }, 500, easeInOutQuart);
         },
     },
 };
