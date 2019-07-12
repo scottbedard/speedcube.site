@@ -1,8 +1,7 @@
 <template>
     <v-obj>
         <!--
-            render stickers not effected by the current
-            turn in their default positions
+            render stickers not effected by the current turn
         -->
         <v-cube-position
             :col-map="colMap"
@@ -22,7 +21,7 @@
 
         <!--
             next, we'll create an object to hold the stickers
-            that are being turned and rotate it
+            that are being turned so they can be rotated together
         -->
         <v-obj v-if="parsedTurn" :rotation="rotation">
             <v-cube-position
@@ -54,8 +53,10 @@ import { roundedRectangle } from '@/components/three/geometries';
 
 const defaultConfig = {
     colors: ['#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ffff00', '#ffffff'],
-    stickerElevation: 0.2,
-    stickerRadius: 0.2,
+    innerBrightness: 90,
+    stickerElevation: 20,
+    stickerRadius: 20,
+    stickerSpacing: 20,
 };
 
 export default {
@@ -77,7 +78,7 @@ export default {
             return roundedRectangle(this.stickerSize, this.stickerSize, this.stickerSize * this.stickerRadius);
         },
         innerOpacity() {
-            return get(this.config, 'innerOpacity', 0.8);
+            return get(this.config, 'innerBrightness', defaultConfig.innerOpacity) / 100;
         },
         parsedTurn() {
             if (this.currentTurn) {
@@ -104,16 +105,16 @@ export default {
             return this.model.size ** 2;
         },
         stickerElevation() {
-            return get(this.config, 'stickerElevation', defaultConfig.stickerElevation);
+            return get(this.config, 'stickerElevation', defaultConfig.stickerElevation) / 100;
         },
         stickerRadius() {
-            return get(this.config, 'stickerRadius', defaultConfig.stickerRadius);
+            return get(this.config, 'stickerRadius', defaultConfig.stickerRadius) / 100;
         },
         stickerSize() {
-            return 100 / this.model.size;
+            return 1000 / this.model.size;
         },
         stickerSpacing() {
-            return get(this.config, 'stickerSpacing', 0.2);
+            return get(this.config, 'stickerSpacing', defaultConfig.stickerSpacing) / 100;
         },
         turnDetails() {
             if (!this.parsedTurn) {
@@ -178,9 +179,7 @@ export default {
         },
         model: {
             default() {
-                return new Cube(3, {
-                    useObjects: true,
-                });
+                return new Cube(3, { useObjects: true });
             },
             type: Object,
         },

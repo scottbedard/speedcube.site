@@ -13,14 +13,14 @@ export default {
     created() {
         // create a mesh for each side of our shape
         const outerMaterial = new MeshLambertMaterial({
-            color: this.color,
+            color: this.normalizedColor,
             side: FrontSide,
         });
 
         const outerMesh = new Mesh(this.geometry, outerMaterial);
 
         const innerMaterial = new MeshLambertMaterial({
-            color: this.color,
+            color: this.normalizedColor,
             opacity: this.innerOpacity,
             side: BackSide,
             transparent: true,
@@ -42,6 +42,13 @@ export default {
     destroyed() {
         this.disposeMaterials();
     },
+    computed: {
+        normalizedColor() {
+            return typeof this.color === 'number'
+                ? this.color
+                : parseInt(this.color.replace('#', '0x'), 16);
+        },
+    },
     methods: {
         disposeMaterials() {
             const { innerMaterial, outerMaterial } = this.$options.three;
@@ -56,7 +63,7 @@ export default {
     props: {
         color: {
             default: 0xffffff,
-            type: Number,
+            type: [Number, String],
         },
         innerOpacity: {
             default: 0.8,

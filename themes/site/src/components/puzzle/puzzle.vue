@@ -22,8 +22,9 @@
 
             <!-- cube -->
             <v-cube
-                :current-turn="currentTurn"
                 :config="config"
+                :current-turn="currentTurn"
+                :model="model"
                 :turn-progress="turnProgress"
             />
         </v-scene>
@@ -40,11 +41,13 @@ import { applyCubeState } from '@/app/utils/puzzle';
 import { get } from 'lodash-es';
 
 export default {
-    beforeCreate() {
-        this.$options.model = null;
-    },
     created() {
         this.createModel();
+    },
+    data() {
+        return {
+            model: undefined,
+        };
     },
     components: {
         'v-axes-helper': axesHelperComponent,
@@ -57,7 +60,7 @@ export default {
             return get(this.config, 'cameraAngle', 0);
         },
         cameraDistance() {
-            return get(this.config, 'cameraDistance', 100);
+            return get(this.config, 'cameraDistance', 2000);
         },
         isCube() {
             return ['2x2', '3x3', '4x4', '5x5'].includes(this.type);
@@ -65,16 +68,20 @@ export default {
     },
     methods: {
         createModel() {
+            let model = null;
+
             // cube
             if (this.isCube) {
                 const size = parseInt(this.type);
 
-                this.$options.model = new Cube(size, { useObjects: true });
+                model = new Cube(size, { useObjects: true });
 
                 if (this.initialState) {
-                    applyCubeState(this.$options.model, this.initialState);
+                    applyCubeState(model, this.initialState);
                 }
             }
+
+            this.model = model;
         },
     },
     props: {

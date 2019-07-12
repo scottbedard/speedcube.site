@@ -4,7 +4,7 @@
         <v-obj :rotation="{ x: -90 }">
             <v-shape
                 v-for="(sticker, index) in stickers('U')"
-                :color="0xffff00"
+                :color="colors[sticker.value]"
                 :geometry="geometry"
                 :inner-opacity="innerOpacity"
                 :key="`U-${index}`"
@@ -16,7 +16,7 @@
         <v-obj :rotation="{ y: -90 }">
             <v-shape
                 v-for="(sticker, index) in  stickers('L')"
-                :color="0x00ff00"
+                :color="colors[sticker.value]"
                 :geometry="geometry"
                 :inner-opacity="innerOpacity"
                 :key="`L-${index}`"
@@ -27,7 +27,7 @@
         <!-- f -->
         <v-shape
             v-for="(sticker, index) in stickers('F')"
-            :color="0xff0000"
+            :color="colors[sticker.value]"
             :geometry="geometry"
             :inner-opacity="innerOpacity"
             :key="`F-${index}`"
@@ -38,7 +38,7 @@
         <v-obj :rotation="{ y: 90 }">
             <v-shape
                 v-for="(sticker, index) in stickers('R')"
-                :color="0x0000ff"
+                :color="colors[sticker.value]"
                 :geometry="geometry"
                 :inner-opacity="innerOpacity"
                 :key="`L-${index}`"
@@ -50,7 +50,7 @@
         <v-obj :rotation="{ y: 180 }">
             <v-shape
                 v-for="(sticker, index) in stickers('B')"
-                :color="0x00ffff"
+                :color="colors[sticker.value]"
                 :geometry="geometry"
                 :inner-opacity="innerOpacity"
                 :key="`B-${index}`"
@@ -62,7 +62,7 @@
         <v-obj :rotation="{ x: 90 }">
             <v-shape
                 v-for="(sticker, index) in stickers('D')"
-                :color="0xffffff"
+                :color="colors[sticker.value]"
                 :geometry="geometry"
                 :inner-opacity="innerOpacity"
                 :key="`D-${index}`"
