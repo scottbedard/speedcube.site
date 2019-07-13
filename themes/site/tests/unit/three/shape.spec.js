@@ -123,4 +123,34 @@ describe('<v-shape>', () => {
         expect(innerMesh.geometry).toBe(newGeometry);
         expect(outerMesh.geometry).toBe(newGeometry);
     });
+
+    it('accepts a hexadecimal triplet string as color', async () => {
+        const vm = mount({
+            data() {
+                return {
+                    color: '#ff0000',
+                    geometry: roundedRectangle(10, 10, 2)
+                };
+            },
+            template: `<v-shape ref="shape" :color="color" :geometry="geometry" />`,
+        });
+
+        const { innerMaterial, outerMaterial } = vm.$refs.shape.$options.three;
+
+
+        expect(innerMaterial.color.getHexString()).toEqual('ff0000');
+        expect(outerMaterial.color.getHexString()).toEqual('ff0000');
+
+        vm.color = '#00ff00';
+        await vm.$nextTick();
+
+        expect(innerMaterial.color.getHexString()).toEqual('00ff00');
+        expect(outerMaterial.color.getHexString()).toEqual('00ff00');
+
+        vm.color = '0000ff';
+        await vm.$nextTick();
+
+        expect(innerMaterial.color.getHexString()).toEqual('0000ff');
+        expect(outerMaterial.color.getHexString()).toEqual('0000ff');
+    });
 });
