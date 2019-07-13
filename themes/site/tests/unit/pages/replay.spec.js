@@ -1,4 +1,5 @@
 /* eslint-disable */
+import Cube from 'bedard-cube';
 import axios from 'axios';
 import replayComponent from '@/pages/replay/replay.vue';
 
@@ -62,5 +63,35 @@ describe('replay page', () => {
         await vm.$nextTick();
 
         expect(replace).toHaveBeenCalledWith({ name: 'records' });
+    });
+
+    it.skip('creates a cube model and applies the initial state', async () => {
+        const vm = mount({
+            beforeCreate() {
+                this.$router.replace({ name: 'replay', params: { id: 1 }});
+            },
+            template: `<v-replay ref="replay" />`,
+        });
+
+        await timeout(100);
+
+        const { model } = vm.$refs.replay;
+
+        expect(model).toBeInstanceOf(Cube);
+        expect(model.size).toBe(3);
+        console.log(model.state.F.map(s => s.value));
+    });
+
+    it.skip('begins playing the replay when watch button is clicked', async () => {
+        const vm = mount({
+            beforeCreate() {
+                this.$router.replace({ name: 'replay', params: { id: 1 }});
+            },
+            template: `<v-replay ref="replay" />`,
+        });
+
+        await timeout(100);
+
+        console.log(vm.$el.outerHTML);
     });
 });

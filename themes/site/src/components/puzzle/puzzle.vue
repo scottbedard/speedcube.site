@@ -32,23 +32,13 @@
 </template>
 
 <script>
-import Cube from 'bedard-cube';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
 import cubeComponent from './cube/cube.vue';
 import lightComponent from '@/components/three/light/light.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
-import { applyCubeState } from '@/app/utils/puzzle';
 import { get } from 'lodash-es';
 
 export default {
-    created() {
-        this.createModel();
-    },
-    data() {
-        return {
-            model: undefined,
-        };
-    },
     components: {
         'v-axes-helper': axesHelperComponent,
         'v-cube': cubeComponent,
@@ -67,22 +57,6 @@ export default {
         },
     },
     methods: {
-        createModel() {
-            let model = null;
-
-            // cube
-            if (this.isCube) {
-                const size = parseInt(this.type);
-
-                model = new Cube(size, { useObjects: true });
-
-                if (this.initialState) {
-                    applyCubeState(model, this.initialState);
-                }
-            }
-
-            this.model = model;
-        },
     },
     props: {
         config: {
@@ -95,12 +69,16 @@ export default {
         initialState: {
             type: String,
         },
+        model: {
+            required: true,
+        },
         turnProgress: {
             default: 0,
             type: Number,
         },
         type: {
             default: '3x3',
+            required: true,
             type: String,
         },
     },
