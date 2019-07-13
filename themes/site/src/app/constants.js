@@ -103,6 +103,9 @@ export const puzzles = {
     },
 };
 
+// an array of supported puzzle types
+export const puzzleTypes = Object.keys(puzzles);
+
 // our common string format for date values
 // tip: this format is useful because it's human readable and values
 //      can be compared with each other as strings. for example...
