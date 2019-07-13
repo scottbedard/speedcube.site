@@ -1,6 +1,43 @@
 import bezierEasing from 'bezier-easing';
 
 /**
+ * Similar to a setTimeout loop, but using requestAnimationFrame
+ * instead. Use this when working with puzzle animations, as an
+ * raf loop allows for better browser optimizations.
+ *
+ * @param {Function}    fn
+ * @param {Number}      duration
+ */
+export function animate(fn, duration) {
+    const startTime = new Date().getTime();
+    const endTime = startTime + duration;
+
+    let running = true;
+
+    const cancel = () => {
+        running = false;
+    };
+    
+    const render = () => {
+        if (running) {
+            const currentTime = new Date().getTime();
+            const lapsedTime = Math.min(currentTime - startTime, duration);
+            const progress = lapsedTime / duration;
+
+            fn(progress);
+
+            if (currentTime < endTime) {
+                requestAnimationFrame(render);
+            }
+        }
+    };
+
+    requestAnimationFrame(render);
+
+    return { cancel };
+}
+
+/**
  * Execute a callback with a cubic bezier curve.
  *
  * @param {Array<number>}   curve       bezier easing curve to use

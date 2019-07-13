@@ -1,18 +1,12 @@
 <template>
     <div>
-        <div class="border-4 border-dashed relative">
-            <div class="pb-full">
-                <v-puzzle
-                    :config="normalizedConfig"
-                    :current-turn="currentTurn && currentTurn.value"
-                    :model="model"
-                    :turn-progress="turnProgress"
-                    :type="type"
-                />
+        <slot v-bind="{ inspection, lastMove, puzzleParams }">
+            <div class="relative">
+                <div class="pb-full">
+                    <v-puzzle v-bind="puzzleParams" />
+                </div>
             </div>
-        </div>
-
-        <pre>{{ inspection }}</pre>
+        </slot>
     </div>
 </template>
 
@@ -97,6 +91,13 @@ export default {
 
             return startIndex === -1;
         },
+        lastMove() {
+            if (this.moves.length) {
+                return this.moves.slice(-1).pop();
+            }
+
+            return null;
+        },
         moves() {
             return this.solution.split(' ').map((move) => {
                 const time = parseInt(move, 10);
@@ -127,7 +128,20 @@ export default {
             return this.config;
         },
         previousTurns() {
+            if (this.currentTurnIndex === -1) {
+                return [];
+            }
+
             return this.moves.slice(0, this.currentTurnIndex);
+        },
+        puzzleParams() {
+            return {
+                config: this.normalizedConfig,
+                currentTurn: this.currentTurn && this.currentTurn.value,
+                model: this.model,
+                turnProgress: this.turnProgress,
+                type: this.type,
+            };
         },
         timeOffset() {
             return this.duration * this.progress;
