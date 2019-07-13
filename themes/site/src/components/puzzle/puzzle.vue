@@ -32,11 +32,11 @@
 </template>
 
 <script>
+import { get } from 'lodash-es';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
-import cubeComponent from './cube/cube.vue';
 import lightComponent from '@/components/three/light/light.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
-import { get } from 'lodash-es';
+import cubeComponent from './cube/cube.vue';
 
 export default {
     components: {
@@ -64,9 +64,6 @@ export default {
             type: Object,
         },
         currentTurn: {
-            type: String,
-        },
-        initialState: {
             type: String,
         },
         model: {

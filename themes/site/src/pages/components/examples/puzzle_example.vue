@@ -57,9 +57,9 @@
 </template>
 
 <script>
+import { componentEase } from 'spyfu-vue-utils';
 import exampleComponent from '../example.vue';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
-import { componentEase } from 'spyfu-vue-utils';
 
 export default {
     data() {

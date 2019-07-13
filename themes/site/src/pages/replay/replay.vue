@@ -19,17 +19,29 @@
                     key="solveReady">
 
                     <!-- puzzle -->
-                    <div class="max-w-sm mb-8 mx-auto">
-                        <div class="border-4 border-dotted border-grey-4 pb-full relative">
-                            <v-puzzle
-                                :config="puzzleConfig"
-                                :initial-state="scrambledState"
-                                :model="model"
-                                :type="puzzleType"
-                                @ready="storePuzzle"
-                            />
-                        </div>
+                    <div class="max-w-sm mx-auto">
+                        <v-replay
+                            :config="config"
+                            :progress="progress"
+                            :scrambled-state="scrambledState"
+                            :solution="solution"
+                            :type="puzzleType"
+                        />
                     </div>
+
+                    <div class="py-4">
+                        <v-range-input
+                            class="max-w-lg w-full"
+                            v-model="progress"
+                            :min="0"
+                            :max="1"
+                            :step="0.000001"
+                        /><br />
+
+                        {{ progress }}
+                    </div>
+
+                    <!-- <pre class="text-xs text-left">{{ solve }}</pre> -->
 
                     <div>
                         <v-button>Watch Replay</v-button>
@@ -41,9 +53,6 @@
 </template>
 
 <script>
-import Cube from 'bedard-cube';
-import puzzleComponent from '@/components/puzzle/puzzle.vue';
-import { applyCubeState, isCube } from '@/app/utils/puzzle';
 import { bindExternalEvent } from 'spyfu-vue-utils';
 import { get } from 'lodash-es';
 import { getSolve } from '@/app/repositories/solves';
@@ -56,8 +65,8 @@ export default {
     },
     data() {
         return {
-            // puzzle model
-            model: null,
+            // progress of the replay, 0 to 1
+            progress: 0,
 
             // the solve being replayed
             solve: null,
@@ -66,48 +75,21 @@ export default {
             solveLoading: false,
         };
     },
-    components: {
-        'v-puzzle': puzzleComponent,
-    },
     computed: {
-        puzzleConfig() {
-            const config = get(this.solve, 'config', '{}');
-
-            if (config) {
-                try {
-                    return JSON.parse(config);
-                } catch (e) {
-                    console.warn('Malformed puzzle config', config)
-                }
-            }
-
-            return {};
+        config() {
+            return get(this.solve, 'config');
         },
         puzzleType() {
-            return get(this.solve, 'scramble.puzzle', 'unknown');
+            return get(this.solve, 'scramble.puzzle');
         },
         scrambledState() {
             return get(this.solve, 'scramble.scrambledState');
         },
+        solution() {
+            return get(this.solve, 'solution');
+        },
     },
     methods: {
-        createModel() {
-            // create a model to represent our puzzle
-            let model = null;
-
-            // cube
-            if (isCube(this.puzzleType)) {
-                const size = parseInt(this.puzzleType);
-
-                model = new Cube(size, { useObjects: true });
-
-                if (this.scrambledState) {
-                    applyCubeState(model, this.scrambledState);
-                }
-            }
-
-            this.model = model;
-        },
         fetchSolve() {
             this.solveLoading = true;
 
@@ -116,7 +98,6 @@ export default {
                 const { solve } = response.data;
 
                 this.solve = solve;
-                this.createModel();
             }, () => {
                 // failed
                 this.$router.replace({ name: 'records' });
@@ -125,12 +106,8 @@ export default {
                 this.solveLoading = false;
             });
         },
-        onKeyup(e) {
+        onKeyup() {
             // ...
-        },
-        storePuzzle(puzzle) {
-            // store a reference to our puzzle so we can manipulate it
-            this.$options.puzzle = puzzle;
         },
     },
 };

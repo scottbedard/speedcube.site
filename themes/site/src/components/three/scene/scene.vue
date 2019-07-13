@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import base from '../base';
 import { Scene, PerspectiveCamera } from 'three';
+import base from '../base';
 import { degreesToRadians } from '@/app/utils/number';
 
 export default {

@@ -162,7 +162,7 @@ export default {
                 try {
                     return getStickersEffectedByTurn(this);
                 } catch (err) {
-                    console.error('Invalid turn', this.currentTurn);
+                    console.error('Invalid turn', this.currentTurn, err);
                 }
             }
 

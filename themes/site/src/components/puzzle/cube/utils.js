@@ -15,6 +15,18 @@ export function getStickersEffectedByTurn(cube) {
     const zeroDepth = depth - 1;
     const reverseDepth = cubeLayers - depth;
 
+    // if the entire cube is being turned, return all stickers
+    if (target === 'X' || target === 'Y' || target === 'Z') {
+        return [
+            ...cube.model.state.U,
+            ...cube.model.state.L,
+            ...cube.model.state.F,
+            ...cube.model.state.R,
+            ...cube.model.state.B,
+            ...cube.model.state.D,
+        ];
+    }
+
     // attach the entire face of wide turns
     if (wide || depth === 1) {
         stickers.push(...cube.model.state[target]);
