@@ -145,9 +145,11 @@ export default {
     },
     methods: {
         applyTurns(model, turns) {
-            // cube
-            if (isCube(this.type)) {
-                model.turn(turns);
+            if (turns.length) {
+                // cube
+                if (isCube(this.type)) {
+                    model.turn(turns);
+                }
             }
         },
         createModel() {
