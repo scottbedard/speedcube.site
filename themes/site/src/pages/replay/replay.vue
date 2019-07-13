@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { bindExternalEvent } from 'spyfu-vue-utils';
+import { bindExternalEvent, componentEase } from 'spyfu-vue-utils';
 import { get } from 'lodash-es';
 import { getSolve } from '@/app/repositories/solves';
 

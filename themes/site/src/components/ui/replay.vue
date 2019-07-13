@@ -1,24 +1,17 @@
 <template>
-<div>
-    <div class="border-4 border-dashed relative">
-        <div class="pb-full">
-            <v-puzzle
-                :config="normalizedConfig"
-                :current-turn="currentTurn && currentTurn.value"
-                :model="model"
-                :turn-progress="turnProgress"
-                :type="type"
-            />
+    <div>
+        <div class="border-4 border-dashed relative">
+            <div class="pb-full">
+                <v-puzzle
+                    :config="normalizedConfig"
+                    :current-turn="currentTurn && currentTurn.value"
+                    :model="model"
+                    :turn-progress="turnProgress"
+                    :type="type"
+                />
+            </div>
         </div>
     </div>
-
-    <!-- <div class="my-4 text-xs text-left">{{ Object.keys(model.state).reduce((acc, face) => {
-        acc[face] = model.state[face].map(sticker => sticker.value);
-        return acc;
-        }, {}) }}</div> -->
-    
-    <pre class="text-xs text-left">{{ normalizedConfig }}</pre>
-</div>
 </template>
 
 <script>
@@ -107,10 +100,10 @@ export default {
         },
     },
     methods: {
-        applyTurn(model, turn) {
+        applyTurns(model, turns) {
             // cube
             if (isCube(this.type)) {
-                model.turn(turn.value);
+                model.turn(turns);
             }
         },
         createModel() {
@@ -157,14 +150,18 @@ export default {
         currentTurnIndex(currentTurnIndex) {
             const model = this.createModel();
 
-            if (currentTurnIndex > -1) {
-                const previousTurns = this.moves.slice(0, currentTurnIndex)
-                    .filter(move => move.type === 'turn')
-                    .map(turn => turn.value)
-                    .join(' ');
+            const alg = moves => moves
+                .filter(obj => obj.type === 'turn')
+                .map(obj => obj.value)
+                .join(' ');
+
+            if (this.progress === 1) {
+                this.applyTurns(model, alg(this.moves));
+            } else if (currentTurnIndex > -1) {
+                const previousTurns = alg(this.moves.slice(0, currentTurnIndex))
                 
-                if (previousTurns.length > 0) {
-                    model.turn(previousTurns);
+                if (previousTurns) {
+                    this.applyTurns(model, previousTurns);
                 }
             }
 
