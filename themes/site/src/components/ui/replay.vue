@@ -11,6 +11,8 @@
                 />
             </div>
         </div>
+
+        <pre>{{ inspection }}</pre>
     </div>
 </template>
 
@@ -20,6 +22,11 @@ import { cloneDeep, get } from 'lodash-es';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
 import { applyCubeState, isCube } from '@/app/utils/puzzle';
 import { puzzleTypes } from '@/app/constants';
+
+const alg = moves => moves
+    .filter(obj => obj.type === 'turn')
+    .map(obj => obj.value)
+    .join(' ');
 
 export default {
     data() {
@@ -35,6 +42,22 @@ export default {
             const match = this.solution.match(/([0-9]+)#END$/);
 
             return match === null ? 0 : parseInt(match[1], 10);
+        },
+        currentMove() {
+            const nextMoveIndex = this.moves.findIndex(move => move.time > this.timeOffset);
+
+            for (let i = nextMoveIndex - 1; i > -1; i -= 1) {
+                return this.moves[i];
+            }
+
+            return null;
+        },
+        currentMoveIndex() {
+            if (this.currentMove) {
+                return this.moves.indexOf(this.currentMove);
+            }
+
+            return -1;
         },
         currentTurn() {
             const nextMoveIndex = this.moves.findIndex(move => move.time > this.timeOffset);
@@ -55,6 +78,24 @@ export default {
             }
 
             return -1;
+        },
+        firstMove() {
+            if (this.moves.length) {
+                return this.moves[0];
+            }
+
+            return null;
+        },
+        inspection() {
+            if (this.timeOffset < this.firstMove.time) {
+                return true;
+            }
+
+            const startIndex = this.moves
+                .slice(0, this.currentTurnIndex)
+                .findIndex(move => move.type === 'event' && move.value === 'START');
+
+            return startIndex === -1;
         },
         moves() {
             return this.solution.split(' ').map((move) => {
@@ -84,6 +125,9 @@ export default {
             }
 
             return this.config;
+        },
+        previousTurns() {
+            return this.moves.slice(0, this.currentTurnIndex);
         },
         timeOffset() {
             return this.duration * this.progress;
@@ -150,19 +194,10 @@ export default {
         currentTurnIndex(currentTurnIndex) {
             const model = this.createModel();
 
-            const alg = moves => moves
-                .filter(obj => obj.type === 'turn')
-                .map(obj => obj.value)
-                .join(' ');
-
             if (this.progress === 1) {
                 this.applyTurns(model, alg(this.moves));
-            } else if (currentTurnIndex > -1) {
-                const previousTurns = alg(this.moves.slice(0, currentTurnIndex))
-                
-                if (previousTurns) {
-                    this.applyTurns(model, previousTurns);
-                }
+            } else if (currentTurnIndex > -1 && this.previousTurns) {
+                this.applyTurns(model, alg(this.previousTurns));
             }
 
             this.model = model;
