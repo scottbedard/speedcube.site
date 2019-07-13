@@ -77,8 +77,6 @@ export default {
 
             // progress of the replay, 0 to 1
             progress: 0,
-            progress2: 0,
-            progress3: 0,
 
             // the solve being replayed
             solve: null,
@@ -156,17 +154,6 @@ export default {
             this.animation = animate((progress) => {
                 this.progress = progress;
             }, duration);
-
-            setTimeout(() => {
-                animate((progress) => {
-                    this.progress2 = progress;
-                }, duration);
-            }, 1000);
-            setTimeout(() => {
-                animate((progress) => {
-                    this.progress3 = progress;
-                }, duration);
-            }, 2000);
         }
     },
 };
