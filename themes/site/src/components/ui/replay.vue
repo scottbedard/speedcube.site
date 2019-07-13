@@ -107,7 +107,6 @@ export default {
             validator: progress => progress >= 0 && progress <= 1,
         },
         scrambledState: {
-            required: true,
             type: String,
         },
         solution: {

@@ -50,28 +50,28 @@ describe('<v-replay>', () => {
         expect(model.state.D.map(s => s.value)).toEqual([3,4,5,4,5,5,0,5,2]);
     });
 
-    it.only('calculates the current turn and progress', () => {
+    it('calculates the current turn and progress', () => {
         const vm = mount({
             computed: {
-                config3x3: () => config3x3,
-                scrambledState: () => scrambled3x3,
-                solution: () => solution3x3,
+                config: () => '{"turnDuration":100}',
+                solution: () => '100#START 200:R 300:U- 400:R 500#END',
             },
             template: `
                 <v-replay
                     ref="replay"
                     type="3x3"
-                    :config="config3x3"
+                    :config="config"
                     :progress="0.5"
-                    :scrambled-state="scrambledState"
                     :solution="solution"
                 />
             `,
         });
         
-        const { currentTurn, turnProgress } = vm.$refs.replay;
+        const { duration, timeOffset, currentTurn, turnProgress } = vm.$refs.replay;
 
-        expect(currentTurn).toEqual({ time: 11887, type: 'turn', value: 'F\'' });
-        expect(turnProgress).toBe(1);
+        expect(currentTurn).toEqual({ time: 200, type: 'turn', value: 'R' });
+        expect(duration).toBe(500);
+        expect(timeOffset).toBe(250);
+        expect(turnProgress).toBe(0.5);
     });
 });
