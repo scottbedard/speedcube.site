@@ -28,28 +28,38 @@
                         :type="puzzleType">
                         
                         <!-- puzzle -->
-                        <div class="max-w-xs mb-12 mx-auto relative">
+                        <div class="max-w-xs mb-4 mx-auto relative">
                             <div class="pb-full">
                                 <v-puzzle v-bind="puzzleParams" />
                             </div>
                         </div>
 
-                        <!-- controls -->
-                        <div class="mb-12">
-                            <v-button @click="play(lastMove.time)">Watch Replay</v-button>
-                        </div>
+                        <v-fade-transition>
+                            <!-- playing -->
+                            <div v-if="playing" key="playing">
+                                playing
+                            </div>
 
-                        <!-- scramble and solution -->
-                        <div class="leading-normal max-w-md mb-8 mx-auto text-left tracking-wide">
-                            <div class="mb-8">
-                                <div class="font-bold text-grey-4 text-xs uppercase">Scramble</div>
-                                <div class="text-grey-7">{{ scramble }}</div>
+                            <!-- idle -->
+                            <div v-else key="idle">
+                                <!-- controls -->
+                                <div class="mb-12">
+                                    <v-button @click="play(lastMove.time)">Watch Replay</v-button>
+                                </div>
+
+                                <!-- scramble and solution -->
+                                <div class="leading-normal max-w-md mb-8 mx-auto text-left tracking-wide">
+                                    <div class="mb-8">
+                                        <div class="font-bold text-grey-4 text-xs uppercase">Scramble</div>
+                                        <div class="text-grey-7">{{ scramble }}</div>
+                                    </div>
+                                    <div class="">
+                                        <div class="font-bold text-grey-4 text-xs uppercase">Solution</div>
+                                        <div class="text-grey-7">{{ cleanedSolution }}</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="">
-                                <div class="font-bold text-grey-4 text-xs uppercase">Solution</div>
-                                <div class="text-grey-7">{{ cleanedSolution }}</div>
-                            </div>
-                        </div>
+                        </v-fade-transition>
                     </v-replay>
                 </div>
             </v-fade-transition>
@@ -58,7 +68,7 @@
 </template>
 
 <script>
-import { bindExternalEvent } from 'spyfu-vue-utils';
+import { bindExternalEvent, componentTimeout } from 'spyfu-vue-utils';
 import { get, noop } from 'lodash-es';
 import { animate } from '@/app/utils/function';
 import { getSolve } from '@/app/repositories/solves';
@@ -74,6 +84,9 @@ export default {
         return {
             // the current animation
             animation: { cancel: noop },
+
+            // determine if the replay is playing or not
+            playing: false,
 
             // progress of the replay, 0 to 1
             progress: 0,
@@ -151,8 +164,18 @@ export default {
             // ...
         },
         play(duration) {
+            if (this.playing) {
+                return;
+            }
+
+            this.playing = true;
+
             this.animation = animate((progress) => {
                 this.progress = progress;
+            }, duration);
+
+            componentTimeout(this, () => {
+                this.playing = false;
             }, duration);
         }
     },
