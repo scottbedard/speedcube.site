@@ -48,7 +48,8 @@
 
                             <!-- solve -->
                             <div v-else-if="playing" key="solve">
-                                <v-timer :max="24000" />
+                                <!-- <v-timer :max="24000" /> -->
+                                {{ Date.now() }}
                             </div>
 
                             <!-- idle -->
