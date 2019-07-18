@@ -8,10 +8,15 @@ import base from '../base';
 
 export default {
     created() {
-        this.$options.three.obj = new Object3D();
+        this.$options.three.obj = this.obj || new Object3D();
     },
     mixins: [
         base,
     ],
+    props: {
+        obj: {
+            type: Object,
+        },
+    },
 };
 </script>

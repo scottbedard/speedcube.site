@@ -1,6 +1,7 @@
 /* eslint-disable */
 import objComponent from '@/components/three/obj/obj.vue';
 import { degreesToRadians } from '@/app/utils/number';
+import { Object3D } from 'three';
 
 //
 // factory
@@ -118,5 +119,20 @@ describe('<v-obj>', () => {
         await vm.$nextTick();
 
         expect(obj.visible).toBe(true);
+    });
+
+    it('accepts a custom threejs object as a prop', () => {
+        const customObj = new Object3D();
+
+        const vm = mount({
+            data() {
+                return { customObj };
+            },
+            template: `<v-obj ref="obj" :obj="customObj" />`,
+        });
+
+        const { obj } = vm.$refs.obj.$options.three;
+
+        expect(obj).toBe(customObj);
     });
 });
