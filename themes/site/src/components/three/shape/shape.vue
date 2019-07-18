@@ -6,8 +6,8 @@ import {
     Mesh,
     MeshLambertMaterial,
 } from 'three';
-import base from '../base';
 
+import base from '../base';
 
 export default {
     created() {

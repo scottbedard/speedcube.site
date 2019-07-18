@@ -20,7 +20,7 @@
 
                     <!-- puzzle -->
                     <v-replay
-                        v-slot="{ lastMove, puzzleParams }"
+                        v-slot="{ inspection, lastMove, puzzleParams }"
                         :config="config"
                         :progress="progress"
                         :scrambled-state="scrambledState"
@@ -28,16 +28,27 @@
                         :type="puzzleType">
                         
                         <!-- puzzle -->
-                        <div class="max-w-xs mb-4 mx-auto relative">
-                            <div class="pb-full">
-                                <v-puzzle v-bind="puzzleParams" />
+                        <div class="flex flex-wrap justify-center">
+                            <div
+                                v-for="n in 3"
+                                class="border-2 border-primary-5 m-4 relative w-full"
+                                style="max-width: 320px"
+                                :key="n">
+                                <div class="pb-full">
+                                    <v-puzzle v-bind="puzzleParams" />
+                                </div>
                             </div>
                         </div>
 
                         <v-fade-transition>
-                            <!-- playing -->
-                            <div v-if="playing" key="playing">
-                                playing
+                            <!-- inspection -->
+                            <div v-if="playing && inspection" key="inspection">
+                                inspection
+                            </div>
+
+                            <!-- solve -->
+                            <div v-else-if="playing" key="solve">
+                                <v-timer :max="24000" />
                             </div>
 
                             <!-- idle -->

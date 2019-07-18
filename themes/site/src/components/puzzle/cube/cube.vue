@@ -23,7 +23,7 @@
             next, we'll create an object to hold the stickers
             that are being turned so they can be rotated together
         -->
-        <v-obj v-if="parsedTurn" :rotation="rotation">
+        <v-obj :rotation="rotation">
             <v-cube-position
                 :col-map="colMap"
                 :colors="colors"
@@ -92,11 +92,19 @@ export default {
             return null;
         },
         rotation() {
-            const { axis, degrees } = this.turnDetails;
-
-            return {
-                [axis]: degrees * this.turnProgress,
+            let rotation = {
+                x: 0,
+                y: 0,
+                z: 0,
             };
+
+            if (this.turnDetails) {
+                const { axis, degrees } = this.turnDetails;
+
+                rotation[axis] = degrees * this.turnProgress;
+            }
+
+            return rotation;
         },
         rowMap() {
             return new Array(this.stickersPerFace).fill().map((val, i) => Math.floor(i / this.model.size));
