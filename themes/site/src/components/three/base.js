@@ -13,6 +13,7 @@ export default {
         this.addToParentObj();
         this.setLocalPosition();
         this.setLocalRotation();
+        this.setVisible();
     },
     render() {
         return this.$slots.default;
@@ -77,6 +78,13 @@ export default {
                 obj.rotation.z = degreesToRadians(z);
             }
         },
+        setVisible() {
+            const { obj } = this.$options.three;
+
+            if (obj) {
+                obj.visible = this.visible;
+            }
+        },
     },
     props: {
         position: {
@@ -91,6 +99,10 @@ export default {
             },
             type: Object,
         },
+        visible: {
+            default: true,
+            type: Boolean,
+        },
     },
     watch: {
         position: {
@@ -100,6 +112,9 @@ export default {
         rotation: {
             deep: true,
             handler: 'setLocalRotation',
+        },
+        visible: {
+            handler: 'setVisible',
         },
     },
 };

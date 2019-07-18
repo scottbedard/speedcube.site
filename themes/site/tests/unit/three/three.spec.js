@@ -99,4 +99,24 @@ describe('<v-obj>', () => {
         expect(obj.rotation.y).toBe(degreesToRadians(20));
         expect(obj.rotation.z).toBe(degreesToRadians(30));
     });
+
+    it('sets initial visibility and updates when changed', async () => {
+        const vm = mount({
+            data() {
+                return {
+                    visible: false,
+                };
+            },
+            template: `<v-obj ref="obj" :visible="visible" />`,
+        });
+
+        const { obj } = vm.$refs.obj.$options.three;
+
+        expect(obj.visible).toBe(false);
+
+        vm.visible = true;
+        await vm.$nextTick();
+
+        expect(obj.visible).toBe(true);
+    });
 });
