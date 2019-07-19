@@ -77,7 +77,7 @@ export default {
             // normalize the new color
             // '#123456' => 0x123456
             if (typeof color === 'string') {
-                color = parseInt(color.replace('#', ''), 16)
+                color = parseInt(color.replace('#', ''), 16);
             }
 
             innerMaterial.color.setHex(color);

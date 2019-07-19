@@ -129,7 +129,7 @@ describe('<v-shape>', () => {
             data() {
                 return {
                     color: '#ff0000',
-                    geometry: roundedRectangle(10, 10, 2)
+                    geometry: roundedRectangle(10, 10, 2),
                 };
             },
             template: `<v-shape ref="shape" :color="color" :geometry="geometry" />`,
