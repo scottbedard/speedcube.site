@@ -3,7 +3,7 @@
         <!--
             render stickers not effected by the current turn
         -->
-        <v-cube-position
+        <v-cube-stickers
             :col-map="colMap"
             :colors="colors"
             :config="config"
@@ -24,7 +24,7 @@
             that are being turned so they can be rotated together
         -->
         <v-obj :rotation="rotation">
-            <v-cube-position
+            <v-cube-stickers
                 :col-map="colMap"
                 :colors="colors"
                 :config="config"
@@ -46,7 +46,7 @@
 <script>
 import Cube from 'bedard-cube';
 import { get } from 'lodash-es';
-import cubePositionComponent from './cube_position/cube_position.vue';
+import cubeStickersComponent from './cube_stickers/cube_stickers.vue';
 import objComponent from '@/components/three/obj/obj.vue';
 import { getStickersEffectedByTurn } from './utils';
 import { roundedRectangle } from '@/components/three/geometries';
@@ -64,7 +64,7 @@ export default {
         this.geometry.dispose();
     },
     components: {
-        'v-cube-position': cubePositionComponent,
+        'v-cube-stickers': cubeStickersComponent,
         'v-obj': objComponent,
     },
     computed: {
@@ -92,7 +92,7 @@ export default {
             return null;
         },
         rotation() {
-            let rotation = {
+            const rotation = {
                 x: 0,
                 y: 0,
                 z: 0,
