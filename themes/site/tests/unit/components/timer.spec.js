@@ -62,4 +62,12 @@ describe('<v-timer>', () => {
 
         expect(vm.$el.querySelector('time').textContent).toBe('15000');
     });
+
+    it('displays the current formatted time', () => {
+        const vm = mount({
+            template: `<v-timer :time="61234" />`,
+        });
+
+        expect(vm.$el.textContent).toBe('1:01.23');
+    });
 });

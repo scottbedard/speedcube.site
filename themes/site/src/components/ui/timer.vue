@@ -1,14 +1,12 @@
 <template>
     <span>
-        <slot
-            v-bind="{ currentTime, formattedCurrentTime }"
-            v-text="formattedCurrentTime"
-        />
+        <slot v-bind="{ currentTime, formattedCurrentTime }">{{ formattedCurrentTime }}</slot>
     </span>
 </template>
 
 <script>
 import { componentInterval } from 'spyfu-vue-utils';
+import { formatShortTime } from '@/app/utils/string';
 import { noop } from 'lodash-es';
 
 // frames per second
@@ -40,7 +38,8 @@ export default {
             return this.now - this.startTime;
         },
         formattedCurrentTime() {
-            return 'formatted current time';
+            // format the current time
+            return formatShortTime(this.currentTime);;
         },
         replay() {
             // in replay mode this component simply displays time
