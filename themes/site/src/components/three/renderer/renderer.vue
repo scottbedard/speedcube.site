@@ -49,6 +49,7 @@ export default {
             canvas: this.$el,
         });
 
+        this.$options.three.renderer.setClearColor(0x000000, 0);
         this.$options.three.renderer.setPixelRatio(window.devicePixelRatio);
     },
     computed: {
@@ -71,9 +72,8 @@ export default {
             this.$options.three.renderer.setScissorTest(true);
         },
         renderScenes() {
-            let cleared = false;
-
             this.updateSize();
+            this.clear();
 
             this.$options.scenes.forEach((scene) => {
                 // get its position relative to the page's viewport
@@ -87,13 +87,6 @@ export default {
                     || rect.left > document.body.clientWidth
                 ) {
                     return; // it's off screen
-                }
-
-                // clear the renderer if we haven't already
-                if (!cleared) {
-                    this.clear();
-
-                    cleared = true;
                 }
 
                 // set the viewport
