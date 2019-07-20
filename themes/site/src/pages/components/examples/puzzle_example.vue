@@ -4,17 +4,7 @@
 
         <div class="max-w-sm mx-auto">
             <div class="border-4 border-dotted border-grey-4 pb-full relative">
-                <v-puzzle
-                    :config="{
-                        cameraAngle,
-                        cameraDistance,
-                        innerOpacity: innerOpacity / 100,
-                        stickerElevation: stickerElevation / 100,
-                        stickerSpacing: stickerSpacing / 100,
-                    }"
-                    :current-turn="currentTurn"
-                    :turn-progress="turnProgress / 100"
-                />
+                <v-puzzle v-bind="puzzleParams" />
             </div>
         </div>
 
@@ -49,8 +39,8 @@
                 <v-range-input v-model="stickerElevation" :min="0" :max="100" />
             </div>
             <div class="mb-4">
-                <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Inner Opacity</label>
-                <v-range-input v-model="innerOpacity" :min="0" :max="100" />
+                <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Inner Brightness</label>
+                <v-range-input v-model="innerBrightness" :min="0" :max="100" />
             </div>
         </div>
     </v-example>
@@ -58,6 +48,7 @@
 
 <script>
 import { componentEase } from 'spyfu-vue-utils';
+import Cube from 'bedard-cube';
 import exampleComponent from '../example.vue';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
 
@@ -65,9 +56,11 @@ export default {
     data() {
         return {
             cameraAngle: 45,
-            cameraDistance: 250,
+            cameraDistance: 2250,
+            colors: ['#FFEE5D', '#EFAA18', '#2589E2', '#EC6157', '#5CBD60', '#F0F0F0'],
             currentTurn: 'U',
-            innerOpacity: 80,
+            innerBrightness: 80,
+            model: new Cube(2, { useObjects: true }),
             stickerElevation: 20,
             stickerSpacing: 20,
             turnProgress: 25,
@@ -76,6 +69,37 @@ export default {
     components: {
         'v-example': exampleComponent,
         'v-puzzle': puzzleComponent,
+    },
+    computed: {
+        puzzleParams() {
+            return {
+                config: {
+                    cameraAngle: this.cameraAngle,
+                    cameraDistance: this.cameraDistance,
+                    colors: this.colors,
+                    innerBrightness: this.innerBrightness,
+                    stickerSpacing: this.stickerSpacing,
+                    stickerElevation: this.stickerElevation,
+                },
+                currentTurn: this.currentTurn,
+                turnProgress: this.turnProgress / 100,
+                model: this.model,
+                type: '3x3',
+            }
+                    // :config="{
+                    //     cameraAngle,
+                    //     cameraDistance,
+                    //     colors,
+                    //     innerOpacity: 100,
+                    //     stickerElevation: 0,
+                    //     stickerSpacing: 0,
+                    // }"
+                    // :current-turn="currentTurn"
+                    // :model="model"
+                    // :turn-progress="turnProgress / 100"
+                    // type="3x3"
+                
+        },
     },
     methods: {
         turn() {
