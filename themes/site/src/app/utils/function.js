@@ -17,7 +17,7 @@ export function animate(fn, duration) {
     const cancel = () => {
         running = false;
     };
-    
+
     const render = () => {
         if (running) {
             const currentTime = new Date().getTime();

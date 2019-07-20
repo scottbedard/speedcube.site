@@ -12,7 +12,7 @@
 
 <script>
 import Cube from 'bedard-cube';
-import { cloneDeep, get } from 'lodash-es';
+import { get } from 'lodash-es';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
 import { applyCubeState, isCube } from '@/app/utils/puzzle';
 import { puzzleTypes } from '@/app/constants';

@@ -80,7 +80,6 @@ export default {
     methods: {
         turn() {
             const easeInOutQuart = [0.77, 0, 0.175, 1];
-            const turn = this.currentTurn;
 
             componentEase(this, (val) => {
                 this.turnProgress = val * 100;

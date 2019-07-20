@@ -6,8 +6,8 @@
 
 <script>
 import { componentInterval } from 'spyfu-vue-utils';
-import { formatShortTime } from '@/app/utils/string';
 import { noop } from 'lodash-es';
+import { formatShortTime } from '@/app/utils/string';
 
 // frames per second
 const fps = 30;
@@ -17,7 +17,7 @@ export default {
         // keep track of time if we aren't in replay mode
         this.$options.interval = this.replay
             ? { cancel: noop }
-            : componentInterval(this, () => { this.now = Date.now() }, 1000 / fps);
+            : componentInterval(this, () => { this.now = Date.now(); }, 1000 / fps);
     },
     data() {
         const now = this.replay ? Date.now() : 0;
@@ -39,13 +39,13 @@ export default {
         },
         formattedCurrentTime() {
             // format the current time
-            return formatShortTime(this.currentTime);;
+            return formatShortTime(this.currentTime);
         },
         replay() {
             // in replay mode this component simply displays time
             // based on props, and does not keep time in state.
             return Number.isFinite(this.time);
-        }
+        },
     },
     props: {
         progress: {

@@ -26,7 +26,7 @@
                         :scrambled-state="scrambledState"
                         :solution="solution"
                         :type="puzzleType">
-                        
+
                         <!-- puzzle -->
                         <div class="flex flex-wrap justify-center">
                             <div
@@ -189,7 +189,7 @@ export default {
             componentTimeout(this, () => {
                 this.playing = false;
             }, duration);
-        }
+        },
     },
 };
 </script>
