@@ -1,5 +1,5 @@
 <template>
-    <div class="hidden"><slot /></div>
+    <div class=""><slot /></div>
 </template>
 
 <script>

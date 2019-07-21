@@ -4,7 +4,13 @@
 
         <div class="max-w-sm mx-auto">
             <div class="border-4 border-dotted border-grey-4 pb-full relative">
-                <v-puzzle v-bind="puzzleParams" />
+                <v-puzzle
+                    :current-turn="currentTurn"
+                    :turn-progress="turnProgress"
+                    :config="config"
+                    :model="model"
+                    type="3x3"
+                />
             </div>
         </div>
 
@@ -31,12 +37,16 @@
                 <v-range-input v-model="cameraDistance" :min="0" :max="400" />
             </div>
             <div class="mb-4">
+                <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Sticker Radius</label>
+                <v-range-input v-model="stickerRadius" :min="0" :max="1" :step="0.01" />
+            </div>
+            <div class="mb-4">
                 <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Sticker Spacing</label>
-                <v-range-input v-model="stickerSpacing" :min="0" :max="100" />
+                <v-range-input v-model="stickerSpacing" :min="0" :max="1" :step="0.01" />
             </div>
             <div class="mb-4">
                 <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Sticker Elevation</label>
-                <v-range-input v-model="stickerElevation" :min="0" :max="100" />
+                <v-range-input v-model="stickerElevation" :min="0" :max="1" :step="0.01" />
             </div>
             <div class="mb-4">
                 <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Inner Brightness</label>
@@ -56,13 +66,14 @@ export default {
     data() {
         return {
             cameraAngle: 45,
-            cameraDistance: 2250,
+            cameraDistance: 250,
             colors: ['#FFEE5D', '#EFAA18', '#2589E2', '#EC6157', '#5CBD60', '#F0F0F0'],
             currentTurn: 'U',
             innerBrightness: 80,
             model: new Cube(2, { useObjects: true }),
-            stickerElevation: 20,
-            stickerSpacing: 20,
+            stickerElevation: 0.25,
+            stickerSpacing: 0.25,
+            stickerRadius: 0.25,
             turnProgress: 25,
         };
     },
@@ -71,34 +82,16 @@ export default {
         'v-puzzle': puzzleComponent,
     },
     computed: {
-        puzzleParams() {
+        config() {
             return {
-                config: {
-                    cameraAngle: this.cameraAngle,
-                    cameraDistance: this.cameraDistance,
-                    colors: this.colors,
-                    innerBrightness: this.innerBrightness,
-                    stickerSpacing: this.stickerSpacing,
-                    stickerElevation: this.stickerElevation,
-                },
-                currentTurn: this.currentTurn,
-                turnProgress: this.turnProgress / 100,
-                model: this.model,
-                type: '3x3',
-            }
-                    // :config="{
-                    //     cameraAngle,
-                    //     cameraDistance,
-                    //     colors,
-                    //     innerOpacity: 100,
-                    //     stickerElevation: 0,
-                    //     stickerSpacing: 0,
-                    // }"
-                    // :current-turn="currentTurn"
-                    // :model="model"
-                    // :turn-progress="turnProgress / 100"
-                    // type="3x3"
-                
+                cameraAngle: this.cameraAngle,
+                cameraDistance: this.cameraDistance,
+                colors: this.colors,
+                innerBrightness: this.innerBrightness,
+                stickerElevation: this.stickerElevation,
+                stickerRadius: this.stickerRadius,
+                stickerSpacing: this.stickerSpacing,
+            };
         },
     },
     methods: {

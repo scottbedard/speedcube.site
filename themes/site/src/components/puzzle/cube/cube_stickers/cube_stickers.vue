@@ -1,91 +1,77 @@
 <template>
     <v-obj>
-        <!-- u -->
+        <!-- U -->
         <v-obj :rotation="{ x: -90 }">
             <v-shape
-                v-for="(sticker, index) in face('U')"
-                :color="colors[sticker.value]"
+                v-for="(sticker, index) in model.state.U"
+                :color="0x00ff00"
                 :geometry="geometry"
-                :inner-opacity="innerOpacity"
-                :key="`U-${index}`"
-                :position="stickerPosition('U', sticker)"
-                :visible="visible(sticker)"
+                :key="`U${index}`"
+                :position="position(index)"
             />
         </v-obj>
 
-        <!-- l -->
+        <!-- L -->
         <v-obj :rotation="{ y: -90 }">
             <v-shape
-                v-for="(sticker, index) in face('L')"
-                :color="colors[sticker.value]"
+                v-for="(sticker, index) in model.state.L"
+                :color="0xff0000"
                 :geometry="geometry"
-                :inner-opacity="innerOpacity"
-                :key="`L-${index}`"
-                :position="stickerPosition('L', sticker)"
-                :visible="visible(sticker)"
+                :key="`L${index}`"
+                :position="position(index)"
             />
         </v-obj>
 
-        <!-- f -->
+        <!-- F -->
         <v-shape
-            v-for="(sticker, index) in face('F')"
-            :color="colors[sticker.value]"
+            v-for="(sticker, index) in model.state.F"
+            :color="0xffff00"
             :geometry="geometry"
-            :inner-opacity="innerOpacity"
-            :key="`F-${index}`"
-            :position="stickerPosition('F', sticker)"
-            :visible="visible(sticker)"
+            :key="`F${index}`"
+            :position="position(index)"
         />
 
-        <!-- r -->
+        <!-- R -->
         <v-obj :rotation="{ y: 90 }">
             <v-shape
-                v-for="(sticker, index) in face('R')"
-                :color="colors[sticker.value]"
+                v-for="(sticker, index) in model.state.R"
+                :color="0x0000ff"
                 :geometry="geometry"
-                :inner-opacity="innerOpacity"
-                :key="`L-${index}`"
-                :position="stickerPosition('R', sticker)"
-                :visible="visible(sticker)"
+                :key="`R${index}`"
+                :position="position(index)"
             />
         </v-obj>
 
-        <!-- b -->
+        <!-- B -->
         <v-obj :rotation="{ y: 180 }">
             <v-shape
-                v-for="(sticker, index) in face('B')"
-                :color="colors[sticker.value]"
+                v-for="(sticker, index) in model.state.B"
+                :color="0x00ffff"
                 :geometry="geometry"
-                :inner-opacity="innerOpacity"
-                :key="`B-${index}`"
-                :position="stickerPosition('B', sticker)"
-                :visible="visible(sticker)"
+                :key="`B${index}`"
+                :position="position(index)"
             />
         </v-obj>
 
-        <!-- d -->
+        <!-- D -->
         <v-obj :rotation="{ x: 90 }">
             <v-shape
-                v-for="(sticker, index) in face('D')"
-                :color="colors[sticker.value]"
+                v-for="(sticker, index) in model.state.D"
+                :color="0xff00ff"
                 :geometry="geometry"
-                :inner-opacity="innerOpacity"
-                :key="`D-${index}`"
-                :position="stickerPosition('D', sticker)"
-                :visible="visible(sticker)"
+                :key="`D${index}`"
+                :position="position(index)"
             />
         </v-obj>
     </v-obj>
 </template>
 
 <script>
-import boxComponent from '@/components/three/box/box.vue';
 import objComponent from '@/components/three/obj/obj.vue';
 import shapeComponent from '@/components/three/shape/shape.vue';
 
 export default {
     components: {
-        'v-box': boxComponent,
         'v-obj': objComponent,
         'v-shape': shapeComponent,
     },
@@ -93,78 +79,41 @@ export default {
         cubeSize() {
             return (this.stickerSize * this.model.size) + (this.gapCount * this.gapSize);
         },
-        face() {
-            return face => this.model.state[face];
-        },
-        gapCount() {
-            return this.model.size - 1;
-        },
-        gapSize() {
-            return this.stickerSize * this.stickerSpacing;
-        },
         halfCubeSize() {
             return this.cubeSize / 2;
         },
         halfStickerSize() {
             return this.stickerSize / 2;
         },
-        stickers() {
-            return face => this.face(face).filter(this.filter);
+        gapCount() {
+            return this.model.size - 1;
         },
-        stickerIndex() {
-            return (face, sticker) => this.face(face).findIndex(sticker);
+        gapSize() {
+            return this.stickerSize * this.config.stickerSpacing;
         },
-        stickerPosition() {
-            return (face, sticker) => {
-                const stickerIndex = this.face(face).findIndex(el => el === sticker);
-
-                return this.stickerPositions[stickerIndex];
-            };
-        },
-        stickerPositions() {
-            // determine the coordinates of a sticker based
-            // on the index and the puzzle configuration
-            const position = (index) => {
-                const col = this.colMap[index];
-                const row = this.rowMap[index];
+        position() {
+            // determine the coordinates of a sticker based on the index and config
+            const stickersPerFace = this.model.size ** 2;
+            const colMap = new Array(stickersPerFace).fill().map((val, i) => i % this.model.size);
+            const rowMap = new Array(stickersPerFace).fill().map((val, i) => Math.floor(i / this.model.size));
+            
+            return (index) => {
+                const col = colMap[index];
+                const row = rowMap[index];
 
                 return {
                     x: -this.halfCubeSize + (col * this.gapSize) + (col * this.stickerSize),
                     y: (this.halfCubeSize - this.stickerSize) - ((row * this.gapSize) + (row * this.stickerSize)),
-                    z: this.halfCubeSize + (this.stickerElevation * this.stickerSize),
+                    z: this.halfCubeSize + (this.config.stickerElevation * this.stickerSize),
                 };
             };
-
-            return new Array(this.stickersPerFace).fill().map((v, i) => position(i));
-        },
-        visible() {
-            // determine if a sticker is visible or not
-            return sticker => this.visibleStickers.indexOf(sticker) > -1;
-        },
-        visibleStickers() {
-            // an array of all visible stickers
-            return this.stickers('U')
-                .concat(this.stickers('L'))
-                .concat(this.stickers('F'))
-                .concat(this.stickers('R'))
-                .concat(this.stickers('B'))
-                .concat(this.stickers('D'));
         },
     },
     props: [
-        'colMap',
-        'colors',
         'config',
-        'filter',
         'geometry',
-        'innerOpacity',
         'model',
-        'rowMap',
-        'stickerElevation',
         'stickerSize',
-        'stickerSpacing',
-        'stickersPerFace',
-        'turnStickers',
     ],
 };
 </script>
