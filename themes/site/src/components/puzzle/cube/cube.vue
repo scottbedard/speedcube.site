@@ -18,14 +18,7 @@ import cubeStickersComponent from './cube_stickers/cube_stickers.vue';
 import { getStickersEffectedByTurn } from './utils';
 import { roundedSquare } from '@/components/three/geometries';
 import { get, times, xor } from 'lodash-es';
-
-import {
-    BackSide,
-    FrontSide,
-    Group,
-    Mesh,
-    MeshLambertMaterial,
-} from 'three';
+import { BackSide, FrontSide, MeshLambertMaterial } from 'three';
 
 const defaultConfig = {
     colors: ['#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ffff00', '#ffffff'],
@@ -47,11 +40,8 @@ export default {
         };
     },
     destroyed() {
+        this.disposeGeometry();
         this.disposeMaterials();
-
-        if (this.geometry) {
-            this.geometry.dispose();
-        }
     },
     components: {
         'v-cube-stickers': cubeStickersComponent,
@@ -66,6 +56,12 @@ export default {
         },
     },
     methods: {
+        disposeGeometry() {
+            // dispose our geometry
+            if (this.geometry) {
+                this.geometry.dispose();
+            }
+        },
         disposeMaterials() {
             // dispose of old materials
             this.materials.forEach(({ inner, outer }) => {
@@ -82,6 +78,8 @@ export default {
                 this.geometry.userData.stickerSize !== this.stickerSize ||
                 this.geometry.userData.stickerRadius !== this.normalizedConfig.stickerRadius
             ) {
+                this.disposeGeometry();
+
                 this.geometry = roundedSquare(this.stickerSize, this.stickerSize * this.normalizedConfig.stickerRadius);
 
                 this.geometry.userData.stickerSize = this.stickerSize;
@@ -129,21 +127,19 @@ export default {
         },
     },
     watch: {
-        config(newConfig, oldConfig) {
-            this.syncGeometry();
+        config: {
+            deep: true,
+            handler(newConfig, oldConfig) {
+                this.syncGeometry();
 
-            // sync materials if colors or inner opacities have chnaged
-            if (
-                xor(newConfig.colors, oldConfig.colors).length ||
-                newConfig.innerBrightness !== oldConfig.innerBrightness
-            ) {
-                this.syncMaterials();
-            }
-        },
-        geometry(newGeometry, oldGeometry) {
-            if (oldGeometry) {
-                oldGeometry.dispose();
-            }
+                // sync materials if colors or inner opacities have chnaged
+                if (
+                    xor(newConfig.colors, oldConfig.colors).length ||
+                    newConfig.innerBrightness !== oldConfig.innerBrightness
+                ) {
+                    this.syncMaterials();
+                }
+            },
         },
     },
 };
