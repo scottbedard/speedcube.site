@@ -17,7 +17,7 @@ import objComponent from '@/components/three/obj/obj.vue';
 import cubeStickersComponent from './cube_stickers/cube_stickers.vue';
 import { getStickersEffectedByTurn } from './utils';
 import { roundedSquare } from '@/components/three/geometries';
-import { get, times } from 'lodash-es';
+import { get, times, xor } from 'lodash-es';
 
 import {
     BackSide,
@@ -89,8 +89,6 @@ export default {
             }
         },
         syncMaterials() {
-            // @todo: short circuit this function if the colors or innerBrightness
-            //        have not changed since the last material creation.
             const { colors, innerBrightness } = this.normalizedConfig;
 
             this.disposeMaterials();
@@ -131,9 +129,16 @@ export default {
         },
     },
     watch: {
-        config() {
+        config(newConfig, oldConfig) {
             this.syncGeometry();
-            this.syncMaterials();
+
+            // sync materials if colors or inner opacities have chnaged
+            if (
+                xor(newConfig.colors, oldConfig.colors).length ||
+                newConfig.innerBrightness !== oldConfig.innerBrightness
+            ) {
+                this.syncMaterials();
+            }
         },
         geometry(newGeometry, oldGeometry) {
             if (oldGeometry) {
