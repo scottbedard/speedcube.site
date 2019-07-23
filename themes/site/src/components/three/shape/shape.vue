@@ -1,12 +1,5 @@
 <script>
-import {
-    BackSide,
-    FrontSide,
-    Group,
-    Mesh,
-    MeshLambertMaterial,
-} from 'three';
-
+import { Group, Mesh } from 'three';
 import base from '../base';
 
 export default {
@@ -14,7 +7,6 @@ export default {
         const innerMesh = new Mesh(this.geometry, this.innerMaterial);
         const outerMesh = new Mesh(this.geometry, this.outerMaterial);
 
-        // create an object to attach our meshes to
         const group = new Group();
         group.add(innerMesh);
         group.add(outerMesh);
