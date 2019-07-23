@@ -2,15 +2,17 @@
     <v-example title="<v-puzzle>">
         <p>Our base component to manipulate and render puzzles.</p>
 
-        <div class="max-w-sm mx-auto">
-            <div class="border-4 border-dotted border-grey-4 pb-full relative">
-                <v-puzzle
-                    :current-turn="currentTurn"
-                    :turn-progress="turnProgress"
-                    :config="config"
-                    :model="model"
-                    type="3x3"
-                />
+        <div class="flex flex-wrap justify-center">
+            <div v-for="n in 1" class="w-full" style="max-width: 300px" :key="n">
+                <div class="border-4 border-dotted border-grey-4 pb-full relative">
+                    <v-puzzle
+                        :current-turn="currentTurn"
+                        :turn-progress="turnProgress"
+                        :config="config"
+                        :model="model"
+                        type="3x3"
+                    />
+                </div>
             </div>
         </div>
 
@@ -50,7 +52,7 @@
             </div>
             <div class="mb-4">
                 <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Inner Brightness</label>
-                <v-range-input v-model="innerBrightness" :min="0" :max="100" />
+                <v-range-input v-model="innerBrightness" :min="0" :max="1" :step="0.01" />
             </div>
         </div>
     </v-example>
@@ -69,8 +71,8 @@ export default {
             cameraDistance: 250,
             colors: ['#FFEE5D', '#EFAA18', '#2589E2', '#EC6157', '#5CBD60', '#F0F0F0'],
             currentTurn: 'U',
-            innerBrightness: 80,
-            model: new Cube(2, { useObjects: true }),
+            innerBrightness: 0.8,
+            model: new Cube(3, { useObjects: true }),
             stickerElevation: 0.25,
             stickerSpacing: 0.25,
             stickerRadius: 0.25,

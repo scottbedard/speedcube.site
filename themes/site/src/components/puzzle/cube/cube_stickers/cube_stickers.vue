@@ -6,7 +6,9 @@
                 v-for="(sticker, index) in model.state.U"
                 :color="0x00ff00"
                 :geometry="geometry"
+                :inner-material="innerMaterial(sticker.value)"
                 :key="`U${index}`"
+                :outer-material="outerMaterial(sticker.value)"
                 :position="position(index)"
             />
         </v-obj>
@@ -17,7 +19,9 @@
                 v-for="(sticker, index) in model.state.L"
                 :color="0xff0000"
                 :geometry="geometry"
+                :inner-material="innerMaterial(sticker.value)"
                 :key="`L${index}`"
+                :outer-material="outerMaterial(sticker.value)"
                 :position="position(index)"
             />
         </v-obj>
@@ -27,7 +31,9 @@
             v-for="(sticker, index) in model.state.F"
             :color="0xffff00"
             :geometry="geometry"
+            :inner-material="innerMaterial(sticker.value)"
             :key="`F${index}`"
+            :outer-material="outerMaterial(sticker.value)"
             :position="position(index)"
         />
 
@@ -37,7 +43,9 @@
                 v-for="(sticker, index) in model.state.R"
                 :color="0x0000ff"
                 :geometry="geometry"
+                :inner-material="innerMaterial(sticker.value)"
                 :key="`R${index}`"
+                :outer-material="outerMaterial(sticker.value)"
                 :position="position(index)"
             />
         </v-obj>
@@ -48,7 +56,9 @@
                 v-for="(sticker, index) in model.state.B"
                 :color="0x00ffff"
                 :geometry="geometry"
+                :inner-material="innerMaterial(sticker.value)"
                 :key="`B${index}`"
+                :outer-material="outerMaterial(sticker.value)"
                 :position="position(index)"
             />
         </v-obj>
@@ -59,7 +69,9 @@
                 v-for="(sticker, index) in model.state.D"
                 :color="0xff00ff"
                 :geometry="geometry"
+                :inner-material="innerMaterial(sticker.value)"
                 :key="`D${index}`"
+                :outer-material="outerMaterial(sticker.value)"
                 :position="position(index)"
             />
         </v-obj>
@@ -91,6 +103,12 @@ export default {
         gapSize() {
             return this.stickerSize * this.config.stickerSpacing;
         },
+        innerMaterial() {
+            return value => this.materials[value].inner;
+        },
+        outerMaterial() {
+            return value => this.materials[value].outer;
+        },
         position() {
             // determine the coordinates of a sticker based on the index and config
             const stickersPerFace = this.model.size ** 2;
@@ -112,6 +130,7 @@ export default {
     props: [
         'config',
         'geometry',
+        'materials',
         'model',
         'stickerSize',
     ],
