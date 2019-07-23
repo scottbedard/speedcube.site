@@ -3,7 +3,7 @@
         <p>Our base component to manipulate and render puzzles.</p>
 
         <div class="flex flex-wrap justify-center">
-            <div v-for="n in 1" class="w-full" style="max-width: 300px" :key="n">
+            <div v-for="n in 1" class="w-full" style="max-width: 320px" :key="n">
                 <div class="border-4 border-dotted border-grey-4 pb-full relative">
                     <v-puzzle
                         :current-turn="currentTurn"
@@ -28,7 +28,7 @@
             </div>
             <div class="mb-4">
                 <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Turn Progress</label>
-                <v-range-input v-model="turnProgress" :min="0" :max="100" />
+                <v-range-input v-model="turnProgress" :min="0" :max="1" :step="0.01" />
             </div>
             <div class="mb-4">
                 <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Camera Angle</label>
@@ -73,10 +73,10 @@ export default {
             currentTurn: 'U',
             innerBrightness: 0.8,
             model: new Cube(3, { useObjects: true }),
-            stickerElevation: 0.25,
-            stickerSpacing: 0.25,
-            stickerRadius: 0.25,
-            turnProgress: 25,
+            stickerElevation: 0.15,
+            stickerSpacing: 0.2,
+            stickerRadius: 0.1,
+            turnProgress: 0.4,
         };
     },
     components: {
@@ -101,7 +101,7 @@ export default {
             const easeInOutQuart = [0.77, 0, 0.175, 1];
 
             componentEase(this, (val) => {
-                this.turnProgress = val * 100;
+                this.turnProgress = val;
             }, 500, easeInOutQuart);
         },
     },

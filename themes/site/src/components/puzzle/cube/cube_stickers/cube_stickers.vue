@@ -10,6 +10,7 @@
                 :key="`U${index}`"
                 :outer-material="outerMaterial(sticker.value)"
                 :position="position(index)"
+                :visible="filter(sticker)"
             />
         </v-obj>
 
@@ -23,6 +24,7 @@
                 :key="`L${index}`"
                 :outer-material="outerMaterial(sticker.value)"
                 :position="position(index)"
+                :visible="filter(sticker)"
             />
         </v-obj>
 
@@ -35,6 +37,7 @@
             :key="`F${index}`"
             :outer-material="outerMaterial(sticker.value)"
             :position="position(index)"
+            :visible="filter(sticker)"
         />
 
         <!-- R -->
@@ -47,6 +50,7 @@
                 :key="`R${index}`"
                 :outer-material="outerMaterial(sticker.value)"
                 :position="position(index)"
+                :visible="filter(sticker)"
             />
         </v-obj>
 
@@ -60,6 +64,7 @@
                 :key="`B${index}`"
                 :outer-material="outerMaterial(sticker.value)"
                 :position="position(index)"
+                :visible="filter(sticker)"
             />
         </v-obj>
 
@@ -73,12 +78,14 @@
                 :key="`D${index}`"
                 :outer-material="outerMaterial(sticker.value)"
                 :position="position(index)"
+                :visible="filter(sticker)"
             />
         </v-obj>
     </v-obj>
 </template>
 
 <script>
+import { mapColumns, mapRows } from '../utils';
 import objComponent from '@/components/three/obj/obj.vue';
 import shapeComponent from '@/components/three/shape/shape.vue';
 
@@ -111,9 +118,8 @@ export default {
         },
         position() {
             // determine the coordinates of a sticker based on the index and config
-            const stickersPerFace = this.model.size ** 2;
-            const colMap = new Array(stickersPerFace).fill().map((val, i) => i % this.model.size);
-            const rowMap = new Array(stickersPerFace).fill().map((val, i) => Math.floor(i / this.model.size));
+            const colMap = mapColumns(this.model.size);
+            const rowMap = mapRows(this.model.size);
             
             return (index) => {
                 const col = colMap[index];
@@ -129,6 +135,7 @@ export default {
     },
     props: [
         'config',
+        'filter',
         'geometry',
         'materials',
         'model',
