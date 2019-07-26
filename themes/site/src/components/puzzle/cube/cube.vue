@@ -170,7 +170,7 @@ export default {
                         color: colors[i],
                         opacity: innerBrightness,
                         side: BackSide,
-                        transparent: true,
+                        transparent: innerBrightness < 1,
                     }),
                     outer: new MeshLambertMaterial({
                         color: colors[i],
