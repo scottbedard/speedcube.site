@@ -120,7 +120,7 @@ export default {
             // determine the coordinates of a sticker based on the index and config
             const colMap = mapColumns(this.model.size);
             const rowMap = mapRows(this.model.size);
-            
+
             return (index) => {
                 const col = colMap[index];
                 const row = rowMap[index];

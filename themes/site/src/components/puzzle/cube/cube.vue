@@ -26,12 +26,12 @@
 
 <script>
 import Cube from 'bedard-cube';
+import { noop, times, xor } from 'lodash-es';
+import { BackSide, FrontSide, MeshLambertMaterial } from 'three';
 import objComponent from '@/components/three/obj/obj.vue';
 import cubeStickersComponent from './cube_stickers/cube_stickers.vue';
 import { getStickersEffectedByTurn } from './utils';
 import { roundedSquare } from '@/components/three/geometries';
-import { get, noop, times, xor } from 'lodash-es';
-import { BackSide, FrontSide, MeshLambertMaterial } from 'three';
 
 const defaultConfig = {
     colors: ['#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ffff00', '#ffffff'],
@@ -164,20 +164,18 @@ export default {
 
             this.disposeMaterials();
 
-            this.materials = times(6).map(i => {
-                return {
-                    inner: new MeshLambertMaterial({
-                        color: colors[i],
-                        opacity: innerBrightness,
-                        side: BackSide,
-                        transparent: innerBrightness < 1,
-                    }),
-                    outer: new MeshLambertMaterial({
-                        color: colors[i],
-                        side: FrontSide,
-                    }),
-                };
-            });
+            this.materials = times(6).map(i => ({
+                inner: new MeshLambertMaterial({
+                    color: colors[i],
+                    opacity: innerBrightness,
+                    side: BackSide,
+                    transparent: innerBrightness < 1,
+                }),
+                outer: new MeshLambertMaterial({
+                    color: colors[i],
+                    side: FrontSide,
+                }),
+            }));
         },
     },
     props: {
@@ -210,8 +208,8 @@ export default {
 
                 // sync materials if colors or inner opacities have chnaged
                 if (
-                    xor(newConfig.colors, oldConfig.colors).length ||
-                    newConfig.innerBrightness !== oldConfig.innerBrightness
+                    xor(newConfig.colors, oldConfig.colors).length
+                    || newConfig.innerBrightness !== oldConfig.innerBrightness
                 ) {
                     this.syncMaterials();
                 }
