@@ -50,4 +50,38 @@ describe('<v-shape>', () => {
         expect(outerMesh.geometry).toBe(geometry);
         expect(outerMesh.material).toBe(outerMaterial);
     });
+
+    it('updates meshes when geometry changes', async () => {
+        const geometry1 = roundedRectangle(1, 1, 1);
+        const geometry2 = roundedRectangle(1, 1, 2);
+
+        const vm = mount({
+            data() {
+                return {
+                    geometry: geometry1,
+                    innerMaterial: new MeshBasicMaterial(),
+                    outerMaterial: new MeshBasicMaterial(),
+                };
+            },
+            template: `
+                <v-shape
+                    ref="shape"
+                    :geometry="geometry"
+                    :inner-material="innerMaterial"
+                    :outer-material="outerMaterial"
+                />
+            `,
+        });
+
+        const { innerMesh, outerMesh } = vm.$refs.shape.$options.three;
+
+        expect(innerMesh.geometry).toBe(geometry1);
+        expect(outerMesh.geometry).toBe(geometry1);
+
+        vm.geometry = geometry2;
+        await vm.$nextTick();
+
+        expect(innerMesh.geometry).toBe(geometry2);
+        expect(outerMesh.geometry).toBe(geometry2);
+    });
 });
