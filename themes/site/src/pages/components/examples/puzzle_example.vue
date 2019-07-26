@@ -1,58 +1,67 @@
 <template>
     <v-example title="<v-puzzle>">
-        <p>Our base component to manipulate and render puzzles.</p>
+        <p>A higher-level component to render whole puzzles.</p>
 
-        <div class="flex flex-wrap justify-center">
-            <div v-for="n in 1" class="w-full" style="max-width: 320px" :key="n">
+        <div class="flex flex-wrap justify-center my-8">
+            <div v-for="n in 1" class="mb-4 w-full" style="max-width: 320px" :key="n">
                 <div class="border-4 border-dotted border-grey-4 pb-full relative">
                     <v-puzzle
                         :current-turn="currentTurn"
                         :turn-progress="turnProgress"
                         :config="config"
                         :model="model"
-                        type="3x3"
+                        :type="`${model.size}x${model.size}`"
                     />
                 </div>
             </div>
+            <div class="text-xs px-8">
+                <pre class="mb-4">turnProgress: {{ turnProgress }}</pre>
+                <pre>config: {{ config }}</pre>
+            </div>
         </div>
 
-        <div class="max-w-sm mt-8 mx-auto">
-            <div class="mb-8">
-                <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Turn</label>
+        <!-- cube controls -->
+        <div>
+            <div class="max-w-xs mb-8 mx-auto">
+                <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Current Turn</label>
                 <div class="flex">
-                    <div class="flex-1 pr-4">
+                    <div class="flex-1 pr-8">
                         <v-input v-model="currentTurn" />
                     </div>
                     <v-button @click="turn">Apply</v-button>
                 </div>
             </div>
-            <div class="mb-4">
-                <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Turn Progress</label>
-                <v-range-input v-model="turnProgress" :min="0" :max="1" :step="0.01" />
-            </div>
-            <div class="mb-4">
-                <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Camera Angle</label>
-                <v-range-input v-model="cameraAngle" :min="0" :max="90" />
-            </div>
-            <div class="mb-4">
-                <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Camera Distance</label>
-                <v-range-input v-model="cameraDistance" :min="0" :max="400" />
-            </div>
-            <div class="mb-4">
-                <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Sticker Radius</label>
-                <v-range-input v-model="stickerRadius" :min="0" :max="1" :step="0.01" />
-            </div>
-            <div class="mb-4">
-                <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Sticker Spacing</label>
-                <v-range-input v-model="stickerSpacing" :min="0" :max="1" :step="0.01" />
-            </div>
-            <div class="mb-4">
-                <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Sticker Elevation</label>
-                <v-range-input v-model="stickerElevation" :min="0" :max="1" :step="0.01" />
-            </div>
-            <div class="mb-4">
-                <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Inner Brightness</label>
-                <v-range-input v-model="innerBrightness" :min="0" :max="1" :step="0.01" />
+            <div class="max-w-3xl mx-auto">
+                <div class="flex flex-wrap -m-4">
+                    <div class="p-4 w-full md:w-1/3">
+                        <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Turn Progress</label>
+                        <v-range-input v-model="turnProgress" :min="0" :max="1" :step="0.01" />
+                    </div>
+                    <div class="p-4 w-full md:w-1/3">
+                        <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Camera Angle</label>
+                        <v-range-input v-model="cameraAngle" :min="0" :max="90" />
+                    </div>
+                    <div class="p-4 w-full md:w-1/3">
+                        <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Camera Distance</label>
+                        <v-range-input v-model="cameraDistance" :min="0" :max="400" />
+                    </div>
+                    <div class="p-4 w-full md:w-1/3">
+                        <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Sticker Radius</label>
+                        <v-range-input v-model="stickerRadius" :min="0" :max="1" :step="0.01" />
+                    </div>
+                    <div class="p-4 w-full md:w-1/3">
+                        <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Sticker Spacing</label>
+                        <v-range-input v-model="stickerSpacing" :min="0" :max="1" :step="0.01" />
+                    </div>
+                    <div class="p-4 w-full md:w-1/3">
+                        <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Sticker Elevation</label>
+                        <v-range-input v-model="stickerElevation" :min="0" :max="1" :step="0.01" />
+                    </div>
+                    <div class="p-4 w-full md:w-1/3">
+                        <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Inner Brightness</label>
+                        <v-range-input v-model="innerBrightness" :min="0" :max="1" :step="0.01" />
+                    </div>
+                </div>
             </div>
         </div>
     </v-example>
@@ -72,11 +81,11 @@ export default {
             colors: ['#FFEE5D', '#EFAA18', '#2589E2', '#EC6157', '#5CBD60', '#F0F0F0'],
             currentTurn: 'U',
             innerBrightness: 0.8,
-            model: new Cube(3, { useObjects: true }),
+            model: new Cube(4, { useObjects: true }),
             stickerElevation: 0.15,
             stickerSpacing: 0.2,
             stickerRadius: 0.1,
-            turnProgress: 0.4,
+            turnProgress: 0.3,
         };
     },
     components: {
