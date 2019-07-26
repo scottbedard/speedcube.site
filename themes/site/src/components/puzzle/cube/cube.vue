@@ -30,7 +30,7 @@ import objComponent from '@/components/three/obj/obj.vue';
 import cubeStickersComponent from './cube_stickers/cube_stickers.vue';
 import { getStickersEffectedByTurn } from './utils';
 import { roundedSquare } from '@/components/three/geometries';
-import { get, times, xor } from 'lodash-es';
+import { get, noop, times, xor } from 'lodash-es';
 import { BackSide, FrontSide, MeshLambertMaterial } from 'three';
 
 const defaultConfig = {
@@ -48,7 +48,7 @@ export default {
     },
     data() {
         return {
-            geometry: null,
+            geometry: { dispose: noop },
             materials: [],
         };
     },
@@ -144,10 +144,8 @@ export default {
     },
     methods: {
         disposeGeometry() {
-            // dispose our geometry
-            if (this.geometry) {
-                this.geometry.dispose();
-            }
+            // dispose of our geometry
+            this.geometry.dispose();
         },
         disposeMaterials() {
             // dispose of old materials
@@ -157,21 +155,9 @@ export default {
             });
         },
         syncGeometry() {
-            // only recompute our geometry if relevant props have changed.
-            // we cannot use a computed property for this because it would
-            // be re-evaluated whenever any of our props are changed.
-            if (
-                !this.geometry || 
-                this.geometry.userData.stickerSize !== this.stickerSize ||
-                this.geometry.userData.stickerRadius !== this.normalizedConfig.stickerRadius
-            ) {
-                this.disposeGeometry();
+            this.disposeGeometry();
 
-                this.geometry = roundedSquare(this.stickerSize, this.stickerSize * this.normalizedConfig.stickerRadius);
-
-                this.geometry.userData.stickerSize = this.stickerSize;
-                this.geometry.userData.stickerRadius = this.normalizedConfig.stickerRadius;
-            }
+            this.geometry = roundedSquare(this.stickerSize, this.stickerSize * this.normalizedConfig.stickerRadius);
         },
         syncMaterials() {
             const { colors, innerBrightness } = this.normalizedConfig;
@@ -214,10 +200,13 @@ export default {
         },
     },
     watch: {
-        config: {
+        normalizedConfig: {
             deep: true,
             handler(newConfig, oldConfig) {
-                this.syncGeometry();
+                // sync the geometry if the radius has changed
+                if (newConfig.stickerRadius !== oldConfig.stickerRadius) {
+                    this.syncGeometry();
+                }
 
                 // sync materials if colors or inner opacities have chnaged
                 if (
