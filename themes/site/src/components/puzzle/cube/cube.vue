@@ -1,43 +1,24 @@
 <template>
     <v-obj>
-        <!--
-            render stickers not effected by the current turn
-        -->
+        <!-- resting stickers -->
         <v-cube-stickers
-            :col-map="colMap"
-            :colors="colors"
             :config="config"
-            :filter="sticker => turnStickers.indexOf(sticker) === -1"
+            :filter="sticker => turningStickers.includes(sticker) === false"
             :geometry="geometry"
-            :inner-opacity="innerOpacity"
+            :materials="materials"
             :model="model"
-            :row-map="rowMap"
-            :sticker-elevation="stickerElevation"
             :sticker-size="stickerSize"
-            :sticker-spacing="stickerSpacing"
-            :stickers-per-face="stickersPerFace"
-            :turn-stickers="turnStickers"
         />
 
-        <!--
-            next, we'll create an object to hold the stickers
-            that are being turned so they can be rotated together
-        -->
+        <!-- turning stickers -->
         <v-obj :rotation="rotation">
             <v-cube-stickers
-                :col-map="colMap"
-                :colors="colors"
                 :config="config"
-                :filter="sticker => turnStickers.indexOf(sticker) > -1"
+                :filter="sticker => turningStickers.includes(sticker) === true"
                 :geometry="geometry"
-                :inner-opacity="innerOpacity"
+                :materials="materials"
                 :model="model"
-                :row-map="rowMap"
-                :sticker-elevation="stickerElevation"
                 :sticker-size="stickerSize"
-                :sticker-spacing="stickerSpacing"
-                :stickers-per-face="stickersPerFace"
-                :turn-stickers="turnStickers"
             />
         </v-obj>
     </v-obj>
@@ -45,40 +26,43 @@
 
 <script>
 import Cube from 'bedard-cube';
-import { get } from 'lodash-es';
-import cubeStickersComponent from './cube_stickers/cube_stickers.vue';
 import objComponent from '@/components/three/obj/obj.vue';
+import cubeStickersComponent from './cube_stickers/cube_stickers.vue';
 import { getStickersEffectedByTurn } from './utils';
-import { roundedRectangle } from '@/components/three/geometries';
+import { roundedSquare } from '@/components/three/geometries';
+import { get, noop, times, xor } from 'lodash-es';
+import { BackSide, FrontSide, MeshLambertMaterial } from 'three';
 
 const defaultConfig = {
     colors: ['#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ffff00', '#ffffff'],
-    innerBrightness: 90,
-    stickerElevation: 20,
-    stickerRadius: 20,
-    stickerSpacing: 20,
+    innerBrightness: 0.8,
+    stickerElevation: 0.5,
+    stickerRadius: 0.5,
+    stickerSpacing: 0.5,
 };
 
 export default {
+    created() {
+        this.syncGeometry();
+        this.syncMaterials();
+    },
+    data() {
+        return {
+            geometry: { dispose: noop },
+            materials: [],
+        };
+    },
     destroyed() {
-        this.geometry.dispose();
+        this.disposeGeometry();
+        this.disposeMaterials();
     },
     components: {
         'v-cube-stickers': cubeStickersComponent,
         'v-obj': objComponent,
     },
     computed: {
-        colMap() {
-            return new Array(this.stickersPerFace).fill().map((val, i) => i % this.model.size);
-        },
-        colors() {
-            return get(this.config, 'colors', defaultConfig.colors);
-        },
-        geometry() {
-            return roundedRectangle(this.stickerSize, this.stickerSize, this.stickerSize * this.stickerRadius);
-        },
-        innerOpacity() {
-            return get(this.config, 'innerBrightness', defaultConfig.innerOpacity) / 100;
+        normalizedConfig() {
+            return { ...defaultConfig, ...this.config };
         },
         parsedTurn() {
             if (this.currentTurn) {
@@ -106,30 +90,16 @@ export default {
 
             return rotation;
         },
-        rowMap() {
-            return new Array(this.stickersPerFace).fill().map((val, i) => Math.floor(i / this.model.size));
-        },
-        stickersPerFace() {
-            return this.model.size ** 2;
-        },
-        stickerElevation() {
-            return get(this.config, 'stickerElevation', defaultConfig.stickerElevation) / 100;
-        },
-        stickerRadius() {
-            return get(this.config, 'stickerRadius', defaultConfig.stickerRadius) / 100;
-        },
         stickerSize() {
-            return 1000 / this.model.size;
-        },
-        stickerSpacing() {
-            return get(this.config, 'stickerSpacing', defaultConfig.stickerSpacing) / 100;
+            return 100 / this.model.size;
         },
         turnDetails() {
-            if (!this.parsedTurn) {
+            if (!this.currentTurn) {
                 return null;
             }
 
             const { target, rotation } = this.parsedTurn;
+
             let axis;
             let degrees;
 
@@ -165,16 +135,49 @@ export default {
 
             return { axis, degrees };
         },
-        turnStickers() {
-            if (this.parsedTurn) {
-                try {
-                    return getStickersEffectedByTurn(this);
-                } catch (err) {
-                    console.error('Invalid turn', this.currentTurn, err);
-                }
-            }
+        turningStickers() {
+            // return an array of all stickers in the current turn
+            return this.parsedTurn
+                ? getStickersEffectedByTurn(this.model, this.parsedTurn)
+                : [];
+        },
+    },
+    methods: {
+        disposeGeometry() {
+            // dispose of our geometry
+            this.geometry.dispose();
+        },
+        disposeMaterials() {
+            // dispose of old materials
+            this.materials.forEach(({ inner, outer }) => {
+                inner.dispose();
+                outer.dispose();
+            });
+        },
+        syncGeometry() {
+            this.disposeGeometry();
 
-            return [];
+            this.geometry = roundedSquare(this.stickerSize, this.stickerSize * this.normalizedConfig.stickerRadius);
+        },
+        syncMaterials() {
+            const { colors, innerBrightness } = this.normalizedConfig;
+
+            this.disposeMaterials();
+
+            this.materials = times(6).map(i => {
+                return {
+                    inner: new MeshLambertMaterial({
+                        color: colors[i],
+                        opacity: innerBrightness,
+                        side: BackSide,
+                        transparent: innerBrightness < 1,
+                    }),
+                    outer: new MeshLambertMaterial({
+                        color: colors[i],
+                        side: FrontSide,
+                    }),
+                };
+            });
         },
     },
     props: {
@@ -197,8 +200,22 @@ export default {
         },
     },
     watch: {
-        geometry(newGeometry, oldGeometry) {
-            oldGeometry.dispose();
+        normalizedConfig: {
+            deep: true,
+            handler(newConfig, oldConfig) {
+                // sync the geometry if the radius has changed
+                if (newConfig.stickerRadius !== oldConfig.stickerRadius) {
+                    this.syncGeometry();
+                }
+
+                // sync materials if colors or inner opacities have chnaged
+                if (
+                    xor(newConfig.colors, oldConfig.colors).length ||
+                    newConfig.innerBrightness !== oldConfig.innerBrightness
+                ) {
+                    this.syncMaterials();
+                }
+            },
         },
     },
 };

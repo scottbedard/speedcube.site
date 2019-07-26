@@ -1,99 +1,53 @@
 <script>
-import {
-    BackSide,
-    FrontSide,
-    Group,
-    Mesh,
-    MeshLambertMaterial,
-} from 'three';
-
+import { Group, Mesh } from 'three';
 import base from '../base';
 
 export default {
     created() {
-        // create a mesh for each side of our shape
-        const outerMaterial = new MeshLambertMaterial({
-            color: this.color,
-            side: FrontSide,
-        });
+        const innerMesh = new Mesh(this.geometry, this.innerMaterial);
+        const outerMesh = new Mesh(this.geometry, this.outerMaterial);
 
-        const outerMesh = new Mesh(this.geometry, outerMaterial);
-
-        const innerMaterial = new MeshLambertMaterial({
-            color: this.color,
-            opacity: this.innerOpacity,
-            side: BackSide,
-            transparent: true,
-        });
-
-        const innerMesh = new Mesh(this.geometry, innerMaterial);
-
-        // create an object to attach our meshes to
         const group = new Group();
-        group.add(outerMesh);
         group.add(innerMesh);
+        group.add(outerMesh);
 
         this.$options.three.obj = group;
-        this.$options.three.innerMaterial = innerMaterial;
         this.$options.three.innerMesh = innerMesh;
-        this.$options.three.outerMaterial = outerMaterial;
         this.$options.three.outerMesh = outerMesh;
     },
-    destroyed() {
-        this.disposeMaterials();
-    },
     methods: {
-        disposeMaterials() {
-            const { innerMaterial, outerMaterial } = this.$options.three;
+        syncGeometry() {
+            if (this.$options.three.innerMesh) {
+                this.$options.three.innerMesh.geometry = this.geometry;
+            }
 
-            innerMaterial.dispose();
-            outerMaterial.dispose();
+            if (this.$options.three.outerMesh) {
+                this.$options.three.outerMesh.geometry = this.geometry;
+            }
+        },
+        syncInnerMesh() {
+            const { innerMesh } = this.$options.three;
+
+            innerMesh.material = this.innerMaterial;
+        },
+        syncOuterMesh() {
+            const { outerMesh } = this.$options.three;
+
+            outerMesh.material = this.outerMaterial;
         },
     },
     mixins: [
         base,
     ],
-    props: {
-        color: {
-            default: 0xffffff,
-            type: [Number, String],
-        },
-        innerOpacity: {
-            default: 0.8,
-            type: Number,
-        },
-        geometry: {
-            required: true,
-        },
-        outerOpacity: {
-            default: 1,
-            type: Number,
-        },
-    },
+    props: [
+        'geometry',
+        'innerMaterial',
+        'outerMaterial',
+    ],
     watch: {
-        color(color) {
-            const { innerMaterial, outerMaterial } = this.$options.three;
-
-            // normalize the new color
-            // '#123456' => 0x123456
-            if (typeof color === 'string') {
-                color = parseInt(color.replace('#', ''), 16);
-            }
-
-            innerMaterial.color.setHex(color);
-            outerMaterial.color.setHex(color);
-        },
-        geometry(geometry) {
-            const { innerMesh, outerMesh } = this.$options.three;
-
-            innerMesh.geometry = geometry;
-            outerMesh.geometry = geometry;
-        },
-        innerOpacity(opacity) {
-            const { innerMaterial } = this.$options.three;
-
-            innerMaterial.opacity = opacity;
-        },
+        geometry: 'syncGeometry',
+        innerMaterial: 'syncInnerMesh',
+        outerMaterial: 'syncOuterMesh',
     },
 };
 </script>

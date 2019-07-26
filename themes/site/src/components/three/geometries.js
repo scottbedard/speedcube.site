@@ -3,7 +3,8 @@ import { Shape, ShapeBufferGeometry } from 'three';
 /**
  * Create a rounded rectangle geometry.
  *
- * @param  {Number}                 size
+ * @param  {Number}                 height
+ * @param  {Number}                 width
  * @param  {Number}                 radius
  * @return {ShapeBufferGeometry}
  */
@@ -21,4 +22,15 @@ export function roundedRectangle(height, width, radius) {
     shape.quadraticCurveTo(0, 0, 0, radius);
 
     return new ShapeBufferGeometry(shape);
+}
+
+/**
+ * Helper to create a rounded square geometry.
+ *
+ * @param  {Number}                 size
+ * @param  {Number}                 radius
+ * @return {ShapeBufferGeometry}
+ */
+export function roundedSquare(size, radius) {
+    return roundedRectangle(size, size, radius);
 }

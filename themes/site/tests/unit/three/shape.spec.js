@@ -1,6 +1,7 @@
 /* eslint-disable */
 import shapeComponent from '@/components/three/shape/shape.vue';
 import { roundedRectangle } from '@/components/three/geometries';
+import { MeshBasicMaterial } from 'three';
 
 //
 // factory
@@ -15,142 +16,134 @@ const mount = factory({
 // specs
 //
 describe('<v-shape>', () => {
-    it('creates a shape group', () => {
+    it('creates group of meshes from geometry and materials', () => {
+        const geometry = roundedRectangle(10, 10, 2);
+        const innerMaterial = new MeshBasicMaterial();
+        const outerMaterial = new MeshBasicMaterial();
+
         const vm = mount({
             data() {
-                return {
-                    geometry: roundedRectangle(10, 10, 2)
-                };
+                return { geometry, innerMaterial, outerMaterial };
             },
-            template: `<v-shape ref="shape" :geometry="geometry" />`,
+            template: `
+                <v-shape
+                    ref="shape"
+                    :geometry="geometry"
+                    :inner-material="innerMaterial"
+                    :outer-material="outerMaterial"
+                />
+            `,
         });
         
-        const { innerMaterial, innerMesh, obj, outerMaterial, outerMesh } = vm.$refs.shape.$options.three;
+        const { innerMesh, obj, outerMesh } = vm.$refs.shape.$options.three;
 
-        expect(innerMaterial.type).toBe('MeshLambertMaterial');
-        expect(innerMesh.type).toBe('Mesh');
         expect(obj.type).toBe('Group');
-        expect(outerMaterial.type).toBe('MeshLambertMaterial');
+        expect(obj.children.length).toBe(2);
+        expect(obj.children.includes(innerMesh)).toBe(true);
+        expect(obj.children.includes(outerMesh)).toBe(true);
+
+        expect(innerMesh.type).toBe('Mesh');
+        expect(innerMesh.geometry).toBe(geometry);
+        expect(innerMesh.material).toBe(innerMaterial);
+        
         expect(outerMesh.type).toBe('Mesh');
+        expect(outerMesh.geometry).toBe(geometry);
+        expect(outerMesh.material).toBe(outerMaterial);
     });
 
-    it('disposes of materials when destroyed', async () => {
+    it('updates meshes when geometry changes', async () => {
+        const geometry1 = roundedRectangle(1, 1, 1);
+        const geometry2 = roundedRectangle(1, 1, 2);
+
         const vm = mount({
             data() {
                 return {
-                    geometry: roundedRectangle(1, 1, 0),
-                    shape: true,
+                    geometry: geometry1,
+                    innerMaterial: new MeshBasicMaterial(),
+                    outerMaterial: new MeshBasicMaterial(),
                 };
             },
-            template: `<v-shape v-if="shape" ref="shape" :geometry="geometry" />`,
+            template: `
+                <v-shape
+                    ref="shape"
+                    :geometry="geometry"
+                    :inner-material="innerMaterial"
+                    :outer-material="outerMaterial"
+                />
+            `,
         });
 
-        const { innerMaterial, outerMaterial } = vm.$refs.shape.$options.three;
-
-        const innerMaterialDispose = jest.spyOn(innerMaterial, 'dispose');
-        const outerMaterialDispose = jest.spyOn(outerMaterial, 'dispose');
-
-        vm.shape = false;
-        await vm.$nextTick();
-
-        expect(innerMaterialDispose).toHaveBeenCalled();
-        expect(outerMaterialDispose).toHaveBeenCalled();
-    });
-
-    it('updates color when changed', async () => {
-        const vm = mount({
-            data() {
-                return {
-                    color: 0xff0000,
-                    geometry: roundedRectangle(10, 10, 2)
-                };
-            },
-            template: `<v-shape ref="shape" :color="color" :geometry="geometry" />`,
-        });
-
-        const { innerMaterial, outerMaterial } = vm.$refs.shape.$options.three;
-
-        expect(innerMaterial.color).toEqual({ r: 1, g: 0, b: 0 });
-        expect(outerMaterial.color).toEqual({ r: 1, g: 0, b: 0 });
-
-        vm.color = 0x00ff00;
-        await vm.$nextTick();
-
-        expect(innerMaterial.color).toEqual({ r: 0, g: 1, b: 0 });
-        expect(outerMaterial.color).toEqual({ r: 0, g: 1, b: 0 });
-    });
-
-    it('updates inner opacity when changed', async () => {
-        const vm = mount({
-            data() {
-                return {
-                    geometry: roundedRectangle(10, 10, 2),
-                    innerOpacity: 0.5,
-                };
-            },
-            template: `<v-shape ref="shape" :geometry="geometry" :inner-opacity="innerOpacity" />`,
-        });
-
-        const { innerMaterial } = vm.$refs.shape.$options.three;
-
-        expect(innerMaterial.opacity).toBe(0.5);
-
-        vm.innerOpacity = 0.75;
-        await vm.$nextTick();
-
-        expect(innerMaterial.opacity).toBe(0.75);
-    });
-
-    it('updates geometry when changed', async () => {
-        const vm = mount({
-            data() {
-                return {
-                    geometry: roundedRectangle(1, 1, 0),
-                };
-            },
-            template: `<v-shape ref="shape" :geometry="geometry" />`,
-        });
-
-        // spy on necessary dispose functions
         const { innerMesh, outerMesh } = vm.$refs.shape.$options.three;
 
-        // set our geometry to a larger square
-        const newGeometry = roundedRectangle(2, 2, 0);
-        vm.geometry = newGeometry;
+        expect(innerMesh.geometry).toBe(geometry1);
+        expect(outerMesh.geometry).toBe(geometry1);
+
+        vm.geometry = geometry2;
         await vm.$nextTick();
 
-        // and the new geometries should be applied to the meshes
-        expect(innerMesh.geometry).toBe(newGeometry);
-        expect(outerMesh.geometry).toBe(newGeometry);
+        expect(innerMesh.geometry).toBe(geometry2);
+        expect(outerMesh.geometry).toBe(geometry2);
     });
 
-    it('accepts a hexadecimal triplet string as color', async () => {
+    it('updates inner mesh when inner material changes', async () => {
+        const geometry = roundedRectangle(1, 1, 1);
+        const material1 = new MeshBasicMaterial();
+        const material2 = new MeshBasicMaterial();
+
         const vm = mount({
             data() {
                 return {
-                    color: '#ff0000',
-                    geometry: roundedRectangle(10, 10, 2),
+                    geometry: geometry,
+                    innerMaterial: material1,
                 };
             },
-            template: `<v-shape ref="shape" :color="color" :geometry="geometry" />`,
+            template: `
+                <v-shape
+                    ref="shape"
+                    :geometry="geometry"
+                    :inner-material="innerMaterial"
+                />
+            `,
         });
 
-        const { innerMaterial, outerMaterial } = vm.$refs.shape.$options.three;
+        const { innerMesh } = vm.$refs.shape.$options.three;
 
+        expect(innerMesh.material).toBe(material1);
 
-        expect(innerMaterial.color.getHexString()).toEqual('ff0000');
-        expect(outerMaterial.color.getHexString()).toEqual('ff0000');
-
-        vm.color = '#00ff00';
+        vm.innerMaterial = material2;
         await vm.$nextTick();
 
-        expect(innerMaterial.color.getHexString()).toEqual('00ff00');
-        expect(outerMaterial.color.getHexString()).toEqual('00ff00');
+        expect(innerMesh.material).toBe(material2);
+    });
 
-        vm.color = '0000ff';
+    it('updates outer mesh when outer material changes', async () => {
+        const geometry = roundedRectangle(1, 1, 1);
+        const material1 = new MeshBasicMaterial();
+        const material2 = new MeshBasicMaterial();
+
+        const vm = mount({
+            data() {
+                return {
+                    geometry: geometry,
+                    outerMaterial: material1,
+                };
+            },
+            template: `
+                <v-shape
+                    ref="shape"
+                    :geometry="geometry"
+                    :outer-material="outerMaterial"
+                />
+            `,
+        });
+
+        const { outerMesh } = vm.$refs.shape.$options.three;
+
+        expect(outerMesh.material).toBe(material1);
+
+        vm.outerMaterial = material2;
         await vm.$nextTick();
 
-        expect(innerMaterial.color.getHexString()).toEqual('0000ff');
-        expect(outerMaterial.color.getHexString()).toEqual('0000ff');
+        expect(outerMesh.material).toBe(material2);
     });
 });
