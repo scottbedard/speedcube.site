@@ -84,4 +84,66 @@ describe('<v-shape>', () => {
         expect(innerMesh.geometry).toBe(geometry2);
         expect(outerMesh.geometry).toBe(geometry2);
     });
+
+    it('updates inner mesh when inner material changes', async () => {
+        const geometry = roundedRectangle(1, 1, 1);
+        const material1 = new MeshBasicMaterial();
+        const material2 = new MeshBasicMaterial();
+
+        const vm = mount({
+            data() {
+                return {
+                    geometry: geometry,
+                    innerMaterial: material1,
+                };
+            },
+            template: `
+                <v-shape
+                    ref="shape"
+                    :geometry="geometry"
+                    :inner-material="innerMaterial"
+                />
+            `,
+        });
+
+        const { innerMesh } = vm.$refs.shape.$options.three;
+
+        expect(innerMesh.material).toBe(material1);
+
+        vm.innerMaterial = material2;
+        await vm.$nextTick();
+
+        expect(innerMesh.material).toBe(material2);
+    });
+
+    it('updates outer mesh when outer material changes', async () => {
+        const geometry = roundedRectangle(1, 1, 1);
+        const material1 = new MeshBasicMaterial();
+        const material2 = new MeshBasicMaterial();
+
+        const vm = mount({
+            data() {
+                return {
+                    geometry: geometry,
+                    outerMaterial: material1,
+                };
+            },
+            template: `
+                <v-shape
+                    ref="shape"
+                    :geometry="geometry"
+                    :outer-material="outerMaterial"
+                />
+            `,
+        });
+
+        const { outerMesh } = vm.$refs.shape.$options.three;
+
+        expect(outerMesh.material).toBe(material1);
+
+        vm.outerMaterial = material2;
+        await vm.$nextTick();
+
+        expect(outerMesh.material).toBe(material2);
+    });
 });

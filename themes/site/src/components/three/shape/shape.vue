@@ -25,6 +25,16 @@ export default {
                 this.$options.three.outerMesh.geometry = this.geometry;
             }
         },
+        syncInnerMesh() {
+            const { innerMesh } = this.$options.three;
+
+            innerMesh.material = this.innerMaterial;
+        },
+        syncOuterMesh() {
+            const { outerMesh } = this.$options.three;
+
+            outerMesh.material = this.outerMaterial;
+        },
     },
     mixins: [
         base,
@@ -36,6 +46,8 @@ export default {
     ],
     watch: {
         geometry: 'syncGeometry',
+        innerMaterial: 'syncInnerMesh',
+        outerMaterial: 'syncOuterMesh',
     },
 };
 </script>
