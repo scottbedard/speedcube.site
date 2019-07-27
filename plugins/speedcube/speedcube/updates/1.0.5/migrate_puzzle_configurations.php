@@ -63,7 +63,7 @@ class MigratePuzzleConfigurations extends Migration
                 $data['turnDuration'] = $original['turnDuration'];
             }
 
-            return json_encode($data);
+            return json_encode((object) $data);
         };
 
         // update user configs
