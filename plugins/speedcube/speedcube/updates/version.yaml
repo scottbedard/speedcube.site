@@ -22,6 +22,6 @@
   - Comments
   - create_comments_table.php
 
-# 1.0.5:
-#   - Migrate puzzle configurations
-#   - 1.0.5/migrate_puzzle_configurations.php
+1.0.5:
+  - Migrate puzzle configurations
+  - 1.0.5/migrate_puzzle_configurations.php

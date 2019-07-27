@@ -43,7 +43,7 @@ class MigratePuzzleConfigurations extends Migration
 
             return json_encode([
                 'cameraAngle' => $original['cameraAngle'],
-                'cameraDistance' => ($original['cameraDistance'] / 8000) * 1000,
+                'cameraDistance' => ($original['cameraDistance'] / 8000) * 3000,
                 'colors' => $original['colors'],
                 'stickerElevation' => $original['stickerElevation'] / 100,
                 'stickerRadius' => $original['stickerRadius'] / 100,
