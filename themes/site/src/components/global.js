@@ -23,7 +23,6 @@ import modalComponent from './ui/modal.vue';
 import numberTransitionComponent from './transitions/number.vue';
 import pageComponent from './containers/page.vue';
 import rangeInputComponent from './ui/range_input.vue';
-import replayComponent from './ui/replay.vue';
 import scatterChartComponent from './charts/scatter_chart.vue';
 import selectComponent from './ui/select.vue';
 import spinnerComponent from './ui/spinner.vue';
@@ -74,7 +73,6 @@ export default {
     'v-input': inputComponent,
     'v-modal': modalComponent,
     'v-range-input': rangeInputComponent,
-    'v-replay': replayComponent,
     'v-select': selectComponent,
     'v-spinner': spinnerComponent,
     'v-switch': switchComponent,

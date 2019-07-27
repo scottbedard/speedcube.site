@@ -1,6 +1,7 @@
 <template>
     <v-page padded>
         <v-margin padded>
+            <pre class="text-xs">{{ solve }}</pre>
             <v-fade-transition>
                 <!-- loading -->
                 <div
@@ -30,10 +31,8 @@
                         <!-- puzzle -->
                         <div class="flex flex-wrap justify-center">
                             <div
-                                v-for="n in 3"
-                                class="border-2 border-primary-5 m-4 relative w-full"
-                                style="max-width: 320px"
-                                :key="n">
+                                class="border-2 border-grey-5 m-4 relative w-full"
+                                style="max-width: 320px">
                                 <div class="pb-full">
                                     <v-puzzle v-bind="puzzleParams" />
                                 </div>
@@ -85,6 +84,7 @@ import { get, noop } from 'lodash-es';
 import { animate } from '@/app/utils/function';
 import { getSolve } from '@/app/repositories/solves';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
+import replayComponent from '@/components/ui/replay.vue';
 
 export default {
     created() {
@@ -115,6 +115,7 @@ export default {
     },
     components: {
         'v-puzzle': puzzleComponent,
+        'v-replay': replayComponent,
     },
     computed: {
         cleanedSolution() {

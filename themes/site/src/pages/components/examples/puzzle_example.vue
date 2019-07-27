@@ -14,7 +14,7 @@
                     />
                 </div>
             </div>
-            <div v-if="puzzles === 1" class="text-xs px-8">
+            <div v-if="puzzles === 1" class="max-w-xs text-xs px-8 w-full">
                 <pre class="mb-4">turnProgress: {{ turnProgress }}</pre>
                 <pre>config: {{ config }}</pre>
             </div>
@@ -22,7 +22,7 @@
 
         <!-- cube controls -->
         <div>
-            <div class="max-w-xs mb-8 mx-auto">
+            <div class="max-w-sm mb-8 mx-auto">
                 <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Current Turn</label>
                 <div class="flex">
                     <div class="flex-1 pr-8">
@@ -43,7 +43,7 @@
                     </div>
                     <div class="p-4 w-full xs:w-1/2 sm:w-1/3">
                         <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Camera Distance</label>
-                        <v-range-input v-model="cameraDistance" :min="0" :max="400" />
+                        <v-range-input v-model="cameraDistance" :min="0" :max="1000" />
                     </div>
                     <div class="p-4 w-full xs:w-1/2 sm:w-1/3">
                         <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Sticker Radius</label>
