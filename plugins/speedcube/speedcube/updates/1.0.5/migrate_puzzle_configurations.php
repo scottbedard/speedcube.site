@@ -35,7 +35,7 @@ class MigratePuzzleConfigurations extends Migration
 
             // camera distance
             if (array_key_exists('cameraDistance', $original)) {
-                $data['cameraDistance'] = ($original['cameraDistance'] / 8000) * 1000;
+                $data['cameraDistance'] = ($original['cameraDistance'] / 8000) * 800;
             }
 
             // colors
