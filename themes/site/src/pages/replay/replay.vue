@@ -30,19 +30,21 @@
 
                             <!-- puzzle -->
                             <v-grid-cell md="8" lg="9">
-                                <h1 class="text-center text-4xl">
+                                <h1 class="flex justify-center text-center text-4xl">
                                     <router-link
                                         v-text="solve.user.username"
                                         class="text-grey-8 hover:text-grey-10"
                                         :to="{ name: 'users:show', params: { username }}"
-                                    /> &bull; {{ solve.time | shortTimer }}
+                                    />
+                                    <span class="mx-3 text-grey-4">-</span>
+                                    <span>{{ solve.time | shortTimer }}</span>
                                 </h1>
                                 <div class="mb-12 text-grey-7 text-lg text-center">
                                     <strong>{{ 'turn' | pluralize(solve.moves, true) }}</strong> at <strong>{{ turnsPerSec }}</strong> {{ turnsPerSec === 1 ? 'turn' : 'turns' }} per second
                                 </div>
 
                                 <div class="flex justify-center">
-                                    <div class="max-w-sm mb-12 relative w-full">
+                                    <div class="max-w-sm mb-8 relative w-full">
                                         <div class="pb-full">
                                             <v-puzzle v-bind="puzzleParams" />
                                         </div>
@@ -50,23 +52,37 @@
                                 </div>
                                 
                                 <div class="text-center">
-                                    <v-fade-transition>
-                                        <!-- inspection -->
-                                        <div v-if="playing && inspection" key="inspection">
-                                            inspection
+                                    <!-- inspection -->
+                                    <div v-if="playing && inspection" key="inspection">
+                                        <v-counter
+                                            v-slot="{ value }"
+                                            class="font-mono text-grey-6 tracking-wide text-2xl"
+                                            :interval="1000">
+                                            {{ round(15000 - value, -3) / 1000 }}
+                                        </v-counter>
+                                    </div>
+
+                                    <!-- playing / complete -->
+                                    <div v-else key="solve">
+                                        <div v-if="plays > 0" class="mb-8">
+                                            <v-counter
+                                                v-slot="{ value }"
+                                                class="font-mono text-grey-8 tracking-wide text-2xl"
+                                                :class="{
+                                                    'text-grey-6': !complete,
+                                                    'text-grey-8': complete,   
+                                                }"
+                                                :max="solve.time">
+                                                {{ value | shortTimer }}
+                                            </v-counter>
                                         </div>
 
-                                        <!-- solve -->
-                                        <div v-else-if="playing" key="solve">
-                                            <!-- <v-timer :max="24000" /> -->
-                                            {{ Date.now() }}
-                                        </div>
-
-                                        <!-- idle -->
-                                        <div v-else key="idle">
-                                            <v-button @click="play(lastMove.time)">Watch Replay</v-button>
-                                        </div>
-                                    </v-fade-transition>
+                                        <v-fade-transition>
+                                            <div v-if="!playing">
+                                                <v-button @click="play(lastMove.time)">Watch {{ plays > 0 ? 'Again' : 'Replay' }}</v-button>
+                                            </div>
+                                        </v-fade-transition>
+                                    </div>
                                 </div>
                             </v-grid-cell>
 
@@ -102,6 +118,7 @@ import { animate } from '@/app/utils/function';
 import { getSolve } from '@/app/repositories/solves';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
 import replayComponent from '@/components/ui/replay.vue';
+import Counter from '@/components/ui/counter.vue';
 
 export default {
     created() {
@@ -114,8 +131,14 @@ export default {
             // the current animation
             animation: { cancel: noop },
 
+            // set to true when the replay is complete
+            complete: false,
+
             // determine if the replay is playing or not
             playing: false,
+
+            // number of times the replay was played
+            plays: 0,
 
             // progress of the replay, 0 to 1
             progress: 0,
@@ -131,6 +154,7 @@ export default {
         this.animation.cancel();
     },
     components: {
+        'v-counter': Counter,
         'v-puzzle': puzzleComponent,
         'v-replay': replayComponent,
     },
@@ -179,6 +203,9 @@ export default {
                 .map(move => move.value)
                 .join(' ');
         },
+        round() {
+            return round;
+        },
         scramble() {
             return get(this.solve, 'scramble.scramble');
         },
@@ -189,7 +216,7 @@ export default {
             return get(this.solve, 'solution', '');
         },
         turnsPerSec() {
-            return round(this.solve.averageSpeed / 1000, 1);
+            return round(1000 / this.solve.averageSpeed, 1);
         },
         username() {
             return get(this.solve, 'user.username', '');
@@ -212,21 +239,21 @@ export default {
                 this.solveLoading = false;
             });
         },
-        onKeyup() {
-            // ...
-        },
         play(duration) {
             if (this.playing) {
                 return;
             }
 
+            this.complete = false;
             this.playing = true;
+            this.plays += 1;
 
             this.animation = animate((progress) => {
                 this.progress = progress;
             }, duration);
 
             componentTimeout(this, () => {
+                this.complete = true;
                 this.playing = false;
             }, duration);
         },
