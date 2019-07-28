@@ -1,7 +1,6 @@
 <template>
     <v-page padded>
         <v-margin padded>
-            <pre class="text-xs">{{ solve }}</pre>
             <v-fade-transition>
                 <!-- loading -->
                 <div
@@ -15,7 +14,6 @@
                 <!-- ready -->
                 <div
                     v-else
-                    class="text-center"
                     data-solve-ready
                     key="solveReady">
 
@@ -28,49 +26,68 @@
                         :solution="solution"
                         :type="puzzleType">
 
-                        <!-- puzzle -->
-                        <div class="flex flex-wrap justify-center">
-                            <div
-                                class="border-2 border-grey-5 m-4 relative w-full"
-                                style="max-width: 320px">
-                                <div class="pb-full">
-                                    <v-puzzle v-bind="puzzleParams" />
-                                </div>
-                            </div>
-                        </div>
+                        <v-grid padded>
 
-                        <v-fade-transition>
-                            <!-- inspection -->
-                            <div v-if="playing && inspection" key="inspection">
-                                inspection
-                            </div>
-
-                            <!-- solve -->
-                            <div v-else-if="playing" key="solve">
-                                <!-- <v-timer :max="24000" /> -->
-                                {{ Date.now() }}
-                            </div>
-
-                            <!-- idle -->
-                            <div v-else key="idle">
-                                <!-- controls -->
-                                <div class="mb-12">
-                                    <v-button @click="play(lastMove.time)">Watch Replay</v-button>
+                            <!-- puzzle -->
+                            <v-grid-cell md="8" lg="9">
+                                <h1 class="text-center text-4xl">
+                                    <router-link
+                                        v-text="solve.user.username"
+                                        class="text-grey-8 hover:text-grey-10"
+                                        :to="{ name: 'users:show', params: { username }}"
+                                    /> &bull; {{ solve.time | shortTimer }}
+                                </h1>
+                                <div class="mb-12 text-grey-7 text-lg text-center">
+                                    <strong>{{ 'turn' | pluralize(solve.moves, true) }}</strong> at <strong>{{ turnsPerSec }}</strong> {{ turnsPerSec === 1 ? 'turn' : 'turns' }} per second
                                 </div>
 
-                                <!-- scramble and solution -->
-                                <div class="leading-normal max-w-md mb-8 mx-auto text-left tracking-wide">
-                                    <div class="mb-8">
-                                        <div class="font-bold text-grey-4 text-xs uppercase">Scramble</div>
-                                        <div class="text-grey-7">{{ scramble }}</div>
-                                    </div>
-                                    <div class="">
-                                        <div class="font-bold text-grey-4 text-xs uppercase">Solution</div>
-                                        <div class="text-grey-7">{{ cleanedSolution }}</div>
+                                <div class="flex justify-center">
+                                    <div class="max-w-sm mb-12 relative w-full">
+                                        <div class="pb-full">
+                                            <v-puzzle v-bind="puzzleParams" />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </v-fade-transition>
+                                
+                                <div class="text-center">
+                                    <v-fade-transition>
+                                        <!-- inspection -->
+                                        <div v-if="playing && inspection" key="inspection">
+                                            inspection
+                                        </div>
+
+                                        <!-- solve -->
+                                        <div v-else-if="playing" key="solve">
+                                            <!-- <v-timer :max="24000" /> -->
+                                            {{ Date.now() }}
+                                        </div>
+
+                                        <!-- idle -->
+                                        <div v-else key="idle">
+                                            <v-button @click="play(lastMove.time)">Watch Replay</v-button>
+                                        </div>
+                                    </v-fade-transition>
+                                </div>
+                            </v-grid-cell>
+
+                            <!-- sidebar -->
+                            <v-grid-cell md="4" lg="3">
+                                <div class="leading-normal mb-8">
+                                    <div class="mb-2 tracking-widest text-grey-6 text-xs uppercase">Scramble</div>
+                                    <div class="tracking-widest">{{ solve.scramble.scramble }}</div>
+                                </div>
+
+                                <div class="leading-normal mb-8">
+                                    <div class="mb-2 tracking-widest text-grey-6 text-xs uppercase">Inspection</div>
+                                    <div class="tracking-widest">{{ readableInspection }}</div>
+                                </div>
+
+                                <div class="leading-normal">
+                                    <div class="mb-2 tracking-widest text-grey-6 text-xs uppercase">Solution</div>
+                                    <div class="tracking-widest">{{ readableSolution }}</div>
+                                </div>
+                            </v-grid-cell>
+                        </v-grid>
                     </v-replay>
                 </div>
             </v-fade-transition>
@@ -80,7 +97,7 @@
 
 <script>
 import { bindExternalEvent, componentTimeout } from 'spyfu-vue-utils';
-import { get, noop } from 'lodash-es';
+import { get, noop, round } from 'lodash-es';
 import { animate } from '@/app/utils/function';
 import { getSolve } from '@/app/repositories/solves';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
@@ -118,14 +135,13 @@ export default {
         'v-replay': replayComponent,
     },
     computed: {
-        cleanedSolution() {
-            return this.moves
-                .filter(move => move.type === 'turn')
-                .map(move => move.value)
-                .join(' ');
-        },
         config() {
             return get(this.solve, 'config');
+        },
+        inspectionMoves() {
+            const startIndex = this.moves.findIndex(event => event.value === 'START');
+
+            return this.moves.slice(0, startIndex);
         },
         moves() {
             return this.solution.split(' ').map((move) => {
@@ -143,8 +159,25 @@ export default {
                 return { time, type, value };
             });
         },
+        postInspectionMoves() {
+            const startIndex = this.moves.findIndex(event => event.value === 'START');
+
+            return this.moves.slice(startIndex + 1);
+        },
         puzzleType() {
             return get(this.solve, 'scramble.puzzle');
+        },
+        readableInspection() {
+            return this.inspectionMoves
+                .filter(move => move.type === 'turn')
+                .map(turn => turn.value)
+                .join(' ');
+        },
+        readableSolution() {
+            return this.postInspectionMoves
+                .filter(move => move.type === 'turn')
+                .map(move => move.value)
+                .join(' ');
         },
         scramble() {
             return get(this.solve, 'scramble.scramble');
@@ -154,6 +187,12 @@ export default {
         },
         solution() {
             return get(this.solve, 'solution', '');
+        },
+        turnsPerSec() {
+            return round(this.solve.averageSpeed / 1000, 1);
+        },
+        username() {
+            return get(this.solve, 'user.username', '');
         },
     },
     methods: {
