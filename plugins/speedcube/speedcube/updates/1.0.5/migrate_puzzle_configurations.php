@@ -73,7 +73,7 @@ class MigratePuzzleConfigurations extends Migration
         });
 
         // update solves
-        Solve::all()->each(function($solve) use ($update) {
+        Solve::completed()->get()->each(function($solve) use ($update) {
             $solve->config = $update($solve->config);
             $solve->save();
         });
