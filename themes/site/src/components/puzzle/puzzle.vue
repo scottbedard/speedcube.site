@@ -1,8 +1,8 @@
 <template>
     <div>
         <v-scene
-            :camera-angle="cameraAngle"
-            :camera-distance="cameraDistance">
+            :camera-angle="normalizedConfig.cameraAngle"
+            :camera-distance="normalizedConfig.cameraDistance">
 
             <v-axes-helper :size="150" />
 
@@ -20,9 +20,9 @@
                 :position="{ x: 0, y: 2000, z: 2000 }"
             />
 
-            <!-- cube -->
+            <!-- cubes -->
             <v-cube
-                :config="config"
+                :config="normalizedConfig"
                 :current-turn="currentTurn"
                 :model="model"
                 :turn-progress="turnProgress"
@@ -32,11 +32,16 @@
 </template>
 
 <script>
-import { get } from 'lodash-es';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
 import lightComponent from '@/components/three/light/light.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
 import cubeComponent from './cube/cube.vue';
+
+// default puzzle config
+const defaultConfig = {
+    cameraAngle: 50,
+    cameraDistance: 215,
+};
 
 export default {
     components: {
@@ -46,14 +51,11 @@ export default {
         'v-scene': sceneComponent,
     },
     computed: {
-        cameraAngle() {
-            return get(this.config, 'cameraAngle', 0);
-        },
-        cameraDistance() {
-            return get(this.config, 'cameraDistance', 2000);
-        },
         isCube() {
             return ['2x2', '3x3', '4x4', '5x5'].includes(this.type);
+        },
+        normalizedConfig() {
+            return { ...defaultConfig, ...this.config };
         },
     },
     props: {

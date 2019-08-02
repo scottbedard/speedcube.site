@@ -160,7 +160,7 @@ export default {
     },
     computed: {
         config() {
-            return get(this.solve, 'config');
+            return get(this.solve, 'config', {});
         },
         inspectionMoves() {
             const startIndex = this.moves.findIndex(event => event.value === 'START');

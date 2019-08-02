@@ -2,7 +2,7 @@
     <v-obj>
         <!-- resting stickers -->
         <v-cube-stickers
-            :config="config"
+            :config="normalizedConfig"
             :filter="sticker => turningStickers.includes(sticker) === false"
             :geometry="geometry"
             :materials="materials"
@@ -13,7 +13,7 @@
         <!-- turning stickers -->
         <v-obj :rotation="rotation">
             <v-cube-stickers
-                :config="config"
+                :config="normalizedConfig"
                 :filter="sticker => turningStickers.includes(sticker) === true"
                 :geometry="geometry"
                 :materials="materials"
@@ -34,11 +34,19 @@ import { getStickersEffectedByTurn } from './utils';
 import { roundedSquare } from '@/components/three/geometries';
 
 const defaultConfig = {
-    colors: ['#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ffff00', '#ffffff'],
-    innerBrightness: 0.8,
-    stickerElevation: 0.5,
-    stickerRadius: 0.5,
-    stickerSpacing: 0.5,
+    colors: [
+        '#FFEE5D', // U
+        '#EFAA18', // L
+        '#2589E2', // F
+        '#EC6157', // R
+        '#5CBD60', // B
+        '#F0F0F0', // D
+    ],
+    innerBrightness: 0.9,
+    stickerElevation: 0.2,
+    stickerRadius: 0.1,
+    stickerSpacing: 0.2,
+    turnDuration: 100,
 };
 
 export default {
