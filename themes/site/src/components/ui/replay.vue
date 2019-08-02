@@ -147,7 +147,7 @@ export default {
             return this.duration * this.progress;
         },
         turnDuration() {
-            return Number(get(this.normalizedConfig, 'turnDuration', 0));
+            return Number(get(this.normalizedConfig, 'turnDuration', 100));
         },
         turnProgress() {
             if (!this.currentTurn) {

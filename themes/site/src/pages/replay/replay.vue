@@ -25,12 +25,10 @@
                         :scrambled-state="scrambledState"
                         :solution="solution"
                         :type="puzzleType">
-
                         <v-grid padded>
-
-                            <!-- puzzle -->
                             <v-grid-cell md="8" lg="9">
-                                <h1 class="flex justify-center text-center text-4xl">
+                                <!-- title -->
+                                <h1 class="flex justify-center mb-2 text-center text-4xl">
                                     <router-link
                                         v-text="solve.user.username"
                                         class="text-grey-8 hover:text-grey-10"
@@ -39,12 +37,17 @@
                                     <span class="mx-3 text-grey-4">-</span>
                                     <span>{{ solve.time | shortTimer }}</span>
                                 </h1>
-                                <div class="mb-12 text-grey-7 text-lg text-center">
-                                    <strong>{{ 'turn' | pluralize(solve.moves, true) }}</strong> at <strong>{{ turnsPerSec }}</strong> {{ turnsPerSec === 1 ? 'turn' : 'turns' }} per second
+
+                                <!-- info -->
+                                <div class="leading-normal mb-8 text-center text-grey-7 text-lg">
+                                    <div class="mb-2">
+                                        <strong>{{ 'turn' | pluralize(solve.moves, true) }}</strong> at <strong>{{ turnsPerSec }}</strong> {{ turnsPerSec === 1 ? 'turn' : 'turns' }} per second
+                                    </div>
+                                    <time :datetime="solveDate">{{ solve.createdAt | datestamp }}</time>
                                 </div>
 
-                                <div class="flex justify-center">
-                                    <div class="max-w-sm mb-8 relative w-full">
+                                <div class="flex justify-center mb-8">
+                                    <div class="max-w-sm relative w-full">
                                         <div class="pb-full">
                                             <v-puzzle v-bind="puzzleParams" />
                                         </div>
@@ -88,19 +91,19 @@
 
                             <!-- sidebar -->
                             <v-grid-cell md="4" lg="3">
-                                <div class="leading-normal mb-8">
+                                <div class="mb-8">
                                     <div class="mb-2 tracking-widest text-grey-6 text-xs uppercase">Scramble</div>
-                                    <div class="tracking-widest">{{ solve.scramble.scramble }}</div>
+                                    <div class="leading-loose text-sm tracking-widest">{{ solve.scramble.scramble }}</div>
                                 </div>
 
-                                <div class="leading-normal mb-8">
+                                <div class="mb-8">
                                     <div class="mb-2 tracking-widest text-grey-6 text-xs uppercase">Inspection</div>
-                                    <div class="tracking-widest">{{ readableInspection }}</div>
+                                    <div class="leading-loose text-sm tracking-widest">{{ readableInspection }}</div>
                                 </div>
 
-                                <div class="leading-normal">
+                                <div>
                                     <div class="mb-2 tracking-widest text-grey-6 text-xs uppercase">Solution</div>
-                                    <div class="tracking-widest">{{ readableSolution }}</div>
+                                    <div class="leading-loose text-sm tracking-widest">{{ readableSolution }}</div>
                                 </div>
                             </v-grid-cell>
                         </v-grid>
@@ -214,6 +217,10 @@ export default {
         },
         solution() {
             return get(this.solve, 'solution', '');
+        },
+        solveDate() {
+            // '2019-01-01 00:00:00' => '2019-01-01'
+            return get(this.solve, 'createdAt', '').split(' ').shift();
         },
         turnsPerSec() {
             return round(1000 / this.solve.averageSpeed, 1);
