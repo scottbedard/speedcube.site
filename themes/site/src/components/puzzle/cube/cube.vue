@@ -32,22 +32,7 @@ import objComponent from '@/components/three/obj/obj.vue';
 import cubeStickersComponent from './cube_stickers/cube_stickers.vue';
 import { getStickersEffectedByTurn } from './utils';
 import { roundedSquare } from '@/components/three/geometries';
-
-const defaultConfig = {
-    colors: [
-        '#FFEE5D', // U
-        '#EFAA18', // L
-        '#2589E2', // F
-        '#EC6157', // R
-        '#5CBD60', // B
-        '#F0F0F0', // D
-    ],
-    innerBrightness: 0.9,
-    stickerElevation: 0.2,
-    stickerRadius: 0.1,
-    stickerSpacing: 0.2,
-    turnDuration: 100,
-};
+import { defaultCubeConfig } from '@/app/constants';
 
 export default {
     created() {
@@ -70,7 +55,7 @@ export default {
     },
     computed: {
         normalizedConfig() {
-            return { ...defaultConfig, ...this.config };
+            return { ...defaultCubeConfig, ...this.config };
         },
         parsedTurn() {
             if (this.currentTurn) {

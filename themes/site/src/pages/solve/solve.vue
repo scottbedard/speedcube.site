@@ -1,8 +1,6 @@
 <template>
     <v-page padded>
         <v-margin padded>
-            Hello from the new solve page!
-
             <!-- content -->
             <v-fade-transition>
 

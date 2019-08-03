@@ -1,6 +1,23 @@
 // the current year
 export const currentYear = (new Date()).getFullYear();
 
+// default cube config
+export const defaultCubeConfig = {
+    colors: [
+        '#FFEE5D', // U
+        '#EFAA18', // L
+        '#2589E2', // F
+        '#EC6157', // R
+        '#5CBD60', // B
+        '#F0F0F0', // D
+    ],
+    innerBrightness: 0.9,
+    stickerElevation: 0.2,
+    stickerRadius: 0.1,
+    stickerSpacing: 0.2,
+    turnDuration: 100,
+};
+
 // default cube keyboard config
 export const defaultCubeKeyboardConfig = {
     modifiers: {
@@ -83,21 +100,25 @@ export const spacebarKeyCode = 32;
 export const puzzles = {
     '2x2': {
         color: '#4098D7',
+        defaultConfig: defaultCubeConfig,
         slug: '2x2',
         title: '2x2',
     },
     '3x3': {
         color: '#f5d16f',
+        defaultConfig: defaultCubeConfig,
         slug: '3x3',
         title: '3x3',
     },
     '4x4': {
         color: '#4CAF50',
+        defaultConfig: defaultCubeConfig,
         slug: '4x4',
         title: '4x4',
     },
     '5x5': {
         color: '#f44336',
+        defaultConfig: defaultCubeConfig,
         slug: '5x5',
         title: '5x5',
     },
