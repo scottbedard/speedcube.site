@@ -68,7 +68,7 @@ export const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > 
 export const isProduction = process.env.NODE_ENV === 'production';
 
 // determine if we're un a unit testing environment
-export const isTesting = process.env.NODE_ENV === 'testing';
+export const isTesting = process.env.NODE_ENV === 'test';
 
 // @todo: determine if we're using a touch device
 export const isTouch = false;

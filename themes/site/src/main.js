@@ -15,11 +15,6 @@ import boot from './app/boot';
 boot(Vue);
 
 //
-// disable the production tip, we know what we're doing
-//
-Vue.config.productionTip = false;
-
-//
 // create a store
 //
 const store = new Vuex.Store({
@@ -54,7 +49,7 @@ if (vuetober) {
 //
 // mount our application to the dom
 //
-new Vue({
+window.app = new Vue({
     router,
     store,
     render: h => h(rootComponent),
