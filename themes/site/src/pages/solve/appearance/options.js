@@ -17,7 +17,7 @@ const base = [
         component: numberPickerComponent,
         id: 'cameraDistance',
         label: 'Camera Distance',
-        props: { max: 2000, min: 1, step: 1 },
+        props: { max: 1000, min: 1, step: 1 },
     },
     {
         cell: { sm: 6, md: 4 },
@@ -62,6 +62,13 @@ const cube = [
         id: 'stickerRadius',
         label: 'Sticker Radius',
         props: { max: 0.5, min: 0, step: 0.01 },
+    },
+    {
+        cell: { sm: 6, md: 4 },
+        component: numberPickerComponent,
+        id: 'innerBrightness',
+        label: 'Inner Brightness',
+        props: { max: 1, min: 0, step: 0.01 },
     },
 ];
 

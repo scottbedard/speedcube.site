@@ -1,6 +1,8 @@
 <template>
     <v-page padded>
         <v-margin padded>
+            <!-- <pre class="text-xs">{{ config }}</pre> -->
+
             <!-- puzzle -->
             <div class="max-w-xs mb-8 mx-auto">
                 <div class="pb-full relative">
@@ -21,6 +23,7 @@
                     data-appearance
                     key="appearance">
                     <v-appearance
+                        :initial-config="config"
                         @clear="clearPreviewConfig"
                         @set="setPreviewConfig"
                     />
@@ -32,8 +35,8 @@
                     class="text-center"
                     data-default
                     key="default">
-                    <router-link class="mx-4" :to="{ query: { content: 'appearance' }}">
-                        <i class="fa fa-sliders mr-2" />Customize Puzzle
+                    <router-link class="mx-4 tracking-wide" :to="{ query: { content: 'appearance' }}">
+                        <i class="fa fa-sliders mr-2" />Customize Appearance
                     </router-link>
                 </div>
             </v-fade-transition>
@@ -45,6 +48,7 @@
 import { get } from 'lodash-es';
 import Cube from 'bedard-cube';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
+import { puzzles } from '@/app/constants';
 
 export default {
     data() {
@@ -69,7 +73,7 @@ export default {
                 return this.previewConfig;
             }
 
-            return {};
+            return get(puzzles, `${this.puzzle}.defaultConfig`, {});
         },
         content() {
             // normalize the currently open tab

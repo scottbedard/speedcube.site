@@ -12,7 +12,7 @@
                     <label
                         v-if="field.label"
                         v-text="field.label"
-                        class="block mb-2 text-grey-6"
+                        class="block text-grey-6"
                     />
                     <component
                         v-bind="field.props"
@@ -86,7 +86,7 @@ export default {
         cloneConfig() {
             // create a clone of the default config, or the user's
             // custom config if they have already created one.
-            let config = this.defaultConfig;
+            let config = { ...this.defaultConfig, ...this.initialConfig };
 
             if (this.isAuthenticated) {
                 const model = this.configs.find(cfg => cfg.puzzle === this.puzzle);
@@ -118,6 +118,9 @@ export default {
             }
         },
     },
+    props: [
+        'initialConfig',
+    ],
     watch: {
         config: {
             deep: true,
