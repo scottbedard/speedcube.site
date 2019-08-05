@@ -24,6 +24,7 @@
                     key="appearance">
                     <v-appearance
                         :initial-config="config"
+                        @apply="applyConfig"
                         @clear="clearPreviewConfig"
                         @set="setPreviewConfig"
                     />
@@ -57,6 +58,9 @@ export default {
     },
     data() {
         return {
+            // applied guest config
+            appliedConfig: null,
+
             model: null,
 
             // visual config being previewed
@@ -100,6 +104,10 @@ export default {
                 return { ...defaultConfig, ...this.previewConfig };
             }
 
+            if (this.appliedConfig) {
+                return { ...defaultConfig, ...this.appliedConfig };
+            }
+
             return { ...defaultConfig, ...this.activeConfig };
         },
         content() {
@@ -112,6 +120,9 @@ export default {
         },
     },
     methods: {
+        applyConfig(config) {
+            this.appliedConfig = config;
+        },
         clearPreviewConfig() {
             this.previewConfig = null;
         },

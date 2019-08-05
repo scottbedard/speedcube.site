@@ -110,11 +110,18 @@ export default {
                 }).then(() => {
                     // success
                     this.$router.push(this.solveRoute);
+
                     this.$alert('Puzzle configuration saved!');
                 }).finally(() => {
                     // complete
                     this.loading = false;
                 });
+            } else {
+                this.$emit('apply', this.config);
+
+                this.$router.push(this.solveRoute);
+
+                this.$alert('Configuration applied, sign in to save these settings.');
             }
         },
     },
