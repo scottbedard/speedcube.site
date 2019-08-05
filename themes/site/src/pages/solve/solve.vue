@@ -1,6 +1,17 @@
 <template>
     <v-page padded>
         <v-margin padded>
+            <!-- puzzle -->
+            <div class="max-w-xs mb-8 mx-auto">
+                <div class="pb-full relative">
+                    <v-puzzle
+                        :config="config"
+                        :model="model"
+                        :type="puzzle"
+                    />
+                </div>
+            </div>
+
             <!-- content -->
             <v-fade-transition>
 
@@ -9,7 +20,10 @@
                     v-if="appearance"
                     data-appearance
                     key="appearance">
-                    <v-appearance @change="previewAppearance" />
+                    <v-appearance
+                        @clear="clearPreviewConfig"
+                        @set="setPreviewConfig"
+                    />
                 </div>
 
                 <!-- default -->
@@ -29,24 +43,49 @@
 
 <script>
 import { get } from 'lodash-es';
+import Cube from 'bedard-cube';
+import puzzleComponent from '@/components/puzzle/puzzle.vue';
 
 export default {
+    data() {
+        return {
+            model: new Cube(3, { useObjects: true }),
+
+            // visual config being previewed
+            previewConfig: null,
+        };
+    },
     components: {
         'v-appearance': () => import('./appearance/appearance.vue'),
+        'v-puzzle': puzzleComponent,
     },
     computed: {
         appearance() {
             // determine if the appearance editor should be visible
             return this.content === 'appearance';
         },
+        config() {
+            if (this.previewConfig) {
+                return this.previewConfig;
+            }
+
+            return {};
+        },
         content() {
             // normalize the currently open tab
             return get(this.$route, 'query.content', '').toLowerCase().trim();
         },
+        puzzle() {
+            // parse and normalize the puzzle id from current route
+            return get(this.$route, 'params.puzzle', 'unknown').trim().toLowerCase();
+        },
     },
     methods: {
-        previewAppearance() {
-            // ...
+        clearPreviewConfig() {
+            this.previewConfig = null;
+        },
+        setPreviewConfig(config) {
+            this.previewConfig = config;
         },
     },
 };

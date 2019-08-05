@@ -47,6 +47,9 @@ export default {
             loading: false,
         };
     },
+    destroyed() {
+        this.$emit('clear');
+    },
     computed: {
         ...mapGetters('user', [
             'isAuthenticated',
@@ -119,7 +122,7 @@ export default {
         config: {
             deep: true,
             handler() {
-                this.$emit('change', this.config);
+                this.$emit('set', this.config);
             },
         },
     },
