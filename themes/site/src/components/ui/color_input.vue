@@ -2,8 +2,9 @@
     <div class="inline-block relative" @click.stop>
         <!-- display -->
         <a
-            class="block h-8 w-8 rounded-full"
+            class="block h-6 w-6 rounded-full"
             href="#"
+            title="Click to change"
             :style="{
                 backgroundColor: value,
             }"
@@ -39,6 +40,7 @@ import { bindExternalEvent } from 'spyfu-vue-utils';
 export default {
     created() {
         bindExternalEvent(this, document.body, 'click', this.collapse);
+        bindExternalEvent(this, document.body, 'keyup', this.onBodyKeyup);
     },
     data() {
         return {
@@ -56,6 +58,12 @@ export default {
         expand() {
             this.cachedColor = this.value;
             this.expanded = true;
+        },
+        onBodyKeyup(e) {
+            if (this.expanded && e.key === 'Escape') {
+                this.expanded = false;
+                this.$emit('input', this.cachedColor);
+            }
         },
         onInput(color) {
             this.$emit('input', color.hex);
