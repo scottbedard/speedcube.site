@@ -1,15 +1,13 @@
 <template>
-    <div>
-        <div class="flex flex-wrap -m-2">
-            <div
-                v-for="n in faces"
-                class="p-2"
-                :key="n">
-                <v-color-input
-                    :value="value[n - 1] || '#FFFFFF'"
-                    @input="setColor($event, n - 1)"
-                />
-            </div>
+    <div class="flex flex-wrap -m-2 pt-2">
+        <div
+            v-for="n in faces"
+            class="p-2"
+            :key="n">
+            <v-color-input
+                :value="value[n - 1] || '#FFFFFF'"
+                @input="setColor($event, n - 1)"
+            />
         </div>
     </div>
 </template>

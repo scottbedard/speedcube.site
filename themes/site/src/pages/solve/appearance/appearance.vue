@@ -1,35 +1,40 @@
 <template>
-    <div class="max-w-2xl mx-auto">
-        <!-- fields -->
-        <v-grid padded>
-            <v-grid-cell
-                v-bind="field.cell"
-                v-for="field in fields"
-                :key="field.id">
-                <label
-                    v-if="field.label"
-                    v-text="field.label"
-                    class="block mb-4 text-grey-6"
-                />
-                <component
-                    v-bind="field.props"
-                    v-model="config[field.id]"
-                    :is="field.component"
-                />
-            </v-grid-cell>
-        </v-grid>
+    <div class="max-w-3xl mx-auto">
+        <form @submit.prevent="updateConfig">
+            <!-- <pre class="text-xs">{{ config }}</pre> -->
 
-        <!-- actions -->
-        <div class="flex justify-end mt-8">
-            <v-button primary type="submit">Save</v-button>
-        </div>
-    </div>  
+            <!-- fields -->
+            <v-grid padded>
+                <v-grid-cell
+                    v-bind="field.cell"
+                    v-for="field in fields"
+                    :key="field.id">
+                    <label
+                        v-if="field.label"
+                        v-text="field.label"
+                        class="block mb-2 text-grey-6"
+                    />
+                    <component
+                        v-bind="field.props"
+                        v-model="config[field.id]"
+                        :is="field.component"
+                    />
+                </v-grid-cell>
+            </v-grid>
+
+            <!-- actions -->
+            <div class="flex items-center justify-end mt-8">
+                <router-link class="mr-8" title="Click to discard changes" :to="solveRoute">Cancel</router-link>
+                <v-button primary type="submit">Save</v-button>
+            </div>
+        </form>
+    </div>
 </template>
 
 <script>
-import options from './options';
 import { cloneDeep, get } from 'lodash-es';
 import { mapGetters, mapState } from 'vuex';
+import options from './options';
 import { puzzles } from '@/app/constants';
 
 export default {
@@ -39,6 +44,7 @@ export default {
     data() {
         return {
             config: {},
+            loading: false,
         };
     },
     computed: {
@@ -64,6 +70,14 @@ export default {
             // parse and normalize the puzzle id from current route
             return get(this.$route, 'params.puzzle', 'unknown').trim().toLowerCase();
         },
+        solveRoute() {
+            return {
+                name: 'solve',
+                params: {
+                    puzzle: this.puzzle,
+                },
+            };
+        },
     },
     methods: {
         cloneConfig() {
@@ -75,11 +89,38 @@ export default {
                 const model = this.configs.find(cfg => cfg.puzzle === this.puzzle);
 
                 if (model) {
-                    try { config = JSON.parse(model.config) } catch (e) {}
+                    /* eslint-disable-next-line no-empty */
+                    try { config = JSON.parse(model.config); } catch (e) {}
                 }
             }
-            
+
             this.config = cloneDeep(config);
+        },
+        updateConfig() {
+            // save the user's config if they are authenticated
+            if (this.isAuthenticated) {
+                this.loading = true;
+
+                this.$store.dispatch('user/saveConfig', {
+                    config: JSON.stringify(this.config),
+                    puzzle: this.puzzle,
+                }).then(() => {
+                    // success
+                    this.$router.push(this.solveRoute);
+                    this.$alert('Puzzle configuration saved!');
+                }).finally(() => {
+                    // complete
+                    this.loading = false;
+                });
+            }
+        },
+    },
+    watch: {
+        config: {
+            deep: true,
+            handler() {
+                this.$emit('change', this.config);
+            },
         },
     },
 };

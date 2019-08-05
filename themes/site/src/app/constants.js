@@ -3,6 +3,8 @@ export const currentYear = (new Date()).getFullYear();
 
 // default cube config
 export const defaultCubeConfig = {
+    cameraAngle: 50,
+    cameraDistance: 200,
     colors: [
         '#FFEE5D', // U
         '#EFAA18', // L
@@ -15,7 +17,7 @@ export const defaultCubeConfig = {
     stickerElevation: 0.2,
     stickerRadius: 0.1,
     stickerSpacing: 0.2,
-    turnDuration: 100,
+    turnDuration: 80,
 };
 
 // default cube keyboard config

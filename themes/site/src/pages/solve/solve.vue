@@ -9,7 +9,7 @@
                     v-if="appearance"
                     data-appearance
                     key="appearance">
-                    <v-appearance />
+                    <v-appearance @change="previewAppearance" />
                 </div>
 
                 <!-- default -->
@@ -42,6 +42,11 @@ export default {
         content() {
             // normalize the currently open tab
             return get(this.$route, 'query.content', '').toLowerCase().trim();
+        },
+    },
+    methods: {
+        previewAppearance() {
+            // ...
         },
     },
 };

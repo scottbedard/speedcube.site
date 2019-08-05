@@ -1,5 +1,13 @@
 /* eslint-disable */
 import appearanceComponent from '@/pages/solve/appearance/appearance.vue';
+import axios from 'axios';
+
+//
+// fixtures
+//
+const emptyConfigsFixture = () => {
+    return { configs: [], status: 'success' };
+}
 
 //
 // mocks
@@ -52,6 +60,14 @@ const mount = factory({
 // specs
 //
 describe('solve page / appearance editor', () => {
+    beforeEach(() => {
+        stubRequests({
+            post: {
+                '/api/speedcube/speedcube/config': emptyConfigsFixture,
+            },
+        });
+    });
+
     it('uses the default config if no config model exists', () => {
         const vm = mount({
             beforeCreate() {
@@ -90,7 +106,34 @@ describe('solve page / appearance editor', () => {
         expect(vm.$refs.appearance.config).toEqual({ foo: 'custom' });
     });
 
-    // it('saves user config if authenticated', async () => {
-    //     // ...
-    // });
+    it('saves user config if authenticated and returns to solve page', async () => {
+        const vm = mount({
+            beforeCreate() {
+                this.$router.replace({ name: 'solve', params: { puzzle: 'test' }});
+            },
+            template: `<v-appearance ref="appearance" />`,
+        }, {
+            user: {
+                user: user(),
+            },
+        });
+
+        const push = jest.spyOn(vm.$router, 'push');
+
+        submit(vm.$el.querySelector('form'));
+
+        expect(axios.post).toHaveBeenCalledWith('/api/speedcube/speedcube/config', {
+            config: '{"foo":"default"}',
+            puzzle: 'test',
+        });
+
+        await vm.$nextTick();
+
+        expect(push).toHaveBeenCalledWith({
+            name: 'solve',
+            params: {
+                puzzle: 'test',
+            },
+        });
+    });
 });

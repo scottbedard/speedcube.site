@@ -53,7 +53,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="text-center">
                                     <!-- inspection -->
                                     <div v-if="playing && inspection" key="inspection">
@@ -73,7 +73,7 @@
                                                 class="font-mono text-grey-8 tracking-wide text-2xl"
                                                 :class="{
                                                     'text-grey-6': !complete,
-                                                    'text-grey-8': complete,   
+                                                    'text-grey-8': complete,
                                                 }"
                                                 :max="solve.time">
                                                 {{ value | shortTimer }}
