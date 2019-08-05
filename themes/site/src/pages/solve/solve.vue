@@ -49,11 +49,15 @@ import { get } from 'lodash-es';
 import Cube from 'bedard-cube';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
 import { puzzles } from '@/app/constants';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
+    created() {
+        this.createModel();
+    },
     data() {
         return {
-            model: new Cube(3, { useObjects: true }),
+            model: null,
 
             // visual config being previewed
             previewConfig: null,
@@ -64,16 +68,39 @@ export default {
         'v-puzzle': puzzleComponent,
     },
     computed: {
+        ...mapGetters('user', [
+            'isAuthenticated',
+        ]),
+        ...mapState('user', [
+            'user',
+        ]),
+        activeConfig() {
+            // return the users config for this puzzle
+            let activeConfig = {};
+
+            if (this.isAuthenticated) {
+                const userConfig = this.user.configs.find(obj => obj.puzzle === this.puzzle);
+
+                if (userConfig) {
+                    /* eslint-disable-next-line no-empty */
+                    try { activeConfig = JSON.parse(userConfig.config) } catch (e) {}
+                }
+            }
+
+            return activeConfig;
+        },
         appearance() {
             // determine if the appearance editor should be visible
             return this.content === 'appearance';
         },
         config() {
+            const defaultConfig = get(puzzles, `${this.puzzle}.defaultConfig`, {});
+
             if (this.previewConfig) {
-                return this.previewConfig;
+                return { ...defaultConfig, ...this.previewConfig };
             }
 
-            return get(puzzles, `${this.puzzle}.defaultConfig`, {});
+            return { ...defaultConfig, ...this.activeConfig };
         },
         content() {
             // normalize the currently open tab
@@ -87,6 +114,9 @@ export default {
     methods: {
         clearPreviewConfig() {
             this.previewConfig = null;
+        },
+        createModel() {
+            this.model = new Cube(3, { useObjects: true });
         },
         setPreviewConfig(config) {
             this.previewConfig = config;
