@@ -8,8 +8,10 @@
                 <div class="pb-full relative">
                     <v-puzzle
                         :config="config"
+                        :inspection="false"
                         :model="model"
                         :type="puzzle"
+                        :turnable="true"
                     />
                 </div>
             </div>

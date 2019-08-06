@@ -1,10 +1,17 @@
 <template>
     <div>
+        <!-- controller -->
+        <v-controller
+            :turnable="turnable"
+            @escape="onEscape"
+            @space="onSpace"
+        />
+
+        <!-- scene -->
         <v-scene
             :camera-angle="normalizedConfig.cameraAngle"
             :camera-distance="normalizedConfig.cameraDistance">
-
-            <v-axes-helper :size="150" />
+            <!-- <v-axes-helper :size="150" /> -->
 
             <!-- lights -->
             <v-light
@@ -36,6 +43,7 @@ import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue'
 import lightComponent from '@/components/three/light/light.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
 import cubeComponent from './cube/cube.vue';
+import controllerComponent from './controller/controller.vue';
 
 // default puzzle config
 const defaultConfig = {
@@ -46,6 +54,7 @@ const defaultConfig = {
 export default {
     components: {
         'v-axes-helper': axesHelperComponent,
+        'v-controller': controllerComponent,
         'v-cube': cubeComponent,
         'v-light': lightComponent,
         'v-scene': sceneComponent,
@@ -58,6 +67,14 @@ export default {
             return { ...defaultConfig, ...this.config };
         },
     },
+    methods: {
+        onEscape() {
+            this.$emit('escape');
+        },
+        onSpace() {
+            this.$emit('space');
+        },
+    },
     props: {
         config: {
             default: () => ({}),
@@ -66,8 +83,16 @@ export default {
         currentTurn: {
             type: String,
         },
+        inspection: {
+            default: false,
+            type: Boolean,
+        },
         model: {
             required: true,
+        },
+        turnable: {
+            default: false,
+            type: Boolean,
         },
         turnProgress: {
             default: 0,
