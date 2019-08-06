@@ -1,6 +1,7 @@
 <template>
     <div>
         <v-range-input
+            :disabled="disabled"
             :max="max"
             :min="min"
             :step="step"
@@ -18,6 +19,10 @@ export default {
         },
     },
     props: {
+        disabled: {
+            default: false,
+            type: Boolean,
+        },
         max: {
             required: true,
             type: Number,

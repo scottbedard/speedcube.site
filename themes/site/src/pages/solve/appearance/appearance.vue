@@ -17,6 +17,7 @@
                     <component
                         v-bind="field.props"
                         v-model="config[field.id]"
+                        :disabled="loading"
                         :is="field.component"
                     />
                 </v-grid-cell>
@@ -24,8 +25,16 @@
 
             <!-- actions -->
             <div class="flex items-center justify-end mt-8">
-                <router-link class="mr-8" title="Click to discard changes" :to="solveRoute">Cancel</router-link>
-                <v-button primary type="submit">Save</v-button>
+                <router-link
+                    v-if="!loading"
+                    v-text="'Cancel'"
+                    class="mr-8"
+                    title="Click to discard changes"
+                    :to="solveRoute"
+                />
+                <v-fade-transition>
+                    <v-button primary type="submit">Save</v-button>
+                </v-fade-transition>
             </div>
         </form>
     </div>

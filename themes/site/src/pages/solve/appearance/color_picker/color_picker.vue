@@ -5,6 +5,7 @@
             class="p-2"
             :key="n">
             <v-color-input
+                :disabled="disabled"
                 :value="value[n - 1] || '#FFFFFF'"
                 @input="setColor($event, n - 1)"
             />
@@ -24,6 +25,10 @@ export default {
         },
     },
     props: {
+        disabled: {
+            default: false,
+            type: Boolean,
+        },
         faces: {
             required: true,
             type: Number,

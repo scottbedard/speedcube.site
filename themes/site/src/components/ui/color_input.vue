@@ -1,10 +1,18 @@
 <template>
-    <div class="inline-block relative" @click.stop>
+    <div
+        class="inline-block relative"
+        :class="{
+            'cursor-not-allowed': disabled,
+        }"
+        @click.stop>
         <!-- display -->
         <a
             class="block h-6 w-6 rounded-full"
             href="#"
             title="Click to change"
+            :class="{
+                'cursor-not-allowed': disabled,
+            }"
             :style="{
                 backgroundColor: value,
             }"
@@ -56,8 +64,10 @@ export default {
             this.expanded = false;
         },
         expand() {
-            this.cachedColor = this.value;
-            this.expanded = true;
+            if (!this.disabled) {
+                this.cachedColor = this.value;
+                this.expanded = true;
+            }
         },
         onBodyKeyup(e) {
             if (this.expanded && e.key === 'Escape') {
@@ -66,7 +76,9 @@ export default {
             }
         },
         onInput(color) {
-            this.$emit('input', color.hex);
+            if (!this.disabled) {
+                this.$emit('input', color.hex);
+            }
         },
     },
     model: {
@@ -74,6 +86,10 @@ export default {
         prop: 'value',
     },
     props: {
+        disabled: {
+            default: false,
+            type: Boolean,
+        },
         value: {
             type: String,
         },
