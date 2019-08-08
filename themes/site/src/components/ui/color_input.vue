@@ -7,7 +7,7 @@
         @click.stop>
         <!-- display -->
         <a
-            class="block h-6 w-6 rounded-full"
+            class="block h-8 w-8 rounded-full"
             href="#"
             title="Click to change"
             :class="{

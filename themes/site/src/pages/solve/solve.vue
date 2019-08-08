@@ -17,32 +17,54 @@
             </div>
 
             <!-- content -->
-            <v-fade-transition>
+            <div class="flex justify-center">
+                <v-fade-transition>
 
-                <!-- appearance -->
-                <div
-                    v-if="appearance"
-                    data-appearance
-                    key="appearance">
-                    <v-appearance
-                        :initial-config="config"
-                        @apply="applyConfig"
-                        @clear="clearPreviewConfig"
-                        @set="setPreviewConfig"
-                    />
-                </div>
+                    <!-- appearance -->
+                    <div
+                        v-if="appearance"
+                        data-appearance
+                        key="appearance">
+                        <v-appearance
+                            :initial-config="config"
+                            @apply="applyConfig"
+                            @clear="clearPreviewConfig"
+                            @set="setPreviewConfig"
+                        />
+                    </div>
 
-                <!-- default -->
-                <div
-                    v-else
-                    class="text-center"
-                    data-default
-                    key="default">
-                    <router-link class="mx-4 tracking-wide" :to="{ query: { content: 'appearance' }}">
-                        <i class="fa fa-sliders mr-2" />Customize Appearance
-                    </router-link>
-                </div>
-            </v-fade-transition>
+                    <!-- keyboard -->
+                    <div
+                        v-else-if="keyboard"
+                        key="keyboard">
+                        <v-keyboard />
+                    </div>
+
+                    <!-- default -->
+                    <div
+                        v-else
+                        class="text-center"
+                        data-default
+                        key="default">
+                        <v-button
+                            class="mx-6"
+                            icon="fa-sliders"
+                            ghost
+                            title="Click to customize appearance"
+                            :to="{ query: { edit: 'appearance' }}">
+                            Customize Puzzle
+                        </v-button>
+                        <v-button
+                            class="mx-6"
+                            icon="fa-code"
+                            ghost
+                            title="Click to edit key bindings"
+                            :to="{ query: { edit: 'keyboard' }}">
+                            Edit Key Bindings
+                        </v-button>
+                    </div>
+                </v-fade-transition>
+            </div>
         </v-margin>
     </v-page>
 </template>
@@ -71,6 +93,7 @@ export default {
     },
     components: {
         'v-appearance': () => import('./appearance/appearance.vue'),
+        'v-keyboard': () => import('./keyboard/keyboard.vue'),
         'v-puzzle': puzzleComponent,
     },
     computed: {
@@ -97,7 +120,7 @@ export default {
         },
         appearance() {
             // determine if the appearance editor should be visible
-            return this.content === 'appearance';
+            return this.edit === 'appearance';
         },
         config() {
             const defaultConfig = get(puzzles, `${this.puzzle}.defaultConfig`, {});
@@ -112,9 +135,13 @@ export default {
 
             return { ...defaultConfig, ...this.activeConfig };
         },
-        content() {
+        edit() {
             // normalize the currently open tab
-            return get(this.$route, 'query.content', '').toLowerCase().trim();
+            return get(this.$route, 'query.edit', '').toLowerCase().trim();
+        },
+        keyboard() {
+            // determine if keyboard editor is open
+            return this.edit === 'keyboard';
         },
         puzzle() {
             // parse and normalize the puzzle id from current route

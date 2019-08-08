@@ -17,7 +17,7 @@ import { bindAll } from 'spyfu-vue-functional';
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { danger, icon, ghost, href, primary, to, type, uppercase } = context.props;
+        const { danger, icon, ghost, href, primary, to, type } = context.props;
 
         //
         // theme
@@ -34,12 +34,12 @@ export default {
             bindings.class.push('v-button-danger');
 
             if (ghost) {
-                bindings.class.push('text-grey-6 hover:text-danger-7');
+                bindings.class.push('text-grey-6 hover:text-danger-8');
             } else {
                 bindings.class.push('bg-danger-6 text-danger-10 hover:bg-danger-7 hover:text-grey-10');
             }
         } else if (ghost) {
-            bindings.class.push('text-grey-6 hover:text-grey-8');
+            bindings.class.push('text-grey-7 hover:text-grey-8');
         } else {
             bindings.class.push('bg-grey-5 text-grey-10 hover:bg-grey-7 hover:text-grey-10');
         }
@@ -64,15 +64,8 @@ export default {
             Tag = 'a';
         }
 
-        //
-        // uppercase
-        //
-        if (uppercase) {
-            bindings.class.push('uppercase');
-        }
-
         return <Tag
-            class="cursor-pointer font-bold inline-flex items-center justify-center leading-normal rounded-full text-center text-sm tracking-wide trans-bg trans-border trans-color focus:outline-none"
+            class="cursor-pointer font-bold inline-flex items-center justify-center leading-normal rounded-full text-center text-sm tracking-widest trans-bg trans-border trans-color focus:outline-none"
             href={href}
             to={to}
             type={type}
@@ -106,10 +99,6 @@ export default {
         },
         type: {
             type: String,
-        },
-        uppercase: {
-            default: true,
-            type: Boolean,
         },
     },
 };

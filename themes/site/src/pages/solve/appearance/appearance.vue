@@ -25,15 +25,21 @@
 
             <!-- actions -->
             <div class="flex items-center justify-end mt-8">
-                <router-link
+                <v-button
                     v-if="!loading"
-                    v-text="'Cancel'"
-                    class="mr-8"
+                    class="mr-6"
+                    ghost
                     title="Click to discard changes"
-                    :to="solveRoute"
-                />
+                    :to="solveRoute">
+                    Cancel
+                </v-button>
                 <v-fade-transition>
-                    <v-button primary type="submit">Save</v-button>
+                    <v-button
+                        primary
+                        title="Click to save changes"
+                        type="submit">
+                        Save
+                    </v-button>
                 </v-fade-transition>
             </div>
         </form>
