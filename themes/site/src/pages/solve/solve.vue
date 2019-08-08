@@ -5,7 +5,12 @@
 
             <!-- puzzle -->
             <div class="max-w-xs mb-8 mx-auto">
-                <div class="pb-full relative">
+                <div
+                    class="border-2 border-dashed trans-border pb-full relative rounded"
+                    :class="{
+                        'border-transparent': edit !== 'appearance',
+                        'border-grey-2': edit === 'appearance'
+                    }">
                     <v-puzzle
                         :config="config"
                         :inspection="false"

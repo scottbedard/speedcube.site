@@ -22,25 +22,17 @@ export default {
         //
         // theme
         //
-        if (primary) {
-            bindings.class.push('v-button-primary');
-
-            if (ghost) {
-                bindings.class.push('border-2 border-primary-5 text-primary-10 hover:border-primary-6 hover:text-grey-10');
-            } else {
-                bindings.class.push('bg-primary-5 text-primary-10 hover:bg-primary-6 hover:text-grey-10');
-            }
-        } else if (danger) {
-            bindings.class.push('v-button-danger');
-
-            if (ghost) {
-                bindings.class.push('text-grey-6 hover:text-danger-8');
-            } else {
-                bindings.class.push('bg-danger-6 text-danger-10 hover:bg-danger-7 hover:text-grey-10');
-            }
-        } else if (ghost) {
+        if (ghost) {
+            // ghost
             bindings.class.push('text-grey-7 hover:text-grey-8');
-        } else {
+        } else if (primary) {
+            // primary
+            bindings.class.push('bg-primary-5 text-primary-10 hover:bg-primary-6 hover:text-grey-10');
+        } else if (danger) {
+            // danger
+            bindings.class.push('v-button-danger bg-danger-6 text-danger-10 hover:bg-danger-7 hover:text-grey-10');
+        } else  {
+            // default
             bindings.class.push('bg-grey-5 text-grey-10 hover:bg-grey-7 hover:text-grey-10');
         }
 
