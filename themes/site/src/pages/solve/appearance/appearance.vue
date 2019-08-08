@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-3xl mx-auto">
+    <div>
         <form @submit.prevent="updateConfig">
             <!-- <pre class="text-xs">{{ config }}</pre> -->
 
@@ -12,7 +12,7 @@
                     <label
                         v-if="field.label"
                         v-text="field.label"
-                        class="block text-grey-6"
+                        class="block text-grey-7 tracking-wider"
                     />
                     <component
                         v-bind="field.props"
@@ -26,21 +26,20 @@
             <!-- actions -->
             <div class="flex items-center justify-end mt-8">
                 <v-button
-                    v-if="!loading"
                     class="mr-6"
                     ghost
                     title="Click to discard changes"
+                    :disabled="loading"
                     :to="solveRoute">
                     Cancel
                 </v-button>
-                <v-fade-transition>
-                    <v-button
-                        primary
-                        title="Click to save changes"
-                        type="submit">
-                        Save
-                    </v-button>
-                </v-fade-transition>
+                <v-button
+                    primary
+                    title="Click to save changes"
+                    type="submit"
+                    :disabled="loading">
+                    Save
+                </v-button>
             </div>
         </form>
     </div>

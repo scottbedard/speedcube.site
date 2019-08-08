@@ -29,6 +29,7 @@
                     <div
                         v-if="appearance"
                         data-appearance
+                        class="max-w-4xl w-full"
                         key="appearance">
                         <v-appearance
                             :initial-config="config"
@@ -41,6 +42,7 @@
                     <!-- keyboard -->
                     <div
                         v-else-if="keyboard"
+                        class="w-full"
                         key="keyboard">
                         <v-keyboard />
                     </div>
