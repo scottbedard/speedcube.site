@@ -38,7 +38,7 @@ const mount = factory({
 // specs
 //
 describe('solve page', () => {
-    it('displays appearance editor when query string is present', async () => {
+    it('displays appearance editor', async () => {
         const vm = mount({
             template: `<v-solve />`,
         });
@@ -50,6 +50,20 @@ describe('solve page', () => {
         await timeout(400);
 
         expect(vm.$el.querySelector('[data-appearance]')).not.toBe(null);
+    });
+
+    it('displays key bindings editor', async () => {
+        const vm = mount({
+            template: `<v-solve />`,
+        });
+
+        expect(vm.$el.querySelector('[data-keyboard]')).toBe(null);
+
+        vm.$router.replace({ query: { edit: 'keyboard' }});
+
+        await timeout(400);
+
+        expect(vm.$el.querySelector('[data-keyboard]')).not.toBe(null);
     });
 
     it('applies user config to puzzle', () => {

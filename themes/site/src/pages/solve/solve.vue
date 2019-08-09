@@ -43,6 +43,7 @@
                     <div
                         v-else-if="keyboard"
                         class="w-full"
+                        data-keyboard
                         key="keyboard">
                         <v-keyboard />
                     </div>
