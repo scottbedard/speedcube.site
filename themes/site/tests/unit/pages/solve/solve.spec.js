@@ -45,7 +45,7 @@ describe('solve page', () => {
 
         expect(vm.$el.querySelector('[data-appearance]')).toBe(null);
 
-        vm.$router.replace({ query: { content: 'appearance' }});
+        vm.$router.replace({ query: { edit: 'appearance' }});
 
         await timeout(400);
 
