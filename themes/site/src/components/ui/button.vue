@@ -57,12 +57,12 @@ export default {
         }
 
         return <Tag
-            class="cursor-pointer font-bold inline-flex items-center justify-center leading-normal rounded-full text-center text-sm tracking-widest trans-bg trans-border trans-color focus:outline-none"
+            class="cursor-pointer font-bold inline-flex items-center justify-center leading-normal rounded-full text-center text-sm tracking-widest trans-bg trans-border trans-color"
             href={href}
             to={to}
             type={type}
             {...bindings}>
-            {icon && <i class={['fa mr-3 text-lg', icon]} />}
+            {icon && <i class={['fa mr-4 text-lg', icon]} />}
             {context.slots().default}
         </Tag>;
     },

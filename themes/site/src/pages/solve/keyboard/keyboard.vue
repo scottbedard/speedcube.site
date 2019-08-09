@@ -1,5 +1,11 @@
 <template>
     <div class="max-w-5xl mx-auto">
+        <!-- modals -->
+        <v-add-modal
+            v-if="addModalIsVisible"
+            @close="addModalIsVisible = false"
+        />
+
         <!-- note -->
         <p class="max-w-xl mb-8 mx-auto text-center text-grey-7 tracking-wider text-sm w-full">
             These is your current keyboard config, displayed in <span class="font-mono">&quot;key <i class="fa fa-angle-right" /> turn&quot;</span> format.
@@ -8,7 +14,15 @@
 
         <!-- toolbar -->
         <div>
-            <v-button class="mr-6" icon="fa-plus" ghost>Add Key Binding</v-button>
+            <v-button
+                class="mr-6"
+                data-add-binding
+                icon="fa-plus"
+                ghost
+                title="Click to add a key binding"
+                @click="add">
+                Add Key Binding
+            </v-button>
             <v-button class="mr-6" icon="fa-code" ghost>Edit JSON</v-button>
             <v-button icon="fa-trash-o" ghost>Clear All Bindings</v-button>
         </div>
@@ -29,3 +43,21 @@
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            addModalIsVisible: false,
+        };
+    },
+    components: {
+        'v-add-modal': () => import('./add_modal/add_modal.vue'),
+    },
+    methods: {
+        add() {
+            this.addModalIsVisible = true;
+        },
+    },
+};
+</script>

@@ -59,24 +59,24 @@ export default {
 
             // el.scrollTop(0);
 
-            const trap = focusTrap(el, {
-                clickOutsideDeactivates: true,
-                escapeDeactivates: true,
-                fallbackFocus: el,
-                onDeactivate: this.close,
-            });
+            if (el) {
+                const trap = focusTrap(el, {
+                    clickOutsideDeactivates: true,
+                    escapeDeactivates: true,
+                    fallbackFocus: el,
+                    onDeactivate: this.close,
+                });
 
-            trap.activate({
-                initialFocus: 'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),[tabindex="0"]',
-            });
+                trap.activate({
+                    initialFocus: 'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),[tabindex="0"]',
+                });
 
-            this.$once('hook:destroyed', () => {
                 // kill the trap and restore focus to where it previous was
-                trap.deactivate({ returnFocus: true });
+                this.$once('hook:destroyed', () => trap.deactivate({ returnFocus: true }));
+            }
 
-                // restore background scrolling
-                noScroll.off();
-            });
+            // restore background scrolling
+            this.$once('hook:destroyed', () => noScroll.off());
         });
     },
     computed: {

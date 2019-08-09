@@ -1,3 +1,4 @@
+/* eslint-disable */
 import modalsComponent from '@/layouts/default/modals/modals.vue';
 
 //
