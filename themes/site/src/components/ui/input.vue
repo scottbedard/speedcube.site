@@ -50,7 +50,7 @@ export default {
         }
 
         return <div
-            class="v-input bg-grey-2 h-14 rounded px-4"
+            class="v-input bg-grey-2 h-12 rounded px-4"
             {...bindings}>
             <input
                 class="bg-transparent h-full w-full text-grey-8 focus:outline-none"

@@ -3,12 +3,13 @@
         <!-- modals -->
         <v-add-modal
             v-if="addModalIsVisible"
+            @add="addPendingBinding"
             @close="addModalIsVisible = false"
         />
 
         <!-- note -->
         <p class="max-w-xl mb-8 mx-auto text-center text-grey-7 tracking-wider text-sm w-full">
-            These is your current keyboard config, displayed in <span class="font-mono">&quot;key <i class="fa fa-angle-right" /> turn&quot;</span> format.
+            These are your current key bindings, displayed in <span class="font-mono whitespace-no-wrap">&quot;key<i class="fa fa-angle-right mx-1" />turn&quot;</span> format.<br class="hidden sm:inline" />
             Making a turn will highlight the associated binding if one exists.
         </p>
 
@@ -19,8 +20,8 @@
                 data-add-binding
                 icon="fa-plus"
                 ghost
-                title="Click to add a key binding"
-                @click="add">
+                title="Click to add key binding"
+                @click="showAddModal">
                 Add Key Binding
             </v-button>
             <v-button class="mr-6" icon="fa-code" ghost>Edit JSON</v-button>
@@ -55,7 +56,10 @@ export default {
         'v-add-modal': () => import('./add_modal/add_modal.vue'),
     },
     methods: {
-        add() {
+        addPendingBinding(binding) {
+            console.log('adding', { binding });
+        },
+        showAddModal() {
             this.addModalIsVisible = true;
         },
     },

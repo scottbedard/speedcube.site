@@ -12,19 +12,18 @@
             v-if="visible"
             description="A description not required, but is a good practice to include."
             padded
+            size="2xl"
             title="Example modal"
             @close="close">
-            <h3 class="mb-4">Be aware of the focus behavior</h3>
+            <h2 class="font-bold mb-4 text-2xl">Be aware of the focus behavior</h2>
             <p class="leading-normal mb-4 text-grey-8 text-sm">
-                Opening a modal will set the focus to the first eligible element within it. In this
-                example, that element will be the following button. Because that button is focused,
-                pressing <b class="font-mono">&quot;enter&quot;</b> should behave the same as clicking
-                the button. When a modal is closed, focus will be returned to the element that previously
-                had it. Here, that element will be the <b class="font-mono">&quot;show&nbsp;modal&quot;</b>
-                button.
+                Opening a modal sets the focus to the first eligible element within it. In this
+                example, that element will be the following button. When a modal is closed, focus
+                is returned to the element that previously had it. Here, that element will be the
+                <b class="font-mono">&quot;show&nbsp;modal&quot;</b> button.
             </p>
             <p class="leading-normal mb-8 text-grey-8 text-sm">
-                In addition to this, focus will be trapped within the modal. If the modal contains multiple
+                Additionally, focus is trapped within the modal. If the modal contains multiple
                 focusable elements, tabbing will cycle through them.
             </p>
             <div class="flex justify-end">

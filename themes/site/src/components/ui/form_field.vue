@@ -59,15 +59,15 @@
             <div class="help mb-2 text-xs tracking-wide"><slot name="help" /></div>
         </div>
 
+        <!-- content -->
+        <slot />
+
         <!-- error -->
         <v-collapse-transition>
             <v-error-message v-if="!isValid" class="mb-2">
                 {{ error }}
             </v-error-message>
         </v-collapse-transition>
-
-        <!-- content -->
-        <slot />
     </div>
 </template>
 

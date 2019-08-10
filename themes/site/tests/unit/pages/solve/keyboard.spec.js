@@ -16,7 +16,7 @@ const mount = factory({
 // specs
 //
 describe('solve page / keyboard editor', () => {
-    it.only('creates new key bindings', async () => {
+    it.skip('creates new key bindings', async () => {
         const vm = mount({
             template: `
                 <div>
@@ -29,7 +29,5 @@ describe('solve page / keyboard editor', () => {
         click(vm.$el.querySelector('[data-add-binding]'));
 
         await timeout(100);
-
-        console.log(vm.$el.outerHTML);
     });
 });

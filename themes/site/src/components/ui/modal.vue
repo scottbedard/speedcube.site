@@ -1,11 +1,18 @@
 <template>
     <portal to="modal">
         <div
-            class="m-auto outline-none"
+            class="mb-12 outline-none w-full"
             role="dialog"
             tabindex="-1"
             :aria-labelledby="titleId"
             :aria-describedby="descriptionId"
+            :class="{
+                'max-w-sm': size === 'sm',  
+                'max-w-md': size === 'md',  
+                'max-w-lg': size === 'lg',  
+                'max-w-xl': size === 'xl',  
+                'max-w-2xl': size === '2xl',  
+            }"
             :data-modal="uid">
 
             <h2
@@ -99,6 +106,11 @@ export default {
         padded: {
             default: false,
             type: Boolean,
+        },
+        size: {
+            default: '2xl',
+            type: String,
+            validator: size => ['auto', 'sm', 'md', 'lg', 'xl', '2xl'].includes(size),
         },
         title: {
             required: true,

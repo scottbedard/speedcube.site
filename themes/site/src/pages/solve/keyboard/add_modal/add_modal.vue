@@ -1,47 +1,54 @@
 <template>
-    <v-modal title="Add Key Binding" @close="close">
-        <v-form class="flex flex-wrap max-w-xl p-4" @submit="submit">
-            <!-- key binding -->
-            <div class="p-4 w-full sm:flex-1">
-                <v-form-field
-                    label="Key Binding"
-                    name="key"
-                    rules="required"
-                    :error-messages="{
-                        required: 'Please enter a key binding',
-                    }"
-                    :value="key">
-                    <v-input
-                        v-model="key"
-                        placeholder="Enter key"
-                        :disabled="loading"
-                    />
-                </v-form-field>
-            </div>
+    <v-modal
+        title="Add Key Binding"
+        padded
+        @close="close">
+        <v-form @submit="submit">
+            <v-grid padded>
+                <!-- key binding -->
+                <v-grid-cell sm="6">
+                    <v-form-field
+                        label="Key binding"
+                        name="key"
+                        rules="required"
+                        :error-messages="{
+                            required: 'Enter a key on your keyboard',
+                        }"
+                        :value="key">
+                        <v-input
+                            v-model="key"
+                            placeholder="Enter key"
+                            :disabled="loading"
+                        />
+                    </v-form-field>
+                </v-grid-cell>
 
-            <!-- turn -->
-            <div class="p-4 w-full sm:flex-1">
-                <v-form-field
-                    label="Turn"
-                    name="turn"
-                    rules="required"
-                    :error-messages="{
-                        required: 'Please enter a turn to execute for this key binding',
-                    }"
-                    :value="turn">
-                    <v-input
-                        v-model="turn"
-                        placeholder="Enter a turn"
-                        :disabled="loading"
-                    />
-                </v-form-field>
-            </div>
+                <!-- turn -->
+                <v-grid-cell sm="6">
+                    <v-form-field
+                        label="Turn to execute"
+                        name="turn"
+                        rules="required"
+                        :error-messages="{
+                            required: 'Enter the turn to execute when this key is pressed',
+                        }"
+                        :value="turn">
+                        <v-input
+                            v-model="turn"
+                            placeholder="Enter a turn"
+                            :disabled="loading"
+                        />
+                    </v-form-field>
+                </v-grid-cell>
 
-            <!-- actions -->
-            <div class="flex justify-end p-4 w-full">
-                <v-button class="mr-6" ghost @click="close">Cancel</v-button>
-                <v-button primary>Add<span class="hidden xs:inline">&nbsp;Binding</span></v-button>
-            </div>
+                <!-- actions -->
+                <v-grid-cell>
+                    <div class="flex justify-end">
+                        <v-button class="mr-4" ghost @click="close">Cancel</v-button>
+                        <v-button primary>Add<span class="hidden xs:inline">&nbsp;Binding</span></v-button>
+                    </div>
+                </v-grid-cell>
+            </v-grid>
         </v-form>
     </v-modal>
 </template>
@@ -60,7 +67,10 @@ export default {
             this.$emit('close');
         },
         submit() {
-            console.log('hey');
+            this.$emit('add', {
+                key: this.key,
+                turn: this.turn,
+            });
         },
     },
 };
