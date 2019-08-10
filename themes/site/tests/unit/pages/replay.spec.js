@@ -42,7 +42,7 @@ describe('replay page', () => {
         expect(vm.$el.querySelector('[data-solve-loading]')).not.toBe(null);
         expect(vm.$el.querySelector('[data-solve-ready]')).toBe(null);
         
-        await timeout(50);
+        await timeout(200);
 
         expect(vm.$el.querySelector('[data-solve-loading]')).toBe(null);
         expect(vm.$el.querySelector('[data-solve-ready]')).not.toBe(null);
@@ -73,7 +73,7 @@ describe('replay page', () => {
             template: `<v-replay ref="replay" />`,
         });
 
-        await timeout(100);
+        await timeout(200);
 
         const { model } = vm.$refs.replay;
 
@@ -90,7 +90,7 @@ describe('replay page', () => {
             template: `<v-replay ref="replay" />`,
         });
 
-        await timeout(100);
+        await timeout(200);
 
         console.log(vm.$el.outerHTML);
     });
