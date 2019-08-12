@@ -64,8 +64,6 @@ export default {
             // trap focus inside of the modal and set initial focus
             const el = this.$root.$el.querySelector(`[data-modal="${this.uid}"]`);
 
-            // el.scrollTop(0);
-
             if (el) {
                 const trap = focusTrap(el, {
                     clickOutsideDeactivates: true,

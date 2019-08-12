@@ -45,7 +45,9 @@
                         class="w-full"
                         data-keyboard
                         key="keyboard">
-                        <v-keyboard />
+                        <v-keyboard
+                            :initial-config="keyboardConfig"
+                        />
                     </div>
 
                     <!-- default -->
@@ -150,6 +152,10 @@ export default {
         keyboard() {
             // determine if keyboard editor is open
             return this.edit === 'keyboard';
+        },
+        keyboardConfig() {
+            // get the user's keyboard config for this puzzle
+            return this.$store.getters['user/keyboardConfigForPuzzle'](this.puzzle);
         },
         puzzle() {
             // parse and normalize the puzzle id from current route

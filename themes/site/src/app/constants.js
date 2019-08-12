@@ -1,3 +1,5 @@
+/* eslint-disable quotes */
+
 // the current year
 export const currentYear = (new Date()).getFullYear();
 
@@ -22,34 +24,31 @@ export const defaultCubeConfig = {
 
 // default cube keyboard config
 export const defaultCubeKeyboardConfig = {
-    modifiers: {
-        // ...
-    },
     turns: {
-        J: 'U',
-        F: 'U-',
-        D: 'L',
-        E: 'L-',
-        H: 'F',
-        G: 'F-',
-        I: 'R',
-        K: 'R-',
-        W: 'B',
-        O: 'B-',
-        S: 'D',
-        L: 'D-',
-        A: 'Y-',
-        ';': 'Y',
-        R: 'X',
-        U: 'X',
-        T: 'X',
-        Y: 'X',
-        V: 'X-',
-        C: 'X-',
-        N: 'X-',
-        M: 'X-',
-        Q: 'Z-',
-        P: 'Z',
+        J: `U`,
+        F: `U'`,
+        D: `L`,
+        E: `L'`,
+        H: `F`,
+        G: `F'`,
+        I: `R`,
+        K: `R'`,
+        W: `B`,
+        O: `B'`,
+        S: `D`,
+        L: `D'`,
+        A: `Y'`,
+        ';': `Y`,
+        R: `X`,
+        U: `X`,
+        T: `X`,
+        Y: `X`,
+        V: `X'`,
+        C: `X'`,
+        N: `X'`,
+        M: `X'`,
+        Q: `Z'`,
+        P: `Z`,
     },
 };
 
@@ -103,24 +102,28 @@ export const puzzles = {
     '2x2': {
         color: '#4098D7',
         defaultConfig: defaultCubeConfig,
+        defaultKeyboardConfig: defaultCubeKeyboardConfig,
         slug: '2x2',
         title: '2x2',
     },
     '3x3': {
         color: '#f5d16f',
         defaultConfig: defaultCubeConfig,
+        defaultKeyboardConfig: defaultCubeKeyboardConfig,
         slug: '3x3',
         title: '3x3',
     },
     '4x4': {
         color: '#4CAF50',
         defaultConfig: defaultCubeConfig,
+        defaultKeyboardConfig: defaultCubeKeyboardConfig,
         slug: '4x4',
         title: '4x4',
     },
     '5x5': {
         color: '#f44336',
         defaultConfig: defaultCubeConfig,
+        defaultKeyboardConfig: defaultCubeKeyboardConfig,
         slug: '5x5',
         title: '5x5',
     },
