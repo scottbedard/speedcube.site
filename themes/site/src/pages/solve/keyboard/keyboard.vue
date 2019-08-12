@@ -25,20 +25,33 @@
                 Add Key Binding
             </v-button>
             <v-button class="mr-6" icon="fa-code" ghost>Edit JSON</v-button>
-            <v-button icon="fa-trash-o" ghost>Clear All Bindings</v-button>
+            <v-button
+                ghost
+                icon="fa-trash-o"
+                title="Click to remove all bindings"
+                @click="removeAllBindings">
+                Remove All Bindings
+            </v-button>
         </div>
 
         <!-- current bindings -->
-        <div class="flex flex-wrap font-mono justify-center mt-2 mb-8 text-center tracking-wider">
-            <a
-                v-for="(turn, binding) in pendingConfig.turns"
-                class="my-2 px-4 py-2"
-                href="#"
-                title="Click to edit or remove key binding"
-                :key="binding"
-                @click.prevent>
-                {{ binding }}<i class="fa fa-angle-right mx-2" />{{ turn }}
-            </a>
+        <div>
+            <v-fade-transition>
+                <p v-if="empty" class="my-8 text-center text-grey-7">
+                    No key bindings are configured, you're starting from a clean slate.
+                </p>
+                <div class="flex flex-wrap font-mono justify-center mt-2 mb-8 text-center tracking-wider" v-else>
+                    <a
+                        v-for="(turn, binding) in pendingConfig.turns"
+                        class="my-2 px-4 py-2"
+                        href="#"
+                        title="Click to edit or remove key binding"
+                        :key="binding"
+                        @click.prevent>
+                        {{ binding }}<i class="fa fa-angle-right mx-2" />{{ turn }}
+                    </a>
+                </div>
+            </v-fade-transition>
         </div>
 
         <!-- actions -->
@@ -90,6 +103,9 @@ export default {
         defaultConfig() {
             return cloneDeep(get(puzzles, `${this.puzzle}.defaultConfig`, {}));
         },
+        empty() {
+            return Object.keys(this.pendingConfig.turns).length === 0;
+        },
         puzzle() {
             return get(this.$route, 'params.puzzle', '').toLowerCase().trim();
         },
@@ -97,9 +113,14 @@ export default {
     methods: {
         addPendingBinding(binding) {
             this.addModalIsVisible = false;
+
+            this.$set(this.pendingConfig.turns, binding.key, binding.turn);
         },
         reset() {
             this.pendingConfig = cloneDeep(this.initialConfig);
+        },
+        removeAllBindings() {
+            this.pendingConfig.turns = {};
         },
         showAddModal() {
             this.addModalIsVisible = true;
