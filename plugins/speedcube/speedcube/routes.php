@@ -54,5 +54,8 @@ Route::prefix('api/speedcube/speedcube')
 
             // profile
             Route::post('profile/twitter', 'Speedcube\Speedcube\Http\Controllers\ProfileController@twitter');
+        
+            // user
+            Route::get('user', 'Speedcube\Speedcube\Http\Controllers\UsersController@user');
         });
     });

@@ -22,7 +22,7 @@
                 ghost
                 title="Click to add key binding"
                 @click="showAddModal">
-                Add Key Binding
+                Add Binding
             </v-button>
             <v-button class="mr-6" icon="fa-code" ghost>Edit JSON</v-button>
             <v-button
@@ -59,12 +59,14 @@
             <v-button
                 class="mr-6"
                 ghost
-                title="Click to discard changes">
+                title="Click to discard changes"
+                @click="cancel">
                 Cancel
             </v-button>
             <v-button
                 primary
-                title="Click to save key bindings">
+                title="Click to save key bindings"
+                @click="save">
                 Save
             </v-button>
         </div>
@@ -75,6 +77,7 @@
 import { cloneDeep, get } from 'lodash-es';
 import { jsonToObject } from '@/app/utils/object';
 import { mapGetters, mapState } from 'vuex';
+import { postKeyboardConfig } from '@/app/repositories/keyboard_configs';
 import { puzzles } from '@/app/constants';
 
 export default {
@@ -85,6 +88,9 @@ export default {
         return {
             // visibility of modal to add key binding
             addModalIsVisible: false,
+
+            // save loading state
+            loading: false,
 
             // pending configuration
             pendingConfig: {},
@@ -116,11 +122,32 @@ export default {
 
             this.$set(this.pendingConfig.turns, binding.key, binding.turn);
         },
+        cancel() {
+            this.$router.push({ query: { edit: undefined }});
+        },
         reset() {
             this.pendingConfig = cloneDeep(this.initialConfig);
         },
         removeAllBindings() {
             this.pendingConfig.turns = {};
+        },
+        save() {
+            this.loading = true;
+
+            postKeyboardConfig({
+                config: JSON.stringify(this.pendingConfig),
+                puzzle: this.puzzle,
+            }).then((response) => {
+                // success
+                // console.log('hooray', response);
+            }).finally(() => {
+                // complete, refresh the user
+                return this.$store.dispatch('user/fresh');
+            }).finally(() => {
+                // complete
+                console.log('done');
+                this.loading = false;
+            });
         },
         showAddModal() {
             this.addModalIsVisible = true;

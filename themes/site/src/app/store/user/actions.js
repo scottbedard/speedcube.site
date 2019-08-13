@@ -24,7 +24,7 @@ export default {
 
         request.then((response) => {
             // success
-            commit('setUser', response.data);
+            commit('setUser', response.data.user);
         }).finally(() => {
             // complete
             commit('setFreshIsLoading', false);

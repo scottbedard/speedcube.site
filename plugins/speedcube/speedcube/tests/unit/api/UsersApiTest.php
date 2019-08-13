@@ -155,4 +155,20 @@ class UsersApiTest extends PluginTestCase
         $this->assertEquals($solveA->id, $data['solves'][0]['id']);
         $this->assertEquals($solveB->id, $data['solves'][1]['id']);
     }
+
+    public function test_fetching_the_authenticated_user()
+    {
+        // users must be authenticated
+        $xhr1 = $this->get('/api/speedcube/speedcube/user');
+        $xhr1->assertStatus(403);
+
+        // create and auth a user
+        $user = Factory::registerUser();
+
+        // fetch the authenticated user
+        $xhr2 = $this->get('/api/speedcube/speedcube/user');
+        $xhr2->assertStatus(200);
+        $data = json_decode($xhr2->getContent(), true);
+        $this->assertEquals($user->id, $data['user']['id']);
+    }
 }

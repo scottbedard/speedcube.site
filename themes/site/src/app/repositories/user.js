@@ -15,7 +15,7 @@ export function deleteAvatar() {
  * @return {Promise}
  */
 export function getAuthenticatedUser() {
-    return axios.get('/api/rainlab/user/user');
+    return axios.get('/api/speedcube/speedcube/user');
 }
 
 /**
