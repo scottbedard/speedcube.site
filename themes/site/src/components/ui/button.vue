@@ -17,23 +17,32 @@ import { bindAll } from 'spyfu-vue-functional';
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { danger, icon, ghost, href, primary, to, type } = context.props;
+        const { danger, disabled, icon, ghost, href, primary, to, type } = context.props;
+
+        //
+        // disabled
+        //
+        if (disabled) {
+            bindings.class.push('cursor-default');
+        } else {
+            bindings.class.push('cursor-pointer');
+        }
 
         //
         // theme
         //
         if (ghost) {
             // ghost
-            bindings.class.push('text-grey-7 hover:text-grey-8');
+            bindings.class.push(`text-grey-7 ${disabled ? '' : 'hover:text-grey-8'}`);
         } else if (primary) {
             // primary
-            bindings.class.push('bg-primary-5 text-primary-10 hover:bg-primary-6 hover:text-grey-10');
+            bindings.class.push(`bg-primary-5 text-primary-10 ${disabled ? '' : 'hover:bg-primary-6 hover:text-grey-10'}`);
         } else if (danger) {
             // danger
-            bindings.class.push('v-button-danger bg-danger-6 text-danger-10 hover:bg-danger-7 hover:text-grey-10');
+            bindings.class.push(`v-button-danger bg-danger-6 text-danger-10 ${disabled ? '' : 'hover:bg-danger-7 hover:text-grey-10'}`);
         } else  {
             // default
-            bindings.class.push('bg-grey-5 text-grey-10 hover:bg-grey-7 hover:text-grey-10');
+            bindings.class.push(`bg-grey-5 text-grey-10 ${disabled ? '' : 'hover:bg-grey-7 hover:text-grey-1'}`);
         }
 
         //
@@ -57,7 +66,8 @@ export default {
         }
 
         return <Tag
-            class="cursor-pointer font-bold inline-flex items-center justify-center leading-normal rounded-full text-center text-sm tracking-widest trans-bg trans-border trans-color"
+            class="font-bold inline-flex items-center justify-center leading-normal rounded-full text-center text-sm tracking-widest trans-bg trans-border trans-color"
+            disabled={disabled}
             href={href}
             to={to}
             type={type}
@@ -69,6 +79,10 @@ export default {
     functional: true,
     props: {
         danger: {
+            default: false,
+            type: Boolean,
+        },
+        disabled: {
             default: false,
             type: Boolean,
         },
