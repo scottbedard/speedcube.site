@@ -1,10 +1,13 @@
 <template>
     <div class="max-w-5xl mx-auto">
         <!-- modals -->
-        <v-add-modal
-            v-if="addModalIsVisible"
+        <v-binding-modal
+            v-if="bindingModalIsVisible"
+            :initial-key="bindingModalKey"
+            :initial-turn="bindingModalTurn"
             @add="addPendingBinding"
-            @close="addModalIsVisible = false"
+            @close="bindingModalIsVisible = false"
+            @delete="deletePendingBinding"
         />
 
         <!-- note -->
@@ -42,13 +45,13 @@
                 </p>
                 <div class="flex flex-wrap font-mono justify-center mt-2 mb-8 text-center tracking-wider" v-else>
                     <a
-                        v-for="(turn, binding) in pendingConfig.turns"
+                        v-for="(turn, key) in pendingConfig.turns"
                         class="my-2 px-4 py-2"
                         href="#"
                         title="Click to edit or remove key binding"
-                        :key="binding"
-                        @click.prevent>
-                        {{ binding }}<i class="fa fa-angle-right mx-2" />{{ turn }}
+                        :key="key"
+                        @click.prevent="edit({ key, turn })">
+                        {{ key }}<i class="fa fa-angle-right mx-2" />{{ turn }}
                     </a>
                 </div>
             </v-fade-transition>
@@ -81,23 +84,24 @@ import { postKeyboardConfig } from '@/app/repositories/keyboard_configs';
 import { puzzles } from '@/app/constants';
 
 export default {
-    created() {
-        this.reset();
-    },
     data() {
         return {
-            // visibility of modal to add key binding
-            addModalIsVisible: false,
+            // visibility of key binding modal
+            bindingModalIsVisible: false,
+
+            // initial state for key binding modal
+            bindingModalKey: '',
+            bindingModalTurn: '',
 
             // save loading state
             loading: false,
 
             // pending configuration
-            pendingConfig: {},
+            pendingConfig: cloneDeep(this.initialConfig),
         };
     },
     components: {
-        'v-add-modal': () => import('./add_modal/add_modal.vue'),
+        'v-binding-modal': () => import('./binding_modal/binding_modal.vue'),
     },
     computed: {
         ...mapGetters('user', [
@@ -118,12 +122,26 @@ export default {
     },
     methods: {
         addPendingBinding(binding) {
-            this.addModalIsVisible = false;
+            this.bindingModalIsVisible = false;
 
             this.$set(this.pendingConfig.turns, binding.key, binding.turn);
+
+            if (this.bindingModalKey && this.bindingModalKey !== binding.key) {
+                this.$delete(this.pendingConfig.turns, this.bindingModalKey);
+            }
         },
         cancel() {
             this.$router.push({ query: { edit: undefined }});
+        },
+        deletePendingBinding(key) {
+            this.bindingModalIsVisible = false;
+
+            this.$delete(this.pendingConfig.turns, key);
+        },
+        edit({ key, turn }) {
+            this.bindingModalKey = key;
+            this.bindingModalTurn = turn;
+            this.bindingModalIsVisible = true;
         },
         reset() {
             this.pendingConfig = cloneDeep(this.initialConfig);
@@ -137,20 +155,23 @@ export default {
             postKeyboardConfig({
                 config: JSON.stringify(this.pendingConfig),
                 puzzle: this.puzzle,
-            }).then((response) => {
+            }).then(() => {
                 // success
-                // console.log('hooray', response);
+                this.$alert('Keyboard configuration saved.');
+
+                this.$router.push({ query: { edit: undefined }});
             }).finally(() => {
-                // complete, refresh the user
+                // refresh user
                 return this.$store.dispatch('user/fresh');
             }).finally(() => {
                 // complete
-                console.log('done');
                 this.loading = false;
             });
         },
         showAddModal() {
-            this.addModalIsVisible = true;
+            this.bindingModalKey = '';
+            this.bindingModalTurn = '';
+            this.bindingModalIsVisible = true;
         },
     },
     props: {

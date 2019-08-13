@@ -19,7 +19,6 @@
                             <v-input
                                 v-model="key"
                                 placeholder="Enter key"
-                                :disabled="loading"
                                 @keydown.enter="submitForm"
                             />
                         </v-form-field>
@@ -38,7 +37,6 @@
                             <v-input
                                 v-model="turn"
                                 placeholder="Enter a turn"
-                                :disabled="loading"
                                 @keydown.enter="submitForm"
                             />
                         </v-form-field>
@@ -46,9 +44,26 @@
 
                     <!-- actions -->
                     <v-grid-cell>
-                        <div class="flex justify-end">
-                            <v-button class="mr-4" ghost @click="close">Cancel</v-button>
-                            <v-button primary>Add<span class="hidden xs:inline">&nbsp;Binding</span></v-button>
+                        <div class="flex justify-between">
+                            <div>
+                                <v-button
+                                    v-if="context === 'edit'"
+                                    danger
+                                    ghost
+                                    icon="fa-trash-o"
+                                    title="Click to remove this key binding"
+                                    @click.prevent="deleteBinding">
+                                    Delete Binding
+                                </v-button>
+                            </div>
+                            <div>
+                                <v-button class="mr-4" ghost @click="close">
+                                    Cancel
+                                </v-button>
+                                <v-button primary>
+                                    {{ context === 'edit' ? 'Update' : 'Add' }}<span class="hidden xs:inline">&nbsp;Binding</span></span>
+                                </v-button>
+                            </div>
                         </div>
                     </v-grid-cell>
                 </v-grid>
@@ -63,14 +78,23 @@ import { queryElementThen } from '@/app/utils/dom';
 export default {
     data() {
         return {
-            key: '',
-            loading: false,
-            turn: '',
+            key: this.initialKey || '',
+            turn: this.initialTurn || '',
         };
+    },
+    computed: {
+        context() {
+            return (this.initialKey.length > 0 && this.initialTurn.length > 0)
+                ? 'edit'
+                : 'create';
+        },
     },
     methods: {
         close() {
             this.$emit('close');
+        },
+        deleteBinding() {
+            this.$emit('delete', this.initialKey);
         },
         submitForm(e) {
             e.preventDefault();
@@ -81,6 +105,16 @@ export default {
         },
         submit() {
             this.$emit('add', { key: this.key, turn: this.turn });
+        },
+    },
+    props: {
+        initialKey: {
+            default: '',
+            type: String,
+        },
+        initialTurn: {
+            default: '',
+            type: String,
         },
     },
 };
