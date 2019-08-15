@@ -37,7 +37,7 @@
 
 <script>
 import focusTrap from 'focus-trap';
-import noScroll from 'no-scroll';
+import { clearAllBodyScrollLocks, enableBodyScroll } from 'body-scroll-lock';
 import { uniqueId } from 'lodash-es';
 
 export default {
@@ -57,7 +57,7 @@ export default {
     },
     mounted() {
         // disable background scrolling
-        noScroll.on();
+        disableBodyScroll(this.$el);
 
         // portal components take a tick to update
         this.$nextTick(() => {
@@ -81,7 +81,7 @@ export default {
             }
 
             // restore background scrolling
-            this.$once('hook:destroyed', () => noScroll.off());
+            this.$once('hook:destroyed', clearAllBodyScrollLocks);
         });
     },
     computed: {
