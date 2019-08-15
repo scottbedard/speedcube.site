@@ -10,9 +10,16 @@
             @delete="deletePendingBinding"
         />
 
+        <v-json-modal
+            v-if="jsonModalIsVisible"
+            :initial-config="pendingConfig"
+            @apply="applyJsonBindings"
+            @close="jsonModalIsVisible = false"
+        />
+
         <!-- note -->
-        <p class="max-w-xl mb-8 mx-auto text-center text-grey-7 tracking-wider text-sm w-full">
-            These are your current key bindings, displayed in <span class="font-mono whitespace-no-wrap">&quot;key<i class="fa fa-angle-right mx-2" />turn&quot;</span> format.<br class="hidden sm:inline" />
+        <p class="max-w-2xl mb-8 mx-auto text-center text-grey-7 tracking-wider w-full">
+            These are your current key bindings, displayed in <span class="font-mono whitespace-no-wrap">&quot;key<i class="fa fa-angle-right mx-2" />turn&quot;</span> format.<br class="hidden md:inline" />
             Making a turn will highlight the associated binding if one exists.
         </p>
 
@@ -27,7 +34,16 @@
                 @click="showAddModal">
                 Add Binding
             </v-button>
-            <v-button class="mr-6" icon="fa-code" ghost>Edit JSON</v-button>
+
+            <v-button
+                class="mr-6"
+                icon="fa-code"
+                ghost
+                title="Click to edit key binding JSON"
+                @click="showJsonModal">
+                Edit JSON
+            </v-button>
+
             <v-button
                 ghost
                 icon="fa-trash-o"
@@ -39,22 +55,27 @@
 
         <!-- current bindings -->
         <div>
-            <v-fade-transition>
-                <p v-if="empty" class="my-8 text-center text-grey-7">
-                    No key bindings are configured, you're starting from a clean slate.
-                </p>
-                <div class="flex flex-wrap font-mono justify-center mt-2 mb-8 text-center tracking-wider" v-else>
-                    <a
-                        v-for="(turn, key) in pendingConfig.turns"
-                        class="my-2 px-4 py-2"
-                        href="#"
-                        title="Click to edit or remove key binding"
-                        :key="key"
-                        @click.prevent="edit({ key, turn })">
-                        {{ key }}<i class="fa fa-angle-right mx-2" />{{ turn }}
-                    </a>
+            <v-collapse-transition>
+                <div v-if="empty" key="empty">
+                    <div class="border-2 border-dashed border-grey-5 my-8 p-8 text-center text-grey-4 rounded">
+                        No key bindings are configured
+                    </div>
                 </div>
-            </v-fade-transition>
+
+                <div v-else key="bindings">
+                    <div class="flex flex-wrap font-mono justify-center mt-2 mb-8 text-center tracking-wider">
+                        <a
+                            v-for="(turn, key) in pendingConfig.turns"
+                            class="my-2 px-4 py-2"
+                            href="#"
+                            title="Click to edit or remove key binding"
+                            :key="key"
+                            @click.prevent="edit({ key, turn })">
+                            {{ key }}<i class="fa fa-angle-right mx-2" />{{ turn }}
+                        </a>
+                    </div>
+                </div>
+            </v-collapse-transition>
         </div>
 
         <!-- actions -->
@@ -93,6 +114,9 @@ export default {
             bindingModalKey: '',
             bindingModalTurn: '',
 
+            // json modal visibility
+            jsonModalIsVisible: false,
+
             // save loading state
             loading: false,
 
@@ -102,6 +126,7 @@ export default {
     },
     components: {
         'v-binding-modal': () => import('./binding_modal/binding_modal.vue'),
+        'v-json-modal': () => import('./json_modal/json_modal.vue'),
     },
     computed: {
         ...mapGetters('user', [
@@ -129,6 +154,9 @@ export default {
             if (this.bindingModalKey && this.bindingModalKey !== binding.key) {
                 this.$delete(this.pendingConfig.turns, this.bindingModalKey);
             }
+        },
+        applyJsonBindings(bindings) {
+            this.pendingConfig = cloneDeep(bindings);
         },
         cancel() {
             this.$router.push({ query: { edit: undefined }});
@@ -172,6 +200,9 @@ export default {
             this.bindingModalKey = '';
             this.bindingModalTurn = '';
             this.bindingModalIsVisible = true;
+        },
+        showJsonModal() {
+            this.jsonModalIsVisible = true;
         },
     },
     props: {

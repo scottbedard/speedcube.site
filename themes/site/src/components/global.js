@@ -28,6 +28,7 @@ import selectComponent from './ui/select.vue';
 import spinnerComponent from './ui/spinner.vue';
 import switchComponent from './ui/switch.vue';
 import tableComponent from './ui/table/table.vue';
+import textareaComponent from './ui/textarea.vue';
 import timerComponent from './ui/timer.vue';
 import uploadButtonComponent from './ui/upload_button.vue';
 
@@ -77,6 +78,7 @@ export default {
     'v-spinner': spinnerComponent,
     'v-switch': switchComponent,
     'v-table': tableComponent,
+    'v-textarea': textareaComponent,
     'v-timer': timerComponent,
     'v-upload-button': uploadButtonComponent,
 };

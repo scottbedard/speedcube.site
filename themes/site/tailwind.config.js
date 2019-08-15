@@ -154,6 +154,11 @@ module.exports = {
             '6xl': '100rem',
             full: '100%',
         },
+        minHeight: {
+            ...relativeScale,
+            ...remScale,
+            ...utilScale,
+        },
         minWidth: {
             '3xs': '12rem',
             '2xs': '16rem',

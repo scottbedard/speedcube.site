@@ -57,10 +57,17 @@
                                 </v-button>
                             </div>
                             <div>
-                                <v-button class="mr-4" ghost @click="close">
+                                <v-button
+                                    class="mr-4"
+                                    ghost
+                                    title="Click to discard changes"
+                                    @click.prevent="close">
                                     Cancel
                                 </v-button>
-                                <v-button primary>
+                                <v-button
+                                    primary
+                                    type="submit"
+                                    :title="`Click to ${context === 'edit' ? 'update' : 'add'} key binding`">
                                     {{ context === 'edit' ? 'Update' : 'Add' }}<span class="hidden xs:inline">&nbsp;Binding</span></span>
                                 </v-button>
                             </div>
