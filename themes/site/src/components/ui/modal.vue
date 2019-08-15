@@ -37,7 +37,7 @@
 
 <script>
 import focusTrap from 'focus-trap';
-import { clearAllBodyScrollLocks, enableBodyScroll } from 'body-scroll-lock';
+import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
 import { uniqueId } from 'lodash-es';
 
 export default {
