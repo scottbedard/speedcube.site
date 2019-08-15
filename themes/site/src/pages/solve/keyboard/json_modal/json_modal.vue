@@ -30,7 +30,7 @@
                     </div>
                 </v-grid-cell>
                 <v-grid-cell>
-                    <div class="flex justify-between">
+                    <div class="flex flex-wrap justify-between">
                         <div>
                             <v-button
                                 ghost
