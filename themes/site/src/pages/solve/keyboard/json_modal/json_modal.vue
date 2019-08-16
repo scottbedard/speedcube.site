@@ -15,45 +15,48 @@
                             required: 'Keyboard configuration is required',
                         }"
                         :value="json">
-                        <v-textarea
+                        <v-input
                             v-model="json"
-                            class="font-mono min-h-32 text-sm w-full"
+                            class="font-mono"
+                            tabindex="-1"
                         />
                     </v-form-field>
-                    <div class="flex mt-4 text-grey-7 text-sm">
-                        <i class="fa fa-exclamation-triangle mt-1 mr-2" />
-                        <div>
-                            <strong>Proceed with caution...</strong><br />
-                            Invalid configuration may break key bindings and cause errors. This feature
-                            exists to make copy / pasting between puzzles easier.
-                        </div>
+                    <div class="mt-6">
+                        <p>
+                            <strong class="text-grey-8">Be careful editing this</strong><br />
+                            Invalid JSON may break your key bindings and cause errors. This feature
+                            primarily exists to make copy / pasting between puzzles easier.
+                        </p>
                     </div>
                 </v-grid-cell>
                 <v-grid-cell>
                     <div class="flex flex-wrap justify-between">
                         <div>
-                            <v-button
+                            <!-- <v-button
                                 ghost
                                 icon="fa-clipboard"
                                 title="Click to copy bindings to clipboard"
                                 @click.prevent="copy">
                                 Copy Bindings
-                            </v-button>
+                            </v-button> -->
                         </div>
                         <div>
-                            <v-button
-                                class="mr-4"
-                                ghost
-                                title="Click to discard changes"
-                                @click.prevent="close">
-                                Cancel
-                            </v-button>
-                            <v-button
-                                primary
-                                title="Click to apply changes"
-                                type="submit">
-                                Apply
-                            </v-button>
+                            <v-modal-actions>
+                                <v-button
+                                    ghost
+                                    tabindex="-1"
+                                    title="Click to discard changes"
+                                    @click.prevent="close">
+                                    Cancel
+                                </v-button>
+                                <v-button
+                                    primary
+                                    title="Click to apply changes"
+                                    tabindex="-1"
+                                    type="submit">
+                                    Apply Config
+                                </v-button>
+                            </v-modal-actions>
                         </div>
                     </div>
                 </v-grid-cell>
@@ -64,11 +67,16 @@
 
 <script>
 import { copyToClipboard } from '@/app/utils/string';
+import modalActionsComponent from '@/components/ui/modal_actions.vue';
+
 export default {
     data() {
         return {
-            json: JSON.stringify(this.initialConfig, null, 2),
+            json: JSON.stringify(this.initialConfig),
         };
+    },
+    components: {
+        'v-modal-actions': modalActionsComponent,
     },
     methods: {
         close() {

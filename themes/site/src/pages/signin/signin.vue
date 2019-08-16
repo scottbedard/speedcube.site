@@ -3,12 +3,9 @@
         <v-margin padded>
             <!-- title -->
             <div class="text-center">
-                <h1 class="font-thin mb-4 text-3xl text-grey-9 tracking-wide">
+                <h1 class="font-thin text-3xl text-grey-9 tracking-wide">
                     Welcome back
                 </h1>
-                <div class="leading-normal text-grey-7">
-                    Sign in and go break some records!
-                </div>
             </div>
 
             <!-- form -->

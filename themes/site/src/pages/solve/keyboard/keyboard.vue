@@ -17,6 +17,17 @@
             @close="jsonModalIsVisible = false"
         />
 
+        <v-confirmation-modal
+            v-if="removeAllBindingsConfirmationIsVisible"
+            title="Confirm key binding reset"
+            cancel="Cancel"
+            header="You're about to clear all key bindings"
+            paragraph="Doing this resets all current key bindings. You will still be able to recover the old bindings by pressing cancel, but any unsaved changes would be lost."
+            accept="Reset Bindings"
+            @confirm="removeAllBindings"
+            @close="removeAllBindingsConfirmationIsVisible = false"
+        />
+
         <!-- note -->
         <p class="max-w-2xl mb-8 mx-auto text-center text-grey-7 tracking-wider w-full">
             These are your current key bindings, displayed in <span class="font-mono whitespace-no-wrap">&quot;key<i class="fa fa-angle-right mx-2" />turn&quot;</span> format.<br class="hidden md:inline" />
@@ -48,40 +59,43 @@
                 ghost
                 icon="fa-trash-o"
                 title="Click to remove all bindings"
-                @click="removeAllBindings">
+                @click="showRemoveAllConfirmationModal">
                 Remove All Bindings
             </v-button>
         </div>
 
         <!-- current bindings -->
         <div>
-            <v-collapse-transition>
+            <v-fade-transition>
                 <div v-if="empty" key="empty">
-                    <div class="border-2 border-dashed border-grey-5 my-8 p-8 text-center text-grey-4 rounded">
+                    <div class="italic py-24 px-8 text-center text-grey-4 tracking-wider">
                         No key bindings are configured
                     </div>
                 </div>
 
                 <div v-else key="bindings">
                     <div class="flex flex-wrap font-mono justify-center mt-2 mb-8 text-center tracking-wider">
-                        <a
+                        <v-button
                             v-for="(turn, key) in pendingConfig.turns"
-                            class="my-2 px-4 py-2"
-                            href="#"
-                            title="Click to edit or remove key binding"
+                            ghost
+                            class=""
+                            title="Click to edit or remove"
                             :key="key"
                             @click.prevent="edit({ key, turn })">
                             {{ key }}<i class="fa fa-angle-right mx-2" />{{ turn }}
-                        </a>
+                        </v-button>
                     </div>
                 </div>
-            </v-collapse-transition>
+            </v-fade-transition>
         </div>
 
         <!-- actions -->
-        <div class="flex justify-end">
+        <div
+            v-if="isAuthenticated"
+            class="flex justify-end text-center"
+            key="user">
             <v-button
-                class="mr-6"
+                class="xs:mr-6"
                 ghost
                 title="Click to discard changes"
                 @click="cancel">
@@ -94,6 +108,30 @@
                 Save
             </v-button>
         </div>
+
+        <div
+            class="flex flex-wrap justify-between items-center text-center lg:text-left"
+            v-else
+            key="guest">
+            <div class="flex-1 leading-normal pb-8 text-grey-7 tracking-wider w-full">
+                Please sign in or <router-link title="Click to create an account" :to="{ name: 'create-account' }">create an account</router-link> to save bindings.
+            </div>
+            <div class="pb-8 w-full lg:w-auto">
+                <v-button
+                    class="mb-4 mx-6 xs:mx-auto xs:mr-6 lg:mb-0"
+                    ghost
+                    title="Click to discard changes"
+                    :to="{ params: { edit: undefined }}">
+                    Cancel
+                </v-button>
+                <v-button
+                    class="mb-4 lg:mb-0"
+                    primary
+                    :to="{ name: 'signin' }">
+                    Sign In
+                </v-button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -103,6 +141,7 @@ import { jsonToObject } from '@/app/utils/object';
 import { mapGetters, mapState } from 'vuex';
 import { postKeyboardConfig } from '@/app/repositories/keyboard_configs';
 import { puzzles } from '@/app/constants';
+import confirmationModalComponent from '@/components/ui/confirmation_modal.vue';
 
 export default {
     data() {
@@ -122,14 +161,19 @@ export default {
 
             // pending configuration
             pendingConfig: cloneDeep(this.initialConfig),
+
+            // removel all bindings confirmation visibility
+            removeAllBindingsConfirmationIsVisible: false,
         };
     },
     components: {
         'v-binding-modal': () => import('./binding_modal/binding_modal.vue'),
+        'v-confirmation-modal': () => import('@/components/ui/confirmation_modal.vue'),
         'v-json-modal': () => import('./json_modal/json_modal.vue'),
     },
     computed: {
         ...mapGetters('user', [
+            'isAuthenticated',
             'keyboardConfigForPuzzle',
         ]),
         ...mapState('user', [
@@ -175,6 +219,7 @@ export default {
             this.pendingConfig = cloneDeep(this.initialConfig);
         },
         removeAllBindings() {
+            this.removeAllBindingsConfirmationIsVisible = false;
             this.pendingConfig.turns = {};
         },
         save() {
@@ -185,7 +230,7 @@ export default {
                 puzzle: this.puzzle,
             }).then(() => {
                 // success
-                this.$alert('Keyboard configuration saved.');
+                this.$alert('Keyboard configuration saved');
 
                 this.$router.push({ query: { edit: undefined }});
             }).finally(() => {
@@ -203,6 +248,9 @@ export default {
         },
         showJsonModal() {
             this.jsonModalIsVisible = true;
+        },
+        showRemoveAllConfirmationModal() {
+            this.removeAllBindingsConfirmationIsVisible = true;
         },
     },
     props: {

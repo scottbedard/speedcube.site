@@ -44,8 +44,8 @@
 
                     <!-- actions -->
                     <v-grid-cell>
-                        <div class="flex justify-between">
-                            <div>
+                        <div class="flex flex-wrap justify-between text-center">
+                            <div class="w-full md:flex-1 md:text-left md:w-auto">
                                 <v-button
                                     v-if="context === 'edit'"
                                     danger
@@ -56,19 +56,20 @@
                                     Delete Binding
                                 </v-button>
                             </div>
-                            <div>
+                            <div class="mb-6 w-full md:mb-0 md:mr-6 md:w-auto">
                                 <v-button
-                                    class="mr-4"
                                     ghost
                                     title="Click to discard changes"
                                     @click.prevent="close">
                                     Cancel
                                 </v-button>
+                            </div>
+                            <div class="w-full md:w-auto">
                                 <v-button
                                     primary
                                     type="submit"
                                     :title="`Click to ${context === 'edit' ? 'update' : 'add'} key binding`">
-                                    {{ context === 'edit' ? 'Update' : 'Add' }}<span class="hidden xs:inline">&nbsp;Binding</span></span>
+                                    {{ context === 'edit' ? 'Update' : 'Add' }} Binding</span>
                                 </v-button>
                             </div>
                         </div>
@@ -81,6 +82,7 @@
 
 <script>
 import { queryElementThen } from '@/app/utils/dom';
+import modalActionsComponent from '@/components/ui/modal_actions.vue';
 
 export default {
     data() {
@@ -88,6 +90,9 @@ export default {
             key: this.initialKey || '',
             turn: this.initialTurn || '',
         };
+    },
+    components: {
+        'v-modal-actions': modalActionsComponent,
     },
     computed: {
         context() {

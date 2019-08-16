@@ -125,7 +125,7 @@ export default {
                     // success
                     this.$router.push(this.solveRoute);
 
-                    this.$alert('Puzzle configuration saved!');
+                    this.$alert('Puzzle configuration saved');
                 }).finally(() => {
                     // complete
                     this.loading = false;
@@ -135,7 +135,7 @@ export default {
 
                 this.$router.push(this.solveRoute);
 
-                this.$alert('Configuration applied, sign in to save these settings.');
+                this.$alert('Configuration applied, sign in to save these settings');
             }
         },
     },

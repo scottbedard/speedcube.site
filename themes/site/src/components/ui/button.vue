@@ -1,6 +1,8 @@
 <style lang="scss" scoped>
     a,
     button {
+        @apply no-underline;
+
         &:active {
             transform: translateY(1px);
         }
@@ -66,7 +68,7 @@ export default {
         }
 
         return <Tag
-            class="font-bold inline-flex items-center justify-center leading-normal rounded-full text-center text-sm tracking-widest trans-bg trans-border trans-color"
+            class="v-button font-bold inline-flex items-center justify-center leading-normal rounded-full text-center text-sm tracking-widest trans-bg trans-border trans-color"
             disabled={disabled}
             href={href}
             to={to}

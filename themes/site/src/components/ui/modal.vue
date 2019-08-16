@@ -1,7 +1,15 @@
+<style lang="scss" scoped>
+    .v-modal {
+        p {
+            @apply text-grey-9;
+        }
+    }
+</style>
+
 <template>
     <portal to="modal">
         <div
-            class="mb-12 outline-none w-full"
+            class="v-modal mb-12 outline-none w-full"
             role="dialog"
             tabindex="-1"
             :aria-labelledby="titleId"
