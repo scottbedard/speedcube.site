@@ -1,8 +1,6 @@
 <style lang="scss" scoped>
     .v-modal {
-        p {
-            @apply text-grey-9;
-        }
+        @apply text-grey-7;
     }
 </style>
 

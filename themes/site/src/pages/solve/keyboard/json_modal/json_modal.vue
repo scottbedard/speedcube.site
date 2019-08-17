@@ -23,9 +23,9 @@
                     </v-form-field>
                     <div class="mt-6">
                         <p>
-                            <strong class="text-grey-8">Be careful editing this</strong><br />
-                            Invalid JSON may break your key bindings and cause errors. This feature
-                            primarily exists to make copy / pasting between puzzles easier.
+                            Be careful editing this, invalid JSON can break key bindings
+                            and cause errors. This feature exists to make copy / pasting
+                            between puzzles easier.
                         </p>
                     </div>
                 </v-grid-cell>
