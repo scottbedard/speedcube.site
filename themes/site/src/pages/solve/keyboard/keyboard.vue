@@ -19,13 +19,24 @@
 
         <v-confirmation-modal
             v-if="removeAllBindingsConfirmationIsVisible"
-            title="Confirm key binding reset"
+            accept="Delete All Bindings"
             cancel="Cancel"
             header="You're about to clear all key bindings"
-            paragraph="Doing this resets all current key bindings. You will still be able to recover the old bindings by pressing cancel, but any unsaved changes would be lost."
-            accept="Reset Bindings"
+            paragraph="Doing this will delete all key bindings. You could still recover your current bindings by pressing cancel, but any unsaved changes would be lost."
+            title="Confirm key binding reset"
             @confirm="removeAllBindings"
             @close="removeAllBindingsConfirmationIsVisible = false"
+        />
+
+        <v-confirmation-modal
+            v-if="resetDefaultBindingsConfirmationIsVisible"
+            accept="Reset Default Bindings"
+            cancel="Cancel"
+            header="You're about to reset the default bindings"
+            paragraph="Pressing this resets all bindings back to their original state. You could still recover your current bindings by pressing cancel, but any unsaved changes would be lost."
+            title="Confirm key bindings reset"
+            @confirm="resetDefaultBindings"
+            @close="resetDefaultBindingsConfirmationIsVisible = false"
         />
 
         <!-- note -->
@@ -35,33 +46,46 @@
         </p>
 
         <!-- toolbar -->
-        <div>
-            <v-button
-                class="mr-6"
-                data-add-binding
-                icon="fa-plus"
-                ghost
-                title="Click to add key binding"
-                @click="showAddModal">
-                Add Binding
-            </v-button>
-
-            <v-button
-                class="mr-6"
-                icon="fa-code"
-                ghost
-                title="Click to edit key binding JSON"
-                @click="showJsonModal">
-                Edit JSON
-            </v-button>
-
-            <v-button
-                ghost
-                icon="fa-trash-o"
-                title="Click to remove all bindings"
-                @click="showRemoveAllConfirmationModal">
-                Remove All Bindings
-            </v-button>
+        <div class="flex flex-wrap">
+            <div class="w-full sm:w-1/2 md:w-auto">
+                <v-button
+                    class="mr-6"
+                    data-add-binding
+                    icon="fa-plus"
+                    ghost
+                    title="Click to add key binding"
+                    @click="showAddModal">
+                    Add Binding
+                </v-button>
+            </div>
+            <div class="w-full sm:w-1/2 md:w-auto">
+                <v-button
+                    class="mr-6"
+                    icon="fa-code"
+                    ghost
+                    title="Click to edit key binding JSON"
+                    @click="showJsonModal">
+                    Edit JSON
+                </v-button>
+            </div>
+            <div class="w-full sm:w-1/2 md:w-auto">
+                <v-button
+                    ghost
+                    icon="fa-undo"
+                    title="Click to restore default bindings"
+                    @click="showResetDefaultConfirmationModal">
+                    Reset Default
+                </v-button>
+            </div>
+            <div class="w-full sm:w-1/2 md:w-auto">
+                <v-button
+                    ghost
+                    icon="fa-trash-o"
+                    title="Click to remove all bindings"
+                    @click="showRemoveAllConfirmationModal">
+                    Clear All
+                </v-button>
+            </div>
         </div>
 
         <!-- current bindings -->
@@ -162,8 +186,11 @@ export default {
             // pending configuration
             pendingConfig: cloneDeep(this.initialConfig),
 
-            // removel all bindings confirmation visibility
+            // remove all bindings modal visibility
             removeAllBindingsConfirmationIsVisible: false,
+
+            // reset default bindings modal visibility
+            resetDefaultBindingsConfirmationIsVisible: false,
         };
     },
     components: {
@@ -218,6 +245,10 @@ export default {
         reset() {
             this.pendingConfig = cloneDeep(this.initialConfig);
         },
+        resetDefaultBindings() {
+            this.resetDefaultBindingsConfirmationIsVisible = false;
+            this.pendingConfig.turns = get(puzzles, `${this.puzzle}.defaultKeyboardConfig.turns`, {});;
+        },
         removeAllBindings() {
             this.removeAllBindingsConfirmationIsVisible = false;
             this.pendingConfig.turns = {};
@@ -251,6 +282,9 @@ export default {
         },
         showRemoveAllConfirmationModal() {
             this.removeAllBindingsConfirmationIsVisible = true;
+        },
+        showResetDefaultConfirmationModal() {
+            this.resetDefaultBindingsConfirmationIsVisible = true;
         },
     },
     props: {
