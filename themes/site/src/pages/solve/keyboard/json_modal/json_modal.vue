@@ -32,13 +32,13 @@
                 <v-grid-cell>
                     <div class="flex flex-wrap justify-between">
                         <div>
-                            <!-- <v-button
+                            <v-button
                                 ghost
                                 icon="fa-clipboard"
                                 title="Click to copy bindings to clipboard"
                                 @click.prevent="copy">
                                 Copy Bindings
-                            </v-button> -->
+                            </v-button>
                         </div>
                         <div>
                             <v-modal-actions>
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { copyToClipboard } from '@/app/utils/string';
+import copyToClipboard from 'clipboard-copy';
 import modalActionsComponent from '@/components/ui/modal_actions.vue';
 
 export default {

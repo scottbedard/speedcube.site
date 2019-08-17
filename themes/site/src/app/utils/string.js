@@ -1,39 +1,4 @@
 /**
- * Copy a string to the user's clipboard.
- * https://hackernoon.com/copying-text-to-clipboard-with-javascript-df4d4988697f
- *
- * @param  {string} str     the string being copied
- * @return {void}
- */
-export function copyToClipboard(str) {
-    const el = document.createElement('textarea');
-    el.value = str;
-    el.setAttribute('readonly', '');
-    el.style.position = 'absolute';
-    el.style.left = '-9999px';
-
-    document.body.appendChild(el);
-
-    const selection = document.getSelection();
-
-    if (selection !== null) {
-        const selected = selection.rangeCount > 0
-            ? selection.getRangeAt(0)
-            : false;
-
-        el.select();
-
-        document.execCommand('copy');
-        document.body.removeChild(el);
-
-        if (selected) {
-            selection.removeAllRanges();
-            selection.addRange(selected);
-        }
-    }
-}
-
-/**
  * Test if a string is a valid email address.
  *
  * @param   {string}    str
