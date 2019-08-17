@@ -1,18 +1,10 @@
 <template>
     <div>
-        <!-- controller -->
-        <v-controller
-            :turnable="turnable"
-            @escape="onEscape"
-            @space="onSpace"
-        />
-
         <!-- scene -->
         <v-scene
             :camera-angle="normalizedConfig.cameraAngle"
             :camera-distance="normalizedConfig.cameraDistance">
-            <!-- <v-axes-helper :size="150" /> -->
-
+            
             <!-- lights -->
             <v-light
                 type="ambient"
@@ -39,7 +31,6 @@
 </template>
 
 <script>
-import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
 import lightComponent from '@/components/three/light/light.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
 import cubeComponent from './cube/cube.vue';
@@ -53,8 +44,6 @@ const defaultConfig = {
 
 export default {
     components: {
-        'v-axes-helper': axesHelperComponent,
-        'v-controller': controllerComponent,
         'v-cube': cubeComponent,
         'v-light': lightComponent,
         'v-scene': sceneComponent,
@@ -65,14 +54,6 @@ export default {
         },
         normalizedConfig() {
             return { ...defaultConfig, ...this.config };
-        },
-    },
-    methods: {
-        onEscape() {
-            this.$emit('escape');
-        },
-        onSpace() {
-            this.$emit('space');
         },
     },
     props: {
