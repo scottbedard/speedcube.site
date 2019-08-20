@@ -23,6 +23,7 @@
             <v-cube
                 :config="normalizedConfig"
                 :current-turn="currentTurn"
+                :masked="masked"
                 :model="model"
                 :turn-progress="turnProgress"
             />
@@ -63,7 +64,7 @@ export default {
         currentTurn: {
             type: String,
         },
-        inspection: {
+        masked: {
             default: false,
             type: Boolean,
         },

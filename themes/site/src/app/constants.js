@@ -91,6 +91,9 @@ export const isTesting = process.env.NODE_ENV === 'test';
 // @todo: determine if we're using a touch device
 export const isTouch = false;
 
+// color to use when masking stickers
+export const maskColor = '#7B8794';
+
 // key codes
 // export const escapeKeyCode = ...;
 export const enterKeyCode = 13;

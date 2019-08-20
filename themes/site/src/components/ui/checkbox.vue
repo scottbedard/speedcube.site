@@ -80,7 +80,7 @@ export default {
         delete bindings.on.change;
 
         return <div
-            class="v-checkbox flex items-center text-grey-8 tracking-wider trans-color focus-within:text-grey-9"
+            class="v-checkbox flex items-center text-grey-8 tracking-widest trans-color focus-within:text-grey-9"
             {...bindings}>
             <div
                 aria-checked={checked ? 'true' : 'false'}

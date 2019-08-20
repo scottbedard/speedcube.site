@@ -6,15 +6,17 @@
             <div v-for="n in puzzles" class="mb-4 w-full" style="max-width: 320px" :key="n">
                 <div class="border-4 border-dotted border-grey-4 pb-full relative">
                     <v-puzzle
-                        :current-turn="currentTurn"
-                        :turn-progress="turnProgress"
                         :config="config"
+                        :current-turn="currentTurn"
+                        :masked="masked"
                         :model="model"
+                        :turn-progress="turnProgress"
                         :type="`${model.size}x${model.size}`"
                     />
                 </div>
             </div>
             <div v-if="puzzles === 1" class="max-w-xs text-xs px-8 w-full">
+                <pre class="mb-4">masked: {{ masked }}</pre>
                 <pre class="mb-4">turnProgress: {{ turnProgress }}</pre>
                 <pre>config: {{ config }}</pre>
             </div>
@@ -24,11 +26,14 @@
         <div>
             <div class="max-w-sm mb-8 mx-auto">
                 <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Current Turn</label>
-                <div class="flex">
+                <div class="flex mb-2">
                     <div class="flex-1 pr-8">
                         <v-input v-model="currentTurn" />
                     </div>
                     <v-button @click="turn">Apply</v-button>
+                </div>
+                <div>
+                    <v-checkbox v-model="masked">Masked</v-checkbox>
                 </div>
             </div>
             <div class="max-w-3xl mx-auto">
@@ -81,10 +86,11 @@ export default {
             colors: ['#FFEE5D', '#EFAA18', '#2589E2', '#EC6157', '#5CBD60', '#F0F0F0'],
             currentTurn: 'U',
             innerBrightness: 0.8,
+            masked: false,
             model: new Cube(3, { useObjects: true }),
             stickerElevation: 0.15,
-            stickerSpacing: 0.2,
             stickerRadius: 0.1,
+            stickerSpacing: 0.2,
             turnProgress: 0.3,
         };
     },

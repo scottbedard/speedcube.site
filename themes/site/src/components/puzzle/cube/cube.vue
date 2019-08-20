@@ -5,6 +5,7 @@
             :config="normalizedConfig"
             :filter="sticker => turningStickers.includes(sticker) === false"
             :geometry="geometry"
+            :masked="masked"
             :materials="materials"
             :model="model"
             :sticker-size="stickerSize"
@@ -16,6 +17,7 @@
                 :config="normalizedConfig"
                 :filter="sticker => turningStickers.includes(sticker) === true"
                 :geometry="geometry"
+                :masked="masked"
                 :materials="materials"
                 :model="model"
                 :sticker-size="stickerSize"
@@ -32,7 +34,7 @@ import objComponent from '@/components/three/obj/obj.vue';
 import cubeStickersComponent from './cube_stickers/cube_stickers.vue';
 import { getStickersEffectedByTurn } from './utils';
 import { roundedSquare } from '@/components/three/geometries';
-import { defaultCubeConfig } from '@/app/constants';
+import { defaultCubeConfig, maskColor } from '@/app/constants';
 
 export default {
     created() {
@@ -153,22 +155,28 @@ export default {
             this.geometry = roundedSquare(this.stickerSize, this.stickerSize * this.normalizedConfig.stickerRadius);
         },
         syncMaterials() {
-            const { colors, innerBrightness } = this.normalizedConfig;
+            const { colors, masked, innerBrightness } = this.normalizedConfig;
+
+            console.log('syncing materials');
 
             this.disposeMaterials();
 
-            this.materials = times(6).map(i => ({
-                inner: new MeshLambertMaterial({
-                    color: colors[i],
-                    opacity: innerBrightness,
-                    side: BackSide,
-                    transparent: innerBrightness < 1,
-                }),
-                outer: new MeshLambertMaterial({
-                    color: colors[i],
-                    side: FrontSide,
-                }),
-            }));
+            this.materials = times(6).map(i => {
+                const color = this.masked ? maskColor : colors[i];
+                
+                return {
+                    inner: new MeshLambertMaterial({
+                        color,
+                        opacity: innerBrightness,
+                        side: BackSide,
+                        transparent: innerBrightness < 1,
+                    }),
+                    outer: new MeshLambertMaterial({
+                        color,
+                        side: FrontSide,
+                    }),
+                };
+            });
         },
     },
     props: {
@@ -178,6 +186,10 @@ export default {
         },
         currentTurn: {
             type: String,
+        },
+        masked: {
+            default: false,
+            type: Boolean,
         },
         model: {
             default() {
@@ -199,14 +211,17 @@ export default {
                     this.syncGeometry();
                 }
 
-                // sync materials if colors or inner opacities have chnaged
+                // sync materials if a relevant property has changed
                 if (
-                    xor(newConfig.colors, oldConfig.colors).length
-                    || newConfig.innerBrightness !== oldConfig.innerBrightness
+                    xor(newConfig.colors, oldConfig.colors).length ||
+                    newConfig.innerBrightness !== oldConfig.innerBrightness
                 ) {
                     this.syncMaterials();
                 }
             },
+        },
+        masked: {
+            handler: 'syncMaterials',
         },
     },
 };

@@ -58,7 +58,6 @@
         <v-obj :rotation="{ y: 180 }">
             <v-shape
                 v-for="(sticker, index) in model.state.B"
-                :color="0x00ffff"
                 :geometry="geometry"
                 :inner-material="innerMaterial(sticker.value)"
                 :key="`B${index}`"
@@ -72,7 +71,6 @@
         <v-obj :rotation="{ x: 90 }">
             <v-shape
                 v-for="(sticker, index) in model.state.D"
-                :color="0xff00ff"
                 :geometry="geometry"
                 :inner-material="innerMaterial(sticker.value)"
                 :key="`D${index}`"
@@ -137,6 +135,7 @@ export default {
         'config',
         'filter',
         'geometry',
+        'masked',
         'materials',
         'model',
         'stickerSize',
