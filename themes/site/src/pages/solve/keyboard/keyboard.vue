@@ -210,7 +210,7 @@ export default {
             return cloneDeep(get(puzzles, `${this.puzzle}.defaultConfig`, {}));
         },
         empty() {
-            return Object.keys(this.pendingConfig.turns).length === 0;
+            return Object.keys(get(this.pendingConfig, 'turns', {})).length === 0;
         },
         puzzle() {
             return get(this.$route, 'params.puzzle', '').toLowerCase().trim();

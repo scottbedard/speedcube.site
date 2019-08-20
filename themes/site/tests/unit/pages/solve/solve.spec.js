@@ -45,7 +45,7 @@ describe('solve page', () => {
 
         expect(vm.$el.querySelector('[data-appearance]')).toBe(null);
 
-        vm.$router.replace({ query: { edit: 'appearance' }});
+        vm.$router.replace({ name: 'solve', query: { edit: 'appearance' }});
 
         await timeout(400);
 
@@ -59,7 +59,7 @@ describe('solve page', () => {
 
         expect(vm.$el.querySelector('[data-keyboard]')).toBe(null);
 
-        vm.$router.replace({ query: { edit: 'keyboard' }});
+        vm.$router.replace({ name: 'solve', query: { edit: 'keyboard' }});
 
         await timeout(400);
 

@@ -4,7 +4,7 @@
         <v-scene
             :camera-angle="normalizedConfig.cameraAngle"
             :camera-distance="normalizedConfig.cameraDistance">
-            
+
             <!-- lights -->
             <v-light
                 type="ambient"
@@ -34,7 +34,6 @@
 import lightComponent from '@/components/three/light/light.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
 import cubeComponent from './cube/cube.vue';
-import controllerComponent from './controller/controller.vue';
 
 // default puzzle config
 const defaultConfig = {
