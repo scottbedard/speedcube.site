@@ -1,10 +1,8 @@
 <template>
     <v-page padded>
         <v-margin padded>
-            <!-- <pre class="text-xs">{{ config }}</pre> -->
-
             <!-- puzzle -->
-            <div class="max-w-xs mb-8 mx-auto">
+            <div v-if="model !== null" class="max-w-xs mb-8 mx-auto">
                 <div
                     class="border-2 border-dashed trans-border pb-full relative rounded"
                     :class="{
@@ -13,10 +11,11 @@
                     }">
                     <v-puzzle
                         :config="config"
-                        :inspection="false"
+                        :current-turn="currentTurn"
+                        :masked="scrambling"
                         :model="model"
+                        :turn-progress="turnProgress"
                         :type="puzzle"
-                        :turnable="true"
                     />
                 </div>
             </div>
@@ -56,22 +55,37 @@
                         class="text-center"
                         data-default
                         key="default">
-                        <v-button
-                            class="mx-6"
-                            icon="fa-sliders"
-                            ghost
-                            title="Click to customize appearance"
-                            :to="{ query: { edit: 'appearance' }}">
-                            Customize Puzzle
-                        </v-button>
-                        <v-button
-                            class="mx-6"
-                            icon="fa-code"
-                            ghost
-                            title="Click to edit key bindings"
-                            :to="{ query: { edit: 'keyboard' }}">
-                            Edit Key Bindings
-                        </v-button>
+                        <v-fade-transition>
+                            <!-- inspecting -->
+                            <div v-if="inspecting" key="inspecting">
+                                Inspecting!
+                            </div>
+
+                            <!-- idle -->
+                            <div v-else key="idle">
+                                <div class="mb-6">
+                                    <v-button primary @click="scramble">Scramble</v-button>
+                                </div>
+                                <div>
+                                    <v-button
+                                        class="mx-3"
+                                        icon="fa-sliders"
+                                        ghost
+                                        title="Click to customize appearance"
+                                        :to="{ query: { edit: 'appearance' }}">
+                                        Customize Puzzle
+                                    </v-button>
+                                    <v-button
+                                        class="mx-3"
+                                        icon="fa-code"
+                                        ghost
+                                        title="Click to edit key bindings"
+                                        :to="{ query: { edit: 'keyboard' }}">
+                                        Edit Key Bindings
+                                    </v-button>
+                                </div>
+                            </div>
+                        </v-fade-transition>
                     </div>
                 </v-fade-transition>
             </div>
@@ -80,25 +94,42 @@
 </template>
 
 <script>
-import { get } from 'lodash-es';
 import Cube from 'bedard-cube';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
-import { puzzles } from '@/app/constants';
+import { componentEase, componentTimeout } from 'spyfu-vue-utils';
+import { get } from 'lodash-es';
+import { isCube } from '@/app/utils/puzzle';
 import { mapGetters, mapState } from 'vuex';
+import { postCreateScramble } from '@/app/repositories/scrambles';
+import { linear, puzzles } from '@/app/constants';
+// import { postSolve } from '@/app/repositories/solves';
 
 export default {
     created() {
-        this.createModel();
+        this.refreshModel();
     },
     data() {
         return {
             // applied guest config
             appliedConfig: null,
 
+            // current turn applied to the puzzle
+            currentTurn: 'F',
+
+            // inspection phase of the solve
+            inspecting: false,
+
+            // model to represent the state of the puzzle
             model: null,
 
             // visual config being previewed
             previewConfig: null,
+
+            // determines if the puzzle's scrambling state is visible
+            scrambling: false,
+
+            // current turn progress
+            turnProgress: 0,
         };
     },
     components: {
@@ -133,21 +164,39 @@ export default {
             return this.edit === 'appearance';
         },
         config() {
+            // fully normalized config being fed into the puzzle
             const defaultConfig = get(puzzles, `${this.puzzle}.defaultConfig`, {});
+            const scrambleSpeed = 100;
 
             if (this.previewConfig) {
-                return { ...defaultConfig, ...this.previewConfig };
+                return { 
+                    ...defaultConfig, 
+                    ...this.previewConfig,
+                    turnDuration: this.scrambling ? scrambleSpeed : (this.previewConfig.turnDuration || defaultConfig.turnDuration)
+                };
             }
 
             if (this.appliedConfig) {
-                return { ...defaultConfig, ...this.appliedConfig };
+                return { 
+                    ...defaultConfig, 
+                    ...this.appliedConfig,
+                    turnDuration: this.scrambling ? scrambleSpeed : (this.appliedConfig.turnDuration || defaultConfig.turnDuration)
+                };
             }
 
-            return { ...defaultConfig, ...this.activeConfig };
+            return { 
+                    ...defaultConfig, 
+                    ...this.activeConfig,
+                    turnDuration: this.scrambling ? scrambleSpeed : (this.activeConfig.turnDuration || defaultConfig.turnDuration)
+                };
         },
         edit() {
             // normalize the currently open tab
             return get(this.$route, 'query.edit', '').toLowerCase().trim();
+        },
+        isCube() {
+            // determine if the puzzle is a standard NxN cube
+            return isCube(this.puzzle);
         },
         keyboard() {
             // determine if keyboard editor is open
@@ -166,15 +215,96 @@ export default {
         applyConfig(config) {
             this.appliedConfig = config;
         },
+        applyState(stateJson) {
+            const state = JSON.parse(stateJson);
+
+            if (this.isCube) {
+                Object.keys(this.model.state).forEach((face) => {
+                    this.model.state[face].forEach((sticker, index) => {
+                        sticker.value = state[face][index];
+                    });
+                });
+            }
+        },
         clearPreviewConfig() {
             this.previewConfig = null;
         },
-        createModel() {
-            this.model = new Cube(3, { useObjects: true });
+        executeTurn(turn) {
+            // ...
+        },
+        randomTurn() {
+            let turn = '';
+
+            if (this.isCube) {
+                do {
+                    turn = this.model.generateScrambleString(1).replace(/2$/, '');
+                } while (turn === this.currentTurn);
+            }
+
+            return turn;
+        },
+        refreshModel() {
+            // cube
+            if (this.isCube) {
+                const size = parseInt(this.puzzle, 10);
+
+                this.model = new Cube(size, { useObjects: true });
+            }
+            
+            // redirect to 3x3 for unknown puzzles
+            else {
+                this.$router.replace({
+                    name: 'solve',
+                    params: { puzzle: '3x3' },
+                });
+            }
+        },
+        reset() {
+            this.scrambling = false;
+            this.inspecting = false;
+        },
+        scramble() {
+
+            // scramble the puzzle and start a new solve
+            this.reset();
+            this.scrambling = true;
+            let loading = true;
+
+            const delay = new Promise(resolve => componentTimeout(this, resolve, 2000));
+
+            const xhr = postCreateScramble(this.puzzle).then((response) => {
+                // success
+                this.applyState(response.data.scrambledState);
+            });
+
+            Promise.all([xhr, delay]).then(() => { loading = false });
+
+            const pseudoScramble = new Promise((resolve) => {
+                const turn = () => {
+                    this.currentTurn = this.randomTurn();
+
+                    componentEase(this, (val) => {
+                        this.turnProgress = val;
+
+                        val === 1 && (loading ? turn() : resolve());
+                    }, this.config.turnDuration, linear);
+
+                };
+
+                turn();
+            });
+
+            Promise.all([xhr, pseudoScramble]).then(() => {
+                console.log('hooray');
+                this.scrambling = false;
+            });
         },
         setPreviewConfig(config) {
             this.previewConfig = config;
         },
+    },
+    watch: {
+        puzzle: 'refreshModel',
     },
 };
 </script>

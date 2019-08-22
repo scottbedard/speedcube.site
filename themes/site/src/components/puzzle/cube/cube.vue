@@ -157,8 +157,6 @@ export default {
         syncMaterials() {
             const { colors, masked, innerBrightness } = this.normalizedConfig;
 
-            console.log('syncing materials');
-
             this.disposeMaterials();
 
             this.materials = times(6).map(i => {
