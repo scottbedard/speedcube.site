@@ -1,3 +1,5 @@
+import { rafEase } from './function';
+
 /**
  * Find an ancestor component.
  *
@@ -17,4 +19,20 @@ export function findAncestor(vm, ancestorName) {
     }
 
     return undefined;
+}
+
+/**
+ * Component managed requestAnimationFrame easing loop.
+ *
+ * @param {Vue}             vm
+ * @param {Function}        fn
+ * @param {Number}          duration
+ * @param {Array<Number>}   curve
+ */
+export function componentRafEase(vm, fn, duration, curve) {
+    const loop = rafEase(fn, duration, curve);
+
+    vm.$once('hook:destroyed', loop.cancel);
+
+    return loop;
 }

@@ -103,6 +103,7 @@ import { mapGetters, mapState } from 'vuex';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { linear, puzzles } from '@/app/constants';
 import { rafEase } from '@/app/utils/function';
+import { componentRafEase } from '@/app/utils/component';
 // import { postSolve } from '@/app/repositories/solves';
 
 export default {
@@ -233,17 +234,6 @@ export default {
         executeTurn(turn) {
             // ...
         },
-        randomTurn() {
-            let turn = '';
-
-            if (this.isCube) {
-                do {
-                    turn = this.model.generateScrambleString(1).replace(/2$/, '');
-                } while (turn === this.currentTurn);
-            }
-
-            return turn;
-        },
         refreshModel() {
             // cube
             if (this.isCube) {
@@ -265,39 +255,52 @@ export default {
             this.inspecting = false;
         },
         scramble() {
-
-            // scramble the puzzle and start a new solve
             this.reset();
+
             this.scrambling = true;
+
+            // fetch and apple our scrambled state
             let loading = true;
 
-            const delay = new Promise(resolve => componentTimeout(this, resolve, 2000));
-
-            const xhr = postCreateScramble(this.puzzle).then((response) => {
-                // success
-                this.applyState(response.data.scrambledState);
+            const xhr = postCreateScramble(this.puzzle).then(({ data }) => {
+                this.applyState(data.scrambledState);
             });
 
+            // this sets the min time our animation will run
+            const delay = new Promise(res => componentTimeout(this, res, 5000));
+
+            // set loading to false when xhr and delay are done
             Promise.all([xhr, delay]).then(() => { loading = false });
 
+            // simulate the puzzle being scrambled. this will have
+            // to be refactored to be puzzle-agnostic once shape
+            // changers like square-1 are implemented.
             const pseudoScramble = new Promise((resolve) => {
+                let scramble = this.model.generateScrambleString(50).split(' ');
+
+                const turnDuration = this.config.turnDuration;
+                
                 const turn = () => {
-                    this.currentTurn = this.randomTurn();
+                    this.currentTurn = scramble.shift().replace(/2$/, '');
 
-                    rafEase((val) => {
-                        this.turnProgress = val;
+                    scramble = scramble.concat(this.currentTurn);
 
-                        val === 1 && (loading ? turn() : resolve());
-                    }, this.config.turnDuration);
+                    componentRafEase(this, (progress) => {
+                        this.turnProgress = progress;
 
+                        if (progress === 1) {
+                            if (loading) turn(); else resolve();
+                        }
+                    }, turnDuration);
                 };
 
                 turn();
             });
 
+            // when everything is complete. move on to inspection phase
             Promise.all([xhr, pseudoScramble]).then(() => {
-                console.log('hooray');
                 this.scrambling = false;
+                this.inspecting = true;
             });
         },
         setPreviewConfig(config) {
