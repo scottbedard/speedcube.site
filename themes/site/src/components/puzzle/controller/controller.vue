@@ -12,6 +12,13 @@ export default {
             if (this.turnable) {
                 if (e.key === ' ') {
                     this.$emit('space');
+                } else {
+                    const turn = this.config.turns[e.key];
+
+                    if (turn) {
+                        this.$emit('keypress', e);
+                        this.$emit('turn', turn);
+                    }
                 }
             }
         },
@@ -21,12 +28,18 @@ export default {
                     this.$emit('escape');
                 }
             }
-        }
+        },
     },
     render: noop,
     props: {
+        config: {
+            default() {
+                return { turns: {} };
+            },
+            type: Object,
+        },
         turnable: {
-            default: false,
+            default: true,
             type: Boolean,
         },
     },

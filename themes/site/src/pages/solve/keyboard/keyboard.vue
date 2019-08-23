@@ -1,5 +1,18 @@
+<style lang="scss" scoped>
+    .highlight-binding {
+        @apply text-grey-10;
+    }
+</style>
+
 <template>
     <div class="max-w-5xl mx-auto">
+        <!-- puzzle controller -->
+        <v-puzzle-controller
+            :config="pendingConfig"
+            @keypress="highlightKey"
+            @turn="executeTurn"
+        />
+
         <!-- modals -->
         <v-binding-modal
             v-if="bindingModalIsVisible"
@@ -96,14 +109,15 @@
                         No key bindings are configured
                     </div>
                 </div>
-
                 <div v-else key="bindings">
                     <div class="flex flex-wrap font-mono justify-center mt-2 mb-8 text-center tracking-wider">
                         <v-button
                             v-for="(turn, key) in pendingConfig.turns"
                             ghost
-                            class=""
-                            title="Click to edit or remove"
+                            title="Click to edit or remove binding"
+                            :class="{
+                                'highlight-binding': highlighted.includes(key),
+                            }"
                             :key="key"
                             @click.prevent="edit({ key, turn })">
                             {{ key }}<i class="fa fa-angle-right mx-2" />{{ turn }}
@@ -160,12 +174,14 @@
 </template>
 
 <script>
+import confirmationModalComponent from '@/components/ui/confirmation_modal.vue';
+import puzzleControllerComponent from '@/components/puzzle/controller/controller.vue';
 import { cloneDeep, get } from 'lodash-es';
+import { componentTimeout } from 'spyfu-vue-utils';
 import { jsonToObject } from '@/app/utils/object';
 import { mapGetters, mapState } from 'vuex';
 import { postKeyboardConfig } from '@/app/repositories/keyboard_configs';
 import { puzzles } from '@/app/constants';
-import confirmationModalComponent from '@/components/ui/confirmation_modal.vue';
 
 export default {
     data() {
@@ -176,6 +192,9 @@ export default {
             // initial state for key binding modal
             bindingModalKey: '',
             bindingModalTurn: '',
+
+            // key bindings to highlight by key
+            highlighted: [],
 
             // json modal visibility
             jsonModalIsVisible: false,
@@ -197,6 +216,7 @@ export default {
         'v-binding-modal': () => import('./binding_modal/binding_modal.vue'),
         'v-confirmation-modal': () => import('@/components/ui/confirmation_modal.vue'),
         'v-json-modal': () => import('./json_modal/json_modal.vue'),
+        'v-puzzle-controller': puzzleControllerComponent,
     },
     computed: {
         ...mapGetters('user', [
@@ -241,6 +261,16 @@ export default {
             this.bindingModalKey = key;
             this.bindingModalTurn = turn;
             this.bindingModalIsVisible = true;
+        },
+        executeTurn(turn) {
+            this.$emit('turn', turn);
+        },
+        highlightKey(e) {
+            this.highlighted = this.highlighted.concat(e.key);
+
+            componentTimeout(this, () => {
+                this.highlighted = this.highlighted.filter(configKey => configKey !== e.key);
+            }, 150);
         },
         reset() {
             this.pendingConfig = cloneDeep(this.initialConfig);
