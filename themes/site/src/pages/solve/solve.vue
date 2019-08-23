@@ -96,15 +96,13 @@
 <script>
 import Cube from 'bedard-cube';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
+import { componentRafEase } from '@/app/utils/component';
 import { componentTimeout } from 'spyfu-vue-utils';
 import { get } from 'lodash-es';
 import { isCube } from '@/app/utils/puzzle';
+import { linear, puzzles } from '@/app/constants';
 import { mapGetters, mapState } from 'vuex';
 import { postCreateScramble } from '@/app/repositories/scrambles';
-import { linear, puzzles } from '@/app/constants';
-import { rafEase } from '@/app/utils/function';
-import { componentRafEase } from '@/app/utils/component';
-// import { postSolve } from '@/app/repositories/solves';
 
 export default {
     created() {
@@ -116,7 +114,7 @@ export default {
             appliedConfig: null,
 
             // current turn applied to the puzzle
-            currentTurn: 'F',
+            currentTurn: '',
 
             // inspection phase of the solve
             inspecting: false,
@@ -168,29 +166,20 @@ export default {
         config() {
             // fully normalized config being fed into the puzzle
             const defaultConfig = get(puzzles, `${this.puzzle}.defaultConfig`, {});
-            const scrambleSpeed = 100;
 
-            if (this.previewConfig) {
-                return { 
-                    ...defaultConfig, 
-                    ...this.previewConfig,
-                    turnDuration: this.scrambling ? scrambleSpeed : (this.previewConfig.turnDuration || defaultConfig.turnDuration)
-                };
+            let turnDuration = defaultConfig.turnDuration;
+
+            if (this.previewConfig && this.previewConfig.turnDuration) {
+                turnDuration = this.previewConfig.turnDuration;
+            } else if (this.activeConfig && this.activeConfig.turnDuration) {
+                turnDuration = this.activeConfig.turnDuration;
             }
 
-            if (this.appliedConfig) {
-                return { 
-                    ...defaultConfig, 
-                    ...this.appliedConfig,
-                    turnDuration: this.scrambling ? scrambleSpeed : (this.appliedConfig.turnDuration || defaultConfig.turnDuration)
-                };
+            return {
+                ...defaultConfig,
+                ...this.previewConfig,
+                turnDuration,
             }
-
-            return { 
-                    ...defaultConfig, 
-                    ...this.activeConfig,
-                    turnDuration: this.scrambling ? scrambleSpeed : (this.activeConfig.turnDuration || defaultConfig.turnDuration)
-                };
         },
         edit() {
             // normalize the currently open tab
@@ -267,7 +256,7 @@ export default {
             });
 
             // this sets the min time our animation will run
-            const delay = new Promise(res => componentTimeout(this, res, 5000));
+            const delay = new Promise(res => componentTimeout(this, res, 2000));
 
             // set loading to false when xhr and delay are done
             Promise.all([xhr, delay]).then(() => { loading = false });
