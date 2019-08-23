@@ -46,6 +46,7 @@
                         key="keyboard">
                         <v-keyboard
                             :initial-config="keyboardConfig"
+                            @turn="queueTurn"
                         />
                     </div>
 
@@ -128,8 +129,14 @@ export default {
             // determines if the puzzle's scrambling state is visible
             scrambling: false,
 
+            // set to true when turning
+            turning: false,
+
             // current turn progress
             turnProgress: 0,
+
+            // turns waiting to be executed
+            turnQueue: [],
         };
     },
     components: {
@@ -222,7 +229,28 @@ export default {
             this.previewConfig = null;
         },
         executeTurn(turn) {
-            // ...
+            this.currentTurn = turn;
+            this.turnProgress = 0;
+            this.turning = true;
+
+            return new Promise(resolve => {
+                componentRafEase(this, (progress) => {
+                    this.turnProgress = progress;
+
+                    if (progress === 1) {
+                        this.$nextTick(() => {
+                            this.model.turn(turn);
+                            this.turnProgress = 0;
+                            this.turning = false;
+                            
+                            this.$nextTick(resolve);
+                        });
+                    }
+                }, this.config.turnDuration);
+            });
+        },
+        queueTurn(turn) {
+            this.turnQueue.push(turn);
         },
         refreshModel() {
             // cube
@@ -275,13 +303,13 @@ export default {
 
                     scramble = scramble.concat(this.currentTurn);
 
-                    componentRafEase(this, (progress) => {
-                        this.turnProgress = progress;
-
-                        if (progress === 1) {
-                            if (loading) turn(); else resolve();
+                    this.executeTurn(this.currentTurn).then(() => {
+                        if (loading) {
+                            turn();
+                        } else {
+                            resolve();
                         }
-                    }, turnDuration);
+                    });
                 };
 
                 turn();
@@ -299,6 +327,16 @@ export default {
     },
     watch: {
         puzzle: 'refreshModel',
+        turnQueue(queue) {
+            // advance ot the next turn if there is one
+            const nextTurn = queue.slice(0, 1).pop();
+
+            if (nextTurn && !this.turning) {
+                this.executeTurn(nextTurn).then(() => {
+                    this.turnQueue.shift();
+                });
+            }
+        },
     },
 };
 </script>

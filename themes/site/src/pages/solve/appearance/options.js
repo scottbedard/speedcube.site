@@ -24,7 +24,7 @@ const base = [
         component: numberPickerComponent,
         id: 'turnDuration',
         label: 'Turn Duration',
-        props: { max: 500, min: 1, step: 1 },
+        props: { max: 500, min: 40, step: 1 },
     },
 ];
 
