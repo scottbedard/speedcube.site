@@ -96,12 +96,13 @@
 <script>
 import Cube from 'bedard-cube';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
-import { componentEase, componentTimeout } from 'spyfu-vue-utils';
+import { componentTimeout } from 'spyfu-vue-utils';
 import { get } from 'lodash-es';
 import { isCube } from '@/app/utils/puzzle';
 import { mapGetters, mapState } from 'vuex';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { linear, puzzles } from '@/app/constants';
+import { rafEase } from '@/app/utils/function';
 // import { postSolve } from '@/app/repositories/solves';
 
 export default {
@@ -283,11 +284,11 @@ export default {
                 const turn = () => {
                     this.currentTurn = this.randomTurn();
 
-                    componentEase(this, (val) => {
+                    rafEase((val) => {
                         this.turnProgress = val;
 
                         val === 1 && (loading ? turn() : resolve());
-                    }, this.config.turnDuration, linear);
+                    }, this.config.turnDuration);
 
                 };
 
