@@ -62,7 +62,7 @@
                             </div>
 
                             <!-- idle -->
-                            <div v-else key="idle">
+                            <div v-else-if="!scrambling" key="idle">
                                 <div class="mb-6">
                                     <v-button primary @click="scramble">Scramble</v-button>
                                 </div>
@@ -177,7 +177,8 @@ export default {
 
             return {
                 ...defaultConfig,
-                ...this.previewConfig,
+                ...(this.activeConfig || {}),
+                ...(this.previewConfig || {}),
                 turnDuration,
             }
         },
