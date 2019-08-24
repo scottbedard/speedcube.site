@@ -1,6 +1,13 @@
 <template>
     <v-page padded>
         <v-margin padded>
+            <!-- keyboard controller -->
+            <v-puzzle-controller
+                v-if="!keyboard"
+                :config="keyboardConfig"
+                @turn="queueTurn"
+            />
+
             <!-- puzzle -->
             <div v-if="model !== null" class="max-w-xs mb-8 mx-auto">
                 <div
@@ -97,6 +104,7 @@
 <script>
 import Cube from 'bedard-cube';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
+import puzzleControllerComponent from '@/components/puzzle/controller/controller.vue';
 import { componentRafEase } from '@/app/utils/component';
 import { componentTimeout } from 'spyfu-vue-utils';
 import { get } from 'lodash-es';
@@ -143,6 +151,7 @@ export default {
         'v-appearance': () => import('./appearance/appearance.vue'),
         'v-keyboard': () => import('./keyboard/keyboard.vue'),
         'v-puzzle': puzzleComponent,
+        'v-puzzle-controller': puzzleControllerComponent,
     },
     computed: {
         ...mapGetters('user', [
