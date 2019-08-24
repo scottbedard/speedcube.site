@@ -83,7 +83,7 @@ describe('solve page', () => {
             },
         });
         
-        expect(vm.$refs.solve.activeConfig).toEqual({
+        expect(vm.$refs.solve.userConfig).toEqual({
             cameraAngle: 50,
             cameraDistance: 200,
             colors: ['#FFEE5D', '#EFAA18', '#2589E2', '#EC6157', '#5CBD60', '#F0F0F0'],

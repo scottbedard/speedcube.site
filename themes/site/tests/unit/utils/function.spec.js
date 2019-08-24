@@ -28,8 +28,8 @@ describe('function utils', function() {
         expect(fn).toHaveBeenCalledTimes(11);
     });
 
-    it.skip('ease (canceled)', async () => {
-        const fn = spy();
+    it('ease (canceled)', async () => {
+        const fn = jest.fn();
 
         const timeouts = ease(easeInOutExpo, fn, 50);
 
@@ -37,12 +37,12 @@ describe('function utils', function() {
 
         await timeout(100);
 
-        expect(fn).not.to.have.been.called;
+        expect(fn).not.toHaveBeenCalled();
     });
 
     it('rafEase', async () => {
         const fn = jest.fn();
-        const loop = rafEase(easeInOutExpo, fn, 100);
+        const loop = rafEase(fn, 100, easeInOutExpo);
 
         expect(fn).toHaveBeenCalledWith(0);
 
@@ -53,7 +53,7 @@ describe('function utils', function() {
 
     it('rafEase (cancaled)', async () => {
         const fn = jest.fn();
-        const loop = rafEase(easeInOutExpo, fn, 500);
+        const loop = rafEase(fn, 500, easeInOutExpo);
 
         expect(fn).toHaveBeenCalledWith(0);
 

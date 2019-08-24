@@ -80,8 +80,7 @@ export function ease(curve, fn, duration, frames = null) {
 export function rafEase(fn, duration, curve = linear) {
     const startTime = Date.now();
     const endTime = startTime + duration;
-    const easing = bezierEasing(...curve);
-
+    const easing = bezierEasing.apply(undefined, curve); /* eslint-disable-line prefer-spread */ // (jest compatability)
 
     // this variable and callback short circuit
     // the loop when called
