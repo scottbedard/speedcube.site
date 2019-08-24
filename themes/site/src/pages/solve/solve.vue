@@ -71,7 +71,7 @@
 
                             <!-- idle -->
                             <div v-else-if="!scrambling" key="idle">
-                                <div class="mb-6">
+                                <div class="mb-12">
                                     <v-button primary @click="scramble">Scramble</v-button>
                                 </div>
                                 <div>
@@ -105,6 +105,7 @@
 import Cube from 'bedard-cube';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
 import puzzleControllerComponent from '@/components/puzzle/controller/controller.vue';
+import safeParse from 'safe-json-parse/callback';
 import { componentRafEase } from '@/app/utils/component';
 import { componentTimeout } from 'spyfu-vue-utils';
 import { get } from 'lodash-es';
@@ -156,47 +157,26 @@ export default {
     computed: {
         ...mapGetters('user', [
             'isAuthenticated',
+            'configForPuzzle',
         ]),
         ...mapState('user', [
             'user',
         ]),
-        activeConfig() {
-            // return the users config for this puzzle
-            let activeConfig = {};
-
-            if (this.isAuthenticated) {
-                const userConfig = this.user.configs.find(obj => obj.puzzle === this.puzzle);
-
-                if (userConfig) {
-                    /* eslint-disable-next-line no-empty */
-                    try { activeConfig = JSON.parse(userConfig.config) } catch (e) {}
-                }
-            }
-
-            return activeConfig;
-        },
         appearance() {
             // determine if the appearance editor should be visible
             return this.edit === 'appearance';
         },
         config() {
             // fully normalized config being fed into the puzzle
-            const defaultConfig = get(puzzles, `${this.puzzle}.defaultConfig`, {});
-
-            let turnDuration = defaultConfig.turnDuration;
-
-            if (this.previewConfig && this.previewConfig.turnDuration) {
-                turnDuration = this.previewConfig.turnDuration;
-            } else if (this.activeConfig && this.activeConfig.turnDuration) {
-                turnDuration = this.activeConfig.turnDuration;
-            }
-
             return {
-                ...defaultConfig,
-                ...(this.activeConfig || {}),
+                ...this.defaultConfig,
+                ...this.userConfig,
                 ...(this.previewConfig || {}),
-                turnDuration,
             }
+        },
+        defaultConfig() {
+            // default config for the puzzle
+            return get(puzzles, `${this.puzzle}.defaultConfig`, {});
         },
         edit() {
             // normalize the currently open tab
@@ -217,6 +197,10 @@ export default {
         puzzle() {
             // parse and normalize the puzzle id from current route
             return get(this.$route, 'params.puzzle', 'unknown').trim().toLowerCase();
+        },
+        userConfig() {
+            // return the users config for the current puzzle
+            return this.configForPuzzle(this.puzzle);
         },
     },
     methods: {
@@ -301,7 +285,7 @@ export default {
 
             // simulate the puzzle being scrambled. this will have
             // to be refactored to be puzzle-agnostic once shape
-            // changers like square-1 are implemented.
+            // changing puzzles like square-1 are implemented.
             const pseudoScramble = new Promise((resolve) => {
                 let scramble = this.model.generateScrambleString(50).split(' ');
 

@@ -1,10 +1,30 @@
 import { get, isUndefined } from 'lodash-es';
 import { puzzles } from '@/app/constants';
+import safeParse from 'safe-json-parse/callback';
 
 //
 // getters
 //
 export default {
+    // get the user's config for a given puzzle
+    configForPuzzle(state, getters) {
+        return (puzzle) => {
+            let obj = {};
+
+            if (getters.isAuthenticated) {
+                const userConfig = state.user.configs.find(obj => obj.puzzle === puzzle);
+
+                if (userConfig) {
+                    safeParse(userConfig.config, (err, parsedObj) => {
+                        if (obj) obj = parsedObj;
+                    });
+                }
+            }
+
+            return obj;
+        };
+    },
+
     // determine if the user has an avatar
     hasAvatar(state, getters) {
         return getters.isAuthenticated && state.user.avatar !== null;
