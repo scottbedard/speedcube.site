@@ -55,7 +55,9 @@ export function formatTime(time) {
 export function formatShortTime(time) {
     const formattedTime = formatTime(time);
 
-    return formattedTime.replace(/^[0:]*/, '');
+    return time >= 1000
+        ? formattedTime.replace(/^[0:]*/, '')
+        : formattedTime.replace(/^\d\:0/, '');
 }
 
 /**

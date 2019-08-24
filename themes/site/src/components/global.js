@@ -26,6 +26,7 @@ import rangeInputComponent from './ui/range_input.vue';
 import scatterChartComponent from './charts/scatter_chart.vue';
 import selectComponent from './ui/select.vue';
 import spinnerComponent from './ui/spinner.vue';
+import stopwatchComponent from './ui/stopwatch.vue';
 import switchComponent from './ui/switch.vue';
 import tableComponent from './ui/table/table.vue';
 import textareaComponent from './ui/textarea.vue';
@@ -76,6 +77,7 @@ export default {
     'v-range-input': rangeInputComponent,
     'v-select': selectComponent,
     'v-spinner': spinnerComponent,
+    'v-stopwatch': stopwatchComponent,
     'v-switch': switchComponent,
     'v-table': tableComponent,
     'v-textarea': textareaComponent,

@@ -36,3 +36,35 @@ export function componentRafEase(vm, fn, duration, curve) {
 
     return loop;
 }
+
+/**
+ * Component managed requestAnimationFrame loop.
+ *
+ * @param  {Vue}        vm
+ * @param  {Function}   fn
+ * @return {Object}
+ */
+export function componentRafLoop(vm, fn) {
+    let running = true;
+
+    const tick = () => {
+        if (running) {
+            fn(window.requestAnimationFrame(tick));
+        }
+    };
+
+    const start = () => {
+        running = true;
+        window.requestAnimationFrame(tick);
+    };
+
+    const stop = () => {
+        running = false;
+    };
+
+    vm.$once('hook:destroyed', stop);
+
+    start();
+
+    return { start, stop };
+}

@@ -1,50 +1,53 @@
 <template>
-    <div
-        class="font-thin text-center text-grey-5 text-4xl"
-        v-text="formattedTimeRemaining"
-    />
+        <span v-text="textContent" class="font-thin text-grey-5 text-4xl" />
 </template>
 
 <script>
-import { componentTimeout } from 'spyfu-vue-utils';
+import { componentRafLoop } from '@/app/utils/component';
+import { noop } from 'lodash-es';
 
 export default {
+    created() {
+        this.loop = componentRafLoop(this, this.tick);
+    },
     data() {
         return {
+            loop: { start: noop, stop: noop },
             now: Date.now(),
         };
-    },
-    mounted() {
-        this.tick();
     },
     computed: {
         formattedTimeRemaining() {
             return Math.ceil(this.timeRemaining / 1000);
         },
+        textContent() {
+            return Math.max(0, this.timeRemaining);
+        },
         timeRemaining() {
-            return this.duration - (this.now - this.startedAt);
+            return this.from - Math.floor((this.now - this.startTime) / 1000);
         },
     },
     methods: {
         tick() {
-            if (this.timeRemaining > 0) {
-                componentTimeout(this, () => {
-                    this.now = Date.now();
-                    this.tick();
-                }, 1000);
-            } else {
-                this.$emit('complete');
-            }
+            this.now = Date.now();
         },
     },
     props: {
-        duration: {
+        from: {
             required: true,
             type: Number,
         },
-        startedAt: {
-            required: true,
+        startTime: {
+            default: () => Date.now(),
             type: Number,
+        },
+    },
+    watch: {
+        timeRemaining(timeRemaining) {
+            if (timeRemaining <= 0) {
+                this.loop.stop();
+                this.$emit('end');
+            }
         },
     },
 };

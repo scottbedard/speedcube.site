@@ -66,7 +66,19 @@
                         <v-fade-transition>
                             <!-- inspecting -->
                             <div v-if="inspecting" key="inspecting">
-                                Inspecting!
+                                <v-countdown
+                                    :from="3"
+                                    :start-time="inspectionStartTime"
+                                    @end="startSolve"
+                                />
+                            </div>
+
+                            <!-- solving -->
+                            <div v-else-if="solving" key="solving">
+                                <v-stopwatch
+                                    :start-time="solveStartTime"
+                                    :stop-time="solveEndTime"
+                                />
                             </div>
 
                             <!-- idle -->
@@ -126,8 +138,11 @@ export default {
             // current turn applied to the puzzle
             currentTurn: '',
 
-            // inspection phase of the solve
+            // inspection phase
             inspecting: false,
+
+            // inspection timestamp
+            inspectionStartTime: 0,
 
             // model to represent the state of the puzzle
             model: null,
@@ -137,6 +152,15 @@ export default {
 
             // determines if the puzzle's scrambling state is visible
             scrambling: false,
+
+            // solve end time
+            solveEndTime: 0,
+
+            // solve start time
+            solveStartTime: 0,
+
+            // solving phase
+            solving: false,
 
             // set to true when turning
             turning: false,
@@ -262,8 +286,12 @@ export default {
             }
         },
         reset() {
-            this.scrambling = false;
             this.inspecting = false;
+            this.inspectionStartTime = 0;
+            this.scrambling = false;
+            this.solveEndTime = 0;
+            this.solveStartTime = 0;
+            this.solving = false;
         },
         scramble() {
             this.reset();
@@ -287,22 +315,16 @@ export default {
             // to be refactored to be puzzle-agnostic once shape
             // changing puzzles like square-1 are implemented.
             const pseudoScramble = new Promise((resolve) => {
-                let scramble = this.model.generateScrambleString(50).split(' ');
-
                 const turnDuration = this.config.turnDuration;
+                
+                let scramble = this.model.generateScrambleString(50).split(' ');
                 
                 const turn = () => {
                     this.currentTurn = scramble.shift().replace(/2$/, '');
 
                     scramble = scramble.concat(this.currentTurn);
 
-                    this.executeTurn(this.currentTurn).then(() => {
-                        if (loading) {
-                            turn();
-                        } else {
-                            resolve();
-                        }
-                    });
+                    this.executeTurn(this.currentTurn).then(loading ? turn : resolve);
                 };
 
                 turn();
@@ -311,11 +333,21 @@ export default {
             // when everything is complete. move on to inspection phase
             Promise.all([xhr, pseudoScramble]).then(() => {
                 this.scrambling = false;
-                this.inspecting = true;
+
+                this.startInspection();
             });
         },
         setPreviewConfig(config) {
             this.previewConfig = config;
+        },
+        startInspection() {
+            this.inspecting = true;
+            this.inspectionStartTime = Date.now();
+        },
+        startSolve() {
+            this.inspecting = false;
+            this.solveStartTime = Date.now();
+            this.solving = true;
         },
     },
     watch: {
