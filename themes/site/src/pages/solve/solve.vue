@@ -74,11 +74,20 @@
                             </div>
 
                             <!-- solving -->
-                            <div v-else-if="solving" key="solving">
-                                <v-stopwatch
-                                    :start-time="solveStartTime"
-                                    :stop-time="solveEndTime"
-                                />
+                            <div v-else-if="solving || solved" key="solving">
+                                <div class="mb-4">
+                                    <v-stopwatch
+                                        :start-time="solveStartTime"
+                                        :stop-time="solveEndTime"
+                                    />
+                                </div>
+
+                                <!-- solved -->
+                                <v-fade-transition>
+                                    <div v-if="solved" key="solved">
+                                        Solved!
+                                    </div>
+                                </v-fade-transition>
                             </div>
 
                             <!-- idle -->
@@ -153,11 +162,17 @@ export default {
             // determines if the puzzle's scrambling state is visible
             scrambling: false,
 
+            // solution to scramble
+            solution: [],
+
             // solve end time
             solveEndTime: 0,
 
             // solve start time
             solveStartTime: 0,
+
+            // solved successfully phase
+            solved: false,
 
             // solving phase
             solving: false,
@@ -222,6 +237,10 @@ export default {
             // parse and normalize the puzzle id from current route
             return get(this.$route, 'params.puzzle', 'unknown').trim().toLowerCase();
         },
+        solutionOffset() {
+            // function to return number of ms elapsed since solution started
+            return () => Date.now() - this.inspectionStartTime;
+        },
         userConfig() {
             // return the users config for the current puzzle
             return this.configForPuzzle(this.puzzle);
@@ -245,12 +264,23 @@ export default {
         clearPreviewConfig() {
             this.previewConfig = null;
         },
+        completeSolve() {
+            this.solveEndTime = Date.now();
+            this.solved = true;
+            this.solving = false;
+
+            this.recordEvent('END', this.solveEndTime);
+        },
         executeTurn(turn) {
             this.currentTurn = turn;
             this.turnProgress = 0;
             this.turning = true;
 
             return new Promise(resolve => {
+                if (this.inspecting || this.solving) {
+                    this.recordTurn(turn);
+                }
+
                 componentRafEase(this, (progress) => {
                     this.turnProgress = progress;
 
@@ -259,6 +289,10 @@ export default {
                             this.model.turn(turn);
                             this.turnProgress = 0;
                             this.turning = false;
+
+                            if (this.solving && this.model.isSolved()) {
+                                this.completeSolve();
+                            }
                             
                             this.$nextTick(resolve);
                         });
@@ -268,6 +302,17 @@ export default {
         },
         queueTurn(turn) {
             this.turnQueue.push(turn);
+        },
+        recordEvent(event, currentTime) {
+            const normalizedEvent = event.trim().toUpperCase();
+            const offset = currentTime - this.inspectionStartTime;
+
+            this.solution.push(`${offset}#${normalizedEvent}`);
+        },
+        recordTurn(turn) {
+            const offset = this.solutionOffset();
+
+            this.solution.push(`${offset}:${turn}`);
         },
         refreshModel() {
             // cube
@@ -289,8 +334,10 @@ export default {
             this.inspecting = false;
             this.inspectionStartTime = 0;
             this.scrambling = false;
+            this.solution = [];
             this.solveEndTime = 0;
             this.solveStartTime = 0;
+            this.solved = false;
             this.solving = false;
         },
         scramble() {
@@ -306,7 +353,7 @@ export default {
             });
 
             // this sets the min time our animation will run
-            const delay = new Promise(res => componentTimeout(this, res, 2000));
+            const delay = new Promise(res => componentTimeout(this, res, 1500));
 
             // set loading to false when xhr and delay are done
             Promise.all([xhr, delay]).then(() => { loading = false });
@@ -348,6 +395,8 @@ export default {
             this.inspecting = false;
             this.solveStartTime = Date.now();
             this.solving = true;
+
+            this.recordEvent('START', this.solveStartTime);
         },
     },
     watch: {
