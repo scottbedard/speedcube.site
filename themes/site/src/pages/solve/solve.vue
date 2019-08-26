@@ -134,6 +134,7 @@ import { isCube } from '@/app/utils/puzzle';
 import { linear, puzzles } from '@/app/constants';
 import { mapGetters, mapState } from 'vuex';
 import { postCreateScramble } from '@/app/repositories/scrambles';
+import { postSolve } from '@/app/repositories/solves';
 
 export default {
     created() {
@@ -158,6 +159,9 @@ export default {
 
             // visual config being previewed
             previewConfig: null,
+
+            // id of scramble being solved
+            scrambleId: 0,
 
             // determines if the puzzle's scrambling state is visible
             scrambling: false,
@@ -270,6 +274,19 @@ export default {
             this.solving = false;
 
             this.recordEvent('END', this.solveEndTime);
+
+            postSolve({
+                config: JSON.stringify(this.config),
+                scrambleId: this.scrambleId,
+                solution: this.solution.join(' '),
+            }).then((response) => {
+                // success
+                console.log('wooot!', response.data)
+
+                // this.last5Solves = last5;
+                // this.recordAverage = recordAverage;
+                // this.solves.push(solve);
+            });
         },
         executeTurn(turn) {
             this.currentTurn = turn;
@@ -333,6 +350,7 @@ export default {
         reset() {
             this.inspecting = false;
             this.inspectionStartTime = 0;
+            this.scrambleId = 0;
             this.scrambling = false;
             this.solution = [];
             this.solveEndTime = 0;
@@ -345,18 +363,20 @@ export default {
 
             this.scrambling = true;
 
-            // fetch and apple our scrambled state
+            // fetch and apply scrambled state and id
             let loading = true;
 
-            const xhr = postCreateScramble(this.puzzle).then(({ data }) => {
-                this.applyState(data.scrambledState);
+            const scrambleXhr = postCreateScramble(this.puzzle).then((response) => {
+                this.scarambleId = response.data.id;
+
+                this.applyState(response.data.scrambledState);
             });
 
-            // this sets the min time our animation will run
-            const delay = new Promise(res => componentTimeout(this, res, 1500));
+            // this sets the min amount of time our animation will run
+            const delay = new Promise(resolve => componentTimeout(this, resolve, 1500));
 
             // set loading to false when xhr and delay are done
-            Promise.all([xhr, delay]).then(() => { loading = false });
+            Promise.all([scrambleXhr, delay]).then(() => { loading = false });
 
             // simulate the puzzle being scrambled. this will have
             // to be refactored to be puzzle-agnostic once shape
@@ -378,7 +398,7 @@ export default {
             });
 
             // when everything is complete. move on to inspection phase
-            Promise.all([xhr, pseudoScramble]).then(() => {
+            Promise.all([scrambleXhr, pseudoScramble]).then(() => {
                 this.scrambling = false;
 
                 this.startInspection();
