@@ -402,6 +402,7 @@ export default {
             }
         },
         reset() {
+            this.appliedConfig = null;
             this.dnf = false;
             this.inspecting = false;
             this.inspectionStartTime = 0;
