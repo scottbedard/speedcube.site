@@ -5,7 +5,9 @@
             <v-puzzle-controller
                 v-if="!keyboard"
                 :config="keyboardConfig"
+                @space="onSpacebar"
                 @turn="queueTurn"
+                @escape="onEscape"
             />
 
             <!-- puzzle -->
@@ -60,7 +62,7 @@
                     <!-- default -->
                     <div
                         v-else
-                        class="text-center"
+                        class="font-thin text-center text-grey-6 text-4xl"
                         data-default
                         key="default">
                         <v-fade-transition>
@@ -75,7 +77,7 @@
 
                             <!-- solving -->
                             <div v-else-if="solving || solved" key="solving">
-                                <div class="mb-4">
+                                <div>
                                     <v-stopwatch
                                         :start-time="solveStartTime"
                                         :stop-time="solveEndTime"
@@ -88,6 +90,11 @@
                                         Solved!
                                     </div>
                                 </v-fade-transition>
+                            </div>
+
+                            <!-- dnf -->
+                            <div v-else-if="dnf" key="dnf">
+                                DNF
                             </div>
 
                             <!-- idle -->
@@ -138,12 +145,15 @@ import { postSolve } from '@/app/repositories/solves';
 
 export default {
     created() {
-        this.refreshModel();
+        this.reset();
     },
     data() {
         return {
             // applied guest config
             appliedConfig: null,
+
+            // did not finish state
+            dnf: false,
 
             // current turn applied to the puzzle
             currentTurn: '',
@@ -163,7 +173,7 @@ export default {
             // id of scramble being solved
             scrambleId: 0,
 
-            // determines if the puzzle's scrambling state is visible
+            // scrambline phase
             scrambling: false,
 
             // solution to scramble
@@ -225,6 +235,10 @@ export default {
             // normalize the currently open tab
             return get(this.$route, 'query.edit', '').toLowerCase().trim();
         },
+        idle() {
+            // determine if we're in an idle state and no timers are running
+            return !this.scrambling && !this.inspecting && !this.solving;
+        },
         isCube() {
             // determine if the puzzle is a standard NxN cube
             return isCube(this.puzzle);
@@ -251,6 +265,16 @@ export default {
         },
     },
     methods: {
+        abortSolve() {
+            if (!this.scrambleId) {
+                return;
+            }
+
+            this.dnf = true;
+            this.inspecting = false;
+            this.solveEndTime = Date.now();
+            this.solving = false;
+        },
         applyConfig(config) {
             this.appliedConfig = config;
         },
@@ -264,6 +288,15 @@ export default {
                     });
                 });
             }
+        },
+        beginInspection() {
+            if (!this.scrambling) {
+                return;
+            }
+
+            this.scrambling = false;
+            this.inspecting = true;
+            this.inspectionStartTime = Date.now();
         },
         clearPreviewConfig() {
             this.previewConfig = null;
@@ -317,6 +350,27 @@ export default {
                 }, this.config.turnDuration);
             });
         },
+        onEscape() {
+            // abort the solve if solving
+            if (this.scrambling || this.inspecting || this.solving) {
+                this.abortSolve();
+            }
+
+            // reset everything if we're idle
+            else if (this.idle) {
+                this.reset();
+            }
+        },
+        onSpacebar(e) {
+            // handle spacebar keypress events
+            e.preventDefault();
+
+            if (this.idle) {
+                this.scramble();
+            } else if (this.inspecting) {
+                this.startSolve();
+            }
+        },
         queueTurn(turn) {
             this.turnQueue.push(turn);
         },
@@ -348,6 +402,7 @@ export default {
             }
         },
         reset() {
+            this.dnf = false;
             this.inspecting = false;
             this.inspectionStartTime = 0;
             this.scrambleId = 0;
@@ -357,6 +412,8 @@ export default {
             this.solveStartTime = 0;
             this.solved = false;
             this.solving = false;
+
+            this.refreshModel();
         },
         scramble() {
             this.reset();
@@ -367,7 +424,8 @@ export default {
             let loading = true;
 
             const scrambleXhr = postCreateScramble(this.puzzle).then((response) => {
-                this.scarambleId = response.data.id;
+                console.log('scramble', response.data.id);
+                this.scrambleId = response.data.id;
 
                 this.applyState(response.data.scrambledState);
             });
@@ -398,20 +456,16 @@ export default {
             });
 
             // when everything is complete. move on to inspection phase
-            Promise.all([scrambleXhr, pseudoScramble]).then(() => {
-                this.scrambling = false;
-
-                this.startInspection();
-            });
+            Promise.all([scrambleXhr, pseudoScramble]).then(this.beginInspection);
         },
         setPreviewConfig(config) {
             this.previewConfig = config;
         },
-        startInspection() {
-            this.inspecting = true;
-            this.inspectionStartTime = Date.now();
-        },
         startSolve() {
+            if (!this.inspecting) {
+                return;
+            }
+
             this.inspecting = false;
             this.solveStartTime = Date.now();
             this.solving = true;

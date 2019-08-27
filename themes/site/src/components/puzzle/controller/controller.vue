@@ -9,24 +9,20 @@ export default {
     },
     methods: {
         onBodyKeypress(e) {
-            if (this.turnable) {
-                if (e.key === ' ') {
-                    this.$emit('space');
-                } else {
-                    const turn = this.config.turns[e.key];
+            if (e.key === ' ') {
+                this.$emit('space', e);
+            } else {
+                const turn = this.config.turns[e.key];
 
-                    if (turn) {
-                        this.$emit('keypress', e);
-                        this.$emit('turn', turn);
-                    }
+                if (turn) {
+                    this.$emit('keypress', e);
+                    this.$emit('turn', turn);
                 }
             }
         },
         onBodyKeyup(e) {
-            if (this.turnable) {
-                if (e.key === 'Escape') {
-                    this.$emit('escape');
-                }
+            if (e.key === 'Escape') {
+                this.$emit('escape', e);
             }
         },
     },
@@ -37,10 +33,6 @@ export default {
                 return { turns: {} };
             },
             type: Object,
-        },
-        turnable: {
-            default: true,
-            type: Boolean,
         },
     },
 };
