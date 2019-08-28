@@ -294,9 +294,10 @@ export default {
                 return;
             }
 
-            this.scrambling = false;
             this.inspecting = true;
             this.inspectionStartTime = Date.now();
+            this.scrambling = false;
+            this.solution = [];
         },
         clearPreviewConfig() {
             this.previewConfig = null;
@@ -327,16 +328,17 @@ export default {
             this.turning = true;
 
             return new Promise(resolve => {
-                if (this.inspecting || this.solving) {
-                    this.recordTurn(turn);
-                }
-
                 componentRafEase(this, (progress) => {
                     this.turnProgress = progress;
 
                     if (progress === 1) {
                         this.$nextTick(() => {
                             this.model.turn(turn);
+
+                            if (this.inspecting || this.solving) {
+                                this.recordTurn(turn);
+                            }
+
                             this.turnProgress = 0;
                             this.turning = false;
 
@@ -391,6 +393,7 @@ export default {
                 const size = parseInt(this.puzzle, 10);
 
                 this.model = new Cube(size, { useObjects: true });
+                this.fooCube = new Cube(size, { useObjects: true });
             }
             
             // redirect to 3x3 for unknown puzzles
@@ -423,12 +426,11 @@ export default {
 
             // fetch and apply scrambled state and id
             let loading = true;
+            let scrambledState = {};
 
             const scrambleXhr = postCreateScramble(this.puzzle).then((response) => {
-                console.log('scramble', response.data.id);
                 this.scrambleId = response.data.id;
-
-                this.applyState(response.data.scrambledState);
+                scrambledState = response.data.scrambledState;
             });
 
             // this sets the min amount of time our animation will run
@@ -457,7 +459,10 @@ export default {
             });
 
             // when everything is complete. move on to inspection phase
-            Promise.all([scrambleXhr, pseudoScramble]).then(this.beginInspection);
+            Promise.all([scrambleXhr, pseudoScramble]).then(() => {
+                this.applyState(scrambledState);
+                this.beginInspection();
+            });
         },
         setPreviewConfig(config) {
             this.previewConfig = config;
