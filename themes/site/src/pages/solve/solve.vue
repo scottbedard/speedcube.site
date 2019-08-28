@@ -69,7 +69,7 @@
                             <!-- inspecting -->
                             <div v-if="inspecting" key="inspecting">
                                 <v-countdown
-                                    :from="3"
+                                    :from="inspectionDuration"
                                     :start-time="inspectionStartTime"
                                     @end="startSolve"
                                 />
@@ -131,6 +131,7 @@
 
 <script>
 import Cube from 'bedard-cube';
+import inspectionMoves from './inspection_moves';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
 import puzzleControllerComponent from '@/components/puzzle/controller/controller.vue';
 import safeParse from 'safe-json-parse/callback';
@@ -163,6 +164,9 @@ export default {
 
             // inspection timestamp
             inspectionStartTime: 0,
+
+            // the users current avg of 5
+            last5Solves: [],
 
             // model to represent the state of the puzzle
             model: null,
@@ -239,6 +243,10 @@ export default {
             // determine if we're in an idle state and no timers are running
             return !this.scrambling && !this.inspecting && !this.solving;
         },
+        inspectionDuration() {
+            // inspection duration in seconds
+            return 15;
+        },
         isCube() {
             // determine if the puzzle is a standard NxN cube
             return isCube(this.puzzle);
@@ -274,6 +282,15 @@ export default {
             this.inspecting = false;
             this.solveEndTime = Date.now();
             this.solving = false;
+
+            postSolve({
+                abort: true,
+                config: JSON.stringify(this.config),
+                scrambleId: this.scrambleId,
+                solution: this.solution.join(' '),
+            }).then(() => {
+                console.log('abort complete');
+            });
         },
         applyConfig(config) {
             this.appliedConfig = config;
@@ -313,13 +330,9 @@ export default {
                 config: JSON.stringify(this.config),
                 scrambleId: this.scrambleId,
                 solution: this.solution.join(' '),
-            }).then((response) => {
+            }).then(() => {
                 // success
-                console.log('wooot!', response.data)
-
-                // this.last5Solves = last5;
-                // this.recordAverage = recordAverage;
-                // this.solves.push(solve);
+                console.log('solve complete');
             });
         },
         executeTurn(turn) {
@@ -374,6 +387,14 @@ export default {
             }
         },
         queueTurn(turn) {
+            if (this.inspecting) {
+                const allowedMoves = inspectionMoves[this.puzzle];
+
+                if (!allowedMoves.includes(turn)) {
+                    return;
+                }
+            }
+            
             this.turnQueue.push(turn);
         },
         recordEvent(event, currentTime) {
@@ -472,11 +493,13 @@ export default {
                 return;
             }
 
+            const inspectionEndTime = this.inspectionStartTime + (this.inspectionDuration * 1000);
+
             this.inspecting = false;
             this.solveStartTime = Date.now();
             this.solving = true;
 
-            this.recordEvent('START', this.solveStartTime);
+            this.recordEvent('START', Math.min(inspectionEndTime, this.solveStartTime));
         },
     },
     watch: {
