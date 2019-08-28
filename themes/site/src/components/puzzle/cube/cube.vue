@@ -155,13 +155,13 @@ export default {
             this.geometry = roundedSquare(this.stickerSize, this.stickerSize * this.normalizedConfig.stickerRadius);
         },
         syncMaterials() {
-            const { colors, masked, innerBrightness } = this.normalizedConfig;
+            const { colors, innerBrightness } = this.normalizedConfig;
 
             this.disposeMaterials();
 
-            this.materials = times(6).map(i => {
+            this.materials = times(6).map((i) => {
                 const color = this.masked ? maskColor : colors[i];
-                
+
                 return {
                     inner: new MeshLambertMaterial({
                         color,
@@ -211,8 +211,8 @@ export default {
 
                 // sync materials if a relevant property has changed
                 if (
-                    xor(newConfig.colors, oldConfig.colors).length ||
-                    newConfig.innerBrightness !== oldConfig.innerBrightness
+                    xor(newConfig.colors, oldConfig.colors).length
+                    || newConfig.innerBrightness !== oldConfig.innerBrightness
                 ) {
                     this.syncMaterials();
                 }

@@ -42,7 +42,7 @@ export default {
         } else if (danger) {
             // danger
             bindings.class.push(`v-button-danger bg-danger-6 text-danger-10 ${disabled ? '' : 'hover:bg-danger-7 hover:text-grey-10'}`);
-        } else  {
+        } else {
             // default
             bindings.class.push(`bg-grey-5 text-grey-9 ${disabled ? '' : 'hover:bg-grey-6'}`);
         }

@@ -33,7 +33,7 @@ export default {
 
         // autofocus
         if (autofocus) {
-            textareaBindings.directives.push({ name: 'autofocus' });
+            bindings.directives.push({ name: 'autofocus' });
         }
 
         // interface with v-model

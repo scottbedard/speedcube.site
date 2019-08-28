@@ -174,12 +174,10 @@
 </template>
 
 <script>
-import confirmationModalComponent from '@/components/ui/confirmation_modal.vue';
-import puzzleControllerComponent from '@/components/puzzle/controller/controller.vue';
 import { cloneDeep, get } from 'lodash-es';
 import { componentTimeout } from 'spyfu-vue-utils';
-import { jsonToObject } from '@/app/utils/object';
 import { mapGetters, mapState } from 'vuex';
+import puzzleControllerComponent from '@/components/puzzle/controller/controller.vue';
 import { postKeyboardConfig } from '@/app/repositories/keyboard_configs';
 import { puzzles } from '@/app/constants';
 
@@ -250,7 +248,7 @@ export default {
             this.pendingConfig = cloneDeep(bindings);
         },
         cancel() {
-            this.$router.push({ query: { edit: undefined }});
+            this.$router.push({ query: { edit: undefined } });
         },
         deletePendingBinding(key) {
             this.bindingModalIsVisible = false;
@@ -277,7 +275,7 @@ export default {
         },
         resetDefaultBindings() {
             this.resetDefaultBindingsConfirmationIsVisible = false;
-            this.pendingConfig.turns = get(puzzles, `${this.puzzle}.defaultKeyboardConfig.turns`, {});;
+            this.pendingConfig.turns = get(puzzles, `${this.puzzle}.defaultKeyboardConfig.turns`, {});
         },
         removeAllBindings() {
             this.removeAllBindingsConfirmationIsVisible = false;
@@ -293,11 +291,8 @@ export default {
                 // success
                 this.$alert('Keyboard configuration saved');
 
-                this.$router.push({ query: { edit: undefined }});
-            }).finally(() => {
-                // refresh user
-                return this.$store.dispatch('user/fresh');
-            }).finally(() => {
+                this.$router.push({ query: { edit: undefined } });
+            }).finally(() => this.$store.dispatch('user/fresh')).finally(() => {
                 // complete
                 this.loading = false;
             });

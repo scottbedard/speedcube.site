@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import { componentRafLoop } from '@/app/utils/component';
 import { noop } from 'lodash-es';
+import { componentRafLoop } from '@/app/utils/component';
 
 export default {
     created() {

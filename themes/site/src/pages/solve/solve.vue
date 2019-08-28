@@ -130,17 +130,17 @@
 </template>
 
 <script>
+/* eslint-disable prefer-destructuring */
 import Cube from 'bedard-cube';
+import { componentTimeout } from 'spyfu-vue-utils';
+import { get } from 'lodash-es';
+import { mapGetters, mapState } from 'vuex';
 import inspectionMoves from './inspection_moves';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
 import puzzleControllerComponent from '@/components/puzzle/controller/controller.vue';
-import safeParse from 'safe-json-parse/callback';
 import { componentRafEase } from '@/app/utils/component';
-import { componentTimeout } from 'spyfu-vue-utils';
-import { get } from 'lodash-es';
 import { isCube } from '@/app/utils/puzzle';
-import { linear, puzzles } from '@/app/constants';
-import { mapGetters, mapState } from 'vuex';
+import { puzzles } from '@/app/constants';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postSolve } from '@/app/repositories/solves';
 
@@ -229,7 +229,7 @@ export default {
                 ...this.defaultConfig,
                 ...this.userConfig,
                 ...(this.previewConfig || {}),
-            }
+            };
         },
         defaultConfig() {
             // default config for the puzzle
@@ -340,7 +340,7 @@ export default {
             this.turnProgress = 0;
             this.turning = true;
 
-            return new Promise(resolve => {
+            return new Promise((resolve) => {
                 componentRafEase(this, (progress) => {
                     this.turnProgress = progress;
 
@@ -358,7 +358,7 @@ export default {
                             if (this.solving && this.model.isSolved()) {
                                 this.completeSolve();
                             }
-                            
+
                             this.$nextTick(resolve);
                         });
                     }
@@ -394,7 +394,7 @@ export default {
                     return;
                 }
             }
-            
+
             this.turnQueue.push(turn);
         },
         recordEvent(event, currentTime) {
@@ -416,7 +416,7 @@ export default {
                 this.model = new Cube(size, { useObjects: true });
                 this.fooCube = new Cube(size, { useObjects: true });
             }
-            
+
             // redirect to 3x3 for unknown puzzles
             else {
                 this.$router.replace({
@@ -458,16 +458,14 @@ export default {
             const delay = new Promise(resolve => componentTimeout(this, resolve, 1500));
 
             // set loading to false when xhr and delay are done
-            Promise.all([scrambleXhr, delay]).then(() => { loading = false });
+            Promise.all([scrambleXhr, delay]).then(() => { loading = false; });
 
             // simulate the puzzle being scrambled. this will have
             // to be refactored to be puzzle-agnostic once shape
             // changing puzzles like square-1 are implemented.
             const pseudoScramble = new Promise((resolve) => {
-                const turnDuration = this.config.turnDuration;
-                
                 let scramble = this.model.generateScrambleString(50).split(' ');
-                
+
                 const turn = () => {
                     this.currentTurn = scramble.shift().replace(/2$/, '');
 

@@ -57,7 +57,7 @@ export function formatShortTime(time) {
 
     return time >= 1000
         ? formattedTime.replace(/^[0:]*/, '')
-        : formattedTime.replace(/^\d\:0/, '');
+        : formattedTime.replace(/^\d:0/, '');
 }
 
 /**

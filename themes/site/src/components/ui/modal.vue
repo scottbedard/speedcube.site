@@ -13,11 +13,11 @@
             :aria-labelledby="titleId"
             :aria-describedby="descriptionId"
             :class="{
-                'max-w-sm': size === 'sm',  
-                'max-w-md': size === 'md',  
-                'max-w-lg': size === 'lg',  
-                'max-w-xl': size === 'xl',  
-                'max-w-2xl': size === '2xl',  
+                'max-w-sm': size === 'sm',
+                'max-w-md': size === 'md',
+                'max-w-lg': size === 'lg',
+                'max-w-xl': size === 'xl',
+                'max-w-2xl': size === '2xl',
             }"
             :data-modal="uid">
 

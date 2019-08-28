@@ -69,7 +69,7 @@
                                     primary
                                     type="submit"
                                     :title="`Click to ${context === 'edit' ? 'update' : 'add'} key binding`">
-                                    {{ context === 'edit' ? 'Update' : 'Add' }} Binding</span>
+                                    {{ context === 'edit' ? 'Update' : 'Add' }} Binding
                                 </v-button>
                             </div>
                         </div>

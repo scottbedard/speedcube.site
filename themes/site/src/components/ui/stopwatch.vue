@@ -3,9 +3,9 @@
 </template>
 
 <script>
+import { noop, throttle } from 'lodash-es';
 import { componentRafLoop } from '@/app/utils/component';
 import { formatShortTime } from '@/app/utils/string';
-import { noop, throttle } from 'lodash-es';
 
 export default {
     created() {

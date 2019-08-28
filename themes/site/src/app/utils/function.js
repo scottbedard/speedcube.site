@@ -1,5 +1,5 @@
-import { linear } from '@/app/constants';
 import bezierEasing from 'bezier-easing';
+import { linear } from '@/app/constants';
 
 /**
  * Similar to a setTimeout loop, but using requestAnimationFrame
