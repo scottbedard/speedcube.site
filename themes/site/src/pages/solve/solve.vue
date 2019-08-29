@@ -83,7 +83,7 @@
 
                             <!-- solving -->
                             <div v-else-if="solving || solved" key="solving">
-                                <div>
+                                <div class="mb-6">
                                     <v-stopwatch
                                         :start-time="solveStartTime"
                                         :stop-time="solveEndTime"
@@ -93,14 +93,21 @@
                                 <!-- solved -->
                                 <v-fade-transition>
                                     <div v-if="solved" key="solved">
-                                        Solved!
+                                        <v-recent-solves
+                                            :record-average="recordAverage"
+                                            :solves="recentSolves"
+                                        />
                                     </div>
                                 </v-fade-transition>
                             </div>
 
                             <!-- dnf -->
                             <div v-else-if="dnf" key="dnf">
-                                DNF
+                                <div class="mb-6">DNF</div>
+                                <v-recent-solves
+                                    :record-average="recordAverage"
+                                    :solves="recentSolves"
+                                />
                             </div>
 
                             <!-- idle -->
@@ -179,9 +186,6 @@ export default {
             // inspection timestamp
             inspectionStartTime: 0,
 
-            // the users current avg of 5
-            last5Solves: [],
-
             // model to represent the state of the puzzle
             model: null,
 
@@ -190,6 +194,12 @@ export default {
 
             // determine if puzzles modal should be visible
             puzzlesModalIsVisible: false,
+
+            // recent solves from this user
+            recentSolves: [],
+
+            // record average of 5
+            recordAverage: null,
 
             // id of scramble being solved
             scrambleId: 0,
@@ -228,6 +238,7 @@ export default {
         'v-puzzle': puzzleComponent,
         'v-puzzle-controller': puzzleControllerComponent,
         'v-puzzles-modal': () => import('./puzzles_modal/puzzles_modal.vue'),
+        'v-recent-solves': () => import('./recent_solves/recent_solves.vue'),
     },
     computed: {
         ...mapGetters('user', [
@@ -306,8 +317,10 @@ export default {
                 config: JSON.stringify(this.config),
                 scrambleId: this.scrambleId,
                 solution: this.solution.join(' '),
-            }).then(() => {
-                console.log('abort complete');
+            }).then((response) => {
+                // success
+                this.recentSolves = response.data.recentSolves;
+                this.recordAverage = response.data.recordAverage;
             });
         },
         applyConfig(config) {
@@ -348,9 +361,10 @@ export default {
                 config: JSON.stringify(this.config),
                 scrambleId: this.scrambleId,
                 solution: this.solution.join(' '),
-            }).then(() => {
+            }).then((response) => {
                 // success
-                console.log('solve complete');
+                this.recentSolves = response.data.recentSolves;
+                this.recordAverage = response.data.recordAverage;
             });
         },
         executeTurn(turn) {
@@ -388,7 +402,7 @@ export default {
         },
         onEscape() {
             // abort the solve if solving
-            if (this.scrambling || this.inspecting || this.solving) {
+            if (this.inspecting || this.solving) {
                 this.abortSolve();
             }
 

@@ -42,7 +42,7 @@ export function isCubeTurn(turn) {
 }
 
 /**
- * Calculate the average solve time in milliseconcds. This
+ * Calculate the average solve time in milliseconds. This
  * function will return -1 if there are not enough solves
  * to determine a valid average.
  *
