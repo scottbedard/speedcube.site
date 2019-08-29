@@ -40,7 +40,7 @@ export default {
     computed: {
         average() {
             return (solves) => {
-                const times = solves.map(solve => solve.status === 'complete' ? solve.time : 'dnf');
+                const times = solves.map(solve => (solve.status === 'complete' ? solve.time : 'dnf'));
                 const avg = calculateAverage(times);
 
                 return avg > -1 ? formatShortTime(avg) : 'DNF';
@@ -50,7 +50,7 @@ export default {
             return formatShortTime;
         },
         takeSolves() {
-            return (n) => this.solves.slice(0, n);
+            return n => this.solves.slice(0, n);
         },
     },
     props: {
