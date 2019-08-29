@@ -32,11 +32,9 @@
 export default {
     computed: {
         normalizedOptions() {
-            return this.options.map(option => {
-                return typeof option === 'object'
-                    ? { display: '', value: undefined, ...option }
-                    : { display: option, value: option };
-            });
+            return this.options.map(option => (typeof option === 'object'
+                ? { display: '', value: undefined, ...option }
+                : { display: option, value: option }));
         },
     },
     methods: {
