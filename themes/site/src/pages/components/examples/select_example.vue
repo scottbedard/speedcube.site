@@ -2,12 +2,16 @@
     <v-example title="<v-select>">
         <p>A stylized select box.</p>
 
-        <v-select
-            v-model="value"
-            label="Puzzle"
-            placeholder="Please select a puzzle"
-            :options="options"
-        />
+        <div class="max-w-sm mb-4">
+            <v-select
+                v-model="value"
+                label="Puzzle"
+                placeholder="Please select a puzzle"
+                :options="options"
+            />
+        </div>
+
+        <p class="text-xs">The value is: {{ value }}</p>
     </v-example>
 </template>
 
@@ -25,7 +29,12 @@ export default {
     },
     computed: {
         options() {
-            return [];
+            return [
+                'foo',
+                'bar',
+                'baz',
+                { display: 'Display text', value: 'qux' },
+            ];
         },
     },
 };

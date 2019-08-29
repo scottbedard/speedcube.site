@@ -1,6 +1,12 @@
 <template>
     <v-page padded>
         <v-margin padded>
+            <!-- modals -->
+            <v-puzzles-modal
+                v-if="puzzlesModalIsVisible"
+                @close="hidePuzzlesModal"
+            />
+
             <!-- keyboard controller -->
             <v-puzzle-controller
                 v-if="!keyboard"
@@ -104,20 +110,28 @@
                                 </div>
                                 <div>
                                     <v-button
-                                        class="mx-3"
+                                        class="mx-4 my-2"
                                         icon="fa-sliders"
                                         ghost
                                         title="Click to customize appearance"
                                         :to="{ query: { edit: 'appearance' }}">
-                                        Customize Puzzle
+                                        Puzzle Settings
                                     </v-button>
                                     <v-button
-                                        class="mx-3"
+                                        class="mx-4 my-2"
                                         icon="fa-code"
                                         ghost
                                         title="Click to edit key bindings"
                                         :to="{ query: { edit: 'keyboard' }}">
-                                        Edit Key Bindings
+                                        Key Bindings
+                                    </v-button>
+                                    <v-button
+                                        class="mx-4 my-2"
+                                        icon="fa-cubes"
+                                        ghost
+                                        title="Click to change puzzles"
+                                        @click="showPuzzlesModal">
+                                        Other Puzzles
                                     </v-button>
                                 </div>
                             </div>
@@ -174,6 +188,9 @@ export default {
             // visual config being previewed
             previewConfig: null,
 
+            // determine if puzzles modal should be visible
+            puzzlesModalIsVisible: false,
+
             // id of scramble being solved
             scrambleId: 0,
 
@@ -210,6 +227,7 @@ export default {
         'v-keyboard': () => import('./keyboard/keyboard.vue'),
         'v-puzzle': puzzleComponent,
         'v-puzzle-controller': puzzleControllerComponent,
+        'v-puzzles-modal': () => import('./puzzles_modal/puzzles_modal.vue'),
     },
     computed: {
         ...mapGetters('user', [
@@ -365,6 +383,9 @@ export default {
                 }, this.config.turnDuration);
             });
         },
+        hidePuzzlesModal() {
+            this.puzzlesModalIsVisible = false;
+        },
         onEscape() {
             // abort the solve if solving
             if (this.scrambling || this.inspecting || this.solving) {
@@ -485,6 +506,9 @@ export default {
         },
         setPreviewConfig(config) {
             this.previewConfig = config;
+        },
+        showPuzzlesModal() {
+            this.puzzlesModalIsVisible = true;
         },
         startSolve() {
             if (!this.inspecting) {
