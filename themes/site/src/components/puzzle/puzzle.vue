@@ -26,6 +26,7 @@
                 :masked="masked"
                 :model="model"
                 :turn-progress="turnProgress"
+                :type="type"
             />
         </v-scene>
     </div>
@@ -69,7 +70,7 @@ export default {
             type: Boolean,
         },
         model: {
-            required: true,
+            type: Object,
         },
         turnable: {
             default: false,

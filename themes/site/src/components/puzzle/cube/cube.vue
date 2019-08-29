@@ -7,7 +7,7 @@
             :geometry="geometry"
             :masked="masked"
             :materials="materials"
-            :model="model"
+            :model="activeModel"
             :sticker-size="stickerSize"
         />
 
@@ -19,7 +19,7 @@
                 :geometry="geometry"
                 :masked="masked"
                 :materials="materials"
-                :model="model"
+                :model="activeModel"
                 :sticker-size="stickerSize"
             />
         </v-obj>
@@ -43,6 +43,7 @@ export default {
     },
     data() {
         return {
+            defaultModel: this.createDefaultModel(),
             geometry: { dispose: noop },
             materials: [],
         };
@@ -56,14 +57,17 @@ export default {
         'v-obj': objComponent,
     },
     computed: {
+        activeModel() {
+            return this.model || this.defaultModel;
+        },
         normalizedConfig() {
             return { ...defaultCubeConfig, ...this.config };
         },
         parsedTurn() {
             if (this.currentTurn) {
-                const parsedTurn = this.model.parseTurn(this.currentTurn);
+                const parsedTurn = this.activeModel.parseTurn(this.currentTurn);
 
-                parsedTurn.depth = Math.min(parsedTurn.depth, this.model.size);
+                parsedTurn.depth = Math.min(parsedTurn.depth, this.activeModel.size);
 
                 return parsedTurn;
             }
@@ -86,7 +90,7 @@ export default {
             return rotation;
         },
         stickerSize() {
-            return 100 / this.model.size;
+            return 100 / this.activeModel.size;
         },
         turnDetails() {
             if (!this.currentTurn) {
@@ -133,11 +137,16 @@ export default {
         turningStickers() {
             // return an array of all stickers in the current turn
             return this.parsedTurn
-                ? getStickersEffectedByTurn(this.model, this.parsedTurn)
+                ? getStickersEffectedByTurn(this.activeModel, this.parsedTurn)
                 : [];
         },
     },
     methods: {
+        createDefaultModel() {
+            // create a model if none was provided. this usually means
+            // the puzzle is being used for purely display purposes.
+            return new Cube(parseInt(this.type, 10), { useObjects: true });
+        },
         disposeGeometry() {
             // dispose of our geometry
             this.geometry.dispose();
@@ -190,14 +199,15 @@ export default {
             type: Boolean,
         },
         model: {
-            default() {
-                return new Cube(3, { useObjects: true });
-            },
             type: Object,
         },
         turnProgress: {
             default: 0,
             type: Number,
+        },
+        type: {
+            default: String,
+            required: true,
         },
     },
     watch: {
