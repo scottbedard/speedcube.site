@@ -107,7 +107,7 @@
         <div>
             <v-fade-transition>
                 <div v-if="empty" key="empty">
-                    <div class="italic py-24 px-8 text-center text-grey-4 tracking-wider">
+                    <div class="py-24 px-8 text-center text-grey-5 text-sm tracking-wider">
                         No key bindings are configured
                     </div>
                 </div>
@@ -153,22 +153,22 @@
             class="flex flex-wrap justify-between items-center text-center lg:text-left"
             v-else
             key="guest">
-            <div class="flex-1 leading-normal pb-8 text-grey-7 tracking-wider w-full">
-                Please sign in or <router-link title="Click to create an account" :to="{ name: 'create-account' }">create an account</router-link> to save bindings.
-            </div>
+            <p class="flex-1 pb-8 text-grey-7 text-sm tracking-wider w-full">
+                Please sign in or create an account to save key bindings.
+            </p>
             <div class="pb-8 w-full lg:w-auto">
                 <v-button
                     class="mb-4 mx-6 xs:mx-auto xs:mr-6 lg:mb-0"
                     ghost
                     title="Click to discard changes"
-                    :to="{ params: { edit: undefined }}">
-                    Cancel
+                    :to="{ name: 'signin' }">
+                    Sign In
                 </v-button>
                 <v-button
                     class="mb-4 lg:mb-0"
                     primary
-                    :to="{ name: 'signin' }">
-                    Sign In
+                    :to="{ name: 'create-account' }">
+                    Create Account
                 </v-button>
             </div>
         </div>
