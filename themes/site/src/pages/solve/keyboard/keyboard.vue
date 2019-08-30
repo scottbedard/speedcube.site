@@ -234,10 +234,10 @@ export default {
             return Object.keys(get(this.pendingConfig, 'turns', {})).length === 0;
         },
         modalIsVisible() {
-            return this.bindingModalIsVisible ||
-                this.jsonModalIsVisible ||
-                this.removeAllBindingsConfirmationIsVisible ||
-                this.resetDefaultBindingsConfirmationIsVisible;
+            return this.bindingModalIsVisible
+                || this.jsonModalIsVisible
+                || this.removeAllBindingsConfirmationIsVisible
+                || this.resetDefaultBindingsConfirmationIsVisible;
         },
         puzzle() {
             return get(this.$route, 'params.puzzle', '').toLowerCase().trim();

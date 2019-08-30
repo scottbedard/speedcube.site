@@ -33,9 +33,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { formatShortTime } from '@/app/utils/string';
 import { calculateAverage } from '@/app/utils/puzzle';
-import { mapGetters } from 'vuex';
 
 export default {
     computed: {
