@@ -206,8 +206,8 @@ export default {
             type: Number,
         },
         type: {
-            default: String,
-            required: true,
+            default: '3x3',
+            type: String,
         },
     },
     watch: {
