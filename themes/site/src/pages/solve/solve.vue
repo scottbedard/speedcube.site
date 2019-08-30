@@ -317,11 +317,7 @@ export default {
                 config: JSON.stringify(this.config),
                 scrambleId: this.scrambleId,
                 solution: this.solution.join(' '),
-            }).then((response) => {
-                // success
-                this.recentSolves = response.data.recentSolves;
-                this.recordAverage = response.data.recordAverage;
-            });
+            }).then(this.onSolveComplete);
         },
         applyConfig(config) {
             this.appliedConfig = config;
@@ -361,11 +357,7 @@ export default {
                 config: JSON.stringify(this.config),
                 scrambleId: this.scrambleId,
                 solution: this.solution.join(' '),
-            }).then((response) => {
-                // success
-                this.recentSolves = response.data.recentSolves;
-                this.recordAverage = response.data.recordAverage;
-            });
+            }).then(this.onSolveComplete);
         },
         executeTurn(turn) {
             this.currentTurn = turn;
@@ -409,6 +401,17 @@ export default {
             // reset everything if we're idle
             else if (this.idle) {
                 this.reset();
+            }
+        },
+        onSolveComplete(response) {
+            // success
+            const { recordAverage, recentSolves, solve } = response.data;
+
+            if (this.isAuthenticated) {
+                this.recentSolves = recentSolves;
+                this.recordAverage = recordAverage;
+            } else {
+                this.recentSolves.push(solve);
             }
         },
         onSpacebar(e) {

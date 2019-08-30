@@ -24,7 +24,7 @@
                 <span class="pr-4">Average:</span>
                 <span>{{ average(takeSolves(5)) }}</span>
             </div>
-            <div v-if="recordAverage" class="flex justify-center px-4">
+            <div v-if="isAuthenticated && recordAverage" class="flex justify-center mt-6 px-4">
                 <span class="pr-4">Record&nbsp;Average:</span>
                 <span>{{ formatShortTime(recordAverage.averageTime) }}</span>
             </div>
@@ -35,9 +35,13 @@
 <script>
 import { formatShortTime } from '@/app/utils/string';
 import { calculateAverage } from '@/app/utils/puzzle';
+import { mapGetters } from 'vuex';
 
 export default {
     computed: {
+        ...mapGetters('user', [
+            'isAuthenticated',
+        ]),
         average() {
             return (solves) => {
                 const times = solves.map(solve => (solve.status === 'complete' ? solve.time : 'dnf'));
