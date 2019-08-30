@@ -8,7 +8,9 @@
     <div class="max-w-5xl mx-auto">
         <!-- puzzle controller -->
         <v-puzzle-controller
+            v-if="!modalIsVisible"
             :config="pendingConfig"
+            @space="onSpacebar"
             @keypress="highlightKey"
             @turn="executeTurn"
         />
@@ -230,6 +232,12 @@ export default {
         empty() {
             return Object.keys(get(this.pendingConfig, 'turns', {})).length === 0;
         },
+        modalIsVisible() {
+            return this.bindingModalIsVisible ||
+                this.jsonModalIsVisible ||
+                this.removeAllBindingsConfirmationIsVisible ||
+                this.resetDefaultBindingsConfirmationIsVisible;
+        },
         puzzle() {
             return get(this.$route, 'params.puzzle', '').toLowerCase().trim();
         },
@@ -269,6 +277,9 @@ export default {
             componentTimeout(this, () => {
                 this.highlighted = this.highlighted.filter(configKey => configKey !== e.key);
             }, 150);
+        },
+        onSpacebar(e) {
+            e.preventDefault();
         },
         reset() {
             this.pendingConfig = cloneDeep(this.initialConfig);
