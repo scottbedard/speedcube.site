@@ -30,10 +30,14 @@
                                 <!-- title -->
                                 <h1 class="flex justify-center mb-2 text-center text-4xl">
                                     <router-link
+                                        v-if="solve.user"
                                         v-text="solve.user.username"
                                         class="text-grey-8 hover:text-grey-10"
                                         :to="{ name: 'users:show', params: { username }}"
                                     />
+                                    <span v-else>
+                                        Guest
+                                    </span>
                                     <span class="mx-3 text-grey-4">-</span>
                                     <span>{{ solve.time | shortTimer }}</span>
                                 </h1>
