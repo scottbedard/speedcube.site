@@ -19,7 +19,7 @@ export const defaultCubeConfig = {
     stickerElevation: 0.2,
     stickerRadius: 0.1,
     stickerSpacing: 0.2,
-    turnDuration: 80,
+    turnDuration: 65,
 };
 
 // default cube keyboard config
