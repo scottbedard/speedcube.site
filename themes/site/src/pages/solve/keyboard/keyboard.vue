@@ -129,7 +129,7 @@
             </v-fade-transition>
         </div>
 
-        <!-- actions -->
+        <!-- user actions -->
         <div
             v-if="isAuthenticated"
             class="flex justify-end text-center"
@@ -149,9 +149,10 @@
             </v-button>
         </div>
 
+        <!-- guest actions -->
         <div
-            class="flex flex-wrap justify-between items-center text-center lg:text-left"
             v-else
+            class="flex flex-wrap justify-between items-center text-center lg:text-left"
             key="guest">
             <p class="flex-1 pb-8 text-grey-7 text-sm tracking-wider w-full">
                 Please sign in or create an account to save key bindings.

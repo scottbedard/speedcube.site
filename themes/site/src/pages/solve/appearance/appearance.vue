@@ -23,23 +23,53 @@
                 </v-grid-cell>
             </v-grid>
 
-            <!-- actions -->
-            <div class="flex items-center justify-end mt-8">
-                <v-button
-                    class="mr-6"
-                    ghost
-                    title="Click to discard changes"
-                    :disabled="loading"
-                    :to="solveRoute">
-                    Cancel
-                </v-button>
-                <v-button
-                    primary
-                    title="Click to save changes"
-                    type="submit"
-                    :disabled="loading">
-                    Save
-                </v-button>
+            <div class="mt-8">
+                <!-- user actions -->
+                <div
+                    v-if="isAuthenticated"
+                    class="flex items-center justify-end"
+                    key="user">
+                    <v-button
+                        class="mr-6"
+                        ghost
+                        title="Click to discard changes"
+                        :disabled="loading"
+                        :to="solveRoute">
+                        Cancel
+                    </v-button>
+                    <v-button
+                        primary
+                        title="Click to save changes"
+                        type="submit"
+                        :disabled="loading">
+                        Save
+                    </v-button>
+                </div>
+
+                <!-- guest actions -->
+                <div
+                    v-else
+                    class="flex flex-wrap justify-between items-center text-center lg:text-left"
+                    key="guest">
+                    <p class="flex-1 pb-8 text-grey-7 text-sm tracking-wider w-full">
+                        Please sign in or create an account to save puzzle settings.
+                    </p>
+                    <div class="pb-8 w-full lg:w-auto">
+                        <v-button
+                            class="mb-4 mx-6 xs:mx-auto xs:mr-6 lg:mb-0"
+                            ghost
+                            title="Click to discard changes"
+                            :to="{ name: 'signin' }">
+                            Sign In
+                        </v-button>
+                        <v-button
+                            class="mb-4 lg:mb-0"
+                            primary
+                            :to="{ name: 'create-account' }">
+                            Create Account
+                        </v-button>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
