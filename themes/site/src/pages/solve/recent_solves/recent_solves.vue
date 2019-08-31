@@ -29,7 +29,7 @@
             </div>
         </div>
 
-        <p class="text-grey-5 text-xs">Press spacebar to scramble</p>
+        <p class="text-grey-5">Press spacebar to scramble</p>
     </div>
 </template>
 
