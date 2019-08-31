@@ -68,12 +68,12 @@
                     <!-- default -->
                     <div
                         v-else
-                        class="font-thin text-center text-grey-6 text-4xl"
+                        class="text-center text-grey-7"
                         data-default
                         key="default">
                         <v-fade-transition>
                             <!-- inspecting -->
-                            <div v-if="inspecting" key="inspecting">
+                            <div v-if="inspecting" class="text-4xl" key="inspecting">
                                 <v-countdown
                                     :from="inspectionDuration"
                                     :start-time="inspectionStartTime"
@@ -83,7 +83,7 @@
 
                             <!-- solving -->
                             <div v-else-if="solving || solved" key="solving">
-                                <div class="mb-6">
+                                <div class="mb-6 text-4xl">
                                     <v-stopwatch
                                         :start-time="solveStartTime"
                                         :stop-time="solveEndTime"
@@ -103,7 +103,7 @@
 
                             <!-- dnf -->
                             <div v-else-if="dnf" key="dnf">
-                                <div class="mb-6">DNF</div>
+                                <div class="mb-6 text-4xl">DNF</div>
                                 <v-recent-solves
                                     :record-average="recordAverage"
                                     :solves="recentSolves"
@@ -116,22 +116,24 @@
                                     <v-button primary @click="scramble">Scramble</v-button>
                                 </div>
                                 <div>
-                                    <v-button
-                                        class="mx-4 my-2"
-                                        icon="fa-sliders"
-                                        ghost
-                                        title="Click to customize appearance"
-                                        :to="{ query: { edit: 'appearance' }}">
-                                        Puzzle Settings
-                                    </v-button>
-                                    <v-button
-                                        class="mx-4 my-2"
-                                        icon="fa-code"
-                                        ghost
-                                        title="Click to edit key bindings"
-                                        :to="{ query: { edit: 'keyboard' }}">
-                                        Key Bindings
-                                    </v-button>
+                                    <div>
+                                        <v-button
+                                            class="mx-4 my-2"
+                                            icon="fa-sliders"
+                                            ghost
+                                            title="Click to customize appearance"
+                                            :to="{ query: { edit: 'appearance' }}">
+                                            Puzzle Settings
+                                        </v-button>
+                                        <v-button
+                                            class="mx-4 my-2"
+                                            icon="fa-code"
+                                            ghost
+                                            title="Click to edit key bindings"
+                                            :to="{ query: { edit: 'keyboard' }}">
+                                            Key Bindings
+                                        </v-button>
+                                    </div>
                                     <v-button
                                         class="mx-4 my-2"
                                         icon="fa-cubes"
