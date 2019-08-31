@@ -367,16 +367,16 @@ export default {
             this.turning = true;
 
             return new Promise((resolve) => {
+                if (this.inspecting || this.solving) {
+                    this.recordTurn(turn);
+                }
+                
                 componentRafEase(this, (progress) => {
                     this.turnProgress = progress;
 
                     if (progress === 1) {
                         this.$nextTick(() => {
                             this.model.turn(turn);
-
-                            if (this.inspecting || this.solving) {
-                                this.recordTurn(turn);
-                            }
 
                             this.turnProgress = 0;
                             this.turning = false;
@@ -454,7 +454,6 @@ export default {
                 const size = parseInt(this.puzzle, 10);
 
                 this.model = new Cube(size, { useObjects: true });
-                this.fooCube = new Cube(size, { useObjects: true });
             }
 
             // redirect to 3x3 for unknown puzzles
