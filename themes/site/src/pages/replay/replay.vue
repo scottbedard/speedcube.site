@@ -266,12 +266,10 @@ export default {
                 const { solve } = response.data;
 
                 this.solve = solve;
+                this.solveLoading = false;
             }, () => {
                 // failed
                 this.$router.replace({ name: 'records' });
-            }).finally(() => {
-                // complete
-                this.solveLoading = false;
             });
         },
         play() {
