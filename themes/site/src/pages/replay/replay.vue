@@ -16,7 +16,7 @@
                     v-else
                     data-solve-ready
                     key="solveReady">
-                    
+
                     <!-- title -->
                     <h1 class="flex justify-center text-center text-grey-8 text-4xl">
                         <router-link
@@ -73,7 +73,7 @@
                                         />
                                     </v-fade-transition>
                                 </div>
-                                
+
                                 <div v-else key="idle">
                                     <v-button primary @click="play">
                                         Watch Replay
@@ -107,13 +107,13 @@
 </template>
 
 <script>
+import { bindExternalEvent } from 'spyfu-vue-utils';
+import { get, noop, round } from 'lodash-es';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
 import replayComponent from '@/components/ui/replay.vue';
 import solveDetailsComponent from './solve_details/solve_details.vue';
-import { bindExternalEvent, componentTimeout } from 'spyfu-vue-utils';
 import { componentRafEase } from '@/app/utils/component';
 import { formatShortTime } from '@/app/utils/string';
-import { get, noop, round } from 'lodash-es';
 import { getSolve, postReplay } from '@/app/repositories/solves';
 import { linear } from '@/app/constants';
 

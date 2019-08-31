@@ -370,7 +370,7 @@ export default {
                 if (this.inspecting || this.solving) {
                     this.recordTurn(turn);
                 }
-                
+
                 componentRafEase(this, (progress) => {
                     this.turnProgress = progress;
 
