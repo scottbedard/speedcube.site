@@ -2,8 +2,8 @@
     <v-grid padded>
         <v-grid-cell lg="7">
             <div class="text-center lg:mt-12 lg:pr-20 lg:text-left">
-                <h1 class="font-thin mb-8 text-5xl text-grey-8">
-                    A free and open place for cubing.
+                <h1 class="mb-8 text-4xl text-grey-8 lg:text-5xl">
+                    A free and open place for cubing
                 </h1>
                 <p class="mb-12 text-grey-7 text-lg">
                     We're a speed cubing platform for any modern browser.

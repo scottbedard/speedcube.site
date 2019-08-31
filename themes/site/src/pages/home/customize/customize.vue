@@ -7,21 +7,19 @@
 <template>
     <v-grid padded>
         <v-grid-cell class="lg:order-2" lg="7">
-            <h2 class="font-light leading-normal mb-8 text-3xl text-grey-8 lg:mt-12">
-                Make the puzzles your own.
+            <h2 class="leading-normal mb-8 text-3xl text-grey-8 lg:mt-12">
+                Customize everything
             </h2>
-            <div class="leading-loose text-grey-7">
-                <p class="mb-8">
-                    Everything is customizable. Pick your colors, sticker positioning,
-                    even the camera angle. Your replays will save this configuration,
-                    so others will see the solve and see it exactly as you did.
-                </p>
-                <p>
-                    Key bindings are also configurable. By default, they mimick how
-                    real finger tricks feel. Modify these as much or as little as
-                    you like to have the puzzle feeling just right.
-                </p>
-            </div>
+            <p class="mb-8">
+                Make the puzzles your own. You can set the colors, sticker positioning,
+                and even the camera angle. Your replays will save this configuration, so
+                others will see the solve exactly as you did.
+            </p>
+            <p>
+                Key bindings are also configurable. By default, they mimick how
+                real finger tricks feel. Modify these as much or as little as
+                you want to have the puzzle feeling just right.
+            </p>
         </v-grid-cell>
         <v-grid-cell class="lg:order-1" lg="5">
             <div class="flex flex-wrap justify-center">
@@ -31,7 +29,7 @@
                     </div>
                 </div>
                 <div class="text-sm tracking-wider w-full">
-                    <div class="max-w-md mx-auto sm:px-8">
+                    <div class="sm:px-8">
                         <v-grid padded>
                             <v-grid-cell sm="6">
                                 <div class="mb-2">Camera Angle</div>
@@ -46,7 +44,7 @@
                                 <v-range-input
                                     v-model="config.cameraDistance"
                                     :min="1"
-                                    :max="8000"
+                                    :max="800"
                                 />
                             </v-grid-cell>
                             <v-grid-cell sm="6">
@@ -55,7 +53,7 @@
                                     v-model="config.stickerSpacing"
                                     :min="0"
                                     :max="1"
-                                    :step="0.01"
+                                    :step="0.0001"
                                 />
                             </v-grid-cell>
                             <v-grid-cell sm="6">
@@ -64,7 +62,7 @@
                                     v-model="config.stickerElevation"
                                     :min="0"
                                     :max="1"
-                                    :step="0.01"
+                                    :step="0.0001"
                                 />
                             </v-grid-cell>
                             <v-grid-cell sm="6">
@@ -73,7 +71,7 @@
                                     v-model="config.stickerRadius"
                                     :min="0"
                                     :max="0.5"
-                                    :step="0.01"
+                                    :step="0.0001"
                                 />
                             </v-grid-cell>
                             <v-grid-cell sm="6">
@@ -82,7 +80,7 @@
                                     v-model="config.innerBrightness"
                                     :min="0"
                                     :max="1"
-                                    :step="0.01"
+                                    :step="0.0001"
                                 />
                             </v-grid-cell>
                         </v-grid>
