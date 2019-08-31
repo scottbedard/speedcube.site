@@ -9,20 +9,19 @@ export default {
     },
     methods: {
         onBodyKeypress(e) {
-            if (e.key === ' ') {
-                this.$emit('space', e);
-            } else {
-                const turn = this.config.turns[e.key];
+            const reserved = [' ', 'Escape'];
+            const turn = this.config.turns[e.key];
 
-                if (turn) {
-                    this.$emit('keypress', e);
-                    this.$emit('turn', turn);
-                }
+            if (!reserved.includes(e.key) && turn) {
+                this.$emit('keypress', e);
+                this.$emit('turn', turn);
             }
         },
         onBodyKeyup(e) {
             if (e.key === 'Escape') {
                 this.$emit('escape', e);
+            } else if (e.key === ' ') {
+                this.$emit('space', e);
             }
         },
     },
