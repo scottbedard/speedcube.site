@@ -43,6 +43,11 @@ class MigratePuzzleConfigurations extends Migration
                 $data['colors'] = $original['colors'];
             }
 
+            // inner brightness
+            if (array_key_exists('innerBrightness', $original)) {
+                $data['innerBrightness'] = $original['innerBrightness'] / 100;
+            }
+
             // sticker elevation
             if (array_key_exists('stickerElevation', $original)) {
                 $data['stickerElevation'] = $original['stickerElevation'] / 100;
