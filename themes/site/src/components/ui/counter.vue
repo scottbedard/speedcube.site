@@ -6,9 +6,6 @@
 import { componentInterval } from 'spyfu-vue-utils';
 
 export default {
-    created() {
-        this.$options.interval = componentInterval(this, this.tick, this.interval);
-    },
     data() {
         const now = Date.now();
 
@@ -33,6 +30,9 @@ export default {
             type: Number,
         },
         max: {
+            type: Number,
+        },
+        startTime: {
             type: Number,
         },
     },

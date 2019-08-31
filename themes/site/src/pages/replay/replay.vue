@@ -16,8 +16,29 @@
                     v-else
                     data-solve-ready
                     key="solveReady">
+                    
+                    <!-- title -->
+                    <h1 class="flex justify-center text-center text-grey-8 text-4xl">
+                        <router-link
+                            v-if="solve.user"
+                            v-text="solve.user.username"
+                            class="no-underline hover:text-grey-9"
+                            :to="{ name: 'users:show', params: { username }}"
+                        />
+                        <span v-else>Guest</span>
+                        <span class="mx-4 text-grey-4">-</span>
+                        <span>{{ solve.time | shortTimer }}</span>
+                    </h1>
 
-                    <!-- puzzle -->
+                    <!-- info -->
+                    <div class="leading-normal mb-8 text-center text-grey-7 text-lg">
+                        <div>
+                            {{ 'turn' | pluralize(solve.moves, true) }} at {{ turnsPerSec }} {{ turnsPerSec === 1 ? 'turn' : 'turns' }} per second
+                        </div>
+                        <time class="font-bold text-grey-5 text-xs tracking-widest" :datetime="solveDate">{{ solve.createdAt | datestamp }}</time>
+                    </div>
+
+                    <!-- replay -->
                     <v-replay
                         v-slot="{ inspection, lastMove, puzzleParams }"
                         :config="config"
@@ -25,92 +46,62 @@
                         :scrambled-state="scrambledState"
                         :solution="solution"
                         :type="puzzleType">
-                        <v-grid padded>
-                            <v-grid-cell md="8" lg="9">
-                                <!-- title -->
-                                <h1 class="flex justify-center mb-2 text-center text-4xl">
-                                    <router-link
-                                        v-if="solve.user"
-                                        v-text="solve.user.username"
-                                        class="text-grey-8 hover:text-grey-10"
-                                        :to="{ name: 'users:show', params: { username }}"
-                                    />
-                                    <span v-else>
-                                        Guest
-                                    </span>
-                                    <span class="mx-3 text-grey-4">-</span>
-                                    <span>{{ solve.time | shortTimer }}</span>
-                                </h1>
-
-                                <!-- info -->
-                                <div class="leading-normal mb-8 text-center text-grey-7 text-lg">
-                                    <div class="mb-2">
-                                        <strong>{{ 'turn' | pluralize(solve.moves, true) }}</strong> at <strong>{{ turnsPerSec }}</strong> {{ turnsPerSec === 1 ? 'turn' : 'turns' }} per second
-                                    </div>
-                                    <time :datetime="solveDate">{{ solve.createdAt | datestamp }}</time>
+                        <!-- puzzle -->
+                        <div class="flex justify-center mb-8">
+                            <div class="max-w-xs relative w-full">
+                                <div class="pb-full">
+                                    <v-puzzle v-bind="puzzleParams" />
                                 </div>
+                            </div>
+                        </div>
 
-                                <div class="flex justify-center mb-8">
-                                    <div class="max-w-sm relative w-full">
-                                        <div class="pb-full">
-                                            <v-puzzle v-bind="puzzleParams" />
+                        <div class="text-center">
+                            <v-fade-transition>
+                                <div v-if="progress > 0 || playing">
+                                    <v-fade-transition>
+                                        <span
+                                            v-if="inspecting"
+                                            v-text="currentInspectionTime"
+                                            class="text-grey-7 text-4xl"
+                                            key="inspecting"
+                                        />
+                                        <span
+                                            v-else
+                                            v-text="currentSolveTime"
+                                            class="text-grey-7 text-4xl"
+                                            key="timer"
+                                        />
+                                    </v-fade-transition>
+                                    <v-fade-transition>
+                                        <div v-if="!playing" class="mt-8" key="idle">
+                                            <v-button primary @click="play">
+                                                Watch Again
+                                            </v-button>
+                                            <aside class="mt-16">
+                                                <v-solve-details
+                                                    :inspection="readableInspection"
+                                                    :scramble="solve.scramble.scramble"
+                                                    :solution="readableSolution"
+                                                />
+                                            </aside>
                                         </div>
-                                    </div>
+                                    </v-fade-transition>
                                 </div>
-
-                                <div class="text-center">
-                                    <!-- inspection -->
-                                    <div v-if="playing && inspection" key="inspection">
-                                        <v-counter
-                                            v-slot="{ value }"
-                                            class="font-mono text-grey-6 tracking-wide text-2xl"
-                                            :interval="1000">
-                                            {{ round(15000 - value, -3) / 1000 }}
-                                        </v-counter>
-                                    </div>
-
-                                    <!-- playing / complete -->
-                                    <div v-else key="solve">
-                                        <div v-if="plays > 0" class="mb-8">
-                                            <v-counter
-                                                v-slot="{ value }"
-                                                class="font-mono text-grey-8 tracking-wide text-2xl"
-                                                :class="{
-                                                    'text-grey-6': !complete,
-                                                    'text-grey-8': complete,
-                                                }"
-                                                :max="solve.time">
-                                                {{ value | shortTimer }}
-                                            </v-counter>
-                                        </div>
-
-                                        <v-fade-transition>
-                                            <div v-if="!playing">
-                                                <v-button @click="play(lastMove.time)">Watch {{ plays > 0 ? 'Again' : 'Replay' }}</v-button>
-                                            </div>
-                                        </v-fade-transition>
-                                    </div>
+                                
+                                <div v-else key="idle">
+                                    <v-button primary @click="play">
+                                        Watch Replay
+                                    </v-button>
+                                    <aside class="mt-16">
+                                        <v-solve-details
+                                            :inspection="readableInspection"
+                                            :scramble="solve.scramble.scramble"
+                                            :solution="readableSolution"
+                                        />
+                                    </aside>
                                 </div>
-                            </v-grid-cell>
-
-                            <!-- sidebar -->
-                            <v-grid-cell md="4" lg="3">
-                                <div class="mb-8">
-                                    <div class="mb-2 tracking-widest text-grey-6 text-xs uppercase">Scramble</div>
-                                    <div class="leading-loose text-sm tracking-widest">{{ solve.scramble.scramble }}</div>
-                                </div>
-
-                                <div class="mb-8">
-                                    <div class="mb-2 tracking-widest text-grey-6 text-xs uppercase">Inspection</div>
-                                    <div class="leading-loose text-sm tracking-widest">{{ readableInspection }}</div>
-                                </div>
-
-                                <div>
-                                    <div class="mb-2 tracking-widest text-grey-6 text-xs uppercase">Solution</div>
-                                    <div class="leading-loose text-sm tracking-widest">{{ readableSolution }}</div>
-                                </div>
-                            </v-grid-cell>
-                        </v-grid>
+                            </v-fade-transition>
+                        </div>
                     </v-replay>
                 </div>
             </v-fade-transition>
@@ -119,13 +110,15 @@
 </template>
 
 <script>
-import { bindExternalEvent, componentTimeout } from 'spyfu-vue-utils';
-import { get, noop, round } from 'lodash-es';
-import { animate } from '@/app/utils/function';
-import { getSolve } from '@/app/repositories/solves';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
 import replayComponent from '@/components/ui/replay.vue';
-import Counter from '@/components/ui/counter.vue';
+import solveDetailsComponent from './solve_details/solve_details.vue';
+import { bindExternalEvent, componentTimeout } from 'spyfu-vue-utils';
+import { componentRafEase } from '@/app/utils/component';
+import { formatShortTime } from '@/app/utils/string';
+import { get, noop, round } from 'lodash-es';
+import { getSolve } from '@/app/repositories/solves';
+import { linear } from '@/app/constants';
 
 export default {
     created() {
@@ -141,7 +134,7 @@ export default {
             // set to true when the replay is complete
             complete: false,
 
-            // determine if the replay is playing or not
+            // playing state
             playing: false,
 
             // number of times the replay was played
@@ -161,13 +154,34 @@ export default {
         this.animation.cancel();
     },
     components: {
-        'v-counter': Counter,
         'v-puzzle': puzzleComponent,
         'v-replay': replayComponent,
+        'v-solve-details': solveDetailsComponent,
     },
     computed: {
         config() {
             return get(this.solve, 'config', {});
+        },
+        currentInspectionTime() {
+            return 15 - Math.round(this.currentTotalSolveTime / 1000);
+        },
+        currentSolveTime() {
+            const startEvent = this.event('START');
+
+            return startEvent
+                ? formatShortTime(this.currentTotalSolveTime - startEvent.time)
+                : 0;
+        },
+        currentTotalSolveTime() {
+            return Math.round(this.totalSolveTime * this.progress);
+        },
+        event() {
+            return eventName => this.moves.find(obj => obj.value === eventName);
+        },
+        inspecting() {
+            const startEvent = this.event('START');
+
+            return startEvent && this.currentTotalSolveTime < startEvent.time;
         },
         inspectionMoves() {
             const startIndex = this.moves.findIndex(event => event.value === 'START');
@@ -210,9 +224,6 @@ export default {
                 .map(move => move.value)
                 .join(' ');
         },
-        round() {
-            return round;
-        },
         scramble() {
             return get(this.solve, 'scramble.scramble');
         },
@@ -225,6 +236,17 @@ export default {
         solveDate() {
             // '2019-01-01 00:00:00' => '2019-01-01'
             return get(this.solve, 'createdAt', '').split(' ').shift();
+        },
+        solving() {
+            const startEvent = this.event('START');
+
+            return startEvent && this.currentTotalSolveTime >= startEvent.time;
+        },
+        totalSolveTime() {
+            // return the solve time, including inspection
+            const end = this.moves.find(obj => obj.value === 'END');
+
+            return end ? end.time : 0;
         },
         turnsPerSec() {
             return round(1000 / this.solve.averageSpeed, 1);
@@ -250,23 +272,16 @@ export default {
                 this.solveLoading = false;
             });
         },
-        play(duration) {
-            if (this.playing) {
-                return;
-            }
-
-            this.complete = false;
+        play() {
             this.playing = true;
-            this.plays += 1;
 
-            this.animation = animate((progress) => {
+            componentRafEase(this, (progress) => {
                 this.progress = progress;
-            }, duration);
 
-            componentTimeout(this, () => {
-                this.complete = true;
-                this.playing = false;
-            }, duration);
+                if (progress === 1) {
+                    this.playing = false;
+                }
+            }, this.totalSolveTime, linear);
         },
     },
 };
