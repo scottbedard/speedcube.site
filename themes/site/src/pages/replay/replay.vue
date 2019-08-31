@@ -117,7 +117,7 @@ import { bindExternalEvent, componentTimeout } from 'spyfu-vue-utils';
 import { componentRafEase } from '@/app/utils/component';
 import { formatShortTime } from '@/app/utils/string';
 import { get, noop, round } from 'lodash-es';
-import { getSolve } from '@/app/repositories/solves';
+import { getSolve, postReplay } from '@/app/repositories/solves';
 import { linear } from '@/app/constants';
 
 export default {
@@ -273,15 +273,19 @@ export default {
             });
         },
         play() {
-            this.playing = true;
+            if (!this.playing) {
+                postReplay(this.solve.id);
 
-            componentRafEase(this, (progress) => {
-                this.progress = progress;
+                this.playing = true;
 
-                if (progress === 1) {
-                    this.playing = false;
-                }
-            }, this.totalSolveTime, linear);
+                componentRafEase(this, (progress) => {
+                    this.progress = progress;
+
+                    if (progress === 1) {
+                        this.playing = false;
+                    }
+                }, this.totalSolveTime, linear);
+            }
         },
     },
 };
