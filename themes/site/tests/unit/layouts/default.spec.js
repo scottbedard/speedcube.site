@@ -1,3 +1,4 @@
+/* eslint-disable */
 import defaultLayoutComponent from '@/layouts/default/default.vue';
 
 //

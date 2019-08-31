@@ -1,15 +1,5 @@
-<style lang="scss" scoped>
-    .modals {
-        height: 200px;
-
-        &:not(:empty) {
-            background-color: blue;
-        }
-    }
-</style>
-
 <template>
-    <div class="min-h-full flex flex-col">
+    <div class="flex flex-col h-full overflow-y-scroll">
         <!-- header -->
         <v-header />
 

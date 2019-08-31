@@ -73,8 +73,8 @@
 </template>
 
 <script>
-import { getComments, postComment } from '@/app/repositories/comments';
 import { mapGetters } from 'vuex';
+import { getComments, postComment } from '@/app/repositories/comments';
 
 export default {
     created() {

@@ -1,145 +1,150 @@
 <template>
     <v-page padded>
         <v-margin padded>
-            <!-- puzzle / controller -->
-            <div class="flex justify-center">
-                <v-puzzle
-                    ref="puzzle"
-                    :config="puzzleConfig"
-                    :keyboard-config="keyboardConfig"
-                    :puzzle="puzzle"
-                    @default-config="setDefaultConfig"
-                    @ready="onReady"
-                    @turn-end="completeIfSolved"
-                    @turn-start="recordTurn"
-                />
+            <!-- modals -->
+            <v-puzzles-modal
+                v-if="puzzlesModalIsVisible"
+                @close="hidePuzzlesModal"
+            />
+
+            <!-- keyboard controller -->
+            <v-puzzle-controller
+                v-if="!keyboard"
+                :config="keyboardConfig"
+                @space="onSpacebar"
+                @turn="queueTurn"
+                @escape="onEscape"
+            />
+
+            <!-- puzzle -->
+            <div v-if="model !== null" class="max-w-xs mb-8 mx-auto">
+                <div
+                    class="border-2 border-dashed trans-border pb-full relative rounded"
+                    :class="{
+                        'border-transparent': edit !== 'appearance',
+                        'border-grey-2': edit === 'appearance'
+                    }">
+                    <v-puzzle
+                        :config="config"
+                        :current-turn="currentTurn"
+                        :masked="scrambling"
+                        :model="model"
+                        :turn-progress="turnProgress"
+                        :type="puzzle"
+                    />
+                </div>
             </div>
 
-            <!-- mobile warning -->
-            <p class="text-center text-grey-7 sm:hidden">
-                We don't support mobile solving yet. You're welcome to use the rest
-                of the site, but for now a keyboard is required to perform solves.
-            </p>
-
-            <!-- controls -->
-            <div class="hidden text-center sm:block">
+            <!-- content -->
+            <div class="flex justify-center">
                 <v-fade-transition>
+
                     <!-- appearance -->
                     <div
-                        v-if="appearanceIsVisible"
+                        v-if="appearance"
+                        data-appearance
+                        class="max-w-4xl w-full"
                         key="appearance">
                         <v-appearance
-                            :config="puzzleConfig"
-                            :options="puzzleOptions"
-                            :puzzle="puzzle"
-                            @close="hideOptions"
-                            @guest-config="setGuestConfig"
-                            @pending="setPendingConfig"
+                            :initial-config="config"
+                            @apply="applyConfig"
+                            @clear="clearPreviewConfig"
+                            @set="setPreviewConfig"
                         />
                     </div>
 
-                    <!-- controls -->
+                    <!-- keyboard -->
                     <div
-                        v-else-if="controlsAreVisible"
-                        key="controls">
-                        <v-controls
-                            :keyboard-config="keyboardConfig"
-                            :puzzle="puzzle"
-                            @close="hideControls"
-                            @disable-turning="disableTurning"
-                            @enable-turning="enableTurning"
-                            @update-pending="setPendingKeyboardConfig"
+                        v-else-if="keyboard"
+                        class="w-full"
+                        data-keyboard
+                        key="keyboard">
+                        <v-keyboard
+                            :initial-config="keyboardConfig"
+                            @turn="queueTurn"
                         />
                     </div>
 
-                    <!-- scrambling -->
-                    <div
-                        v-else-if="scrambling"
-                        key="scrambling"
-                    />
-
-                    <!-- inspecting -->
-                    <div
-                        v-else-if="inspecting"
-                        key="inspecting">
-                        <v-countdown
-                            :duration="inspectionDuration"
-                            :started-at="inspectionStartedAt"
-                            @complete="beginSolve"
-                        />
-                        <p class="font-thin mt-4 text-grey-6">press space to start</p>
-                    </div>
-
-                    <!-- solving / solved -->
-                    <div v-else-if="solving || solved" key="solving">
-                        <div
-                            class="font-thin mb-8 text-center text-4xl trans-color"
-                            :class="{
-                                'text-grey-6': !solved,
-                                'text-grey-7': solved,
-                            }">
-                            <v-timer
-                                :running="solving"
-                                :display-time="solveCompletedTime"
-                                :started-at="solveStartedAt"
-                            />
-                            <p v-if="solving" class="font-thin mt-4 text-grey-6 text-base">press escape to quit</p>
-                        </div>
-
-                        <!-- stats -->
-                        <v-fade-transition :enter-delay="200">
-                            <div v-if="!inspecting && !solving">
-                                <div v-if="solves.length > 1" class="mb-8">
-                                    <v-stats
-                                        :last5="last5Solves"
-                                        :record-average="recordAverage"
-                                        :solves="solves"
-                                    />
-                                </div>
-                                <v-toolbar
-                                    @scramble="scramble"
-                                    @appearance="onAppearanceClick"
-                                    @controls="onControlsClick"
-                                />
-                            </div>
-                        </v-fade-transition>
-                    </div>
-
-                    <!-- dnf -->
-                    <div v-else-if="dnf" key="dnf">
-                        <div class="font-thin mb-8 text-center text-grey-6 text-4xl">DNF</div>
-
-                        <!-- stats -->
-                        <v-fade-transition :enter-delay="200">
-                            <div v-if="!inspecting && !solving">
-                                <div v-if="solves.length > 1" class="mb-8">
-                                    <v-stats
-                                        :last5="last5Solves"
-                                        :record-average="recordAverage"
-                                        :solves="solves"
-                                    />
-                                </div>
-                                <v-toolbar
-                                    @scramble="scramble"
-                                    @appearance="onAppearanceClick"
-                                    @controls="onControlsClick"
-                                />
-                            </div>
-                        </v-fade-transition>
-                    </div>
-
-                    <!-- idle -->
+                    <!-- default -->
                     <div
                         v-else
-                        key="idle">
-                        <p class="leading-normal max-w-md mb-8 mx-auto text-center text-left text-grey-7">
-                            Use your keyboard to get a feel for the cube. Default key bindings mimick the way real finger tricks feel.
-                        </p>
-                        <v-toolbar
-                            @scramble="scramble"
-                            @appearance="onAppearanceClick"
-                            @controls="onControlsClick"
-                        />
+                        class="text-center text-grey-7"
+                        data-default
+                        key="default">
+                        <v-fade-transition>
+                            <!-- inspecting -->
+                            <div v-if="inspecting" class="text-4xl" key="inspecting">
+                                <v-countdown
+                                    :from="inspectionDuration"
+                                    :start-time="inspectionStartTime"
+                                    @end="startSolve"
+                                />
+                            </div>
+
+                            <!-- solving -->
+                            <div v-else-if="solving || solved" key="solving">
+                                <div class="mb-6 text-4xl">
+                                    <v-stopwatch
+                                        :start-time="solveStartTime"
+                                        :stop-time="solveEndTime"
+                                    />
+                                </div>
+
+                                <!-- solved -->
+                                <v-fade-transition>
+                                    <div v-if="solved" key="solved">
+                                        <v-recent-solves
+                                            :record-average="recordAverage"
+                                            :solves="recentSolves"
+                                        />
+                                    </div>
+                                </v-fade-transition>
+                            </div>
+
+                            <!-- dnf -->
+                            <div v-else-if="dnf" key="dnf">
+                                <div class="mb-6 text-4xl">DNF</div>
+                                <v-recent-solves
+                                    :record-average="recordAverage"
+                                    :solves="recentSolves"
+                                />
+                            </div>
+
+                            <!-- idle -->
+                            <div v-else-if="!scrambling" key="idle">
+                                <div class="mb-12">
+                                    <v-button primary @click="scramble">Scramble</v-button>
+                                </div>
+                                <div>
+                                    <div>
+                                        <v-button
+                                            class="mx-4 my-2"
+                                            icon="fa-sliders"
+                                            ghost
+                                            title="Click to customize appearance"
+                                            :to="{ query: { edit: 'appearance' }}">
+                                            Puzzle Settings
+                                        </v-button>
+                                        <v-button
+                                            class="mx-4 my-2"
+                                            icon="fa-code"
+                                            ghost
+                                            title="Click to edit key bindings"
+                                            :to="{ query: { edit: 'keyboard' }}">
+                                            Key Bindings
+                                        </v-button>
+                                    </div>
+                                    <v-button
+                                        class="mx-4 my-2"
+                                        icon="fa-cubes"
+                                        ghost
+                                        title="Click to change puzzles"
+                                        @click="showPuzzlesModal">
+                                        Other Puzzles
+                                    </v-button>
+                                </div>
+                            </div>
+                        </v-fade-transition>
                     </div>
                 </v-fade-transition>
             </div>
@@ -148,363 +153,406 @@
 </template>
 
 <script>
+/* eslint-disable prefer-destructuring */
+import Cube from 'bedard-cube';
+import { componentTimeout } from 'spyfu-vue-utils';
 import { get } from 'lodash-es';
 import { mapGetters, mapState } from 'vuex';
-import { bindExternalEvent } from 'spyfu-vue-utils';
-import { jsonToObject } from '@/app/utils/object';
+import inspectionMoves from './inspection_moves';
+import puzzleComponent from '@/components/puzzle/puzzle.vue';
+import puzzleControllerComponent from '@/components/puzzle/controller/controller.vue';
+import { componentRafEase } from '@/app/utils/component';
+import { isCube } from '@/app/utils/puzzle';
+import { puzzles } from '@/app/constants';
 import { postCreateScramble } from '@/app/repositories/scrambles';
 import { postSolve } from '@/app/repositories/solves';
-import appearanceOptions from './appearance_options';
-import defaultKeyboardConfigs from './default_keyboard_configs';
-import toolbarComponent from './toolbar/toolbar.vue';
 
 export default {
     created() {
-        bindExternalEvent(this, document.body, 'keyup', this.onKeyup);
+        this.reset();
     },
     data() {
         return {
-            // visibility of puzzle appearance controls
-            appearanceIsVisible: false,
+            // applied guest config
+            appliedConfig: null,
 
-            // visilbility of keyboard controls editor
-            controlsAreVisible: false,
-
-            // default puzzle configuration
-            defaultConfig: {},
-
-            // did not finish
+            // did not finish state
             dnf: false,
 
-            // guest puzzle config
-            guestConfig: {},
-
-            // log of all turns and solve events
-            history: [],
+            // current turn applied to the puzzle
+            currentTurn: '',
 
             // inspection phase
             inspecting: false,
 
-            // inspection duration in milliseconds
-            inspectionDuration: 0,
+            // inspection timestamp
+            inspectionStartTime: 0,
 
-            // inspection start time
-            inspectionStartedAt: 0,
+            // model to represent the state of the puzzle
+            model: null,
 
-            // last 5 solves the authenticated user has performed
-            last5Solves: [],
+            // visual config being previewed
+            previewConfig: null,
 
-            // pending puzzle config
-            pendingConfig: null,
+            // determine if puzzles modal should be visible
+            puzzlesModalIsVisible: false,
 
-            // pending keyboard config
-            pendingKeyboardConfig: null,
+            // recent solves from this user
+            recentSolves: [],
 
-            // enables key listeners
-            puzzleIsTurnable: true,
-
-            // the user's current PersonalRecordAverage for this puzzle
+            // record average of 5
             recordAverage: null,
 
-            // id of the scramble model
+            // id of scramble being solved
             scrambleId: 0,
 
-            // scrambling phase
+            // scrambline phase
             scrambling: false,
 
-            // session of recent solves
-            solves: [],
+            // solution to scramble
+            solution: [],
 
-            // solve completion time
-            solveCompletedAt: 0,
-
-            // the final time of the solve
-            solveCompletedTime: null,
+            // solve end time
+            solveEndTime: 0,
 
             // solve start time
-            solveStartedAt: 0,
+            solveStartTime: 0,
+
+            // solved successfully phase
+            solved: false,
 
             // solving phase
             solving: false,
 
-            // solved phase
-            solved: false,
+            // set to true when turning
+            turning: false,
+
+            // current turn progress
+            turnProgress: 0,
+
+            // turns waiting to be executed
+            turnQueue: [],
         };
     },
     components: {
         'v-appearance': () => import('./appearance/appearance.vue'),
-        'v-controls': () => import('./controls/controls.vue'),
-        'v-stats': () => import('./stats/stats.vue'),
-        'v-toolbar': toolbarComponent,
+        'v-keyboard': () => import('./keyboard/keyboard.vue'),
+        'v-puzzle': puzzleComponent,
+        'v-puzzle-controller': puzzleControllerComponent,
+        'v-puzzles-modal': () => import('./puzzles_modal/puzzles_modal.vue'),
+        'v-recent-solves': () => import('./recent_solves/recent_solves.vue'),
     },
     computed: {
         ...mapGetters('user', [
             'isAuthenticated',
+            'configForPuzzle',
         ]),
         ...mapState('user', [
             'user',
         ]),
-        hasOptions() {
-            return Array.isArray(this.puzzleOptions);
+        appearance() {
+            // determine if the appearance editor should be visible
+            return this.edit === 'appearance';
+        },
+        config() {
+            // fully normalized config being fed into the puzzle
+            return {
+                ...this.defaultConfig,
+                ...this.userConfig,
+                ...(this.previewConfig || {}),
+            };
+        },
+        defaultConfig() {
+            // default config for the puzzle
+            return get(puzzles, `${this.puzzle}.defaultConfig`, {});
+        },
+        edit() {
+            // normalize the currently open tab
+            return get(this.$route, 'query.edit', '').toLowerCase().trim();
+        },
+        idle() {
+            // determine if we're in an idle state and no timers are running
+            return !this.scrambling && !this.inspecting && !this.solving;
+        },
+        inspectionDuration() {
+            // inspection duration in seconds
+            return 15;
+        },
+        isCube() {
+            // determine if the puzzle is a standard NxN cube
+            return isCube(this.puzzle);
+        },
+        keyboard() {
+            // determine if keyboard editor is open
+            return this.edit === 'keyboard';
         },
         keyboardConfig() {
-            if (this.pendingKeyboardConfig) {
-                return this.pendingKeyboardConfig;
-            }
-
-            const userConfig = get(this.user, 'keyboardConfigs', []).find(kc => kc.puzzle === this.puzzle);
-
-            return userConfig
-                ? jsonToObject(userConfig.config)
-                : defaultKeyboardConfigs[this.puzzle];
+            // get the user's keyboard config for this puzzle
+            return this.$store.getters['user/keyboardConfigForPuzzle'](this.puzzle);
         },
         puzzle() {
-            return this.$route.params.puzzle;
+            // parse and normalize the puzzle id from current route
+            return get(this.$route, 'params.puzzle', 'unknown').trim().toLowerCase();
         },
-        puzzleConfig() {
-            if (this.pendingConfig) {
-                return { ...this.defaultConfig, ...this.pendingConfig };
-            }
-
-            if (this.isAuthenticated) {
-                const savedConfig = get(this.user, 'configs', []).find(config => config.puzzle === this.puzzle);
-
-                if (savedConfig) {
-                    return { ...this.defaultConfig, ...jsonToObject(savedConfig.config) };
-                }
-            }
-
-            return { ...this.defaultConfig, ...this.guestConfig };
+        solutionOffset() {
+            // function to return number of ms elapsed since solution started
+            return () => Date.now() - this.inspectionStartTime;
         },
-        puzzleOptions() {
-            return appearanceOptions[this.puzzle];
-        },
-        solution() {
-            return this.history.join(' ');
+        userConfig() {
+            // return the users config for the current puzzle
+            return this.configForPuzzle(this.puzzle);
         },
     },
     methods: {
         abortSolve() {
-            if (!this.inspecting && !this.solving) {
+            if (!this.scrambleId) {
                 return;
             }
 
-            this.inspecting = false;
-            this.solving = false;
             this.dnf = true;
-            this.$refs.puzzle.flushQueuedTurns();
-
-            this.recordEvent('END');
+            this.inspecting = false;
+            this.solveEndTime = Date.now();
+            this.solving = false;
 
             postSolve({
                 abort: true,
-                config: JSON.stringify(this.puzzleConfig),
+                config: JSON.stringify(this.config),
                 scrambleId: this.scrambleId,
-                solution: this.solution,
-            }).then((response) => {
-                const { last5, recordAverage, solve } = response.data;
+                solution: this.solution.join(' '),
+            }).then(this.onSolveComplete);
+        },
+        applyConfig(config) {
+            this.appliedConfig = config;
+        },
+        applyState(stateJson) {
+            const state = JSON.parse(stateJson);
 
-                this.last5Solves = last5;
-                this.recordAverage = recordAverage;
-                this.solves.push(solve);
-            });
+            if (this.isCube) {
+                Object.keys(this.model.state).forEach((face) => {
+                    this.model.state[face].forEach((sticker, index) => {
+                        sticker.value = state[face][index];
+                    });
+                });
+            }
         },
         beginInspection() {
-            // allow partial turns
-            this.scrambling = false;
+            if (!this.scrambling) {
+                return;
+            }
 
-            // begin an inspection for however long our puzzle allows
             this.inspecting = true;
-            this.inspectionDuration = this.$options.puzzle.getInspectionDuration();
-            this.inspectionStartedAt = Date.now();
+            this.inspectionStartTime = Date.now();
+            this.scrambling = false;
+            this.solution = [];
         },
-        beginSolve() {
+        clearPreviewConfig() {
+            this.previewConfig = null;
+        },
+        completeSolve() {
+            this.solveEndTime = Date.now();
+            this.solved = true;
+            this.solving = false;
+
+            this.recordEvent('END', this.solveEndTime);
+
+            postSolve({
+                config: JSON.stringify(this.config),
+                scrambleId: this.scrambleId,
+                solution: this.solution.join(' '),
+            }).then(this.onSolveComplete);
+        },
+        executeTurn(turn) {
+            this.currentTurn = turn;
+            this.turnProgress = 0;
+            this.turning = true;
+
+            return new Promise((resolve) => {
+                if (this.inspecting || this.solving) {
+                    this.recordTurn(turn);
+                }
+
+                componentRafEase(this, (progress) => {
+                    this.turnProgress = progress;
+
+                    if (progress === 1) {
+                        this.$nextTick(() => {
+                            this.model.turn(turn);
+
+                            this.turnProgress = 0;
+                            this.turning = false;
+
+                            if (this.solving && this.model.isSolved()) {
+                                this.completeSolve();
+                            }
+
+                            this.$nextTick(resolve);
+                        });
+                    }
+                }, this.config.turnDuration);
+            });
+        },
+        hidePuzzlesModal() {
+            this.puzzlesModalIsVisible = false;
+        },
+        onEscape() {
+            // abort the solve if solving
+            if (this.inspecting || this.solving) {
+                this.abortSolve();
+            }
+
+            // reset everything if we're idle
+            else if (this.idle) {
+                this.reset();
+            }
+        },
+        onSolveComplete(response) {
+            // success
+            const { recordAverage, recentSolves, solve } = response.data;
+
+            if (this.isAuthenticated) {
+                this.recentSolves = recentSolves;
+                this.recordAverage = recordAverage;
+            } else {
+                this.recentSolves.push(solve);
+            }
+        },
+        onSpacebar(e) {
+            // handle spacebar keypress events
+            e.preventDefault();
+
+            if (this.idle) {
+                this.scramble();
+            } else if (this.inspecting) {
+                this.startSolve();
+            }
+        },
+        queueTurn(turn) {
+            if (this.inspecting) {
+                const allowedMoves = inspectionMoves[this.puzzle];
+
+                if (!allowedMoves.includes(turn)) {
+                    return;
+                }
+            }
+
+            this.turnQueue.push(turn);
+        },
+        recordEvent(event, currentTime) {
+            const normalizedEvent = event.trim().toUpperCase();
+            const offset = currentTime - this.inspectionStartTime;
+
+            this.solution.push(`${offset}#${normalizedEvent}`);
+        },
+        recordTurn(turn) {
+            const offset = this.solutionOffset();
+
+            this.solution.push(`${offset}:${turn}`);
+        },
+        refreshModel() {
+            // cube
+            if (this.isCube) {
+                const size = parseInt(this.puzzle, 10);
+
+                this.model = new Cube(size, { useObjects: true });
+            }
+
+            // redirect to 3x3 for unknown puzzles
+            else {
+                this.$router.replace({
+                    name: 'solve',
+                    params: { puzzle: '3x3' },
+                });
+            }
+        },
+        reset() {
+            this.appliedConfig = null;
+            this.dnf = false;
+            this.inspecting = false;
+            this.inspectionStartTime = 0;
+            this.scrambleId = 0;
+            this.scrambling = false;
+            this.solution = [];
+            this.solveEndTime = 0;
+            this.solveStartTime = 0;
+            this.solved = false;
+            this.solving = false;
+
+            this.refreshModel();
+        },
+        scramble() {
+            this.reset();
+
+            this.scrambling = true;
+
+            // fetch and apply scrambled state and id
+            let loading = true;
+            let scrambledState = {};
+
+            const scrambleXhr = postCreateScramble(this.puzzle).then((response) => {
+                this.scrambleId = response.data.id;
+                scrambledState = response.data.scrambledState;
+            });
+
+            // this sets the min amount of time our animation will run
+            const delay = new Promise(resolve => componentTimeout(this, resolve, 1500));
+
+            // set loading to false when xhr and delay are done
+            Promise.all([scrambleXhr, delay]).then(() => { loading = false; });
+
+            // simulate the puzzle being scrambled. this will have
+            // to be refactored to be puzzle-agnostic once shape
+            // changing puzzles like square-1 are implemented.
+            const pseudoScramble = new Promise((resolve) => {
+                let scramble = this.model.generateScrambleString(50).split(' ');
+
+                const turn = () => {
+                    this.currentTurn = scramble.shift().replace(/2$/, '');
+
+                    scramble = scramble.concat(this.currentTurn);
+
+                    this.executeTurn(this.currentTurn).then(loading ? turn : resolve);
+                };
+
+                turn();
+            });
+
+            // when everything is complete. move on to inspection phase
+            Promise.all([scrambleXhr, pseudoScramble]).then(() => {
+                this.applyState(scrambledState);
+                this.beginInspection();
+            });
+        },
+        setPreviewConfig(config) {
+            this.previewConfig = config;
+        },
+        showPuzzlesModal() {
+            this.puzzlesModalIsVisible = true;
+        },
+        startSolve() {
             if (!this.inspecting) {
                 return;
             }
 
-            const now = Date.now();
+            const inspectionEndTime = this.inspectionStartTime + (this.inspectionDuration * 1000);
 
-            // transition to solving state and allow all turns
             this.inspecting = false;
-            this.solveStartedAt = now;
+            this.solveStartTime = Date.now();
             this.solving = true;
 
-            this.recordEvent('START', now);
-        },
-        completeIfSolved(isSolved) {
-            if (isSolved) {
-                this.completeSolve();
-            }
-        },
-        completeSolve() {
-            if (!this.solving) {
-                return;
-            }
-
-            // transition to solved state
-            const now = Date.now();
-            this.solveCompletedAt = now;
-            this.solveCompletedTime = this.solveCompletedAt - this.solveStartedAt;
-            this.solved = true;
-            this.solving = false;
-
-            this.recordEvent('END', now);
-
-            postSolve({
-                config: JSON.stringify(this.puzzleConfig),
-                scrambleId: this.scrambleId,
-                solution: this.solution,
-            }).then((response) => {
-                // success
-                const { last5, recordAverage, solve } = response.data;
-
-                this.last5Solves = last5;
-                this.recordAverage = recordAverage;
-                this.solves.push(solve);
-            });
-        },
-        disableTurning() {
-            this.puzzleIsTurnable = false;
-        },
-        enableTurning() {
-            this.puzzleIsTurnable = true;
-        },
-        hideControls() {
-            this.controlsAreVisible = false;
-            this.pendingKeyboardConfig = null;
-        },
-        hideOptions() {
-            this.appearanceIsVisible = false;
-            this.pendingConfig = null;
-        },
-        onAppearanceClick() {
-            this.appearanceIsVisible = true;
-        },
-        onControlsClick() {
-            this.controlsAreVisible = true;
-        },
-        onEscapeUp() {
-            // abort the current solve if one is running
-            if (this.inspecting || this.solving) {
-                this.abortSolve();
-            }
-        },
-        onKeyup(e) {
-            // reset everything if we're solved and escape was pressed
-            if (this.solved && e.key === 'Escape') {
-                this.reset();
-            }
-
-            // do nothing if the puzzle is not turnable
-            if (!this.puzzleIsTurnable) {
-                return;
-            }
-
-            if (e.key === ' ') {
-                this.onSpaceUp();
-            } else if (e.key === 'Escape') {
-                this.onEscapeUp();
-            } else {
-                const turn = this.$options.puzzle.getTurnFromKeyboardEvent(e);
-
-                if (turn) {
-                    this.turn(turn);
-                }
-            }
-        },
-        onReady(puzzle) {
-            this.$options.puzzle = puzzle;
-        },
-        onSpaceUp() {
-            // do nothing if we're modifying cube options
-            if (this.appearanceIsVisible) {
-                return;
-            }
-
-            // start a new solve if we're not doing anything
-            if (!this.inspecting && !this.solving) {
-                this.scramble();
-            }
-
-            // if we're inspecting, transition to solving
-            // doing this removes our countdown from the dom, and this
-            // cancels the timeout from triggering a redundant start
-            if (this.inspecting) {
-                this.beginSolve();
-            }
-        },
-        recordEvent(event) {
-            const offset = Date.now() - this.inspectionStartedAt;
-
-            this.history.push(`${offset}#${event}`);
-        },
-        recordTurn(turn, now = null) {
-            const offset = (now || Date.now()) - this.inspectionStartedAt;
-
-            this.history.push(`${offset}:${turn}`);
-        },
-        setDefaultConfig(defaultConfig) {
-            this.defaultConfig = defaultConfig;
-        },
-        setGuestConfig(guestConfig) {
-            this.guestConfig = guestConfig;
-        },
-        setPendingConfig(pendingConfig) {
-            this.pendingConfig = pendingConfig;
-        },
-        setPendingKeyboardConfig(pendingKeyboardConfig) {
-            this.pendingKeyboardConfig = pendingKeyboardConfig;
-        },
-        reset() {
-            this.appearanceIsVisible = false;
-            this.dnf = false;
-            this.history = [];
-            this.inspecting = false;
-            this.puzzleIsTurnable = true;
-            this.scrambling = false;
-            this.solveCompletedAt = 0;
-            this.solveCompletedTime = null;
-            this.solveStaretdAt = 0;
-            this.solved = false;
-            this.solving = false;
-        },
-        scramble() {
-            this.reset();
-            this.$refs.puzzle.flushQueuedTurns();
-            this.scrambling = true;
-
-            // get a scramble from the server, and use an animating
-            // pseudo-scramble as the loading state
-            const scrambleRequest = postCreateScramble(this.puzzle);
-            const pseudoScramble = this.$options.puzzle.pseudoScramble();
-
-            // disable turning during the scramble
-            this.disableTurning();
-
-            // update the puzzle's state
-            Promise.all([scrambleRequest, pseudoScramble]).then(([response]) => {
-                this.scrambleId = response.data.id;
-                this.$options.puzzle.applyState(response.data.scrambledState);
-
-                // re-enable turning and begin the inspection
-                this.enableTurning();
-                this.beginInspection();
-            });
-        },
-        turn(turn) {
-            if (!this.inspecting || this.$options.puzzle.isInspectionTurn(turn)) {
-                this.$options.puzzle.turn(turn);
-            }
+            this.recordEvent('START', Math.min(inspectionEndTime, this.solveStartTime));
         },
     },
     watch: {
-        $route: {
-            deep: true,
-            handler() {
-                this.abortSolve();
-                this.reset();
-            },
+        puzzle: 'refreshModel',
+        turnQueue(queue) {
+            // advance ot the next turn if there is one
+            const nextTurn = queue.slice(0, 1).pop();
+
+            if (nextTurn && !this.turning) {
+                this.executeTurn(nextTurn).then(() => {
+                    this.turnQueue.shift();
+                });
+            }
         },
     },
 };

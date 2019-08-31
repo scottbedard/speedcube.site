@@ -3,9 +3,9 @@
 </template>
 
 <script>
+import { componentTimeout } from 'spyfu-vue-utils';
 import { ease } from '@/app/utils/function';
 import { easeInOutQuart } from '@/app/constants';
-import { componentTimeout } from 'spyfu-vue-utils';
 
 // protected method to animate counting
 function count(vm, to, from) {

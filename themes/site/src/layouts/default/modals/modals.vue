@@ -4,7 +4,9 @@
     }
 
     .vue-portal-target {
-        margin: auto;
+        display: grid;
+        justify-items: center;
+        @apply h-full items-center w-full;
     }
 </style>
 
@@ -13,7 +15,7 @@
         <v-fade-transition>
             <div
                 v-if="modalsAreOpen"
-                class="backdrop fixed flex items-center justify-center overflow-y-scroll p-8 top-0 left-0 right-0 bottom-0"
+                class="backdrop fixed h-full left-0 overflow-y-scroll p-8 top-0 w-full z-20"
                 ref="backdrop">
                 <portal-target name="modal" />
             </div>
@@ -41,7 +43,7 @@ export default {
                 if (modalsAreOpen) {
                     this.$refs.backdrop.scrollTop = 0;
                 }
-            }, 10);
+            }, 50);
         },
     },
 };

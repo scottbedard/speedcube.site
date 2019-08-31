@@ -1,4 +1,42 @@
 import bezierEasing from 'bezier-easing';
+import { linear } from '@/app/constants';
+
+/**
+ * Similar to a setTimeout loop, but using requestAnimationFrame
+ * instead. Use this when working with puzzle animations, as an
+ * raf loop allows for better browser optimizations.
+ *
+ * @param {Function}    fn
+ * @param {Number}      duration
+ */
+export function animate(fn, duration) {
+    const startTime = new Date().getTime();
+    const endTime = startTime + duration;
+
+    let running = true;
+
+    const cancel = () => {
+        running = false;
+    };
+
+    const render = () => {
+        if (running) {
+            const currentTime = new Date().getTime();
+            const lapsedTime = Math.min(currentTime - startTime, duration);
+            const progress = lapsedTime / duration;
+
+            fn(progress);
+
+            if (currentTime < endTime) {
+                requestAnimationFrame(render);
+            }
+        }
+    };
+
+    requestAnimationFrame(render);
+
+    return { cancel };
+}
 
 /**
  * Execute a callback with a cubic bezier curve.
@@ -29,5 +67,49 @@ export function ease(curve, fn, duration, frames = null) {
     // and finally, return an object we can use to cancel the timeouts
     return {
         cancel: () => timeouts.forEach(clearTimeout),
+    };
+}
+
+/**
+ * Execute an easing callback using requestAnimationFrame.
+ *
+ * @param {Function}        fn          function to execute
+ * @param {number}          duration    easing duration in milliseconds
+ * @param {Array<number>}   curve       bezier easing curve to use
+ */
+export function rafEase(fn, duration, curve = linear) {
+    const startTime = Date.now();
+    const endTime = startTime + duration;
+    const easing = bezierEasing.apply(undefined, curve); /* eslint-disable-line prefer-spread */ // (jest compatability)
+
+    // this variable and callback short circuit
+    // the loop when called
+    let canceled = false;
+
+    const cancel = () => {
+        canceled = true;
+    };
+
+    // call render every animation frame
+    const render = () => {
+        if (canceled) return;
+
+        // hit callback with progress in the bezier curve
+        const now = Date.now();
+        const timeOffset = now - startTime;
+        const progress = Math.min(1, timeOffset / duration);
+
+        fn(+easing(progress));
+
+        // call again if we need to
+        if (now < endTime) {
+            requestAnimationFrame(render);
+        }
+    };
+
+    render();
+
+    return {
+        cancel,
     };
 }

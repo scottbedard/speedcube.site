@@ -1,7 +1,9 @@
+/* eslint-disable */
 import { easeInOutExpo } from '@/app/constants';
 
 import {
     ease,
+    rafEase,
 } from '@/app/utils/function';
 
 //
@@ -26,8 +28,8 @@ describe('function utils', function() {
         expect(fn).toHaveBeenCalledTimes(11);
     });
 
-    it.skip('ease (canceled)', async function() {
-        const fn = spy();
+    it('ease (canceled)', async () => {
+        const fn = jest.fn();
 
         const timeouts = ease(easeInOutExpo, fn, 50);
 
@@ -35,6 +37,33 @@ describe('function utils', function() {
 
         await timeout(100);
 
-        expect(fn).not.to.have.been.called;
+        expect(fn).not.toHaveBeenCalled();
+    });
+
+    it('rafEase', async () => {
+        const fn = jest.fn();
+        const loop = rafEase(fn, 100, easeInOutExpo);
+
+        expect(fn).toHaveBeenCalledWith(0);
+
+        await timeout(200);
+
+        expect(fn).toHaveBeenCalledWith(1);
+    });
+
+    it('rafEase (cancaled)', async () => {
+        const fn = jest.fn();
+        const loop = rafEase(fn, 500, easeInOutExpo);
+
+        expect(fn).toHaveBeenCalledWith(0);
+
+        await timeout(200);
+
+        loop.cancel();
+        fn.mockClear();
+
+        await timeout(200);
+
+        expect(fn).not.toHaveBeenCalled();
     });
 });

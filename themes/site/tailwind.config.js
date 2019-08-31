@@ -70,6 +70,11 @@ const scale = [
     192, // 48rem
 ];
 
+const relativeScale = {
+    'half': '50%',
+    'full': '100%',
+};
+
 const remScale = scale.reduce((obj, value) => {
     const rem = value / 4;
 
@@ -149,6 +154,26 @@ module.exports = {
             '6xl': '100rem',
             full: '100%',
         },
+        minHeight: {
+            ...relativeScale,
+            ...remScale,
+            ...utilScale,
+        },
+        minWidth: {
+            '3xs': '12rem',
+            '2xs': '16rem',
+            xs: '20rem',
+            sm: '24rem',
+            md: '28rem',
+            lg: '32rem',
+            xl: '36rem',
+            '2xl': '42rem',
+            '3xl': '48rem',
+            '4xl': '56rem',
+            '5xl': '64rem',
+            '6xl': '100rem',
+            full: '100%',
+        },
         screens: {
             xs: '480px',
             sm: '576px',
@@ -157,6 +182,7 @@ module.exports = {
             xl: '1200px',
         },
         spacing: {
+            ...relativeScale,
             ...remScale,
             ...utilScale,
         }

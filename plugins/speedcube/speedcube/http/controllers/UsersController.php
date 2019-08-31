@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use RainLab\User\Models\User;
 use Speedcube\Speedcube\Classes\ApiController;
 use Speedcube\Speedcube\Models\Solve;
+use Vuetober\RainLabUserApi\Classes\AccountManager;
 
 class UsersController extends ApiController
 {
@@ -95,6 +96,20 @@ class UsersController extends ApiController
         catch (Exception $err) {
             return $this->failed($err);
         }
+    }
+
+    /**
+     * Get the authenticated user.
+     * 
+     * @return Response
+     */
+    public function user()
+    {
+        $user = (new AccountManager)->getAuthenticatedUser();
+
+        return $this->success([
+            'user' => $user,
+        ]);
     }
 
     /**

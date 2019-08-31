@@ -1,7 +1,7 @@
-<template functional>
+<template>
     <div>
-        <h2 class="font-thin leading-normal mb-8 text-2xl text-grey-8">
-            100% Open Source
+        <h2 class="leading-normal mb-8 text-2xl text-grey-8">
+            We're entirely open source
         </h2>
         <p class="leading-loose text-grey-7">
             If you know your way around <a href="https://laravel.com" target="_blank">Laravel</a>

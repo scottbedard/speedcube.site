@@ -1,6 +1,6 @@
 <template>
     <div
-        class="fixed bottom-0 max-w-sm p-6 right-0"
+        class="fixed bottom-0 max-w-sm p-6 right-0 z-30"
         @mouseenter="pause"
         @mouseleave="resume">
         <transition-group

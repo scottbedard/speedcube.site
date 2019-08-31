@@ -88,7 +88,7 @@ jobs:
       - run:
           name: Test frontend
           command: |
-            (cd ./themes/site && yarn test:unit --coverage)
+            (cd ./themes/site && yarn test:unit --maxWorkers=2 --coverage)
       - run:
           name: Codecov
           command: |

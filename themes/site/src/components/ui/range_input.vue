@@ -1,46 +1,68 @@
+<style lang="scss" scoped>
+    // https://github.com/darlanrod/input-range-scss
+    // $thumb-border-color: #eceff1;
+    $thumb-border-width: 0px;
+    $thumb-color: #186FAF;
+    $thumb-height: 16px;
+    $thumb-radius: 8px;
+    $thumb-shadow-blur: 0px;
+    // $thumb-shadow-color: rgba(0, 0, 0, .2);
+    $thumb-shadow-size: 0px;
+    $thumb-width: 16px;
+    // $track-border-color: #cfd8dc;
+    $track-border-width: 0px;
+    $track-color: #52606D;
+    $track-height: 4px;
+    $track-radius: 2px;
+    $track-shadow-blur: 0px;
+    // $track-shadow-color: rgba(0, 0, 0, .2);
+    $track-shadow-size: 0px;
+    // $track-width: 100%;
+
+    @import '../../../node_modules/input-range-scss/_inputrange.scss';
+
+    @mixin thumb {
+        cursor: grab;
+
+        &:active {
+            cursor: grabbing;
+        }
+    }
+
+    input[type=range] {
+        &::-moz-range-thumb {
+            @include thumb;
+        }
+
+        &::-ms-thumb {
+            @include thumb;
+        }
+
+        &::-webkit-slider-thumb {
+            @include thumb;
+        }
+    }
+</style>
+
 <template>
-    <vue-slider
-        v-model="val"
-        :dot-size="16"
-        :height="2"
+    <input
+        v-model.number="val"
+        type="range"
         :max="max"
         :min="min"
-        :process-style="{
-            backgroundColor: '#2680C2',
-        }"
-        :rail-style="{
-            backgroundColor: '#616E7C',
-            border: 'none',
-            boxShadow: 'none',
-        }"
-        :tooltip="'none'">
-
-        <!-- dot -->
-        <template slot="dot">
-            <div
-                class="bg-grey-5 cursor-ew-resize h-full rounded-full trans-bg w-full hover:bg-grey-4"
-            />
-        </template>
-    </vue-slider>
+        :step="step"
+    />
 </template>
 
 <script>
-// see slider docs at:
-// https://github.com/NightCatSama/vue-slider-component
-
-import vueSlider from 'vue-slider-component';
-
 export default {
-    components: {
-        vueSlider,
-    },
     computed: {
         val: {
             get() {
                 return this.value;
             },
-            set(value) {
-                this.$emit('input', value);
+            set(val) {
+                this.$emit('input', val);
             },
         },
     },
@@ -53,6 +75,9 @@ export default {
             type: Number,
         },
         min: {
+            type: Number,
+        },
+        step: {
             type: Number,
         },
         value: {

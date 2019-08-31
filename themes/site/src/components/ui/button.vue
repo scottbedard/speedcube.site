@@ -1,6 +1,8 @@
 <style lang="scss" scoped>
     a,
     button {
+        @apply no-underline;
+
         &:active {
             transform: translateY(1px);
         }
@@ -17,31 +19,32 @@ import { bindAll } from 'spyfu-vue-functional';
 export default {
     render(h, context) {
         const bindings = bindAll(context);
-        const { danger, icon, ghost, href, primary, to, type, uppercase } = context.props;
+        const { danger, disabled, icon, ghost, href, primary, to, type } = context.props;
+
+        //
+        // disabled
+        //
+        if (disabled) {
+            bindings.class.push('cursor-default');
+        } else {
+            bindings.class.push('cursor-pointer');
+        }
 
         //
         // theme
         //
-        if (primary) {
-            bindings.class.push('v-button-primary');
-
-            if (ghost) {
-                bindings.class.push('border-2 border-primary-5 text-primary-10 hover:border-primary-6 hover:text-grey-10');
-            } else {
-                bindings.class.push('bg-primary-5 text-primary-10 hover:bg-primary-6 hover:text-grey-10');
-            }
+        if (ghost) {
+            // ghost
+            bindings.class.push(`text-grey-7 ${disabled ? '' : 'hover:text-grey-8'}`);
+        } else if (primary) {
+            // primary
+            bindings.class.push(`bg-primary-5 text-primary-10 ${disabled ? '' : 'hover:bg-primary-6 hover:text-grey-10'}`);
         } else if (danger) {
-            bindings.class.push('v-button-danger');
-
-            if (ghost) {
-                bindings.class.push('text-grey-6 hover:text-danger-7');
-            } else {
-                bindings.class.push('bg-danger-6 text-danger-10 hover:bg-danger-7 hover:text-grey-10');
-            }
-        } else if (ghost) {
-            bindings.class.push('text-grey-6 hover:text-grey-8');
+            // danger
+            bindings.class.push(`v-button-danger bg-danger-6 text-danger-10 ${disabled ? '' : 'hover:bg-danger-7 hover:text-grey-10'}`);
         } else {
-            bindings.class.push('bg-grey-5 text-grey-10 hover:bg-grey-7 hover:text-grey-10');
+            // default
+            bindings.class.push(`bg-grey-5 text-grey-9 ${disabled ? '' : 'hover:bg-grey-6 hover:text-grey-10'}`);
         }
 
         //
@@ -64,26 +67,24 @@ export default {
             Tag = 'a';
         }
 
-        //
-        // uppercase
-        //
-        if (uppercase) {
-            bindings.class.push('uppercase');
-        }
-
         return <Tag
-            class="cursor-pointer font-bold inline-flex items-center justify-center leading-normal rounded-full text-center text-sm tracking-wide trans-bg trans-border trans-color focus:outline-none"
+            class="v-button font-bold inline-flex items-center justify-center leading-normal rounded-full text-center text-sm tracking-widest trans-bg trans-border trans-color"
+            disabled={disabled}
             href={href}
             to={to}
             type={type}
             {...bindings}>
-            {icon && <i class={['fa mr-3 text-lg', icon]} />}
+            {icon && <i class={['fa mr-4 text-lg', icon]} />}
             {context.slots().default}
         </Tag>;
     },
     functional: true,
     props: {
         danger: {
+            default: false,
+            type: Boolean,
+        },
+        disabled: {
             default: false,
             type: Boolean,
         },
@@ -106,10 +107,6 @@ export default {
         },
         type: {
             type: String,
-        },
-        uppercase: {
-            default: true,
-            type: Boolean,
         },
     },
 };

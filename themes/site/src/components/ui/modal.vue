@@ -1,11 +1,24 @@
+<style lang="scss" scoped>
+    .v-modal {
+        @apply text-grey-7;
+    }
+</style>
+
 <template>
     <portal to="modal">
         <div
-            class="m-auto outline-none"
+            class="v-modal mb-12 outline-none w-full"
             role="dialog"
             tabindex="-1"
             :aria-labelledby="titleId"
             :aria-describedby="descriptionId"
+            :class="{
+                'max-w-sm': size === 'sm',
+                'max-w-md': size === 'md',
+                'max-w-lg': size === 'lg',
+                'max-w-xl': size === 'xl',
+                'max-w-2xl': size === '2xl',
+            }"
             :data-modal="uid">
 
             <h2
@@ -30,7 +43,7 @@
 
 <script>
 import focusTrap from 'focus-trap';
-import noScroll from 'no-scroll';
+import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock';
 import { uniqueId } from 'lodash-es';
 
 export default {
@@ -50,33 +63,31 @@ export default {
     },
     mounted() {
         // disable background scrolling
-        noScroll.on();
+        disableBodyScroll(this.$el);
 
         // portal components take a tick to update
         this.$nextTick(() => {
             // trap focus inside of the modal and set initial focus
             const el = this.$root.$el.querySelector(`[data-modal="${this.uid}"]`);
 
-            // el.scrollTop(0);
+            if (el) {
+                const trap = focusTrap(el, {
+                    clickOutsideDeactivates: true,
+                    escapeDeactivates: true,
+                    fallbackFocus: el,
+                    onDeactivate: this.close,
+                });
 
-            const trap = focusTrap(el, {
-                clickOutsideDeactivates: true,
-                escapeDeactivates: true,
-                fallbackFocus: el,
-                onDeactivate: this.close,
-            });
+                trap.activate({
+                    initialFocus: 'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),[tabindex="0"]',
+                });
 
-            trap.activate({
-                initialFocus: 'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),[tabindex="0"]',
-            });
-
-            this.$once('hook:destroyed', () => {
                 // kill the trap and restore focus to where it previous was
-                trap.deactivate({ returnFocus: true });
+                this.$once('hook:destroyed', () => trap.deactivate({ returnFocus: true }));
+            }
 
-                // restore background scrolling
-                noScroll.off();
-            });
+            // restore background scrolling
+            this.$once('hook:destroyed', clearAllBodyScrollLocks);
         });
     },
     computed: {
@@ -99,6 +110,11 @@ export default {
         padded: {
             default: false,
             type: Boolean,
+        },
+        size: {
+            default: '2xl',
+            type: String,
+            validator: size => ['auto', 'sm', 'md', 'lg', 'xl', '2xl'].includes(size),
         },
         title: {
             required: true,

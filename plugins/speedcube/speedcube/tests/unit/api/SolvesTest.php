@@ -77,7 +77,7 @@ class SolvesApiTest extends PluginTestCase
         $this->assertEquals(1, Solve::count());
         $this->assertEquals($user->id, $solve->user_id);
         $this->assertEquals(4000, $solve->time);
-        $this->assertEquals(1, count($data['last5']));
+        $this->assertEquals(1, count($data['recentSolves']));
         $this->assertNull($data['recordAverage']);
 
         // adding 5 more solves should return a record average

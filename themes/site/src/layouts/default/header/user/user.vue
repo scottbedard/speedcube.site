@@ -2,7 +2,7 @@
     <div class="relative" @click.stop>
         <!-- avatar -->
         <a
-            class="flex items-center text-grey-6 hover:text-grey-6"
+            class="flex items-center no-underline text-grey-6 hover:text-grey-6"
             href="#"
             @click.prevent="expand">
             <v-avatar :user="user" />

@@ -1,65 +1,74 @@
 <template>
     <div>
-        <!-- form -->
-        <form
-            class="max-w-3xl mx-auto w-full"
-            @submit.prevent="onSubmit">
+        <form @submit.prevent="updateConfig">
+            <!-- <pre class="text-xs">{{ config }}</pre> -->
 
-            <!-- options -->
-            <v-grid class="justify-center" padded>
+            <!-- fields -->
+            <v-grid padded>
                 <v-grid-cell
-                    v-for="(option, index) in options"
-                    :xs="grid(option, 'xs')"
-                    :sm="grid(option, 'sm')"
-                    :md="grid(option, 'md')"
-                    :lg="grid(option, 'lg')"
-                    :xl="grid(option, 'xl')"
-                    :key="index">
-                    <div
-                        v-if="option.label"
-                        v-text="option.label"
-                        class="mb-2 text-grey-6 text-sm tracking-wide"
+                    v-bind="field.cell"
+                    v-for="field in fields"
+                    :key="field.id">
+                    <label
+                        v-if="field.label"
+                        v-text="field.label"
+                        class="block text-grey-7 tracking-wider"
                     />
-
-                    <!-- colors -->
-                    <div
-                        v-if="option.type === 'colors'"
-                        class="flex flex-wrap justify-center">
-                        <div
-                            v-for="(x, index) in arrayOfLength(option.faces)"
-                            :key="index">
-                            <div class="pt-2 px-2">
-                                <v-color-input v-model="currentOptions[option.key][index]" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- number ranges -->
-                    <v-range-input
-                        v-else-if="option.type === 'range'"
-                        v-model="currentOptions[option.key]"
-                        :max="option.max"
-                        :min="option.min"
+                    <component
+                        v-bind="field.props"
+                        v-model="config[field.id]"
+                        :disabled="loading"
+                        :is="field.component"
                     />
                 </v-grid-cell>
             </v-grid>
 
-            <!-- authentication warning -->
-            <div
-                v-if="!isAuthenticated"
-                class="leading-normal mt-8 text-grey-6 text-sm">
-                You aren't signed in, these settings won't be saved.
-            </div>
-
-            <!-- actions -->
-            <div class="mt-4 flex items-center justify-center">
-                <div class="p-4">
-                    <v-button danger ghost @click="close">Cancel</v-button>
-                </div>
-                <div class="p-4">
-                    <v-button primary type="submit">
-                        {{ isAuthenticated ? 'Save' : 'Apply' }}
+            <div class="mt-8">
+                <!-- user actions -->
+                <div
+                    v-if="isAuthenticated"
+                    class="flex items-center justify-end"
+                    key="user">
+                    <v-button
+                        class="mr-6"
+                        ghost
+                        title="Click to discard changes"
+                        :disabled="loading"
+                        :to="solveRoute">
+                        Cancel
                     </v-button>
+                    <v-button
+                        primary
+                        title="Click to save changes"
+                        type="submit"
+                        :disabled="loading">
+                        Save
+                    </v-button>
+                </div>
+
+                <!-- guest actions -->
+                <div
+                    v-else
+                    class="flex flex-wrap justify-between items-center text-center lg:text-left"
+                    key="guest">
+                    <p class="flex-1 pb-8 text-grey-7 text-sm tracking-wider w-full">
+                        Please sign in or create an account to save puzzle settings.
+                    </p>
+                    <div class="pb-8 w-full lg:w-auto">
+                        <v-button
+                            class="mb-4 mx-6 xs:mx-auto xs:mr-6 lg:mb-0"
+                            ghost
+                            title="Click to discard changes"
+                            :to="{ name: 'signin' }">
+                            Sign In
+                        </v-button>
+                        <v-button
+                            class="mb-4 lg:mb-0"
+                            primary
+                            :to="{ name: 'create-account' }">
+                            Create Account
+                        </v-button>
+                    </div>
                 </div>
             </div>
         </form>
@@ -67,79 +76,107 @@
 </template>
 
 <script>
-import { get } from 'lodash-es';
-import { mapGetters } from 'vuex';
+import { cloneDeep, get } from 'lodash-es';
+import { mapGetters, mapState } from 'vuex';
+import options from './options';
+import { puzzles } from '@/app/constants';
 
 export default {
     created() {
-        this.initialize();
+        this.cloneConfig();
     },
     data() {
         return {
-            currentOptions: {},
+            config: {},
+            loading: false,
         };
+    },
+    destroyed() {
+        this.$emit('clear');
     },
     computed: {
         ...mapGetters('user', [
             'isAuthenticated',
         ]),
-        arrayOfLength() {
-            return (n, initialValue) => new Array(n).fill(initialValue);
+        ...mapState('user', [
+            'user',
+        ]),
+        configs() {
+            // the user's config models
+            return get(this.user, 'configs', []);
         },
-        grid() {
-            return (obj, breakpoint) => get(obj, `grid.${breakpoint}`);
+        defaultConfig() {
+            // default config for this puzzle id
+            return get(puzzles, `${this.puzzle}.defaultConfig`, {});
+        },
+        fields() {
+            // get config fields for this puzzle id
+            return get(options, this.puzzle, []);
+        },
+        puzzle() {
+            // parse and normalize the puzzle id from current route
+            return get(this.$route, 'params.puzzle', 'unknown').trim().toLowerCase();
+        },
+        solveRoute() {
+            return {
+                name: 'solve',
+                params: {
+                    puzzle: this.puzzle,
+                },
+            };
         },
     },
     methods: {
-        close() {
-            this.$emit('close');
-        },
-        initialize() {
-            // set the initial values on our currentOptions object
-            this.options.forEach((option) => {
-                this.$set(this.currentOptions, option.key, option.default);
-            });
+        cloneConfig() {
+            // create a clone of the default config, or the user's
+            // custom config if they have already created one.
+            let config = { ...this.defaultConfig, ...this.initialConfig };
 
-            // set the current config using a raw javascript object. we need
-            // to do this in order to prevent mutatino errors, since the source
-            // object is one that technically lives in the vuex user store.
-            const rawConfig = JSON.parse(JSON.stringify(this.config));
-
-            Object.keys(rawConfig).forEach((key) => {
-                if (typeof rawConfig[key] !== 'undefined') {
-                    this.currentOptions[key] = rawConfig[key];
-                }
-            });
-        },
-        onSubmit() {
-            // for authenticated users save the config
             if (this.isAuthenticated) {
-                this.$store.dispatch('user/saveConfig', {
-                    puzzle: this.puzzle,
-                    config: JSON.stringify(this.currentOptions),
-                }).then(() => {
-                    // success
-                    this.close();
-                });
+                const model = this.configs.find(cfg => cfg.puzzle === this.puzzle);
+
+                if (model) {
+                    /* eslint-disable-next-line no-empty */
+                    try { config = JSON.parse(model.config); } catch (e) {}
+                }
             }
 
-            // and for guests just tell the parent to use the config
-            else {
-                this.$emit('guest-config', this.config);
-                this.close();
+            this.config = cloneDeep(config);
+        },
+        updateConfig() {
+            // save the user's config if they are authenticated
+            if (this.isAuthenticated) {
+                this.loading = true;
+
+                this.$store.dispatch('user/saveConfig', {
+                    config: JSON.stringify(this.config),
+                    puzzle: this.puzzle,
+                }).then(() => {
+                    // success
+                    this.$router.push(this.solveRoute);
+
+                    this.$alert('Puzzle configuration saved');
+                }).finally(() => {
+                    // complete
+                    this.loading = false;
+                });
+            } else {
+                this.$emit('apply', this.config);
+
+                this.$router.push(this.solveRoute);
+
+                this.$alert('Configuration applied, sign in to save these settings');
             }
         },
     },
     props: [
-        'config',
-        'options',
-        'puzzle',
+        'initialConfig',
     ],
     watch: {
-        currentOptions: {
+        config: {
             deep: true,
-            handler(currentOptions) {
-                this.$emit('pending', currentOptions);
+            handler() {
+                this.$emit('set', this.config);
             },
         },
     },

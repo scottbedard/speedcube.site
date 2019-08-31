@@ -52,9 +52,9 @@
 </template>
 
 <script>
+import { get, uniqueId } from 'lodash-es';
 import { puzzles } from '@/app/constants';
 import { getPersonalRecords } from '@/app/repositories/personal_records';
-import { get, uniqueId } from 'lodash-es';
 import recordsTableComponent from './records_table/records_table.vue';
 
 export default {

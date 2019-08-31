@@ -1,4 +1,24 @@
-import { clone, mean } from 'lodash-es';
+import { clone, forOwn, mean } from 'lodash-es';
+
+/**
+ * Apply state to a cube puzzle.
+ *
+ * @param {Cube}    cube
+ * @param {String}  stateJson
+ */
+export function applyCubeState(cube, stateJson) {
+    try {
+        const state = JSON.parse(stateJson);
+
+        forOwn(cube.state, (value, key) => {
+            value.forEach((sticker, index) => {
+                sticker.value = state[key][index];
+            });
+        });
+    } catch (e) {
+        console.warn('Failed to apply cube state, invalid json.', stateJson);
+    }
+}
 
 /**
  * Helper to test if a puzzle is a cube.
@@ -22,7 +42,7 @@ export function isCubeTurn(turn) {
 }
 
 /**
- * Calculate the average solve time in milliseconcds. This
+ * Calculate the average solve time in milliseconds. This
  * function will return -1 if there are not enough solves
  * to determine a valid average.
  *

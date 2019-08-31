@@ -1,4 +1,5 @@
 import globalComponents from '@/components/global';
+import { isTesting, isProduction } from './constants';
 
 //
 // directives
@@ -23,8 +24,8 @@ import vuexPlugin from './plugins/vuex';
 
 
 export default function (Vue) {
-    Vue.config.productionTip = false;
-    Vue.config.devtools = false;
+    Vue.config.productionTip = isProduction;
+    Vue.config.devtools = !isTesting && !isProduction;
 
     // directives
     autofocusDirective(Vue);

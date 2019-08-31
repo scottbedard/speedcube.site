@@ -1,36 +1,82 @@
+/* eslint-disable quotes */
+
 // the current year
 export const currentYear = (new Date()).getFullYear();
 
+// default cube config
+export const defaultCubeConfig = {
+    cameraAngle: 50,
+    cameraDistance: 200,
+    colors: [
+        '#FFEE5D', // U
+        '#EFAA18', // L
+        '#2589E2', // F
+        '#EC6157', // R
+        '#5CBD60', // B
+        '#F0F0F0', // D
+    ],
+    innerBrightness: 0.9,
+    stickerElevation: 0.2,
+    stickerRadius: 0.1,
+    stickerSpacing: 0.2,
+    turnDuration: 65,
+};
+
 // default cube keyboard config
 export const defaultCubeKeyboardConfig = {
-    modifiers: {
-        // ...
-    },
     turns: {
-        J: 'U',
-        F: 'U-',
-        D: 'L',
-        E: 'L-',
-        H: 'F',
-        G: 'F-',
-        I: 'R',
-        K: 'R-',
-        W: 'B',
-        O: 'B-',
-        S: 'D',
-        L: 'D-',
-        A: 'Y-',
-        ';': 'Y',
-        R: 'X',
-        U: 'X',
-        T: 'X',
-        Y: 'X',
-        V: 'X-',
-        C: 'X-',
-        N: 'X-',
-        M: 'X-',
-        Q: 'Z-',
-        P: 'Z',
+        // face turns
+        j: `U`,
+        f: `U'`,
+        d: `L`,
+        e: `L'`,
+        h: `F`,
+        g: `F'`,
+        i: `R`,
+        k: `R'`,
+        w: `B`,
+        o: `B'`,
+        s: `D`,
+        l: `D'`,
+
+        // wide turns
+        J: `Uw`,
+        F: `Uw'`,
+        D: `Lw`,
+        E: `Lw'`,
+        H: `Fw`,
+        G: `Fw'`,
+        I: `Rw`,
+        K: `Rw'`,
+        W: `Bw`,
+        O: `Bw'`,
+        S: `Dw`,
+        L: `Dw'`,
+
+        // rotations
+        a: `Y'`,
+        A: `Y'`,
+        ';': `Y`,
+        R: `X`,
+        r: `X`,
+        U: `X`,
+        u: `X`,
+        T: `X`,
+        t: `X`,
+        Y: `X`,
+        y: `X`,
+        V: `X'`,
+        v: `X'`,
+        C: `X'`,
+        c: `X'`,
+        N: `X'`,
+        n: `X'`,
+        M: `X'`,
+        m: `X'`,
+        Q: `Z'`,
+        q: `Z'`,
+        P: `Z`,
+        p: `Z`,
     },
 };
 
@@ -60,6 +106,7 @@ export const easeInOutCirc = [0.785, 0.135, 0.15, 0.86];
 export const easeInBack = [0.6, -0.28, 0.735, 0.045];
 export const easeOutBack = [0.175, 0.885, 0.32, 1.275];
 export const easeInOutBack = [0.68, -0.55, 0.265, 1.55];
+export const linear = [0, 0, 1, 1];
 
 // detect firefox
 export const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
@@ -68,10 +115,13 @@ export const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > 
 export const isProduction = process.env.NODE_ENV === 'production';
 
 // determine if we're un a unit testing environment
-export const isTesting = process.env.NODE_ENV === 'testing';
+export const isTesting = process.env.NODE_ENV === 'test';
 
 // @todo: determine if we're using a touch device
 export const isTouch = false;
+
+// color to use when masking stickers
+export const maskColor = '#7B8794';
 
 // key codes
 // export const escapeKeyCode = ...;
@@ -83,25 +133,86 @@ export const spacebarKeyCode = 32;
 export const puzzles = {
     '2x2': {
         color: '#4098D7',
+        defaultConfig: defaultCubeConfig,
+        defaultKeyboardConfig: {
+            turns: {
+                j: 'U',
+                f: 'U\'',
+                d: 'L',
+                e: 'L\'',
+                h: 'F',
+                g: 'F\'',
+                i: 'R',
+                k: 'R\'',
+                w: 'B',
+                o: 'B\'',
+                s: 'D',
+                l: 'D\'',
+                J: 'U',
+                F: 'U\'',
+                E: 'L\'',
+                D: 'L',
+                G: 'F\'',
+                H: 'F',
+                I: 'R',
+                K: 'R\'',
+                O: 'B\'',
+                W: 'B',
+                L: 'D\'',
+                S: 'D',
+                a: 'Y\'',
+                A: 'Y\'',
+                ';': 'Y',
+                R: 'X',
+                r: 'X',
+                U: 'X',
+                u: 'X',
+                T: 'X',
+                t: 'X',
+                Y: 'X',
+                y: 'X',
+                V: 'X\'',
+                v: 'X\'',
+                C: 'X\'',
+                c: 'X\'',
+                N: 'X\'',
+                n: 'X\'',
+                M: 'X\'',
+                m: 'X\'',
+                Q: 'Z\'',
+                q: 'Z\'',
+                P: 'Z',
+                p: 'Z',
+            },
+        },
         slug: '2x2',
         title: '2x2',
     },
     '3x3': {
         color: '#f5d16f',
+        defaultConfig: defaultCubeConfig,
+        defaultKeyboardConfig: defaultCubeKeyboardConfig,
         slug: '3x3',
         title: '3x3',
     },
     '4x4': {
         color: '#4CAF50',
+        defaultConfig: defaultCubeConfig,
+        defaultKeyboardConfig: defaultCubeKeyboardConfig,
         slug: '4x4',
         title: '4x4',
     },
     '5x5': {
         color: '#f44336',
+        defaultConfig: defaultCubeConfig,
+        defaultKeyboardConfig: defaultCubeKeyboardConfig,
         slug: '5x5',
         title: '5x5',
     },
 };
+
+// an array of supported puzzle types
+export const puzzleTypes = Object.keys(puzzles);
 
 // our common string format for date values
 // tip: this format is useful because it's human readable and values

@@ -164,11 +164,11 @@ global.stubRequests = function (requests = {}) {
 
             when(axios[method])
                 .calledWith(endpoint)
-                .mockReturnValue(
-                    typeof response === 'boolean'
+                .mockImplementation(() => {
+                    return typeof response === 'boolean'
                         ? (response ? Promise.resolve({ data: {} }) : Promise.reject())
-                        : Promise.resolve({ data: response }),
-                );
+                        : Promise.resolve({ data: response });
+                });
         });
     });
 };

@@ -5,13 +5,11 @@
 }
 
 a {
-    border: 0;
-    color: theme('colors.grey-7');
-    text-decoration: none;
-    transition: color 150ms ease-in-out;
+    transition: color 150ms ease;
+    @apply underline;
 
     &:hover {
-        color: theme('colors.grey-8');
+        @apply text-grey-8;
     }
 }
 
@@ -37,6 +35,14 @@ p {
 }
 
 ::selection {
-    background-color: config('colors.primary-8'); /* WebKit/Blink Browsers */
-    color: config('colors.grey-9');
+    // background-color: config('colors.primary-8'); /* WebKit/Blink Browsers */
+    // color: config('colors.grey-9');
+}
+
+::selection {
+    color: #fff; /* WebKit/Blink Browsers */
+}
+
+::-moz-selection {
+    color: #fff; /* Gecko Browsers */
 }

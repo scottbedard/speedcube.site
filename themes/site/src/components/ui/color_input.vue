@@ -1,9 +1,18 @@
 <template>
-    <div class="inline-block relative" @click.stop>
+    <div
+        class="inline-block relative"
+        :class="{
+            'cursor-not-allowed': disabled,
+        }"
+        @click.stop>
         <!-- display -->
         <a
             class="block h-8 w-8 rounded-full"
             href="#"
+            title="Click to change"
+            :class="{
+                'cursor-not-allowed': disabled,
+            }"
             :style="{
                 backgroundColor: value,
             }"
@@ -39,6 +48,7 @@ import { bindExternalEvent } from 'spyfu-vue-utils';
 export default {
     created() {
         bindExternalEvent(this, document.body, 'click', this.collapse);
+        bindExternalEvent(this, document.body, 'keyup', this.onBodyKeyup);
     },
     data() {
         return {
@@ -54,11 +64,21 @@ export default {
             this.expanded = false;
         },
         expand() {
-            this.cachedColor = this.value;
-            this.expanded = true;
+            if (!this.disabled) {
+                this.cachedColor = this.value;
+                this.expanded = true;
+            }
+        },
+        onBodyKeyup(e) {
+            if (this.expanded && e.key === 'Escape') {
+                this.expanded = false;
+                this.$emit('input', this.cachedColor);
+            }
         },
         onInput(color) {
-            this.$emit('input', color.hex);
+            if (!this.disabled) {
+                this.$emit('input', color.hex);
+            }
         },
     },
     model: {
@@ -66,6 +86,10 @@ export default {
         prop: 'value',
     },
     props: {
+        disabled: {
+            default: false,
+            type: Boolean,
+        },
         value: {
             type: String,
         },
