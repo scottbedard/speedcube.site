@@ -33,6 +33,7 @@ import { BackSide, FrontSide, MeshLambertMaterial } from 'three';
 import objComponent from '@/components/three/obj/obj.vue';
 import cubeStickersComponent from './cube_stickers/cube_stickers.vue';
 import { getStickersEffectedByTurn } from './utils';
+import { applyCubeState } from '@/app/utils/puzzle';
 import { roundedSquare } from '@/components/three/geometries';
 import { defaultCubeConfig, maskColor } from '@/app/constants';
 
@@ -145,7 +146,18 @@ export default {
         createDefaultModel() {
             // create a model if none was provided. this usually means
             // the puzzle is being used for purely display purposes.
-            return new Cube(parseInt(this.type, 10), { useObjects: true });
+            const model = new Cube(parseInt(this.type, 10), { useObjects: true });
+
+            // apply the initial state if one was provided
+            const initialState = typeof this.initialState === 'string'
+                ? JSON.parse(this.initialState)
+                : this.initialState;
+
+            if (initialState) {
+                applyCubeState(model, this.initialState);
+            }
+
+            return model;
         },
         disposeGeometry() {
             // dispose of our geometry
@@ -193,6 +205,9 @@ export default {
         },
         currentTurn: {
             type: String,
+        },
+        initialState: {
+            type: [Object, String],
         },
         masked: {
             default: false,

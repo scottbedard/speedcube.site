@@ -23,6 +23,7 @@
             <v-cube
                 :config="normalizedConfig"
                 :current-turn="currentTurn"
+                :initial-state="initialState"
                 :masked="masked"
                 :model="model"
                 :turn-progress="turnProgress"
@@ -54,16 +55,21 @@ export default {
             return ['2x2', '3x3', '4x4', '5x5'].includes(this.type);
         },
         normalizedConfig() {
-            return { ...defaultConfig, ...this.config };
+            const config = typeof this.config === 'string' ? JSON.parse(this.config) : config;
+
+            return { ...defaultConfig, ...config };
         },
     },
     props: {
         config: {
             default: () => ({}),
-            type: Object,
+            type: [Object, String],
         },
         currentTurn: {
             type: String,
+        },
+        initialState: {
+            type: [Object, String],
         },
         masked: {
             default: false,

@@ -36,12 +36,9 @@ class RecordsController extends ApiController
                     'speedcube_speedcube_personal_records.user_id'
                 )
                 ->with([
-                    'solve' => function ($solve) {
-                        $solve->select('created_at', 'id', 'moves', 'time');
-                    },
-                    'user' => function ($user) {
-                        $user->select('id', 'name', 'username');
-                    },
+                    'solve:average_speed,created_at,config,id,moves,scramble_id,time',
+                    'solve.scramble:id,puzzle,scrambled_state',
+                    'user:id,username',
                 ])
                 ->orderBy('speedcube_speedcube_solves.time', 'asc')
                 ->skip(($page - 1) * $pageSize)
