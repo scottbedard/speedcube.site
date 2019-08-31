@@ -46,7 +46,7 @@
                         class="flex flex-wrap items-center justify-center no-underline"
                         title="Click to watch replay"
                         :class="{
-                            'border-t border-grey-3 mt-8 pt-8': index > 0,   
+                            'border-t border-grey-3 mt-8 pt-8': index > 0,
                         }"
                         :key="record.id"
                         :to="{ name: 'replay', params: { id: record.solve.id }}">
