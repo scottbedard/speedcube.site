@@ -35,7 +35,7 @@
                         <div>
                             {{ 'turn' | pluralize(solve.moves, true) }} at {{ turnsPerSec }} {{ turnsPerSec === 1 ? 'turn' : 'turns' }} per second
                         </div>
-                        <time class="font-bold text-grey-5 text-xs tracking-widest" :datetime="solveDate">{{ solve.createdAt | datestamp }}</time>
+                        <time class="font-bold text-xs tracking-widest" :datetime="solveDate">{{ solve.createdAt | datestamp }}</time>
                     </div>
 
                     <!-- replay -->
@@ -55,7 +55,7 @@
                             </div>
                         </div>
 
-                        <div class="text-center">
+                        <div class="flex h-16 items-center justify-center text-center">
                             <v-fade-transition>
                                 <div v-if="progress > 0 || playing">
                                     <v-fade-transition>
@@ -72,37 +72,34 @@
                                             key="timer"
                                         />
                                     </v-fade-transition>
-                                    <v-fade-transition>
-                                        <div v-if="!playing" class="mt-8" key="idle">
-                                            <v-button primary @click="play">
-                                                Watch Again
-                                            </v-button>
-                                            <aside class="mt-16">
-                                                <v-solve-details
-                                                    :inspection="readableInspection"
-                                                    :scramble="solve.scramble.scramble"
-                                                    :solution="readableSolution"
-                                                />
-                                            </aside>
-                                        </div>
-                                    </v-fade-transition>
                                 </div>
                                 
                                 <div v-else key="idle">
                                     <v-button primary @click="play">
                                         Watch Replay
                                     </v-button>
-                                    <aside class="mt-16">
-                                        <v-solve-details
-                                            :inspection="readableInspection"
-                                            :scramble="solve.scramble.scramble"
-                                            :solution="readableSolution"
-                                        />
-                                    </aside>
                                 </div>
                             </v-fade-transition>
                         </div>
                     </v-replay>
+
+
+                    <div class="max-w-sm mt-12 mx-auto" @mousedown="stop">
+                        <v-range-input
+                            v-model="progress"
+                            title="Solve progress"
+                            :min="0"
+                            :max="1"
+                            :step="0.00000000001"
+                        />
+                    </div>
+                    <aside class="mt-12">
+                        <v-solve-details
+                            :inspection="readableInspection"
+                            :scramble="solve.scramble.scramble"
+                            :solution="readableSolution"
+                        />
+                    </aside>
                 </div>
             </v-fade-transition>
         </v-margin>
@@ -142,6 +139,11 @@ export default {
 
             // progress of the replay, 0 to 1
             progress: 0,
+
+            // requestAnimationFrame easing loop
+            rafEase: {
+                cancel: noop,
+            },
 
             // the solve being replayed
             solve: null,
@@ -278,14 +280,18 @@ export default {
 
                 this.playing = true;
 
-                componentRafEase(this, (progress) => {
+                this.rafEase = componentRafEase(this, (progress) => {
                     this.progress = progress;
 
                     if (progress === 1) {
-                        this.playing = false;
+                        this.stop();
                     }
                 }, this.totalSolveTime, linear);
             }
+        },
+        stop() {
+            this.playing = false;
+            this.rafEase.cancel();
         },
     },
 };
