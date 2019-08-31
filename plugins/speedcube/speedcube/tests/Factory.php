@@ -185,8 +185,8 @@ class Factory
             'created_at' => Carbon::now()->subDays(rand(0, 365)),
             'email' => $email,
             'name' => $faker->firstName(rand(0, 1)) . ' ' . $faker->lastName,
-            'password' => 'foobar',
-            'password_confirmation' => 'foobar',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
             'username' => $username,
         ];
     }
