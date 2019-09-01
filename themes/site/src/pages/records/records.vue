@@ -9,7 +9,7 @@
                 These are the fastest solves ever performed on the site.
             </div>
 
-            <div class="mb-8 text-center">
+            <div class="leading-normal mb-8 text-center tracking-widest">
                 <router-link
                     v-for="puzzle in puzzles"
                     class="inline-block mx-4 text-base"
@@ -40,17 +40,17 @@
                 </div>
 
                 <!-- records -->
-                <div v-else class="max-w-lg mx-auto" key="records">
+                <div v-else class="max-w-2xl mx-auto" key="records">
                     <router-link
                         v-for="(record, index) in records"
-                        class="flex flex-wrap items-center justify-center no-underline"
-                        title="Click to watch replay"
+                        class="flex flex-wrap items-center justify-center no-underline md:flex-no-wrap"
+                        title="Click to view replay"
                         :class="{
-                            'border-t border-grey-3 mt-8 pt-8': index > 0,
+                            'mt-8 pt-4': index > 0,
                         }"
                         :key="record.id"
                         :to="{ name: 'replay', params: { id: record.solve.id }}">
-                        <div class="mx-4 w-full" style="max-width: 150px">
+                        <div class="w-48">
                             <div class="pb-full relative">
                                 <v-puzzle
                                     :config="record.solve.config"
@@ -59,8 +59,10 @@
                                 />
                             </div>
                         </div>
-                        <div class="mx-4 text-center">
-                            <div class="text-2xl">{{ record.user.username }} - {{ record.solve.time | shortTimer }}</div>
+                        <div class="text-center w-full md:ml-12 md:w-auto">
+                            <div class="text-2xl">
+                                #{{ rank(record) }} {{ record.user.username }} - {{ record.solve.time | shortTimer }}
+                            </div>
                             <div class="opacity-75">
                                 <div class="text-sm">{{ 'turn' | pluralize(record.solve.moves, true) }} at {{ turnsPerSec(record) }} {{ turnsPerSec(record) === 1 ? 'turn' : 'turns' }} per second</div>
                                 <time class="text-sm" :datetime="record.solve.createdAt">{{ record.solve.createdAt | datestamp }}</time>
@@ -77,7 +79,6 @@
 import { get, round, uniqueId } from 'lodash-es';
 import { puzzles } from '@/app/constants';
 import { getPersonalRecords } from '@/app/repositories/personal_records';
-import recordsTableComponent from './records_table/records_table.vue';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
 
 export default {
@@ -98,7 +99,6 @@ export default {
         };
     },
     components: {
-        'v-records-table': recordsTableComponent,
         'v-puzzle': puzzleComponent,
     },
     computed: {
@@ -110,6 +110,9 @@ export default {
         },
         puzzleQuery() {
             return get(this, '$route.query.puzzle', '3x3');
+        },
+        rank() {
+            return record => (this.pagination.pageSize * (this.pagination.currentPage - 1)) + this.records.indexOf(record) + 1;
         },
         turnsPerSec() {
             return record => round(1000 / record.solve.averageSpeed, 1);
