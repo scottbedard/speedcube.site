@@ -4,7 +4,6 @@
         <v-obj :rotation="{ x: -90 }">
             <v-shape
                 v-for="(sticker, index) in model.state.U"
-                :color="0x00ff00"
                 :geometry="geometry"
                 :inner-material="innerMaterial(sticker.value)"
                 :key="`U${index}`"
@@ -18,7 +17,6 @@
         <v-obj :rotation="{ y: -90 }">
             <v-shape
                 v-for="(sticker, index) in model.state.L"
-                :color="0xff0000"
                 :geometry="geometry"
                 :inner-material="innerMaterial(sticker.value)"
                 :key="`L${index}`"
@@ -31,7 +29,6 @@
         <!-- F -->
         <v-shape
             v-for="(sticker, index) in model.state.F"
-            :color="0xffff00"
             :geometry="geometry"
             :inner-material="innerMaterial(sticker.value)"
             :key="`F${index}`"
@@ -44,7 +41,6 @@
         <v-obj :rotation="{ y: 90 }">
             <v-shape
                 v-for="(sticker, index) in model.state.R"
-                :color="0x0000ff"
                 :geometry="geometry"
                 :inner-material="innerMaterial(sticker.value)"
                 :key="`R${index}`"
