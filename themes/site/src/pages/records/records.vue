@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { get, round, uniqueId } from 'lodash-es';
+import { get, uniqueId } from 'lodash-es';
 import { puzzles } from '@/app/constants';
 import { formatShortTime } from '@/app/utils/string';
 import { getPersonalRecords } from '@/app/repositories/personal_records';
