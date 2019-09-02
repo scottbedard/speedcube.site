@@ -42,11 +42,11 @@ describe('function utils', function() {
 
     it('rafEase', async () => {
         const fn = jest.fn();
-        const loop = rafEase(fn, 100, easeInOutExpo);
+        const loop = rafEase(fn, 250, easeInOutExpo);
 
         expect(fn).toHaveBeenCalledWith(0);
 
-        await timeout(200);
+        await timeout(500);
 
         expect(fn).toHaveBeenCalledWith(1);
     });
