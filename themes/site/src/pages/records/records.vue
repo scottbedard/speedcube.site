@@ -40,32 +40,38 @@
                 </div>
 
                 <!-- records -->
-                <div v-else class="max-w-2xl mx-auto" key="records">
+                <div v-else class="max-w-xl mx-auto md:table" key="records">
                     <router-link
                         v-for="(record, index) in records"
-                        class="flex flex-wrap items-center justify-center no-underline md:flex-no-wrap"
-                        title="Click to view replay"
-                        :class="{
-                            'mt-8 pt-4': index > 0,
-                        }"
+                        class="flex flex-wrap group justify-center no-underline md:table-row"
+                        href="#"
+                        :title="`Click to see ${record.user.username}'s ${solveTime(record)} solve`"
                         :key="record.id"
                         :to="{ name: 'replay', params: { id: record.solve.id }}">
-                        <div class="w-48">
-                            <div class="pb-full relative">
-                                <v-puzzle
-                                    :config="record.solve.config"
-                                    :initial-state="record.solve.scramble.scrambledState"
-                                    :type="record.solve.scramble.puzzle"
-                                />
+                        <div
+                            :class="{ 'pt-8': index > 0 }"
+                            class="flex justify-center w-full md:align-middle md:table-cell md:w-auto">
+                            <div class="w-32">
+                                <div class="pb-full relative">
+                                    <v-puzzle
+                                        :config="record.solve.config"
+                                        :initial-state="record.solve.scramble.scrambledState"
+                                        :type="record.solve.scramble.puzzle"
+                                    />
+                                </div>
                             </div>
                         </div>
-                        <div class="text-center w-full md:ml-12 md:w-auto">
-                            <div class="text-2xl">
-                                #{{ rank(record) }} {{ record.user.username }} - {{ record.solve.time | shortTimer }}
-                            </div>
-                            <div class="opacity-75">
-                                <div class="text-sm">{{ 'turn' | pluralize(record.solve.moves, true) }} at {{ turnsPerSec(record) }} {{ turnsPerSec(record) === 1 ? 'turn' : 'turns' }} per second</div>
-                                <time class="text-sm" :datetime="record.solve.createdAt">{{ record.solve.createdAt | datestamp }}</time>
+                        <div
+                            :class="{ 'pt-2 md:pt-8': index > 0 }"
+                            class="flex items-center justify-center max-w-md text-center w-full md:align-middle md:pl-8 md:table-cell md:text-left md:w-auto">
+                            <div class="overflow-hidden">
+                                <div class="text-2xl truncate">
+                                    #{{ rank(record) }} {{ record.user.username }}
+                                </div>
+                                <div class="font-bold text-xs tracking-widest">
+                                    <div>{{ solveTime(record) }}, {{ 'turn' | pluralize(record.solve.moves, true) }}</div>
+                                    <time :datetime="record.solve.createdAt">{{ record.solve.createdAt | datestamp }}</time>
+                                </div>
                             </div>
                         </div>
                     </router-link>
@@ -78,6 +84,7 @@
 <script>
 import { get, round, uniqueId } from 'lodash-es';
 import { puzzles } from '@/app/constants';
+import { formatShortTime } from '@/app/utils/string';
 import { getPersonalRecords } from '@/app/repositories/personal_records';
 import puzzleComponent from '@/components/puzzle/puzzle.vue';
 
@@ -114,8 +121,8 @@ export default {
         rank() {
             return record => (this.pagination.pageSize * (this.pagination.currentPage - 1)) + this.records.indexOf(record) + 1;
         },
-        turnsPerSec() {
-            return record => round(1000 / record.solve.averageSpeed, 1);
+        solveTime() {
+            return record => formatShortTime(record.solve.time);
         },
         query() {
             return puzzle => ({ ...this.$route.query, puzzle });
