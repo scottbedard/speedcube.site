@@ -1,31 +1,61 @@
 <template>
     <div class="flex flex-wrap md:flex-no-wrap">
-        <div class="overflow-hidden w-full md:flex-1 md:w-auto">
-            <a href="#" @click.prevent="select('2x2')"> 2x2</a>
-            <a href="#" @click.prevent="select('3x3')"> 3x3</a>
-            <a href="#" @click.prevent="select('4x4')"> 4x4</a>
-            <a href="#" @click.prevent="select('5x5')"> 5x5</a>
+        <div class="overflow-hidden w-full md:flex-1 md:pr-12 md:w-auto">
+            <h1 class="mb-8 text-4xl text-grey-8 lg:text-5xl">
+                A free and open place for cubing
+            </h1>
+            <p class="mb-12 text-grey-7 text-lg">
+                We're a speed cubing platform for any modern browser.
+                Your keyboard is the controller. After some practice,
+                it'll feel you're holding it in your hands.
+            </p>
+
+            <div class="-m-4">
+                <v-button
+                    class="m-4"
+                    primary
+                    title="Click to begin solving"
+                    :to="{
+                        name: 'solve',
+                        params: {
+                            puzzle: '3x3',
+                        },
+                    }">
+                    Start Solving
+                </v-button>
+                <v-button
+                    class="m-4"
+                    title="Click to view the current records"
+                    :to="{
+                        name: 'records',
+                        params: {
+                            puzzle: '3x3',
+                        },
+                    }">
+                    Watch Records
+                </v-button>
+            </div>
+
+            <br><br><br>
+
+            <a href="#" @click.prevent="select('2x2')">2x2</a>&nbsp;&nbsp;&nbsp;
+            <a href="#" @click.prevent="select('3x3')">3x3</a>&nbsp;&nbsp;&nbsp;
+            <a href="#" @click.prevent="select('4x4')">4x4</a>&nbsp;&nbsp;&nbsp;
+            <a href="#" @click.prevent="select('5x5')">5x5</a>&nbsp;&nbsp;&nbsp;
         </div>
 
         <div class="max-w-xl mx-auto w-full md:w-half">
-            <div class="border pb-full relative">
+            <div class="pb-full relative">
                 <v-scene
                     :camera-angle="90"
                     :camera-distance="1000">
 
-                    <v-axes-helper :size="200" />
+                    <!-- <v-axes-helper :size="200" /> -->
 
                     <v-light
                         type="ambient"
                         :color="0xffffff"
-                        :intensity="0.5"
-                    />
-
-                    <v-light
-                        type="point"
-                        :color="0xffffff"
-                        :intensity="0.7"
-                        :position="{ x: 0, y: 2000, z: 2000 }"
+                        :intensity="1"
                     />
 
                     <v-obj :rotation="{ z: orbitRotation }">
@@ -68,12 +98,12 @@ function randomRotation() {
 export default {
     created() {
         componentInterval(this, () => {
-            this.orbitRotation += 0.2;
+            this.orbitRotation += 0.15;
 
             this.puzzles.forEach(puzzle => {
-                puzzle.rotation.x += 0.1;
-                puzzle.rotation.y += 0.1;
-                puzzle.rotation.z += 0.1;
+                puzzle.rotation.x += 0.2;
+                puzzle.rotation.y += 0.2;
+                puzzle.rotation.z += 0.2;
             });
         }, 50);
     },
