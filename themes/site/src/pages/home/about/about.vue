@@ -4,12 +4,13 @@
             Copy will go here
         </div>
 
-        <div class="relative w-full md:w-half">
+        <div class="relative max-w-xl mx-auto w-full md:w-half">
             <div class="pb-full absoloute border right-0 top-0">
                 <v-scene
                     :camera-angle="90"
-                    :camera-distance="750">
-                    <v-axes-helper :size="100" />
+                    :camera-distance="1000">
+
+                    <v-axes-helper :size="200" />
 
                     <v-light
                         type="ambient"
@@ -24,16 +25,16 @@
                         :position="{ x: 0, y: 2000, z: 2000 }"
                     />
 
-                    <v-obj :position="{ x: -250 }">
+                    <v-obj :position="{ x: 0, z: 600 }">
                         <v-cube type="2x2" />
                     </v-obj>
-                    <v-obj :position="{ y: 250 }">
+                    <v-obj :position="{ y: 400 }">
                         <v-cube type="3x3" />
                     </v-obj>
-                    <v-obj :position="{ x: 250 }">
+                    <v-obj :position="{ x: 400 }">
                         <v-cube type="4x4" />
                     </v-obj>
-                    <v-obj :position="{ y: -250 }">
+                    <v-obj :position="{ y: -400 }">
                         <v-cube type="5x5" />
                     </v-obj>
                 </v-scene>
@@ -43,7 +44,6 @@
 </template>
 
 <script>
-import { bindExternalEvent } from 'spyfu-vue-utils';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
 import boxComponent from '@/components/three/box/box.vue';
 import objComponent from '@/components/three/obj/obj.vue';
@@ -52,17 +52,6 @@ import sceneComponent from '@/components/three/scene/scene.vue';
 import cubeComponent from '@/components/puzzle/cube/cube.vue';
 
 export default {
-    created() {
-        bindExternalEvent(this, window, 'resize', this.onResize);
-    },
-    data() {
-        return {
-            containerWidth: 0,
-        }
-    },
-    mounted() {
-        this.onResize();
-    },
     components: {
         'v-axes-helper': axesHelperComponent,
         'v-light': lightComponent,
@@ -71,15 +60,8 @@ export default {
         'v-obj': objComponent,
         'v-cube': cubeComponent,
     },
-    computed: {
-        circleOffset() {
-            return this.containerWidth / 4;
-        },
-    },
     methods: {
-        onResize() {
-            this.containerWidth = this.$el.offsetWidth;
-        },
+        // ...
     },
 };
 </script>
