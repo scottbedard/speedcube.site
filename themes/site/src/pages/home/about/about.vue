@@ -1,46 +1,85 @@
-<template functional>
-    <v-grid padded>
-        <v-grid-cell lg="7">
-            <div class="text-center lg:mt-12 lg:pr-20 lg:text-left">
-                <h1 class="mb-8 text-4xl text-grey-8 lg:text-5xl">
-                    A free and open place for cubing
-                </h1>
-                <p class="mb-12 text-grey-7 text-lg">
-                    We're a speed cubing platform for any modern browser.
-                    Your keyboard is the controller. After some practice,
-                    it'll feel you're holding it in your hands.
-                </p>
-                <div class="-m-4">
-                    <v-button
-                        class="m-4"
-                        primary
-                        title="Click to begin solving"
-                        :to="{
-                            name: 'solve',
-                            params: {
-                                puzzle: '3x3',
-                            },
-                        }">
-                        Start Solving
-                    </v-button>
-                    <v-button
-                        class="m-4"
-                        title="Click to view the current records"
-                        :to="{
-                            name: 'records',
-                            params: {
-                                puzzle: '3x3',
-                            },
-                        }">
-                        Watch Records
-                    </v-button>
-                </div>
+<template>
+    <div class="flex flex-wrap md:flex-no-wrap">
+        <div class="w-full md:flex-1 md:w-auto">
+            Copy will go here
+        </div>
+
+        <div class="relative w-full md:w-half">
+            <div class="pb-full absoloute border right-0 top-0">
+                <v-scene
+                    :camera-angle="90"
+                    :camera-distance="750">
+                    <v-axes-helper :size="100" />
+
+                    <v-light
+                        type="ambient"
+                        :color="0xffffff"
+                        :intensity="0.5"
+                    />
+
+                    <v-light
+                        type="point"
+                        :color="0xffffff"
+                        :intensity="0.7"
+                        :position="{ x: 0, y: 2000, z: 2000 }"
+                    />
+
+                    <v-obj :position="{ x: -250 }">
+                        <v-cube type="2x2" />
+                    </v-obj>
+                    <v-obj :position="{ y: 250 }">
+                        <v-cube type="3x3" />
+                    </v-obj>
+                    <v-obj :position="{ x: 250 }">
+                        <v-cube type="4x4" />
+                    </v-obj>
+                    <v-obj :position="{ y: -250 }">
+                        <v-cube type="5x5" />
+                    </v-obj>
+                </v-scene>
             </div>
-        </v-grid-cell>
-        <v-grid-cell lg="5">
-            <div class="h-full flex items-center justify-center md:text-right">
-                <img class="h-auto max-w-md mx-auto w-full" src="./fans.svg" />
-            </div>
-        </v-grid-cell>
-    </v-grid>
+        </div>
+    </div>
 </template>
+
+<script>
+import { bindExternalEvent } from 'spyfu-vue-utils';
+import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
+import boxComponent from '@/components/three/box/box.vue';
+import objComponent from '@/components/three/obj/obj.vue';
+import lightComponent from '@/components/three/light/light.vue';
+import sceneComponent from '@/components/three/scene/scene.vue';
+import cubeComponent from '@/components/puzzle/cube/cube.vue';
+
+export default {
+    created() {
+        bindExternalEvent(this, window, 'resize', this.onResize);
+    },
+    data() {
+        return {
+            containerWidth: 0,
+        }
+    },
+    mounted() {
+        this.onResize();
+    },
+    components: {
+        'v-axes-helper': axesHelperComponent,
+        'v-light': lightComponent,
+        'v-scene': sceneComponent,
+        'v-box': boxComponent,
+        'v-obj': objComponent,
+        'v-cube': cubeComponent,
+    },
+    computed: {
+        circleOffset() {
+            return this.containerWidth / 4;
+        },
+    },
+    methods: {
+        onResize() {
+            this.containerWidth = this.$el.offsetWidth;
+        },
+    },
+};
+</script>
