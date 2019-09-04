@@ -12,7 +12,9 @@ import base from '../base';
 
 export default {
     created() {
-        // create our box geometry
+        // create our box geometry, and cache the original size
+        this.originalSize = this.sizeValues;
+
         const { depth, height, width } = this.sizeValues;
 
         const geometry = new CubeGeometry(height, width, depth);
@@ -28,6 +30,11 @@ export default {
         this.$options.three.geometry = geometry;
         this.$options.three.material = material;
         this.$options.three.obj = mesh;
+    },
+    data() {
+        return {
+            originalSize: { depth: 0, height: 0, width: 0 },
+        };
     },
     destroyed() {
         this.disposeGeometry();
@@ -79,6 +86,14 @@ export default {
             const { material } = this.$options.three;
 
             material.color.setHex(color);
+        },
+        size() {
+            const { depth, height, width } = this.sizeValues;
+            const { obj } = this.$options.three;
+
+            obj.scale.x = width / this.originalSize.width;
+            obj.scale.y = height / this.originalSize.height;
+            obj.scale.z = depth / this.originalSize.depth;
         },
     },
 };
