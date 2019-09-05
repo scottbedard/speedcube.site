@@ -50,6 +50,8 @@
                     :camera-angle="90"
                     :camera-distance="1000">
 
+                    <v-box :size="200" :color="0xff0000" />
+
                     <!-- <v-axes-helper :size="200" /> -->
 
                     <v-light
@@ -58,7 +60,7 @@
                         :intensity="1"
                     />
 
-                    <v-obj :rotation="{ z: orbitRotation }">
+                    <!-- <v-obj :rotation="{ z: orbitRotation }">
                         <v-obj
                             v-for="(puzzle, index) in puzzles"
                             :key="index"
@@ -68,7 +70,7 @@
                                 <v-cube :type="puzzle.type" />
                             </v-obj>
                         </v-obj>
-                    </v-obj>
+                    </v-obj> -->
                 </v-scene>
             </div>
         </div>
@@ -178,6 +180,8 @@ export default {
 
             if (selectedPuzzle) {
                 selectedPuzzle.cancelSelection();
+
+                // @todo: add starting progress for selected puzzle
 
                 const easing = componentRafEase(this, (progress) => {
                     selectedPuzzle.selectionProgress = progress;

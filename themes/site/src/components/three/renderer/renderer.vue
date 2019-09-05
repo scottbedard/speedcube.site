@@ -96,6 +96,7 @@ export default {
 
                 this.$options.three.renderer.setViewport(rect.left, bottom, width, height);
                 this.$options.three.renderer.setScissor(rect.left, bottom, width, height);
+                scene.$options.three.raycaster.setFromCamera(scene.$options.three.mouse, scene.$options.three.camera);
 
                 this.$options.three.renderer.render(
                     scene.$options.three.obj,

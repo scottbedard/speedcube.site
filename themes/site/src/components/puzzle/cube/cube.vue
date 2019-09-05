@@ -1,5 +1,8 @@
 <template>
     <v-obj>
+        <!-- click box -->
+        <!-- <v-box :color="0xff0000" :size="boxSize" /> -->
+
         <!-- resting stickers -->
         <v-cube-stickers
             :config="normalizedConfig"
@@ -28,8 +31,9 @@
 
 <script>
 import Cube from 'bedard-cube';
-import { noop, times, xor } from 'lodash-es';
+import { get, noop, times, xor } from 'lodash-es';
 import { BackSide, FrontSide, MeshLambertMaterial } from 'three';
+import boxComponent from '@/components/three/box/box.vue';
 import objComponent from '@/components/three/obj/obj.vue';
 import cubeStickersComponent from './cube_stickers/cube_stickers.vue';
 import { getStickersEffectedByTurn } from './utils';
@@ -54,12 +58,21 @@ export default {
         this.disposeMaterials();
     },
     components: {
+        'v-box': boxComponent,
         'v-cube-stickers': cubeStickersComponent,
         'v-obj': objComponent,
     },
     computed: {
         activeModel() {
             return this.model || this.defaultModel;
+        },
+        boxSize() {
+            const elevation = get(this.normalizedConfig, 'stickerElevation') || 0;
+            const spacing = get(this.normalizedConfig, 'stickerSpacing') || 0;
+            
+            return (this.stickerSize * this.activeModel.size) // base
+                + ((this.stickerSize * spacing) * (this.activeModel.size - 1)) // spacing
+                + ((this.stickerSize * elevation) * 2); // elevation
         },
         normalizedConfig() {
             return { ...defaultCubeConfig, ...this.config };

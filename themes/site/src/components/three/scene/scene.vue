@@ -1,16 +1,18 @@
 <template>
-    <div class="absolute h-full w-full"><slot /></div>
+    <div class="absolute h-full w-full" @mousemove="onMousemove"><slot /></div>
 </template>
 
 <script>
-import { Scene, PerspectiveCamera } from 'three';
+import { Scene, PerspectiveCamera, Raycaster, Vector2 } from 'three';
 import base from '../base';
 import { degreesToRadians } from '@/app/utils/number';
 
 export default {
     created() {
-        this.$options.three.obj = new Scene();
         this.$options.three.camera = new PerspectiveCamera(this.cameraFov, this.cameraAspect, this.cameraNear, this.cameraFar);
+        this.$options.three.mouse = new Vector2();
+        this.$options.three.obj = new Scene();
+        this.$options.three.raycaster = new Raycaster();
 
         this.syncCameraPosition();
     },
@@ -36,6 +38,24 @@ export default {
             const { obj: scene } = this.$options.three;
 
             scene.dispose();
+        },
+        onMousemove(e) {
+            const { mouse, raycaster, obj: scene } = this.$options.three;
+            
+            // determine what child objects intersect with the ray
+            const intersects = raycaster.intersectObjects(scene.children);
+
+            // calculate mouse position within our scene, in normalized device coordinates
+            const { height, left, top, width } = this.$el.getBoundingClientRect();
+            
+            mouse.x = ((e.clientX - left) / width) * 2 - 1;
+            mouse.y = -((e.clientY - top) / height) * 2 + 1;
+
+            // check if we've hit anything
+            // @todo: figure out why this is firing on first
+            if (intersects.length) {
+                console.log('intersecting', intersects[0]);
+            }
         },
         syncCameraPosition() {
             const { camera } = this.$options.three;
