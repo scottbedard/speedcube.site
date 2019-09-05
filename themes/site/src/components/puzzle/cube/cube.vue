@@ -69,7 +69,7 @@ export default {
         boxSize() {
             const elevation = get(this.normalizedConfig, 'stickerElevation') || 0;
             const spacing = get(this.normalizedConfig, 'stickerSpacing') || 0;
-            
+
             return (this.stickerSize * this.activeModel.size) // base
                 + ((this.stickerSize * spacing) * (this.activeModel.size - 1)) // spacing
                 + ((this.stickerSize * elevation) * 2); // elevation

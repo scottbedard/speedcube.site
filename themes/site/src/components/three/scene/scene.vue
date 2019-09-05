@@ -41,13 +41,13 @@ export default {
         },
         onMousemove(e) {
             const { mouse, raycaster, obj: scene } = this.$options.three;
-            
+
             // determine what child objects intersect with the ray
             const intersects = raycaster.intersectObjects(scene.children);
 
             // calculate mouse position within our scene, in normalized device coordinates
             const { height, left, top, width } = this.$el.getBoundingClientRect();
-            
+
             mouse.x = ((e.clientX - left) / width) * 2 - 1;
             mouse.y = -((e.clientY - top) / height) * 2 + 1;
 

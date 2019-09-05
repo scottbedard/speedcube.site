@@ -78,16 +78,16 @@
 </template>
 
 <script>
+import { componentInterval } from 'spyfu-vue-utils';
+import { noop, random } from 'lodash-es';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
 import boxComponent from '@/components/three/box/box.vue';
 import cubeComponent from '@/components/puzzle/cube/cube.vue';
 import lightComponent from '@/components/three/light/light.vue';
 import objComponent from '@/components/three/obj/obj.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
-import { componentInterval } from 'spyfu-vue-utils';
 import { componentRafEase } from '@/app/utils/component';
 import { easeOutQuart as easeInCurve, easeOutQuart as easeOutCurve } from '@/app/constants';
-import { noop, random } from 'lodash-es';
 
 function randomRotation() {
     return {
@@ -102,7 +102,7 @@ export default {
         componentInterval(this, () => {
             this.orbitRotation += 0.15;
 
-            this.puzzles.forEach(puzzle => {
+            this.puzzles.forEach((puzzle) => {
                 puzzle.rotation.x += 0.2;
                 puzzle.rotation.y += 0.2;
                 puzzle.rotation.z += 0.2;
@@ -123,7 +123,7 @@ export default {
                     cancelSelection: noop,
                     selectionProgress: 0,
                     type: '3x3',
-                    rotation: randomRotation()
+                    rotation: randomRotation(),
                 },
                 {
                     cancelSelection: noop,
@@ -151,19 +151,15 @@ export default {
     },
     computed: {
         position() {
-            return puzzle => {
-                return {
-                    x: 450 * (1 - puzzle.selectionProgress),
-                    z: 600 * (puzzle.selectionProgress),
-                };
-            };
+            return puzzle => ({
+                x: 450 * (1 - puzzle.selectionProgress),
+                z: 600 * (puzzle.selectionProgress),
+            });
         },
         rotation() {
-            return index => {
-                return {
-                    z: (360 / this.puzzles.length) * index,
-                }
-            };
+            return index => ({
+                z: (360 / this.puzzles.length) * index,
+            });
         },
     },
     methods: {
@@ -197,7 +193,7 @@ export default {
                 prevSelectedPuzzle.cancelSelection();
 
                 const startingProgress = prevSelectedPuzzle.selectionProgress;
-                
+
                 const easing = componentRafEase(this, (progress) => {
                     prevSelectedPuzzle.selectionProgress = startingProgress * (1 - progress);
                 }, speed, easeOutCurve);
