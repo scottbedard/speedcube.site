@@ -50,7 +50,14 @@
                     :camera-angle="90"
                     :camera-distance="1000">
 
-                    <v-box :size="200" :color="0xff0000" />
+                    <!-- <v-obj>
+                        <v-box
+                            :size="200"
+                            :color="0xff0000"
+                            @mouseenter="onMouseenter"
+                            @click="onClick"
+                        />
+                    </v-obj> -->
 
                     <!-- <v-axes-helper :size="200" /> -->
 
@@ -60,17 +67,22 @@
                         :intensity="1"
                     />
 
-                    <!-- <v-obj :rotation="{ z: orbitRotation }">
+                    <v-obj :rotation="{ z: orbitRotation }">
                         <v-obj
                             v-for="(puzzle, index) in puzzles"
                             :key="index"
                             :rotation="rotation(index)"
                             :type="puzzle.type">
                             <v-obj :position="position(puzzle)" :rotation="puzzle.rotation">
-                                <v-cube :type="puzzle.type" />
+                                <v-cube
+                                    :type="puzzle.type"
+                                    @click="select(puzzle.type)"
+                                    @mouseenter="onMouseenter"
+                                    @mouseleave="onMouseleave"
+                                />
                             </v-obj>
                         </v-obj>
-                    </v-obj> -->
+                    </v-obj>
                 </v-scene>
             </div>
         </div>
@@ -165,6 +177,15 @@ export default {
     methods: {
         select(puzzleType) {
             this.selected = puzzleType;
+        },
+        onClick(e) {
+            console.log('click', e);
+        },
+        onMouseenter() {
+            console.log('enter');
+        },
+        onMouseleave() {
+            console.log('leave');
         },
     },
     watch: {

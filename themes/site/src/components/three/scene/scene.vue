@@ -1,5 +1,9 @@
 <template>
-    <div class="absolute h-full w-full" @mousemove="onMousemove"><slot /></div>
+    <div
+        class="absolute h-full w-full"
+        @click="onClick"
+        @mousemove="onMousemove"
+    ><slot /></div>
 </template>
 
 <script>
@@ -9,10 +13,14 @@ import { degreesToRadians } from '@/app/utils/number';
 
 export default {
     created() {
+        // initialize threejs objects
         this.$options.three.camera = new PerspectiveCamera(this.cameraFov, this.cameraAspect, this.cameraNear, this.cameraFar);
         this.$options.three.mouse = new Vector2();
         this.$options.three.obj = new Scene();
         this.$options.three.raycaster = new Raycaster();
+
+        // create a container for threejs objects that require raycasting
+        this.$options.raycasterVms = [];
 
         this.syncCameraPosition();
     },
@@ -34,28 +42,55 @@ export default {
         },
     },
     methods: {
+        bindMouseEvents(vm) {
+            this.$options.raycasterVms.push(vm);
+
+            vm.$once('hook:beforeDestroy', () => {
+                this.$options.raycasterVms = this.$options.raycasterVms.filter(registeredVm => registeredVm !== vm);
+            });
+        },
         disposeScene() {
             const { obj: scene } = this.$options.three;
 
             scene.dispose();
         },
-        onMousemove(e) {
+        onClick(e) {
             const { mouse, raycaster, obj: scene } = this.$options.three;
 
-            // determine what child objects intersect with the ray
-            const intersects = raycaster.intersectObjects(scene.children);
-
-            // calculate mouse position within our scene, in normalized device coordinates
+            // calculate mouse position within our scene in normalized device coordinates
             const { height, left, top, width } = this.$el.getBoundingClientRect();
-
+            
             mouse.x = ((e.clientX - left) / width) * 2 - 1;
             mouse.y = -((e.clientY - top) / height) * 2 + 1;
 
-            // check if we've hit anything
-            // @todo: figure out why this is firing on first
-            if (intersects.length) {
-                console.log('intersecting', intersects[0]);
-            }
+            this.$options.raycasterVms.forEach(vm => {
+                // determine what child objects intersect with the ray
+                const intersects = raycaster.intersectObject(vm.$options.three.obj);
+
+                // check if we've hit anything
+                // @todo: figure out why this is firing on first
+                if (intersects.length) {
+                    vm.$emit('click', e);
+                }
+            });
+        },
+        onMousemove(e) {
+            const { mouse, raycaster, obj: scene } = this.$options.three;
+
+            // calculate mouse position within our scene in normalized device coordinates
+            const { height, left, top, width } = this.$el.getBoundingClientRect();
+            
+            mouse.x = ((e.clientX - left) / width) * 2 - 1;
+            mouse.y = -((e.clientY - top) / height) * 2 + 1;
+
+            this.$options.raycasterVms.forEach(vm => {
+                // determine what child objects intersect with the ray
+                const intersects = raycaster.intersectObject(vm.$options.three.obj);
+
+                // check if we've hit anything
+                // @todo: figure out why this is firing on first
+                vm.threeObjHover = intersects.length > 0;
+            });
         },
         syncCameraPosition() {
             const { camera } = this.$options.three;

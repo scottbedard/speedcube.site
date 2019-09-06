@@ -1,7 +1,14 @@
 <template>
     <v-obj>
         <!-- click box -->
-        <!-- <v-box :color="0xff0000" :size="boxSize" /> -->
+        <v-box
+            :color="0xffff00"
+            :opacity="0"
+            :size="boxSize - 20"
+            @click="onClick"
+            @mouseenter="onMouseenter"
+            @mouseleave="onMouseleave"
+        />
 
         <!-- resting stickers -->
         <v-cube-stickers
@@ -182,6 +189,15 @@ export default {
                 inner.dispose();
                 outer.dispose();
             });
+        },
+        onClick(e) {
+            this.$emit('click', e);
+        },
+        onMouseenter() {
+            this.$emit('mouseenter');
+        },
+        onMouseleave() {
+            this.$emit('mouseleave');
         },
         syncGeometry() {
             this.disposeGeometry();

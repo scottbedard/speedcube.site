@@ -4,6 +4,7 @@ import { get } from 'lodash-es';
 import {
     CubeGeometry,
     FrontSide,
+    Material,
     MeshLambertMaterial,
     Mesh,
 } from 'three';
@@ -21,8 +22,9 @@ export default {
 
         const material = new MeshLambertMaterial({
             color: this.color,
+            opacity: this.opacity,
             side: FrontSide,
-            // wireframe: true,
+            transparent: this.opacity < 1,
         });
 
         const mesh = new Mesh(geometry, material);
@@ -79,6 +81,10 @@ export default {
         size: {
             default: 10,
             type: [Number, Object],
+        },
+        opacity: {
+            default: 1,
+            type: Number,
         },
     },
     watch: {

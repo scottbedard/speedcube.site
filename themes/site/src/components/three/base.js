@@ -1,9 +1,21 @@
 import { degreesToRadians } from '@/app/utils/number';
+import { findAncestor } from '@/app/utils/component';
+import { get, intersection } from 'lodash-es';
 
 export default {
     created() {
         this.$options.three = {
             obj: null,
+        };
+
+        this.$options.threeContext = {
+            renderer: null,
+            scene: null,
+        };
+    },
+    data() {
+        return {
+            threeObjHover: false,
         };
     },
     destroyed() {
@@ -14,17 +26,32 @@ export default {
         this.setLocalPosition();
         this.setLocalRotation();
         this.setVisible();
+        this.bindSceneEvents();
     },
     render() {
         return this.$slots.default;
     },
     methods: {
         addToParentObj() {
+            // add to the parent object
             const { obj } = this.$options.three;
             const parentObj = this.findParentObj();
 
             if (obj && parentObj) {
                 parentObj.add(obj);
+            }
+        },
+        bindSceneEvents() {
+            // bind mouse events with our scene if necessary
+            const events = ['click', 'mouseenter', 'mouseleave', 'mousemove'];
+            const listeners = Object.keys(this.$listeners);
+
+            if (intersection(events, listeners).length > 0) {
+                const scene = findAncestor(this, 'scene');
+
+                if (scene) {
+                    scene.bindMouseEvents(this);
+                }
             }
         },
         findParentObj() {
@@ -105,6 +132,13 @@ export default {
         },
     },
     watch: {
+        threeObjHover(hover, oldHover) {
+            if (hover && !oldHover) {
+                this.$emit('mouseenter');
+            } else if (!hover && oldHover) {
+                this.$emit('mouseleave');
+            }
+        },
         position: {
             deep: true,
             handler: 'setLocalPosition',
