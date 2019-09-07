@@ -105,6 +105,22 @@ export default {
                 obj.rotation.z = degreesToRadians(z);
             }
         },
+        setLocalScale() {
+            const { obj } = this.$options.three;
+
+            if (obj) {
+                const { x, y, z } = {
+                    x: 1,
+                    y: 1,
+                    z: 1,
+                    ...this.scale,
+                };
+
+                obj.scale.x = x;
+                obj.scale.y = y;
+                obj.scale.z = z;
+            }
+        },
         setVisible() {
             const { obj } = this.$options.three;
 
@@ -121,6 +137,12 @@ export default {
             type: Object,
         },
         rotation: {
+            default() {
+                return { x: 0, y: 0, z: 0 };
+            },
+            type: Object,
+        },
+        scale: {
             default() {
                 return { x: 0, y: 0, z: 0 };
             },
@@ -146,6 +168,10 @@ export default {
         rotation: {
             deep: true,
             handler: 'setLocalRotation',
+        },
+        scale: {
+            deep: true,
+            handler: 'setLocalScale',
         },
         visible: {
             handler: 'setVisible',

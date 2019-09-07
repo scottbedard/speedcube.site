@@ -45,7 +45,7 @@
         </div>
 
         <div class="max-w-xl mx-auto w-full md:w-half">
-            <div class="pb-full relative">
+            <div class="pb-full relative" :class="{ 'cursor-pointer': hover }">
                 <v-scene
                     :camera-angle="90"
                     :camera-distance="1000">
@@ -73,12 +73,15 @@
                             :key="index"
                             :rotation="rotation(index)"
                             :type="puzzle.type">
-                            <v-obj :position="position(puzzle)" :rotation="puzzle.rotation">
+                            <v-obj
+                                :position="position(puzzle)"
+                                :rotation="puzzle.rotation"
+                                :scale="scale(puzzle)">
                                 <v-cube
                                     :type="puzzle.type"
                                     @click="select(puzzle.type)"
-                                    @mouseenter="onMouseenter"
-                                    @mouseleave="onMouseleave"
+                                    @mouseenter="onMouseenter(puzzle.type)"
+                                    @mouseleave="onMouseleave(puzzle.type)"
                                 />
                             </v-obj>
                         </v-obj>
@@ -99,7 +102,15 @@ import lightComponent from '@/components/three/light/light.vue';
 import objComponent from '@/components/three/obj/obj.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
 import { componentRafEase } from '@/app/utils/component';
-import { easeOutQuart as easeInCurve, easeOutQuart as easeOutCurve } from '@/app/constants';
+import {
+    easeOutQuart as hoverInCurve,
+    easeOutQuart as hoverOutCurve,
+    easeOutQuart as selectInCurve,
+    easeOutQuart as selectOutCurve,
+} from '@/app/constants';
+
+const hoverEaseDuration = 500;
+const selectEaseDuration = 1000;
 
 function randomRotation() {
     return {
@@ -112,7 +123,7 @@ function randomRotation() {
 export default {
     created() {
         componentInterval(this, () => {
-            this.orbitRotation += 0.15;
+            this.orbitRotation += 0.1;
 
             this.puzzles.forEach((puzzle) => {
                 puzzle.rotation.x += 0.2;
@@ -123,34 +134,39 @@ export default {
     },
     data() {
         return {
+            hover: false,
             orbitRotation: 0,
             puzzles: [
                 {
                     cancelSelection: noop,
+                    hoverProgress: 0,
                     selectionProgress: 0,
                     type: '2x2',
                     rotation: randomRotation(),
                 },
                 {
                     cancelSelection: noop,
+                    hoverProgress: 0,
                     selectionProgress: 0,
                     type: '3x3',
                     rotation: randomRotation(),
                 },
                 {
                     cancelSelection: noop,
+                    hoverProgress: 0,
                     selectionProgress: 0,
                     type: '4x4',
                     rotation: randomRotation(),
                 },
                 {
                     cancelSelection: noop,
+                    hoverProgress: 0,
                     selectionProgress: 0,
                     type: '5x5',
                     rotation: randomRotation(),
                 },
             ],
-            selected: null,
+            selected: '',
         };
     },
     components: {
@@ -173,25 +189,47 @@ export default {
                 z: (360 / this.puzzles.length) * index,
             });
         },
+        scale() {
+            const hoverSize = 0.1;
+
+            return puzzle => {
+                const progress = puzzle.selectionProgress ? 0 : puzzle.hoverProgress;
+                const scale = 1 + (hoverSize * progress);
+
+                return { x: scale, y: scale, z: scale };
+            };
+        },
     },
     methods: {
         select(puzzleType) {
+            this.hover = false;
             this.selected = puzzleType;
         },
-        onClick(e) {
-            console.log('click', e);
+        onMouseenter(puzzleType) {
+            const puzzle = this.puzzles.find(puzzle => puzzle.type === puzzleType);
+
+            if (puzzle && this.selected !== puzzleType) {
+                this.hover = true;
+
+                componentRafEase(this, (progress) => {
+                    puzzle.hoverProgress = progress;
+                }, hoverEaseDuration, hoverInCurve);
+            }
         },
-        onMouseenter() {
-            console.log('enter');
-        },
-        onMouseleave() {
-            console.log('leave');
+        onMouseleave(puzzleType) {
+            this.hover = false;
+
+            const puzzle = this.puzzles.find(puzzle => puzzle.type === puzzleType);
+
+            if (puzzle) {
+                componentRafEase(this, (progress) => {
+                    puzzle.hoverProgress = 1 - progress;
+                }, hoverEaseDuration, hoverOutCurve);
+            }
         },
     },
     watch: {
         selected(selected, prevSelected) {
-            const speed = 1000;
-
             // select the desired puzzle
             const selectedPuzzle = this.puzzles.find(puzzle => puzzle.type === selected);
 
@@ -202,7 +240,7 @@ export default {
 
                 const easing = componentRafEase(this, (progress) => {
                     selectedPuzzle.selectionProgress = progress;
-                }, speed, easeInCurve);
+                }, selectEaseDuration, selectInCurve);
 
                 selectedPuzzle.cancelSelection = easing.cancel;
             }
@@ -217,7 +255,7 @@ export default {
 
                 const easing = componentRafEase(this, (progress) => {
                     prevSelectedPuzzle.selectionProgress = startingProgress * (1 - progress);
-                }, speed, easeOutCurve);
+                }, selectEaseDuration, selectOutCurve);
 
                 prevSelectedPuzzle.cancelSelection = easing.cancel;
             }
