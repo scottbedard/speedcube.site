@@ -2,7 +2,7 @@
     <v-page padded>
         <v-margin padded>
             <!-- hero -->
-            <div class="md:mb-8 lg:mb-12">
+            <div class="md:mb-8 lg:mb-20">
                 <v-hero />
             </div>
 
