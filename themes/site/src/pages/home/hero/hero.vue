@@ -1,9 +1,10 @@
 <template>
-    <div class="flex flex-wrap md:flex-no-wrap">
-        <div class="overflow-hidden w-full md:flex-1 md:pr-12 md:w-auto">
+    <div class="flex flex-wrap lg:flex-no-wrap">
+        <div class="mb-8 overflow-hidden text-center w-full lg:flex-1 lg:mb-0 lg:pr-12 lg:text-left lg:w-auto">
             <h1 class="mb-8 text-4xl text-grey-8 lg:text-5xl">
                 A free and open place for cubing
             </h1>
+
             <p class="mb-12 text-grey-7 text-lg">
                 We're a speed cubing platform for any modern browser.
                 Your keyboard is the controller. After some practice,
@@ -18,7 +19,7 @@
                     :to="{
                         name: 'solve',
                         params: {
-                            puzzle: '3x3',
+                            puzzle: selected,
                         },
                     }">
                     Start Solving
@@ -29,19 +30,19 @@
                     :to="{
                         name: 'records',
                         params: {
-                            puzzle: '3x3',
+                            puzzle: selected,
                         },
                     }">
-                    Watch Records
+                    See Records
                 </v-button>
             </div>
         </div>
 
-        <div class="max-w-lg mx-auto w-full md:w-half">
+        <div class="max-w-xl mx-auto w-full lg:w-half">
             <div class="pb-full relative" :class="{ 'cursor-pointer': hover }">
                 <v-scene
                     :camera-angle="90"
-                    :camera-distance="1200">
+                    :camera-distance="1100">
                     
                     <v-light
                         type="ambient"
@@ -164,7 +165,7 @@ export default {
             return puzzle => {
                 return {
                     x: 500 * (1 - puzzle.selectionProgress),
-                    z: 700 * puzzle.selectionProgress,
+                    z: 650 * puzzle.selectionProgress,
                 }
             };
         },

@@ -10,12 +10,12 @@
             <h2 class="leading-normal mb-8 text-3xl text-grey-8 lg:mt-12">
                 Customize everything
             </h2>
-            <p class="mb-8">
-                Make the puzzles your own. You can set the colors, sticker positioning,
-                and even the camera angle. Your replays will save this configuration, so
+            <p class="mb-8 text-lg">
+                Make the puzzles your own. You set the colors, sticker positioning,
+                even the camera angle. Your replays will save this configuration, so
                 others will see the solve exactly as you did.
             </p>
-            <p>
+            <p class="text-lg">
                 Key bindings are also configurable. By default, they mimick how
                 real finger tricks feel. Modify these as much or as little as
                 you want to have the puzzle feeling just right.
