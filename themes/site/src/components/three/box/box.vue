@@ -3,7 +3,6 @@ import { get } from 'lodash-es';
 
 import {
     CubeGeometry,
-    FrontSide,
     Material,
     MeshLambertMaterial,
     Mesh,
@@ -23,7 +22,7 @@ export default {
         const material = new MeshLambertMaterial({
             color: this.color,
             opacity: this.opacity,
-            side: FrontSide,
+            side: this.side,
             transparent: this.opacity < 1,
         });
 
@@ -77,6 +76,10 @@ export default {
     props: {
         color: {
             default: 0xffffff,
+        },
+        side: {
+            default: 0, // FrontSide = 0, BackSide = 1, DoubleSide = 2
+            type: Number,
         },
         size: {
             default: 10,

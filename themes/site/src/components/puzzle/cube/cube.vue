@@ -2,9 +2,9 @@
     <v-obj>
         <!-- click box -->
         <v-box
-            :color="0xffff00"
             :opacity="0"
-            :size="boxSize - 20"
+            :side="1"
+            :size="boxSize + 1"
             @click="onClick"
             @mouseenter="onMouseenter"
             @mouseleave="onMouseleave"
