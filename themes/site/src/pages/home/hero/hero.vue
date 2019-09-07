@@ -1,14 +1,14 @@
 <template>
-    <div class="flex flex-wrap lg:flex-no-wrap">
-        <div class="mb-8 overflow-hidden text-center w-full lg:flex-1 lg:mb-0 lg:pr-12 lg:text-left lg:w-auto">
-            <h1 class="mb-8 text-4xl text-grey-8 lg:text-5xl">
-                A free and open place for cubing
+    <div class="flex flex-wrap items-center xl:flex-no-wrap">
+        <div class="mb-8 overflow-hidden text-center w-full xl:flex-1 xl:mb-0 xl:pr-32 xl:text-left xl:w-auto">
+            <h1 class="font-thin mb-8 text-4xl text-grey-8 tracking-wide xl:text-5xl">
+                Let the speed cubing begin!
             </h1>
 
-            <p class="mb-12 text-grey-7 text-lg">
-                We're a speed cubing platform for any modern browser.
-                Your keyboard is the controller. After some practice,
-                it'll feel you're holding it in your hands.
+            <p class="max-w-4xl mb-12 mx-auto text-grey-7 text-lg">
+                We're a totally free speed cubing platform that works with any
+                modern browser. Your keyboard is the controller, after some practice
+                it'll feel like you're holding the puzzles in your hands.
             </p>
 
             <div class="-m-4">
@@ -33,12 +33,12 @@
                             puzzle: selected,
                         },
                     }">
-                    See Records
+                    Watch Records
                 </v-button>
             </div>
         </div>
 
-        <div class="max-w-xl mx-auto w-full lg:w-half">
+        <div class="max-w-xl mx-auto w-full">
             <div class="pb-full relative" :class="{ 'cursor-pointer': hover }">
                 <v-scene
                     :camera-angle="90"
@@ -50,7 +50,7 @@
                         :intensity="1"
                     />
 
-                    <v-obj :rotation="{ z: orbitRotation }">
+                    <v-obj :rotation="{ z: orbitRotation - 220 }">
                         <v-obj
                             v-for="(puzzle, index) in puzzles"
                             :key="index"

@@ -2,25 +2,23 @@
     <v-page padded>
         <v-margin padded>
             <!-- hero -->
-            <div class="mb-8 md:mb-16 lg:mb-24">
+            <div class="md:mb-8 lg:mb-12">
                 <v-hero />
             </div>
 
             <!-- customize -->
-            <div class="mb-8 md:mb-16 lg:mb-32">
+            <div class="mb-8 sm:mb-12 md:mb-24">
                 <v-customize />
             </div>
 
-            <!-- stats / open source -->
-            <div class="pb-20">
-                <v-grid padded>
-                    <v-grid-cell md="6">
-                        <v-stats />
-                    </v-grid-cell>
-                    <v-grid-cell md="6">
-                        <v-open-source />
-                    </v-grid-cell>
-                </v-grid>
+            <!-- stats -->
+            <div class="mb-8 sm:mb-12 md:mb-24">
+                <v-stats />
+            </div>
+
+            <!-- open source -->
+            <div>
+                <v-open-source />
             </div>
         </v-margin>
     </v-page>
@@ -29,7 +27,6 @@
 <script>
 import customizeComponent from './customize/customize.vue';
 import heroComponent from './hero/hero.vue';
-// import highlightedComponent from './highlighted/highlighted.vue';
 import openSourceComponent from './open_source/open_source.vue';
 import statsComponent from './stats/stats.vue';
 
@@ -37,7 +34,6 @@ export default {
     components: {
         'v-customize': customizeComponent,
         'v-hero': heroComponent,
-        // 'v-highlighted': highlightedComponent,
         'v-open-source': openSourceComponent,
         'v-stats': statsComponent,
     },
