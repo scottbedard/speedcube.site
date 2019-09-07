@@ -37,11 +37,11 @@
             </div>
         </div>
 
-        <div class="max-w-xl mx-auto w-full md:w-half">
+        <div class="max-w-lg mx-auto w-full md:w-half">
             <div class="pb-full relative" :class="{ 'cursor-pointer': hover }">
                 <v-scene
                     :camera-angle="90"
-                    :camera-distance="1000">
+                    :camera-distance="1200">
                     
                     <v-light
                         type="ambient"
@@ -129,7 +129,7 @@ export default {
                 {
                     cancelSelection: noop,
                     hoverProgress: 0,
-                    selectionProgress: 0,
+                    selectionProgress: 1,
                     type: '3x3',
                     rotation: randomRotation(),
                 },
@@ -148,7 +148,7 @@ export default {
                     rotation: randomRotation(),
                 },
             ],
-            selected: '',
+            selected: '3x3',
         };
     },
     components: {
@@ -163,8 +163,8 @@ export default {
         position() {
             return puzzle => {
                 return {
-                    x: 450 * (1 - puzzle.selectionProgress),
-                    z: 600 * puzzle.selectionProgress,
+                    x: 500 * (1 - puzzle.selectionProgress),
+                    z: 700 * puzzle.selectionProgress,
                 }
             };
         },
