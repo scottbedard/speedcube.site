@@ -55,6 +55,11 @@ export default {
             scene.dispose();
         },
         onClick(e) {
+            // do nothing if we don't require raycasting
+            if (this.$options.raycasterVms.length === 0) {
+                return;
+            }
+
             const { mouse, raycaster, obj: scene } = this.$options.three;
 
             // calculate mouse position within our scene in normalized device coordinates
@@ -75,6 +80,11 @@ export default {
             });
         },
         onMousemove(e) {
+            // do nothing if we don't require raycasting
+            if (this.$options.raycasterVms.length === 0) {
+                return;
+            }
+
             const { mouse, raycaster, obj: scene } = this.$options.three;
 
             // calculate mouse position within our scene in normalized device coordinates

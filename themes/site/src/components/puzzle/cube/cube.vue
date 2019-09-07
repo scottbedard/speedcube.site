@@ -1,7 +1,8 @@
 <template>
     <v-obj>
-        <!-- click box -->
+        <!-- hit box -->
         <v-box
+            v-if="mouseEvents"
             :opacity="0"
             :side="1"
             :size="boxSize + 1"
@@ -58,6 +59,9 @@ export default {
             defaultModel: this.createDefaultModel(),
             geometry: { dispose: noop },
             materials: [],
+            mouseEvents: typeof this.$listeners.mouseenter !== 'undefined'
+                || typeof this.$listeners.mouseleave !== 'undefined'
+                || typeof this.$listeners.click !== 'undefined',
         };
     },
     destroyed() {
