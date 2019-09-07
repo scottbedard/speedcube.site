@@ -12,7 +12,7 @@
             </p>
         </v-grid-cell>
         <v-grid-cell class="md:order-1" md="6">
-            <img class="max-w-xs mx-auto w-full md:max-w-sm" src="./fans.svg" />
+            <img class="max-w-xs mx-auto w-full md:max-w-sm md:-mt-8 lg:-mt-20" src="./fans.svg" />
         </v-grid-cell>
     </v-grid>
 </template>
