@@ -6,10 +6,10 @@
 
 a {
     transition: color 150ms ease;
-    @apply underline;
+    @apply text-grey-8 underline;
 
     &:hover {
-        @apply text-grey-8;
+        @apply text-grey-10;
     }
 }
 
@@ -35,14 +35,9 @@ p {
 }
 
 ::selection {
-    // background-color: config('colors.primary-8'); /* WebKit/Blink Browsers */
-    // color: config('colors.grey-9');
-}
-
-::selection {
-    color: #fff; /* WebKit/Blink Browsers */
+    @apply bg-primary-8 text-grey-10; /* WebKit/Blink Browsers */
 }
 
 ::-moz-selection {
-    color: #fff; /* Gecko Browsers */
+    @apply bg-primary-8 text-grey-10; /* Gecko Browsers */
 }

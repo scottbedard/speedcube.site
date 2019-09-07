@@ -1,14 +1,14 @@
 <template>
     <div class="flex flex-wrap items-center xl:flex-no-wrap">
-        <div class="mb-8 overflow-hidden text-center w-full xl:flex-1 xl:mb-0 xl:pr-32 xl:text-left xl:w-auto">
+        <div class="mb-8 overflow-hidden text-center w-full xl:flex-1 xl:mb-0 xl:pr-24 xl:text-left xl:w-auto">
             <h1 class="font-thin mb-8 text-4xl text-grey-8 tracking-wide xl:text-5xl">
                 Let the speed cubing begin!
             </h1>
 
             <p class="max-w-4xl mb-12 mx-auto text-grey-7 text-lg">
-                We're a totally free speed cubing platform that works with any
-                modern browser. Your keyboard is the controller, after some practice
-                it'll feel like you're holding the puzzles in your hands.
+                We're a free speed cubing platform for any modern browser.
+                Your keyboard is the controller, after some practice it'll
+                feel like you're holding the puzzles in your hands.
             </p>
 
             <div class="-m-4">
