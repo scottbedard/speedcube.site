@@ -60,15 +60,15 @@ export default {
                 return;
             }
 
-            const { mouse, raycaster, obj: scene } = this.$options.three;
+            const { mouse, raycaster } = this.$options.three;
 
             // calculate mouse position within our scene in normalized device coordinates
             const { height, left, top, width } = this.$el.getBoundingClientRect();
-            
+
             mouse.x = ((e.clientX - left) / width) * 2 - 1;
             mouse.y = -((e.clientY - top) / height) * 2 + 1;
 
-            this.$options.raycasterVms.forEach(vm => {
+            this.$options.raycasterVms.forEach((vm) => {
                 // determine what child objects intersect with the ray
                 const intersects = raycaster.intersectObject(vm.$options.three.obj);
 
@@ -85,15 +85,15 @@ export default {
                 return;
             }
 
-            const { mouse, raycaster, obj: scene } = this.$options.three;
+            const { mouse, raycaster } = this.$options.three;
 
             // calculate mouse position within our scene in normalized device coordinates
             const { height, left, top, width } = this.$el.getBoundingClientRect();
-            
+
             mouse.x = ((e.clientX - left) / width) * 2 - 1;
             mouse.y = -((e.clientY - top) / height) * 2 + 1;
 
-            this.$options.raycasterVms.forEach(vm => {
+            this.$options.raycasterVms.forEach((vm) => {
                 // determine what child objects intersect with the ray
                 const intersects = raycaster.intersectObject(vm.$options.three.obj);
 

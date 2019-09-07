@@ -3,7 +3,6 @@ import { get } from 'lodash-es';
 
 import {
     CubeGeometry,
-    Material,
     MeshLambertMaterial,
     Mesh,
 } from 'three';

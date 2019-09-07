@@ -43,7 +43,7 @@
                 <v-scene
                     :camera-angle="90"
                     :camera-distance="1100">
-                    
+
                     <v-light
                         type="ambient"
                         :color="0xffffff"
@@ -162,24 +162,20 @@ export default {
     },
     computed: {
         position() {
-            return puzzle => {
-                return {
-                    x: 500 * (1 - puzzle.selectionProgress),
-                    z: 650 * puzzle.selectionProgress,
-                }
-            };
+            return puzzle => ({
+                x: 500 * (1 - puzzle.selectionProgress),
+                z: 650 * puzzle.selectionProgress,
+            });
         },
         rotation() {
-            return index => {
-                return {
-                    z: (360 / this.puzzles.length) * index,
-                };
-            };
+            return index => ({
+                z: (360 / this.puzzles.length) * index,
+            });
         },
         scale() {
             const hoverSize = 0.1;
 
-            return puzzle => {
+            return (puzzle) => {
                 const progress = puzzle.selectionProgress ? 0 : puzzle.hoverProgress;
                 const scale = 1 + (hoverSize * progress);
 
@@ -193,7 +189,7 @@ export default {
             this.selected = puzzleType;
         },
         onMouseenter(puzzleType) {
-            const puzzle = this.puzzles.find(puzzle => puzzle.type === puzzleType);
+            const puzzle = this.puzzles.find(p => p.type === puzzleType);
 
             if (puzzle && this.selected !== puzzleType) {
                 this.hover = true;
@@ -206,7 +202,7 @@ export default {
         onMouseleave(puzzleType) {
             this.hover = false;
 
-            const puzzle = this.puzzles.find(puzzle => puzzle.type === puzzleType);
+            const puzzle = this.puzzles.find(p => p.type === puzzleType);
 
             if (puzzle) {
                 componentRafEase(this, (progress) => {

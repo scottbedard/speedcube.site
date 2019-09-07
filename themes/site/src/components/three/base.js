@@ -1,6 +1,6 @@
+import { intersection } from 'lodash-es';
 import { degreesToRadians } from '@/app/utils/number';
 import { findAncestor } from '@/app/utils/component';
-import { get, intersection } from 'lodash-es';
 
 export default {
     created() {
