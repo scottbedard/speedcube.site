@@ -35,13 +35,6 @@
                     Watch Records
                 </v-button>
             </div>
-
-            <br><br><br>
-
-            <a href="#" @click.prevent="select('2x2')">2x2</a>&nbsp;&nbsp;&nbsp;
-            <a href="#" @click.prevent="select('3x3')">3x3</a>&nbsp;&nbsp;&nbsp;
-            <a href="#" @click.prevent="select('4x4')">4x4</a>&nbsp;&nbsp;&nbsp;
-            <a href="#" @click.prevent="select('5x5')">5x5</a>&nbsp;&nbsp;&nbsp;
         </div>
 
         <div class="max-w-xl mx-auto w-full md:w-half">
@@ -49,18 +42,7 @@
                 <v-scene
                     :camera-angle="90"
                     :camera-distance="1000">
-
-                    <!-- <v-obj>
-                        <v-box
-                            :size="200"
-                            :color="0xff0000"
-                            @mouseenter="onMouseenter"
-                            @click="onClick"
-                        />
-                    </v-obj> -->
-
-                    <!-- <v-axes-helper :size="200" /> -->
-
+                    
                     <v-light
                         type="ambient"
                         :color="0xffffff"
@@ -179,15 +161,19 @@ export default {
     },
     computed: {
         position() {
-            return puzzle => ({
-                x: 450 * (1 - puzzle.selectionProgress),
-                z: 600 * (puzzle.selectionProgress),
-            });
+            return puzzle => {
+                return {
+                    x: 450 * (1 - puzzle.selectionProgress),
+                    z: 600 * puzzle.selectionProgress,
+                }
+            };
         },
         rotation() {
-            return index => ({
-                z: (360 / this.puzzles.length) * index,
-            });
+            return index => {
+                return {
+                    z: (360 / this.puzzles.length) * index,
+                };
+            };
         },
         scale() {
             const hoverSize = 0.1;
