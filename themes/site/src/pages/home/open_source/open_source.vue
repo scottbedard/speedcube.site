@@ -13,9 +13,27 @@
         </v-grid-cell>
         <v-grid-cell md="6">
             <div class="flex flex-wrap items-center justify-center">
-                <img alt="Laravel" class="max-w-12 m-4 sm:max-w-16 md:max-w-24 md:mx-8" src="./laravel.png" />
-                <img alt="Vue.js" class="max-w-12 m-4 sm:max-w-16 md:max-w-24 md:mx-8" src="./vue.svg" />
-                <img alt="GitHub" class="max-w-12 m-4 sm:max-w-16 md:max-w-24 md:mx-8" src="./github.svg" />
+                <a
+                    class="max-w-12 m-4 sm:max-w-16 md:max-w-24 md:mx-8"
+                    href="https://laravel.com"
+                    target="_blank"
+                    title="Laravel">
+                    <img alt="Laravel" class="w-full" src="./laravel.png" />
+                </a>
+                <a
+                    class="max-w-12 m-4 sm:max-w-16 md:max-w-24 md:mx-8"
+                    href="https://vuejs.org"
+                    target="_blank"
+                    title="Vue.js">
+                    <img alt="Vue.js" class="w-full" src="./vue.svg" />
+                </a>
+                <a
+                    class="max-w-12 m-4 sm:max-w-16 md:max-w-24 md:mx-8"
+                    href="https://github.com/scottbedard/speedcube.site"
+                    target="_blank"
+                    title="GitHub">
+                    <img alt="GitHub" class="w-full" src="./github.svg" />
+                </a>
             </div>
         </v-grid-cell>
     </v-grid>
