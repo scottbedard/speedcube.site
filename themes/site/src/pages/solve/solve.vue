@@ -17,7 +17,10 @@
             />
 
             <!-- puzzle -->
-            <div v-if="model !== null" class="max-w-xs mb-8 mx-auto">
+            <div
+                v-if="model !== null"
+                class="max-w-xs mb-8 mx-auto"
+                :key="puzzle">
                 <div
                     class="border-2 border-dashed trans-border pb-full relative rounded"
                     :class="{
