@@ -2,13 +2,13 @@
 
 namespace Speedcube\Speedcube\Http\Controllers;
 
+use Bedard\RainLabUserApi\Classes\AccountManager;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use RainLab\User\Models\User;
 use Speedcube\Speedcube\Classes\ApiController;
 use Speedcube\Speedcube\Models\Solve;
-use Vuetober\RainLabUserApi\Classes\AccountManager;
 
 class UsersController extends ApiController
 {
