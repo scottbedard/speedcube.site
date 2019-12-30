@@ -1,25 +1,18 @@
-/* eslint-disable */
 import timerComponent from '@/components/ui/timer.vue';
-
-//
-// factory
-//
-const mount = factory({
-    components: {
-        'v-timer': timerComponent,
-    },
-});
 
 //
 // specs
 //
 describe('<v-timer>', () => {
     it('keeps time until prop is provided', async () => {
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     time: undefined,
                 };
+            },
+            components: {
+                'v-timer': timerComponent,
             },
             template: `
                 <v-timer v-slot="{ currentTime }" ref="timer" :time="time">
@@ -52,7 +45,10 @@ describe('<v-timer>', () => {
     });
 
     it('renders the current time at defined progress', () => {
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-timer': timerComponent,
+            },
             template: `
                 <v-timer v-slot="{ currentTime }" :progress="0.5" :time="30000">
                     <time v-text="currentTime" />
@@ -64,7 +60,10 @@ describe('<v-timer>', () => {
     });
 
     it('displays the current formatted time', () => {
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-timer': timerComponent,
+            },
             template: `<v-timer :time="61234" />`,
         });
 

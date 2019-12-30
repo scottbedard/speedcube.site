@@ -2,15 +2,6 @@
 import modalsComponent from '@/layouts/default/modals/modals.vue';
 
 //
-// factory
-//
-const mount = factory({
-    components: {
-        'v-modals': modalsComponent,
-    },
-});
-
-//
 // specs
 //
 describe.skip('<v-modal>', function() {

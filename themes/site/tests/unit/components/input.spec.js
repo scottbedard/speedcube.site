@@ -1,9 +1,9 @@
 //
 // specs
 //
-describe('<v-input>', function() {
-    it('renders an input element', function() {
-        const vm = mount({
+describe('<v-input>', () => {
+    it('renders an input element', () => {
+        const { vm } = mount({
             template: `<v-input placeholder="foo" />`,
         });
 
@@ -13,8 +13,8 @@ describe('<v-input>', function() {
         expect(inputEl.getAttribute('placeholder')).toBe('foo');
     });
 
-    it('interfaces with v-model', function() {
-        const vm = mount({
+    it('interfaces with v-model', () => {
+        const { vm } = mount({
             data() {
                 return {
                     value: 'foo',
@@ -32,24 +32,24 @@ describe('<v-input>', function() {
         expect(vm.value).toBe('bar');
     });
 
-    it('accepts an id', function() {
-        const vm = mount({
+    it('accepts an id', () => {
+        const { vm } = mount({
             template: `<v-input id="hello" />`,
         });
 
         expect(vm.$el.querySelector('input').getAttribute('id')).toBe('hello');
     });
 
-    it('accepts a placeholder', function() {
-        const vm = mount({
+    it('accepts a placeholder', () => {
+        const { vm } = mount({
             template: `<v-input placeholder="hello" />`,
         });
 
         expect(vm.$el.querySelector('input').getAttribute('placeholder')).toBe('hello');
     });
 
-    it('accepts a type', function() {
-        const vm = mount({
+    it('accepts a type', () => {
+        const { vm } = mount({
             template: `<v-input type="password" />`,
         });
 
