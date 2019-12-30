@@ -1,4 +1,3 @@
-/* eslint-disable */
 import Cube from 'bedard-cube';
 import axios from 'axios';
 import replayComponent from '@/pages/replay/replay.vue';
@@ -7,15 +6,6 @@ import replayComponent from '@/pages/replay/replay.vue';
 // fixtures
 //
 import { solveFixture } from '~/fixtures/solves';
-
-//
-// factory
-//
-const mount = factory({
-    components: {
-        'v-replay': replayComponent,
-    },
-});
 
 //
 // specs
@@ -31,9 +21,12 @@ describe('replay page', () => {
     });
 
     it('fetches solve and displays a loading state', async () => {
-        const vm = mount({
+        const { vm } = mount({
             beforeCreate() {
-                this.$router.replace({ name: 'replay', params: { id: 1 }});
+                this.$router.replace({ name: 'replay', params: { id: 1 } });
+            },
+            components: {
+                'v-replay': replayComponent,
             },
             template: `<v-replay ref="replay" />`,
         });
@@ -41,7 +34,7 @@ describe('replay page', () => {
         expect(axios.get).toHaveBeenCalledWith('/api/speedcube/speedcube/solves/1');
         expect(vm.$el.querySelector('[data-solve-loading]')).not.toBe(null);
         expect(vm.$el.querySelector('[data-solve-ready]')).toBe(null);
-        
+
         await timeout(200);
 
         expect(vm.$el.querySelector('[data-solve-loading]')).toBe(null);
@@ -51,11 +44,14 @@ describe('replay page', () => {
     it('redirects to records if solve not found', async () => {
         let replace;
 
-        const vm = mount({
+        const { vm } = mount({
             beforeCreate() {
-                this.$router.replace({ name: 'replay', params: { id: 2 }});
+                this.$router.replace({ name: 'replay', params: { id: 2 } });
 
                 replace = jest.spyOn(this.$router, 'replace');
+            },
+            components: {
+                'v-replay': replayComponent,
             },
             template: `<v-replay ref="replay" />`,
         });
@@ -66,9 +62,12 @@ describe('replay page', () => {
     });
 
     it.skip('creates a cube model and applies the initial state', async () => {
-        const vm = mount({
+        const { vm } = mount({
             beforeCreate() {
-                this.$router.replace({ name: 'replay', params: { id: 1 }});
+                this.$router.replace({ name: 'replay', params: { id: 1 } });
+            },
+            components: {
+                'v-replay': replayComponent,
             },
             template: `<v-replay ref="replay" />`,
         });
@@ -83,9 +82,12 @@ describe('replay page', () => {
     });
 
     it.skip('begins playing the replay when watch button is clicked', async () => {
-        const vm = mount({
+        const { vm } = mount({
             beforeCreate() {
-                this.$router.replace({ name: 'replay', params: { id: 1 }});
+                this.$router.replace({ name: 'replay', params: { id: 1 } });
+            },
+            components: {
+                'v-replay': replayComponent,
             },
             template: `<v-replay ref="replay" />`,
         });

@@ -2,19 +2,10 @@ import axios from 'axios';
 import signoutComponent from '@/pages/signout/signout.vue';
 
 //
-// factory
-//
-const mount = factory({
-    components: {
-        'v-signout': signoutComponent,
-    },
-});
-
-//
 // specs
 //
-describe('signout page', function() {
-    beforeEach(function() {
+describe('signout page', () => {
+    beforeEach(() => {
         stubRequests({
             get: {
                 '/api/rainlab/user/auth/logout': true,
@@ -23,9 +14,10 @@ describe('signout page', function() {
     });
 
     it('signs the user out', async () => {
-        let push;
-
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-signout': signoutComponent,
+            },
             template: `<v-signout />`,
         });
 

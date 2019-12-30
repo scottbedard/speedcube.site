@@ -104,7 +104,7 @@ global.mount = function mount(options, initialState = {}) {
             if (typeof route.name === 'string') {
                 acc.push({
                     ...route,
-                    beforeEnter: noop,
+                    beforeEnter: undefined,
                     component: { render: noop },
                 });
             }

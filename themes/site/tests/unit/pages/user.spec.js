@@ -7,26 +7,10 @@ import userComponent from '@/pages/users/user/user.vue';
 import { userFixture } from '../../fixtures/user';
 
 //
-// factory
-//
-const mount = factory({
-    components: {
-        'v-user': userComponent,
-    },
-    routes: [
-        'replay',
-        {
-            name: 'test',
-            path: 'users/:username',
-        },
-    ],
-});
-
-//
 // specs
 //
-describe('user page', function() {
-    beforeEach(function() {
+describe('user page', () => {
+    beforeEach(() => {
         stubRequests({
             get: {
                 '/api/speedcube/speedcube/users/scott/overview': userFixture,
@@ -35,15 +19,18 @@ describe('user page', function() {
         });
     });
 
-    it('fetches data on initial load', async function() {
-        const vm = mount({
+    it('fetches data on initial load', async () => {
+        const { vm } = mount({
             beforeCreate() {
                 this.$router.replace({
-                    name: 'test',
+                    name: 'users:show',
                     params: {
                         username: 'scott',
                     },
                 });
+            },
+            components: {
+                'v-user': userComponent,
             },
             template: `<v-user />`,
         });
@@ -53,7 +40,7 @@ describe('user page', function() {
         expect(axios.get).toHaveBeenCalledWith('/api/speedcube/speedcube/users/scott/overview', expect.anything());
 
         vm.$router.replace({
-            name: 'test',
+            name: 'users:show',
             params: {
                 username: 'foo',
             },

@@ -4,15 +4,6 @@ import { postSigninFixture } from '../../fixtures/user';
 import { getConfigFixture } from '../../fixtures/config';
 
 //
-// factory
-//
-const mount = factory({
-    components: {
-        'v-signin': signinComponent,
-    },
-});
-
-//
 // specs
 //
 describe('signin page', () => {
@@ -28,7 +19,10 @@ describe('signin page', () => {
     });
 
     it('logs the user in when the form is submitted', async () => {
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-signin': signinComponent,
+            },
             template: `<v-signin />`,
         });
 
