@@ -28,7 +28,7 @@ describe('<v-comments>', () => {
                 '/api/speedcube/speedcube/comments/solve/2': commentsFixture,
             },
             post: {
-                '/api/rainlab/user/signin': postSigninFixture,
+                '/api/rainlab/user/auth/login': postSigninFixture,
                 '/api/speedcube/speedcube/comments': () => {},
             },
         });

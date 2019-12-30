@@ -75,7 +75,7 @@ describe('create account page', () => {
                 '/api/speedcube/speedcube/user': freshFixture,
             },
             post: {
-                '/api/rainlab/user/register': userFixture,
+                '/api/rainlab/user/users': userFixture,
             },
         });
     });
@@ -97,7 +97,7 @@ describe('create account page', () => {
         await timeout(10);
         
         expect(axios.post).toHaveBeenCalledWith(
-            '/api/rainlab/user/register',
+            '/api/rainlab/user/users',
             {
                 email: 'john@example.com',
                 password: 'abc123',

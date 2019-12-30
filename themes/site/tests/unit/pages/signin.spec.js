@@ -22,7 +22,7 @@ describe('signin page', () => {
                 '/api/speedcube/speedcube/config': getConfigFixture,
             },
             post: {
-                '/api/rainlab/user/signin': postSigninFixture,
+                '/api/rainlab/user/auth/login': postSigninFixture,
             },
         });
     });
@@ -42,7 +42,7 @@ describe('signin page', () => {
         await timeout(10);
 
         expect(axios.post).toHaveBeenCalledWith(
-            '/api/rainlab/user/signin',
+            '/api/rainlab/user/auth/login',
             {
                 login: 'johndoe',
                 password: 'abc123',

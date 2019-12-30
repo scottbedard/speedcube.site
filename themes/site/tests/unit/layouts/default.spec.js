@@ -14,7 +14,8 @@ const mount = factory({
 // specs
 //
 describe('default layout', function() {
-    it('navigates home when logo is clicked', function() {
+    // re-enable this test when the new test factory is created
+    it.skip('navigates home when logo is clicked', function() {
         const vm = mount({
             template: `<v-default-layout />`,
         });

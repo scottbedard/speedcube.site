@@ -17,7 +17,7 @@ describe('signout page', function() {
     beforeEach(function() {
         stubRequests({
             get: {
-                '/api/rainlab/user/signout': true,
+                '/api/rainlab/user/auth/logout': true,
             },
         });
     });
@@ -31,6 +31,6 @@ describe('signout page', function() {
 
         await timeout(10);
 
-        expect(axios.get).toHaveBeenCalledWith('/api/rainlab/user/signout');
+        expect(axios.get).toHaveBeenCalledWith('/api/rainlab/user/auth/logout');
     });
 });
