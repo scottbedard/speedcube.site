@@ -6,7 +6,7 @@ import modules from '@/app/store';
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import routes from '@/app/routes';
-import { get, isFunction } from 'lodash-es';
+import { get, isFunction, noop } from 'lodash-es';
 import { when } from 'jest-when';
 import { createLocalVue, mount as testUtilsMount } from '@vue/test-utils';
 
@@ -99,13 +99,31 @@ global.mount = function mount(options, initialState = {}) {
 
     boot(localVue);
 
+    function walk(children) {
+        return children.reduce((acc, route) => {
+            if (typeof route.name === 'string') {
+                acc.push({
+                    ...route,
+                    beforeEnter: noop,
+                    component: { render: noop },
+                });
+            }
+
+            if (Array.isArray(route.children)) {
+                acc.push(...walk(route.children));
+            }
+
+            return acc;
+        }, []);
+    }
+
     const store =  new Vuex.Store({
         modules: mergeTestState(normalizeModules(modules), initialState),
     });
 
     const router = new VueRouter({
-        mode: 'history',
-        routes: routes(store),
+        mode: 'abstract',
+        routes: walk(routes(store)),
     });
 
     // sync(store, router);
@@ -133,7 +151,7 @@ global.input = function (value, el, setupFn) {
 //
 // no-op
 //
-global.noop = () => {};
+global.noop = noop;
 
 //
 // prevent store interactions before a component is mounted
