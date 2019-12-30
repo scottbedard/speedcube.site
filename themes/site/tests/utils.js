@@ -1,30 +1,14 @@
 /* eslint-disable */
-import Vue from 'vue/dist/vue.common.js';
-import VueRuntime from 'vue/dist/vue.runtime.common.dev.js';
 import axios from 'axios';
+import merge from 'deepmerge';
 import boot from '@/app/boot';
 import modules from '@/app/store';
+import Vuex from 'vuex';
+import VueRouter from 'vue-router';
 import routes from '@/app/routes';
-import { factory as spyfuVueFactory } from 'spyfu-vue-factory';
 import { get, isFunction } from 'lodash-es';
 import { when } from 'jest-when';
-
-// these functions are exposed globally to aid in
-// common testing tasks. they are designed to have
-// our tests mimick the actual usage of the component.
-// as an example of this, we render using dom apis.
-//
-// const vm = mount({
-//     template: `<some-awesome-component />`,
-// });
-//
-// the goal, is to have tests that not only feel more
-// natural, but also double as examples of our to use
-// the various components.
-
-// ignore warnings that dont apply in tests
-VueRuntime.config.productionTip = false;
-VueRuntime.config.devtools = false;
+import { createLocalVue, mount as testUtilsMount } from '@vue/test-utils';
 
 // axios is mocked globally throughout our application
 // if you import axios in a test, you will actually
@@ -51,37 +35,87 @@ global.click = function click(el) {
 };
 
 //
-// create a vue factory
+// vue factory
 //
-global.factory = function factory(options = {}) {
-    boot(Vue);
+function findModule(store, namespace) {
+    return namespace.split('/').reduce((obj, key) => {
+        // root modules will exist directly on the store
+        if (obj && obj[key]) {
+            return obj[key];
+        }
 
-    function walk(children) {
-        return children.reduce((acc, route) => {
-            if (typeof route.name === 'string') {
-                acc.push(route.name);
-            }
+        // child stores will exist in a modules object
+        if (obj && obj.modules && obj.modules[key]) {
+            return obj.modules[key];
+        }
 
-            if (Array.isArray(route.children)) {
-                acc.push(...walk(route.children));
-            }
+        // if we couldn't find the module, throw an error
+        // istanbul ignore next
+        throw new Error(`Could not find module "${namespace}" in store.`);
+    }, store);
+}
 
-            return acc;
-        }, []);
-    }
+function normalizeModules(modules) {
+    const normalized = {};
 
-    const vm = spyfuVueFactory({
-        Vue,
-        modules,
-        routes: walk(routes()),
-        ...options,
+    Object.keys(modules).forEach((key) => {
+        const module = modules[key];
+
+        // make sure each vuex module has all keys defined
+        normalized[key] = {
+            actions: module.actions || {},
+            getters: module.getters || {},
+            modules: module.modules ? normalizeModules(module.modules) : {},
+            mutations: module.mutations || {},
+            namespaced: module.namespaced || false,
+            state: {},
+        };
+
+        // make sure our state is a fresh object
+        if (typeof module.state === 'function') {
+            normalized[key].state = module.state();
+        } else if (typeof module.state === 'object') {
+            normalized[key].state = JSON.parse(JSON.stringify(module.state));
+        }
     });
 
-    // @todo: figure out if theres a way to hook into
-    // the end of the test so we can dispose of this vm
+    return normalized;
+}
 
-    return vm;
-};
+function mergeTestState(modules, state) {
+    Object.keys(state).forEach((key) => {
+        const module = findModule(modules, key);
+
+        if (module) {
+            module.state = merge(module.state, state[key]);
+        }
+    });
+
+    return modules;
+}
+
+global.mount = function mount(options, initialState = {}) {
+    const localVue = createLocalVue();
+
+    boot(localVue);
+
+    const store =  new Vuex.Store({
+        modules: mergeTestState(normalizeModules(modules), initialState),
+    });
+
+    const router = new VueRouter({
+        mode: 'history',
+        routes: routes(store),
+    });
+
+    // sync(store, router);
+
+    return testUtilsMount({
+        router,
+        store,
+        ...options,
+    }, { localVue });
+}
 
 //
 // simulate an input event
@@ -95,11 +129,6 @@ global.input = function (value, el, setupFn) {
         }
     });
 };
-
-//
-// default mount function
-//
-global.mount = global.factory();
 
 //
 // no-op

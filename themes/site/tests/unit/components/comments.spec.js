@@ -1,4 +1,3 @@
-/* eslint-disable */
 import axios from 'axios';
 import commentsComponent from '@/components/ui/comments.vue';
 
@@ -7,15 +6,6 @@ import commentsComponent from '@/components/ui/comments.vue';
 //
 import { commentsFixture, emptyCommentsFixture } from '~/fixtures/comments';
 import { postSigninFixture } from '~/fixtures/user';
-
-//
-// factory
-//
-const mount = factory({
-    components: {
-        'v-comments': commentsComponent,
-    },
-});
 
 //
 // specs
@@ -35,7 +25,10 @@ describe('<v-comments>', () => {
     });
 
     it('displays a loading state while comments are being fetched', async () => {
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-comments': commentsComponent,
+            },
             template: `<v-comments id="2" type="solve" />`,
         });
 
@@ -51,7 +44,10 @@ describe('<v-comments>', () => {
     });
 
     it('can be commented on by users', async () => {
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-comments': commentsComponent,
+            },
             template: `<v-comments id="1" type="solve" />`,
         }, {
             user: {
@@ -79,15 +75,21 @@ describe('<v-comments>', () => {
     });
 
     it('cannot be commented on by guests', () => {
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-comments': commentsComponent,
+            },
             template: `<v-comments id="1" type="solve" />`,
         });
-        
+
         expect(vm.$el.querySelector('form')).toBe(null);
     });
 
     it('displays an empty message if there are no comments', async () => {
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-comments': commentsComponent,
+            },
             template: `<v-comments id="1" type="solve" />`,
         });
 
@@ -100,7 +102,10 @@ describe('<v-comments>', () => {
         const onBlur = jest.fn();
         const onFocus = jest.fn();
 
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-comments': commentsComponent,
+            },
             methods: {
                 onBlur,
                 onFocus,
@@ -118,7 +123,7 @@ describe('<v-comments>', () => {
                 user: user(),
             },
         });
-        
+
         simulate('focus', vm.$el.querySelector('textarea'));
         expect(onFocus).toHaveBeenCalled();
 

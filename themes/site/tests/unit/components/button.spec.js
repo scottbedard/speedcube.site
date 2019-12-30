@@ -1,9 +1,9 @@
-describe('<v-button>', function() {
-    it('emits a click event', function() {
+describe('<v-button>', () => {
+    it('emits a click event', () => {
         const onClick = jest.fn();
 
-        const vm = mount({
-            methods: { 
+        const { vm } = mount({
+            methods: {
                 onClick,
             },
             template: `<v-button @click="onClick" />`,
@@ -14,8 +14,8 @@ describe('<v-button>', function() {
         expect(onClick).toHaveBeenCalled();
     });
 
-    it('renders default slot content', function() {
-        const vm = mount({
+    it('renders default slot content', () => {
+        const { vm } = mount({
             template: `<v-button>Hello world</v-button>`,
         });
 

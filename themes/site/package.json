@@ -49,6 +49,7 @@
     "chai": "^4.1.2",
     "codecov": "^3.1.0",
     "cross-env": "^5.2.0",
+    "deepmerge": "^4.2.2",
     "glob-all": "^3.1.0",
     "jest-canvas-mock": "^2.0.0",
     "jest-when": "^2.5.0",

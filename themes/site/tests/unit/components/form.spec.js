@@ -1,12 +1,11 @@
-
 //
 // specs
 //
-describe('<v-form> & <v-form-field>', function() {
-    it('emits a submit event', function(done) {
+describe('<v-form> & <v-form-field>', () => {
+    it('emits a submit event', async () => {
         const onSubmit = jest.fn();
 
-        const vm = mount({
+        const { vm } = mount({
             methods: {
                 onSubmit,
             },
@@ -15,12 +14,8 @@ describe('<v-form> & <v-form-field>', function() {
 
         submit(vm.$el);
 
-        setTimeout(() => {
-            expect(onSubmit).toHaveBeenCalled();
+        await timeout(10);
 
-            done();
-        }, 10);
+        expect(onSubmit).toHaveBeenCalled();
     });
-
-    // it('doesnt emit a submit event if validation fails');
 });

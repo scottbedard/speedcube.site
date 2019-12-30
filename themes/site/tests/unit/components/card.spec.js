@@ -1,17 +1,17 @@
 //
 // specs
 //
-describe('<v-card>', function() {
-    it('renders default content', function() {
-        const vm = mount({
+describe('<v-card>', () => {
+    it('renders default content', () => {
+        const { vm } = mount({
             template: `<v-card>Hello world</v-card>`,
         });
 
         expect(vm.$el.textContent).toBe('Hello world');
     });
 
-    it('supports a padded prop', function(done) {
-        const vm = mount({
+    it('supports a padded prop', async () => {
+        const { vm } = mount({
             data() {
                 return {
                     padded: false,
@@ -26,10 +26,8 @@ describe('<v-card>', function() {
 
         vm.padded = true;
 
-        vm.$nextTick(() => {
-            expect(hasPadding(vm.$el)).toBe(true);
+        await vm.$nextTick();
 
-            done();
-        });
+        expect(hasPadding(vm.$el)).toBe(true);
     });
 });
