@@ -125,18 +125,8 @@ export default {
                 this.$router.push({ name: 'home' });
             }), (err) => {
                 // failed
-                const status = get(err, 'response.data.status');
-
-                if (status === 'username_taken') {
-                    this.$refs.form.applyErrors({
-                        username: 'This username is already taken.',
-                    });
-                } else if (status === 'email_taken') {
-                    this.$refs.form.applyErrors({
-                        email: 'This email address is already registered. Try resetting your password if you\'ve forgotten it.',
-                    });
-                } else {
-                    this.$refs.form.handleValidationError(err);
+                if (err.response.status === 422) {
+                    this.$refs.form.applyErrors(err.response.data);
                 }
             }).finally(() => {
                 // complete

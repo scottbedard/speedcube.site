@@ -1,0 +1,9 @@
+[submodule "plugins/bedard/rainlabuserapi"]
+	path = plugins/bedard/rainlabuserapi
+	url = https://github.com/scottbedard/rainlab-user-api.git
+[submodule "plugins/rainlab/blog"]
+	path = plugins/rainlab/blog
+	url = https://github.com/rainlab/blog-plugin.git
+[submodule "plugins/rainlab/user"]
+	path = plugins/rainlab/user
+	url = https://github.com/rainlab/user-plugin.git

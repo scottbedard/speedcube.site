@@ -66,7 +66,6 @@
 </template>
 
 <script>
-import { get } from 'lodash-es';
 import { postUser } from '@/app/repositories/user';
 import accountHeaderComponent from '../account_header/account_header.vue';
 
@@ -97,8 +96,8 @@ export default {
                 this.passwordConfirmation = '';
             }, (err) => {
                 // failed
-                if (get(err, 'response.data.status') === 'invalid') {
-                    this.$refs.form.handleValidationError(err);
+                if (err.response.status === 422) {
+                    this.$refs.form.applyErrors(err.response.data);
                 } else {
                     this.$alert('An unknown error has occured, please try again or contact support.', { type: 'error' });
                 }
