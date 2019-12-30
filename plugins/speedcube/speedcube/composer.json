@@ -12,6 +12,6 @@
         "phpunit/phpunit": "~6.5"
     },
     "require": {
-        "laravel-notification-channels/twitter": "~1.0"
+        "laravel-notification-channels/twitter": "1.0.5"
     }
 }
