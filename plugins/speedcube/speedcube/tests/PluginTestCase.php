@@ -4,6 +4,7 @@ namespace Speedcube\Speedcube\Tests;
 
 use App;
 use Auth;
+use Config;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Notification;
 use Mail;
@@ -52,6 +53,9 @@ abstract class PluginTestCase extends BasePluginTestCase
         UserSettings::resetDefault();
         UserSettings::set('activate_mode', 'auto');
         UserSettings::set('allow_registration', true);
+
+        // set rainlab.user min password length
+        Config::set('rainlab.user::minPasswordLength', 8);
 
         // register the Auth facade in our test environment
         // @todo: figure out why RainLab.Blog isn't doing this for us
