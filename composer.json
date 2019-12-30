@@ -1,34 +1,4 @@
 {
-    "name": "october/october",
-    "description": "October CMS",
-    "homepage": "https://octobercms.com",
-    "keywords": ["october", "cms", "octobercms", "laravel"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Alexey Bobkov",
-            "email": "aleksey.bobkov@gmail.com",
-            "role": "Co-founder"
-        },
-        {
-            "name": "Samuel Georges",
-            "email": "daftspunky@gmail.com",
-            "role": "Co-founder"
-        },
-        {
-            "name": "Luke Towers",
-            "email": "octobercms@luketowers.ca",
-            "homepage": "https://luketowers.ca",
-            "role": "Maintainer"
-        }
-    ],
-    "support": {
-        "issues": "https://github.com/octobercms/october/issues",
-        "forum": "https://octobercms.com/forum/",
-        "docs": "https://octobercms.com/docs/",
-        "irc": "irc://irc.freenode.net/october",
-        "source": "https://github.com/octobercms/october"
-    },
     "require": {
         "php": ">=7.0",
         "ext-mbstring": "*",
@@ -42,8 +12,11 @@
     },
     "require-dev": {
         "fzaninotto/faker": "~1.7",
-        "phpunit/phpunit": "~5.7",
-        "phpunit/phpunit-selenium": "~1.2"
+        "phpunit/phpunit": "~6.5",
+        "phpunit/phpunit-selenium": "~1.2",
+        "meyfa/phpunit-assert-gd": "1.1.0",
+        "squizlabs/php_codesniffer": "3.*",
+        "jakub-onderka/php-parallel-lint": "^1.0"
     },
     "autoload-dev": {
         "classmap": [
@@ -53,11 +26,8 @@
         ]
     },
     "scripts": {
-        "post-create-project-cmd": [
-            "php artisan key:generate"
-        ],
         "post-update-cmd": [
-            "php artisan october:util set build"
+            "php artisan package:discover"
         ]
     },
     "config": {
