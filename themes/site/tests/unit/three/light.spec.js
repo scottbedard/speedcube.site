@@ -1,28 +1,19 @@
-/* eslint-disable */
 import lightComponent from '@/components/three/light/light.vue';
-import sceneComponent from '@/components/three/scene/scene.vue';
-
-//
-// factory
-//
-const mount = factory({
-    components: {
-        'v-light': lightComponent,
-        'v-scene': sceneComponent,
-    },
-});
 
 //
 // specs
 //
 describe('<v-light>', () => {
     it('updates when color or intensity changes', async () => {
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     color: 0xff0000,
                     intensity: 0.1,
                 };
+            },
+            components: {
+                'v-light': lightComponent,
             },
             template: `
                 <v-light
@@ -51,6 +42,9 @@ describe('<v-light>', () => {
         const AmbientLight = jest.spyOn(require('three'), 'AmbientLight');
 
         const vm = mount({
+            components: {
+                'v-light': lightComponent,
+            },
             template: `<v-light type="ambient" :color="0xff0000" :intensity="0.1" />`,
         });
 
@@ -62,7 +56,10 @@ describe('<v-light>', () => {
     it('supports point lights', () => {
         const PointLight = jest.spyOn(require('three'), 'PointLight');
 
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-light': lightComponent,
+            },
             template: `<v-light type="point" :color="0xff0000" :intensity="0.1" />`,
         });
 

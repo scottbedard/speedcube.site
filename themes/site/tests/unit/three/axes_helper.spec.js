@@ -1,21 +1,14 @@
-/* eslint-disable */
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
-
-//
-// factory
-//
-const mount = factory({
-    components: {
-        'v-axes-helper': axesHelperComponent,
-    },
-});
 
 //
 // specs
 //
 describe('<v-axes-helper>', () => {
     it('instantiates axes helper line segments', () => {
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-axes-helper': axesHelperComponent,
+            },
             template: `<v-axes-helper ref="axesHelper" />`,
         });
 

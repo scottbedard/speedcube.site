@@ -1,17 +1,6 @@
-/* eslint-disable */
 import sceneComponent from '@/components/three/scene/scene.vue';
 import rendererComponent from '@/components/three/renderer/renderer.vue';
 import { WebGLRenderer } from 'three';
-
-//
-// factory
-//
-const mount = factory({
-    components: {
-        'v-scene': sceneComponent,
-        'v-renderer': rendererComponent,
-    },
-});
 
 //
 // mocks
@@ -46,7 +35,10 @@ describe('<v-scene>', () => {
     });
 
     it('instantiates a scene', () => {
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-scene': sceneComponent,
+            },
             template: `<v-scene ref="scene" />`,
         });
 
@@ -54,7 +46,10 @@ describe('<v-scene>', () => {
     });
 
     it('instantiates a camera', () => {
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-scene': sceneComponent,
+            },
             template: `
                 <v-scene
                     ref="scene"
@@ -62,7 +57,8 @@ describe('<v-scene>', () => {
                     :camera-far="3"
                     :camera-fov="4"
                     :camera-near="5"
-                />`,
+                />
+            `,
         });
 
         const { camera } = vm.$refs.scene.$options.three
@@ -75,11 +71,14 @@ describe('<v-scene>', () => {
     });
 
     it('disposes the scene when destroyed', async () => {
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     scene: true,
                 };
+            },
+            components: {
+                'v-scene': sceneComponent,
             },
             template: `<v-scene v-if="scene" ref="scene" />`,
         });
@@ -93,11 +92,15 @@ describe('<v-scene>', () => {
     });
 
     it('adds and removes itself from the renderer', async () => {
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     scene: false,
                 };
+            },
+            components: {
+                'v-renderer': rendererComponent,
+                'v-scene': sceneComponent,
             },
             template: `
                 <div>
@@ -122,12 +125,15 @@ describe('<v-scene>', () => {
     });
 
     it('sets the initial camera position and reacts to changes', async () => {
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     cameraAngle: 0,
                     cameraDistance: 100,
                 };
+            },
+            components: {
+                'v-scene': sceneComponent,
             },
             template: `
                 <v-scene

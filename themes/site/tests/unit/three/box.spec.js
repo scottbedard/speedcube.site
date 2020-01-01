@@ -1,26 +1,19 @@
-/* eslint-disable */
 import boxComponent from '@/components/three/box/box.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
-
-//
-// factory
-//
-const mount = factory({
-    components: {
-        'v-box': boxComponent,
-    },
-});
 
 //
 // specs
 //
 describe('<v-box>', () => {
     it('disposes geometry and material when destroyed', async () => {
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     box: true,
                 };
+            },
+            components: {
+                'v-box': boxComponent,
             },
             template: `<v-box v-if="box" ref="box" />`,
         });
@@ -38,11 +31,14 @@ describe('<v-box>', () => {
     });
 
     it('updates when color changes', async () => {
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     color: 0xff0000,
                 };
+            },
+            components: {
+                'v-box': boxComponent,
             },
             template: `<v-box ref="box" :color="color" />`,
         });
