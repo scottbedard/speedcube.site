@@ -3,21 +3,15 @@ import keyboardComponent from '@/pages/solve/keyboard/keyboard.vue';
 import modalsComponent from '@/layouts/default/modals/modals.vue';
 
 //
-// factory
-//
-const mount = factory({
-    components: {
-        'v-keyboard': keyboardComponent,
-        'v-modals': modalsComponent,
-    },
-});
-
-//
 // specs
 //
 describe('solve page / keyboard editor', () => {
     it.skip('creates new key bindings', async () => {
         const vm = mount({
+            components: {
+                'v-keyboard': keyboardComponent,
+                'v-modals': modalsComponent,
+            },
             template: `
                 <div>
                     <v-keyboard />

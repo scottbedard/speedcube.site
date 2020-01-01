@@ -26,20 +26,14 @@ function configModel(opts = {}) {
 }
 
 //
-// factory
-//
-const mount = factory({
-    components: {
-        'v-solve': solveComponent,
-    },
-});
-
-//
 // specs
 //
 describe('solve page', () => {
     it('displays appearance editor', async () => {
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-solve': solveComponent,
+            },
             template: `<v-solve />`,
         });
 
@@ -53,7 +47,10 @@ describe('solve page', () => {
     });
 
     it('displays key bindings editor', async () => {
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-solve': solveComponent,
+            },
             template: `<v-solve />`,
         });
 
@@ -69,9 +66,12 @@ describe('solve page', () => {
     it('applies user config to puzzle', () => {
         const model = configModel({ puzzle: '3x3' });
 
-        const vm = mount({
+        const { vm } = mount({
             beforeCreate() {
                 this.$router.replace({ name: 'solve', params: { puzzle: '3x3' }});
+            },
+            components: {
+                'v-solve': solveComponent,
             },
             template: `<v-solve ref="solve" />`,
         }, {

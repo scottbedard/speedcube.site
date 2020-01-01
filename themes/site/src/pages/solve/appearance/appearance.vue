@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { cloneDeep, get } from 'lodash-es';
+import { cloneDeep, get, noop } from 'lodash-es';
 import { mapGetters, mapState } from 'vuex';
 import options from './options';
 import { puzzles } from '@/app/constants';
@@ -153,7 +153,7 @@ export default {
                     puzzle: this.puzzle,
                 }).then(() => {
                     // success
-                    this.$router.push(this.solveRoute);
+                    this.$router.push(this.solveRoute).catch(noop);
 
                     this.$alert('Puzzle configuration saved');
                 }).finally(() => {
@@ -163,7 +163,7 @@ export default {
             } else {
                 this.$emit('apply', this.config);
 
-                this.$router.push(this.solveRoute);
+                this.$router.push(this.solveRoute).catch(noop);
 
                 this.$alert('Configuration applied, sign in to save these settings');
             }

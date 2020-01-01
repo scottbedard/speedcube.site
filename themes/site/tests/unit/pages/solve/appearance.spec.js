@@ -1,13 +1,10 @@
-/* eslint-disable */
-import appearanceComponent from '@/pages/solve/appearance/appearance.vue';
 import axios from 'axios';
+import appearanceComponent from '@/pages/solve/appearance/appearance.vue';
 
 //
 // fixtures
 //
-const emptyConfigsFixture = () => {
-    return { configs: [], status: 'success' };
-}
+const emptyConfigsFixture = () => ({ configs: [], status: 'success' });
 
 //
 // mocks
@@ -28,33 +25,20 @@ jest.mock('@/app/constants', () => {
     };
 });
 
-jest.mock('@/pages/solve/appearance/options', () => {
-    return {
-        'test': [
-            {
-                component: {
-                    render: h => <div>
-                        hmmm
-                    </div>,
-                },
-                key: 'foo',
-                label: 'Foo',
-                props: {
-                    
-                },
+jest.mock('@/pages/solve/appearance/options', () => ({
+    test: [
+        {
+            component: {
+                render: h => <div>hmmm</div>,
             },
-        ],
-    };
-});
+            key: 'foo',
+            label: 'Foo',
+            props: {
 
-//
-// factory
-//
-const mount = factory({
-    components: {
-        'v-appearance': appearanceComponent,
-    },
-});
+            },
+        },
+    ],
+}));
 
 //
 // specs
@@ -69,9 +53,12 @@ describe('solve page / appearance editor', () => {
     });
 
     it('uses the default config if no config model exists', () => {
-        const vm = mount({
+        const { vm } = mount({
             beforeCreate() {
-                this.$router.replace({ name: 'solve', params: { puzzle: 'test' }});
+                this.$router.replace({ name: 'solve', params: { puzzle: 'test' } });
+            },
+            components: {
+                'v-appearance': appearanceComponent,
             },
             template: `<v-appearance ref="appearance" />`,
         }, {
@@ -84,9 +71,12 @@ describe('solve page / appearance editor', () => {
     });
 
     it('loads custom configs from the user store', () => {
-        const vm = mount({
+        const { vm } = mount({
             beforeCreate() {
-                this.$router.replace({ name: 'solve', params: { puzzle: 'test' }});
+                this.$router.replace({ name: 'solve', params: { puzzle: 'test' } });
+            },
+            components: {
+                'v-appearance': appearanceComponent,
             },
             template: `<v-appearance ref="appearance" />`,
         }, {
@@ -97,7 +87,7 @@ describe('solve page / appearance editor', () => {
                         {
                             config: '{"foo":"custom"}',
                             puzzle: 'test',
-                        }
+                        },
                     ],
                 },
             },
@@ -107,9 +97,12 @@ describe('solve page / appearance editor', () => {
     });
 
     it('saves user config if authenticated and returns to solve page', async () => {
-        const vm = mount({
+        const { vm } = mount({
             beforeCreate() {
-                this.$router.replace({ name: 'solve', params: { puzzle: 'test' }});
+                this.$router.replace({ name: 'solve', params: { puzzle: 'test' } });
+            },
+            components: {
+                'v-appearance': appearanceComponent,
             },
             template: `<v-appearance ref="appearance" />`,
         }, {
@@ -121,6 +114,8 @@ describe('solve page / appearance editor', () => {
         const push = jest.spyOn(vm.$router, 'push');
 
         submit(vm.$el.querySelector('form'));
+
+        await timeout(100);
 
         expect(axios.post).toHaveBeenCalledWith('/api/speedcube/speedcube/config', {
             config: '{"foo":"default"}',
