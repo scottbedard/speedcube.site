@@ -1,9 +1,10 @@
 import axios from 'axios';
+import { noop } from 'lodash-es';
 
 //
 // helpers
 //
-const createStore = () => mount().$store;
+const createStore = () => mount({ render: noop }).vm.$store;
 
 //
 // fixtures
@@ -18,8 +19,8 @@ function configsFixture() {
 //
 // specs
 //
-describe('user store', function() {
-    beforeEach(function() {
+describe('user store', () => {
+    beforeEach(() => {
         stubRequests({
             get: {
                 '/api/speedcube/speedcube/config': configsFixture,
@@ -30,18 +31,17 @@ describe('user store', function() {
     //
     // actions
     //
-    describe('actions', function() {
-        it('syncConfigs', function(done) {
+    describe('actions', () => {
+        it('syncConfigs', async () => {
             const store = createStore();
             const request = store.dispatch('user/syncConfigs');
 
             expect(axios.get).toHaveBeenCalledWith('/api/speedcube/speedcube/config');
             expect(store.state.user.configsAreLoading).toBe(true);
 
-            setTimeout(() => {
-                expect(store.state.user.configsAreLoading).toBe(false);
-                done();
-            }, 10);
+            await timeout(10);
+
+            expect(store.state.user.configsAreLoading).toBe(false);
         });
     });
 });

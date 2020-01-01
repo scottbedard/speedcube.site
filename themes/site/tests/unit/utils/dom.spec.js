@@ -7,11 +7,11 @@ import {
 //
 // specs
 //
-describe('dom utils', function() {
+describe('dom utils', () => {
     // need to figure out whats different
     // about our mocked click events.
     it.skip('isForeignClick', (done) => {
-        const vm = mount({
+        const { vm } = mount({
             methods: {
                 onClick(e) {
                     // expect(isForeignClick(e, this.$el)).to.be.false;
@@ -33,10 +33,10 @@ describe('dom utils', function() {
         console.log(vm.$el.outerHTML);
     });
 
-    it.skip('walkEventPath (ie)', function(done) {
+    it.skip('walkEventPath (ie)', (done) => {
         const cb = jest.fn();
 
-        const vm = mount({
+        const { vm } = mount({
             methods: {
                 onClick(e) {
                     const pathLength = e.path.length;
@@ -65,8 +65,8 @@ describe('dom utils', function() {
         document.body.removeChild(vm.$el);
     });
 
-    it('queryElementThen', function() {
-        const vm = mount({
+    it('queryElementThen', () => {
+        const { vm } = mount({
             template: `
                 <div>
                     <div data-foo />
