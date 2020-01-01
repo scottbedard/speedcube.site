@@ -1,13 +1,13 @@
 {
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.0.8",
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "october/rain": "~1.0",
         "october/system": "~1.0",
         "october/backend": "~1.0",
         "october/cms": "~1.0",
-        "laravel/framework": "5.5.*",
+        "laravel/framework": "^5.5.40",
         "wikimedia/composer-merge-plugin": "dev-master"
     },
     "require-dev": {
@@ -20,6 +20,8 @@
     },
     "autoload-dev": {
         "classmap": [
+            "tests/concerns/InteractsWithAuthentication.php",
+            "tests/fixtures/backend/models/UserFixture.php",
             "tests/TestCase.php",
             "tests/UiTestCase.php",
             "tests/PluginTestCase.php"
@@ -27,13 +29,14 @@
     },
     "scripts": {
         "post-update-cmd": [
+            "php artisan october:util set build",
             "php artisan package:discover"
         ]
     },
     "config": {
         "preferred-install": "dist",
         "platform": {
-            "php": "7.0"
+            "php": "7.0.8"
         }
     },
     "minimum-stability": "dev",

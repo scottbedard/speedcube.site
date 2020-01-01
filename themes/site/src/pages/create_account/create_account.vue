@@ -98,7 +98,6 @@
 </template>
 
 <script>
-import { get } from 'lodash-es';
 import { postRegister } from '@/app/repositories/user';
 
 export default {

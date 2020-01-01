@@ -7,7 +7,7 @@ import { noop } from 'lodash-es';
 //
 describe('component utils', () => {
     it('findAncestor', () => {
-        const vm = mount({
+        const { vm } = mount({
             components: {
                 'v-parent': {
                     name: 'parent',

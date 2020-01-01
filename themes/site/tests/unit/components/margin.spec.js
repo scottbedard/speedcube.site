@@ -1,17 +1,17 @@
 //
 // specs
 //
-describe('<v-margin>', function() {
-    it('renders default slot content', function() {
-        const vm = mount({
+describe('<v-margin>', () => {
+    it('renders default slot content', () => {
+        const { vm } = mount({
             template: `<v-margin>Hello world</v-margin>`,
         });
 
         expect(vm.$el.textContent).toBe('Hello world');
     });
 
-    it('adds horizontal padding when padded prop is true', function(done) {
-        const vm = mount({
+    it('adds horizontal padding when padded prop is true', async () => {
+        const { vm } = mount({
             data() {
                 return {
                     padded: false,
@@ -27,9 +27,9 @@ describe('<v-margin>', function() {
 
         // and flipping padded to true should attach the class
         vm.padded = true;
-        vm.$nextTick(() => {
-            expect(hasPxClass(vm.$el)).toBe(true);
-            done();
-        });
+
+        await vm.$nextTick();
+
+        expect(hasPxClass(vm.$el)).toBe(true);
     });
 });

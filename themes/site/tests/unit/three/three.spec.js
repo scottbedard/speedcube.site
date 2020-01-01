@@ -1,21 +1,14 @@
-/* eslint-disable */
 import objComponent from '@/components/three/obj/obj.vue';
 import { degreesToRadians } from '@/app/utils/number';
 import { Object3D } from 'three';
 
-//
-// factory
-//
-const mount = factory({
-    components: {
-        'v-obj': objComponent,
-    },
-});
-
 describe('<v-obj>', () => {
     it('adds and removes itself from parent objects', async () => {
-        const vm = mount({
+        const { vm } = mount({
             data: () => ({ child: false }),
+            components: {
+                'v-obj': objComponent,
+            },
             template: `
                 <v-obj ref="parent">
                     <v-obj v-if="child" ref="child" />
@@ -46,13 +39,16 @@ describe('<v-obj>', () => {
     });
 
     it('sets local position and updates when changed', async () => {
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     x: 1,
                     y: 2,
                     z: 3,
                 };
+            },
+            components: {
+                'v-obj': objComponent,
             },
             template: `
                 <v-obj ref="obj" :position="{ x, y, z }" />
@@ -72,13 +68,16 @@ describe('<v-obj>', () => {
     });
 
     it('sets local rotation and updates when changed', async () => {
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     x: 1,
                     y: 2,
                     z: 3,
                 };
+            },
+            components: {
+                'v-obj': objComponent,
             },
             template: `
                 <v-obj ref="obj" :rotation="{ x, y, z }" />
@@ -102,11 +101,14 @@ describe('<v-obj>', () => {
     });
 
     it('sets initial visibility and updates when changed', async () => {
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     visible: false,
                 };
+            },
+            components: {
+                'v-obj': objComponent,
             },
             template: `<v-obj ref="obj" :visible="visible" />`,
         });
@@ -124,9 +126,12 @@ describe('<v-obj>', () => {
     it('accepts a custom threejs object as a prop', () => {
         const customObj = new Object3D();
 
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return { customObj };
+            },
+            components: {
+                'v-obj': objComponent,
             },
             template: `<v-obj ref="obj" :obj="customObj" />`,
         });

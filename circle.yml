@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  backend_coverage:
+  backend:
     docker:
       - image: circleci/php:7.2-node-browsers
     steps:
@@ -8,7 +8,8 @@ jobs:
       - run:
           name: Install plugins
           command: |
-            git clone git@github.com:scottbedard/rainlab-user-api.git ./plugins/bedard/rainlabuserapi
+            git submodule init
+            git submodule update --remote
       - restore_cache:
           key: -v3-{{ checksum "composer.lock" }}-{{ checksum "themes/site/yarn.lock" }}
       - run:
@@ -30,46 +31,13 @@ jobs:
           command: |
             cp .env.example .env
       - run:
-          name: Generate backend coverage
+          name: Test
           command: |
-            (cd ./plugins/speedcube/speedcube && vendor/bin/phpunit --coverage-clover clover.xml)
+            (cd ./plugins/speedcube/speedcube && phpdbg -qrr vendor/bin/phpunit -d memory_limit=512M --coverage-clover clover.xml)
       - run:
           name: Codecov
           command: |
             (cd ./plugins/speedcube/speedcube && bash <(curl -s https://codecov.io/bash) -t 5c7c532d-d106-480a-b67e-d2af48ce8f56 -cF php)
-  backend_test:
-    docker:
-      - image: circleci/php:7.2-node-browsers
-    steps:
-      - checkout
-      - run:
-          name: Install plugins
-          command: |
-            git clone git@github.com:scottbedard/rainlab-user-api.git ./plugins/bedard/rainlabuserapi
-      - restore_cache:
-          key: -v3-{{ checksum "composer.lock" }}-{{ checksum "themes/site/yarn.lock" }}
-      - run:
-          name: Install dependencies
-          command: |
-            wget https://getcomposer.org/composer.phar
-            php composer.phar install --no-interaction
-            sudo composer self-update
-            composer install
-            (cd ./plugins/speedcube/speedcube && composer install)
-            (cd ./themes/site && yarn install)
-      - save_cache:
-          key: -v3-{{ checksum "composer.lock" }}-{{ checksum "themes/site/yarn.lock" }}
-          paths:
-            - "vendor"
-            - "themes/site/node_modules"
-      - run:
-          name: Configure environment
-          command: |
-            cp .env.example .env
-      - run:
-          name: Test backend
-          command: |
-            (cd ./plugins/speedcube/speedcube && vendor/bin/phpunit)
   frontend:
     docker:
       - image: circleci/php:7.2-node-browsers
@@ -110,12 +78,9 @@ workflows:
   version: 2
   tests:
     jobs:
-      - backend_test
+      - backend
       - frontend
       - deploy:
           requires:
-            - backend_test
+            - backend
             - frontend
-      - backend_coverage:
-          requires:
-            - backend_test

@@ -1,5 +1,6 @@
 /* eslint-disable */
 const isProduction = process.env.NODE_ENV === 'production';
+const isTesting = process.env.NODE_ENV === 'test';
 
 module.exports = {
     env: {
@@ -9,6 +10,27 @@ module.exports = {
     extends: [
         'plugin:vue/essential',
         '@vue/airbnb',
+    ],
+    globals: {
+        click: isTesting ? 'readonly' : undefined,
+        input: isTesting ? 'readonly' : undefined,
+        mount: isTesting ? 'readonly' : undefined,
+        simulate: isTesting ? 'readonly' : undefined,
+        stubRequests: isTesting ? 'readonly' : undefined,
+        submit: isTesting ? 'readonly' : undefined,
+        timeout: isTesting ? 'readonly' : undefined,
+        user: isTesting ? 'readonly' : undefined,
+    },
+    overrides: [
+        {
+            files: [
+                '**/__tests__/*.{j,t}s?(x)',
+                '**/tests/unit/**/*.spec.{j,t}s?(x)',
+            ],
+            env: {
+                jest: true,
+            },
+        },
     ],
     parserOptions: {
         parser: 'babel-eslint',
@@ -25,5 +47,6 @@ module.exports = {
         'no-debugger': isProduction ? 'error' : 'off',
         'no-param-reassign': 0,
         'object-curly-newline': 0,
+        'quotes': 0,
     },
 };

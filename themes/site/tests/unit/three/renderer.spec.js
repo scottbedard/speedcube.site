@@ -28,16 +28,6 @@ jest.mock('three', () => {
     }
 });
 
-//
-// factory
-//
-const mount = factory({
-    components: {
-        'v-scene': sceneComponent,
-        'v-renderer': rendererComponent,
-    },
-});
-
 describe('<v-renderer>', () => {
     beforeEach(() => {
         jest.spyOn(window, 'requestAnimationFrame');
@@ -51,11 +41,14 @@ describe('<v-renderer>', () => {
     });
 
     it('creates a WebGLRenderer', () => {
-        const vm = mount({
+        const { vm } = mount({
             created() {
                 // since our WebGLRenderer needs a canvas element
                 // to render to, it shouldn't be instantiated yet
                 expect(WebGLRenderer).not.toHaveBeenCalled();
+            },
+            components: {
+                'v-renderer': rendererComponent,
             },
             template: `<v-renderer />`,
         });
@@ -70,11 +63,15 @@ describe('<v-renderer>', () => {
     });
 
     it('tracks the number of active scenes', async () => {
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     scene: false,
                 }
+            },
+            components: {
+                'v-renderer': rendererComponent,
+                'v-scene': sceneComponent,
             },
             template: `
                 <div>
@@ -105,7 +102,10 @@ describe('<v-renderer>', () => {
     it('tracks scroll position', async () => {
         window.scrollY = 10;
 
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-renderer': rendererComponent,
+            },
             template: `<v-renderer ref="renderer" />`,
         });
 
@@ -122,7 +122,10 @@ describe('<v-renderer>', () => {
     });
 
     it('tracks browser dimensions', async () => {
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-renderer': rendererComponent,
+            },
             template: `<v-renderer />`,
         }, {
             browser: {
@@ -144,11 +147,15 @@ describe('<v-renderer>', () => {
     });  
 
     it('runs a requestAnimationFrame loop', async () => {
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     scene: false,
                 };
+            },
+            components: {
+                'v-renderer': rendererComponent,
+                'v-scene': sceneComponent,
             },
             template: `
                 <div>
@@ -175,7 +182,11 @@ describe('<v-renderer>', () => {
     });
 
     it('sets the size of the renderer', async () => {
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-scene': sceneComponent,
+                'v-renderer': rendererComponent,
+            },
             template: `<v-renderer ref="renderer" />`,
         }, {
             browser: {
@@ -198,11 +209,15 @@ describe('<v-renderer>', () => {
     })
 
     it('hides the canvas when there are no scenes to render', async () => {
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     scene: false,
                 };
+            },
+            components: {
+                'v-renderer': rendererComponent,
+                'v-scene': sceneComponent,
             },
             template: `
                 <div>
@@ -221,7 +236,11 @@ describe('<v-renderer>', () => {
     });
 
     it('skips rendering off-screen scenes', () => {
-        const vm = mount({
+        const { vm } = mount({
+            components: {
+                'v-renderer': rendererComponent,
+                'v-scene': sceneComponent,
+            },
             template: `
                 <div>
                     <v-renderer ref="renderer" />

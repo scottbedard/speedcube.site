@@ -1,16 +1,6 @@
-/* eslint-disable */
 import shapeComponent from '@/components/three/shape/shape.vue';
 import { roundedRectangle } from '@/components/three/geometries';
 import { MeshBasicMaterial } from 'three';
-
-//
-// factory
-//
-const mount = factory({
-    components: {
-        'v-shape': shapeComponent,
-    },
-});
 
 //
 // specs
@@ -21,9 +11,12 @@ describe('<v-shape>', () => {
         const innerMaterial = new MeshBasicMaterial();
         const outerMaterial = new MeshBasicMaterial();
 
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return { geometry, innerMaterial, outerMaterial };
+            },
+            components: {
+                'v-shape': shapeComponent,
             },
             template: `
                 <v-shape
@@ -55,13 +48,16 @@ describe('<v-shape>', () => {
         const geometry1 = roundedRectangle(1, 1, 1);
         const geometry2 = roundedRectangle(1, 1, 2);
 
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     geometry: geometry1,
                     innerMaterial: new MeshBasicMaterial(),
                     outerMaterial: new MeshBasicMaterial(),
                 };
+            },
+            components: {
+                'v-shape': shapeComponent,
             },
             template: `
                 <v-shape
@@ -90,12 +86,15 @@ describe('<v-shape>', () => {
         const material1 = new MeshBasicMaterial();
         const material2 = new MeshBasicMaterial();
 
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     geometry: geometry,
                     innerMaterial: material1,
                 };
+            },
+            components: {
+                'v-shape': shapeComponent,
             },
             template: `
                 <v-shape
@@ -121,12 +120,15 @@ describe('<v-shape>', () => {
         const material1 = new MeshBasicMaterial();
         const material2 = new MeshBasicMaterial();
 
-        const vm = mount({
+        const { vm } = mount({
             data() {
                 return {
                     geometry: geometry,
                     outerMaterial: material1,
                 };
+            },
+            components: {
+                'v-shape': shapeComponent,
             },
             template: `
                 <v-shape

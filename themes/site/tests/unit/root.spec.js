@@ -1,4 +1,3 @@
-/* eslint-disable */
 import rootComponent from '@/root.vue';
 
 jest.mock('@/components/three/renderer/renderer.vue', () => {
@@ -8,18 +7,9 @@ jest.mock('@/components/three/renderer/renderer.vue', () => {
 });
 
 //
-// factory
-//
-const mount = factory({
-    components: {
-        'v-root': rootComponent,
-    },
-});
-
-//
 // specs
 //
-describe('root component', function() {
+describe('root component', () => {
     const windowDimensions = {
         innerWidth: window.innerWidth,
         innerHeight: window.innerHeight,
@@ -33,12 +23,15 @@ describe('root component', function() {
         window.innerWidth = windowDimensions.innerWidth;
     });
 
-    it('syncs window dimensions with vuex', function() {
+    it('syncs window dimensions with vuex', () => {
         let commit;
 
-        const vm = mount({
+        const { vm } = mount({
             beforeCreate() {
                 commit = jest.spyOn(this.$store, 'commit');
+            },
+            components: {
+                'v-root': rootComponent,
             },
             template: `<v-root />`,
         });
