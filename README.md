@@ -20,7 +20,7 @@ That is where this project begins. Our goal is to be a platform that works in an
 If you're familiar with [Laravel](https://laravel.com) or [Vue](https://vuejs.org), you're going to feel right at home. We recommend using a [Laravel Homestead](https://laravel.com/docs/homestead) box for your development environment, but anything that supports both PHP and Node should be fine.
 
 1. Clone this repository, and rename `.env.example` to `.env`
-2. Clone [`rainlab-user-api`](https://github.com/bedard/rainlab-user-api) to `/plugins/bedard/rainlabuserapi`
+2. Clone [`rainlab-user-api`](https://github.com/scottbedard/rainlab-user-api) to `/plugins/bedard/rainlabuserapi`
 3. Execute `composer install` from the root directory
 4. Execute `yarn install` from `/themes/site`
 5. Build databases with `php artisan october:up`
