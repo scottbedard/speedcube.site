@@ -186,6 +186,12 @@ class Plugin extends PluginBase
                         'permissions' => ['speedcube.speedcube.access_solves'],
                         'url'         => Backend::url('speedcube/speedcube/solves'),
                     ],
+                    'algorithms' => [
+                        'icon'          => 'icon-keyboard-o',
+                        'label'         => 'Algorithms',
+                        'permissions'   => ['speedcube.speedcube.access_algorithms'],
+                        'url'           => Backend::url('speedcube/speedcube/algorithms'),
+                    ],
                     'comments' => [
                         'icon' => 'icon-comment-o',
                         'label' => 'Comments',

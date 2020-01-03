@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Algorithm
+
+# Model Form Field configuration
+form: $/speedcube/speedcube/models/algorithm/fields.yaml
+
+# Model Class name
+modelClass: Speedcube\Speedcube\Models\Algorithm
+
+# Default redirect location
+defaultRedirect: speedcube/speedcube/algorithms
+
+# Create page
+create:
+    title: Create Algorithm
+    redirect: speedcube/speedcube/algorithms/update/:id
+    redirectClose: speedcube/speedcube/algorithms
+
+# Update page
+update:
+    title: Edit Algorithm
+    redirect: speedcube/speedcube/algorithms
+    redirectClose: speedcube/speedcube/algorithms
+
+# Preview page
+preview:
+    title: Preview Algorithm

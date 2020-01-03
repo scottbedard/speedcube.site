@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Algorithm Group
+
+# Model Form Field configuration
+form: $/speedcube/speedcube/models/algorithmgroup/fields.yaml
+
+# Model Class name
+modelClass: Speedcube\Speedcube\Models\AlgorithmGroup
+
+# Default redirect location
+defaultRedirect: speedcube/speedcube/algorithmgroups
+
+# Create page
+create:
+    title: Create Algorithm Group
+    redirect: speedcube/speedcube/algorithmgroups/update/:id
+    redirectClose: speedcube/speedcube/algorithmgroups
+
+# Update page
+update:
+    title: Edit Algorithm Group
+    redirect: speedcube/speedcube/algorithmgroups
+    redirectClose: speedcube/speedcube/algorithmgroups
+
+# Preview page
+preview:
+    title: Preview Algorithm Group

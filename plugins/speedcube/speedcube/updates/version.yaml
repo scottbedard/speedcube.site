@@ -25,3 +25,8 @@
 1.0.5:
   - Migrate puzzle configurations
   - 1.0.5/migrate_puzzle_configurations.php
+
+1.0.6:
+  - Create Algorithm and AlgorithmGroup models
+  - 1.0.6/create_algorithm_groups_table.php
+  - 1.0.6/create_algorithms_table.php
