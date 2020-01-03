@@ -19,7 +19,7 @@
             <div
                 v-if="!value && placeholder"
                 v-text="placeholder"
-                class="absolute left-0 truncate pl-4 pr-10 top-half -ty-half w-full"
+                class="absolute left-0 truncate pl-4 pointer-events-none pr-10 top-half -ty-half w-full"
             />
 
             <!-- arrow -->

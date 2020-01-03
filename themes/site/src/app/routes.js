@@ -172,6 +172,21 @@ export default function (store) {
                 },
 
                 //
+                // training
+                //
+                {
+                    name: 'training',
+                    path: '/training',
+                    component: () => import('@/pages/training/browse/browse.vue' /* webpackChunkName: "trainingBrowse" */),
+                },
+
+                {
+                    name: 'trainingAdd',
+                    path: '/training/add',
+                    component: () => import('@/pages/training/add/add.vue' /* webpackChunkName: "trainingAdd" */),
+                },
+
+                //
                 // users
                 //
                 {

@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
     a + a {
-        margin-left: 2rem;
+        @apply ml-12
     }
 </style>
 
