@@ -47,7 +47,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^24.8.0",
     "chai": "^4.1.2",
-    "codecov": "^3.1.0",
+    "codecov": "^3.6.5",
     "cross-env": "^5.2.0",
     "deepmerge": "^4.2.2",
     "glob-all": "^3.1.0",
