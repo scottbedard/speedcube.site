@@ -2,25 +2,31 @@
     <v-obj>
         <v-axes-helper />
 
-        <v-shape
-            v-for="(shape, index) in megaStickers"
-            :geometry="shape"
-            :inner-material="material"
+        <v-obj
+            v-for="(shape, index) in 5"
             :key="index"
-            :outer-material="material"
-            :position="{
-                x: 0,
-                y: 0,
-                z: 0,
-            }"
-        />
+            :rotation="{
+                z: 72 * -index,
+            }">
+            <v-shape
+                :geometry="kiloGeometry"
+                :inner-material="material"
+                :key="index"
+                :outer-material="material"
+                :position="{
+                    x: 0,
+                    y: config.stickerSpacing,
+                    z: 0,
+                }"
+            />
+        </v-obj>
 
-        <!-- <v-shape
+        <v-shape
             :geometry="g2"
             :inner-material="m2"
             :outer-material="m2"
             :position="p2"
-        /> -->
+        />
     </v-obj>
 </template>
 
@@ -39,22 +45,21 @@ export default {
         'v-shape': shapeComponent,
     },
     computed: {
-        // g2() {
-        //     return polygon(3, 100); // circle w/ radius 5
-        // },
-        // m2() {
-        //     return new MeshLambertMaterial({
-        //         color: 0xff0000,
-        //         opacity: 1,
-        //         side: DoubleSide,
-        //     });
-        // },
-        // p2() {
-        //     const { vertices } = polygon(100, 5);
-        //     const [origin, a, b, c, d, e] = vertices;
+        g2() {
+            return polygon(5, 10);
+        },
+        m2() {
+            return new MeshLambertMaterial({
+                color: 0xff0000,
+                side: DoubleSide,
+            });
+        },
+        p2() {
+            const { vertices } = polygon(100, 5);
+            const [origin, a, b, c, d, e] = vertices;
 
-        //     return midpoint(a, b);
-        // },
+            return midpoint(a, b, 0.5);
+        },
         material() {
             return new MeshLambertMaterial({
                 color: 0xffffff,
@@ -80,20 +85,19 @@ export default {
                 shape([midpoint(b, c, 2/3), c, midpoint(c, d, 1/3), cc], radius)
             ];
         },
-        kiloStickers() {
-            const { vertices } = polygon(100, 5);
-            const [origin, a, b, c, d, e] = vertices;
+        kiloGeometry() {
+            const [origin, a, b, c, d, e] = polygon(100, 5).vertices;
 
-            const radius = 0.5;
-
-            return [
-                shape([origin, midpoint(a, e), a, midpoint(a, b)], radius),
-                shape([origin, midpoint(a, b), b, midpoint(b, c)], radius),
-                shape([origin, midpoint(b, c), c, midpoint(c, d)], radius),
-                shape([origin, midpoint(c, d), d, midpoint(d, e)], radius),
-                shape([origin, midpoint(d, e), e, midpoint(e, a)], radius),
-            ];
+            return shape([
+                origin,
+                midpoint(a, e),
+                a,
+                midpoint(a, b)
+            ], this.config.stickerRadius);
         },
     },
+    props: [
+        'config',
+    ],
 };
 </script>

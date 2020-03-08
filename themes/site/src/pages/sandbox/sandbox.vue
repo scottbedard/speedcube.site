@@ -8,19 +8,29 @@
                         :config="{
                             cameraAngle,
                             cameraDistance,
+                            stickerRadius,
+                            stickerSpacing,
                         }"
                     />
                 </div>
             </div>
 
-            <div class="flex justify-center mt-12">
-                <div class="p-4 w-full xs:w-1/2 sm:w-1/3">
+            <div class="flex flex-wrap justify-center mt-12 max-w-2xl mx-auto">
+                <div class="p-4 w-full xs:w-1/2">
                     <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Camera Angle</label>
                     <v-range-input v-model="cameraAngle" :min="0" :max="90" />
                 </div>
-                <div class="p-4 w-full xs:w-1/2 sm:w-1/3">
+                <div class="p-4 w-full xs:w-1/2">
                     <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Camera Distance</label>
                     <v-range-input v-model="cameraDistance" :min="0" :max="3000" />
+                </div>
+                <div class="p-4 w-full xs:w-1/2">
+                    <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Sticker Spacing</label>
+                    <v-range-input v-model="stickerSpacing" :min="0" :max="50" />
+                </div>
+                <div class="p-4 w-full xs:w-1/2">
+                    <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Sticker Radius</label>
+                    <v-range-input v-model="stickerRadius" :min="0" :max="0.5" :step="0.01" />
                 </div>
             </div>
         </v-margin>
@@ -35,6 +45,8 @@ export default {
         return {
             cameraAngle: 90,
             cameraDistance: 250,
+            stickerRadius: 0.2,
+            stickerSpacing: 20,
         };
     },
     components: {

@@ -22,6 +22,7 @@
             <!-- minx -->
             <v-minx
                 v-if="isMinx"
+                :config="normalizedConfig"
             />
 
             <!-- cubes -->
