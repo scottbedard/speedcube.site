@@ -21,16 +21,7 @@ import { degreesToRadians } from './number';
  * @return {Vector3}
  */
 export function midpoint(a, b, percentage = 0.5) {
-    if (percentage === 0.5) {
-        return new Vector3((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2);
-    }
-
-    return a.clone().add(
-        b.clone()
-            .sub(a)
-            .normalize()
-            .multiplyScalar(a.distanceTo(b) * percentage)
-    );
+    return new Vector3().lerpVectors(a, b, percentage);
 }
 
 /**
