@@ -19,8 +19,14 @@
                 :position="{ x: 0, y: 2000, z: 2000 }"
             />
 
+            <!-- minx -->
+            <v-minx
+                v-if="isMinx"
+            />
+
             <!-- cubes -->
             <v-cube
+                v-else-if="isCube"
                 :config="normalizedConfig"
                 :current-turn="currentTurn"
                 :initial-state="initialState"
@@ -37,6 +43,7 @@
 import lightComponent from '@/components/three/light/light.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
 import cubeComponent from './cube/cube.vue';
+import minxComponent from './minx/minx.vue';
 
 // default puzzle config
 const defaultConfig = {
@@ -48,11 +55,15 @@ export default {
     components: {
         'v-cube': cubeComponent,
         'v-light': lightComponent,
+        'v-minx': minxComponent,
         'v-scene': sceneComponent,
     },
     computed: {
         isCube() {
             return ['2x2', '3x3', '4x4', '5x5'].includes(this.type);
+        },
+        isMinx() {
+            return ['minx2', 'minx3', 'minx4', 'minx5'].includes(this.type);
         },
         normalizedConfig() {
             const config = typeof this.config === 'string'

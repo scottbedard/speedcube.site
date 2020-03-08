@@ -128,6 +128,15 @@ export default function (store) {
                 },
 
                 //
+                // sandbox
+                //
+                {
+                    name: 'sandbox',
+                    path: '/sandbox',
+                    component: () => import('@/pages/sandbox/sandbox.vue' /* webpackChunkName: "sandbox" */),
+                },
+
+                //
                 // signin
                 //
                 {
