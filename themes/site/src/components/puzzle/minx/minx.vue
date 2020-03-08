@@ -3,7 +3,7 @@
         <v-axes-helper />
 
         <v-shape
-            v-for="(shape, index) in stickers"
+            v-for="(shape, index) in megaStickers"
             :geometry="shape"
             :inner-material="material"
             :key="index"
@@ -14,6 +14,13 @@
                 z: 0,
             }"
         />
+
+        <!-- <v-shape
+            :geometry="g2"
+            :inner-material="m2"
+            :outer-material="m2"
+            :position="p2"
+        /> -->
     </v-obj>
 </template>
 
@@ -32,6 +39,22 @@ export default {
         'v-shape': shapeComponent,
     },
     computed: {
+        // g2() {
+        //     return polygon(3, 100); // circle w/ radius 5
+        // },
+        // m2() {
+        //     return new MeshLambertMaterial({
+        //         color: 0xff0000,
+        //         opacity: 1,
+        //         side: DoubleSide,
+        //     });
+        // },
+        // p2() {
+        //     const { vertices } = polygon(100, 5);
+        //     const [origin, a, b, c, d, e] = vertices;
+
+        //     return midpoint(a, b);
+        // },
         material() {
             return new MeshLambertMaterial({
                 color: 0xffffff,
@@ -39,7 +62,25 @@ export default {
                 side: DoubleSide,
             });
         },
-        stickers() {
+        megaStickers() {
+            const center = polygon(60, 5);
+            const [_, ca, cb, cc, cd, ce] = center.vertices;
+
+            const { vertices } = polygon(110, 5);
+            const [origin, a, b, c, d, e] = vertices;
+
+            const radius = 0.2;
+
+            return [
+                center,
+                shape([midpoint(e, a, 2/3), a, midpoint(a, b, 1/3), ca], radius),
+                shape([midpoint(a, b, 1/3), midpoint(a, b, 2/3), cb, ca], radius),
+                shape([midpoint(a, b, 2/3), b, midpoint(b, c, 1/3), cb], radius),
+                shape([midpoint(b, c, 1/3), midpoint(b, c, 2/3), cc, cb], radius),
+                shape([midpoint(b, c, 2/3), c, midpoint(c, d, 1/3), cc], radius)
+            ];
+        },
+        kiloStickers() {
             const { vertices } = polygon(100, 5);
             const [origin, a, b, c, d, e] = vertices;
 

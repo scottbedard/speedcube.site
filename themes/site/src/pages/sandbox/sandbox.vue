@@ -20,7 +20,7 @@
                 </div>
                 <div class="p-4 w-full xs:w-1/2 sm:w-1/3">
                     <label class="mb-1 text-grey-7 tracking-wide text-xs uppercase">Camera Distance</label>
-                    <v-range-input v-model="cameraDistance" :min="0" :max="1000" />
+                    <v-range-input v-model="cameraDistance" :min="0" :max="3000" />
                 </div>
             </div>
         </v-margin>
