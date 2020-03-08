@@ -1,4 +1,6 @@
+/* eslint-disable comma-dangle */
 /* eslint-disable no-use-before-define */
+
 import {
     CircleGeometry,
     QuadraticBezierCurve3,
@@ -23,11 +25,12 @@ export function midpoint(a, b, percentage = 0.5) {
         return new Vector3((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2);
     }
 
-    let dir = b.clone().sub(a);
-
-    dir = dir.normalize().multiplyScalar(dir.length() * percentage);
-
-    return a.clone().add(dir);
+    return a.clone().add(
+        b.clone()
+            .sub(a)
+            .normalize()
+            .multiplyScalar(a.distanceTo(b) * percentage)
+    );
 }
 
 /**
@@ -59,11 +62,11 @@ export function shape(points, radius = 0) {
     const pointData = (i) => {
         const point = points[i] || points[0];
         const nextPoint = points[i + 1] || points[0];
-        const distance = point.distanceTo(nextPoint);
+        const dist = point.distanceTo(nextPoint);
 
         return {
-            start: midpoint(point, nextPoint, distance * radius),
-            end: midpoint(point, nextPoint, distance - (distance * radius)),
+            start: midpoint(point, nextPoint, (dist * radius) / dist),
+            end: midpoint(point, nextPoint, (dist - (dist * radius)) / dist),
         };
     };
 
