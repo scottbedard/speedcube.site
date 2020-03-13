@@ -6,6 +6,7 @@
                     <v-puzzle
                         type="minx2"
                         :config="{
+                            size: 3,
                             cameraAngle,
                             cameraDistance,
                             stickerRadius,

@@ -2,24 +2,36 @@
     <v-obj>
         <v-axes-helper />
 
-        <v-obj
-            v-for="(shape, index) in 5"
-            :key="index"
-            :rotation="{
-                z: 72 * -index,
-            }">
+        <template v-if="config.size === 2">
+            <v-obj
+                v-for="(shape, index) in 5"
+                :key="index"
+                :rotation="{
+                    z: 72 * -index,
+                }">
+                <v-shape
+                    :geometry="kiloGeometry"
+                    :inner-material="material"
+                    :key="index"
+                    :outer-material="material"
+                    :position="{
+                        x: 0,
+                        y: config.stickerSpacing,
+                        z: 0,
+                    }"
+                />
+            </v-obj>
+        </template>
+
+        <template v-else-if="config.size === 3">
             <v-shape
-                :geometry="kiloGeometry"
+                v-for="(shape, index) in megaStickers"
+                :geometry="shape"
                 :inner-material="material"
                 :key="index"
                 :outer-material="material"
-                :position="{
-                    x: 0,
-                    y: config.stickerSpacing,
-                    z: 0,
-                }"
             />
-        </v-obj>
+        </template>
 
         <v-shape
             :geometry="g2"
@@ -68,21 +80,22 @@ export default {
             });
         },
         megaStickers() {
-            const center = polygon(60, 5);
-            const [_, ca, cb, cc, cd, ce] = center.vertices;
-
-            const { vertices } = polygon(110, 5);
-            const [origin, a, b, c, d, e] = vertices;
-
-            const radius = 0.2;
+            const outline = polygon(100, 5);
+            const [origin, a, b, c, d, e] = outline.vertices;
 
             return [
-                center,
-                shape([midpoint(e, a, 2/3), a, midpoint(a, b, 1/3), ca], radius),
-                shape([midpoint(a, b, 1/3), midpoint(a, b, 2/3), cb, ca], radius),
-                shape([midpoint(a, b, 2/3), b, midpoint(b, c, 1/3), cb], radius),
-                shape([midpoint(b, c, 1/3), midpoint(b, c, 2/3), cc, cb], radius),
-                shape([midpoint(b, c, 2/3), c, midpoint(c, d, 1/3), cc], radius)
+                // outline,
+                shape([a, midpoint(a, b), midpoint(b, e), midpoint(e, a)], this.config.stickerRadius),
+                shape([midpoint(a, b), midpoint(a, c), midpoint(b, e)], this.config.stickerRadius),
+                shape([midpoint(a, b), b, midpoint(b, c), midpoint(a, c)], this.config.stickerRadius),
+                shape([midpoint(b, c), midpoint(b, d), midpoint(a, c)], this.config.stickerRadius),
+                shape([midpoint(b, c), c, midpoint(c, d), midpoint(b, d)], this.config.stickerRadius),
+                shape([midpoint(c, d), midpoint(c, e), midpoint(b, d)], this.config.stickerRadius),
+                shape([midpoint(c, d), d, midpoint(d, e), midpoint(c, e)], this.config.stickerRadius),
+                shape([midpoint(d, e), midpoint(d, a), midpoint(c, e)], this.config.stickerRadius),
+                shape([midpoint(d, e), e, midpoint(e, a), midpoint(a, d)], this.config.stickerRadius),
+                shape([midpoint(e, a), midpoint(b, e), midpoint(a, d)], this.config.stickerRadius),
+                shape([midpoint(e, b), midpoint(a, c), midpoint(b, d), midpoint(c, e), midpoint(d, a)], this.config.stickerRadius),
             ];
         },
         kiloGeometry() {
