@@ -63,7 +63,7 @@ export function polygon(radius, n) {
  *
  * @return {ShapeBufferGeometry}
  */
-export function shape(points, radius = 0) {
+export function shape(points, radius = 0, maxCurve = 0) {
     const obj = new Shape();
 
     const pointData = (i) => {
@@ -71,9 +71,11 @@ export function shape(points, radius = 0) {
         const nextPoint = points[i + 1] || points[0];
         const dist = point.distanceTo(nextPoint);
 
+        const rad = maxCurve ? Math.min(maxCurve, dist * radius) : dist * radius;
+
         return {
-            start: midpoint(point, nextPoint, (dist * radius) / dist),
-            end: midpoint(point, nextPoint, (dist - (dist * radius)) / dist),
+            start: midpointDistance(point, nextPoint, rad),
+            end: midpointDistance(point, nextPoint, dist - rad),
         };
     };
 

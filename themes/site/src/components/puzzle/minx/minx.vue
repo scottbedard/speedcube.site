@@ -33,12 +33,24 @@
             />
         </template>
 
-        <v-shape
-            :geometry="g2"
-            :inner-material="m2"
-            :outer-material="m2"
-            :position="p2"
+        <!-- <v-shape
+            :geometry="circle"
+            :inner-material="debugMaterial"
+            :outer-material="debugMaterial"
+            :position="foo1"
         />
+        <v-shape
+            :geometry="circle"
+            :inner-material="debugMaterial"
+            :outer-material="debugMaterial"
+            :position="foo2"
+        />
+        <v-shape
+            :geometry="circle"
+            :inner-material="debugMaterial"
+            :outer-material="debugMaterial"
+            :position="foo3"
+        /> -->
     </v-obj>
 </template>
 
@@ -47,7 +59,7 @@
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
 import objComponent from '@/components/three/obj/obj.vue';
 import shapeComponent from '@/components/three/shape/shape.vue';
-import { midpoint, polygon, shape } from '@/app/utils/geometry';
+import { midpoint, midpointDistance, polygon, shape } from '@/app/utils/geometry';
 import { DoubleSide, MeshLambertMaterial } from 'three';
 
 export default {
@@ -57,14 +69,23 @@ export default {
         'v-shape': shapeComponent,
     },
     computed: {
-        g2() {
+        circle() {
             return polygon(5, 10);
         },
-        m2() {
+        debugMaterial() {
             return new MeshLambertMaterial({
                 color: 0xff0000,
                 side: DoubleSide,
             });
+        },
+        foo1() {
+            return { x: -30, y: -30, z: -30 };
+        },
+        foo2() {
+            return { x: 30, y: 30, z: 30 };
+        },
+        foo3() {
+            return midpointDistance(this.foo1, this.foo2, 150);
         },
         p2() {
             const { vertices } = polygon(100, 5);
@@ -83,19 +104,21 @@ export default {
             const outline = polygon(100, 5);
             const [origin, a, b, c, d, e] = outline.vertices;
 
+            const maxRad = midpoint(a, c).distanceTo(midpoint(b, d)) / 2;
+
             return [
                 // outline,
-                shape([a, midpoint(a, b), midpoint(b, e), midpoint(e, a)], this.config.stickerRadius),
-                shape([midpoint(a, b), midpoint(a, c), midpoint(b, e)], this.config.stickerRadius),
-                shape([midpoint(a, b), b, midpoint(b, c), midpoint(a, c)], this.config.stickerRadius),
-                shape([midpoint(b, c), midpoint(b, d), midpoint(a, c)], this.config.stickerRadius),
-                shape([midpoint(b, c), c, midpoint(c, d), midpoint(b, d)], this.config.stickerRadius),
-                shape([midpoint(c, d), midpoint(c, e), midpoint(b, d)], this.config.stickerRadius),
-                shape([midpoint(c, d), d, midpoint(d, e), midpoint(c, e)], this.config.stickerRadius),
-                shape([midpoint(d, e), midpoint(d, a), midpoint(c, e)], this.config.stickerRadius),
-                shape([midpoint(d, e), e, midpoint(e, a), midpoint(a, d)], this.config.stickerRadius),
-                shape([midpoint(e, a), midpoint(b, e), midpoint(a, d)], this.config.stickerRadius),
-                shape([midpoint(e, b), midpoint(a, c), midpoint(b, d), midpoint(c, e), midpoint(d, a)], this.config.stickerRadius),
+                shape([a, midpoint(a, b), midpoint(b, e), midpoint(e, a)], this.config.stickerRadius, maxRad),
+                shape([midpoint(a, b), midpoint(a, c), midpoint(b, e)], this.config.stickerRadius, maxRad),
+                shape([midpoint(a, b), b, midpoint(b, c), midpoint(a, c)], this.config.stickerRadius, maxRad),
+                shape([midpoint(b, c), midpoint(b, d), midpoint(a, c)], this.config.stickerRadius, maxRad),
+                shape([midpoint(b, c), c, midpoint(c, d), midpoint(b, d)], this.config.stickerRadius, maxRad),
+                shape([midpoint(c, d), midpoint(c, e), midpoint(b, d)], this.config.stickerRadius, maxRad),
+                shape([midpoint(c, d), d, midpoint(d, e), midpoint(c, e)], this.config.stickerRadius, maxRad),
+                shape([midpoint(d, e), midpoint(d, a), midpoint(c, e)], this.config.stickerRadius, maxRad),
+                shape([midpoint(d, e), e, midpoint(e, a), midpoint(a, d)], this.config.stickerRadius, maxRad),
+                shape([midpoint(e, a), midpoint(b, e), midpoint(a, d)], this.config.stickerRadius, maxRad),
+                shape([midpoint(e, b), midpoint(a, c), midpoint(b, d), midpoint(c, e), midpoint(d, a)], this.config.stickerRadius, maxRad),
             ];
         },
         kiloGeometry() {
