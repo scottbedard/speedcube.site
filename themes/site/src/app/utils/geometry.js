@@ -14,14 +14,30 @@ import { degreesToRadians } from './number';
 /**
  * Calculate the midpoint between two vectors.
  *
- * @param {Vector3} a
- * @param {Vector3} b
- * @param {number}  percentage
+ * @param {object|Vector3}  a
+ * @param {object|Vector3}  b
+ * @param {number}          percentage
  *
  * @return {Vector3}
  */
 export function midpoint(a, b, percentage = 0.5) {
     return new Vector3().lerpVectors(a, b, percentage);
+}
+
+/**
+ * Calculate an explicit distance between two vectors.
+ *
+ * @param {object|Vector3}  a
+ * @param {object|Vector3}  b
+ * @param {number}          distance
+ *
+ * @return {Vector3}
+ */
+export function midpointDistance(a, b, distance) {
+    a = vector(a);
+    b = vector(b);
+
+    return midpoint(a, b, distance / a.distanceTo(b));
 }
 
 /**
@@ -85,4 +101,15 @@ export function shape(points, radius = 0) {
     }
 
     return new ShapeBufferGeometry(obj);
+}
+
+/**
+ * Normalize a vector.
+ *
+ * @param {object|Vector3}  obj
+ *
+ * @return {Vector3}
+ */
+export function vector(obj) {
+    return obj.isVector3 ? obj : new Vector3(obj.x, obj.y, obj.z);
 }
