@@ -18,6 +18,7 @@ import timerFilter from './filters/timer';
 // plugins
 //
 import alertPlugin from './plugins/alert';
+import compositionPlugin from './plugins/composition';
 import portalPlugin from './plugins/portal';
 import routerPlugin from './plugins/router';
 import vuexPlugin from './plugins/vuex';
@@ -38,6 +39,7 @@ export default function (Vue) {
 
     // plugins
     alertPlugin(Vue);
+    compositionPlugin(Vue);
     portalPlugin(Vue);
     routerPlugin(Vue);
     vuexPlugin(Vue);
