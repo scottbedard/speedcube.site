@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col h-full overflow-y-scroll">
+    <div class="flex flex-col h-full">
         <!-- header -->
         <v-header />
 
@@ -18,6 +18,9 @@
 
         <!-- modals -->
         <v-modals />
+
+        <!-- renderer -->
+        <v-renderer />
     </div>
 </template>
 
@@ -26,6 +29,7 @@ import alertsComponent from './alerts/alerts.vue';
 import footerComponent from './footer/footer.vue';
 import headerComponent from './header/header.vue';
 import modalsComponent from './modals/modals.vue';
+import rendererComponent from './renderer/renderer.vue';
 
 export default {
     components: {
@@ -33,6 +37,7 @@ export default {
         'v-footer': footerComponent,
         'v-header': headerComponent,
         'v-modals': modalsComponent,
+        'v-renderer': rendererComponent,
     },
 };
 </script>
