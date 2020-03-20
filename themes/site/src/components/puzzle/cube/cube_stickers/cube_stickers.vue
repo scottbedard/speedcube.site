@@ -80,8 +80,8 @@
 
 <script>
 import { mapColumns, mapRows } from '../utils';
-import objComponent from '@/components/three/obj/obj.vue';
-import shapeComponent from '@/components/three/shape/shape.vue';
+import objComponent from '@/components/three_old/obj/obj.vue';
+import shapeComponent from '@/components/three_old/shape/shape.vue';
 
 export default {
     components: {

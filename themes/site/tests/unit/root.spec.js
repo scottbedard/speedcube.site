@@ -1,6 +1,6 @@
 import rootComponent from '@/root.vue';
 
-jest.mock('@/components/three/renderer/renderer.vue', () => {
+jest.mock('@/components/three_old/renderer/renderer.vue', () => {
     return {
         render: () => {},
     };

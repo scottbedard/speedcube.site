@@ -1,5 +1,5 @@
-import shapeComponent from '@/components/three/shape/shape.vue';
-import { roundedRectangle } from '@/components/three/geometries';
+import shapeComponent from '@/components/three_old/shape/shape.vue';
+import { roundedRectangle } from '@/components/three_old/geometries';
 import { MeshBasicMaterial } from 'three';
 
 //

@@ -78,12 +78,12 @@
 <script>
 import { componentInterval } from 'spyfu-vue-utils';
 import { noop, random } from 'lodash-es';
-import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
-import boxComponent from '@/components/three/box/box.vue';
+import axesHelperComponent from '@/components/three_old/axes_helper/axes_helper.vue';
+import boxComponent from '@/components/three_old/box/box.vue';
 import cubeComponent from '@/components/puzzle/cube/cube.vue';
-import lightComponent from '@/components/three/light/light.vue';
-import objComponent from '@/components/three/obj/obj.vue';
-import sceneComponent from '@/components/three/scene/scene.vue';
+import lightComponent from '@/components/three_old/light/light.vue';
+import objComponent from '@/components/three_old/obj/obj.vue';
+import sceneComponent from '@/components/three_old/scene/scene.vue';
 import { componentRafEase } from '@/app/utils/component';
 import {
     easeOutQuart as hoverInCurve,

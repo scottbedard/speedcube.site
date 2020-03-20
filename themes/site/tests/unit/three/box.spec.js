@@ -1,5 +1,5 @@
-import boxComponent from '@/components/three/box/box.vue';
-import sceneComponent from '@/components/three/scene/scene.vue';
+import boxComponent from '@/components/three_old/box/box.vue';
+import sceneComponent from '@/components/three_old/scene/scene.vue';
 
 //
 // specs

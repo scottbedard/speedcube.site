@@ -1,4 +1,4 @@
-import objComponent from '@/components/three/obj/obj.vue';
+import objComponent from '@/components/three_old/obj/obj.vue';
 import { degreesToRadians } from '@/app/utils/number';
 import { Object3D } from 'three';
 

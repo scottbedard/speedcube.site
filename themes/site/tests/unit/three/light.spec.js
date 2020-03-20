@@ -1,4 +1,4 @@
-import lightComponent from '@/components/three/light/light.vue';
+import lightComponent from '@/components/three_old/light/light.vue';
 
 //
 // specs

@@ -1,5 +1,5 @@
-import sceneComponent from '@/components/three/scene/scene.vue';
-import rendererComponent from '@/components/three/renderer/renderer.vue';
+import sceneComponent from '@/components/three_old/scene/scene.vue';
+import rendererComponent from '@/components/three_old/renderer/renderer.vue';
 import { WebGLRenderer } from 'three';
 
 //

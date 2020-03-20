@@ -1,4 +1,4 @@
-import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
+import axesHelperComponent from '@/components/three_old/axes_helper/axes_helper.vue';
 
 //
 // specs
