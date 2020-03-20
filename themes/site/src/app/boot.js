@@ -23,7 +23,6 @@ import portalPlugin from './plugins/portal';
 import routerPlugin from './plugins/router';
 import vuexPlugin from './plugins/vuex';
 
-
 export default function (Vue) {
     Vue.config.productionTip = isProduction;
     Vue.config.devtools = !isTesting && !isProduction;

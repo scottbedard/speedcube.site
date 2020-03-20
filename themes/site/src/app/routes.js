@@ -190,6 +190,15 @@ export default function (store) {
                 },
 
                 //
+                // 3d
+                //
+                {
+                    name: '3d',
+                    path: '3d',
+                    component: () => import('@/pages/3d/3d.vue' /* webpackChunkName: "3d" */),
+                },
+
+                //
                 // 404
                 //
                 {
