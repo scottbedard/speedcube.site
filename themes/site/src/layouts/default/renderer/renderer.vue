@@ -2,7 +2,7 @@
     <canvas
         class="absolute h-full left-0 pointer-events-none top-0 w-full z-10"
         :class="{
-            hidden: empty,
+            hidden: false,
         }"
         :height="height"
         :style="{
@@ -13,23 +13,40 @@
 </template>
 
 <script>
+import { WebGLRenderer } from 'three';
 import { mapState } from 'vuex';
 import { useScrollPosition } from '@/app/behaviors/scroll_position';
+import { useThree } from '@/app/behaviors/three';
 
 export default {
     setup() {
         const { scrollPosition } = useScrollPosition();
+        const { getThreeObj, setThreeObj } = useThree();
 
-        return { scrollPosition };
+        return {
+            getThreeObj,
+            scrollPosition,
+            setThreeObj,
+        };
+    },
+    mounted() {
+        const renderer = new WebGLRenderer({
+            alpha: true,
+            antialias: true,
+            canvas: this.$el,
+        });
+
+        renderer.setClearColor(0x000000, 0);
+
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        this.setThreeObj(renderer);
     },
     computed: {
         ...mapState('browser', {
             height: state => state.dimensions.height || 0,
             width: state => state.dimensions.width || 0,
         }),
-        empty() {
-            return false;
-        },
     },
 };
 </script>
