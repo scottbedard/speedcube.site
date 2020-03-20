@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "./"
+		}
+	],
+	"settings": {
+		"eslint.workingDirectories": [
+			{ 
+				"changeProcessCWD": true,
+				"directory": "./themes/site"
+			}
+		]
+	}
+}
