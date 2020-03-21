@@ -29,7 +29,7 @@ import alertsComponent from './alerts/alerts.vue';
 import footerComponent from './footer/footer.vue';
 import headerComponent from './header/header.vue';
 import modalsComponent from './modals/modals.vue';
-import rendererComponent from './renderer/renderer.vue';
+import rendererComponent from '@/components/three/renderer/renderer.vue';
 
 export default {
     components: {

@@ -1,8 +1,3 @@
-import {
-    onUnmounted,
-    reactive,
-} from '@vue/composition-api';
-
 /**
  * The glue between Vue and Three
  *
@@ -10,14 +5,6 @@ import {
  */
 export function useThree() {
     let obj;
-
-    //
-    // lifecycle
-    //
-
-    onUnmounted(() => {
-        console.log('unmounted');
-    });
 
     //
     // methods
