@@ -17,6 +17,7 @@ import { pull } from 'lodash-es';
 import { WebGLRenderer } from 'three';
 import { mapState } from 'vuex';
 import { useScrollPosition } from '@/app/behaviors/scroll_position';
+import { getBoundingClientRect, rectIsVisible } from '@/app/utils/dom';
 
 export default {
     /**
@@ -57,6 +58,8 @@ export default {
 
         renderer.setClearColor(0x000000, 0);
         renderer.setPixelRatio(window.devicePixelRatio);
+
+        this.$options.renderer = renderer;
     },
 
     /**
@@ -99,6 +102,17 @@ export default {
         },
 
         /**
+         * Clear the renderer.
+         *
+         * @return {void}
+         */
+        clear() {
+            this.$options.renderer.setScissorTest(false);
+            this.$options.renderer.clear();
+            this.$options.renderer.setScissorTest(true);
+        },
+
+        /**
          * Count the number of scenes.
          *
          * @return {void}
@@ -113,7 +127,20 @@ export default {
          * @return {void}
          */
         draw() {
-            console.log('drawing');
+            const { renderer, scenes } = this.$options;
+
+            this.resize();
+            this.clear();
+
+            scenes.forEach((scene) => {
+                const rect = getBoundingClientRect(scene.userData.el);
+
+                if (rectIsVisible(rect)) {
+                    this.setViewport(rect);
+
+                    renderer.render(scene, scene.userData.camera);
+                }
+            });
         },
 
         /**
@@ -127,6 +154,36 @@ export default {
             pull(this.$options.scenes, scene);
 
             this.count();
+        },
+
+        /**
+         * Resize the renderer.
+         *
+         * @return {void}
+         */
+        resize() {
+            const width = this.$el.clientWidth;
+            const height = this.$el.clientHeight;
+
+            if (this.$el.width !== width || this.$el.height !== height) {
+                this.$options.renderer.setSize(width, height, false);
+            }
+        },
+
+        /**
+         * Set the renderer viewport.
+         *
+         * @param {object} rect
+         *
+         * @return {void}
+         */
+        setViewport(rect) {
+            const width = rect.right - rect.left;
+            const height = rect.bottom - rect.top;
+            const bottom = document.body.clientHeight - rect.bottom;
+
+            this.$options.renderer.setViewport(rect.left, bottom, width, height);
+            this.$options.renderer.setScissor(rect.left, bottom, width, height);
         },
 
         /**

@@ -1,14 +1,10 @@
 <template>
     <v-page padded>
         <v-margin padded>
-            <h1>3D Sandbox</h1>
+            <h1 class="mb-12">3D Sandbox</h1>
 
-            <div class="mb-6">
-                <button @click="scene = !scene">toggle</button>
-            </div>
-
-            <div style="padding: 100px 0">
-                <v-scene v-if="scene">
+            <div style="padding-bottom: 2000px">
+                <v-scene>
                     Hmm...
                 </v-scene>
             </div>
@@ -22,7 +18,7 @@ import sceneComponent from '@/components/three/scene/scene.vue';
 export default {
     data() {
         return {
-            scene: false,
+            // ...
         };
     },
     components: {

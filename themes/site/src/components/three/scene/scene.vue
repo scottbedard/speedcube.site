@@ -13,18 +13,20 @@ export default {
      * @return {void}
      */
     created() {
-        const camera = new PerspectiveCamera(
+        const scene = new Scene();
+
+        scene.userData.camera = new PerspectiveCamera(
             this.cameraFov,
             this.cameraAspect,
             this.cameraNear,
             this.cameraFar,
         );
 
-        const scene = new Scene();
-
         this.setThreeObj(scene);
 
         this.$on('hook:mounted', () => {
+            scene.userData.el = this.$el;
+
             this.$root.$emit('scene-add', scene);
         });
 
