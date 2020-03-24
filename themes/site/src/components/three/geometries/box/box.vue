@@ -11,7 +11,7 @@ import {
     Mesh,
 } from 'three';
 
-import { useThree } from '@/app/behaviors/three';
+import { threeProps, useThree } from '@/app/behaviors/three';
 
 export default {
     /**
@@ -20,17 +20,20 @@ export default {
      * @return {void}
      */
     setup(props, context) {
-        const geometry = new CubeGeometry(5, 5, 5);
+        const geometry = new CubeGeometry(20, 20, 20);
 
         const material = new MeshLambertMaterial({
-            color: 0xff0000,
+            wireframe: true,
         });
 
         const mesh = new Mesh(geometry, material);
 
-        const { threeObj } = useThree(mesh, { context });
+        const { getThreeObj } = useThree(mesh, { context, props });
 
-        return { threeObj };
+        return { getThreeObj };
+    },
+    props: {
+        ...threeProps,
     },
 };
 </script>

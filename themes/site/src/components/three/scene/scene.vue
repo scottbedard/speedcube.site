@@ -14,7 +14,7 @@ export default {
      * @return {void}
      */
     beforeDestroy() {
-        this.$root.$emit('scene-remove', this.threeObj);
+        this.$root.$emit('scene-remove', this.scene);
     },
 
     /**
@@ -23,11 +23,11 @@ export default {
      * @return {void}
      */
     mounted() {
+        this.scene.userData.el = this.$el;
+
         this.syncCameraPosition();
 
-        this.threeObj.userData.el = this.$el;
-
-        this.$root.$emit('scene-add', this.threeObj);
+        this.$root.$emit('scene-add', this.scene);
     },
 
     /**
@@ -36,20 +36,20 @@ export default {
      * @return {void}
      */
     setup(props, context) {
-        const camera = new PerspectiveCamera(
+        const scene = new Scene();
+
+        scene.userData.camera = new PerspectiveCamera(
             props.cameraFov,
             props.cameraAspect,
             props.cameraNear,
             props.cameraFar,
         );
 
-        const scene = new Scene();
+        const { getThreeObj } = useThree(scene, { context });
 
-        scene.userData.camera = camera;
-
-        const { threeObj } = useThree(scene, { context });
-
-        return { threeObj };
+        return {
+            getThreeObj,
+        };
     },
     computed: {
         /**
@@ -65,10 +65,19 @@ export default {
                 opposite: Math.cos(angle) * this.cameraDistance,
             };
         },
+
+        /**
+         * Scene.
+         *
+         * @return {Scene}
+         */
+        scene() {
+            return this.getThreeObj();
+        },
     },
     methods: {
         syncCameraPosition() {
-            const { camera } = this.threeObj.userData;
+            const { camera } = this.scene.userData;
             const { opposite, adjacent } = this.cameraPosition;
 
             camera.position.set(0, opposite, adjacent);

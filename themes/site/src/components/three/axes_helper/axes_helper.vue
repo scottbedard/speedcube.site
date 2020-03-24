@@ -7,9 +7,7 @@ export default {
     setup(props, context) {
         const axesHelper = new AxesHelper(props.size);
 
-        const { threeObj } = useThree(axesHelper, { context });
-
-        return { threeObj };
+        useThree(axesHelper, { context });
     },
     props: {
         size: {

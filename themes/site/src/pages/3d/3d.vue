@@ -10,6 +10,7 @@
                         :camera-angle="cameraAngle"
                         :camera-distance="cameraDistance">
                         <v-axes-helper />
+                        <v-box :position="position" />
                     </v-scene>
                 </div>
 

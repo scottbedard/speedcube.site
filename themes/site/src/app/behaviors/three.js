@@ -1,38 +1,204 @@
-import { get } from 'lodash-es';
-import { computed, onMounted, onUnmounted, ref, watch } from '@vue/composition-api';
+/* eslint-disable no-use-before-define */
+import { isFunction, isPlainObject } from 'lodash-es';
+import { onMounted, onUnmounted, watch } from '@vue/composition-api';
+import { degreesToRadians } from '@/app/utils/number';
+import { stubVector } from '@/app/utils/object';
 
 /**
- * The glue between Vue and Three
+ * Three positioning.
+ *
+ * @const {Object}
+ */
+export const threePositionProp = {
+    position: {
+        default: stubVector,
+        type: Object,
+    },
+};
+
+/**
+ * Three rotation.
+ *
+ * @const {Object}
+ */
+export const threeRotationProp = {
+    rotation: {
+        default: stubVector,
+        type: Object,
+    },
+};
+
+/**
+ * Three scaling.
+ *
+ * @const {Object}
+ */
+export const threeScaleProp = {
+    scale: {
+        default: stubVector,
+        type: Object,
+    },
+};
+
+/**
+ * Common three props.
+ *
+ * @const {Object}
+ */
+export const threeProps = {
+    ...threePositionProp,
+    ...threeRotationProp,
+    ...threeScaleProp,
+};
+
+/**
+ * Core three behavior.
  *
  * @return {Object}
  */
 export function useThree(obj, options = {}) {
-    const parent = get(options, 'context.parent.threeObj');
-    const threeObj = ref(obj);
+    const context = options.context || {};
+    const props = options.props || {};
 
     //
-    // nesting
+    // functions
     //
-    if (parent) {
-        onMounted(() => parent.add(obj));
-        onUnmounted(() => parent.remove(obj));
+
+    /**
+     * Add to the parent three object.
+     *
+     * @return {void}
+     */
+    function addToParentObj() {
+        const parent = findParentObj();
+
+        if (parent) {
+            parent.add(obj);
+        }
+    }
+
+    /**
+     * Find the parent three object.
+     *
+     * @return {Object3D|null}
+     */
+    function findParentObj() {
+        let { parent } = context;
+
+        while (parent) {
+            if (isFunction(parent.getThreeObj)) {
+                return parent.getThreeObj();
+            }
+
+            parent = parent.$parent;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get this component's three object.
+     *
+     * @return {Object3D}
+     */
+    function getThreeObj() {
+        return obj;
+    }
+
+    /**
+     * Remove from the parent three object.
+     *
+     * @return {void}
+     */
+    function removeFromParentObj() {
+        const parent = findParentObj();
+
+        if (parent) {
+            parent.remove(obj);
+        }
+    }
+
+    /**
+     * Set local object position.
+     *
+     * @param {Object}  vector
+     * @param {number?} vector.x
+     * @param {number?} vector.y
+     * @param {number?} vector.z
+     *
+     * @return {void}
+     */
+    function setLocalPosition({ x, y, z }) {
+        obj.position.set(x || 0, y || 0, z || 0);
+    }
+
+    /**
+     * Set local object rotation.
+     *
+     * @param {Object}  vector
+     * @param {number?} vector.x
+     * @param {number?} vector.y
+     * @param {number?} vector.z
+     *
+     * @return {void}
+     */
+    function setLocalRotation({ x, y, z }) {
+        obj.rotation.x = degreesToRadians(x || 0);
+        obj.rotation.y = degreesToRadians(y || 0);
+        obj.rotation.z = degreesToRadians(z || 0);
+    }
+
+    /**
+     * Set local object scale.
+     *
+     * @param {Object}  vector
+     * @param {number?} vector.x
+     * @param {number?} vector.y
+     * @param {number?} vector.z
+     *
+     * @return {void}
+     */
+    function setLocalScale({ x, y, z }) {
+        obj.scale.x = x || obj.scale.x;
+        obj.scale.y = y || obj.scale.x;
+        obj.scale.z = z || obj.scale.x;
     }
 
     //
-    // position
+    // lifecycle
     //
-    // const position = computed(() => ({
-    //     x: 0, y: 0, z: 0, ...get(options, 'context.attrs.position', {}),
-    // }));
 
-    // const setPosition = (...args) => obj.position.set(...args);
+    onMounted(() => {
+        addToParentObj();
+    });
 
-    obj.position.set(0, 0, 0);
+    onUnmounted(() => {
+        removeFromParentObj();
+    });
 
-    // watch(position, () => setPosition(position.x, position.y, position.z));
+    //
+    // behavior
+    //
+
+    if (isPlainObject(props.position)) {
+        watch(() => props.position, setLocalPosition, { deep: true });
+    }
+
+    if (isPlainObject(props.rotation)) {
+        watch(() => props.rotation, setLocalRotation, { deep: true });
+    }
+
+    if (isPlainObject(props.scale)) {
+        watch(() => props.scale, setLocalScale, { deep: true });
+    }
 
     return {
-        threeObj,
-        // setPosition,
+        addToParentObj,
+        findParentObj,
+        getThreeObj,
+        removeFromParentObj,
+        setLocalPosition,
+        setLocalRotation,
+        setLocalScale,
     };
 }
