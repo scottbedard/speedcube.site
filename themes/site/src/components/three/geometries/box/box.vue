@@ -20,6 +20,8 @@ export default {
      * @return {void}
      */
     setup(props, context) {
+        const { position, rotation, scale } = props;
+
         const geometry = new CubeGeometry(20, 20, 20);
 
         const material = new MeshLambertMaterial({
@@ -28,7 +30,12 @@ export default {
 
         const mesh = new Mesh(geometry, material);
 
-        const { getThreeObj } = useThree(mesh, { context, props });
+        const { getThreeObj } = useThree(mesh, {
+            context,
+            position,
+            rotation,
+            scale,
+        });
 
         return { getThreeObj };
     },

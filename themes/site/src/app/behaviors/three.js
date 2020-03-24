@@ -180,16 +180,16 @@ export function useThree(obj, options = {}) {
     // behavior
     //
 
-    if (isPlainObject(props.position)) {
-        watch(() => props.position, setLocalPosition, { deep: true });
+    if (isPlainObject(options.position)) {
+        watch(() => options.position, setLocalPosition, { deep: true });
     }
 
-    if (isPlainObject(props.rotation)) {
-        watch(() => props.rotation, setLocalRotation, { deep: true });
+    if (isPlainObject(options.rotation)) {
+        watch(() => options.rotation, setLocalRotation, { deep: true });
     }
 
-    if (isPlainObject(props.scale)) {
-        watch(() => props.scale, setLocalScale, { deep: true });
+    if (isPlainObject(options.scale)) {
+        watch(() => options.scale, setLocalScale, { deep: true });
     }
 
     return {
