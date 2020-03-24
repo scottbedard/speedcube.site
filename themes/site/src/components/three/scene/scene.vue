@@ -5,34 +5,29 @@
 <script>
 import { Scene, PerspectiveCamera } from 'three';
 import { useThree } from '@/app/behaviors/three';
+import { degreesToRadians } from '@/app/utils/number';
 
 export default {
     /**
-     * Created.
+     * Before destroy.
      *
      * @return {void}
      */
-    created() {
-        const scene = new Scene();
+    beforeDestroy() {
+        this.$root.$emit('scene-remove', this.threeObj);
+    },
 
-        scene.userData.camera = new PerspectiveCamera(
-            this.cameraFov,
-            this.cameraAspect,
-            this.cameraNear,
-            this.cameraFar,
-        );
+    /**
+     * Mounted.
+     *
+     * @return {void}
+     */
+    mounted() {
+        this.syncCameraPosition();
 
-        this.setThreeObj(scene);
+        this.threeObj.userData.el = this.$el;
 
-        this.$on('hook:mounted', () => {
-            scene.userData.el = this.$el;
-
-            this.$root.$emit('scene-add', scene);
-        });
-
-        this.$on('hook:beforeDestroy', () => {
-            this.$root.$emit('scene-remove', scene);
-        });
+        this.$root.$emit('scene-add', this.threeObj);
     },
 
     /**
@@ -40,10 +35,45 @@ export default {
      *
      * @return {void}
      */
-    setup() {
-        const { setThreeObj } = useThree();
+    setup(props, context) {
+        const camera = new PerspectiveCamera(
+            props.cameraFov,
+            props.cameraAspect,
+            props.cameraNear,
+            props.cameraFar,
+        );
 
-        return { setThreeObj };
+        const scene = new Scene();
+
+        scene.userData.camera = camera;
+
+        const { threeObj } = useThree(scene, { context });
+
+        return { threeObj };
+    },
+    computed: {
+        /**
+         * Camera position.
+         *
+         * @return {object}
+         */
+        cameraPosition() {
+            const angle = degreesToRadians(this.cameraAngle);
+
+            return {
+                adjacent: Math.sin(angle) * this.cameraDistance,
+                opposite: Math.cos(angle) * this.cameraDistance,
+            };
+        },
+    },
+    methods: {
+        syncCameraPosition() {
+            const { camera } = this.threeObj.userData;
+            const { opposite, adjacent } = this.cameraPosition;
+
+            camera.position.set(0, opposite, adjacent);
+            camera.lookAt(0, 0, 0);
+        },
     },
     props: {
         cameraAngle: {
@@ -59,7 +89,7 @@ export default {
             type: Number,
         },
         cameraFar: {
-            default: 10000,
+            default: 1000,
             type: Number,
         },
         cameraFov: {
@@ -67,9 +97,12 @@ export default {
             type: Number,
         },
         cameraNear: {
-            default: 1,
+            default: 0.01,
             type: Number,
         },
+    },
+    watch: {
+        cameraPosition: 'syncCameraPosition',
     },
 };
 </script>

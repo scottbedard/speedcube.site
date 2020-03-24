@@ -1,31 +1,38 @@
+import { get } from 'lodash-es';
+import { computed, onMounted, onUnmounted, ref, watch } from '@vue/composition-api';
+
 /**
  * The glue between Vue and Three
  *
  * @return {Object}
  */
-export function useThree() {
-    let obj;
+export function useThree(obj, options = {}) {
+    const parent = get(options, 'context.parent.threeObj');
+    const threeObj = ref(obj);
 
     //
-    // methods
+    // nesting
     //
+    if (parent) {
+        onMounted(() => parent.add(obj));
+        onUnmounted(() => parent.remove(obj));
+    }
 
-    /**
-     * Get a component's 3D object.
-     *
-     * @return {Object3D}
-     */
-    const getThreeObj = () => obj;
+    //
+    // position
+    //
+    // const position = computed(() => ({
+    //     x: 0, y: 0, z: 0, ...get(options, 'context.attrs.position', {}),
+    // }));
 
-    /**
-     * Set a component's 3D object.
-     *
-     * @param {Object3D} val
-     */
-    const setThreeObj = (val) => { obj = val; };
+    // const setPosition = (...args) => obj.position.set(...args);
+
+    obj.position.set(0, 0, 0);
+
+    // watch(position, () => setPosition(position.x, position.y, position.z));
 
     return {
-        getThreeObj,
-        setThreeObj,
+        threeObj,
+        // setPosition,
     };
 }
