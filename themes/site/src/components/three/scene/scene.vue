@@ -4,7 +4,7 @@
 
 <script>
 import { Scene, PerspectiveCamera } from 'three';
-import { useDisposable, useThree } from '@/app/behaviors/three';
+import { useDisposable, useThree } from '@/app/behaviors/three/base';
 import { degreesToRadians } from '@/app/utils/number';
 
 export default {

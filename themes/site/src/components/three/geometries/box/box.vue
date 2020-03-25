@@ -37,7 +37,7 @@
 import { isPlainObject } from 'lodash-es';
 import { BoxGeometry, MeshLambertMaterial, Mesh } from 'three';
 import { computed, watch } from '@vue/composition-api';
-import { threeProps, useDisposable, useThree } from '@/app/behaviors/three';
+import { threeProps, useDisposable, useThree } from '@/app/behaviors/three/base';
 import objectComponent from '../../object/object.vue';
 
 function normalizeDimensions(val) {
@@ -66,6 +66,8 @@ export default {
         const geometry = new BoxGeometry(x, y, z);
         const material = new MeshLambertMaterial({ wireframe: true });
         const mesh = new Mesh(geometry, material);
+
+        console.log(geometry);
 
         watch(dimensions, ({ x: newX, y: newY, z: newZ }) => {
             const xDiff = newX / x;

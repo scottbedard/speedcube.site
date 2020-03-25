@@ -12,7 +12,7 @@
                         <v-axes-helper />
 
                         <v-box :position="position" :size="size">
-                            <template #U>
+                            <!-- <template #U>
                                 <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
                             </template>
                             <template #L>
@@ -29,7 +29,7 @@
                             </template>
                             <template #D>
                                 <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
-                            </template>
+                            </template> -->
                         </v-box>
                     </v-scene>
                 </div>
