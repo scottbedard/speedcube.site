@@ -10,7 +10,7 @@
                         :camera-angle="cameraAngle"
                         :camera-distance="cameraDistance">
                         <v-axes-helper />
-                        <v-box :position="position" />
+                        <v-box :position="position" :size="size" />
                     </v-scene>
                 </div>
 
@@ -40,6 +40,21 @@
                     </div>
                 </div>
 
+                <div class="flex max-w-sm mx-auto mb-12 text-center">
+                    <div class="px-2">
+                        X
+                        <v-range-input v-model.number="size.x" :min="0" :max="50" />
+                    </div>
+                    <div class="px-2">
+                        Y
+                        <v-range-input v-model.number="size.y" :min="0" :max="50" />
+                    </div>
+                    <div class="px-2">
+                        Z
+                        <v-range-input v-model.number="size.z" :min="0" :max="50" />
+                    </div>
+                </div>
+
                 <pre class="text-xs max-w-sm mx-auto">{{ $data }}</pre>
             </div>
         </v-margin>
@@ -58,6 +73,7 @@ export default {
             cameraAngle: 45,
             cameraDistance: 50,
             position: { x: 0, y: 0, z: 0 },
+            size: { x: 20, y: 20, z: 20 },
         };
     },
     components: {
