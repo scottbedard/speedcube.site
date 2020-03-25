@@ -8,7 +8,7 @@
 import { isPlainObject } from 'lodash-es';
 import { BoxGeometry, MeshLambertMaterial, Mesh } from 'three';
 import { watch } from '@vue/composition-api';
-import { threeProps, useThree } from '@/app/behaviors/three';
+import { threeProps, useDisposable, useThree } from '@/app/behaviors/three';
 
 function dimensions(val) {
     const { x, y, z } = isPlainObject(val)
@@ -54,6 +54,8 @@ export default {
             rotation: props.rotation,
             scale: props.scale,
         });
+
+        useDisposable(geometry, material);
 
         return { getThreeObj };
     },

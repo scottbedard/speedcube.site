@@ -52,13 +52,29 @@ export const threeProps = {
 };
 
 /**
+ * Dispose three objects when a component is destroyed.
+ *
+ * @param  {Object3D[]} args
+ *
+ * @return {void}
+ */
+export function useDisposable(...args) {
+    onUnmounted(() => args.forEach((obj) => {
+        if (isFunction(obj.dispose)) {
+            obj.dispose();
+        } else {
+            console.error('Attempted to dispose non-disposable object', obj);
+        }
+    }));
+}
+
+/**
  * Core three behavior.
  *
  * @return {Object}
  */
 export function useThree(obj, options = {}) {
     const context = options.context || {};
-    const props = options.props || {};
 
     //
     // functions
