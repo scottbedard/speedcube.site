@@ -1,8 +1,19 @@
 /* eslint-disable no-use-before-define */
-import { isFunction, isPlainObject } from 'lodash-es';
+import { isFunction } from 'lodash-es';
 import { onMounted, onUnmounted, watch } from '@vue/composition-api';
 import { degreesToRadians } from '@/app/utils/number';
 import { stubVector } from '@/app/utils/object';
+
+/**
+ * Name.
+ *
+ * @const {Object}
+ */
+export const threeNameProp = {
+    name: {
+        type: String,
+    },
+};
 
 /**
  * Three positioning.
@@ -46,6 +57,7 @@ export const threeScaleProp = {
  * @const {Object}
  */
 export const threeProps = {
+    ...threeNameProp,
     ...threePositionProp,
     ...threeRotationProp,
     ...threeScaleProp,
@@ -180,6 +192,17 @@ export function useThree(obj, options = {}) {
         obj.scale.z = z || obj.scale.x;
     }
 
+    /**
+     * Set object name.
+     *
+     * @param {string} name
+     *
+     * @return {void}
+     */
+    function setName(name) {
+        obj.name = name;
+    }
+
     //
     // lifecycle
     //
@@ -196,16 +219,20 @@ export function useThree(obj, options = {}) {
     // behavior
     //
 
-    if (isPlainObject(options.position)) {
-        watch(() => options.position, setLocalPosition, { deep: true });
+    if (isFunction(options.name)) {
+        watch(options.name, setName);
     }
 
-    if (isPlainObject(options.rotation)) {
-        watch(() => options.rotation, setLocalRotation, { deep: true });
+    if (isFunction(options.position)) {
+        watch(options.position, setLocalPosition, { deep: true });
     }
 
-    if (isPlainObject(options.scale)) {
-        watch(() => options.scale, setLocalScale, { deep: true });
+    if (isFunction(options.rotation)) {
+        watch(options.rotation, setLocalRotation, { deep: true });
+    }
+
+    if (isFunction(options.scale)) {
+        watch(options.scale, setLocalScale, { deep: true });
     }
 
     return {
@@ -216,5 +243,6 @@ export function useThree(obj, options = {}) {
         setLocalPosition,
         setLocalRotation,
         setLocalScale,
+        setName,
     };
 }

@@ -1,16 +1,46 @@
 <template>
-    <div>
-        <slot />
+    <div class="hidden">
+        <v-object
+            :position="{ y: dimensions.y / 2 }"
+            :rotation="{ x: -90 }">
+            <slot name="U" />
+        </v-object>
+        <v-object
+            :position="{ x: dimensions.x / -2 }"
+            :rotation="{ y: -90 }">
+            <slot name="L" />
+        </v-object>
+        <v-object
+            :position="{ z: dimensions.z / 2 }"
+            :rotation="{ }">
+            <slot name="F" />
+        </v-object>
+        <v-object
+            :position="{ x: dimensions.x / 2 }"
+            :rotation="{ y: 90 }">
+            <slot name="R" />
+        </v-object>
+        <v-object
+            :position="{ z: dimensions.z / -2 }"
+            :rotation="{ y: 180 }">
+            <slot name="B" />
+        </v-object>
+        <v-object
+            :position="{ y: dimensions.y / -2 }"
+            :rotation="{ x: 90 }">
+            <slot name="D" />
+        </v-object>
     </div>
 </template>
 
 <script>
 import { isPlainObject } from 'lodash-es';
 import { BoxGeometry, MeshLambertMaterial, Mesh } from 'three';
-import { watch } from '@vue/composition-api';
+import { computed, watch } from '@vue/composition-api';
 import { threeProps, useDisposable, useThree } from '@/app/behaviors/three';
+import objectComponent from '../../object/object.vue';
 
-function dimensions(val) {
+function normalizeDimensions(val) {
     const { x, y, z } = isPlainObject(val)
         ? { x: 1, y: 1, z: 1, ...val }
         : { x: val, y: val, z: val };
@@ -29,13 +59,15 @@ export default {
      * @return {void}
      */
     setup(props, context) {
-        let { x, y, z } = dimensions(props.size);
+        const dimensions = computed(() => normalizeDimensions(props.size));
+
+        let { x, y, z } = dimensions.value;
+
         const geometry = new BoxGeometry(x, y, z);
         const material = new MeshLambertMaterial({ wireframe: true });
         const mesh = new Mesh(geometry, material);
 
-        watch(() => props.size, (size) => {
-            const { x: newX, y: newY, z: newZ } = dimensions(size);
+        watch(dimensions, ({ x: newX, y: newY, z: newZ }) => {
             const xDiff = newX / x;
             const yDiff = newY / y;
             const zDiff = newZ / z;
@@ -50,14 +82,21 @@ export default {
 
         const { getThreeObj } = useThree(mesh, {
             context,
-            position: props.position,
-            rotation: props.rotation,
-            scale: props.scale,
+            name: () => props.name,
+            position: () => props.position,
+            rotation: () => props.rotation,
+            scale: () => props.scale,
         });
 
         useDisposable(geometry, material);
 
-        return { getThreeObj };
+        return {
+            dimensions,
+            getThreeObj,
+        };
+    },
+    components: {
+        'v-object': objectComponent,
     },
     props: {
         ...threeProps,

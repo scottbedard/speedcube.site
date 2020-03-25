@@ -10,7 +10,27 @@
                         :camera-angle="cameraAngle"
                         :camera-distance="cameraDistance">
                         <v-axes-helper />
-                        <v-box :position="position" :size="size" />
+
+                        <v-box :position="position" :size="size">
+                            <template #U>
+                                <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
+                            </template>
+                            <template #L>
+                                <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
+                            </template>
+                            <template #F>
+                                <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
+                            </template>
+                            <template #R>
+                                <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
+                            </template>
+                            <template #B>
+                                <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
+                            </template>
+                            <template #D>
+                                <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
+                            </template>
+                        </v-box>
                     </v-scene>
                 </div>
 
@@ -73,7 +93,7 @@ export default {
             cameraAngle: 45,
             cameraDistance: 50,
             position: { x: 0, y: 0, z: 0 },
-            size: { x: 20, y: 20, z: 20 },
+            size: { x: 25, y: 25, z: 25 },
         };
     },
     components: {

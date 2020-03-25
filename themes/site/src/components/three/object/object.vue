@@ -4,7 +4,7 @@
 
 <script>
 import { Object3D } from 'three';
-import { useThree } from '@/app/behaviors/three';
+import { threeProps, useThree } from '@/app/behaviors/three';
 
 export default {
     /**
@@ -15,7 +15,18 @@ export default {
     setup(props, context) {
         const obj = new Object3D();
 
-        return useThree(obj, { context, props });
+        const { getThreeObj, setLocalPosition } = useThree(obj, {
+            context,
+            name: () => props.name,
+            position: () => props.position,
+            rotation: () => props.rotation,
+            scale: () => props.scale,
+        });
+
+        return { getThreeObj, setLocalPosition };
+    },
+    props: {
+        ...threeProps,
     },
 };
 </script>
