@@ -11,8 +11,10 @@
                         :camera-distance="cameraDistance">
                         <v-axes-helper />
 
-                        <v-box :position="position" :size="size">
-                            <!-- <template #U>
+                        <v-sphere />
+
+                        <!-- <v-box :position="position" :size="size">
+                            <template #U>
                                 <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
                             </template>
                             <template #L>
@@ -29,8 +31,8 @@
                             </template>
                             <template #D>
                                 <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
-                            </template> -->
-                        </v-box>
+                            </template>
+                        </v-box> -->
                     </v-scene>
                 </div>
 
@@ -86,6 +88,7 @@ import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue'
 import boxComponent from '@/components/three/geometries/box/box.vue';
 import objectComponent from '@/components/three/object/object.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
+import sphereComponent from '@/components/three/geometries/sphere/sphere.vue';
 
 export default {
     data() {
@@ -101,6 +104,7 @@ export default {
         'v-box': boxComponent,
         'v-object': objectComponent,
         'v-scene': sceneComponent,
+        'v-sphere': sphereComponent,
     },
 };
 </script>

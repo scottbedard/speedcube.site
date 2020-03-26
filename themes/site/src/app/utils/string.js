@@ -1,7 +1,10 @@
+import { isNumber, isString } from 'lodash-es';
+
 /**
  * Test if a string is a valid email address.
  *
  * @param   {string}    str
+ *
  * @return  {boolean}
  */
 export function isEmail(str) {
@@ -15,6 +18,7 @@ export function isEmail(str) {
  * Test if a string is a valid json object.
  *
  * @param   {string}    str
+ *
  * @return  {boolean}
  */
 export function isJson(jsonString) {
@@ -34,6 +38,7 @@ export function isJson(jsonString) {
  * Format a time value.
  *
  * @param  {number|string} time
+ *
  * @return {string}
  */
 export function formatTime(time) {
@@ -50,6 +55,7 @@ export function formatTime(time) {
  * Format a time value, showing minutes only if necessary.
  *
  * @param  {number} time
+ *
  * @return {string}
  */
 export function formatShortTime(time) {
@@ -64,6 +70,7 @@ export function formatShortTime(time) {
  * Format a time to be short sentence.
  *
  * @param  {number} time
+ *
  * @return {string}
  */
 export function formatShortTimeSentence(time) {
@@ -73,4 +80,29 @@ export function formatShortTimeSentence(time) {
     return minutes < 1
         ? `${shortTime} second`
         : `${shortTime} minute`;
+}
+
+/**
+ * Parse a hex color string.
+ *
+ * @param {string} color
+ *
+ * @return {number}
+ */
+export function hexColorValue(color) {
+    if (isNumber(color)) {
+        return color;
+    }
+
+    if (isString(color)) {
+        color = color.toLowerCase().replace(/[^a-f0-9]*/g, '');
+
+        if (color.length === 3) {
+            color = `${color[0]}${color[0]}${color[1]}${color[1]}${color[2]}${color[2]}`;
+        }
+
+        return parseInt(color, 16);
+    }
+
+    throw new Error('Invalid color');
 }
