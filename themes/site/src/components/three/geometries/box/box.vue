@@ -1,33 +1,21 @@
 <template>
     <div class="hidden">
-        <v-object
-            :position="{ y: dimensions.y / 2 }"
-            :rotation="{ x: -90 }">
+        <v-object :position="{ y: y / 2 }" :rotation="{ x: -90 }">
             <slot name="u" />
         </v-object>
-        <v-object
-            :position="{ x: dimensions.x / -2 }"
-            :rotation="{ y: -90 }">
+        <v-object :position="{ x: x / -2 }" :rotation="{ y: -90 }">
             <slot name="l" />
         </v-object>
-        <v-object
-            :position="{ z: dimensions.z / 2 }"
-            :rotation="{ }">
+        <v-object :position="{ z: z / 2 }">
             <slot name="f" />
         </v-object>
-        <v-object
-            :position="{ x: dimensions.x / 2 }"
-            :rotation="{ y: 90 }">
+        <v-object :position="{ x: x / 2 }" :rotation="{ y: 90 }">
             <slot name="r" />
         </v-object>
-        <v-object
-            :position="{ z: dimensions.z / -2 }"
-            :rotation="{ y: 180 }">
+        <v-object :position="{ z: z / -2 }" :rotation="{ y: 180 }">
             <slot name="b" />
         </v-object>
-        <v-object
-            :position="{ y: dimensions.y / -2 }"
-            :rotation="{ x: 90 }">
+        <v-object :position="{ y: y / -2 }" :rotation="{ x: 90 }">
             <slot name="d" />
         </v-object>
     </div>
@@ -62,16 +50,14 @@ export default {
         'v-object': objectComponent,
     },
     computed: {
-        dimensions() {
-            const { x, y, z } = isPlainObject(this.size)
-                ? { x: 1, y: 1, z: 1, ...this.size }
-                : { x: this.size, y: this.size, z: this.size };
-
-            return {
-                x: Math.max(Number.EPSILON, x),
-                y: Math.max(Number.EPSILON, y),
-                z: Math.max(Number.EPSILON, z),
-            };
+        x() {
+            return isPlainObject(this.size) ? this.size.x : this.size;
+        },
+        y() {
+            return isPlainObject(this.size) ? this.size.y : this.size;
+        },
+        z() {
+            return isPlainObject(this.size) ? this.size.z : this.size;
         },
     },
     props: {
