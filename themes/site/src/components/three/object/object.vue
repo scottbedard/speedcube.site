@@ -4,7 +4,7 @@
 
 <script>
 import { Object3D } from 'three';
-import { threeProps, useThree } from '@/app/behaviors/three/base';
+import { threeProps, useThree } from '@/app/behaviors/three';
 
 export default {
     /**

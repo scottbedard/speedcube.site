@@ -24,7 +24,7 @@
 <script>
 import { isPlainObject } from 'lodash-es';
 import { Object3D } from 'three';
-import { threeProps, useThree } from '@/app/behaviors/three/base';
+import { threeProps, useThree } from '@/app/behaviors/three';
 import objectComponent from '../../object/object.vue';
 
 export default {

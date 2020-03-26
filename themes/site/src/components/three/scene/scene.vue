@@ -4,7 +4,7 @@
 
 <script>
 import { Scene, PerspectiveCamera } from 'three';
-import { useDisposable, useThree } from '@/app/behaviors/three/base';
+import { useDisposable, useThree } from '@/app/behaviors/three';
 import { degreesToRadians } from '@/app/utils/number';
 
 export default {
@@ -45,9 +45,9 @@ export default {
             props.cameraFar,
         );
 
-        const { getThreeObj } = useThree(scene, { context });
-
         useDisposable(scene);
+
+        const { getThreeObj } = useThree(scene, { context });
 
         return {
             getThreeObj,

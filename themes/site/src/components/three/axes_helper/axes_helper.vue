@@ -1,7 +1,7 @@
 <script>
 import { AxesHelper } from 'three';
 import { noop } from 'lodash-es';
-import { useThree } from '@/app/behaviors/three/base';
+import { useThree } from '@/app/behaviors/three';
 
 export default {
     setup(props, context) {
