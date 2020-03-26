@@ -1,7 +1,7 @@
 <script>
 import { noop } from 'lodash-es';
 import { Mesh, MeshBasicMaterial, SphereGeometry } from 'three';
-import { useThree } from '@/app/behaviors/three/base';
+import { threeProps, useDisposable, useThree } from '@/app/behaviors/three/base';
 import { hexColorValue } from '@/app/utils/string';
 
 export default {
@@ -13,26 +13,29 @@ export default {
             wireframe: props.wireframe,
         });
 
-        const sphere = new Mesh(geometry, material);
+        useDisposable(geometry, material);
 
-        const { getThreeObj } = useThree(sphere, {
+        useThree(new Mesh(geometry, material), {
             context,
+            name: () => props.name,
+            position: () => props.position,
+            rotation: () => props.rotation,
+            scale: () => props.scale,
         });
-
-        return { getThreeObj };
     },
     render: noop,
     props: {
+        ...threeProps,
         color: {
             default: 'fff',
             type: String,
         },
         radius: {
-            default: 5,
+            default: 2,
             type: Number,
         },
         segments: {
-            default: 30,
+            default: 10,
             type: Number,
         },
         wireframe: {

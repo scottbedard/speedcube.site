@@ -1,27 +1,43 @@
 <template>
     <div class="hidden">
-        
+        <v-object
+            :position="{ y: dimensions.y / 2 }"
+            :rotation="{ x: -90 }">
+            <slot name="u" />
+        </v-object>
+        <v-object
+            :position="{ x: dimensions.x / -2 }"
+            :rotation="{ y: -90 }">
+            <slot name="l" />
+        </v-object>
+        <v-object
+            :position="{ z: dimensions.z / 2 }"
+            :rotation="{ }">
+            <slot name="f" />
+        </v-object>
+        <v-object
+            :position="{ x: dimensions.x / 2 }"
+            :rotation="{ y: 90 }">
+            <slot name="r" />
+        </v-object>
+        <v-object
+            :position="{ z: dimensions.z / -2 }"
+            :rotation="{ y: 180 }">
+            <slot name="b" />
+        </v-object>
+        <v-object
+            :position="{ y: dimensions.y / -2 }"
+            :rotation="{ x: 90 }">
+            <slot name="d" />
+        </v-object>
     </div>
 </template>
 
 <script>
 import { isPlainObject } from 'lodash-es';
-import { BoxGeometry, MeshLambertMaterial, Mesh, Object3D } from 'three';
-import { computed, watch } from '@vue/composition-api';
-import { threeProps, useDisposable, useThree } from '@/app/behaviors/three/base';
+import { Object3D } from 'three';
+import { threeProps, useThree } from '@/app/behaviors/three/base';
 import objectComponent from '../../object/object.vue';
-
-function normalizeDimensions(val) {
-    const { x, y, z } = isPlainObject(val)
-        ? { x: 1, y: 1, z: 1, ...val }
-        : { x: val, y: val, z: val };
-
-    return {
-        x: Math.max(Number.EPSILON, x),
-        y: Math.max(Number.EPSILON, y),
-        z: Math.max(Number.EPSILON, z),
-    };
-}
 
 export default {
     /**
@@ -31,7 +47,8 @@ export default {
      */
     setup(props, context) {
         const obj = new Object3D();
-        const { getThreeObj } = useThree(new Object3D(), {
+
+        const { getThreeObj } = useThree(obj, {
             context,
             name: () => props.name,
             position: () => props.position,
@@ -43,6 +60,19 @@ export default {
     },
     components: {
         'v-object': objectComponent,
+    },
+    computed: {
+        dimensions() {
+            const { x, y, z } = isPlainObject(this.size)
+                ? { x: 1, y: 1, z: 1, ...this.size }
+                : { x: this.size, y: this.size, z: this.size };
+
+            return {
+                x: Math.max(Number.EPSILON, x),
+                y: Math.max(Number.EPSILON, y),
+                z: Math.max(Number.EPSILON, z),
+            };
+        },
     },
     props: {
         ...threeProps,

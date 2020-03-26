@@ -11,28 +11,26 @@
                         :camera-distance="cameraDistance">
                         <v-axes-helper />
 
-                        <v-sphere />
-
-                        <!-- <v-box :position="position" :size="size">
-                            <template #U>
-                                <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
+                        <v-box :position="position" :size="size">
+                            <template #u>
+                                <v-sphere color="f00" />
                             </template>
-                            <template #L>
-                                <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
+                            <template #l>
+                                <v-sphere color="ff0" />
                             </template>
-                            <template #F>
-                                <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
+                            <template #f>
+                                <v-sphere color="fff" />
                             </template>
-                            <template #R>
-                                <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
+                            <template #r>
+                                <v-sphere color="0ff" />
                             </template>
-                            <template #B>
-                                <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
+                            <template #b>
+                                <v-sphere color="00f" />
                             </template>
-                            <template #D>
-                                <v-box :position="{ x: -10, y: 10 }" :size="{ x: 5, y: 5 }" />
+                            <template #d>
+                                <v-sphere color="f0f" />
                             </template>
-                        </v-box> -->
+                        </v-box>
                     </v-scene>
                 </div>
 
