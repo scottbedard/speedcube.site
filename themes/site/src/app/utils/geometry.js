@@ -95,13 +95,13 @@ export function polygon(radius, n) {
  *
  * @return {Object}
  */
-export function positionedShape(vertices) {
+export function positionedShape(vertices, radius) {
     const dist = new Vector3().sub(vertices[0]);
 
     const position = new Vector3();
     position.add(vertices[0]);
 
-    const geometry = shape(vertices, 0);
+    const geometry = shape(vertices, radius);
     geometry.translate(dist.x, dist.y, dist.z);
 
     return { geometry, position };

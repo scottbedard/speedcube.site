@@ -66,15 +66,19 @@
                 <div class="flex max-w-md mx-auto mb-8 text-center">
                     <div class="px-2">
                         Mid
-                        <v-range-input v-model.number="mid" :min="0" :max="0.49" :step="0.01" />
+                        <v-range-input v-model.number="mid" :min="0" :max="0.4" :step="0.01" />
                     </div>
                     <div class="px-2">
                         Gap
-                        <v-range-input v-model.number="gap" :min="0" :max="1" :step="0.01" />
+                        <v-range-input v-model.number="gap" :min="0" :max="0.6" :step="0.01" />
                     </div>
                     <div class="px-2">
                         Scale
                         <v-range-input v-model.number="scale" :min="1" :max="3" :step="0.01" />
+                    </div>
+                    <div class="px-2">
+                        Radius
+                        <v-range-input v-model.number="radius" :min="0" :max="0.5" :step="0.01" />
                     </div>
                 </div>
 
@@ -131,9 +135,10 @@ export default {
         return {
             cameraAngle: 0,
             cameraDistance: 35,
-            position: { x: 0, y: 0, z: 0 },
             gap: 0.9,
             mid: 0.1,
+            position: { x: 0, y: 0, z: 0 },
+            radius: 0.1,
             scale: 1.2,
             size: { x: 25, y: 25, z: 25 },
             stickerRadius: 0,
@@ -159,21 +164,22 @@ export default {
         mega() {
             const cornerMid = clamp(0.5 - this.mid, 0, 0.5 - Number.EPSILON);
             const centerMid = clamp(0.5 + this.mid, 0.5 + Number.EPSILON, 1);
+            const gapRatio = 1 - this.gap;
             const outline = polygon(10 * this.scale, 5);
             const [origin, a, b, c, d, e] = outline.vertices;
 
             // outer corner points
             // ab = "a" corner, towards "b" corner
-            const ab = midpoint(a, midpoint(a, b, cornerMid), this.gap);
-            const ae = midpoint(a, midpoint(a, e, cornerMid), this.gap);
-            const ba = midpoint(b, midpoint(b, a, cornerMid), this.gap);
-            const bc = midpoint(b, midpoint(b, c, cornerMid), this.gap);
-            const cb = midpoint(c, midpoint(c, b, cornerMid), this.gap);
-            const cd = midpoint(c, midpoint(c, d, cornerMid), this.gap);
-            const de = midpoint(d, midpoint(d, e, cornerMid), this.gap);
-            const dc = midpoint(d, midpoint(d, c, cornerMid), this.gap);
-            const ea = midpoint(e, midpoint(e, a, cornerMid), this.gap);
-            const ed = midpoint(e, midpoint(e, d, cornerMid), this.gap);
+            const ab = midpoint(a, midpoint(a, b, cornerMid), gapRatio);
+            const ae = midpoint(a, midpoint(a, e, cornerMid), gapRatio);
+            const ba = midpoint(b, midpoint(b, a, cornerMid), gapRatio);
+            const bc = midpoint(b, midpoint(b, c, cornerMid), gapRatio);
+            const cb = midpoint(c, midpoint(c, b, cornerMid), gapRatio);
+            const cd = midpoint(c, midpoint(c, d, cornerMid), gapRatio);
+            const de = midpoint(d, midpoint(d, e, cornerMid), gapRatio);
+            const dc = midpoint(d, midpoint(d, c, cornerMid), gapRatio);
+            const ea = midpoint(e, midpoint(e, a, cornerMid), gapRatio);
+            const ed = midpoint(e, midpoint(e, d, cornerMid), gapRatio);
 
             // inner corners points
             // ia = inner "a" corner
@@ -184,21 +190,15 @@ export default {
             const ie = intersect(ea, dc, ed, ab);
 
             // outer middle points
-            // mab = middle "ab"
             // maba = middle "ab", towards "a" corner
-            const mab = midpoint(a, b);
             const maba = midpoint(b, a, centerMid);
             const mabb = midpoint(a, b, centerMid);
-            const mbc = midpoint(b, c);
             const mbcb = midpoint(c, b, centerMid);
             const mbcc = midpoint(b, c, centerMid);
-            const mcd = midpoint(c, d);
             const mcdd = midpoint(c, d, centerMid);
             const mcdc = midpoint(d, c, centerMid);
-            const mde = midpoint(d, e);
             const mdee = midpoint(d, e, centerMid);
             const mded = midpoint(e, d, centerMid);
-            const mea = midpoint(e, a);
             const meaa = midpoint(e, a, centerMid);
             const meae = midpoint(a, e, centerMid);
 
@@ -224,17 +224,17 @@ export default {
             const cie = intersect(mcdd, meae, mdee, maba);
 
             return [
-                positionedShape([a, ab, ia, ae]),
-                positionedShape([mab, mabb, imabb, imaba, maba]),
-                positionedShape([b, bc, ib, ba]),
-                positionedShape([mbc, mbcc, imbcc, imbcb, mbcb]),
-                positionedShape([c, cd, ic, cb]),
-                positionedShape([mcd, mcdd, imcdd, imcdc, mcdc]),
-                positionedShape([d, de, id, dc]),
-                positionedShape([mde, mdee, imdee, imded, mded]),
-                positionedShape([e, ea, ie, ed]),
-                positionedShape([mea, meaa, imeaa, imeae, meae]),
-                positionedShape([cia, cib, cic, cid, cie]),
+                positionedShape([a, ab, ia, ae], this.radius),
+                positionedShape([mabb, imabb, imaba, maba], this.radius),
+                positionedShape([b, bc, ib, ba], this.radius),
+                positionedShape([mbcc, imbcc, imbcb, mbcb], this.radius),
+                positionedShape([c, cd, ic, cb], this.radius),
+                positionedShape([mcdd, imcdd, imcdc, mcdc], this.radius),
+                positionedShape([d, de, id, dc], this.radius),
+                positionedShape([mdee, imdee, imded, mded], this.radius),
+                positionedShape([e, ea, ie, ed], this.radius),
+                positionedShape([meaa, imeaa, imeae, meae], this.radius),
+                positionedShape([cia, cib, cic, cid, cie], this.radius),
             ];
         },
     },
