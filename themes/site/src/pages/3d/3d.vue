@@ -13,15 +13,16 @@
 
                         <v-box :position="position" :size="size">
                             <template #u>
+                                <v-shape
+                                    v-for="(sticker, index) in mega"
+                                    :geometry="sticker.geometry"
+                                    :inner-material="material"
+                                    :key="index"
+                                    :outer-material="material"
+                                    :position="sticker.position"
+                                />
+                                    
                                 <v-face :scale="scale">
-                                    <v-shape
-                                        v-for="(sticker, index) in mega"
-                                        :geometry="sticker.geometry"
-                                        :inner-material="material"
-                                        :key="index"
-                                        :outer-material="material"
-                                        :position="sticker.position"
-                                    />
                                     <v-sphere color="f00" :radius="0.25" :position="{ x: -5, y: 5 }" />
                                     <v-sphere color="f00" :radius="0.25" :position="{ x: 0, y: 5 }" />
                                     <v-sphere color="f00" :radius="0.25" :position="{ x: 5, y: 5 }" />
@@ -61,8 +62,18 @@
                         Camera Distance
                         <v-range-input v-model.number="cameraDistance" :min="0" :max="200" />
                     </div>
+                </div>
+                <div class="flex max-w-md mx-auto mb-8 text-center">
                     <div class="px-2">
-                        Face Scaling
+                        Mid
+                        <v-range-input v-model.number="mid" :min="0" :max="0.49" :step="0.01" />
+                    </div>
+                    <div class="px-2">
+                        Gap
+                        <v-range-input v-model.number="gap" :min="0" :max="1" :step="0.01" />
+                    </div>
+                    <div class="px-2">
+                        Scale
                         <v-range-input v-model.number="scale" :min="1" :max="3" :step="0.01" />
                     </div>
                 </div>
@@ -104,6 +115,7 @@
 </template>
 
 <script>
+import { clamp } from 'lodash-es';
 import { DoubleSide, MeshLambertMaterial } from 'three';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
 import boxComponent from '@/components/three/geometries/box/box.vue';
@@ -112,7 +124,7 @@ import objectComponent from '@/components/three/object/object.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
 import shapeComponent from '@/components/three/shape/shape.vue';
 import sphereComponent from '@/components/three/geometries/sphere/sphere.vue';
-import { midpoint, polygon, positionedShape, shape } from '@/app/utils/geometry';
+import { intersect, midpoint, polygon, positionedShape } from '@/app/utils/geometry';
 
 export default {
     data() {
@@ -120,6 +132,8 @@ export default {
             cameraAngle: 0,
             cameraDistance: 35,
             position: { x: 0, y: 0, z: 0 },
+            gap: 0.9,
+            mid: 0.1,
             scale: 1.2,
             size: { x: 25, y: 25, z: 25 },
             stickerRadius: 0,
@@ -143,31 +157,84 @@ export default {
             });
         },
         mega() {
-            const outline = polygon(10, 5);
+            const cornerMid = clamp(0.5 - this.mid, 0, 0.5 - Number.EPSILON);
+            const centerMid = clamp(0.5 + this.mid, 0.5 + Number.EPSILON, 1);
+            const outline = polygon(10 * this.scale, 5);
             const [origin, a, b, c, d, e] = outline.vertices;
-            const [midAB, midBC, midCD, midDE, midEA] = [midpoint(a, b), midpoint(b, c), midpoint(c, d), midpoint(d, e), midpoint(e, a)];
-            const [innerA, innerB, innerC, innerD, innerE] = [midpoint(e, b), midpoint(a, c), midpoint(b, d), midpoint(c, e), midpoint(d, a)];
 
-            const center = shape([
-                midpoint(origin, innerA, this.scale),
-                midpoint(origin, innerB, this.scale),
-                midpoint(origin, innerC, this.scale),
-                midpoint(origin, innerD, this.scale),
-                midpoint(origin, innerE, this.scale),
-            ], 0);
+            // outer corner points
+            // ab = "a" corner, towards "b" corner
+            const ab = midpoint(a, midpoint(a, b, cornerMid), this.gap);
+            const ae = midpoint(a, midpoint(a, e, cornerMid), this.gap);
+            const ba = midpoint(b, midpoint(b, a, cornerMid), this.gap);
+            const bc = midpoint(b, midpoint(b, c, cornerMid), this.gap);
+            const cb = midpoint(c, midpoint(c, b, cornerMid), this.gap);
+            const cd = midpoint(c, midpoint(c, d, cornerMid), this.gap);
+            const de = midpoint(d, midpoint(d, e, cornerMid), this.gap);
+            const dc = midpoint(d, midpoint(d, c, cornerMid), this.gap);
+            const ea = midpoint(e, midpoint(e, a, cornerMid), this.gap);
+            const ed = midpoint(e, midpoint(e, d, cornerMid), this.gap);
+
+            // inner corners points
+            // ia = inner "a" corner
+            const ia = intersect(ae, bc, ab, ed);
+            const ib = intersect(ba, cd, bc, ae);
+            const ic = intersect(cd, ba, cb, de);
+            const id = intersect(dc, ea, de, cb);
+            const ie = intersect(ea, dc, ed, ab);
+
+            // outer middle points
+            // mab = middle "ab"
+            // maba = middle "ab", towards "a" corner
+            const mab = midpoint(a, b);
+            const maba = midpoint(b, a, centerMid);
+            const mabb = midpoint(a, b, centerMid);
+            const mbc = midpoint(b, c);
+            const mbcb = midpoint(c, b, centerMid);
+            const mbcc = midpoint(b, c, centerMid);
+            const mcd = midpoint(c, d);
+            const mcdd = midpoint(c, d, centerMid);
+            const mcdc = midpoint(d, c, centerMid);
+            const mde = midpoint(d, e);
+            const mdee = midpoint(d, e, centerMid);
+            const mded = midpoint(e, d, centerMid);
+            const mea = midpoint(e, a);
+            const meaa = midpoint(e, a, centerMid);
+            const meae = midpoint(a, e, centerMid);
+
+            // inner middle points
+            // imaba = inner middle "ab", towards "a" corner
+            const imaba = intersect(maba, mdee, ae, bc);
+            const imabb = intersect(mabb, mcdc, ae, bc);
+            const imbcb = intersect(mbcb, meaa, ba, cd);
+            const imbcc = intersect(mbcc, mded, ba, cd);
+            const imcdc = intersect(mcdc, mabb, cb, de);
+            const imcdd = intersect(mcdd, meae, cb, de);
+            const imded = intersect(mded, mbcc, dc, ea);
+            const imdee = intersect(mdee, maba, dc, ea);
+            const imeaa = intersect(meaa, mbcb, ed, ab);
+            const imeae = intersect(meae, mcdd, ed, ab);
+
+            // center points
+            // cia = center inner "a" corner
+            const cia = intersect(meaa, mbcb, mdee, maba);
+            const cib = intersect(meaa, mbcb, mabb, mcdc);
+            const cic = intersect(mabb, mcdc, mbcc, mded);
+            const cid = intersect(mcdd, meae, mbcc, mded);
+            const cie = intersect(mcdd, meae, mdee, maba);
 
             return [
-                positionedShape([a, midAB, innerA, midEA], origin),
-                positionedShape([midAB, innerB, innerA], origin),
-                positionedShape([b, midBC, innerB, midAB], origin),
-                positionedShape([midBC, innerC, innerB], origin),
-                positionedShape([c, midCD, innerC, midBC], origin),
-                positionedShape([midCD, innerD, innerC], origin),
-                positionedShape([d, midDE, innerD, midCD], origin),
-                positionedShape([midDE, innerE, innerD], origin),
-                positionedShape([e, midEA, innerE, midDE], origin),
-                positionedShape([midEA, innerA, innerE], origin),
-                { geometry: center, position: origin },
+                positionedShape([a, ab, ia, ae]),
+                positionedShape([mab, mabb, imabb, imaba, maba]),
+                positionedShape([b, bc, ib, ba]),
+                positionedShape([mbc, mbcc, imbcc, imbcb, mbcb]),
+                positionedShape([c, cd, ic, cb]),
+                positionedShape([mcd, mcdd, imcdd, imcdc, mcdc]),
+                positionedShape([d, de, id, dc]),
+                positionedShape([mde, mdee, imdee, imded, mded]),
+                positionedShape([e, ea, ie, ed]),
+                positionedShape([mea, meaa, imeaa, imeae, meae]),
+                positionedShape([cia, cib, cic, cid, cie]),
             ];
         },
     },

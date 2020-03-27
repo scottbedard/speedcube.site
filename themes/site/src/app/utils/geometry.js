@@ -1,5 +1,6 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable no-use-before-define */
+import { intersect as mathIntersect } from 'mathjs';
 
 import {
     CircleGeometry,
@@ -10,6 +11,36 @@ import {
 } from 'three';
 
 import { degreesToRadians } from './number';
+
+/**
+ * Gather an array of points.
+ *
+ * @param  {...[Vector3, Vector3, number]} args
+ *
+ * @return {Vector3[]}
+ */
+export function gatherPoints(...points) {
+    return points.map(([a, b, percentage]) => midpoint(a, b, percentage));
+}
+
+/**
+ * Calculate the intersection of lines A and B.
+ *
+ * @param {Vector3|object} a1
+ * @param {Vector3|object} a2
+ * @param {Vector3|object} b1
+ * @param {Vector3|object} b2
+ *
+ * @return {Vector3|null}
+ */
+export function intersect(a1, a2, b1, b2) {
+    const coords = mathIntersect(
+        [a1.x, a1.y], [a2.x, a2.y],
+        [b1.x, b1.y], [b2.x, b2.y],
+    );
+
+    return Array.isArray(coords) ? new Vector3(...coords) : null;
+}
 
 /**
  * Calculate the midpoint between two vectors.
