@@ -56,10 +56,31 @@ export function polygon(radius, n) {
 }
 
 /**
+ * Create a shape, and set the position as a straight line
+ * from the origin to the first vertice. This is useful
+ * with the face component to space stickers apart.
+ *
+ * @param {Vector3[]}   vertices
+ *
+ * @return {Object}
+ */
+export function positionedShape(vertices) {
+    const dist = new Vector3().sub(vertices[0]);
+
+    const position = new Vector3();
+    position.add(vertices[0]);
+
+    const geometry = shape(vertices, 0);
+    geometry.translate(dist.x, dist.y, dist.z);
+
+    return { geometry, position };
+}
+
+/**
  * Create a shape from an array of points
  *
- * @param {Array<Vector3>}  points
- * @param {number}          radius
+ * @param {Vector3[]}   points
+ * @param {number}      radius
  *
  * @return {ShapeBufferGeometry}
  */

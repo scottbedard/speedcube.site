@@ -112,23 +112,7 @@ import objectComponent from '@/components/three/object/object.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
 import shapeComponent from '@/components/three/shape/shape.vue';
 import sphereComponent from '@/components/three/geometries/sphere/sphere.vue';
-import { midpoint, polygon, shape } from '@/app/utils/geometry';
-
-function anchoredShape(vertices, origin) {
-    const geometry = shape(vertices, 0);
-    const sub = origin.clone().sub(vertices[0]);
-
-    geometry.translate(sub.x, sub.y, sub.z);
-
-    const position = origin.clone();
-
-    position.add(vertices[0]);
-
-    return {
-        geometry,
-        position,
-    }
-}
+import { midpoint, polygon, positionedShape, shape } from '@/app/utils/geometry';
 
 export default {
     data() {
@@ -173,16 +157,16 @@ export default {
             ], 0);
 
             return [
-                anchoredShape([a, midAB, innerA, midEA], origin),
-                anchoredShape([midAB, innerB, innerA], origin),
-                anchoredShape([b, midBC, innerB, midAB], origin),
-                anchoredShape([midBC, innerC, innerB], origin),
-                anchoredShape([c, midCD, innerC, midBC], origin),
-                anchoredShape([midCD, innerD, innerC], origin),
-                anchoredShape([d, midDE, innerD, midCD], origin),
-                anchoredShape([midDE, innerE, innerD], origin),
-                anchoredShape([e, midEA, innerE, midDE], origin),
-                anchoredShape([midEA, innerA, innerE], origin),
+                positionedShape([a, midAB, innerA, midEA], origin),
+                positionedShape([midAB, innerB, innerA], origin),
+                positionedShape([b, midBC, innerB, midAB], origin),
+                positionedShape([midBC, innerC, innerB], origin),
+                positionedShape([c, midCD, innerC, midBC], origin),
+                positionedShape([midCD, innerD, innerC], origin),
+                positionedShape([d, midDE, innerD, midCD], origin),
+                positionedShape([midDE, innerE, innerD], origin),
+                positionedShape([e, midEA, innerE, midDE], origin),
+                positionedShape([midEA, innerA, innerE], origin),
                 { geometry: center, position: origin },
             ];
         },
