@@ -1,6 +1,7 @@
 <script>
 import { noop } from 'lodash-es';
 import { Group, Mesh } from 'three';
+import { watch } from '@vue/composition-api';
 import { threeProps, useThree } from '@/app/behaviors/three';
 
 export default {
@@ -10,12 +11,35 @@ export default {
      * @return {void}
      */
     setup(props, context) {
-        const innerMesh = new Mesh(props.geometry, props.innerMaterial);
-        const outerMesh = new Mesh(props.geometry, props.outerMaterial);
-
         const group = new Group();
-        group.add(innerMesh);
-        group.add(outerMesh);
+
+        if (props.innerMaterial) {
+            const innerMesh = new Mesh(props.geometry, props.innerMaterial);
+
+            group.add(innerMesh);
+
+            watch(() => props.innerMaterial, () => {
+                innerMesh.material = props.innerMaterial;
+            });
+
+            watch(() => props.geometry, () => {
+                innerMesh.geometry = props.geometry;
+            });
+        }
+
+        if (props.outerMaterial) {
+            const outerMesh = new Mesh(props.geometry, props.outerMaterial);
+
+            group.add(outerMesh);
+
+            watch(() => props.outerMaterial, () => {
+                outerMesh.material = props.outerMaterial;
+            });
+
+            watch(() => props.geometry, () => {
+                outerMesh.geometry = props.geometry;
+            });
+        }
 
         const { getThreeObj } = useThree(group, {
             context,
@@ -27,37 +51,11 @@ export default {
         return { getThreeObj };
     },
     render: noop,
-    methods: {
-        // syncGeometry() {
-        //     if (this.$options.three.innerMesh) {
-        //         this.$options.three.innerMesh.geometry = this.geometry;
-        //     }
-
-        //     if (this.$options.three.outerMesh) {
-        //         this.$options.three.outerMesh.geometry = this.geometry;
-        //     }
-        // },
-        // syncInnerMesh() {
-        //     const { innerMesh } = this.$options.three;
-
-        //     innerMesh.material = this.innerMaterial;
-        // },
-        // syncOuterMesh() {
-        //     const { outerMesh } = this.$options.three;
-
-        //     outerMesh.material = this.outerMaterial;
-        // },
-    },
     props: {
         ...threeProps,
         geometry: Object,
         innerMaterial: Object,
         outerMaterial: Object,
-    },
-    watch: {
-        // geometry: 'syncGeometry',
-        // innerMaterial: 'syncInnerMesh',
-        // outerMaterial: 'syncOuterMesh',
     },
 };
 </script>
