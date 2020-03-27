@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import { DoubleSide, Matrix4, MeshLambertMaterial } from 'three';
+import { DoubleSide, MeshLambertMaterial } from 'three';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
 import boxComponent from '@/components/three/geometries/box/box.vue';
 import faceComponent from '@/components/three/face/face.vue';
@@ -160,13 +160,17 @@ export default {
         },
         mega() {
             const outline = polygon(10, 5);
-
             const [origin, a, b, c, d, e] = outline.vertices;
             const [midAB, midBC, midCD, midDE, midEA] = [midpoint(a, b), midpoint(b, c), midpoint(c, d), midpoint(d, e), midpoint(e, a)];
             const [innerA, innerB, innerC, innerD, innerE] = [midpoint(e, b), midpoint(a, c), midpoint(b, d), midpoint(c, e), midpoint(d, a)];
 
-            // the center will need to be scaled a larger size as spacing increases
-            const center = shape([innerA, innerB, innerC, innerD, innerE], 0);
+            const center = shape([
+                midpoint(origin, innerA, this.scale),
+                midpoint(origin, innerB, this.scale),
+                midpoint(origin, innerC, this.scale),
+                midpoint(origin, innerD, this.scale),
+                midpoint(origin, innerE, this.scale),
+            ], 0);
 
             return [
                 anchoredShape([a, midAB, innerA, midEA], origin),
