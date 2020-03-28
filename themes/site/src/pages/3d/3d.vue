@@ -10,8 +10,16 @@
                         :camera-angle="cameraAngle"
                         :camera-distance="cameraDistance">
                         <v-axes-helper />
-                        <v-ambient-light :intensity="intensity" />
+                        <v-ambient-light
+                            :intensity="intensity"
+                            :position="{ x: 200, z: 150 }"
+                        />
+                        <v-point-light
+                            :intensity="intensity"
+                            :position="{ x: 200, z: 150 }"
+                        />
                         
+                        <v-dodecahedron :size="30" />
                     </v-scene>
                 </div>
 
@@ -37,6 +45,8 @@ import { clamp } from 'lodash-es';
 import { DoubleSide, MeshLambertMaterial } from 'three';
 import ambientLightComponent from '@/components/three/ambient_light/ambient_light.vue';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
+import dodecahedronComponent from '@/components/three/geometries/dodecahedron/dodecahedron.vue';
+import pointLightComponent from '@/components/three/point_light/point_light.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
 import sphereComponent from '@/components/three/geometries/sphere/sphere.vue';
 import { intersect, midpoint, polygon, positionedShape } from '@/app/utils/geometry';
@@ -60,6 +70,8 @@ export default {
     components: {
         'v-ambient-light': ambientLightComponent,
         'v-axes-helper': axesHelperComponent,
+        'v-dodecahedron': dodecahedronComponent,
+        'v-point-light': pointLightComponent,
         'v-scene': sceneComponent,
         'v-sphere': sphereComponent,
     },

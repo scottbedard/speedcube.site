@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { DodecahedronGeometry, Mesh, MeshBasicMaterial, Object3D } from 'three';
+import { DodecahedronGeometry, Mesh, MeshLambertMaterial, Object3D } from 'three';
 import { computed } from '@vue/composition-api';
 import { threeProps, useDisposable, useThree } from '@/app/behaviors/three';
 import objectComponent from '../../object/object.vue';
@@ -19,11 +19,10 @@ export default {
      * @return {void}
      */
     setup(props, context) {
-        const geometry = new DodecahedronGeometry(10);
+        const geometry = new DodecahedronGeometry(props.size);
 
-        const material = new MeshBasicMaterial({
+        const material = new MeshLambertMaterial({
             color: 0xaaaaaa,
-            wireframe: true,
         });
         
         const mesh = new Mesh(geometry, material);
