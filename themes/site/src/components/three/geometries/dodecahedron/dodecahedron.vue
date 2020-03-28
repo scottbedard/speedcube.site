@@ -1,16 +1,84 @@
 <template>
     <div class="hidden">
-        <v-object :position="vertices[2]">
+        <v-object :position="corner('u', 'f', 'l')">
             <slot name="u" />
         </v-object>
     </div>
 </template>
 
 <script>
-import { DodecahedronGeometry, Mesh, MeshLambertMaterial, Object3D } from 'three';
-import { computed } from '@vue/composition-api';
+import { DodecahedronGeometry, Mesh, MeshLambertMaterial } from 'three';
 import { threeProps, useDisposable, useThree } from '@/app/behaviors/three';
+import { hasSameMembers } from '@/app/utils/array';
+import { degreesToRadians } from '@/app/utils/number';
+import { midpoint } from '@/app/utils/geometry';
 import objectComponent from '../../object/object.vue';
+
+/**
+ * Map tri-face intersections to vertice indexes.
+ *
+ * @const {string[][]}
+ */
+const cornerMap = [
+    ['f', 'dr', 'dl'], // 0
+    ['f', 'r', 'dr'], // 1
+    ['f', 'l', 'dl'], // 2
+    ['u', 'r', 'f'], // 3
+    ['u', 'f', 'l'], // 4
+    ['r', 'dr', 'dbr'], // 5
+    ['r', 'br', 'dbr'], // 6
+    ['u', 'br', 'r'], // 7
+    ['br', 'dbr', 'b'], // 8
+    ['br', 'bl', 'b'], // 9
+    ['u', 'bl', 'br'], // 10
+    ['bl', 'dbl', 'b'], // 11
+    ['l', 'bl', 'dbl'], // 12
+    ['u', 'bl', 'l'], // 13
+    ['d', 'b', 'dbl'], // 14
+    ['dl', 'dbl', 'd'], // 15
+    ['l', 'dl', 'dbl'], // 16
+    ['dl', 'dr', 'd'], // 17
+    ['b', 'd', 'dbr'], // 18
+    ['dr', 'dbr', 'd'], // 19
+];
+
+/**
+ * Map face pairs to vertice indexes.
+ *
+ * @const {Array<Array>}
+ */
+const midpointMap = [
+    [['u', 'f'], [4, 3]],
+    [['u', 'r'], [3, 7]],
+    [['u', 'br'], [7, 10]],
+    [['u', 'bl'], [10, 13]],
+    [['u', 'l'], [13, 4]],
+    [['f', 'l'], [4, 2]],
+    [['f', 'r'], [3, 1]],
+    [['r', 'br'], [7, 6]],
+    [['br', 'bl'], [10, 9]],
+    [['bl', 'l'], [13, 12]],
+    [['f', 'dl'], [2, 0]],
+    [['f', 'dr'], [0, 1]],
+    [['r', 'dr'], [1, 5]],
+    [['r', 'dbr'], [5, 6]],
+    [['br', 'dbr'], [6, 8]],
+    [['br', 'b'], [8, 9]],
+    [['bl', 'b'], [9, 11]],
+    [['bl', 'dbl'], [11, 12]],
+    [['l', 'dbl'], [12, 16]],
+    [['l', 'dl'], [16, 2]],
+    [['dl', 'dr'], [0, 17]],
+    [['dr', 'dbr'], [19, 5]],
+    [['dbr', 'b'], [18, 8]],
+    [['b', 'dbl'], [11, 14]],
+    [['dl', 'dbl'], [16, 15]],
+    [['d', 'dr'], [17, 19]],
+    [['d', 'dbr'], [19, 18]],
+    [['d', 'b'], [18, 14]],
+    [['d', 'dbl'], [14, 15]],
+    [['d', 'dl'], [15, 17]],
+];
 
 export default {
     /**
@@ -21,13 +89,35 @@ export default {
     setup(props, context) {
         const geometry = new DodecahedronGeometry(props.size);
 
-        const material = new MeshLambertMaterial({
-            color: 0xaaaaaa,
-        });
-        
+        geometry.rotateX(degreesToRadians(36));
+
+        const material = new MeshLambertMaterial({ color: 0x999999 });
+
         const mesh = new Mesh(geometry, material);
 
-        const vertices = computed(() => geometry.vertices);
+        /**
+         * Computed function to get corner vectors by faces.
+         *
+         * @param {string[]} faces
+         *
+         * @return {Vector3}
+         */
+        const corner = (...faces) => geometry.vertices[
+            cornerMap.findIndex(arr => hasSameMembers(arr, faces))
+        ];
+
+        /**
+         * Computed function to get edge vectors by faces.
+         *
+         * @param {string[]} faces
+         *
+         * @return {Vector3}
+         */
+        const edge = (...faces) => {
+            const e = midpointMap.find(([f]) => hasSameMembers(f, faces));
+
+            return e && midpoint(geometry.vertices[e[1][0]], geometry.vertices[e[1][1]]);
+        };
 
         useDisposable(geometry, material);
 
@@ -40,8 +130,9 @@ export default {
         });
 
         return {
+            corner,
+            edge,
             getThreeObj,
-            vertices,
         };
     },
     components: {

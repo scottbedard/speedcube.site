@@ -10,16 +10,14 @@
                         :camera-angle="cameraAngle"
                         :camera-distance="cameraDistance">
                         <v-axes-helper />
-                        <v-ambient-light
-                            :intensity="intensity"
-                            :position="{ x: 200, z: 150 }"
-                        />
-                        <v-point-light
-                            :intensity="intensity"
-                            :position="{ x: 200, z: 150 }"
-                        />
+                        <v-ambient-light :intensity="0.8" :position="{ x: 200, z: 150 }" />
+                        <v-point-light :intensity="0.8" :position="{ y: 150 }" />
                         
-                        <v-dodecahedron :size="30" />
+                        <v-dodecahedron :rotation="rotation" :size="40">
+                            <template #u>
+                                <v-sphere color="#f00" />
+                            </template>
+                        </v-dodecahedron>
                     </v-scene>
                 </div>
 
@@ -31,6 +29,21 @@
                     <div class="flex-1 px-3">
                         <div>Camera distance</div>
                         <v-range-input v-model="cameraDistance" :min="1" :max="200" />
+                    </div>
+                </div>
+
+                <div class="flex max-w-lg mb-6 mx-auto text-center">
+                    <div class="flex-1 px-3">
+                        <div>Rotate X</div>
+                        <v-range-input v-model="rotation.x" :min="-180" :max="180" />
+                    </div>
+                    <div class="flex-1 px-3">
+                        <div>Rotate Y</div>
+                        <v-range-input v-model="rotation.y" :min="-180" :max="180" />
+                    </div>
+                    <div class="flex-1 px-3">
+                        <div>Rotate Z</div>
+                        <v-range-input v-model="rotation.z" :min="-180" :max="180" />
                     </div>
                 </div>
 
@@ -56,15 +69,8 @@ export default {
         return {
             cameraAngle: 60,
             cameraDistance: 150,
-            color: 0xffffff,
-            intensity: 0.5,
-            gap: 0.2,
-            mid: 0.1,
             position: { x: 0, y: 0, z: 0 },
-            radius: 0.1,
-            scale: 1.2,
-            size: { x: 25, y: 25, z: 25 },
-            stickerRadius: 0,
+            rotation: { x: 0, y: 0, z: 0 },
         };
     },
     components: {
