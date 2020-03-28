@@ -11,109 +11,18 @@
                         :camera-distance="cameraDistance">
                         <v-axes-helper />
                         <v-ambient-light :intensity="intensity" />
-
-                        <v-box :position="position" :size="size">
-                            <template #u>
-                                <v-shape
-                                    v-for="(sticker, index) in mega"
-                                    :geometry="sticker.geometry"
-                                    :inner-material="material"
-                                    :key="index"
-                                    :outer-material="material"
-                                    :position="sticker.position"
-                                />
-                                    
-                                <v-face :scale="scale">
-                                    <v-sphere color="f00" :radius="0.25" :position="{ x: -5, y: 5 }" />
-                                    <v-sphere color="f00" :radius="0.25" :position="{ x: 0, y: 5 }" />
-                                    <v-sphere color="f00" :radius="0.25" :position="{ x: 5, y: 5 }" />
-                                    <v-sphere color="f00" :radius="0.25" :position="{ x: -5, y: 0 }" />
-                                    <v-sphere color="f00" :radius="0.25" :position="{ x: 0, y: 0 }" />
-                                    <v-sphere color="f00" :radius="0.25" :position="{ x: 5, y: 0 }" />
-                                    <v-sphere color="f00" :radius="0.25" :position="{ x: -5, y: -5 }" />
-                                    <v-sphere color="f00" :radius="0.25" :position="{ x: 0, y: -5 }" />
-                                    <v-sphere color="f00" :radius="0.25" :position="{ x: 5, y: -5 }" />
-                                </v-face>
-                            </template>
-                            <template #l>
-                                <v-sphere color="ff0" />
-                            </template>
-                            <template #f>
-                                <v-sphere color="fff" />
-                            </template>
-                            <template #r>
-                                <v-sphere color="0ff" />
-                            </template>
-                            <template #b>
-                                <v-sphere color="00f" />
-                            </template>
-                            <template #d>
-                                <v-sphere color="f0f" />
-                            </template>
-                        </v-box>
+                        
                     </v-scene>
                 </div>
 
-                <div class="flex max-w-md mx-auto mb-8 text-center">
-                    <div class="px-2">
-                        Camera Angle
-                        <v-range-input v-model.number="cameraAngle" :min="0" :max="90" />
+                <div class="flex max-w-lg mb-6 mx-auto text-center">
+                    <div class="flex-1 px-3">
+                        <div>Camera angle</div>
+                        <v-range-input v-model="cameraAngle" :min="0" :max="90" />
                     </div>
-                    <div class="px-2">
-                        Camera Distance
-                        <v-range-input v-model.number="cameraDistance" :min="0" :max="200" />
-                    </div>
-                    <div class="px-2">
-                        Intensity
-                        <v-range-input v-model.number="intensity" :min="0" :max="1" :step="0.01" />
-                    </div>
-                </div>
-                <div class="flex max-w-md mx-auto mb-8 text-center">
-                    <div class="px-2">
-                        Mid
-                        <v-range-input v-model.number="mid" :min="0" :max="0.4" :step="0.01" />
-                    </div>
-                    <div class="px-2">
-                        Gap
-                        <v-range-input v-model.number="gap" :min="0" :max="0.6" :step="0.01" />
-                    </div>
-                    <div class="px-2">
-                        Scale
-                        <v-range-input v-model.number="scale" :min="1" :max="3" :step="0.01" />
-                    </div>
-                    <div class="px-2">
-                        Radius
-                        <v-range-input v-model.number="radius" :min="0" :max="0.5" :step="0.01" />
-                    </div>
-                </div>
-
-                <div class="flex max-w-sm mx-auto mb-8 text-center">
-                    <div class="px-2">
-                        X
-                        <v-range-input v-model.number="position.x" :min="-50" :max="50" />
-                    </div>
-                    <div class="px-2">
-                        Y
-                        <v-range-input v-model.number="position.y" :min="-50" :max="50" />
-                    </div>
-                    <div class="px-2">
-                        Z
-                        <v-range-input v-model.number="position.z" :min="-50" :max="50" />
-                    </div>
-                </div>
-
-                <div class="flex max-w-sm mx-auto mb-8 text-center">
-                    <div class="px-2">
-                        X
-                        <v-range-input v-model.number="size.x" :min="0" :max="50" />
-                    </div>
-                    <div class="px-2">
-                        Y
-                        <v-range-input v-model.number="size.y" :min="0" :max="50" />
-                    </div>
-                    <div class="px-2">
-                        Z
-                        <v-range-input v-model.number="size.z" :min="0" :max="50" />
+                    <div class="flex-1 px-3">
+                        <div>Camera distance</div>
+                        <v-range-input v-model="cameraDistance" :min="1" :max="200" />
                     </div>
                 </div>
 
@@ -128,19 +37,15 @@ import { clamp } from 'lodash-es';
 import { DoubleSide, MeshLambertMaterial } from 'three';
 import ambientLightComponent from '@/components/three/ambient_light/ambient_light.vue';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
-import boxComponent from '@/components/three/geometries/box/box.vue';
-import faceComponent from '@/components/three/face/face.vue';
-import objectComponent from '@/components/three/object/object.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
-import shapeComponent from '@/components/three/shape/shape.vue';
 import sphereComponent from '@/components/three/geometries/sphere/sphere.vue';
 import { intersect, midpoint, polygon, positionedShape } from '@/app/utils/geometry';
 
 export default {
     data() {
         return {
-            cameraAngle: 0,
-            cameraDistance: 35,
+            cameraAngle: 60,
+            cameraDistance: 150,
             color: 0xffffff,
             intensity: 0.5,
             gap: 0.2,
@@ -155,11 +60,7 @@ export default {
     components: {
         'v-ambient-light': ambientLightComponent,
         'v-axes-helper': axesHelperComponent,
-        'v-box': boxComponent,
-        'v-face': faceComponent,
-        'v-object': objectComponent,
         'v-scene': sceneComponent,
-        'v-shape': shapeComponent,
         'v-sphere': sphereComponent,
     },
     computed: {
