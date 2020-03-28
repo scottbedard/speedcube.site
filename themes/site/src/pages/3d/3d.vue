@@ -135,7 +135,7 @@ export default {
         return {
             cameraAngle: 0,
             cameraDistance: 35,
-            gap: 0.9,
+            gap: 0.2,
             mid: 0.1,
             position: { x: 0, y: 0, z: 0 },
             radius: 0.1,
