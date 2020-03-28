@@ -10,6 +10,7 @@
                         :camera-angle="cameraAngle"
                         :camera-distance="cameraDistance">
                         <v-axes-helper />
+                        <v-ambient-light :intensity="intensity" />
 
                         <v-box :position="position" :size="size">
                             <template #u>
@@ -61,6 +62,10 @@
                     <div class="px-2">
                         Camera Distance
                         <v-range-input v-model.number="cameraDistance" :min="0" :max="200" />
+                    </div>
+                    <div class="px-2">
+                        Intensity
+                        <v-range-input v-model.number="intensity" :min="0" :max="1" :step="0.01" />
                     </div>
                 </div>
                 <div class="flex max-w-md mx-auto mb-8 text-center">
@@ -121,6 +126,7 @@
 <script>
 import { clamp } from 'lodash-es';
 import { DoubleSide, MeshLambertMaterial } from 'three';
+import ambientLightComponent from '@/components/three/ambient_light/ambient_light.vue';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
 import boxComponent from '@/components/three/geometries/box/box.vue';
 import faceComponent from '@/components/three/face/face.vue';
@@ -135,6 +141,8 @@ export default {
         return {
             cameraAngle: 0,
             cameraDistance: 35,
+            color: 0xffffff,
+            intensity: 0.5,
             gap: 0.2,
             mid: 0.1,
             position: { x: 0, y: 0, z: 0 },
@@ -145,6 +153,7 @@ export default {
         };
     },
     components: {
+        'v-ambient-light': ambientLightComponent,
         'v-axes-helper': axesHelperComponent,
         'v-box': boxComponent,
         'v-face': faceComponent,
