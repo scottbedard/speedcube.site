@@ -13,10 +13,21 @@
                         <v-ambient-light :intensity="0.8" :position="{ x: 200, z: 150 }" />
                         <v-point-light :intensity="0.8" :position="{ y: 150 }" />
                         
-                        <v-dodecahedron :rotation="rotation" :size="40">
-                            <template #u>
-                                <v-sphere color="#f00" />
-                            </template>
+                        <v-dodecahedron
+                            :position="position"
+                            :size="size">
+                            <template #u><v-sphere color="#fff" /></template>
+                            <template #f><v-sphere color="#db241d" /></template>
+                            <template #l><v-sphere color="#006600" /></template>
+                            <template #bl><v-sphere color="#5f509b" /></template>
+                            <template #r><v-sphere color="#033bb9" /></template>
+                            <template #br><v-sphere color="#f9c300" /></template>
+                            <template #dl><v-sphere color="#fffb9d" /></template>
+                            <template #dbl><v-sphere color="#75c5f1" /></template>
+                            <template #dr><v-sphere color="#f19abf" /></template>
+                            <template #dbr><v-sphere color="#b9db7d" /></template>
+                            <template #b><v-sphere color="#fb6b03" /></template>
+                            <template #d><v-sphere color="#c2c1c1" /></template>
                         </v-dodecahedron>
                     </v-scene>
                 </div>
@@ -30,20 +41,24 @@
                         <div>Camera distance</div>
                         <v-range-input v-model="cameraDistance" :min="1" :max="200" />
                     </div>
+                    <div class="flex-1 px-3">
+                        <div>Size</div>
+                        <v-range-input v-model="size" :min="1" :max="100" />
+                    </div>
                 </div>
 
                 <div class="flex max-w-lg mb-6 mx-auto text-center">
                     <div class="flex-1 px-3">
-                        <div>Rotate X</div>
-                        <v-range-input v-model="rotation.x" :min="-180" :max="180" />
+                        <div>Position X</div>
+                        <v-range-input v-model="position.x" :min="-180" :max="180" />
                     </div>
                     <div class="flex-1 px-3">
-                        <div>Rotate Y</div>
-                        <v-range-input v-model="rotation.y" :min="-180" :max="180" />
+                        <div>Position Y</div>
+                        <v-range-input v-model="position.y" :min="-180" :max="180" />
                     </div>
                     <div class="flex-1 px-3">
-                        <div>Rotate Z</div>
-                        <v-range-input v-model="rotation.z" :min="-180" :max="180" />
+                        <div>Position Z</div>
+                        <v-range-input v-model="position.z" :min="-180" :max="180" />
                     </div>
                 </div>
 
@@ -69,6 +84,7 @@ export default {
         return {
             cameraAngle: 60,
             cameraDistance: 150,
+            size: 40,
             position: { x: 0, y: 0, z: 0 },
             rotation: { x: 0, y: 0, z: 0 },
         };

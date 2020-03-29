@@ -1,13 +1,17 @@
 <template>
     <div class="hidden">
-        <v-object :position="center('f')">
-            <slot name="u" />
+        <v-object
+            v-for="face in faces"
+            :key="face"
+            :position="center(face)">
+            <slot :name="face" />
         </v-object>
     </div>
 </template>
 
 <script>
-import { DodecahedronGeometry, Mesh, MeshLambertMaterial } from 'three';
+import { DodecahedronGeometry, Object3D } from 'three';
+import { computed, ref, watch } from '@vue/composition-api';
 import { threeProps, useDisposable, useThree } from '@/app/behaviors/three';
 import { hasSameMembers } from '@/app/utils/array';
 import { degreesToRadians } from '@/app/utils/number';
@@ -63,6 +67,27 @@ const cornerMap = [
     ['dr', 'dbr', 'd'], // 19
 ];
 
+
+/**
+ * Faces.
+ *
+ * @const {string[]}
+ */
+const faces = [
+    'u',
+    'bl',
+    'br',
+    'l',
+    'r',
+    'f',
+    'dl',
+    'dr',
+    'dbl',
+    'dbr',
+    'b',
+    'd',
+];
+
 /**
  * Map face pairs to vertice indexes.
  *
@@ -112,9 +137,21 @@ export default {
 
         geometry.rotateX(degreesToRadians(36));
 
-        const material = new MeshLambertMaterial({ color: 0x999999 });
+        useDisposable(geometry);
 
-        const mesh = new Mesh(geometry, material);
+        /**
+         * Reactively track vertices.
+         *
+         * @const {Object}
+         */
+        const vertices = ref(geometry.vertices);
+
+        /**
+         * Edge length.
+         *
+         * @const {Object}
+         */
+        const edgeLength = computed(() => vertices.value[3].distanceTo(vertices.value[4]));
 
         /**
          * Get corner vector from face triplets.
@@ -123,8 +160,8 @@ export default {
          *
          * @return {Vector3}
          */
-        const corner = (...faces) => geometry.vertices[
-            cornerMap.findIndex(arr => hasSameMembers(arr, faces))
+        const corner = (...args) => vertices.value[
+            cornerMap.findIndex(arr => hasSameMembers(arr, args))
         ];
 
         /**
@@ -134,32 +171,41 @@ export default {
          *
          * @return {Vector3}
          */
-        const edge = (...faces) => {
-            const e = midpointMap.find(([f]) => hasSameMembers(f, faces));
+        const edge = (...args) => {
+            const e = midpointMap.find(([f]) => hasSameMembers(f, args));
 
-            return e && midpoint(geometry.vertices[e[1][0]], geometry.vertices[e[1][1]]);
+            return e && midpoint(vertices.value[e[1][0]], vertices.value[e[1][1]]);
         };
 
         /**
          * Get center vector of a face.
          *
-         * @param {string}
+         * @param {string} face
          *
          * @return {Vector3}
          */
         const center = (face) => {
             // calculate the radius of a circle inscribed in our face
-            const e = corner('u', 'f', 'l').distanceTo(corner('u', 'f', 'r'));
-            const r = e / 10 * Math.sqrt(25 + (10 * Math.sqrt(5)));
+            const r = edgeLength.value / 10 * Math.sqrt(25 + (10 * Math.sqrt(5)));
 
             // then draw a line of that distance from an edge to the opposite corner
             const [edgeFaces, cornerFaces] = centerMap[face];
             return midpointDistance(edge(...edgeFaces), corner(...cornerFaces), r);
         };
 
-        useDisposable(geometry, material);
+        /**
+         * Scale dodecahedron when size changes.
+         */
+        watch(() => props.size, (newSize, oldSize) => {
+            if (oldSize) {
+                const scale = 1 - ((oldSize - newSize) / oldSize);
+                geometry.scale(scale, scale, scale);
+            }
+        });
 
-        const { getThreeObj } = useThree(mesh, {
+        const obj = new Object3D();
+
+        const { getThreeObj } = useThree(obj, {
             context,
             name: () => props.name,
             position: () => props.position,
@@ -171,6 +217,7 @@ export default {
             center,
             corner,
             edge,
+            faces,
             getThreeObj,
         };
     },
