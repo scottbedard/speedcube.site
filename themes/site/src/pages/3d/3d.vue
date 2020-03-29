@@ -15,19 +15,140 @@
                         
                         <v-dodecahedron
                             :position="position"
+                            :rotation="rotation"
                             :size="size">
-                            <template #u><v-sphere color="#fff" /></template>
-                            <template #f><v-sphere color="#db241d" /></template>
-                            <template #l><v-sphere color="#006600" /></template>
-                            <template #bl><v-sphere color="#5f509b" /></template>
-                            <template #r><v-sphere color="#033bb9" /></template>
-                            <template #br><v-sphere color="#f9c300" /></template>
-                            <template #dl><v-sphere color="#fffb9d" /></template>
-                            <template #dbl><v-sphere color="#75c5f1" /></template>
-                            <template #dr><v-sphere color="#f19abf" /></template>
-                            <template #dbr><v-sphere color="#b9db7d" /></template>
-                            <template #b><v-sphere color="#fb6b03" /></template>
-                            <template #d><v-sphere color="#c2c1c1" /></template>
+                            <template #u>
+                                <v-shape
+                                    v-for="(sticker, index) in mega"
+                                    :geometry="sticker.geometry"
+                                    :inner-material="innerMaterial"
+                                    :key="index"
+                                    :outer-material="outerMaterial"
+                                    :position="sticker.position"
+                                />
+                                <v-sphere color="#ffffff" />
+                            </template>
+                            <template #f>
+                                <v-shape
+                                    v-for="(sticker, index) in mega"
+                                    :geometry="sticker.geometry"
+                                    :inner-material="innerMaterial"
+                                    :key="index"
+                                    :outer-material="outerMaterial"
+                                    :position="sticker.position"
+                                />
+                                <v-sphere color="#db241d" />
+                            </template>
+                            <template #l>
+                                <v-shape
+                                    v-for="(sticker, index) in mega"
+                                    :geometry="sticker.geometry"
+                                    :inner-material="innerMaterial"
+                                    :key="index"
+                                    :outer-material="outerMaterial"
+                                    :position="sticker.position"
+                                />
+                                <v-sphere color="#006600" />
+                            </template>
+                            <template #r>
+                                <v-shape
+                                    v-for="(sticker, index) in mega"
+                                    :geometry="sticker.geometry"
+                                    :inner-material="innerMaterial"
+                                    :key="index"
+                                    :outer-material="outerMaterial"
+                                    :position="sticker.position"
+                                />
+                                <v-sphere color="#033bb9" />
+                            </template>
+                            <template #bl>
+                                <v-shape
+                                    v-for="(sticker, index) in mega"
+                                    :geometry="sticker.geometry"
+                                    :inner-material="innerMaterial"
+                                    :key="index"
+                                    :outer-material="outerMaterial"
+                                    :position="sticker.position"
+                                />
+                                <v-sphere color="#5f509b" />
+                            </template>
+                            <template #br>
+                                <v-shape
+                                    v-for="(sticker, index) in mega"
+                                    :geometry="sticker.geometry"
+                                    :inner-material="innerMaterial"
+                                    :key="index"
+                                    :outer-material="outerMaterial"
+                                    :position="sticker.position"
+                                />
+                                <v-sphere color="#f9c300" />
+                            </template>
+                            <template #dl>
+                                <v-shape
+                                    v-for="(sticker, index) in mega"
+                                    :geometry="sticker.geometry"
+                                    :inner-material="innerMaterial"
+                                    :key="index"
+                                    :outer-material="outerMaterial"
+                                    :position="sticker.position"
+                                />
+                                <v-sphere color="#fffb9d" />
+                            </template>
+                            <template #dbl>
+                                <v-shape
+                                    v-for="(sticker, index) in mega"
+                                    :geometry="sticker.geometry"
+                                    :inner-material="innerMaterial"
+                                    :key="index"
+                                    :outer-material="outerMaterial"
+                                    :position="sticker.position"
+                                />
+                                <v-sphere color="#75c5f1" />
+                            </template>
+                            <template #dr>
+                                <v-shape
+                                    v-for="(sticker, index) in mega"
+                                    :geometry="sticker.geometry"
+                                    :inner-material="innerMaterial"
+                                    :key="index"
+                                    :outer-material="outerMaterial"
+                                    :position="sticker.position"
+                                />
+                                <v-sphere color="#f19abf" />
+                            </template>
+                            <template #dbr>
+                                <v-shape
+                                    v-for="(sticker, index) in mega"
+                                    :geometry="sticker.geometry"
+                                    :inner-material="innerMaterial"
+                                    :key="index"
+                                    :outer-material="outerMaterial"
+                                    :position="sticker.position"
+                                />
+                                <v-sphere color="#b9db7d" />
+                            </template>
+                            <template #b>
+                                <v-shape
+                                    v-for="(sticker, index) in mega"
+                                    :geometry="sticker.geometry"
+                                    :inner-material="innerMaterial"
+                                    :key="index"
+                                    :outer-material="outerMaterial"
+                                    :position="sticker.position"
+                                />
+                                <v-sphere color="#fb6b03" />
+                            </template>
+                            <template #d>
+                                <v-shape
+                                    v-for="(sticker, index) in mega"
+                                    :geometry="sticker.geometry"
+                                    :inner-material="innerMaterial"
+                                    :key="index"
+                                    :outer-material="outerMaterial"
+                                    :position="sticker.position"
+                                />
+                                <v-sphere color="#c2c1c1" />
+                            </template>
                         </v-dodecahedron>
                     </v-scene>
                 </div>
@@ -49,16 +170,31 @@
 
                 <div class="flex max-w-lg mb-6 mx-auto text-center">
                     <div class="flex-1 px-3">
-                        <div>Position X</div>
-                        <v-range-input v-model="position.x" :min="-180" :max="180" />
+                        <div>Rotation X</div>
+                        <v-range-input v-model="rotation.x" :min="-180" :max="180" />
                     </div>
                     <div class="flex-1 px-3">
-                        <div>Position Y</div>
-                        <v-range-input v-model="position.y" :min="-180" :max="180" />
+                        <div>Rotation Y</div>
+                        <v-range-input v-model="rotation.y" :min="-180" :max="180" />
                     </div>
                     <div class="flex-1 px-3">
-                        <div>Position Z</div>
-                        <v-range-input v-model="position.z" :min="-180" :max="180" />
+                        <div>Rotation Z</div>
+                        <v-range-input v-model="rotation.z" :min="-180" :max="180" />
+                    </div>
+                </div>
+
+                <div class="flex max-w-lg mb-6 mx-auto text-center">
+                    <div class="flex-1 px-3">
+                        <div>Gap X</div>
+                        <v-range-input v-model="gap" :min="0" :max="0.5" :step="0.01" />
+                    </div>
+                    <div class="flex-1 px-3">
+                        <div>Mid</div>
+                        <v-range-input v-model="mid" :min="0" :max="0.4" :step="0.01" />
+                    </div>
+                    <div class="flex-1 px-3">
+                        <div>Radius</div>
+                        <v-range-input v-model="radius" :min="0" :max="0.5" :step="0.01" />
                     </div>
                 </div>
 
@@ -70,14 +206,16 @@
 
 <script>
 import { clamp } from 'lodash-es';
-import { DoubleSide, MeshLambertMaterial } from 'three';
+import { DoubleSide, MeshLambertMaterial, BackSide, FrontSide } from 'three';
 import ambientLightComponent from '@/components/three/ambient_light/ambient_light.vue';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
 import dodecahedronComponent from '@/components/three/geometries/dodecahedron/dodecahedron.vue';
 import pointLightComponent from '@/components/three/point_light/point_light.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
+import shapeComponent from '@/components/three/shape/shape.vue';
 import sphereComponent from '@/components/three/geometries/sphere/sphere.vue';
 import { intersect, midpoint, polygon, positionedShape } from '@/app/utils/geometry';
+import { hexColorValue } from '@/app/utils/string';
 
 export default {
     data() {
@@ -87,6 +225,9 @@ export default {
             size: 40,
             position: { x: 0, y: 0, z: 0 },
             rotation: { x: 0, y: 0, z: 0 },
+            gap: 0.2,
+            mid: 0.1,
+            radius: 0,
         };
     },
     components: {
@@ -95,21 +236,29 @@ export default {
         'v-dodecahedron': dodecahedronComponent,
         'v-point-light': pointLightComponent,
         'v-scene': sceneComponent,
+        'v-shape': shapeComponent,
         'v-sphere': sphereComponent,
     },
     computed: {
-        material() {
+        innerMaterial() {
             return new MeshLambertMaterial({
                 color: 0xffffff,
                 opacity: 1,
-                side: DoubleSide,
+                side: BackSide,
+            });
+        },
+        outerMaterial() {
+            return new MeshLambertMaterial({
+                color: 0xff0000,
+                opacity: 1,
+                side: FrontSide,
             });
         },
         mega() {
             const cornerMid = clamp(0.5 - this.mid, 0, 0.5 - Number.EPSILON);
             const centerMid = clamp(0.5 + this.mid, 0.5 + Number.EPSILON, 1);
             const gapRatio = 1 - this.gap;
-            const outline = polygon(10 * this.scale, 5);
+            const outline = polygon(this.size / 2, 5);
             const [origin, a, b, c, d, e] = outline.vertices;
 
             // outer corner points

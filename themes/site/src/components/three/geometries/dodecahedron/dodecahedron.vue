@@ -3,6 +3,7 @@
         <v-object
             v-for="face in faces"
             :key="face"
+            :look-at="{ x: 0, y: 0, z: 0 }"
             :position="center(face)">
             <slot :name="face" />
         </v-object>

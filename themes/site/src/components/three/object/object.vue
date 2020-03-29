@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { Object3D } from 'three';
+import { Object3D, Quaternion } from 'three';
 import { threeProps, useThree } from '@/app/behaviors/three';
 
 export default {
@@ -17,6 +17,7 @@ export default {
 
         const { getThreeObj, setLocalPosition } = useThree(obj, {
             context,
+            lookAt: () => props.lookAt,
             name: () => props.name,
             position: () => props.position,
             rotation: () => props.rotation,
@@ -27,6 +28,8 @@ export default {
     },
     props: {
         ...threeProps,
+        lookAt: Object,
+        quaternion: Boolean,
     },
 };
 </script>
