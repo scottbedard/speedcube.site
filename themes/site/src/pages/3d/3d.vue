@@ -3,7 +3,7 @@
         <v-margin padded>
             <h1 class="mb-12">3D Sandbox</h1>
 
-            <div style="padding-bottom: 2000px">
+            <div>
                 <div class="max-w-md mx-auto mb-12">
 
                     <v-puzzle
@@ -13,6 +13,7 @@
                         :camera-distance="cameraDistance"
                         :config="config"
                         :rotation="rotation"
+                        :size="size"
                     />
 
                     <!-- <v-scene
@@ -53,7 +54,7 @@
                     </div>
                     <div class="flex-1 px-3">
                         <div>Size</div>
-                        <v-range-input v-model="size" :min="1" :max="100" />
+                        <v-range-input v-model="size" :min="10" :max="300" />
                     </div>
                 </div>
 
@@ -114,7 +115,7 @@ export default {
         return {
             cameraAngle: 50,
             cameraDistance: 250,
-            size: 40,
+            size: 100,
             position: { x: 0, y: 0, z: 0 },
             rotation: { x: 0, y: 0, z: 0 },
             config: {

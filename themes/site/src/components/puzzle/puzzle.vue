@@ -23,6 +23,7 @@
             :config="config"
             :is="typeComponent"
             :rotation="rotation"
+            :size="size"
             :type="type"
         />
     </v-scene>
@@ -74,6 +75,10 @@ export default {
         },
         rotation: {
             type: Object,
+        },
+        size: {
+            default: 100,
+            type: Number,
         },
         type: {
             required: true,

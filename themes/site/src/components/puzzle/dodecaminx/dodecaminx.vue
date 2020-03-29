@@ -1,7 +1,7 @@
 <template>
     <v-dodecahedron
         :rotation="rotation"
-        :size="100">
+        :size="size">
         <template #u>
             <v-object :position="elevatedPosition">
                 <v-shape
@@ -71,15 +71,6 @@ export default {
     },
     computed: {
         /**
-         * Outer sphere radius of dodecahedron geometry.
-         *
-         * @return {number}
-         */
-        dodecahedronRadius() {
-            return 100;
-        },
-
-        /**
          * Elevate our faces along their local Z axis.
          *
          * @return {Object}
@@ -96,10 +87,10 @@ export default {
          * @return {number}
          */
         faceRadius() {
-            const edgeLength = 4 * this.dodecahedronRadius / (Math.sqrt(3) * (1 + Math.sqrt(5)));
+            const edgeLength = 4 * this.size / (Math.sqrt(3) * (1 + Math.sqrt(5)));
             const circumcircleRadius = edgeLength / 10 * Math.sqrt(50 + (10 * Math.sqrt(5)));
 
-            return this.dodecahedronRadius * (circumcircleRadius / this.dodecahedronRadius);
+            return this.size * (circumcircleRadius / this.size);
         },
 
         innerMaterial() {
@@ -224,6 +215,9 @@ export default {
         },
         rotation: {
             type: Object,
+        },
+        size: {
+            type: Number,
         },
     },
 };
