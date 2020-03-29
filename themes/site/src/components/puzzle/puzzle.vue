@@ -22,6 +22,7 @@
         <component
             :config="config"
             :is="typeComponent"
+            :rotation="rotation"
             :type="type"
         />
     </v-scene>
@@ -69,6 +70,9 @@ export default {
         },
         config: {
             default: stubObject,
+            type: Object,
+        },
+        rotation: {
             type: Object,
         },
         type: {

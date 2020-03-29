@@ -99,9 +99,12 @@ export function useThree(obj, options = {}) {
         obj.rotation.z = degreesToRadians(z || 0);
 
         if (isFunction(options.lookAt)) {
-            const { x: lookX, y: lookY, z: lookZ } = options.lookAt();
-
-            obj.lookAt(lookX, lookY, lookZ);
+            const lookAt = options.lookAt();
+            
+            if (lookAt) {
+                const { x: lookX, y: lookY, z: lookZ } = options.lookAt();
+                obj.lookAt(lookX, lookY, lookZ);
+            }
         }
     }
 

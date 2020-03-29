@@ -11,6 +11,8 @@
                         type="megaminx"
                         :camera-angle="cameraAngle"
                         :camera-distance="cameraDistance"
+                        :config="config"
+                        :rotation="rotation"
                     />
 
                     <!-- <v-scene
@@ -72,16 +74,20 @@
 
                 <div class="flex max-w-lg mb-6 mx-auto text-center">
                     <div class="flex-1 px-3">
-                        <div>Gap X</div>
-                        <v-range-input v-model="gap" :min="0" :max="0.5" :step="0.01" />
+                        <div>Center</div>
+                        <v-range-input v-model="config.centerSize" :min="0" :max="0.4" :step="0.01" />
                     </div>
                     <div class="flex-1 px-3">
-                        <div>Mid</div>
-                        <v-range-input v-model="mid" :min="0" :max="0.4" :step="0.01" />
+                        <div>Spacing</div>
+                        <v-range-input v-model="config.stickerSpacing" :min="0" :max="0.5" :step="0.01" />
+                    </div>
+                    <div class="flex-1 px-3">
+                        <div>Elevation</div>
+                        <v-range-input v-model="config.stickerElevation" :min="0" :max="100" :step="1" />
                     </div>
                     <div class="flex-1 px-3">
                         <div>Radius</div>
-                        <v-range-input v-model="radius" :min="0" :max="0.5" :step="0.01" />
+                        <v-range-input v-model="config.stickerRadius" :min="0" :max="0.5" :step="0.01" />
                     </div>
                 </div>
 
@@ -93,7 +99,6 @@
 
 <script>
 import { clamp } from 'lodash-es';
-import { MeshLambertMaterial, BackSide, FrontSide } from 'three';
 import ambientLightComponent from '@/components/three/ambient_light/ambient_light.vue';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
 import dodecahedronComponent from '@/components/three/geometries/dodecahedron/dodecahedron.vue';
@@ -107,14 +112,17 @@ import puzzleComponent from '@/components/puzzle/puzzle.vue';
 export default {
     data() {
         return {
-            cameraAngle: 60,
+            cameraAngle: 50,
             cameraDistance: 250,
             size: 40,
             position: { x: 0, y: 0, z: 0 },
             rotation: { x: 0, y: 0, z: 0 },
-            gap: 0.2,
-            mid: 0.1,
-            radius: 0,
+            config: {
+                centerSize: 0.05,
+                stickerRadius: 0,
+                stickerSpacing: 0.01,
+                stickerElevation: 0.5,
+            },
         };
     },
     components: {
@@ -128,20 +136,6 @@ export default {
         'v-sphere': sphereComponent,
     },
     computed: {
-        innerMaterial() {
-            return new MeshLambertMaterial({
-                color: 0xffffff,
-                opacity: 1,
-                side: BackSide,
-            });
-        },
-        outerMaterial() {
-            return new MeshLambertMaterial({
-                color: 0xff0000,
-                opacity: 1,
-                side: FrontSide,
-            });
-        },
         mega() {
             const cornerMid = clamp(0.5 - this.mid, 0, 0.5 - Number.EPSILON);
             const centerMid = clamp(0.5 + this.mid, 0.5 + Number.EPSILON, 1);

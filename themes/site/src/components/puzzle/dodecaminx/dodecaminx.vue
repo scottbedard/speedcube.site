@@ -1,15 +1,54 @@
 <template>
-    <v-dodecahedron :size="50">
+    <v-dodecahedron
+        :rotation="rotation"
+        :size="100">
         <template #u>
-            <v-shape
-                v-for="(sticker, index) in megaminxShapes"
-                :geometry="sticker.geometry"
-                :inner-material="innerMaterial"
-                :key="index"
-                :outer-material="outerMaterial"
-                :position="sticker.position"
-            />
-            <v-sphere color="#ffffff" />
+            <v-object :position="elevatedPosition">
+                <v-shape
+                    v-for="(sticker, index) in megaminxShapes"
+                    :geometry="sticker.geometry"
+                    :inner-material="innerMaterial"
+                    :key="index"
+                    :outer-material="outerMaterial"
+                    :position="sticker.position"
+                />
+            </v-object>
+        </template>
+        <template #f>
+            <v-object :rotation="{ z: 36 }" :position="elevatedPosition">
+                <v-shape
+                    v-for="(sticker, index) in megaminxShapes"
+                    :geometry="sticker.geometry"
+                    :inner-material="innerMaterial"
+                    :key="index"
+                    :outer-material="outerMaterial"
+                    :position="sticker.position"
+                />
+            </v-object>
+        </template>
+        <template #r>
+            <v-object :rotation="{ z: 31.5 }" :position="elevatedPosition">
+                <v-shape
+                    v-for="(sticker, index) in megaminxShapes"
+                    :geometry="sticker.geometry"
+                    :inner-material="innerMaterial"
+                    :key="index"
+                    :outer-material="outerMaterial"
+                    :position="sticker.position"
+                />
+            </v-object>
+        </template>
+        <template #l>
+            <v-object :rotation="{ z: 40.5 }" :position="elevatedPosition">
+                <v-shape
+                    v-for="(sticker, index) in megaminxShapes"
+                    :geometry="sticker.geometry"
+                    :inner-material="innerMaterial"
+                    :key="index"
+                    :outer-material="outerMaterial"
+                    :position="sticker.position"
+                />
+            </v-object>
         </template>
     </v-dodecahedron>
 </template>
@@ -19,16 +58,50 @@ import { clamp } from 'lodash-es';
 import { BackSide, FrontSide, MeshLambertMaterial } from 'three';
 import { intersect, midpoint, polygon, positionedShape } from '@/app/utils/geometry';
 import dodecahedronComponent from '@/components/three/geometries/dodecahedron/dodecahedron.vue';
+import objectComponent from '@/components/three/object/object.vue';
 import shapeComponent from '@/components/three/shape/shape.vue';
 import sphereComponent from '@/components/three/geometries/sphere/sphere.vue';
 
 export default {
     components: {
         'v-dodecahedron': dodecahedronComponent,
+        'v-object': objectComponent,
         'v-shape': shapeComponent,
         'v-sphere': sphereComponent,
     },
     computed: {
+        /**
+         * Outer sphere radius of dodecahedron geometry.
+         *
+         * @return {number}
+         */
+        dodecahedronRadius() {
+            return 100;
+        },
+
+        /**
+         * Elevate our faces along their local Z axis.
+         *
+         * @return {Object}
+         */
+        elevatedPosition() {
+            return {
+                z: this.normalizedConfig.stickerElevation * -1,
+            };
+        },
+
+        /**
+         * Outer radius of each pentagonal face.
+         *
+         * @return {number}
+         */
+        faceRadius() {
+            const edgeLength = 4 * this.dodecahedronRadius / (Math.sqrt(3) * (1 + Math.sqrt(5)));
+            const circumcircleRadius = edgeLength / 10 * Math.sqrt(50 + (10 * Math.sqrt(5)));
+
+            return this.dodecahedronRadius * (circumcircleRadius / this.dodecahedronRadius);
+        },
+
         innerMaterial() {
             return new MeshLambertMaterial({
                 color: 0xffffff,
@@ -52,7 +125,7 @@ export default {
         megaminxShapes() {
             const { centerSize, stickerRadius, stickerSpacing } = this.normalizedConfig;
 
-            const outline = polygon(50 / 2, 5);
+            const outline = polygon(this.faceRadius, 5);
             const cornerMid = clamp(0.5 - centerSize, 0, 0.5 - Number.EPSILON);
             const centerMid = clamp(0.5 + centerSize, 0.5 + Number.EPSILON, 1);
             const spacingRatio = 1 - stickerSpacing;
@@ -138,6 +211,7 @@ export default {
         normalizedConfig() {
             return {
                 centerSize: 0.1,
+                stickerElevation: -1,
                 stickerRadius: 0.2,
                 stickerSpacing: 0.2,
                 ...this.config,
@@ -146,6 +220,9 @@ export default {
     },
     props: {
         config: {
+            type: Object,
+        },
+        rotation: {
             type: Object,
         },
     },
