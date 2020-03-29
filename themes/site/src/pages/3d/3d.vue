@@ -5,7 +5,15 @@
 
             <div style="padding-bottom: 2000px">
                 <div class="max-w-md mx-auto mb-12">
-                    <v-scene
+
+                    <v-puzzle
+                        debug
+                        type="megaminx"
+                        :camera-angle="cameraAngle"
+                        :camera-distance="cameraDistance"
+                    />
+
+                    <!-- <v-scene
                         class="pb-full"
                         :camera-angle="cameraAngle"
                         :camera-distance="cameraDistance">
@@ -29,7 +37,7 @@
                                 <v-sphere color="#ffffff" />
                             </template>
                         </v-dodecahedron>
-                    </v-scene>
+                    </v-scene> -->
                 </div>
 
                 <div class="flex max-w-lg mb-6 mx-auto text-center">
@@ -39,7 +47,7 @@
                     </div>
                     <div class="flex-1 px-3">
                         <div>Camera distance</div>
-                        <v-range-input v-model="cameraDistance" :min="1" :max="200" />
+                        <v-range-input v-model="cameraDistance" :min="0" :max="500" />
                     </div>
                     <div class="flex-1 px-3">
                         <div>Size</div>
@@ -85,7 +93,7 @@
 
 <script>
 import { clamp } from 'lodash-es';
-import { DoubleSide, MeshLambertMaterial, BackSide, FrontSide } from 'three';
+import { MeshLambertMaterial, BackSide, FrontSide } from 'three';
 import ambientLightComponent from '@/components/three/ambient_light/ambient_light.vue';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
 import dodecahedronComponent from '@/components/three/geometries/dodecahedron/dodecahedron.vue';
@@ -94,13 +102,13 @@ import sceneComponent from '@/components/three/scene/scene.vue';
 import shapeComponent from '@/components/three/shape/shape.vue';
 import sphereComponent from '@/components/three/geometries/sphere/sphere.vue';
 import { intersect, midpoint, polygon, positionedShape } from '@/app/utils/geometry';
-import { hexColorValue } from '@/app/utils/string';
+import puzzleComponent from '@/components/puzzle/puzzle.vue';
 
 export default {
     data() {
         return {
             cameraAngle: 60,
-            cameraDistance: 150,
+            cameraDistance: 250,
             size: 40,
             position: { x: 0, y: 0, z: 0 },
             rotation: { x: 0, y: 0, z: 0 },
@@ -114,6 +122,7 @@ export default {
         'v-axes-helper': axesHelperComponent,
         'v-dodecahedron': dodecahedronComponent,
         'v-point-light': pointLightComponent,
+        'v-puzzle': puzzleComponent,
         'v-scene': sceneComponent,
         'v-shape': shapeComponent,
         'v-sphere': sphereComponent,

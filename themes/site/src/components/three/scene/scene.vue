@@ -1,11 +1,11 @@
 <template>
-    <div class="border-4 border-gray-300 border-dashed"><slot /></div>
+    <div><slot /></div>
 </template>
 
 <script>
 import { Scene, PerspectiveCamera } from 'three';
 import { useDisposable, useThree } from '@/app/behaviors/three';
-import { degreesToRadians } from '@/app/utils/number';
+import { degreesToRadians, greaterThanZero } from '@/app/utils/number';
 
 export default {
     /**
@@ -61,10 +61,11 @@ export default {
          */
         cameraPosition() {
             const angle = degreesToRadians(this.cameraAngle);
+            const distance = greaterThanZero(this.cameraDistance);
 
             return {
-                adjacent: Math.sin(angle) * this.cameraDistance,
-                opposite: Math.cos(angle) * this.cameraDistance,
+                adjacent: Math.sin(angle) * distance,
+                opposite: Math.cos(angle) * distance,
             };
         },
 

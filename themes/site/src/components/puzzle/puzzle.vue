@@ -1,13 +1,80 @@
 <template>
-    <div>
-        Hello world
-    </div>
+    <v-scene
+        class="border-4 border-dashed pb-full"
+        :camera-angle="cameraAngle"
+        :camera-distance="cameraDistance">
+
+        <!-- axes helper -->
+        <v-axes-helper v-if="debug" :size="100" />
+
+        <!-- lighting -->
+        <v-ambient-light
+            :intensity="0.8"
+            :position="{ x: 200, z: 150 }"
+        />
+
+        <v-point-light
+            :intensity="0.8"
+            :position="{ y: 150 }"
+        />
+
+        <!-- puzzle -->
+        <component
+            :config="config"
+            :is="typeComponent"
+            :type="type"
+        />
+    </v-scene>
 </template>
 
 <script>
+import { stubObject } from 'lodash-es';
+import ambientLightComponent from '@/components/three/ambient_light/ambient_light.vue';
+import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
+import pointLightComponent from '@/components/three/point_light/point_light.vue';
+import sceneComponent from '../three/scene/scene.vue';
+
 export default {
+    components: {
+        'v-ambient-light': ambientLightComponent,
+        'v-axes-helper': axesHelperComponent,
+        'v-point-light': pointLightComponent,
+        'v-scene': sceneComponent,
+    },
+    computed: {
+        typeComponent() {
+            const component = {
+                megaminx: () => import('./dodecaminx/dodecaminx.vue'),
+            }[this.type];
+
+            if (!component) {
+                console.error(`Invalid puzzle type: ${this.type}`);
+            }
+
+            return component;
+        },
+    },
     props: {
-        // ...
+        debug: {
+            default: false,
+            type: Boolean,
+        },
+        cameraAngle: {
+            default: 60,
+            type: Number,
+        },
+        cameraDistance: {
+            default: 150,
+            type: Number,
+        },
+        config: {
+            default: stubObject,
+            type: Object,
+        },
+        type: {
+            required: true,
+            type: String,
+        },
     },
 };
 </script>
