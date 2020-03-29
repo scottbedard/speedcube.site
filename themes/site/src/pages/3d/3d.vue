@@ -113,7 +113,7 @@ import puzzleComponent from '@/components/puzzle/puzzle.vue';
 export default {
     data() {
         return {
-            cameraAngle: 50,
+            cameraAngle: 60,
             cameraDistance: 250,
             size: 100,
             position: { x: 0, y: 0, z: 0 },

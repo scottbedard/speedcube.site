@@ -29,7 +29,6 @@ export default {
     props: {
         ...threeProps,
         lookAt: Object,
-        quaternion: Boolean,
     },
 };
 </script>

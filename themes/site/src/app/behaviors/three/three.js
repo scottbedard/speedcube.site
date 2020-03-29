@@ -100,7 +100,7 @@ export function useThree(obj, options = {}) {
 
         if (isFunction(options.lookAt)) {
             const lookAt = options.lookAt();
-            
+
             if (lookAt) {
                 const { x: lookX, y: lookY, z: lookZ } = options.lookAt();
                 obj.lookAt(lookX, lookY, lookZ);

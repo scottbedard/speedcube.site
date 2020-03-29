@@ -3,8 +3,7 @@
         <v-object
             v-for="face in faces"
             :key="face"
-            :look-at="{ x: 0, y: 0, z: 0 }"
-            :rotation="{ z: 40 }"
+            :look-at="axis(face)"
             :position="center(face)">
             <slot :name="face" />
         </v-object>
@@ -12,7 +11,7 @@
 </template>
 
 <script>
-import { DodecahedronGeometry, Object3D } from 'three';
+import { DodecahedronGeometry, Object3D, Vector3 } from 'three';
 import { computed, ref, watch } from '@vue/composition-api';
 import { threeProps, useDisposable, useThree } from '@/app/behaviors/three';
 import { hasSameMembers } from '@/app/utils/array';
@@ -196,6 +195,13 @@ export default {
         };
 
         /**
+         * Return a vector twice the distance from the center through a face.
+         */
+        const axis = (face) => {
+            return midpoint(new Vector3(), center(face), 2);
+        };
+
+        /**
          * Scale dodecahedron when size changes.
          */
         watch(() => props.size, (newSize, oldSize) => {
@@ -216,6 +222,7 @@ export default {
         });
 
         return {
+            axis,
             center,
             corner,
             edge,

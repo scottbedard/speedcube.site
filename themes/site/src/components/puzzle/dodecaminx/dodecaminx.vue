@@ -15,7 +15,9 @@
             </v-object>
         </template>
         <template #f>
-            <v-object :rotation="{ z: 36 }" :position="elevatedPosition">
+            <v-object
+                :position="elevatedPosition"
+                :rotation="{ z: 36 }">
                 <v-shape
                     v-for="(sticker, index) in megaminxShapes"
                     :geometry="sticker.geometry"
@@ -27,7 +29,9 @@
             </v-object>
         </template>
         <template #r>
-            <v-object :rotation="{ z: 31.5 }" :position="elevatedPosition">
+            <v-object
+                :position="elevatedPosition"
+                :rotation="{ z: 40.5 }">
                 <v-shape
                     v-for="(sticker, index) in megaminxShapes"
                     :geometry="sticker.geometry"
@@ -39,7 +43,9 @@
             </v-object>
         </template>
         <template #l>
-            <v-object :rotation="{ z: 40.5 }" :position="elevatedPosition">
+            <v-object
+                :position="elevatedPosition"
+                :rotation="{ z: 31.5 }">
                 <v-shape
                     v-for="(sticker, index) in megaminxShapes"
                     :geometry="sticker.geometry"
@@ -50,6 +56,48 @@
                 />
             </v-object>
         </template>
+        <template #bl>
+            <v-object
+                :position="elevatedPosition"
+                :rotation="{ z: 33.1 }">
+                <v-shape
+                    v-for="(sticker, index) in megaminxShapes"
+                    :geometry="sticker.geometry"
+                    :inner-material="innerMaterial"
+                    :key="index"
+                    :outer-material="outerMaterial"
+                    :position="sticker.position"
+                />
+            </v-object>
+        </template>
+        <template #br>
+            <v-object
+                :position="elevatedPosition"
+                :rotation="{ z: 38.9 }">
+                <v-shape
+                    v-for="(sticker, index) in megaminxShapes"
+                    :geometry="sticker.geometry"
+                    :inner-material="innerMaterial"
+                    :key="index"
+                    :outer-material="outerMaterial"
+                    :position="sticker.position"
+                />
+            </v-object>
+        </template>
+        <!-- <template #dl>
+            <v-object
+                :position="elevatedPosition"
+                :rotation="{ z: 0 }">
+                <v-shape
+                    v-for="(sticker, index) in megaminxShapes"
+                    :geometry="sticker.geometry"
+                    :inner-material="innerMaterial"
+                    :key="index"
+                    :outer-material="outerMaterial"
+                    :position="sticker.position"
+                />
+            </v-object>
+        </template> -->
     </v-dodecahedron>
 </template>
 
@@ -77,7 +125,7 @@ export default {
          */
         elevatedPosition() {
             return {
-                z: this.normalizedConfig.stickerElevation * -1,
+                z: this.normalizedConfig.stickerElevation,
             };
         },
 
@@ -93,16 +141,30 @@ export default {
             return this.size * (circumcircleRadius / this.size);
         },
 
+        /**
+         * Rotations to orient faces.
+         *
+         * @return {Object}
+         */
+        faceRotation() {
+            const f = new Quaternion();
+
+            return {
+                f,
+            };
+        },
+
         innerMaterial() {
             return new MeshLambertMaterial({
-                color: 0xffffff,
+                color: 0xff0000,
                 opacity: 1,
                 side: BackSide,
             });
         },
+
         outerMaterial() {
             return new MeshLambertMaterial({
-                color: 0xff0000,
+                color: 0xffffff,
                 opacity: 1,
                 side: FrontSide,
             });
