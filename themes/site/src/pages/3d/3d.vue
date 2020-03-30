@@ -13,7 +13,7 @@
                         :camera-distance="cameraDistance"
                         :config="config"
                         :rotation="rotation"
-                        :size="size"
+                        :size="100"
                     />
 
                     <!-- <v-scene
@@ -51,10 +51,6 @@
                     <div class="flex-1 px-3">
                         <div>Camera distance</div>
                         <v-range-input v-model="cameraDistance" :min="0" :max="500" />
-                    </div>
-                    <div class="flex-1 px-3">
-                        <div>Size</div>
-                        <v-range-input v-model="size" :min="10" :max="300" />
                     </div>
                 </div>
 
@@ -113,16 +109,15 @@ import puzzleComponent from '@/components/puzzle/puzzle.vue';
 export default {
     data() {
         return {
-            cameraAngle: 60,
-            cameraDistance: 250,
-            size: 100,
+            cameraAngle: 35,
+            cameraDistance: 400,
             position: { x: 0, y: 0, z: 0 },
             rotation: { x: 0, y: 0, z: 0 },
             config: {
                 centerSize: 0.05,
                 stickerRadius: 0,
-                stickerSpacing: 0.01,
-                stickerElevation: 0.5,
+                stickerSpacing: 0.2,
+                stickerElevation: 0,
             },
         };
     },

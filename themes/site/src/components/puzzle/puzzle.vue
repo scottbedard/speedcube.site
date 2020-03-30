@@ -9,13 +9,13 @@
 
         <!-- lighting -->
         <v-ambient-light
-            :intensity="0.8"
-            :position="{ x: 200, z: 150 }"
+            :intensity="0.7"
+            :position="{ y: 1000 }"
         />
 
         <v-point-light
             :intensity="0.8"
-            :position="{ y: 150 }"
+            :position="{ z: 1000 }"
         />
 
         <!-- puzzle -->
