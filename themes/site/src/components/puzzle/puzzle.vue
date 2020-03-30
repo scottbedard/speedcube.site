@@ -24,6 +24,8 @@
             :is="typeComponent"
             :rotation="rotation"
             :size="size"
+            :turn-progress="turnProgress"
+            :turn="turn"
             :type="type"
         />
     </v-scene>
@@ -79,6 +81,13 @@ export default {
         size: {
             default: 100,
             type: Number,
+        },
+        turnProgress: {
+            default: 0,
+            type: Number,
+        },
+        turn: {
+            type: String,
         },
         type: {
             required: true,

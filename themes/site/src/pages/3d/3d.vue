@@ -8,12 +8,14 @@
 
                     <v-puzzle
                         debug
+                        turn="R"
                         type="megaminx"
                         :camera-angle="cameraAngle"
                         :camera-distance="cameraDistance"
                         :config="config"
                         :rotation="rotation"
                         :size="100"
+                        :turn-progress="turnProgress"
                     />
 
                     <!-- <v-scene
@@ -51,6 +53,10 @@
                     <div class="flex-1 px-3">
                         <div>Camera distance</div>
                         <v-range-input v-model="cameraDistance" :min="0" :max="500" />
+                    </div>
+                    <div class="flex-1 px-3">
+                        <div>Turn progress</div>
+                        <v-range-input v-model="cameraDistance" :min="0" :max="1" :step="0.01" />
                     </div>
                 </div>
 
@@ -113,6 +119,7 @@ export default {
             cameraDistance: 400,
             position: { x: 0, y: 0, z: 0 },
             rotation: { x: 0, y: 0, z: 0 },
+            turnProgress: 0,
             config: {
                 centerSize: 0.05,
                 stickerRadius: 0,

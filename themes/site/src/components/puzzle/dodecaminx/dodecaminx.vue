@@ -1,141 +1,10 @@
 <template>
-    <v-dodecahedron
-        :rotation="rotation"
-        :size="size">
-        <template #u>
-            <v-object :position="elevatedPosition">
-                <v-shape
-                    v-for="(sticker, index) in megaminxShapes"
-                    :geometry="sticker.geometry"
-                    :inner-material="innerMaterial"
-                    :key="index"
-                    :outer-material="outerMaterial"
-                    :position="sticker.position"
-                />
-            </v-object>
-        </template>
-        <template #f>
-            <v-object :rotation="{ z: 36 }" :position="elevatedPosition">
-                <v-shape
-                    v-for="(sticker, index) in megaminxShapes"
-                    :geometry="sticker.geometry"
-                    :inner-material="innerMaterial"
-                    :key="index"
-                    :outer-material="outerMaterial"
-                    :position="sticker.position"
-                />
-            </v-object>
-        </template>
-        <template #r>
-            <v-object :rotation="{ z: 36 }" :position="elevatedPosition">
-                <v-shape
-                    v-for="(sticker, index) in megaminxShapes"
-                    :geometry="sticker.geometry"
-                    :inner-material="innerMaterial"
-                    :key="index"
-                    :outer-material="outerMaterial"
-                    :position="sticker.position"
-                />
-            </v-object>
-        </template>
-        <template #l>
-            <v-object :rotation="{ z: 36 }" :position="elevatedPosition">
-                <v-shape
-                    v-for="(sticker, index) in megaminxShapes"
-                    :geometry="sticker.geometry"
-                    :inner-material="innerMaterial"
-                    :key="index"
-                    :outer-material="outerMaterial"
-                    :position="sticker.position"
-                />
-            </v-object>
-        </template>
-        <template #bl>
-            <v-object :rotation="{ z: 36 }" :position="elevatedPosition">
-                <v-shape
-                    v-for="(sticker, index) in megaminxShapes"
-                    :geometry="sticker.geometry"
-                    :inner-material="innerMaterial"
-                    :key="index"
-                    :outer-material="outerMaterial"
-                    :position="sticker.position"
-                />
-            </v-object>
-        </template>
-        <template #br>
-            <v-object :rotation="{ z: 36 }" :position="elevatedPosition">
-                <v-shape
-                    v-for="(sticker, index) in megaminxShapes"
-                    :geometry="sticker.geometry"
-                    :inner-material="innerMaterial"
-                    :key="index"
-                    :outer-material="outerMaterial"
-                    :position="sticker.position"
-                />
-            </v-object>
-        </template>
-        <template #dl>
-            <v-object :rotation="{ z: 216 }" :position="elevatedPosition">
-                <v-shape
-                    v-for="(sticker, index) in megaminxShapes"
-                    :geometry="sticker.geometry"
-                    :inner-material="innerMaterial"
-                    :key="index"
-                    :outer-material="outerMaterial"
-                    :position="sticker.position"
-                />
-            </v-object>
-        </template>
-        <template #dbl>
-            <v-object :rotation="{ z: 216 }" :position="elevatedPosition">
-                <v-shape
-                    v-for="(sticker, index) in megaminxShapes"
-                    :geometry="sticker.geometry"
-                    :inner-material="innerMaterial"
-                    :key="index"
-                    :outer-material="outerMaterial"
-                    :position="sticker.position"
-                />
-            </v-object>
-        </template>
-        <template #dr>
-            <v-object :rotation="{ z: 216 }" :position="elevatedPosition">
-                <v-shape
-                    v-for="(sticker, index) in megaminxShapes"
-                    :geometry="sticker.geometry"
-                    :inner-material="innerMaterial"
-                    :key="index"
-                    :outer-material="outerMaterial"
-                    :position="sticker.position"
-                />
-            </v-object>
-        </template>
-        <template #dbr>
-            <v-object :rotation="{ z: 216 }" :position="elevatedPosition">
-                <v-shape
-                    v-for="(sticker, index) in megaminxShapes"
-                    :geometry="sticker.geometry"
-                    :inner-material="innerMaterial"
-                    :key="index"
-                    :outer-material="outerMaterial"
-                    :position="sticker.position"
-                />
-            </v-object>
-        </template>
-        <template #b>
-            <v-object :rotation="{ z: 216 }" :position="elevatedPosition">
-                <v-shape
-                    v-for="(sticker, index) in megaminxShapes"
-                    :geometry="sticker.geometry"
-                    :inner-material="innerMaterial"
-                    :key="index"
-                    :outer-material="outerMaterial"
-                    :position="sticker.position"
-                />
-            </v-object>
-        </template>
-        <template #d>
-            <v-object :position="elevatedPosition">
+    <v-dodecahedron :rotation="rotation" :size="size">
+        <template v-for="face in Object.keys(faces)" v-slot:[face]>
+            <v-object
+                :key="face"
+                :position="{ z: normalizedConfig.stickerElevation }"
+                :rotation="faces[face]">
                 <v-shape
                     v-for="(sticker, index) in megaminxShapes"
                     :geometry="sticker.geometry"
@@ -167,13 +36,24 @@ export default {
     },
     computed: {
         /**
-         * Elevate our faces along their local Z axis.
+         * Faces.
          *
          * @return {Object}
          */
-        elevatedPosition() {
+        faces() {
             return {
-                z: this.normalizedConfig.stickerElevation,
+                u: {},
+                f: { z: 36 },
+                l: { z: 36 },
+                r: { z: 36 },
+                bl: { z: 36 },
+                br: { z: 36 },
+                dl: { z: 216 },
+                dr: { z: 216 },
+                dbl: { z: 216 },
+                dbr: { z: 216 },
+                b: { z: 216 },
+                d: {},
             };
         },
 
@@ -303,6 +183,12 @@ export default {
         },
         size: {
             type: Number,
+        },
+        turnProgress: {
+            type: Number,
+        },
+        turn: {
+            type: String,
         },
     },
 };
