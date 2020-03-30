@@ -177,18 +177,6 @@ export default {
             };
         },
 
-        /**
-         * Outer radius of each pentagonal face.
-         *
-         * @return {number}
-         */
-        faceRadius() {
-            const edgeLength = 4 * this.size / (Math.sqrt(3) * (1 + Math.sqrt(5)));
-            const circumcircleRadius = edgeLength / 10 * Math.sqrt(50 + (10 * Math.sqrt(5)));
-
-            return this.size;
-        },
-
         innerMaterial() {
             return new MeshLambertMaterial({
                 color: 0x333333,
@@ -213,7 +201,7 @@ export default {
         megaminxShapes() {
             const { centerSize, stickerRadius, stickerSpacing } = this.normalizedConfig;
 
-            const outline = polygon(this.faceRadius, 5);
+            const outline = polygon(this.size, 5);
             const cornerMid = clamp(0.5 - centerSize, 0, 0.5 - Number.EPSILON);
             const centerMid = clamp(0.5 + centerSize, 0.5 + Number.EPSILON, 1);
             const spacingRatio = 1 - stickerSpacing;
