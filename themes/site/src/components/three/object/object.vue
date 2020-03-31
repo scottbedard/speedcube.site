@@ -20,6 +20,7 @@ export default {
             lookAt: () => props.lookAt,
             name: () => props.name,
             position: () => props.position,
+            quaternion: () => props.quaternion,
             rotation: () => props.rotation,
             scale: () => props.scale,
         });
@@ -29,6 +30,7 @@ export default {
     props: {
         ...threeProps,
         lookAt: Object,
+        quaternion: Object,
     },
 };
 </script>

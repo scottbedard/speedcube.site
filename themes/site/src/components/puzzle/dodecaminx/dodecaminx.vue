@@ -1,5 +1,9 @@
 <template>
-    <v-dodecahedron :rotation="rotation" :size="size">
+    <v-dodecahedron
+        :quaternion-axis="'l'"
+        :quaternion-rotation="turnProgress * -72"
+        :rotation="rotation"
+        :size="size">
         <template v-for="face in Object.keys(faces)" v-slot:[face]>
             <v-object
                 :key="face"

@@ -1,20 +1,23 @@
 <template>
     <div class="hidden">
-        <v-object
-            v-for="face in faces"
-            :key="face.name"
-            :look-at="face.lookAt"
-            :position="face.vector">
-            <slot :name="face.name" />
+        <v-object :quaternion="quaternion">
+            <v-object
+                v-for="face in faces"
+                :key="face.name"
+                :look-at="face.lookAt"
+                :position="face.vector">
+                <slot :name="face.name" />
+            </v-object>
         </v-object>
     </div>
 </template>
 
 <script>
 import { IcosahedronGeometry, Object3D, Quaternion } from 'three';
-import { ref, watch } from '@vue/composition-api';
+import { computed, ref, watch } from '@vue/composition-api';
 import { threeProps, useDisposable, useThree } from '@/app/behaviors/three';
 import { midpoint } from '@/app/utils/geometry';
+import { degreesToRadians } from '@/app/utils/number';
 import objectComponent from '../../object/object.vue';
 import sphereComponent from '../sphere/sphere.vue';
 
@@ -55,14 +58,14 @@ export default {
         useDisposable(geometry);
 
         // rotate the geometry so U and F faces point towards camera
-        const quaternion = new Quaternion();
+        const orientation = new Quaternion();
 
-        quaternion.setFromUnitVectors(
+        orientation.setFromUnitVectors(
             midpoint(geometry.vertices[2], geometry.vertices[3]).normalize(),
             geometry.vertices[4].clone().normalize(),
         );
 
-        geometry.vertices.forEach(vector => vector.applyQuaternion(quaternion));
+        geometry.vertices.forEach(vector => vector.applyQuaternion(orientation));
 
         // resize geometry when size prop changes
         watch(() => props.size, (size, oldSize) => {
@@ -94,7 +97,22 @@ export default {
             };
         });
 
-        return { faces, getThreeObj };
+        const quaternion = computed(() => {
+            const q = new Quaternion();
+
+            q.setFromAxisAngle(
+                geometry.vertices[faceMap.indexOf(props.quaternionAxis)].clone().normalize(),
+                degreesToRadians(props.quaternionRotation),
+            );
+
+            return q;
+        });
+
+        return {
+            faces,
+            getThreeObj,
+            quaternion,
+        };
     },
     components: {
         'v-object': objectComponent,
@@ -102,6 +120,14 @@ export default {
     },
     props: {
         ...threeProps,
+        quaternionAxis: {
+            default: 'r',
+            type: String,
+        },
+        quaternionRotation: {
+            default: 0,
+            type: Number,
+        },
         size: {
             default: 10,
             type: [Number, Object],

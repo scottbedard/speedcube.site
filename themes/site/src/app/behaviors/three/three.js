@@ -84,7 +84,7 @@ export function useThree(obj, options = {}) {
     }
 
     /**
-     * Set local object rotation.
+     * Set euler rotation.
      *
      * @param {Object}  vector
      * @param {number?} vector.x
@@ -93,7 +93,12 @@ export function useThree(obj, options = {}) {
      *
      * @return {void}
      */
-    function setLocalRotation({ x, y, z }) {
+    function setEulerRotation({ x, y, z }) {
+        // only set euler rotations if no quaternion is present
+        if (isFunction(options.quaternion) && options.quaternion()) {
+            return;
+        }
+
         obj.rotation.x = degreesToRadians(x || 0);
         obj.rotation.y = degreesToRadians(y || 0);
         obj.rotation.z = degreesToRadians(z || 0);
@@ -135,6 +140,16 @@ export function useThree(obj, options = {}) {
         obj.name = name;
     }
 
+    /**
+     * Set quaternion rotation.
+     * @param {Quaternion} quaternion
+     */
+    function setQuaternionRotation(quaternion) {
+        if (quaternion) {
+            obj.setRotationFromQuaternion(quaternion);
+        }
+    }
+
     //
     // lifecycle
     //
@@ -159,8 +174,12 @@ export function useThree(obj, options = {}) {
         watch(options.position, setLocalPosition, { deep: true });
     }
 
+    if (isFunction(options.quaternion)) {
+        watch(options.quaternion, setQuaternionRotation);
+    }
+
     if (isFunction(options.rotation)) {
-        watch(options.rotation, setLocalRotation, { deep: true });
+        watch(options.rotation, setEulerRotation, { deep: true });
     }
 
     if (isFunction(options.scale)) {
@@ -173,7 +192,7 @@ export function useThree(obj, options = {}) {
         getThreeObj,
         removeFromParentObj,
         setLocalPosition,
-        setLocalRotation,
+        setLocalRotation: setEulerRotation,
         setLocalScale,
         setName,
     };
