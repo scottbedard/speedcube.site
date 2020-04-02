@@ -23,8 +23,9 @@
 </template>
 
 <script>
-import { clamp } from 'lodash-es';
+import { clamp, stubObject } from 'lodash-es';
 import { BackSide, FrontSide, MeshLambertMaterial } from 'three';
+import { Dodecaminx } from '@bedard/twister';
 import { intersect, midpoint, polygon, positionedShape } from '@/app/utils/geometry';
 import dodecahedronComponent from '@/components/three/geometries/dodecahedron/dodecahedron.vue';
 import objectComponent from '@/components/three/object/object.vue';
@@ -32,6 +33,16 @@ import shapeComponent from '@/components/three/shape/shape.vue';
 import sphereComponent from '@/components/three/geometries/sphere/sphere.vue';
 
 export default {
+    created() {
+        this.model = new Dodecaminx(this.normalizedOptions);
+
+        console.log(this.model);
+    },
+    data() {
+        return {
+            model: null,
+        };
+    },
     components: {
         'v-dodecahedron': dodecahedronComponent,
         'v-object': objectComponent,
@@ -177,9 +188,26 @@ export default {
                 ...this.config,
             };
         },
+
+        /**
+         * Normalized options.
+         *
+         * @return {Object}
+         */
+        normalizedOptions() {
+            return {
+                size: 3,
+                ...this.options,
+            };
+        },
     },
     props: {
         config: {
+            default: stubObject,
+            type: Object,
+        },
+        optiioins: {
+            default: stubObject,
             type: Object,
         },
         rotation: {
@@ -192,6 +220,9 @@ export default {
             type: Number,
         },
         turn: {
+            type: String,
+        },
+        type: {
             type: String,
         },
     },

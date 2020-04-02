@@ -9,6 +9,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@bedard/twister": "^0.1.5",
     "@vue/composition-api": "^0.5.0",
     "axios": "^0.19.0",
     "bedard-cube": "^1.0.0-beta.0",
