@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { Object3D, Quaternion } from 'three';
+import { Object3D } from 'three';
 import { threeProps, useThree } from '@/app/behaviors/three';
 
 export default {

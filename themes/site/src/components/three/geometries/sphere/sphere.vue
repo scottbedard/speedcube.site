@@ -16,7 +16,7 @@ export default {
             color: hexColorValue(props.color),
             wireframe: props.wireframe,
         });
-        
+
         const mesh = new Mesh(geometry, material);
 
         useDisposable(geometry, material);
