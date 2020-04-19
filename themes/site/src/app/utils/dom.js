@@ -20,6 +20,17 @@ export function eventPassedThroughTag(e, tagName) {
 }
 
 /**
+ * Get an element's position relative to the viewport.
+ *
+ * @param {Element} el
+ *
+ * @return {object}
+ */
+export function getBoundingClientRect(el) {
+    return el.getBoundingClientRect() || { bottom: 0, top: 0, right: 0, left: 0 };
+}
+
+/**
  * Cross browser tests for key events.
  * @param  {Event}      e
  * @param  {string}     keyName     enter | spacebar
@@ -108,6 +119,26 @@ export function queryElementThen(parentEl, selector, cb) {
     if (el) {
         cb(el);
     }
+}
+
+/**
+ * Test if a bounding client rect is visible within the viewport
+ *
+ * @param {object} rect
+ * @param {number} rect.bottom
+ * @param {number} rect.left
+ * @param {number} rect.right
+ * @param {number} rect.top
+ *
+ * @return {boolean}
+ */
+export function rectIsVisible(rect) {
+    return !(
+        rect.bottom < 0
+        || rect.top > document.body.clientHeight
+        || rect.right < 0
+        || rect.left > document.body.clientWidth
+    );
 }
 
 /**

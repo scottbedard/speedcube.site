@@ -1,15 +1,18 @@
 <template>
-    <div>
+    <div class="border-4 border-primary-5" ref="container">
         <slot />
     </div>
 </template>
 
 <script>
+import { onMounted, ref } from '@vue/composition-api';
 import { PerspectiveCamera, Scene } from 'three';
 import { useScene } from 'vue-use-three';
 
 export default {
     setup(props) {
+        const container = ref();
+
         const camera = new PerspectiveCamera(
             props.cameraFov,
             props.cameraAspect,
@@ -18,8 +21,17 @@ export default {
         );
 
         const scene = new Scene();
+        scene.userData.camera = camera;
 
-        useScene(scene, { camera });
+        useScene(scene);
+
+        onMounted(() => {
+            scene.userData.container = container.value;
+        });
+
+        return {
+            container,
+        };
     },
     props: {
         cameraAngle: {
