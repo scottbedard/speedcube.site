@@ -41,12 +41,12 @@
 import Cube from 'bedard-cube';
 import { get, noop, times, xor } from 'lodash-es';
 import { BackSide, FrontSide, MeshLambertMaterial } from 'three';
-import boxComponent from '@/components/three/box/box.vue';
-import objComponent from '@/components/three/obj/obj.vue';
+import boxComponent from '@/components/three_old/box/box.vue';
+import objComponent from '@/components/three_old/obj/obj.vue';
 import cubeStickersComponent from './cube_stickers/cube_stickers.vue';
 import { getStickersEffectedByTurn } from './utils';
 import { applyCubeState } from '@/app/utils/puzzle';
-import { roundedSquare } from '@/components/three/geometries';
+import { roundedSquare } from '@/components/three_old/geometries';
 import { defaultCubeConfig, maskColor } from '@/app/constants';
 
 export default {

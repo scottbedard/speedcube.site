@@ -66,12 +66,12 @@
 </template>
 
 <script>
-import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
-import boxComponent from '@/components/three/box/box.vue';
+import axesHelperComponent from '@/components/three_old/axes_helper/axes_helper.vue';
+import boxComponent from '@/components/three_old/box/box.vue';
 import exampleComponent from '../example.vue';
-import lightComponent from '@/components/three/light/light.vue';
-import sceneComponent from '@/components/three/scene/scene.vue';
-import shapeComponent from '@/components/three/shape/shape.vue';
+import lightComponent from '@/components/three_old/light/light.vue';
+import sceneComponent from '@/components/three_old/scene/scene.vue';
+import shapeComponent from '@/components/three_old/shape/shape.vue';
 
 export default {
     components: {

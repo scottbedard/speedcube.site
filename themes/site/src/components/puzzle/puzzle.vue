@@ -34,8 +34,8 @@
 </template>
 
 <script>
-import lightComponent from '@/components/three/light/light.vue';
-import sceneComponent from '@/components/three/scene/scene.vue';
+import lightComponent from '@/components/three_old/light/light.vue';
+import sceneComponent from '@/components/three_old/scene/scene.vue';
 import cubeComponent from './cube/cube.vue';
 
 // default puzzle config

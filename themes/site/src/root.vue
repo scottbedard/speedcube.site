@@ -14,7 +14,7 @@
 
 <script>
 import { bindExternalEvent } from 'spyfu-vue-utils';
-import rendererComponent from '@/components/three/renderer/renderer.vue';
+import rendererComponent from '@/components/three_old/renderer/renderer.vue';
 
 export default {
     created() {
