@@ -1,8 +1,9 @@
 <template>
     <canvas
         class="absolute h-full left-0 pointer-events-none top-0 w-full z-10"
+        data-old
         :class="{
-            hidden: empty,
+            hidden: true,
         }"
         :height="height"
         :style="{

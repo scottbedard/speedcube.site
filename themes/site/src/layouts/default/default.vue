@@ -1,23 +1,25 @@
 <template>
     <div class="flex flex-col h-full overflow-y-scroll">
-        <!-- header -->
-        <v-header />
+        <v-renderer>
+            <!-- header -->
+            <v-header />
 
-        <!-- content -->
-        <main class="flex-1" role="main">
-            <v-collapse-transition>
-                <router-view />
-            </v-collapse-transition>
-        </main>
+            <!-- content -->
+            <main class="flex-1" role="main">
+                <v-collapse-transition>
+                    <router-view />
+                </v-collapse-transition>
+            </main>
 
-        <!-- footer -->
-        <v-footer />
+            <!-- footer -->
+            <v-footer />
 
-        <!-- alerts -->
-        <v-alerts />
+            <!-- alerts -->
+            <v-alerts />
 
-        <!-- modals -->
-        <v-modals />
+            <!-- modals -->
+            <v-modals />
+        </v-renderer>
     </div>
 </template>
 
@@ -26,6 +28,7 @@ import alertsComponent from './alerts/alerts.vue';
 import footerComponent from './footer/footer.vue';
 import headerComponent from './header/header.vue';
 import modalsComponent from './modals/modals.vue';
+import rendererComponent from '../../components/three/renderer/renderer.vue';
 
 export default {
     components: {
@@ -33,6 +36,7 @@ export default {
         'v-footer': footerComponent,
         'v-header': headerComponent,
         'v-modals': modalsComponent,
+        'v-renderer': rendererComponent,
     },
 };
 </script>
