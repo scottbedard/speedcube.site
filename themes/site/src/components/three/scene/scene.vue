@@ -6,8 +6,8 @@
 
 <script>
 import { onMounted, ref } from '@vue/composition-api';
-import { PerspectiveCamera, Scene } from 'three';
-import { useScene } from 'vue-use-three';
+import { BoxGeometry, Mesh, MeshNormalMaterial, PerspectiveCamera, Scene } from 'three';
+import { useNesting, useScene } from 'vue-use-three';
 
 export default {
     setup(props) {
@@ -20,10 +20,19 @@ export default {
             props.cameraFar,
         );
 
+        camera.position.z = 1;
+
         const scene = new Scene();
         scene.userData.camera = camera;
 
+        const geometry = new BoxGeometry(0.2, 0.2, 0.2);
+        const material = new MeshNormalMaterial();
+        const mesh = new Mesh(geometry, material);
+        scene.add(mesh);
+
         useScene(scene);
+
+        useNesting(scene);
 
         onMounted(() => {
             scene.userData.container = container.value;

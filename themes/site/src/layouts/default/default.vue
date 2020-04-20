@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col h-full overflow-y-scroll">
+    <div class="flex flex-col h-full">
         <v-renderer>
             <!-- header -->
             <v-header />

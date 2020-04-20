@@ -24,10 +24,7 @@ export default {
         const canvas = ref();
         const running = ref(false);
 
-        const {
-            empty,
-            getScenes,
-        } = useRenderer(() => renderer);
+        const { empty, getScenes } = useRenderer(() => renderer);
 
         onMounted(() => {
             renderer = new WebGLRenderer({
@@ -42,11 +39,9 @@ export default {
 
         // clear the renderer
         const clear = () => {
-            if (renderer) {
-                renderer.setScissorTest(false);
-                renderer.clear();
-                renderer.setScissorTest(true);
-            }
+            renderer.setScissorTest(false);
+            renderer.clear();
+            renderer.setScissorTest(true);
         };
 
         // set the renderer viewport
@@ -59,8 +54,23 @@ export default {
             renderer.setScissor(rect.left, bottom, width, height);
         };
 
+        // resize the renderer
+        const resize = () => {
+            const width = canvas.value.clientWidth;
+            const height = canvas.value.clientHeight;
+
+            if (canvas.value.width !== width || canvas.value.height !== height) {
+                renderer.setSize(width, height, false);
+            }
+        };
+
         // render all scenes within the viewport
         const render = () => {
+            if (!renderer || !canvas.value) {
+                return;
+            }
+
+            resize();
             clear();
 
             getScenes().forEach((scene) => {
@@ -70,6 +80,7 @@ export default {
                     setViewport(rect);
 
                     renderer.render(scene, scene.userData.camera);
+                    console.log('render');
                 }
             });
         };
@@ -96,7 +107,6 @@ export default {
 
         return {
             canvas,
-            clear,
             empty,
         };
     },
