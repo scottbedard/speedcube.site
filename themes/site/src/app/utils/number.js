@@ -1,4 +1,14 @@
 /**
+ * Convert degrees to radians.
+ *
+ * @param  {Number} degrees
+ * @return {Number}
+ */
+export function degreesToRadians(degrees) {
+    return degrees * (Math.PI / 180);
+}
+
+/**
  * Format milliseconds to a human-readable string.
  *
  * @param  {number} time
@@ -18,11 +28,12 @@ export function formatSolveTime(time) {
 }
 
 /**
- * Convert degrees to radians.
+ * Prevent a value from being negative.
  *
- * @param  {Number} degrees
+ * @param {Number} value
+ *
  * @return {Number}
  */
-export function degreesToRadians(degrees) {
-    return degrees * (Math.PI / 180);
+export function greaterThanZero(value) {
+    return Math.max(Number.EPSILON, value);
 }

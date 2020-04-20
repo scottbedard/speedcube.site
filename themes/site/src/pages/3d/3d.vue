@@ -3,10 +3,35 @@
         <v-margin padded>
             <button @click="visible = !visible">toggle: {{ visible }}</button>
 
-            <v-scene v-if="visible" class="max-w-md mx-auto">
+            <v-scene
+                v-if="visible"
+                class="max-w-md mx-auto"
+                :camera-angle="cameraAngle"
+                :camera-distance="cameraDistance">
                 <div class="pb-full" />
                 <v-axes-helper />
             </v-scene>
+
+            <div class="max-w-2xl mt-12 mx-auto">
+                <v-grid padded>
+                    <v-grid-cell md="6">
+                        <label>Camera Angle</label>
+                        <v-range-input
+                            v-model="cameraAngle"
+                            :min="0"
+                            :max="90"
+                        />
+                    </v-grid-cell>
+                    <v-grid-cell md="6">
+                        <label>Camera Distance</label>
+                        <v-range-input
+                            v-model="cameraDistance"
+                            :min="0"
+                            :max="100"
+                        />
+                    </v-grid-cell>
+                </v-grid>
+            </div>
 
             <div style="border: 4px dashed green; height: 2000px; margin: 4rem" />
         </v-margin>
@@ -19,7 +44,11 @@ import sceneComponent from '@/components/three/scene/scene.vue';
 
 export default {
     data() {
-        return { visible: true };
+        return {
+            cameraAngle: 90,
+            cameraDistance: 50,
+            visible: true,
+        };
     },
     components: {
         'v-axes-helper': axesHelperComponent,

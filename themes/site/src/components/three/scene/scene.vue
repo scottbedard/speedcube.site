@@ -5,9 +5,10 @@
 </template>
 
 <script>
-import { onMounted, ref } from '@vue/composition-api';
+import { onMounted, ref, watch } from '@vue/composition-api';
 import { BoxGeometry, Mesh, MeshNormalMaterial, PerspectiveCamera, Scene } from 'three';
-import { useNesting, useScene } from 'vue-use-three';
+import { useNesting, usePosition, useScene } from 'vue-use-three';
+import { degreesToRadians, greaterThanZero } from '@/app/utils/number';
 
 export default {
     setup(props) {
@@ -20,12 +21,10 @@ export default {
             props.cameraFar,
         );
 
-        camera.position.z = 1;
-
         const scene = new Scene();
         scene.userData.camera = camera;
 
-        const geometry = new BoxGeometry(0.2, 0.2, 0.2);
+        const geometry = new BoxGeometry(10, 10, 10);
         const material = new MeshNormalMaterial();
         const mesh = new Mesh(geometry, material);
         scene.add(mesh);
@@ -33,6 +32,18 @@ export default {
         useScene(scene);
 
         useNesting(scene);
+
+        usePosition(camera, () => {
+            const angle = degreesToRadians(props.cameraAngle);
+            const distance = greaterThanZero(props.cameraDistance);
+
+            return {
+                y: Math.cos(angle) * distance,
+                z: Math.sin(angle) * distance,
+            };
+        });
+
+        watch(() => [props.cameraAngle, props.cameraDistance], () => camera.lookAt(0, 0, 0));
 
         onMounted(() => {
             scene.userData.container = container.value;
@@ -52,7 +63,7 @@ export default {
             type: Number,
         },
         cameraDistance: {
-            default: 0,
+            default: 1,
             type: Number,
         },
         cameraFar: {
