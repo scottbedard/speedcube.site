@@ -10,6 +10,10 @@
                 :camera-distance="cameraDistance">
                 <div class="pb-full" />
                 <v-axes-helper />
+                <v-puzzle
+                    type="3x3"
+                    :model="model"
+                />
             </v-scene>
 
             <div class="max-w-2xl mt-12 mx-auto">
@@ -39,7 +43,9 @@
 </template>
 
 <script>
+import { Cube } from '@bedard/twister';
 import axesHelperComponent from '@/components/three/axes_helper/axes_helper.vue';
+import puzzleComponent from '@/components/puzzle/puzzle.vue';
 import sceneComponent from '@/components/three/scene/scene.vue';
 
 export default {
@@ -47,11 +53,13 @@ export default {
         return {
             cameraAngle: 90,
             cameraDistance: 50,
+            model: new Cube({ size: 3 }),
             visible: true,
         };
     },
     components: {
         'v-axes-helper': axesHelperComponent,
+        'v-puzzle': puzzleComponent,
         'v-scene': sceneComponent,
     },
 };

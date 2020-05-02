@@ -685,6 +685,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@bedard/twister@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@bedard/twister/-/twister-0.1.5.tgz#6797da938795e8cc87a546c85f8a7ef82f3665bc"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"

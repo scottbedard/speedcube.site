@@ -80,7 +80,7 @@ import { componentInterval } from 'spyfu-vue-utils';
 import { noop, random } from 'lodash-es';
 import axesHelperComponent from '@/components/three_old/axes_helper/axes_helper.vue';
 import boxComponent from '@/components/three_old/box/box.vue';
-import cubeComponent from '@/components/puzzle/cube/cube.vue';
+import cubeComponent from '@/components/puzzle_old/cube/cube.vue';
 import lightComponent from '@/components/three_old/light/light.vue';
 import objComponent from '@/components/three_old/obj/obj.vue';
 import sceneComponent from '@/components/three_old/scene/scene.vue';

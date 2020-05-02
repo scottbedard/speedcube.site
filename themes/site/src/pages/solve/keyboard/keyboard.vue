@@ -180,7 +180,7 @@
 import { cloneDeep, get } from 'lodash-es';
 import { componentTimeout } from 'spyfu-vue-utils';
 import { mapGetters, mapState } from 'vuex';
-import puzzleControllerComponent from '@/components/puzzle/controller/controller.vue';
+import puzzleControllerComponent from '@/components/puzzle_old/controller/controller.vue';
 import { postKeyboardConfig } from '@/app/repositories/keyboard_configs';
 import { puzzles } from '@/app/constants';
 
