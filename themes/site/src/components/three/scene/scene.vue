@@ -24,10 +24,10 @@ export default {
         const scene = new Scene();
         scene.userData.camera = camera;
 
-        const geometry = new BoxGeometry(10, 10, 10);
-        const material = new MeshNormalMaterial();
-        const mesh = new Mesh(geometry, material);
-        scene.add(mesh);
+        // const geometry = new BoxGeometry(10, 10, 10);
+        // const material = new MeshNormalMaterial();
+        // const mesh = new Mesh(geometry, material);
+        // scene.add(mesh);
 
         useScene(scene);
 

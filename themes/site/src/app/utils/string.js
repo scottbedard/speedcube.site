@@ -1,3 +1,5 @@
+import { isNumber, isString } from 'lodash-es';
+
 /**
  * Test if a string is a valid email address.
  *
@@ -73,4 +75,29 @@ export function formatShortTimeSentence(time) {
     return minutes < 1
         ? `${shortTime} second`
         : `${shortTime} minute`;
+}
+
+/**
+ * Parse a hex color string.
+ *
+ * @param {number|string} color
+ *
+ * @return {number}
+ */
+export function hexColorValue(color) {
+    if (isNumber(color)) {
+        return color;
+    }
+
+    if (isString(color)) {
+        color = color.toLowerCase().replace(/[^a-f0-9]*/g, '');
+
+        if (color.length === 3) {
+            color = `${color[0]}${color[0]}${color[1]}${color[1]}${color[2]}${color[2]}`;
+        }
+
+        return parseInt(color, 16);
+    }
+
+    throw new Error('Invalid color');
 }
