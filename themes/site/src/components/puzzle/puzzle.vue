@@ -1,16 +1,7 @@
 <template>
-    <v-group
-        :position="position"
-        :rotation="rotation">
-        <v-ambient-light
-            :intensity="0.7"
-            :position="{ y: 200 }"
-        />
-
-        <!-- <v-point-light
-            :intensity="0.8"
-            :position="{ z: 1000 }"
-        /> -->
+    <v-group :position="position" :rotation="rotation">
+        <v-ambient-light :intensity="0.7" :position="{ y: 200 }" />
+        <v-point-light :intensity="0.8" :position="{ z: 500 }" />
 
         <component
             :is="puzzle"
@@ -22,11 +13,13 @@
 <script>
 import { stubObject } from 'lodash-es';
 import ambientLightComponent from '@/components/three/ambient_light/ambient_light.vue';
+import pointLightComponent from '@/components/three/point_light/point_light.vue';
 import groupComponent from '@/components/three/group/group.vue';
 
 export default {
     components: {
         'v-ambient-light': ambientLightComponent,
+        'v-point-light': pointLightComponent,
         'v-group': groupComponent,
     },
     computed: {
