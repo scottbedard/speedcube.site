@@ -33,7 +33,7 @@
                         <v-range-input
                             v-model="cameraDistance"
                             :min="0"
-                            :max="100"
+                            :max="500"
                         />
                     </v-grid-cell>
                 </v-grid>

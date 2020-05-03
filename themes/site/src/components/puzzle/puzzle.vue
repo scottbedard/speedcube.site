@@ -2,6 +2,16 @@
     <v-group
         :position="position"
         :rotation="rotation">
+        <!-- <v-ambient-light
+            :intensity="0.7"
+            :position="{ y: 1000 }"
+        />
+
+        <v-point-light
+            :intensity="0.8"
+            :position="{ z: 1000 }"
+        /> -->
+
         <component
             :is="puzzle"
             :model="model"

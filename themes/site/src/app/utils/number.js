@@ -28,7 +28,7 @@ export function formatSolveTime(time) {
 }
 
 /**
- * Prevent a value from being negative.
+ * Prevent a value from being less than or equal to zero.
  *
  * @param {Number} value
  *
