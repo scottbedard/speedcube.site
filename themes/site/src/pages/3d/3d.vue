@@ -72,7 +72,7 @@ export default {
             cameraAngle: 60,
             cameraDistance: 200,
             config: {
-                stickerRadius: 0,
+                stickerRadius: 0.5,
             },
             model: new Cube({ size: 3 }),
             visible: true,

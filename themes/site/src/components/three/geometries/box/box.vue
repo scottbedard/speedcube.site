@@ -1,22 +1,22 @@
 <template>
     <v-group :position="position" :rotation="rotation">
         <v-group :position="{ y: y / 2 }" :rotation="{ x: -90 }">
-            <slot name="u" />
+            <slot name="U" />
         </v-group>
         <v-group :position="{ x: x / -2 }" :rotation="{ y: -90 }">
-            <slot name="l" />
+            <slot name="L" />
         </v-group>
         <v-group :position="{ z: z / 2 }">
-            <slot name="f" />
+            <slot name="F" />
         </v-group>
         <v-group :position="{ x: x / 2 }" :rotation="{ y: 90 }">
-            <slot name="r" />
+            <slot name="R" />
         </v-group>
         <v-group :position="{ z: z / -2 }" :rotation="{ y: 180 }">
-            <slot name="b" />
+            <slot name="B" />
         </v-group>
         <v-group :position="{ y: y / -2 }" :rotation="{ x: 90 }">
-            <slot name="d" />
+            <slot name="D" />
         </v-group>
     </v-group>
 </template>
