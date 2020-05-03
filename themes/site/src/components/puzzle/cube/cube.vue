@@ -2,11 +2,14 @@
     <v-box :size="100">
         <template v-for="face in faces" v-slot:[face]>
             <v-group :key="face">
+                <v-axes-helper />
                 <v-sphere color="#ff0" />
                 <v-shape
                     :geometry="geometry"
                     :inner-material="innerMaterial"
                     :outer-material="outerMaterial"
+                    :position="{ x: 0, y: 0 }"
+                    :rotation="{ x: 180, z: 180 }"
                 />
             </v-group>
         </template>
@@ -19,6 +22,7 @@ import { BackSide, FrontSide, MeshLambertMaterial } from 'three';
 import { useDisposable } from 'vue-use-three';
 import { computed, watch } from '@vue/composition-api';
 import { defaultCubeConfig } from '@/app/constants';
+import axesHelperComponent from '../../three/axes_helper/axes_helper.vue';
 import boxComponent from '../../three/geometries/box/box.vue';
 import groupComponent from '../../three/group/group.vue';
 import shapeComponent from '../../three/shape/shape.vue';
@@ -31,11 +35,10 @@ export default {
     setup(props) {
         const config = computed(() => ({ ...defaultCubeConfig, ...props.config }));
         const layers = computed(() => props.model.options.size);
-        const stickerSize = computed(() => 100 / layers.value);
-        const geometry = computed(() => roundedSquare(stickerSize.value, config.value.stickerRadius));
+        const geometry = computed(() => roundedSquare(100 / layers.value, config.value.stickerRadius));
 
         const innerMaterial = new MeshLambertMaterial({
-            color: 0xff0000,
+            color: 0x0000ff,
             side: FrontSide,
         });
 
@@ -61,6 +64,7 @@ export default {
         };
     },
     components: {
+        'v-axes-helper': axesHelperComponent,
         'v-box': boxComponent,
         'v-group': groupComponent,
         'v-shape': shapeComponent,

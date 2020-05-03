@@ -10,7 +10,7 @@
                 :camera-distance="cameraDistance">
                 <div class="pb-full" />
 
-                <v-axes-helper />
+                <v-axes-helper :size="25" />
 
                 <v-puzzle
                     type="cube"
@@ -42,11 +42,15 @@
                         <v-range-input
                             v-model="config.stickerRadius"
                             :min="0"
-                            :max="0.5"
+                            :max="1"
                             :step="0.01"
                         />
                     </v-grid-cell>
                 </v-grid>
+            </div>
+
+            <div class="flex justify-center">
+                <pre class="mx-auto my-8 text-xs w-auto">{{ config }}</pre>
             </div>
 
             <div style="border: 4px dashed green; height: 2000px; margin: 4rem" />
@@ -66,9 +70,9 @@ export default {
     data() {
         return {
             cameraAngle: 60,
-            cameraDistance: 150,
+            cameraDistance: 200,
             config: {
-                stickerRadius: 0.2,
+                stickerRadius: 0,
             },
             model: new Cube({ size: 3 }),
             visible: true,

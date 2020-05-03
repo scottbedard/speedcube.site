@@ -18,36 +18,54 @@ export function polygon(radius, sides) {
 }
 
 /**
- * Create a rounded rectangle geometries.
+ * Create a rounded rectangle geometry.
  *
  * @param  {Number}                 height
  * @param  {Number}                 width
  * @param  {Number}                 radius
  * @return {ShapeBufferGeometry}
  */
-export function roundedRectangle(height, width, radius) {
+export function roundedRectangle(height, width, radius = 0) {
     const shape = new Shape();
 
-    shape.moveTo(0, radius);
-    shape.lineTo(0, height - radius);
-    shape.quadraticCurveTo(0, height, radius, height);
+    radius = Math.min(height, width) * clamp(radius, 0, 1);
+
     shape.lineTo(width - radius, height);
-    shape.quadraticCurveTo(width, height, width, height - radius);
-    shape.lineTo(width, radius);
-    shape.quadraticCurveTo(width, 0, width - radius, 0);
-    shape.lineTo(radius, 0);
-    shape.quadraticCurveTo(0, 0, 0, radius);
+
+    if (radius) {
+        shape.quadraticCurveTo(width, height, width, height - radius);
+    }
+
+    shape.lineTo(width, -height + radius);
+
+    if (radius) {
+        shape.quadraticCurveTo(width, -height, width - radius, -height);
+    }
+
+    shape.lineTo(-width + radius, -height);
+
+    if (radius) {
+        shape.quadraticCurveTo(-width, -height, -width, -height + radius);
+    }
+
+    shape.lineTo(-width, height - radius);
+
+    if (radius) {
+        shape.quadraticCurveTo(-width, height, -width + radius, height);
+    }
+
+    shape.lineTo(width - radius, height);
 
     return new ShapeBufferGeometry(shape);
 }
 
 /**
- * Helper to create a rounded square geometries.
+ * Helper to create a rounded square geometry.
  *
  * @param  {Number}                 size
  * @param  {Number}                 radius
  * @return {ShapeBufferGeometry}
  */
 export function roundedSquare(size, radius) {
-    return roundedRectangle(size, size, size * clamp(radius, 0, 0.5));
+    return roundedRectangle(size, size, radius);
 }

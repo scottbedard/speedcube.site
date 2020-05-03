@@ -38,7 +38,7 @@ export default {
 
         useNesting(group);
         usePosition(group, () => props.position);
-        useRotation(group, () => props.rotation);
+        useRotation(group, () => props.rotation, { unit: 'degrees' });
     },
     props: {
         geometry: {
