@@ -1,21 +1,42 @@
 <template>
-    <v-group>
-        <v-sphere color="#f00" />
+    <v-group
+        :position="position"
+        :rotation="rotation">
+        <component
+            :is="puzzle"
+            :model="model"
+        />
     </v-group>
 </template>
 
 <script>
+import { stubObject } from 'lodash-es';
 import groupComponent from '@/components/three/group/group.vue';
-import sphereComponent from '@/components/three/geometries/sphere/sphere.vue';
 
 export default {
     components: {
         'v-group': groupComponent,
-        'v-sphere': sphereComponent,
+    },
+    computed: {
+        puzzle() {
+            if (this.type === 'cube') {
+                return () => import('./cube/cube.vue');
+            }
+
+            throw new Error(`Unknown puzzle type "${this.type}"`);
+        },
     },
     props: {
         model: {
             required: true,
+            type: Object,
+        },
+        position: {
+            default: stubObject,
+            type: Object,
+        },
+        rotation: {
+            default: stubObject,
             type: Object,
         },
         type: {

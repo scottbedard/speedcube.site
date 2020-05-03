@@ -12,31 +12,10 @@
 
                 <v-axes-helper />
 
-                <v-box :position="position" :size="size">
-                    <template #u>
-                        <v-sphere color="#0f0" />
-                    </template>
-                    <template #l>
-                        <v-sphere color="#ff0" />
-                    </template>
-                    <template #f>
-                        <v-sphere color="#0ff" />
-                    </template>
-                    <template #r>
-                        <v-sphere color="#f00" />
-                    </template>
-                    <template #b>
-                        <v-sphere color="#00f" />
-                    </template>
-                    <template #d>
-                        <v-sphere color="#f0f" />
-                    </template>
-                </v-box>
-
-                <!-- <v-puzzle
-                    type="3x3"
+                <v-puzzle
+                    type="cube"
                     :model="model"
-                /> -->
+                />
             </v-scene>
 
             <div class="max-w-2xl mt-12 mx-auto">
@@ -56,32 +35,6 @@
                             :min="0"
                             :max="100"
                         />
-                    </v-grid-cell>
-
-                    <v-grid-cell md="4">
-                        <label>Width</label>
-                        <v-range-input v-model="size.x" :min="0" :max="100" />
-                    </v-grid-cell>
-                    <v-grid-cell md="4">
-                        <label>Height</label>
-                        <v-range-input v-model="size.y" :min="0" :max="100" />
-                    </v-grid-cell>
-                    <v-grid-cell md="4">
-                        <label>Depth</label>
-                        <v-range-input v-model="size.z" :min="0" :max="100" />
-                    </v-grid-cell>
-
-                    <v-grid-cell md="4">
-                        <label>X</label>
-                        <v-range-input v-model="position.x" :min="-100" :max="100" />
-                    </v-grid-cell>
-                    <v-grid-cell md="4">
-                        <label>Y</label>
-                        <v-range-input v-model="position.y" :min="-100" :max="100" />
-                    </v-grid-cell>
-                    <v-grid-cell md="4">
-                        <label>Z</label>
-                        <v-range-input v-model="position.z" :min="-100" :max="100" />
                     </v-grid-cell>
                 </v-grid>
             </div>
@@ -103,10 +56,8 @@ export default {
     data() {
         return {
             cameraAngle: 70,
-            cameraDistance: 50,
+            cameraDistance: 150,
             model: new Cube({ size: 3 }),
-            position: { x: 0, y: 0, z: 0 },
-            size: { x: 10, y: 10, z: 10 },
             visible: true,
         };
     },
