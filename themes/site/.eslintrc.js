@@ -37,6 +37,7 @@ module.exports = {
     },
     root: true,
     rules: {
+        'arrow-body-style': 0,
         'brace-style': 0,
         'class-methods-use-this': 0,
         'func-names': 0,
