@@ -14,6 +14,7 @@
 
                 <v-puzzle
                     type="cube"
+                    :config="config"
                     :model="model"
                 />
             </v-scene>
@@ -36,6 +37,15 @@
                             :max="500"
                         />
                     </v-grid-cell>
+                    <v-grid-cell md="6">
+                        <label>Sticker Radius</label>
+                        <v-range-input
+                            v-model="config.stickerRadius"
+                            :min="0"
+                            :max="0.5"
+                            :step="0.01"
+                        />
+                    </v-grid-cell>
                 </v-grid>
             </div>
 
@@ -55,8 +65,11 @@ import sphereComponent from '@/components/three/geometries/sphere/sphere.vue';
 export default {
     data() {
         return {
-            cameraAngle: 70,
+            cameraAngle: 60,
             cameraDistance: 150,
+            config: {
+                stickerRadius: 0.2,
+            },
             model: new Cube({ size: 3 }),
             visible: true,
         };

@@ -4,6 +4,7 @@
         <v-point-light :intensity="0.8" :position="{ z: 500 }" />
 
         <component
+            :config="config"
             :is="puzzle"
             :model="model"
         />
@@ -13,8 +14,8 @@
 <script>
 import { stubObject } from 'lodash-es';
 import ambientLightComponent from '@/components/three/ambient_light/ambient_light.vue';
-import pointLightComponent from '@/components/three/point_light/point_light.vue';
 import groupComponent from '@/components/three/group/group.vue';
+import pointLightComponent from '@/components/three/point_light/point_light.vue';
 
 export default {
     components: {
@@ -32,6 +33,10 @@ export default {
         },
     },
     props: {
+        config: {
+            default: stubObject,
+            type: Object,
+        },
         model: {
             required: true,
             type: Object,
