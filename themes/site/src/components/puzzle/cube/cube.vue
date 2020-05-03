@@ -9,7 +9,7 @@
                     :inner-material="innerMaterial"
                     :outer-material="outerMaterial"
                     :position="{ x: 0, y: 0 }"
-                    :rotation="{ x: 180, z: 180 }"
+                    :rotation="{ x: 180 }"
                 />
             </v-group>
         </template>
