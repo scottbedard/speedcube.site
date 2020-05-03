@@ -28,6 +28,8 @@ export function polygon(radius, sides) {
 export function roundedRectangle(height, width, radius = 0) {
     const shape = new Shape();
 
+    height *= 0.5;
+    width *= 0.5;
     radius = Math.min(height, width) * clamp(radius, 0, 1);
 
     shape.lineTo(width - radius, height);
