@@ -21,7 +21,7 @@
 import { times } from 'lodash-es';
 import { BackSide, FrontSide, MeshLambertMaterial } from 'three';
 import { useDisposable } from 'vue-use-three';
-import { computed, watch } from '@vue/composition-api';
+import { computed, onUnmounted, watch } from '@vue/composition-api';
 import { defaultCubeConfig } from '@/app/constants';
 import axesHelperComponent from '../../three/axes_helper/axes_helper.vue';
 import boxComponent from '../../three/geometries/box/box.vue';
@@ -30,6 +30,13 @@ import shapeComponent from '../../three/shape/shape.vue';
 import sphereComponent from '../../three/geometries/sphere/sphere.vue';
 import { roundedSquare } from '@/app/utils/geometry';
 import { hexColorValue } from '@/app/utils/string';
+
+const disposeMaterials = (materials) => {
+    materials.forEach(({ inner, outer }) => {
+        inner.dispose();
+        outer.dispose();
+    });
+};
 
 const faces = ['U', 'L', 'F', 'R', 'B', 'D'];
 
@@ -60,6 +67,8 @@ export default {
             if (prev) prev.dispose();
         });
 
+        useDisposable(geometry);
+
         // column and row maps
         // these determine which col/row a sticker belongs to
         const colMap = computed(() => stickers.value.map(i => i % layers.value));
@@ -82,6 +91,7 @@ export default {
         });
 
         // materials
+        // @todo: only recompute when relevant config changes
         const materials = computed(() => {
             return faces.map((face, i) => {
                 const color = hexColorValue(config.value.colors[i]);
@@ -101,7 +111,11 @@ export default {
             });
         });
 
-        useDisposable(geometry);
+        watch(materials, (current, prev) => {
+            if (prev) disposeMaterials(prev);
+        });
+
+        onUnmounted(() => disposeMaterials(materials.value));
 
         return {
             faces,
