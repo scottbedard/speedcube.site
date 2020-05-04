@@ -90,12 +90,12 @@ export default {
         return {
             config: {
                 cameraAngle: 50,
-                cameraDistance: 200,
+                cameraDistance: 250,
                 stickerElevation: 0.2,
                 stickerRadius: 0.2,
                 stickerSpacing: 0.2,
             },
-            model: new Cube({ size: 3 }),
+            model: new Cube({ size: 4 }),
             visible: true,
         };
     },

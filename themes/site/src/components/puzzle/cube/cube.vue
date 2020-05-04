@@ -6,9 +6,9 @@
                 <v-shape
                     v-for="(sticker, index) in model.state[face]"
                     :geometry="geometry"
-                    :inner-material="innerMaterial"
+                    :inner-material="materials[sticker.value].inner"
                     :key="`${face}${index}`"
-                    :outer-material="outerMaterial"
+                    :outer-material="materials[sticker.value].outer"
                     :position="positions[index]"
                     :rotation="{ x: 180 }"
                 />
@@ -29,6 +29,7 @@ import groupComponent from '../../three/group/group.vue';
 import shapeComponent from '../../three/shape/shape.vue';
 import sphereComponent from '../../three/geometries/sphere/sphere.vue';
 import { roundedSquare } from '@/app/utils/geometry';
+import { hexColorValue } from '@/app/utils/string';
 
 const faces = ['U', 'L', 'F', 'R', 'B', 'D'];
 
@@ -80,26 +81,33 @@ export default {
             });
         });
 
-        const innerMaterial = new MeshLambertMaterial({
-            color: 0x0000ff,
-            side: FrontSide,
+        // materials
+        const materials = computed(() => {
+            return faces.map((face, i) => {
+                const color = hexColorValue(config.value.colors[i]);
+
+                return {
+                    inner: new MeshLambertMaterial({
+                        color,
+                        side: FrontSide,
+                    }),
+                    outer: new MeshLambertMaterial({
+                        color,
+                        opacity: 1,
+                        side: BackSide,
+                        transparent: false,
+                    }),
+                };
+            });
         });
 
-        const outerMaterial = new MeshLambertMaterial({
-            color: 0x00ff00,
-            opacity: 1,
-            side: BackSide,
-            transparent: false,
-        });
-
-        useDisposable(geometry, innerMaterial, outerMaterial);
+        useDisposable(geometry);
 
         return {
             faces,
             fullBoxSize,
             geometry,
-            innerMaterial,
-            outerMaterial,
+            materials,
             positions,
         };
     },

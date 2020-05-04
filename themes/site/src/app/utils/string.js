@@ -99,5 +99,5 @@ export function hexColorValue(color) {
         return parseInt(color, 16);
     }
 
-    throw new Error('Invalid color');
+    throw new Error(`Invalid color "${color}"`);
 }
