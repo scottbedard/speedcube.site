@@ -38,7 +38,7 @@
                         />
                     </v-grid-cell>
 
-                    <v-grid-cell md="6">
+                    <v-grid-cell md="4">
                         <label>Sticker Radius</label>
                         <v-range-input
                             v-model="config.stickerRadius"
@@ -47,10 +47,19 @@
                             :step="0.01"
                         />
                     </v-grid-cell>
-                    <v-grid-cell md="6">
+                    <v-grid-cell md="4">
                         <label>Sticker Spacing</label>
                         <v-range-input
                             v-model="config.stickerSpacing"
+                            :min="0"
+                            :max="1"
+                            :step="0.01"
+                        />
+                    </v-grid-cell>
+                    <v-grid-cell md="4">
+                        <label>Sticker Elevation</label>
+                        <v-range-input
+                            v-model="config.stickerElevation"
                             :min="0"
                             :max="1"
                             :step="0.01"
@@ -80,10 +89,11 @@ export default {
     data() {
         return {
             config: {
-                cameraAngle: 60,
+                cameraAngle: 50,
                 cameraDistance: 200,
-                stickerRadius: 0.5,
-                stickerSpacing: 0,
+                stickerElevation: 0.2,
+                stickerRadius: 0.2,
+                stickerSpacing: 0.2,
             },
             model: new Cube({ size: 3 }),
             visible: true,

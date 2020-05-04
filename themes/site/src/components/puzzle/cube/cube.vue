@@ -46,14 +46,9 @@ export default {
         const stickerSize = computed(() => boxSize.value / layers.value);
         const halfStickerSize = computed(() => stickerSize.value / 2);
         const gapSize = computed(() => stickerSize.value * config.value.stickerSpacing);
-
-        const fullBoxSize = computed(() => {
-            const gaps = (layers.value - 1) * gapSize.value;
-
-            return boxSize.value + gaps;
-        });
-
-        const halfBoxSize = computed(() => fullBoxSize.value / 2);
+        const boxSizeWithGaps = computed(() => boxSize.value + (layers.value - 1) * gapSize.value);
+        const halfBoxSize = computed(() => boxSizeWithGaps.value / 2);
+        const fullBoxSize = computed(() => boxSizeWithGaps.value + (stickerSize.value * 2 * config.value.stickerElevation));
 
         // sticker geometry
         const geometry = computed(() => {
