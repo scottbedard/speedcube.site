@@ -1,5 +1,5 @@
 <template>
-    <v-box :size="boxSize">
+    <v-box :size="fullBoxSize">
         <template v-for="face in faces" v-slot:[face]>
             <v-group :key="face">
                 <v-sphere color="#f00" />
@@ -32,8 +32,6 @@ import { roundedSquare } from '@/app/utils/geometry';
 
 const faces = ['U', 'L', 'F', 'R', 'B', 'D'];
 
-const gapSize = 0;
-
 export default {
     setup(props) {
         // normalized cube configuration
@@ -45,9 +43,17 @@ export default {
 
         // box and sticker sizes
         const boxSize = computed(() => 100);
-        const halfBoxSize = computed(() => boxSize.value / 2);
         const stickerSize = computed(() => boxSize.value / layers.value);
         const halfStickerSize = computed(() => stickerSize.value / 2);
+        const gapSize = computed(() => stickerSize.value * config.value.stickerSpacing);
+
+        const fullBoxSize = computed(() => {
+            const gaps = (layers.value - 1) * gapSize.value;
+
+            return boxSize.value + gaps;
+        });
+
+        const halfBoxSize = computed(() => fullBoxSize.value / 2);
 
         // sticker geometry
         const geometry = computed(() => {
@@ -65,13 +71,16 @@ export default {
 
         // sticker positions
         const positions = computed(() => {
+            const baseX = -halfBoxSize.value + halfStickerSize.value;
+            const baseY = halfBoxSize.value - halfStickerSize.value;
+
             return stickers.value.map((i) => {
                 const col = colMap.value[i];
                 const row = rowMap.value[i];
 
                 return {
-                    x: (-halfBoxSize.value + halfStickerSize.value) + (stickerSize.value * col),
-                    y: (halfBoxSize.value - halfStickerSize.value) - (stickerSize.value * row),
+                    x: baseX + (col * stickerSize.value) + (col * gapSize.value),
+                    y: baseY - (row * stickerSize.value) - (row * gapSize.value),
                 };
             });
         });
@@ -91,8 +100,8 @@ export default {
         useDisposable(geometry, innerMaterial, outerMaterial);
 
         return {
-            boxSize,
             faces,
+            fullBoxSize,
             geometry,
             innerMaterial,
             outerMaterial,

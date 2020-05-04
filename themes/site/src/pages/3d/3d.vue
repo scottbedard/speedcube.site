@@ -6,8 +6,8 @@
             <v-scene
                 v-if="visible"
                 class="max-w-md mx-auto"
-                :camera-angle="cameraAngle"
-                :camera-distance="cameraDistance">
+                :camera-angle="config.cameraAngle"
+                :camera-distance="config.cameraDistance">
                 <div class="pb-full" />
 
                 <v-axes-helper :size="25" />
@@ -24,7 +24,7 @@
                     <v-grid-cell md="6">
                         <label>Camera Angle</label>
                         <v-range-input
-                            v-model="cameraAngle"
+                            v-model="config.cameraAngle"
                             :min="0"
                             :max="90"
                         />
@@ -32,15 +32,25 @@
                     <v-grid-cell md="6">
                         <label>Camera Distance</label>
                         <v-range-input
-                            v-model="cameraDistance"
+                            v-model="config.cameraDistance"
                             :min="0"
                             :max="500"
                         />
                     </v-grid-cell>
+
                     <v-grid-cell md="6">
                         <label>Sticker Radius</label>
                         <v-range-input
                             v-model="config.stickerRadius"
+                            :min="0"
+                            :max="1"
+                            :step="0.01"
+                        />
+                    </v-grid-cell>
+                    <v-grid-cell md="6">
+                        <label>Sticker Spacing</label>
+                        <v-range-input
+                            v-model="config.stickerSpacing"
                             :min="0"
                             :max="1"
                             :step="0.01"
@@ -69,10 +79,11 @@ import sphereComponent from '@/components/three/geometries/sphere/sphere.vue';
 export default {
     data() {
         return {
-            cameraAngle: 60,
-            cameraDistance: 200,
             config: {
+                cameraAngle: 60,
+                cameraDistance: 200,
                 stickerRadius: 0.5,
+                stickerSpacing: 0,
             },
             model: new Cube({ size: 3 }),
             visible: true,
