@@ -1,9 +1,17 @@
+<style>
+/* purgecss start ignore */
+@tailwind base;
+@tailwind components;
+/* purgecss end ignore */
+@tailwind utilities;
+</style>
+
 <template>
-  <div>
+  <div class="p-12">
     Count: {{ count }}<br />
     Squared: {{ squared }}<br />
-    <button @click="add(1)">+1</button>
-    <button @click="add(-1)">-1</button>
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="add(1)">+1</button>
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="add(-1)">-1</button>
   </div>
 </template>
 
