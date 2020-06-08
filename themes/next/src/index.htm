@@ -1,0 +1,33 @@
+<!-- htmlmin:ignore -->
+title = "test"
+url = "/:all?*"
+==
+function onStart()
+{
+    $this['vuetober'] = [
+        'env' => app()->env,
+        'token' => Session::token(),
+    ];
+}
+==
+<!-- htmlmin:ignore -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- meta -->
+        <meta charset="utf-8">
+        <meta content="IE=edge" http-equiv="X-UA-Compatible">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <meta name="vuetober" content="{{ vuetober | json_encode }}" />
+
+        <!-- title -->
+        <title>speedcube</title>
+    </head>
+    <body>
+        <noscript>
+            <strong>We're sorry but speedcube doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+        </noscript>
+        <div id="app"></div>
+        <!-- built files will be auto injected -->
+    </body>
+</html>
