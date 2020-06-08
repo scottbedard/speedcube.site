@@ -1,6 +1,6 @@
 import Vue from 'vue';
+import { boot } from '@/app/boot';
 import App from './App.vue';
-import { boot } from '../app/boot';
 
 boot(Vue);
 
