@@ -7,29 +7,18 @@
 </style>
 
 <template>
-  <div class="p-12">
-    Count: {{ count }}<br />
-    Squared: {{ squared }}<br />
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="add(1)">+1</button>
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="add(-1)">-1</button>
+  <div class="p-8">
+    <router-view />
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api';
-import { square } from '@/math';
+import { defineComponent } from '@vue/composition-api';
 
 export default defineComponent({
   setup() {
-    const count = ref<number>(0);
-    const squared = computed(() => square(count.value));
-
-    const add = (n: number) => count.value += n;
-
     return {
-      add,
-      count,
-      squared,
+      // ...
     };
   },
 });

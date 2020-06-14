@@ -25,6 +25,7 @@ module.exports = {
   },
   root: true,
   rules: {
+    '@typescript-eslint/ban-ts-ignore': 0,
     'import/prefer-default-export': 0,
     'max-len': 0,
     'no-console': production ? 'warn' : 'off',
