@@ -3,20 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "serve": "vue-cli-service serve",
+    "test": "vue-cli-service test:unit"
   },
   "dependencies": {
     "@vue/composition-api": "^0.5.0",
     "core-js": "^3.6.5",
+    "lodash-es": "^4.17.15",
+    "three": "^0.117.1",
     "vue": "^2.6.11",
     "vue-router": "^3.3.4",
     "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",
+    "@types/lodash-es": "^4.17.3",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "@vue/cli-plugin-babel": "^4.4.0",
