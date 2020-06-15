@@ -7,19 +7,25 @@
 </style>
 
 <template>
-  <div class="p-8">
+  <div>
+    <renderer />
     <router-view />
+
+    <div>
+      <div v-for="n in 1000" :key="n">
+        Hello world: {{ n }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
+import Renderer from '@/components/three/Renderer.vue';
 
 export default defineComponent({
-  setup() {
-    return {
-      // ...
-    };
+  components: {
+    Renderer,
   },
 });
 </script>
