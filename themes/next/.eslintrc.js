@@ -32,8 +32,8 @@ module.exports = {
     'no-debugger': production ? 'warn' : 'off',
     'no-return-assign': 0,
     'vue/max-len': ['error', {
-      'code': 80,
-      'comments': 80,
+      'code': 100,
+      'comments': 100,
       'ignoreComments': false,
       'ignoreHTMLAttributeValues': true,
       'ignoreHTMLTextContents': false,
@@ -44,7 +44,7 @@ module.exports = {
       'ignoreTrailingComments': false,
       'ignoreUrls': false,
       'tabWidth': 2,
-      'template': 80,
+      'template': 100,
   }]
   },
 };

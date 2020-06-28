@@ -1,10 +1,15 @@
 <template>
   <div>
-    Hello from the home page<br />
-    <router-link
-      class="text-blue-500 hover:underline"
-      :to="{ name: 'about' }">
-      Go to about page
-    </router-link>
+    <Scene />
   </div>
 </template>
+
+<script>
+import Scene from '@/components/three/Scene.vue';
+
+export default {
+  components: {
+    Scene,
+  },
+};
+</script>

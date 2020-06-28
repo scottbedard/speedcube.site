@@ -7,15 +7,10 @@
 </style>
 
 <template>
-  <div>
-    <renderer />
-    <router-view />
-
-    <div>
-      <div v-for="n in 1000" :key="n">
-        Hello world: {{ n }}
-      </div>
-    </div>
+  <div class="p-12" style="height: 4000px">
+    <renderer>
+      <router-view />
+    </renderer>
   </div>
 </template>
 
