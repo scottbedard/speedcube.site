@@ -60,25 +60,23 @@ export default defineComponent({
 
     // request animation frame loop
     const { start, stop } = useRafFn(() => {
-      scenes.value
-        .filter(scene => scene.userData.el instanceof Element)
-        .forEach(scene => {
-          const el: Element = scene.userData.el;
-          const rect = el.getBoundingClientRect();
+      scenes.value.forEach(scene => {
+        const el: Element = scene.userData.el;
+        const rect = el.getBoundingClientRect();
 
-          // set the viewport
-          const width = rect.right - rect.left;
-          const height = rect.bottom - rect.top;
-          const bottom = document.body.clientHeight - rect.bottom;
+        // set the viewport
+        const width = rect.right - rect.left;
+        const height = rect.bottom - rect.top;
+        const bottom = document.body.clientHeight - rect.bottom;
 
-          renderer.setViewport(rect.left, bottom, width, height);
-          renderer.setScissor(rect.left, bottom, width, height);
+        renderer.setViewport(rect.left, bottom, width, height);
+        renderer.setScissor(rect.left, bottom, width, height);
 
-          // @todo: raycasting
+        // @todo: raycasting
 
-          // render the scene
-          renderer.render(scene, scene.userData.camera);
-        });
+        // render the scene
+        renderer.render(scene, scene.userData.camera);
+      });
     });
 
     watch(empty, (newEmpty) => newEmpty ? stop() : start());
