@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { Scene } from 'three';
+import { PerspectiveCamera, Scene } from 'three';
 import {
   defineComponent, inject, onMounted, onUnmounted, ref, watch,
 } from '@vue/composition-api';
@@ -15,16 +15,24 @@ import { useDisposable } from '@/app/three';
 import { RendererSymbol } from './types';
 
 export default defineComponent({
-  setup() {
+  setup(props) {
     const container = ref<Element>();
 
+    // renderer api
     const renderer = inject(RendererSymbol);
 
-    const scene = new Scene();
-    useDisposable(scene);
+    // camera
+    const camera = new PerspectiveCamera(
+      props.cameraFov,
+      props.cameraAspect,
+      props.cameraNear,
+      props.cameraFar,
+    );
 
-    // @ts-ignore
-    const visible = useElementVisibility(container);
+    // scene
+    const scene = new Scene();
+    scene.userData.camera = camera;
+    useDisposable(scene);
 
     if (renderer) {
       // lifecycle hooks
@@ -36,22 +44,44 @@ export default defineComponent({
         renderer.removeScene(scene);
       });
 
-      // add and remove scene
-      watch(visible, () => {
-        if (visible.value) {
-          renderer.addScene(scene);
-        } else {
-          renderer.removeScene(scene);
-        }
-      });
+      // add scene to renderer when container is visible
+      // @ts-ignore
+      watch(useElementVisibility(container), (visible) => (
+        visible
+          ? renderer.addScene(scene)
+          : renderer.removeScene(scene)
+      ));
     }
 
     return {
       container,
-      visible,
     };
   },
   props: {
+    cameraAngle: {
+      default: 0,
+      type: Number,
+    },
+    cameraAspect: {
+      default: 1,
+      type: Number,
+    },
+    cameraDistance: {
+      default: 0,
+      type: Number,
+    },
+    cameraFar: {
+      default: 10000,
+      type: Number,
+    },
+    cameraFov: {
+      default: 60,
+      type: Number,
+    },
+    cameraNear: {
+      default: 1,
+      type: Number,
+    },
     square: {
       default: false,
       type: Boolean,

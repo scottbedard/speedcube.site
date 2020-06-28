@@ -73,6 +73,11 @@ export default defineComponent({
 
           renderer.setViewport(rect.left, bottom, width, height);
           renderer.setScissor(rect.left, bottom, width, height);
+
+          // @todo: raycasting
+
+          // render the scene
+          renderer.render(scene, scene.userData.camera);
         });
     });
 
