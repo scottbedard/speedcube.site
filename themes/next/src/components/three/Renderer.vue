@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import {
-  defineComponent, inject, onMounted, provide, ref,
+  defineComponent, onMounted, provide, ref,
 } from '@vue/composition-api';
 import { useDisposable } from '@/app/three';
 import { useWindowScroll } from '@vueuse/core';

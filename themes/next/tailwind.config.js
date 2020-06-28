@@ -7,7 +7,11 @@ module.exports = {
     './src/**/*.vue',
   ] : [],
   theme: {
-    extend: {},
+    extend: {
+      padding: {
+        full: '100%',
+      },
+    },
   },
   variants: {},
 };

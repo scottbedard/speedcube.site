@@ -1,6 +1,8 @@
 <template>
   <div>
-    <Scene />
+    <div class="max-w-md mx-auto">
+      <Scene square/>
+    </div>
   </div>
 </template>
 
