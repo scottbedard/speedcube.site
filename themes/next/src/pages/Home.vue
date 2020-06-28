@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="max-w-md mx-auto">
-      <Scene square/>
+      <button @click="show = !show">toggle</button>
+      <Scene v-if="show" square/>
     </div>
   </div>
 </template>
@@ -12,6 +13,11 @@ import Scene from '@/components/three/Scene.vue';
 export default {
   components: {
     Scene,
+  },
+  data() {
+    return {
+      show: true,
+    };
   },
 };
 </script>

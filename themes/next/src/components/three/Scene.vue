@@ -8,7 +8,7 @@
 <script lang="ts">
 import { Scene } from 'three';
 import {
-  defineComponent, inject, onUnmounted, ref, watchEffect,
+  defineComponent, inject, onMounted, onUnmounted, ref, watch,
 } from '@vue/composition-api';
 import { useElementVisibility } from '@vueuse/core';
 import { useDisposable } from '@/app/three';
@@ -27,15 +27,21 @@ export default defineComponent({
     const visible = useElementVisibility(container);
 
     if (renderer) {
-      onUnmounted(() => {
-        renderer.removeScene();
+      // lifecycle hooks
+      onMounted(() => {
+        scene.userData.el = container.value;
       });
 
-      watchEffect(() => {
+      onUnmounted(() => {
+        renderer.removeScene(scene);
+      });
+
+      // add and remove scene
+      watch(visible, () => {
         if (visible.value) {
-          renderer.addScene();
+          renderer.addScene(scene);
         } else {
-          renderer.removeScene();
+          renderer.removeScene(scene);
         }
       });
     }

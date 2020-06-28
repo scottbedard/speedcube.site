@@ -1,11 +1,12 @@
 import { InjectionKey } from '@vue/composition-api';
+import { Scene } from 'three';
 
 /**
  * Methods exposed on renderer api.
  */
 export type RendererApi = {
-  addScene: () => void;
-  removeScene: () => void;
+  addScene: (scene: Scene) => void;
+  removeScene: (scene: Scene) => void;
 };
 
 /**
