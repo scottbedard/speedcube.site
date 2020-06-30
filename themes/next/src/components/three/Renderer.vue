@@ -46,6 +46,9 @@ export default defineComponent({
         antialias: true,
         canvas: canvas.value,
       });
+
+      renderer.setClearColor(0x000000, 0);
+      renderer.setPixelRatio(window.devicePixelRatio);
     });
 
     // renderer api
@@ -60,6 +63,24 @@ export default defineComponent({
 
     // request animation frame loop
     const { start, stop } = useRafFn(() => {
+      if (!renderer || !canvas.value) {
+        return;
+      }
+
+      // update size
+      const height = canvas.value.clientHeight;
+      const width = canvas.value.clientWidth;
+
+      if (canvas.value.width !== width || canvas.value.height !== height) {
+        renderer.setSize(width, height, false);
+      }
+
+      // clear
+      renderer.setScissorTest(false);
+      renderer.clear();
+      renderer.setScissorTest(true);
+
+      // render scenes
       scenes.value.forEach(scene => {
         const el: Element = scene.userData.el;
         const rect = el.getBoundingClientRect();

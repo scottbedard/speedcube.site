@@ -6,20 +6,19 @@
 </template>
 
 <script lang="ts">
+import { stubArray } from 'lodash-es';
 import { PerspectiveCamera, Scene } from 'three';
 import {
-  defineComponent, inject, onMounted, onUnmounted, ref, watch,
+  defineComponent, inject, onMounted, onUnmounted, ref, watch, watchEffect,
 } from '@vue/composition-api';
 import { useElementVisibility } from '@vueuse/core';
-import { useDisposable } from '@/app/three';
+import { useDisposable, useNestable } from '@/app/three';
+import { degreesToRadians } from '@/app/utils/math';
 import { RendererSymbol } from './types';
 
 export default defineComponent({
   setup(props) {
     const container = ref<Element>();
-
-    // renderer api
-    const renderer = inject(RendererSymbol);
 
     // camera
     const camera = new PerspectiveCamera(
@@ -29,13 +28,26 @@ export default defineComponent({
       props.cameraFar,
     );
 
+    watchEffect(() => {
+      const angle = degreesToRadians(props.cameraAngle);
+      const adjacent = Math.sin(angle) * props.cameraDistance;
+      const opposite = Math.cos(angle) * props.cameraDistance;
+
+      camera.position.set(0, opposite, adjacent);
+      camera.lookAt(0, 0, 0);
+    });
+
     // scene
     const scene = new Scene();
     scene.userData.camera = camera;
+
+    useNestable(scene, () => props.children);
     useDisposable(scene);
 
+    // renderer
+    const renderer = inject(RendererSymbol);
+
     if (renderer) {
-      // lifecycle hooks
       onMounted(() => {
         scene.userData.el = container.value;
       });
@@ -67,7 +79,7 @@ export default defineComponent({
       type: Number,
     },
     cameraDistance: {
-      default: 0,
+      default: 100,
       type: Number,
     },
     cameraFar: {
@@ -81,6 +93,10 @@ export default defineComponent({
     cameraNear: {
       default: 1,
       type: Number,
+    },
+    children: {
+      default: stubArray,
+      type: Array,
     },
     square: {
       default: false,
