@@ -6,9 +6,11 @@
       :class="{
         hidden: empty,
       }"
+      :height="windowHeight"
       :style="{
         transform: `translateY(${scrollY}px)`,
       }"
+      :width="windowWidth"
     />
     <slot />
     <pre>empty: {{ empty }}</pre>
@@ -21,7 +23,7 @@ import {
   computed, defineComponent, onMounted, provide, ref, watch,
 } from '@vue/composition-api';
 import { useDisposable } from '@/app/three';
-import { useRafFn, useWindowScroll } from '@vueuse/core';
+import { useRafFn, useWindowScroll, useWindowSize } from '@vueuse/core';
 import { Scene, WebGLRenderer } from 'three';
 import { RendererSymbol } from './types';
 
@@ -32,6 +34,7 @@ export default defineComponent({
     useDisposable(() => renderer);
 
     // reactive data
+    const { height: windowHeight, width: windowWidth } = useWindowSize();
     const { y: scrollY } = useWindowScroll();
     const canvas = ref<HTMLCanvasElement>();
     const scenes = ref<Scene[]>([]);
@@ -83,7 +86,7 @@ export default defineComponent({
       // render scenes
       scenes.value.forEach(scene => {
         const el: Element = scene.userData.el;
-        const rect = el.getBoundingClientRect();
+        const rect = el.getBoundingClientRect() || { bottom: 0, top: 0, right: 0, left: 0 };
 
         // set the viewport
         const width = rect.right - rect.left;
@@ -106,6 +109,8 @@ export default defineComponent({
       canvas,
       empty,
       scrollY,
+      windowHeight,
+      windowWidth,
     };
   },
 });

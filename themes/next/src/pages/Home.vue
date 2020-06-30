@@ -39,13 +39,21 @@
 import { ref } from '@vue/composition-api';
 import Scene from '@/components/three/Scene.vue';
 import { useAxesHelper } from '@/app/three';
+import { useAmbientLight, usePointLight } from '@/app/three/lights';
+import { useBox } from '@/app/three/geometries';
 
 export default {
   setup() {
+    const ambientLight = useAmbientLight();
     const axesHelper = useAxesHelper();
+    const box = useBox();
+    const pointLight = usePointLight();
 
     const children = ref([
+      ambientLight,
       axesHelper,
+      box,
+      pointLight,
     ]);
 
     const cameraAngle = ref(40);
@@ -58,8 +66,6 @@ export default {
       } else {
         children.value.push(axesHelper);
       }
-
-      console.log('children', children.value);
     };
 
     return {
