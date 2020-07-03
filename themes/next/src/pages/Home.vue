@@ -44,11 +44,9 @@
           </div>
         </label>
         <label class="block mb-4">
-          <div>Box: <span class="font-mono">{{ { height, width, depth } }}</span></div>
+          <div>Hidden: <span class="font-mono">{{ hidden }}</span></div>
           <div class="flex">
-            <input v-model.number="height" min="0" max="10" step="0.01" type="range" />
-            <input v-model.number="width" min="0" max="10" step="0.01" type="range" />
-            <input v-model.number="depth" min="0" max="10" step="0.01" type="range" />
+            <input v-model="hidden" type="checkbox" />
           </div>
         </label>
       </div>
@@ -72,19 +70,16 @@ export default {
     const cameraDistance = ref(5);
     const position = ref({ x: 0, y: 0, z: 0 });
     const position2 = ref({ x: 0, y: 0, z: 0 });
-    const height = ref(1);
-    const depth = ref(1);
-    const width = ref(1);
+    const hidden = ref(false);
 
-    const children = useGroup({
-      name: 'foo',
-    }, [
+    const children = useGroup({}, [
       useAxesHelper(),
       useAmbientLight(),
       useBox({
         color: 0xff0000,
         depth: 1,
         height: 1,
+        hidden,
         position,
         width: 1,
       }, {
@@ -137,11 +132,9 @@ export default {
       cameraAngle,
       cameraDistance,
       children,
+      hidden,
       position,
       position2,
-      height,
-      width,
-      depth,
     };
   },
   components: {

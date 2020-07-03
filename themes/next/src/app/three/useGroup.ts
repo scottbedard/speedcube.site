@@ -1,13 +1,15 @@
 import { Group, Object3D } from 'three';
+import { useHidden } from './useHidden';
 import { useNestable } from './useNestable';
 import { usePosition } from './usePosition';
 import { useRotation } from './useRotation';
-import { IncompleteVector, PossiblyReactive } from './types';
+import { IncompleteVector, Nestable, PossiblyReactive } from './types';
 
 /**
  * Use group options.
  */
 export type UseGroupOptions = {
+  hidden?: PossiblyReactive<boolean>;
   name?: string;
   position?: PossiblyReactive<IncompleteVector>;
   rotation?: PossiblyReactive<IncompleteVector>;
@@ -18,7 +20,7 @@ export type UseGroupOptions = {
  */
 export function useGroup(
   opts: UseGroupOptions = {},
-  children: Object3D|Object3D[] = new Object3D(),
+  children: Nestable = new Object3D(),
 ) {
   const group = new Group();
 
@@ -26,9 +28,10 @@ export function useGroup(
     group.name = opts.name;
   }
 
-  useNestable(group, children);
+  useHidden(group, opts.hidden);
   usePosition(group, opts.position);
   useRotation(group, opts.rotation);
+  useNestable(group, children);
 
   return group;
 }

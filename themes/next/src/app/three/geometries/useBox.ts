@@ -7,9 +7,10 @@ import {
   IncompleteVector, Nestable, PossiblyReactive, Reactive,
 } from '../types';
 import { useDisposable } from '../useDisposable';
+import { useHidden } from '../useHidden';
 import { usePosition } from '../usePosition';
-import { useSlots } from '../useSlots';
 import { useRotation } from '../useRotation';
+import { useSlots } from '../useSlots';
 
 /**
  * Options
@@ -18,6 +19,7 @@ export type UseBoxOptions = {
   color?: PossiblyReactive<number>;
   depth?: number;
   height?: number;
+  hidden?: PossiblyReactive<boolean>;
   position?: Reactive<IncompleteVector>;
   rotation?: Reactive<IncompleteVector>;
   width?: number;
@@ -57,7 +59,7 @@ export function useBox(opts: UseBoxOptions = {}, slots: UseBoxSlots = {}) {
 
   const box = new Mesh(geometry, material);
 
-  // position & rotation
+  useHidden(box, opts.hidden);
   usePosition(box, opts.position);
   useRotation(box, opts.rotation);
 
