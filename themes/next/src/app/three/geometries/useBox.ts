@@ -6,7 +6,9 @@ import { computed, watch } from '@vue/composition-api';
 import { getValue } from '../helpers';
 import { IncompleteVector, PossiblyReactive, Reactive } from '../types';
 import { useDisposable } from '../useDisposable';
+import { useGroup } from '../useGroup';
 import { usePosition } from '../usePosition';
+import { useSlots } from '../useSlots';
 
 /**
  * Options
@@ -35,13 +37,14 @@ export function useBox(opts: UseBoxOptions = {}, slots: UseBoxSlots = {}) {
   const height = computed(() => getValue(opts.height) || 0);
   const width = computed(() => getValue(opts.width) || 0);
 
-  const geometry = new BoxBufferGeometry(width.value, height.value, depth.value);
-
   const baseValues = {
     depth: depth.value,
     height: height.value,
     width: width.value,
   };
+
+  // objects
+  const geometry = new BoxBufferGeometry(width.value, height.value, depth.value);
 
   const material = new MeshLambertMaterial({
     color: color.value,
@@ -52,14 +55,6 @@ export function useBox(opts: UseBoxOptions = {}, slots: UseBoxSlots = {}) {
 
   const box = new Mesh(geometry, material);
 
-  // const faces = useSlots({
-  //   position: opts.position,
-  // }, {
-  //   u: () => ({ y: height.value / 2 }),
-  // });
-
-  // box.children.push(faces);
-
   // dimensions
   watch(width, () => box.scale.x = width.value / baseValues.width);
   watch(height, () => box.scale.y = height.value / baseValues.height);
@@ -67,6 +62,15 @@ export function useBox(opts: UseBoxOptions = {}, slots: UseBoxSlots = {}) {
 
   // position
   usePosition(box, opts.position);
+
+  // slots
+  const group = useGroup({
+    position: opts.position,
+  }, useGroup({
+    position: computed(() => ({ y: height.value / 2 })),
+  }, slots.u));
+
+  box.children.push(group);
 
   // cleanup
   useDisposable(geometry);

@@ -1,5 +1,18 @@
 import { Group } from 'three';
+import { IncompleteVector, Reactive } from './types';
 
+/**
+ * Options
+ */
+export type UseSlotsOptions = {
+  [key: string]: () => Reactive<IncompleteVector>;
+}
+
+/**
+ * Slots
+ */
 export function useSlots(...args: any[]) {
-  return new Group();
+  const slots = new Group();
+
+  return slots;
 }

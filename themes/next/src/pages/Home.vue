@@ -36,6 +36,14 @@
           </div>
         </label>
         <label class="block mb-4">
+          <div>Position2: <span class="font-mono">{{ { position: position2 } }}</span></div>
+          <div class="flex">
+            <input v-model.number="position2.x" min="-10" max="10" step="0.01" type="range" />
+            <input v-model.number="position2.y" min="-10" max="10" step="0.01" type="range" />
+            <input v-model.number="position2.z" min="-10" max="10" step="0.01" type="range" />
+          </div>
+        </label>
+        <label class="block mb-4">
           <div>Box: <span class="font-mono">{{ { height, width, depth } }}</span></div>
           <div class="flex">
             <input v-model.number="height" min="0" max="10" step="0.01" type="range" />
@@ -63,6 +71,7 @@ export default {
     const cameraAngle = ref(50);
     const cameraDistance = ref(5);
     const position = ref({ x: 0, y: 0, z: 0 });
+    const position2 = ref({ x: 0, y: 0, z: 0 });
     const height = ref(1);
     const depth = ref(1);
     const width = ref(1);
@@ -78,6 +87,14 @@ export default {
         height,
         position,
         width,
+      }, {
+        u: useBox({
+          color: 0x00ff00,
+          depth: 0.25,
+          height: 0.25,
+          position: position2,
+          width: 0.25,
+        })
       }),
     ]);
 
@@ -86,6 +103,7 @@ export default {
       cameraDistance,
       children,
       position,
+      position2,
       height,
       width,
       depth,
