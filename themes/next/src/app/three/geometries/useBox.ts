@@ -65,6 +65,18 @@ export function useBox(opts: UseBoxOptions = {}, slots: UseBoxSlots = {}) {
     f: {
       position: { z: depth / 2 },
     },
+    r: {
+      position: { x: width / 2 },
+      rotation: { y: 90 },
+    },
+    b: {
+      position: { z: -depth / 2 },
+      rotation: { y: 180 },
+    },
+    d: {
+      position: { y: -height / 2 },
+      rotation: { x: 90 },
+    },
   }, slots);
 
   // cleanup

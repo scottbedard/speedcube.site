@@ -108,6 +108,27 @@ export default {
           height: 0.5,
           position: position2,
           width: 0.5,
+        }),
+        r: useBox({
+          color: 0xff00ff,
+          depth: 0.1,
+          height: 0.5,
+          position: position2,
+          width: 0.5,
+        }),
+        b: useBox({
+          color: 0xffffff,
+          depth: 0.1,
+          height: 0.5,
+          position: position2,
+          width: 0.5,
+        }),
+        d: useBox({
+          color: 0xffff00,
+          depth: 0.1,
+          height: 0.5,
+          position: position2,
+          width: 0.5,
         })
       }),
     ]);
