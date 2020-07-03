@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   BoxBufferGeometry, MeshLambertMaterial, Mesh, Object3D,
 } from 'three';
-import { computed, watch } from '@vue/composition-api';
+import { computed } from '@vue/composition-api';
 import { getValue } from '../helpers';
 import { IncompleteVector, PossiblyReactive, Reactive } from '../types';
 import { useDisposable } from '../useDisposable';
-import { useGroup } from '../useGroup';
 import { usePosition } from '../usePosition';
 import { useSlots } from '../useSlots';
 import { useRotation } from '../useRotation';
@@ -45,6 +43,7 @@ export function useBox(opts: UseBoxOptions = {}, slots: UseBoxSlots = {}) {
     opacity: 0.5,
     side: 2,
     transparent: false,
+    wireframe: true,
   });
 
   const box = new Mesh(geometry, material);
@@ -58,6 +57,10 @@ export function useBox(opts: UseBoxOptions = {}, slots: UseBoxSlots = {}) {
     u: {
       position: { y: height / 2 },
       rotation: { x: -90 },
+    },
+    l: {
+      position: { x: -width / 2 },
+      rotation: { y: -90 },
     },
     f: {
       position: { z: depth / 2 },

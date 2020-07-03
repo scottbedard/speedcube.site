@@ -95,6 +95,13 @@ export default {
           position: position2,
           width: 0.5,
         }),
+        l: useBox({
+          color: 0x00ffff,
+          depth: 0.1,
+          height: 0.5,
+          position: position2,
+          width: 0.5,
+        }),
         f: useBox({
           color: 0x0000ff,
           depth: 0.1,
