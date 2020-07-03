@@ -11,19 +11,22 @@
         -
       </button> -->
 
-      <Scene :children="children">
+      <Scene
+        :camera-angle="cameraAngle"
+        :camera-distance="cameraDistance"
+        :children="children">
         <div class="pb-full" />
       </Scene>
 
       <div class="mt-4">
-        <!-- <label class="block mb-4">
+        <label class="block mb-4">
           <div>Camera Angle: {{ cameraAngle }}</div>
           <input v-model.number="cameraAngle" min="0" max="90" type="range" />
         </label>
         <label class="block mb-4">
           <div>Camera Distance: {{ cameraDistance }}</div>
-          <input v-model.number="cameraDistance" min="0" max="1000" type="range" />
-        </label> -->
+          <input v-model.number="cameraDistance" min="0" max="10" step="0.01" type="range" />
+        </label>
       </div>
     </div>
   </div>
@@ -41,6 +44,10 @@ import { useGroup } from '@/app/three/useGroup';
 
 export default {
   setup() {
+    const cameraAngle = ref(50);
+    const cameraDistance = ref(3.5);
+    const cameraFov = ref(60);
+
     const children = useGroup({
       name: 'foo',
       position: {
@@ -55,6 +62,9 @@ export default {
     console.log({ children });
 
     return {
+      cameraAngle,
+      cameraDistance,
+      cameraFov,
       children,
     };
   },

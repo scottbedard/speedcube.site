@@ -12,15 +12,11 @@ export type UsePositionOptions = {
  */
 export function usePosition(
   obj: Object3D,
-  position: RawVectorObject,
+  position?: RawVectorObject,
 ) {
   const { x, y, z } = normalizeVector(position);
 
   obj.position.setX(x);
   obj.position.setY(y);
   obj.position.setZ(z);
-
-  watch(position, (value) => {
-    console.log('it changed', value);
-  });
 }
