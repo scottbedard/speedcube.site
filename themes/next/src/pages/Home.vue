@@ -27,6 +27,22 @@
           <div>Camera Distance: {{ cameraDistance }}</div>
           <input v-model.number="cameraDistance" min="0" max="10" step="0.01" type="range" />
         </label>
+        <label class="block mb-4">
+          <div>Object Position 1: <span class="font-mono">{{ position }}</span></div>
+          <div class="flex">
+            <input v-model.number="position.x" min="-10" max="10" step="0.01" type="range" />
+            <input v-model.number="position.y" min="-10" max="10" step="0.01" type="range" />
+            <input v-model.number="position.z" min="-10" max="10" step="0.01" type="range" />
+          </div>
+        </label>
+        <label class="block mb-4">
+          <div>Object Position 2: <span class="font-mono">{{ position2 }}</span></div>
+          <div class="flex">
+            <input v-model.number="position2.x" min="-10" max="10" step="0.01" type="range" />
+            <input v-model.number="position2.y" min="-10" max="10" step="0.01" type="range" />
+            <input v-model.number="position2.z" min="-10" max="10" step="0.01" type="range" />
+          </div>
+        </label>
       </div>
     </div>
   </div>
@@ -45,27 +61,39 @@ import { useGroup } from '@/app/three/useGroup';
 export default {
   setup() {
     const cameraAngle = ref(50);
-    const cameraDistance = ref(3.5);
-    const cameraFov = ref(60);
+    const cameraDistance = ref(5);
+
+    const position = ref({
+      x: 0,
+      y: 0,
+      z: 0,
+    });
+
+    const position2 = ref({
+      x: 0,
+      y: 0,
+      z: 0,
+    });
 
     const children = useGroup({
       name: 'foo',
-      position: {
-        // x: -50,
-      },
     }, [
-      useAxesHelper(),
+      useAxesHelper({ position }),
       useAmbientLight(),
       useBox(),
+      useGroup({
+        position: position2,
+      }, [
+        useAxesHelper(),
+      ])
     ]);
-
-    console.log({ children });
 
     return {
       cameraAngle,
       cameraDistance,
-      cameraFov,
       children,
+      position,
+      position2,
     };
   },
   components: {
