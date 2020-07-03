@@ -1,28 +1,27 @@
 import { Group, Object3D } from 'three';
-import { computed, Ref } from '@vue/composition-api';
 import { useNestable } from './useNestable';
 import { usePosition } from './usePosition';
-import { RawVectorObject } from './types';
+import { IncompleteVector, Reactive } from './types';
 
 /**
  * Use group options.
  */
 export type UseGroupOptions = {
-  name?: Ref<string>;
-  position?: Ref<RawVectorObject>;
+  name?: string;
+  position?: Reactive<IncompleteVector>;
 };
 
 /**
- * Group
+ * Use group
  */
 export function useGroup(
   opts: UseGroupOptions = {},
-  children: Object3D|Object3D[],
+  children: Object3D|Object3D[] = new Object3D(),
 ) {
   const group = new Group();
 
   if (opts.name) {
-    group.name = opts.name.value;
+    group.name = opts.name;
   }
 
   useNestable(group, children);

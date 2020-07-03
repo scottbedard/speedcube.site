@@ -28,7 +28,7 @@
           <input v-model.number="cameraDistance" min="0" max="10" step="0.01" type="range" />
         </label>
         <label class="block mb-4">
-          <div>Position: <span class="font-mono">{{ { height, width, depth } }}</span></div>
+          <div>Position: <span class="font-mono">{{ position }}</span></div>
           <div class="flex">
             <input v-model.number="position.x" min="-10" max="10" step="0.01" type="range" />
             <input v-model.number="position.y" min="-10" max="10" step="0.01" type="range" />
@@ -73,6 +73,7 @@ export default {
       useAxesHelper(),
       useAmbientLight(),
       useBox({
+        color: 0xff0000,
         depth,
         height,
         position,

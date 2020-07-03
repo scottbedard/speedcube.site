@@ -1,17 +1,20 @@
+import { ComputedRef, Ref } from '@vue/composition-api';
+
 /**
- * Pre-normalized vector coordinates.
+ * Incomplete vector
  */
-export type RawVectorObject = {
-  x?: number,
-  y?: number,
-  z?: number,
+export type IncompleteVector = {
+ x?: number,
+ y?: number,
+ z?: number,
 };
 
 /**
- * Vector coordinates.
+ * Possibly reactive value
  */
-export type VectorObject = {
-  x: number,
-  y: number,
-  z: number,
-};
+export type PossiblyReactive<T> = T | Reactive<T>;
+
+/**
+ * Reactive value
+ */
+export type Reactive<T> = ComputedRef<T> | Ref<T>;

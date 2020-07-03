@@ -7,17 +7,13 @@
 <script lang="ts">
 import { Object3D, Scene } from 'three';
 import {
-  computed, defineComponent, inject, ref, onMounted, onUnmounted, watchEffect,
+  computed, defineComponent, inject, ref, onMounted, onUnmounted,
 } from '@vue/composition-api';
-import { degreesToRadians } from '@/app/utils/math';
 import { RendererSymbol } from '@/components/three/types';
 import { useNestable } from '@/app/three';
 import { usePerspectiveCamera } from '@/app/three/cameras/usePerspectiveCamera';
 
-/**
- * Props
- */
-interface Props {
+type SceneProps = {
   cameraAngle?: number;
   cameraAspect?: number;
   cameraDistance?: number;
@@ -25,21 +21,21 @@ interface Props {
   cameraFov?: number;
   cameraNear?: number;
   children: Object3D;
-}
+};
 
 export default defineComponent({
-  setup(props: Props) {
+  setup(props: SceneProps) {
     const el = ref<Element>();
 
     const scene = new Scene();
 
     const camera = usePerspectiveCamera({
-      cameraAngle: computed(() => props.cameraAngle),
-      cameraAspect: computed(() => props.cameraAspect),
-      cameraDistance: computed(() => props.cameraDistance),
-      cameraFar: computed(() => props.cameraFar),
-      cameraFov: computed(() => props.cameraFov),
-      cameraNear: computed(() => props.cameraNear),
+      cameraAngle: computed(() => props.cameraAngle || 0),
+      cameraAspect: props.cameraAspect,
+      cameraDistance: computed(() => props.cameraDistance || 1),
+      cameraFar: props.cameraFar,
+      cameraFov: props.cameraFov,
+      cameraNear: props.cameraNear,
     });
 
     const sceneFn = () => ({
@@ -65,30 +61,12 @@ export default defineComponent({
     return { el };
   },
   props: {
-    cameraAngle: {
-      default: 0,
-      type: Number,
-    },
-    cameraAspect: {
-      default: 1,
-      type: Number,
-    },
-    cameraDistance: {
-      default: 1,
-      type: Number,
-    },
-    cameraFar: {
-      default: 100,
-      type: Number,
-    },
-    cameraFov: {
-      default: 60,
-      type: Number,
-    },
-    cameraNear: {
-      default: 0,
-      type: Number,
-    },
+    cameraAngle: Number,
+    cameraAspect: Number,
+    cameraDistance: Number,
+    cameraFar: Number,
+    cameraFov: Number,
+    cameraNear: Number,
     children: Object3D,
   },
 });

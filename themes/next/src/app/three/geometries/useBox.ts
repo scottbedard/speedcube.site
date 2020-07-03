@@ -1,22 +1,36 @@
-/* eslint-disable */
-import { isUndefined, isNumber } from 'lodash-es';
-import { BoxBufferGeometry, MeshLambertMaterial, Mesh } from 'three';
-import { computed, Ref, watch, isRef, isReactive } from '@vue/composition-api';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  BoxBufferGeometry, MeshLambertMaterial, Mesh, Object3D,
+} from 'three';
+import { computed, watch } from '@vue/composition-api';
 import { getValue } from '../helpers';
+import { IncompleteVector, PossiblyReactive, Reactive } from '../types';
 import { useDisposable } from '../useDisposable';
 import { usePosition } from '../usePosition';
-import { RawVectorObject } from '../types';
 
-export type UseBoxOptions = {
-  depth?: number | Ref<number>;
-  height?: number | Ref<number>;
-  position?: Ref<RawVectorObject>;
-  width?: number | Ref<number>;
-}
 /**
- * Box.
+ * Options
  */
-export function useBox(opts: UseBoxOptions = {}) {
+export type UseBoxOptions = {
+  color?: PossiblyReactive<number>;
+  depth?: PossiblyReactive<number>;
+  height?: PossiblyReactive<number>;
+  position?: Reactive<IncompleteVector>;
+  width?: PossiblyReactive<number>;
+}
+
+/**
+ * Slots
+ */
+export type UseBoxSlots = {
+  [key: string]: Object3D|Object3D[];
+};
+
+/**
+ * Box
+ */
+export function useBox(opts: UseBoxOptions = {}, slots: UseBoxSlots = {}) {
+  const color = computed(() => getValue(opts.color) || 0x00ff00);
   const depth = computed(() => getValue(opts.depth) || 0);
   const height = computed(() => getValue(opts.height) || 0);
   const width = computed(() => getValue(opts.width) || 0);
@@ -30,7 +44,7 @@ export function useBox(opts: UseBoxOptions = {}) {
   };
 
   const material = new MeshLambertMaterial({
-    color: 0xff0000,
+    color: color.value,
     opacity: 0.5,
     side: 2,
     transparent: false,
@@ -38,12 +52,23 @@ export function useBox(opts: UseBoxOptions = {}) {
 
   const box = new Mesh(geometry, material);
 
+  // const faces = useSlots({
+  //   position: opts.position,
+  // }, {
+  //   u: () => ({ y: height.value / 2 }),
+  // });
+
+  // box.children.push(faces);
+
+  // dimensions
   watch(width, () => box.scale.x = width.value / baseValues.width);
   watch(height, () => box.scale.y = height.value / baseValues.height);
   watch(depth, () => box.scale.z = depth.value / baseValues.depth);
 
+  // position
   usePosition(box, opts.position);
 
+  // cleanup
   useDisposable(geometry);
   useDisposable(material);
 
