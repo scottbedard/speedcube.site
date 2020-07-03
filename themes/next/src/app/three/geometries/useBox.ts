@@ -16,7 +16,7 @@ import { useSlots } from '../useSlots';
  */
 export type UseBoxOptions = {
   color?: number;
-  debug?: number;
+  debug?: boolean;
   depth?: number;
   height?: number;
   hidden?: PossiblyReactive<boolean>;
@@ -41,7 +41,6 @@ export type UseBoxSlots = {
  * Box
  */
 export function useBox(opts: UseBoxOptions = {}, slots: UseBoxSlots = {}) {
-  const color = opts.color || 0xfffffff;
   const debug = opts.debug || false;
   const depth = opts.depth || 0;
   const height = opts.height || 0;
@@ -52,7 +51,12 @@ export function useBox(opts: UseBoxOptions = {}, slots: UseBoxSlots = {}) {
   // debug wireframe
   if (debug) {
     const geometry = new BoxBufferGeometry(width, height, depth);
-    const material = new MeshLambertMaterial({ color, wireframe: true });
+
+    const material = new MeshLambertMaterial({
+      color: opts.color || 0xfffffff,
+      wireframe: true,
+    });
+
     const box = new Mesh(geometry, material);
 
     group.add(box);
