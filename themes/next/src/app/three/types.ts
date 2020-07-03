@@ -1,7 +1,7 @@
 import { ComputedRef, Ref } from '@vue/composition-api';
 
 /**
- * Incomplete vector
+ * Incomplete vector coordinates
  */
 export type IncompleteVector = {
  x?: number,

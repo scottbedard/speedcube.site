@@ -1,14 +1,16 @@
 import { Group, Object3D } from 'three';
 import { useNestable } from './useNestable';
 import { usePosition } from './usePosition';
-import { IncompleteVector, Reactive } from './types';
+import { useRotation } from './useRotation';
+import { IncompleteVector, PossiblyReactive } from './types';
 
 /**
  * Use group options.
  */
 export type UseGroupOptions = {
   name?: string;
-  position?: Reactive<IncompleteVector>;
+  position?: PossiblyReactive<IncompleteVector>;
+  rotation?: PossiblyReactive<IncompleteVector>;
 };
 
 /**
@@ -26,6 +28,7 @@ export function useGroup(
 
   useNestable(group, children);
   usePosition(group, opts.position);
+  useRotation(group, opts.rotation);
 
   return group;
 }

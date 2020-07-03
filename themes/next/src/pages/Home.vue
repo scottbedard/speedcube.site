@@ -68,7 +68,7 @@ import { useGroup } from '@/app/three/useGroup';
 
 export default {
   setup() {
-    const cameraAngle = ref(50);
+    const cameraAngle = ref(35);
     const cameraDistance = ref(5);
     const position = ref({ x: 0, y: 0, z: 0 });
     const position2 = ref({ x: 0, y: 0, z: 0 });
@@ -83,17 +83,24 @@ export default {
       useAmbientLight(),
       useBox({
         color: 0xff0000,
-        depth,
-        height,
+        depth: 1,
+        height: 1,
         position,
-        width,
+        width: 1,
       }, {
         u: useBox({
           color: 0x00ff00,
-          depth: 0.25,
-          height: 0.25,
+          depth: 0.1,
+          height: 0.5,
           position: position2,
-          width: 0.25,
+          width: 0.5,
+        }),
+        f: useBox({
+          color: 0x0000ff,
+          depth: 0.1,
+          height: 0.5,
+          position: position2,
+          width: 0.5,
         })
       }),
     ]);

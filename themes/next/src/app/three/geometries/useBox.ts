@@ -9,42 +9,36 @@ import { useDisposable } from '../useDisposable';
 import { useGroup } from '../useGroup';
 import { usePosition } from '../usePosition';
 import { useSlots } from '../useSlots';
+import { useRotation } from '../useRotation';
 
 /**
  * Options
  */
 export type UseBoxOptions = {
   color?: PossiblyReactive<number>;
-  depth?: PossiblyReactive<number>;
-  height?: PossiblyReactive<number>;
+  depth?: number;
+  height?: number;
   position?: Reactive<IncompleteVector>;
-  width?: PossiblyReactive<number>;
+  rotation?: Reactive<IncompleteVector>;
+  width?: number;
 }
 
 /**
  * Slots
  */
-export type UseBoxSlots = {
-  [key: string]: Object3D|Object3D[];
-};
+export type UseBoxSlots = Record<string, Object3D|Object3D[]>
 
 /**
  * Box
  */
 export function useBox(opts: UseBoxOptions = {}, slots: UseBoxSlots = {}) {
+  const depth = opts.depth || 0;
+  const height = opts.height || 0;
+  const width = opts.width || 0;
   const color = computed(() => getValue(opts.color) || 0x00ff00);
-  const depth = computed(() => getValue(opts.depth) || 0);
-  const height = computed(() => getValue(opts.height) || 0);
-  const width = computed(() => getValue(opts.width) || 0);
-
-  const baseValues = {
-    depth: depth.value,
-    height: height.value,
-    width: width.value,
-  };
 
   // objects
-  const geometry = new BoxBufferGeometry(width.value, height.value, depth.value);
+  const geometry = new BoxBufferGeometry(width, height, depth);
 
   const material = new MeshLambertMaterial({
     color: color.value,
@@ -55,22 +49,20 @@ export function useBox(opts: UseBoxOptions = {}, slots: UseBoxSlots = {}) {
 
   const box = new Mesh(geometry, material);
 
-  // dimensions
-  watch(width, () => box.scale.x = width.value / baseValues.width);
-  watch(height, () => box.scale.y = height.value / baseValues.height);
-  watch(depth, () => box.scale.z = depth.value / baseValues.depth);
-
-  // position
+  // position & rotation
   usePosition(box, opts.position);
+  useRotation(box, opts.rotation);
 
   // slots
-  const group = useGroup({
-    position: opts.position,
-  }, useGroup({
-    position: computed(() => ({ y: height.value / 2 })),
-  }, slots.u));
-
-  box.children.push(group);
+  useSlots(box, {
+    u: {
+      position: { y: height / 2 },
+      rotation: { x: -90 },
+    },
+    f: {
+      position: { z: depth / 2 },
+    },
+  }, slots);
 
   // cleanup
   useDisposable(geometry);
