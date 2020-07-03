@@ -1,5 +1,6 @@
 import { Object3D } from 'three';
 import { useNestable } from './useNestable';
+import { Nestable } from './types';
 import { useGroup, UseGroupOptions } from './useGroup';
 
 /**
@@ -8,7 +9,7 @@ import { useGroup, UseGroupOptions } from './useGroup';
 export function useSlots(
   parent: Object3D,
   slots: Record<string, UseGroupOptions> = {},
-  content: Record<string, Object3D|Object3D[]>,
+  content: Record<string, Nestable>,
 ) {
   Object.entries(slots).forEach(([key, slotOpts]) => {
     const slot = useGroup(slotOpts);

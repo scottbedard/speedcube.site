@@ -1,9 +1,11 @@
 import {
-  BoxBufferGeometry, MeshLambertMaterial, Mesh, Object3D,
+  BoxBufferGeometry, MeshLambertMaterial, Mesh,
 } from 'three';
 import { computed } from '@vue/composition-api';
 import { getValue } from '../helpers';
-import { IncompleteVector, PossiblyReactive, Reactive } from '../types';
+import {
+  IncompleteVector, Nestable, PossiblyReactive, Reactive,
+} from '../types';
 import { useDisposable } from '../useDisposable';
 import { usePosition } from '../usePosition';
 import { useSlots } from '../useSlots';
@@ -24,7 +26,14 @@ export type UseBoxOptions = {
 /**
  * Slots
  */
-export type UseBoxSlots = Record<string, Object3D|Object3D[]>
+export type UseBoxSlots = {
+  u?: Nestable;
+  l?: Nestable;
+  f?: Nestable;
+  r?: Nestable;
+  b?: Nestable;
+  d?: Nestable;
+};
 
 /**
  * Box
