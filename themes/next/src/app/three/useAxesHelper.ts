@@ -3,6 +3,9 @@ import { AxesHelper } from 'three';
 import { usePosition } from './usePosition';
 import { RawVectorObject } from './types';
 
+/**
+ * Axes helper options.
+ */
 export type AxesHelperOptions = {
   position?: Ref<RawVectorObject>;
 };
@@ -12,9 +15,10 @@ export type AxesHelperOptions = {
  */
 export function useAxesHelper(opts: AxesHelperOptions = {}) {
   const axesHelper = new AxesHelper(100);
-  const position = computed(() => opts.position?.value || {});
 
-  usePosition(axesHelper, position);
+  if (opts.position) {
+    usePosition(axesHelper, opts.position);
+  }
 
   return axesHelper;
 }

@@ -26,7 +26,7 @@ export function useGroup(
   }
 
   useNestable(group, children);
-  usePosition(group, computed(() => opts.position?.value || {}));
+  usePosition(group, opts.position);
 
   return group;
 }

@@ -1,5 +1,6 @@
-import { isNumber } from 'lodash-es';
+import { isNumber, isUndefined } from 'lodash-es';
 import { Object3D } from 'three';
+import { isRef, Ref } from '@vue/composition-api';
 import { VectorObject } from './types';
 
 /**
@@ -11,4 +12,15 @@ export function normalizeVector(obj: Record<string, number|undefined> = {}): Vec
     y: isNumber(obj.y) ? obj.y : 0,
     z: isNumber(obj.z) ? obj.z : 0,
   };
+}
+
+/**
+ * Get a ref value.
+ */
+export function getValue<T>(valueOrRef: T | Ref<T>) {
+  if (isRef(valueOrRef)) {
+    return valueOrRef.value;
+  }
+
+  return valueOrRef;
 }

@@ -78,7 +78,7 @@ export default defineComponent({
       type: Number,
     },
     cameraFar: {
-      default: 10,
+      default: 100,
       type: Number,
     },
     cameraFov: {
@@ -86,7 +86,7 @@ export default defineComponent({
       type: Number,
     },
     cameraNear: {
-      default: 1,
+      default: 0,
       type: Number,
     },
     children: Object3D,
