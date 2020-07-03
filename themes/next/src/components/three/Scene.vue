@@ -1,107 +1,54 @@
 <template>
-  <div class="border-4 border-blue-500 w-full" ref="container">
-    <div v-if="square" class="pb-full" />
+  <div class="border-4 border-blue-500 w-full" ref="el">
     <slot />
   </div>
 </template>
 
 <script lang="ts">
-import { stubArray } from 'lodash-es';
-import { PerspectiveCamera, Scene } from 'three';
+import { Object3D, PerspectiveCamera, Scene } from 'three';
 import {
-  defineComponent, inject, onMounted, onUnmounted, ref, watch, watchEffect,
+  defineComponent, inject, ref, onMounted, onUnmounted,
 } from '@vue/composition-api';
-import { useElementVisibility } from '@vueuse/core';
-import { useDisposable, useNestable } from '@/app/three';
-import { degreesToRadians } from '@/app/utils/math';
-import { RendererSymbol } from './types';
+import { RendererSymbol } from '@/components/three/types';
+import { useNestable } from '@/app/three';
+
+interface Props {
+  children: Object3D;
+}
 
 export default defineComponent({
-  setup(props) {
-    const container = ref<Element>();
+  setup(props: Props) {
+    const el = ref<Element>();
 
-    // camera
-    const camera = new PerspectiveCamera(
-      props.cameraFov,
-      props.cameraAspect,
-      props.cameraNear,
-      props.cameraFar,
-    );
+    const scene = new Scene();
 
-    watchEffect(() => {
-      const angle = degreesToRadians(props.cameraAngle);
-      const adjacent = Math.sin(angle) * props.cameraDistance;
-      const opposite = Math.cos(angle) * props.cameraDistance;
+    const camera = new PerspectiveCamera(50, 1, 1, 10);
+    camera.position.z = 2;
 
-      camera.position.set(0, opposite, adjacent);
-      camera.lookAt(0, 0, 0);
+    const sceneFn = () => ({
+      camera,
+      el: el.value,
+      scene,
     });
 
-    // scene
-    const scene = new Scene();
-    scene.userData.camera = camera;
+    useNestable(scene, props.children);
 
-    useNestable(scene, () => props.children);
-    useDisposable(scene);
-
-    // renderer
     const renderer = inject(RendererSymbol);
 
     if (renderer) {
       onMounted(() => {
-        scene.userData.el = container.value;
+        renderer.addScene(sceneFn);
       });
 
       onUnmounted(() => {
-        renderer.removeScene(scene);
+        renderer.removeScene(sceneFn);
       });
-
-      // add scene to renderer when container is visible
-      // @ts-ignore
-      watch(useElementVisibility(container), (visible) => (
-        visible
-          ? renderer.addScene(scene)
-          : renderer.removeScene(scene)
-      ));
     }
 
-    return {
-      container,
-    };
+    return { el };
   },
   props: {
-    cameraAngle: {
-      default: 0,
-      type: Number,
-    },
-    cameraAspect: {
-      default: 1,
-      type: Number,
-    },
-    cameraDistance: {
-      default: 100,
-      type: Number,
-    },
-    cameraFar: {
-      default: 10000,
-      type: Number,
-    },
-    cameraFov: {
-      default: 60,
-      type: Number,
-    },
-    cameraNear: {
-      default: 1,
-      type: Number,
-    },
-    children: {
-      default: stubArray,
-      type: Array,
-    },
-    square: {
-      default: false,
-      type: Boolean,
-    },
+    children: Object3D,
   },
 });
 </script>

@@ -1,13 +1,24 @@
 import { InjectionKey } from '@vue/composition-api';
-import { Scene } from 'three';
+import { PerspectiveCamera, Scene } from 'three';
 
 /**
  * Methods exposed on renderer api.
  */
 export type RendererApi = {
-  addScene: (scene: Scene) => void;
-  removeScene: (scene: Scene) => void;
+  addScene: (sceneFn: SceneFactory) => void;
+  removeScene: (sceneFn: SceneFactory) => void;
 };
+
+/**
+ * Scene api object used by the renderer
+ */
+export type SceneApi = {
+  camera: PerspectiveCamera;
+  el: Element | undefined;
+  scene: Scene;
+};
+
+export type SceneFactory = () => SceneApi;
 
 /**
  * Symbol to access the global renderer.

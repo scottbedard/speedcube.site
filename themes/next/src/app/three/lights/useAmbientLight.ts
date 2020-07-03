@@ -6,7 +6,7 @@ import { AmbientLight } from 'three';
 export function useAmbientLight() {
   const light = new AmbientLight(0xffffff, 0.8);
 
-  light.position.set(0, 200, 200);
+  light.position.set(1, 1, 1);
 
   return light;
 }

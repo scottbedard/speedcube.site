@@ -1,4 +1,5 @@
 import { isNumber } from 'lodash-es';
+import { Object3D } from 'three';
 import { VectorObject } from './types';
 
 /**

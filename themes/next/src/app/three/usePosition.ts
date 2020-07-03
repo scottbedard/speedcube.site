@@ -1,16 +1,26 @@
 import { Object3D } from 'three';
-import { computed, watch } from '@vue/composition-api';
+import { computed, Ref, watch } from '@vue/composition-api';
 import { normalizeVector } from './helpers';
+import { RawVectorObject } from './types';
+
+export type UsePositionOptions = {
+
+};
 
 /**
  * Sync an object's position.
  */
-export function usePosition(obj: Object3D, position: Record<string, number>) {
-  const normalizedPosition = computed(() => normalizeVector(position));
+export function usePosition(
+  obj: Object3D,
+  position: RawVectorObject,
+) {
+  const { x, y, z } = normalizeVector(position);
 
-  watch(normalizedPosition, ({ x, y, z }) => {
-    obj.position.set(x, y, z);
-  }, {
-    deep: true,
+  obj.position.setX(x);
+  obj.position.setY(y);
+  obj.position.setZ(z);
+
+  watch(position, (value) => {
+    console.log('it changed', value);
   });
 }
