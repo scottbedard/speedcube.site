@@ -1,6 +1,6 @@
 import { noop } from 'lodash-es';
 import { mount } from '~/utils';
-import { useDisposable } from  '@/app/three';
+import { useDisposable } from  '@/app/three/useDisposable';
 
 describe('useDisposable', () => {
   it('disposes an object when component is destroyed', () => {

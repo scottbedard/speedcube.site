@@ -1,7 +1,7 @@
 import { Object3D } from 'three';
 import { useNestable } from './useNestable';
 import { Nestable } from './types';
-import { useGroup, UseGroupOptions } from './useGroup';
+import { useGroup, UseGroupOptions } from './utils/useGroup';
 
 /**
  * Slots

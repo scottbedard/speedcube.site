@@ -1,9 +1,9 @@
 import { Group, Object3D } from 'three';
-import { useHidden } from './useHidden';
-import { useNestable } from './useNestable';
-import { usePosition } from './usePosition';
-import { useRotation } from './useRotation';
-import { IncompleteVector, Nestable, PossiblyReactive } from './types';
+import { useHidden } from '../useHidden';
+import { useNestable } from '../useNestable';
+import { usePosition } from '../usePosition';
+import { useRotation } from '../useRotation';
+import { IncompleteVector, Nestable, PossiblyReactive } from '../types';
 
 /**
  * Use group options.

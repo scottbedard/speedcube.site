@@ -10,7 +10,7 @@ import {
   computed, defineComponent, inject, ref, onMounted, onUnmounted,
 } from '@vue/composition-api';
 import { RendererSymbol } from '@/components/three/types';
-import { useNestable } from '@/app/three';
+import { useNestable } from '@/app/three/useNestable';
 import { usePerspectiveCamera } from '@/app/three/cameras/usePerspectiveCamera';
 
 type SceneProps = {

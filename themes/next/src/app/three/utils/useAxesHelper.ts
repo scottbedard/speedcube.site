@@ -1,6 +1,6 @@
 import { AxesHelper } from 'three';
-import { usePosition } from './usePosition';
-import { IncompleteVector, Reactive } from './types';
+import { usePosition } from '../usePosition';
+import { IncompleteVector, Reactive } from '../types';
 
 /**
  * Options

@@ -58,11 +58,11 @@
 /* eslint-disable */
 import { ref } from '@vue/composition-api';
 import Scene from '@/components/three/Scene.vue';
-import { useAxesHelper } from '@/app/three';
+import { useAxesHelper } from '@/app/three/utils/useAxesHelper';
 import { Object3D } from 'three';
-import { useAmbientLight } from '@/app/three/lights';
-import { useBox } from '@/app/three/geometries';
-import { useGroup } from '@/app/three/useGroup';
+import { useAmbientLight } from '@/app/three/lights/useAmbientLight';
+import { useBox } from '@/app/three/geometries/useBox';
+import { useGroup } from '@/app/three/utils/useGroup';
 
 export default {
   setup() {

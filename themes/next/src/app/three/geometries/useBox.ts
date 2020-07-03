@@ -5,7 +5,7 @@ import {
   IncompleteVector, Nestable, PossiblyReactive, Reactive,
 } from '../types';
 import { useDisposable } from '../useDisposable';
-import { useGroup } from '../useGroup';
+import { useGroup } from '../utils/useGroup';
 import { useHidden } from '../useHidden';
 import { usePosition } from '../usePosition';
 import { useRotation } from '../useRotation';
