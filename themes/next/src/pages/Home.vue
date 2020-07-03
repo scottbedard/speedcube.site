@@ -68,6 +68,7 @@ export default {
   setup() {
     const cameraAngle = ref(35);
     const cameraDistance = ref(5);
+    const debug = true;
     const position = ref({ x: 0, y: 0, z: 0 });
     const position2 = ref({ x: 0, y: 0, z: 0 });
     const hidden = ref(false);
@@ -85,6 +86,7 @@ export default {
       }, {
         u: useBox({
           color: 0x00ff00,
+          debug,
           depth: 0.1,
           height: 0.5,
           position: position2,
@@ -92,6 +94,7 @@ export default {
         }),
         l: useBox({
           color: 0x00ffff,
+          debug,
           depth: 0.1,
           height: 0.5,
           position: position2,
@@ -99,6 +102,7 @@ export default {
         }),
         f: useBox({
           color: 0x0000ff,
+          debug,
           depth: 0.1,
           height: 0.5,
           position: position2,
@@ -106,6 +110,7 @@ export default {
         }),
         r: useBox({
           color: 0xff00ff,
+          debug,
           depth: 0.1,
           height: 0.5,
           position: position2,
@@ -113,6 +118,7 @@ export default {
         }),
         b: useBox({
           color: 0xffffff,
+          debug,
           depth: 0.1,
           height: 0.5,
           position: position2,
@@ -120,6 +126,7 @@ export default {
         }),
         d: useBox({
           color: 0xffff00,
+          debug,
           depth: 0.1,
           height: 0.5,
           position: position2,
