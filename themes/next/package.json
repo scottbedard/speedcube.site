@@ -9,6 +9,7 @@
     "test": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@bedard/twister": "^0.1.6",
     "@vue/composition-api": "0.6.1",
     "@vueuse/core": "^2.0.33",
     "core-js": "^3.6.5",
