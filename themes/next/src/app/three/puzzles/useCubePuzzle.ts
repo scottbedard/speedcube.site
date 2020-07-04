@@ -1,130 +1,195 @@
 /* eslint-disable */
 import { Cube } from '@bedard/twister';
-import { CubeSticker } from '@bedard/twister/dist/cube/cube';
-import { times } from 'lodash-es';
-import { Group, ShapeBufferGeometry } from 'three';
-import { IncompleteVector, PossiblyReactive } from '../types';
-import { roundedRectangle } from '../helpers';
+import { isUndefined, times } from 'lodash-es';
+import { isReactive, onUnmounted, watch } from '@vue/composition-api';
+import { createGarbage, roundedRectangle } from '../helpers';
 import { useBox } from '../geometries/useBox';
-import { useDisposable } from '../useDisposable';
 import { useGroup } from '../utils/useGroup';
-import { useHidden } from '../useHidden';
-import { usePosition } from '../usePosition';
-import { useRotation } from '../useRotation';
-import { useShape } from '../utils/useShape';
-
-/**
- * Face options
- */
-export type FaceOptions = {
-  colMap: number[],
-  colors: number[],
-  geometry: ShapeBufferGeometry,
-  rowMap: number[],
-  size: number,
-}
+import { MeshLambertMaterial, BackSide, FrontSide, Group, Mesh, ShapeBufferGeometry } from 'three';
 
 /**
  * Options
  */
-export type UseCubeOptions = {
-  hidden?: PossiblyReactive<boolean>;
-  model: Cube;
-  position?: PossiblyReactive<IncompleteVector>;
-  rotation?: PossiblyReactive<IncompleteVector>;
+export type UseCubePuzzleOptions = {
+  debug?: boolean;
+  model?: Cube,
+  options?: {
+    stickerRadius?: number,
+  };
+}
+
+export type NormalizedUseCubePuzzleOptions = {
+  debug: boolean;
+  model: Cube,
+  options: {
+    stickerRadius?: number,
+  },
+}
+
+export type MaterialsArray = Array<{
+  inner: MeshLambertMaterial,
+  outer: MeshLambertMaterial,
+}>
+
+export type FaceOptions = {
+  colMap: number[],
+  geometry: ShapeBufferGeometry,
+  id: string,
+  materials: MaterialsArray,
+  normalizedOpts: NormalizedUseCubePuzzleOptions,
+  rowMap: number[],
 }
 
 /**
- * Create a map of columns for each sticker index.
+ * Garbage
+ */
+const garbage = createGarbage();
+
+/**
+ * Create a face of stickers
+ */
+function createFace({ colMap, geometry, id, materials, normalizedOpts, rowMap }: FaceOptions) {
+  const { model } = normalizedOpts;
+
+  const face = new Group();
+  const layers = model.options.size;
+  const layerSize = 1 / layers;
+
+  model.state.U.forEach((sticker, index) => {
+    const col = colMap[index];
+    const row = rowMap[index];
+    const shape = createSticker(geometry, materials);
+
+    shape.position.x = -0.5 + (layerSize * col);
+    shape.position.y = 0.5 - layerSize - (layerSize * row);
+
+    face.add(shape);
+  });
+
+  return face;
+}
+
+/**
+ * Create sticker geometry
+ */
+function createGeometry(id: string, opts: NormalizedUseCubePuzzleOptions) {
+  const layerSize = 1 / opts.model.options.size;
+  const geometry = roundedRectangle(layerSize, layerSize, opts.options.stickerRadius || 0)
+
+  garbage.add(id, () => geometry.dispose());
+
+  return geometry;
+}
+
+/**
+ * Create sticker materials
+ */
+function createMaterials(id: string, opts: NormalizedUseCubePuzzleOptions): MaterialsArray {
+  const materials = times(6).map(() => {
+    return {
+      inner: new MeshLambertMaterial({
+        color: 0xff0000,
+        opacity: 1,
+        side: BackSide,
+        transparent: false,
+      }),
+      outer: new MeshLambertMaterial({
+        color: 0xff0000,
+        side: FrontSide
+      }),
+    };
+  });
+
+  garbage.add(id,
+    ...materials.map(obj => () => obj.inner.dispose()),
+    ...materials.map(obj => () => obj.outer.dispose()),
+  );
+
+  return materials;
+}
+
+/**
+ * Create a puzzle
+ */
+function createPuzzle(id: string, opts: UseCubePuzzleOptions) {
+  console.log('Creating puzzle');
+  garbage.empty(id);
+
+  const normalizedOpts = normalizeOptions(opts);
+
+  const colMap = mapColumns(normalizedOpts.model.options.size);
+  const rowMap = mapRows(normalizedOpts.model.options.size);
+  const geometry = createGeometry(id, normalizedOpts);
+  const materials = createMaterials(id, normalizedOpts);
+
+  const faceOpts = { colMap, geometry, id, materials, normalizedOpts, rowMap };
+
+  const puzzle = useBox({
+    debug: normalizedOpts.debug,
+  }, {
+    u: createFace(faceOpts),
+  });
+
+  return puzzle;
+}
+
+/**
+ * Create a sticker shape
+ */
+function createSticker(geometry: ShapeBufferGeometry, materials: MaterialsArray) {
+  const innerMesh = new Mesh(geometry, materials[0].inner);
+  const outerMesh = new Mesh(geometry, materials[0].outer);
+
+  const group = new Group();
+  group.add(innerMesh);
+  group.add(outerMesh);
+
+  return group;
+}
+
+/**
+ * Create a column index map
  */
 function mapColumns(size: number) {
   return times(size ** 2).map(i => i % size);
 }
 
 /**
-* Create a map of rows for each sticker index.
+* Create a row index map
 */
 function mapRows(size: number) {
   return times(size ** 2).map(i => Math.floor(i / size));
 }
 
 /**
- * Cube face
+ * Normalize puzzle options
  */
-function useCubeFace(opts: FaceOptions, stickers: CubeSticker[]) {
-  const group = useGroup();
-
-  const stickerSize = 1 / opts.size;
-  const halfStickerSize = stickerSize / 2;
-
-  stickers.forEach((sticker, index) => {
-    const shape = useShape({
-      color: opts.colors[sticker.value],
-      geometry: opts.geometry,
-    });
-    const col = opts.colMap[index];
-    const row = opts.rowMap[index];
-
-    // {
-    //   x: -this.halfCubeSize + (col * this.gapSize) + (col * this.stickerSize),
-    //   y: (this.halfCubeSize - this.stickerSize) - ((row * this.gapSize) + (row * this.stickerSize)),
-    //   z: this.halfCubeSize + (this.config.stickerElevation * this.stickerSize),
-    // }
-
-    shape.position.x = -0.5 + (stickerSize * col);
-    shape.position.y = 0.5 - stickerSize - (stickerSize * row);
-
-    group.add(shape);
-  });
-
-  return group;
+export function normalizeOptions(opts: UseCubePuzzleOptions): NormalizedUseCubePuzzleOptions {
+  return {
+    debug: opts.debug || false,
+    model: opts.model || new Cube({ size: 3 }),
+    options: opts.options || {},
+  }
 }
 
 /**
  * Cube puzzle
  */
-export function useCubePuzzle(opts: UseCubeOptions) {
-  const colors = [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0x00ffff, 0xff00ff];
-  const model = opts.model || new Cube({ size: 3 });
-  const colMap = mapColumns(model.options.size);
-  const rowMap = mapRows(model.options.size);
+export function useCubePuzzle(opts: UseCubePuzzleOptions) {
+  const id = garbage.createId();
+  const group = useGroup();
 
-  // stickers
-  const stickerGeometry = roundedRectangle(
-    1 / model.options.size,
-    1 / model.options.size,
-    0.2 / model.options.size,
-  );
+  let puzzle: Group;
 
-  const faceOpts = {
-    colMap,
-    colors,
-    geometry: stickerGeometry,
-    rowMap,
-    size: model.options.size,
-  };
-
-  useDisposable(stickerGeometry);
-
-  // box
-  const box = useBox({
-    debug: true,
-    depth: 1,
-    height: 1,
-    width: 1,
+  watch(opts.options || {}, () => {
+    group.remove(puzzle);
+    puzzle = createPuzzle(id, opts);
+    group.add(puzzle);
   }, {
-    u: useCubeFace(faceOpts, model.state.U),
-    l: useCubeFace(faceOpts, model.state.L),
-    f: useCubeFace(faceOpts, model.state.F),
-    r: useCubeFace(faceOpts, model.state.R),
-    b: useCubeFace(faceOpts, model.state.B),
-    d: useCubeFace(faceOpts, model.state.D),
+    immediate: true,
   });
 
+  onUnmounted(() => garbage.empty(id));
 
-  useHidden(box, opts.hidden);
-  usePosition(box, opts.position);
-  useRotation(box, opts.rotation);
-
-  return box;
+  return group;
 }

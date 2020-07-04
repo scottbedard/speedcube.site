@@ -2,6 +2,16 @@ import { ComputedRef, Ref } from '@vue/composition-api';
 import { Object3D } from 'three';
 
 /**
+ * Garbage
+ */
+export type Garbage = {
+  add: (id: string, ...fns: Function[]) => void,
+  bin: Record<string, Function[]>,
+  createId: () => string,
+  empty: (id: string) => void,
+}
+
+/**
  * Incomplete vector coordinates
  */
 export type IncompleteVector = {

@@ -28,6 +28,10 @@
           <input v-model.number="cameraDistance" min="0" max="10" step="0.01" type="range" />
         </label>
         <label class="block mb-4">
+          <div>Sticker Radius: {{ options.stickerRadius }}</div>
+          <input v-model.number="options.stickerRadius" min="0" max="1" step="0.01" type="range" />
+        </label>
+        <label class="block mb-4">
           <div>Position: <span class="font-mono">{{ position }}</span></div>
           <div class="flex">
             <input v-model.number="position.x" min="-10" max="10" step="0.01" type="range" />
@@ -48,11 +52,12 @@
 
 <script lang="ts">
 /* eslint-disable */
-import { ref } from '@vue/composition-api';
+import { reactive, ref } from '@vue/composition-api';
 import Scene from '@/components/three/Scene.vue';
 import { useAmbientLight } from '@/app/three/lights/useAmbientLight';
 import { useAxesHelper } from '@/app/three/utils/useAxesHelper';
 import { useGroup } from '@/app/three/utils/useGroup';
+import { useBox } from '@/app/three/geometries/useBox';
 import { useCubePuzzle } from '@/app/three/puzzles/useCubePuzzle';
 import { Cube } from '@bedard/twister';
 
@@ -65,16 +70,20 @@ export default {
     const hidden = ref(false);
 
     const model = new Cube({
-      size: 5,
+      size: 3,
+    });
+
+    const options = reactive({
+      stickerRadius: 0.2,
     });
 
     const children = useGroup({}, [
       useAxesHelper(),
       useAmbientLight(),
       useCubePuzzle({
-        hidden,
+        debug: true,
         model,
-        position,
+        options,
       }),
     ]);
 
@@ -83,6 +92,7 @@ export default {
       cameraDistance,
       children,
       hidden,
+      options,
       position,
     };
   },

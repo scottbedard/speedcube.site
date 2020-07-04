@@ -60,9 +60,6 @@ export function useBox(opts: UseBoxOptions = {}, slots: UseBoxSlots = {}) {
     const box = new Mesh(geometry, material);
 
     group.add(box);
-
-    useDisposable(geometry);
-    useDisposable(material);
   }
 
   useHidden(group, opts.hidden);
