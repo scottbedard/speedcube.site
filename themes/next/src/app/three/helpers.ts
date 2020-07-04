@@ -1,6 +1,43 @@
 import { isRef } from '@vue/composition-api';
+import { uniqueId } from 'lodash-es';
 import { Shape, ShapeBufferGeometry } from 'three';
 import { IncompleteVector, PossiblyReactive } from './types';
+
+/**
+ * Create a garbage for threejs objects
+ */
+export function createGarbage() {
+  const bin: Record<string, Function[]> = {};
+
+  // add a function for garbage collection
+  const add = (id: string, ...fn: Function[]) => {
+    bin[id].push(...fn);
+  };
+
+  // create a unique garbage bin
+  const createId = () => {
+    const id = uniqueId();
+
+    bin[id] = [];
+
+    return id;
+  };
+
+  // empty a specific bin
+  const empty = (id: string) => {
+    bin[id].forEach((dispose) => dispose());
+    bin[id] = [];
+  };
+
+  // empty all bins
+  const emptyAll = () => {
+    Object.keys(bin).forEach(empty);
+  };
+
+  return {
+    add, bin, createId, empty, emptyAll,
+  };
+}
 
 /**
  * Get a ref value
