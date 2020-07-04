@@ -46,7 +46,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /* eslint-disable */
 import { ref } from '@vue/composition-api';
 import Scene from '@/components/three/Scene.vue';
@@ -54,20 +54,26 @@ import { useAmbientLight } from '@/app/three/lights/useAmbientLight';
 import { useAxesHelper } from '@/app/three/utils/useAxesHelper';
 import { useGroup } from '@/app/three/utils/useGroup';
 import { useCubePuzzle } from '@/app/three/puzzles/useCubePuzzle';
+import { Cube } from '@bedard/twister';
 
 export default {
   setup() {
     const cameraAngle = ref(35);
-    const cameraDistance = ref(5);
+    const cameraDistance = ref(2);
     const debug = true;
     const position = ref({ x: 0, y: 0, z: 0 });
     const hidden = ref(false);
+
+    const model = new Cube({
+      size: 5,
+    });
 
     const children = useGroup({}, [
       useAxesHelper(),
       useAmbientLight(),
       useCubePuzzle({
         hidden,
+        model,
         position,
       }),
     ]);
