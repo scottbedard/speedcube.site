@@ -74,7 +74,12 @@ function createFace({ colMap, geometry, id, materials, normalizedOpts, rowMap }:
  */
 function createGeometry(id: string, opts: NormalizedUseCubePuzzleOptions) {
   const layerSize = 1 / opts.model.options.size;
-  const geometry = roundedRectangle(layerSize, layerSize, opts.options.stickerRadius || 0)
+
+  const geometry = roundedRectangle(
+    layerSize,
+    layerSize,
+    (opts.options.stickerRadius || 0) * (layerSize / 2),
+  );
 
   garbage.add(id, () => geometry.dispose());
 
@@ -126,6 +131,8 @@ function createPuzzle(id: string, opts: UseCubePuzzleOptions) {
 
   const puzzle = useBox({
     debug: normalizedOpts.debug,
+    height: 1,
+    width: 1,
   }, {
     u: createFace(faceOpts),
   });
