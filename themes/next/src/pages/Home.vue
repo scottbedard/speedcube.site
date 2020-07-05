@@ -74,7 +74,15 @@ export default {
     });
 
     const options = reactive({
-      stickerRadius: 0.2,
+      colors: [
+        0xff0000,
+        0xff00ff,
+        0x00ffff,
+        0xffff00,
+        0xff00ff,
+        0x0000ff,
+      ],
+      stickerRadius: 0.4,
     });
 
     const children = useGroup({}, [

@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { Cube } from '@bedard/twister';
+import { CubeSticker } from '@bedard/twister/dist/cube/cube';
 import { isUndefined, times } from 'lodash-es';
 import { isReactive, onUnmounted, watch } from '@vue/composition-api';
 import { createGarbage, roundedRectangle } from '../helpers';
@@ -14,6 +15,7 @@ export type UseCubePuzzleOptions = {
   debug?: boolean;
   model?: Cube,
   options?: {
+    colors?: number[],
     stickerRadius?: number,
   };
 }
@@ -22,6 +24,7 @@ export type NormalizedUseCubePuzzleOptions = {
   debug: boolean;
   model: Cube,
   options: {
+    colors?: number[],
     stickerRadius?: number,
   },
 }
@@ -48,17 +51,17 @@ const garbage = createGarbage();
 /**
  * Create a face of stickers
  */
-function createFace({ colMap, geometry, id, materials, normalizedOpts, rowMap }: FaceOptions) {
+function createFace({ colMap, geometry, id, materials, normalizedOpts, rowMap }: FaceOptions, stickers: CubeSticker[]) {
   const { model } = normalizedOpts;
 
   const face = new Group();
   const layers = model.options.size;
   const layerSize = 1 / layers;
 
-  model.state.U.forEach((sticker, index) => {
+  stickers.forEach((sticker, index) => {
     const col = colMap[index];
     const row = rowMap[index];
-    const shape = createSticker(geometry, materials);
+    const shape = createSticker(geometry, materials, sticker);
 
     shape.position.x = -0.5 + (layerSize * col);
     shape.position.y = 0.5 - layerSize - (layerSize * row);
@@ -90,16 +93,16 @@ function createGeometry(id: string, opts: NormalizedUseCubePuzzleOptions) {
  * Create sticker materials
  */
 function createMaterials(id: string, opts: NormalizedUseCubePuzzleOptions): MaterialsArray {
-  const materials = times(6).map(() => {
+  const materials = (opts.options.colors || []).map((color) => {
     return {
       inner: new MeshLambertMaterial({
-        color: 0xff0000,
+        color,
         opacity: 1,
         side: BackSide,
         transparent: false,
       }),
       outer: new MeshLambertMaterial({
-        color: 0xff0000,
+        color,
         side: FrontSide
       }),
     };
@@ -121,6 +124,7 @@ function createPuzzle(id: string, opts: UseCubePuzzleOptions) {
   garbage.empty(id);
 
   const normalizedOpts = normalizeOptions(opts);
+  const { model } = normalizedOpts;
 
   const colMap = mapColumns(normalizedOpts.model.options.size);
   const rowMap = mapRows(normalizedOpts.model.options.size);
@@ -131,10 +135,16 @@ function createPuzzle(id: string, opts: UseCubePuzzleOptions) {
 
   const puzzle = useBox({
     debug: normalizedOpts.debug,
+    depth: 1,
     height: 1,
     width: 1,
   }, {
-    u: createFace(faceOpts),
+    u: createFace(faceOpts, model.state.U),
+    l: createFace(faceOpts, model.state.L),
+    f: createFace(faceOpts, model.state.F),
+    r: createFace(faceOpts, model.state.R),
+    b: createFace(faceOpts, model.state.B),
+    d: createFace(faceOpts, model.state.D),
   });
 
   return puzzle;
@@ -143,13 +153,16 @@ function createPuzzle(id: string, opts: UseCubePuzzleOptions) {
 /**
  * Create a sticker shape
  */
-function createSticker(geometry: ShapeBufferGeometry, materials: MaterialsArray) {
-  const innerMesh = new Mesh(geometry, materials[0].inner);
-  const outerMesh = new Mesh(geometry, materials[0].outer);
-
+function createSticker(geometry: ShapeBufferGeometry, materials: MaterialsArray, sticker: CubeSticker) {
   const group = new Group();
-  group.add(innerMesh);
-  group.add(outerMesh);
+
+  if (sticker.value !== null) {
+    const innerMesh = new Mesh(geometry, materials[sticker.value].inner);
+    const outerMesh = new Mesh(geometry, materials[sticker.value].outer);
+
+    group.add(innerMesh);
+    group.add(outerMesh);
+  }
 
   return group;
 }
