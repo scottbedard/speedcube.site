@@ -32,6 +32,10 @@
           <input v-model.number="options.stickerRadius" min="0" max="1" step="0.01" type="range" />
         </label>
         <label class="block mb-4">
+          <div>Sticker Elevation: {{ options.stickerElevation }}</div>
+          <input v-model.number="options.stickerElevation" min="0" max="1" step="0.01" type="range" />
+        </label>
+        <label class="block mb-4">
           <div>Position: <span class="font-mono">{{ position }}</span></div>
           <div class="flex">
             <input v-model.number="position.x" min="-10" max="10" step="0.01" type="range" />
@@ -79,10 +83,11 @@ export default {
         0xff00ff,
         0x00ffff,
         0xffff00,
-        0xff00ff,
+        0xffffff,
         0x0000ff,
       ],
       stickerRadius: 0.4,
+      stickerElevation: 0,
     });
 
     const children = useGroup({}, [

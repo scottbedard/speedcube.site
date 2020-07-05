@@ -16,6 +16,7 @@ export type UseCubePuzzleOptions = {
   model?: Cube,
   options?: {
     colors?: number[],
+    stickerElevation?: number,
     stickerRadius?: number,
   };
 }
@@ -25,6 +26,7 @@ export type NormalizedUseCubePuzzleOptions = {
   model: Cube,
   options: {
     colors?: number[],
+    stickerElevation?: number,
     stickerRadius?: number,
   },
 }
@@ -55,6 +57,7 @@ function createFace({ colMap, geometry, id, materials, normalizedOpts, rowMap }:
   const { model } = normalizedOpts;
 
   const face = new Group();
+  face.position.z = normalizedOpts.options?.stickerElevation || 0;
   const layers = model.options.size;
   const layerSize = 1 / layers;
 
