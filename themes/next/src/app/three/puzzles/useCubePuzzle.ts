@@ -18,6 +18,7 @@ export type UseCubePuzzleOptions = {
     colors?: number[],
     stickerElevation?: number,
     stickerRadius?: number,
+    stickerSpacing?: number,
   };
 }
 
@@ -28,6 +29,7 @@ export type NormalizedUseCubePuzzleOptions = {
     colors?: number[],
     stickerElevation?: number,
     stickerRadius?: number,
+    stickerSpacing?: number,
   },
 }
 
@@ -55,19 +57,23 @@ const garbage = createGarbage();
  */
 function createFace({ colMap, geometry, id, materials, normalizedOpts, rowMap }: FaceOptions, stickers: CubeSticker[]) {
   const { model } = normalizedOpts;
-
-  const face = new Group();
-  face.position.z = normalizedOpts.options?.stickerElevation || 0;
+  const stickerSpacing = normalizedOpts.options.stickerSpacing || 0;
+  const stickerElevation = normalizedOpts.options.stickerElevation || 0;
   const layers = model.options.size;
   const layerSize = 1 / layers;
+  const gapSize = layerSize * stickerSpacing;
+  const gapOffset = gapSize * (layers - 1);
+
+  const face = new Group();
+  face.position.z = (stickerElevation * layerSize) + (gapOffset / 2);
 
   stickers.forEach((sticker, index) => {
     const col = colMap[index];
     const row = rowMap[index];
     const shape = createSticker(geometry, materials, sticker);
 
-    shape.position.x = -0.5 + (layerSize * col);
-    shape.position.y = 0.5 - layerSize - (layerSize * row);
+    shape.position.x = -0.5 - (gapOffset / 2) + (layerSize * col) + (gapSize * col);
+    shape.position.y = 0.5 + (gapOffset / 2) - (layerSize * row) - (gapSize * row) - layerSize;
 
     face.add(shape);
   });

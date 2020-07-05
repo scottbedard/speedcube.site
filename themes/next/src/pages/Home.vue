@@ -36,6 +36,10 @@
           <input v-model.number="options.stickerElevation" min="0" max="1" step="0.01" type="range" />
         </label>
         <label class="block mb-4">
+          <div>Sticker Spacing: {{ options.stickerSpacing }}</div>
+          <input v-model.number="options.stickerSpacing" min="0" max="1" step="0.01" type="range" />
+        </label>
+        <label class="block mb-4">
           <div>Position: <span class="font-mono">{{ position }}</span></div>
           <div class="flex">
             <input v-model.number="position.x" min="-10" max="10" step="0.01" type="range" />
@@ -68,7 +72,7 @@ import { Cube } from '@bedard/twister';
 export default {
   setup() {
     const cameraAngle = ref(35);
-    const cameraDistance = ref(2);
+    const cameraDistance = ref(3);
     const debug = true;
     const position = ref({ x: 0, y: 0, z: 0 });
     const hidden = ref(false);
@@ -86,8 +90,9 @@ export default {
         0xffffff,
         0x0000ff,
       ],
-      stickerRadius: 0.4,
       stickerElevation: 0,
+      stickerRadius: 0.4,
+      stickerSpacing: 0,
     });
 
     const children = useGroup({}, [
