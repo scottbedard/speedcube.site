@@ -40,6 +40,10 @@
           <input v-model.number="options.stickerSpacing" min="0" max="1" step="0.01" type="range" />
         </label>
         <label class="block mb-4">
+          <div>Turn progress: {{ turnProgress }}</div>
+          <input v-model.number="turnProgress" min="0" max="1" step="0.01" type="range" />
+        </label>
+        <label class="block mb-4">
           <div>Position: <span class="font-mono">{{ position }}</span></div>
           <div class="flex">
             <input v-model.number="position.x" min="-10" max="10" step="0.01" type="range" />
@@ -81,6 +85,8 @@ export default {
       size: 3,
     });
 
+    const turnProgress = ref(0.2);
+
     const options = reactive({
       colors: [
         0xff0000,
@@ -90,18 +96,20 @@ export default {
         0xffffff,
         0x0000ff,
       ],
-      stickerElevation: 0,
-      stickerRadius: 0.4,
-      stickerSpacing: 0,
+      stickerElevation: 0.2,
+      stickerRadius: 0.2,
+      stickerSpacing: 0.2,
     });
 
     const children = useGroup({}, [
       useAxesHelper(),
       useAmbientLight(),
       useCubePuzzle({
+        currentTurn: 'U',
         debug: true,
         model,
         options,
+        turnProgress,
       }),
     ]);
 
@@ -112,6 +120,7 @@ export default {
       hidden,
       options,
       position,
+      turnProgress,
     };
   },
   components: {

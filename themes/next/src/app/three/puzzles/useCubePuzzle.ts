@@ -1,17 +1,21 @@
 /* eslint-disable */
 import { Cube } from '@bedard/twister';
-import { CubeSticker } from '@bedard/twister/dist/cube/cube';
-import { isUndefined, times } from 'lodash-es';
-import { isReactive, onUnmounted, watch } from '@vue/composition-api';
-import { createGarbage, roundedRectangle } from '../helpers';
+import { CubeSticker, CubeTurn } from '@bedard/twister/dist/cube/cube';
+import { difference, times, isNumber } from 'lodash-es';
+import { computed, isReactive, onUnmounted, watch } from '@vue/composition-api';
+import { createGarbage, roundedRectangle, getValue } from '../helpers';
 import { useBox } from '../geometries/useBox';
 import { useGroup } from '../utils/useGroup';
 import { MeshLambertMaterial, BackSide, FrontSide, Group, Mesh, ShapeBufferGeometry } from 'three';
+import { PossiblyReactive } from '../types';
+import { degreesToRadians } from '@/app/utils/math';
+import { getEffectedCubeStickers } from '@/app/utils/twister';
 
 /**
  * Options
  */
 export type UseCubePuzzleOptions = {
+  currentTurn?: PossiblyReactive<string | null>,
   debug?: boolean;
   model?: Cube,
   options?: {
@@ -20,9 +24,11 @@ export type UseCubePuzzleOptions = {
     stickerRadius?: number,
     stickerSpacing?: number,
   };
+  turnProgress?: PossiblyReactive<number>,
 }
 
 export type NormalizedUseCubePuzzleOptions = {
+  currentTurn: string | null,
   debug: boolean;
   model: Cube,
   options: {
@@ -31,6 +37,7 @@ export type NormalizedUseCubePuzzleOptions = {
     stickerRadius?: number,
     stickerSpacing?: number,
   },
+  turnProgress: number,
 }
 
 export type MaterialsArray = Array<{
@@ -53,6 +60,51 @@ export type FaceOptions = {
 const garbage = createGarbage();
 
 /**
+ * Adjust a turn
+ */
+function adjustTurnProgress(turn: Group, face: string | null, turnProgress: number) {
+  const turnDegress = degreesToRadians(90);
+
+  turn.rotation.x = 0;
+  turn.rotation.y = 0;
+  turn.rotation.z = 0;
+
+  if (face === 'U') {
+    turn.rotation.y = turnDegress * -turnProgress;
+  } else if (face === 'L') {
+    turn.rotation.x = turnDegress * turnProgress;
+  } else if (face === 'F') {
+    turn.rotation.z = turnDegress * -turnProgress;
+  } else if (face === 'R') {
+    turn.rotation.x = turnDegress * -turnProgress;
+  } else if (face === 'B') {
+    turn.rotation.z = turnDegress * turnProgress;
+  } else if (face === 'D') {
+    turn.rotation.y = turnDegress * turnProgress;
+  }
+}
+
+/**
+ * Show / hide stickers effected by a turn.
+ */
+function adjustVisibleStickers(id: string, turnId: string, model: Cube, parsedTurn: CubeTurn, colMap: number[], rowMap: number[]) {
+  walkStickers(
+    model,
+    parsedTurn,
+    colMap,
+    rowMap,
+    (effectedSticker) => {
+      effectedSticker.data[id].visible = false;
+      effectedSticker.data[turnId].visible = true;
+    },
+    (uneffectedSticker) => {
+      uneffectedSticker.data[id].visible = true;
+      uneffectedSticker.data[turnId].visible = false;
+    },
+  );
+}
+
+/**
  * Create a face of stickers
  */
 function createFace({ colMap, geometry, id, materials, normalizedOpts, rowMap }: FaceOptions, stickers: CubeSticker[]) {
@@ -70,7 +122,7 @@ function createFace({ colMap, geometry, id, materials, normalizedOpts, rowMap }:
   stickers.forEach((sticker, index) => {
     const col = colMap[index];
     const row = rowMap[index];
-    const shape = createSticker(geometry, materials, sticker);
+    const shape = createSticker(id, geometry, materials, sticker);
 
     shape.position.x = -0.5 - (gapOffset / 2) + (layerSize * col) + (gapSize * col);
     shape.position.y = 0.5 + (gapOffset / 2) - (layerSize * row) - (gapSize * row) - layerSize;
@@ -128,11 +180,10 @@ function createMaterials(id: string, opts: NormalizedUseCubePuzzleOptions): Mate
 /**
  * Create a puzzle
  */
-function createPuzzle(id: string, opts: UseCubePuzzleOptions) {
+function createPuzzle(id: string, normalizedOpts: NormalizedUseCubePuzzleOptions) {
   console.log('Creating puzzle');
   garbage.empty(id);
 
-  const normalizedOpts = normalizeOptions(opts);
   const { model } = normalizedOpts;
 
   const colMap = mapColumns(normalizedOpts.model.options.size);
@@ -162,7 +213,7 @@ function createPuzzle(id: string, opts: UseCubePuzzleOptions) {
 /**
  * Create a sticker shape
  */
-function createSticker(geometry: ShapeBufferGeometry, materials: MaterialsArray, sticker: CubeSticker) {
+function createSticker(id: string, geometry: ShapeBufferGeometry, materials: MaterialsArray, sticker: CubeSticker) {
   const group = new Group();
 
   if (sticker.value !== null) {
@@ -173,7 +224,29 @@ function createSticker(geometry: ShapeBufferGeometry, materials: MaterialsArray,
     group.add(outerMesh);
   }
 
+  sticker.data[id] = group;
+
   return group;
+}
+
+/**
+ * Walk the stickers effected by a turn
+ */
+function walkStickers<T extends (sticker: CubeSticker) => void>(model: Cube, parsedTurn: CubeTurn, colMap: number[], rowMap: number[], effectedFn: T, uneffectedFn: T) {
+  const stickers = [
+    ...model.state.U,
+    ...model.state.L,
+    ...model.state.F,
+    ...model.state.R,
+    ...model.state.B,
+    ...model.state.D,
+  ];
+
+  const effectedStickers = getEffectedCubeStickers(model, parsedTurn, colMap, rowMap);
+
+  effectedStickers.forEach(effectedFn);
+
+  difference(stickers, effectedStickers).forEach(uneffectedFn);
 }
 
 /**
@@ -195,9 +268,11 @@ function mapRows(size: number) {
  */
 export function normalizeOptions(opts: UseCubePuzzleOptions): NormalizedUseCubePuzzleOptions {
   return {
+    currentTurn: getValue(opts.currentTurn) || null,
     debug: opts.debug || false,
     model: opts.model || new Cube({ size: 3 }),
     options: opts.options || {},
+    turnProgress: getValue(opts.turnProgress) || 0,
   }
 }
 
@@ -206,19 +281,58 @@ export function normalizeOptions(opts: UseCubePuzzleOptions): NormalizedUseCubeP
  */
 export function useCubePuzzle(opts: UseCubePuzzleOptions) {
   const id = garbage.createId();
-  const group = useGroup();
+  const turnId = garbage.createId();
+  const normalizedOpts = normalizeOptions(opts);
+  const model = normalizedOpts.model;
+  const colMap = mapColumns(normalizedOpts.model.options.size);
+  const rowMap = mapRows(normalizedOpts.model.options.size);
 
+  const group = new Group;
+
+  // draw the puzzle and add it to our group
   let puzzle: Group;
+  let turn: Group;
 
   watch(opts.options || {}, () => {
     group.remove(puzzle);
-    puzzle = createPuzzle(id, opts);
+    puzzle = createPuzzle(id, normalizedOpts);
     group.add(puzzle);
   }, {
     immediate: true,
   });
 
-  onUnmounted(() => garbage.empty(id));
+  const parsedTurn = computed(() => {
+    return normalizedOpts.currentTurn
+      ? model.parseTurn(normalizedOpts.currentTurn)
+      : null
+  });
+
+  watch(parsedTurn, (newParsedTurn, oldParsedTurn) => {
+    // toggle sticker visibilities
+    if (newParsedTurn && !turn) {
+      turn = createPuzzle(turnId, normalizedOpts);
+
+      adjustVisibleStickers(id, turnId, model, newParsedTurn, colMap, rowMap);
+
+      group.add(turn);
+    }
+  }, {
+    immediate: true,
+  });
+
+  // adjust for the current turn
+  watch(opts.turnProgress || {}, (turnProgress) => {
+    if (turn && parsedTurn.value?.target) {
+      adjustTurnProgress(turn, parsedTurn.value.target, Number(turnProgress) || 0);
+    }
+  }, {
+    immediate: true,
+  });
+
+  onUnmounted(() => {
+    garbage.empty(id);
+    garbage.empty(turnId);
+  });
 
   return group;
 }
