@@ -65,22 +65,42 @@ const garbage = createGarbage();
 function adjustTurnProgress(turn: Group, face: string | null, turnProgress: number) {
   const turnDegress = degreesToRadians(90);
 
-  turn.rotation.x = 0;
-  turn.rotation.y = 0;
-  turn.rotation.z = 0;
-
-  if (face === 'U') {
-    turn.rotation.y = turnDegress * -turnProgress;
-  } else if (face === 'L') {
-    turn.rotation.x = turnDegress * turnProgress;
-  } else if (face === 'F') {
-    turn.rotation.z = turnDegress * -turnProgress;
-  } else if (face === 'R') {
-    turn.rotation.x = turnDegress * -turnProgress;
-  } else if (face === 'B') {
-    turn.rotation.z = turnDegress * turnProgress;
-  } else if (face === 'D') {
-    turn.rotation.y = turnDegress * turnProgress;
+  switch (face) {
+    case 'U':
+      turn.rotation.x = 0;
+      turn.rotation.y = turnDegress * -turnProgress;
+      turn.rotation.z = 0;
+      break;
+    case 'L':
+      turn.rotation.x = turnDegress * turnProgress;
+      turn.rotation.y = 0;
+      turn.rotation.z = 0;
+      break;
+    case 'F':
+      turn.rotation.x = 0;
+      turn.rotation.y = 0;
+      turn.rotation.z = turnDegress * -turnProgress;
+      break;
+    case 'R':
+      turn.rotation.x = turnDegress * -turnProgress;
+      turn.rotation.y = 0;
+      turn.rotation.z = 0;
+      break;
+    case 'B':
+      turn.rotation.x = 0;
+      turn.rotation.y = 0;
+      turn.rotation.z = turnDegress * turnProgress;
+      break;
+    case 'D':
+      turn.rotation.x = 0;
+      turn.rotation.y = turnDegress * turnProgress;
+      turn.rotation.z = 0;
+      break;
+    default:
+      turn.rotation.x = 0;
+      turn.rotation.y = 0;
+      turn.rotation.z = 0;
+      break;
   }
 }
 
