@@ -313,27 +313,38 @@ export function useCubePuzzle(opts: UseCubePuzzleOptions) {
   let puzzle: Group;
   let turn: Group;
 
+  const turnProgress = computed(() => getValue(opts.turnProgress) || 0);
+
+  const parsedTurn = computed(() => {
+    const currentTurn = getValue(opts.currentTurn);
+    return currentTurn ? model.parseTurn(currentTurn) : null;
+  });
+
+  // redraw everything when the options change
   watch(opts.options || {}, () => {
     group.remove(puzzle);
     puzzle = createPuzzle(id, normalizedOpts);
     group.add(puzzle);
+
+    if (parsedTurn.value) {
+      group.remove(turn);
+      turn = createPuzzle(turnId, normalizedOpts);
+      adjustVisibleStickers(id, turnId, model, parsedTurn.value, colMap, rowMap);
+      adjustTurnProgress(turn, parsedTurn.value.target, turnProgress.value);
+      group.add(turn);
+    }
   }, {
     immediate: true,
   });
 
-  const parsedTurn = computed(() => {
-    return normalizedOpts.currentTurn
-      ? model.parseTurn(normalizedOpts.currentTurn)
-      : null
-  });
+  // redraw the turn when it changes
+  watch(parsedTurn, (newParsedTurn) => {
+    group.remove(turn);
 
-  watch(parsedTurn, (newParsedTurn, oldParsedTurn) => {
-    // toggle sticker visibilities
-    if (newParsedTurn && !turn) {
+    if (newParsedTurn) {
       turn = createPuzzle(turnId, normalizedOpts);
-
       adjustVisibleStickers(id, turnId, model, newParsedTurn, colMap, rowMap);
-
+      adjustTurnProgress(turn, newParsedTurn.target, turnProgress.value);
       group.add(turn);
     }
   }, {

@@ -28,6 +28,10 @@
           <input v-model.number="cameraDistance" min="0" max="10" step="0.01" type="range" />
         </label>
         <label class="block mb-4">
+          <div>Current Turn: {{ currentTurn }}</div>
+          <input v-model="currentTurn" class="text-black" />
+        </label>
+        <label class="block mb-4">
           <div>Sticker Radius: {{ options.stickerRadius }}</div>
           <input v-model.number="options.stickerRadius" min="0" max="1" step="0.01" type="range" />
         </label>
@@ -77,6 +81,7 @@ export default {
   setup() {
     const cameraAngle = ref(35);
     const cameraDistance = ref(3);
+    const currentTurn = ref('R');
     const debug = true;
     const position = ref({ x: 0, y: 0, z: 0 });
     const hidden = ref(false);
@@ -105,7 +110,7 @@ export default {
       useAxesHelper(),
       useAmbientLight(),
       useCubePuzzle({
-        currentTurn: 'U',
+        currentTurn,
         debug: true,
         model,
         options,
@@ -116,6 +121,7 @@ export default {
     return {
       cameraAngle,
       cameraDistance,
+      currentTurn,
       children,
       hidden,
       options,
