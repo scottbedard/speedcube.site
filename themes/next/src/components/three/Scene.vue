@@ -32,7 +32,7 @@ export default defineComponent({
     const camera = usePerspectiveCamera({
       cameraAngle: computed(() => props.cameraAngle || 0),
       cameraAspect: props.cameraAspect,
-      cameraDistance: computed(() => props.cameraDistance || 1),
+      cameraDistance: computed(() => props.cameraDistance || 0),
       cameraFar: props.cameraFar,
       cameraFov: props.cameraFov,
       cameraNear: props.cameraNear,
@@ -61,13 +61,33 @@ export default defineComponent({
     return { el };
   },
   props: {
-    cameraAngle: Number,
-    cameraAspect: Number,
-    cameraDistance: Number,
-    cameraFar: Number,
-    cameraFov: Number,
-    cameraNear: Number,
-    children: Object3D,
+    cameraAngle: {
+      default: 0,
+      type: Number,
+    },
+    cameraAspect: {
+      default: 1,
+      type: Number,
+    },
+    cameraDistance: {
+      default: 0,
+      type: Number,
+    },
+    cameraFar: {
+      default: 10000,
+      type: Number,
+    },
+    cameraFov: {
+      default: 60,
+      type: Number,
+    },
+    cameraNear: {
+      default: 0,
+      type: Number,
+    },
+    children: {
+      type: Object3D,
+    },
   },
 });
 </script>

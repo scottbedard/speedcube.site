@@ -24,11 +24,11 @@ export function usePerspectiveCamera(opts: UsePerspectiveCameraOptions = {}) {
   const aspect = opts.cameraAspect || 1;
   const far = opts.cameraFar || 10;
   const fov = opts.cameraFov || 60;
-  const near = opts.cameraNear || 1;
+  const near = clamp(opts.cameraNear || 0, 0.0001, Infinity);
 
   // computed
   const angle = computed(() => clamp(-(opts.cameraAngle?.value || 0) + 90, 0, 90));
-  const distance = computed(() => clampPositive(opts.cameraDistance?.value || 1));
+  const distance = computed(() => clampPositive(opts.cameraDistance?.value || 0));
 
   // create camera
   const camera = new PerspectiveCamera(fov, aspect, near, far);

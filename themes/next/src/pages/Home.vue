@@ -32,6 +32,10 @@
           <input v-model="currentTurn" class="text-black" />
         </label>
         <label class="block mb-4">
+          <div>Inner brightness: {{ options.innerBrightness }}</div>
+          <input v-model.number="options.innerBrightness" min="0" max="1" step="0.01" type="range" />
+        </label>
+        <label class="block mb-4">
           <div>Sticker Radius: {{ options.stickerRadius }}</div>
           <input v-model.number="options.stickerRadius" min="0" max="1" step="0.01" type="range" />
         </label>
@@ -72,9 +76,10 @@ import { reactive, ref } from '@vue/composition-api';
 import Scene from '@/components/three/Scene.vue';
 import { useAmbientLight } from '@/app/three/lights/useAmbientLight';
 import { useAxesHelper } from '@/app/three/utils/useAxesHelper';
-import { useGroup } from '@/app/three/utils/useGroup';
 import { useBox } from '@/app/three/geometries/useBox';
 import { useCubePuzzle } from '@/app/three/puzzles/useCubePuzzle';
+import { useGroup } from '@/app/three/utils/useGroup';
+import { usePointLight } from '@/app/three/lights/usePointLight';
 import { Cube } from '@bedard/twister';
 
 export default {
@@ -101,6 +106,7 @@ export default {
         0xffffff,
         0x0000ff,
       ],
+      innerBrightness: 0.5,
       stickerElevation: 0.2,
       stickerRadius: 0.2,
       stickerSpacing: 0.2,
@@ -108,7 +114,15 @@ export default {
 
     const children = useGroup({}, [
       useAxesHelper(),
-      useAmbientLight(),
+      useAmbientLight({
+        color: 0xffffff,
+        intensity: 0.5,
+      }),
+      usePointLight({
+        color: 0xffffff,
+        intensity: 0.7,
+        position: { x: 0, y: 2000, z: 2000 },
+      }),
       useCubePuzzle({
         currentTurn,
         debug: true,

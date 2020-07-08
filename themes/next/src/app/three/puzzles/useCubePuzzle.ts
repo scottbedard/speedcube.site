@@ -20,6 +20,7 @@ export type UseCubePuzzleOptions = {
   model?: Cube,
   options?: {
     colors?: number[],
+    innerBrightness?: number,
     stickerElevation?: number,
     stickerRadius?: number,
     stickerSpacing?: number,
@@ -33,6 +34,7 @@ export type NormalizedUseCubePuzzleOptions = {
   model: Cube,
   options: {
     colors?: number[],
+    innerBrightness?: number,
     stickerElevation?: number,
     stickerRadius?: number,
     stickerSpacing?: number,
@@ -178,7 +180,7 @@ function createMaterials(id: string, opts: NormalizedUseCubePuzzleOptions): Mate
     return {
       inner: new MeshLambertMaterial({
         color,
-        opacity: 1,
+        opacity: opts.options.innerBrightness || 0,
         side: BackSide,
         transparent: false,
       }),

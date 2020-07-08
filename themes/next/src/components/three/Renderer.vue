@@ -3,15 +3,15 @@
     <canvas
       class="border-4 border-red-500 fixed h-screen left-0 pointer-events-none top-0 w-screen z-10"
       ref="canvas" />
-    <pre>{{ scenes }}</pre>
     <slot />
   </div>
 </template>
 
 <script lang="ts">
-/* eslint-disable */
-import { BoxBufferGeometry, WebGLRenderer } from 'three';
-import { defineComponent, onMounted, provide, ref } from '@vue/composition-api';
+import { WebGLRenderer } from 'three';
+import {
+  defineComponent, onMounted, provide, ref,
+} from '@vue/composition-api';
 import { useRafFn, useWindowScroll } from '@vueuse/core';
 import { RendererSymbol, SceneFactory } from '@/components/three/types';
 
@@ -27,7 +27,7 @@ export default defineComponent({
         scenes.value.push(scene);
       },
       removeScene(scene) {
-        scenes.value = scenes.value.filter(fn => fn !== scene);
+        scenes.value = scenes.value.filter((fn) => fn !== scene);
       },
     });
 
@@ -57,7 +57,7 @@ export default defineComponent({
           renderer.setSize(width, height, false);
         }
       }
-    }
+    };
 
     const animationLoop = useRafFn(() => {
       if (!canvas.value) {
@@ -77,23 +77,23 @@ export default defineComponent({
         const rect = el.getBoundingClientRect();
 
         // check if it's offscreen. If so skip it
-				if (
-          rect.bottom < 0 ||
-          rect.top > renderer.domElement.clientHeight ||
-          rect.right < 0 ||
-          rect.left > renderer.domElement.clientWidth
+        if (
+          rect.bottom < 0
+          || rect.top > renderer.domElement.clientHeight
+          || rect.right < 0
+          || rect.left > renderer.domElement.clientWidth
         ) {
           return; // it's off screen
         }
 
         // set the viewport
-        var width = rect.right - rect.left;
-        var height = rect.bottom - rect.top;
-        var left = rect.left;
-        var bottom = renderer.domElement.clientHeight - rect.bottom;
+        const width = rect.right - rect.left;
+        const height = rect.bottom - rect.top;
+        const { left } = rect;
+        const bottom = renderer.domElement.clientHeight - rect.bottom;
 
         renderer.setViewport(left, bottom, width, height);
-				renderer.setScissor(left, bottom, width, height);
+        renderer.setScissor(left, bottom, width, height);
 
         renderer.render(scene, camera);
       });
