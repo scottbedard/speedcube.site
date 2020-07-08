@@ -176,13 +176,15 @@ function createGeometry(id: string, opts: NormalizedUseCubePuzzleOptions) {
  * Create sticker materials
  */
 function createMaterials(id: string, opts: NormalizedUseCubePuzzleOptions): MaterialsArray {
+  const innerBrightness = opts.options.innerBrightness || 0;
+
   const materials = (opts.options.colors || []).map((color) => {
     return {
       inner: new MeshLambertMaterial({
         color,
-        opacity: opts.options.innerBrightness || 0,
+        opacity: innerBrightness,
         side: BackSide,
-        transparent: false,
+        transparent: innerBrightness > 0,
       }),
       outer: new MeshLambertMaterial({
         color,
