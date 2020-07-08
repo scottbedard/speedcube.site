@@ -26,7 +26,7 @@ export function getEffectedCubeStickers(model: Cube, parsedTurn: CubeTurn, colMa
   }
 
   // attach the entire face of wide turns
-  if (wide || depth === 1) {
+  if (wide || depth === 1 && Array.isArray(model.state[target])) {
     stickers.push(...model.state[target]);
   }
 
@@ -35,7 +35,9 @@ export function getEffectedCubeStickers(model: Cube, parsedTurn: CubeTurn, colMa
   if (depth >= cubeLayers) {
     const opposite: Record<CubeFace, CubeFace> = { U: 'D', L: 'R', F: 'B', R: 'L', B: 'F', D: 'U' };
 
-    stickers.push(...model.state[opposite[target]]);
+    if (Array.isArray(model.state[opposite[target]])) {
+      stickers.push(...model.state[opposite[target]]);
+    }
   }
 
   // get the slices being turned
