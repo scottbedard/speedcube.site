@@ -34,7 +34,7 @@ export default defineComponent({
     onMounted(() => {
       renderer = new WebGLRenderer({
         alpha: true,
-        antialias: true,
+        antialias: false,
         canvas: canvas.value,
       });
 
