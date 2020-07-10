@@ -2,6 +2,7 @@
   <div>
     <div class="max-w-md mx-auto">
       <Puzzle
+        v-if="!hidden"
         type="3x3"
         :camera-angle="cameraAngle"
         :camera-distance="cameraDistance"

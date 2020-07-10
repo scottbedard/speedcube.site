@@ -10,7 +10,7 @@
 <script lang="ts">
 import { WebGLRenderer } from 'three';
 import {
-  defineComponent, onMounted, provide, ref,
+  computed, defineComponent, onMounted, provide, ref, watch,
 } from '@vue/composition-api';
 import { useRafFn, useWindowScroll } from '@vueuse/core';
 import { RendererSymbol, SceneFactory } from '@/components/three/types';
@@ -21,6 +21,7 @@ export default defineComponent({
 
     const canvas = ref<HTMLCanvasElement>();
     const scenes = ref<SceneFactory[]>([]);
+    const empty = computed(() => scenes.value.length === 0);
 
     provide(RendererSymbol, {
       addScene(scene) {
@@ -97,6 +98,16 @@ export default defineComponent({
 
         renderer.render(scene, camera);
       });
+    });
+
+    watch(empty, () => {
+      if (empty.value) {
+        animationLoop.stop();
+      } else {
+        animationLoop.start();
+      }
+    }, {
+      immediate: true,
     });
 
     return {
