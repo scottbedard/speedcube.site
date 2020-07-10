@@ -1,59 +1,63 @@
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable import/extensions */
+/* eslint-disable no-param-reassign */
 import { Cube } from '@bedard/twister';
+/* eslint-disable import/no-unresolved */
 import { CubeSticker, CubeTurn } from '@bedard/twister/dist/cube/cube';
-import { difference, times, isNumber } from 'lodash-es';
-import { computed, isReactive, onUnmounted, watch } from '@vue/composition-api';
-import { createGarbage, roundedRectangle, getValue } from '../helpers';
-import { useBox } from '../geometries/useBox';
-import { useGroup } from '../utils/useGroup';
-import { MeshLambertMaterial, BackSide, FrontSide, Group, Mesh, ShapeBufferGeometry } from 'three';
-import { PossiblyReactive } from '../types';
+import { difference, times } from 'lodash-es';
+import { computed, onUnmounted, watch } from '@vue/composition-api';
+import {
+  MeshLambertMaterial, BackSide, FrontSide, Group, Mesh, ShapeBufferGeometry,
+} from 'three';
 import { degreesToRadians } from '@/app/utils/math';
 import { getCubeStickers, getEffectedCubeStickers } from '@/app/utils/twister';
+import { createGarbage, roundedRectangle, getValue } from '../helpers';
+import { useBox } from '../geometries/useBox';
+import { PossiblyReactive } from '../types';
 
 /**
  * Options
  */
 export type UseCubePuzzleOptions = {
-  currentTurn?: PossiblyReactive<string | null>,
-  debug?: boolean,
-  model?: Cube,
+  currentTurn?: PossiblyReactive<string | null>;
+  debug?: boolean;
+  model?: Cube;
   options?: PossiblyReactive<{
-    colors?: number[],
-    innerBrightness?: number,
-    stickerElevation?: number,
-    stickerRadius?: number,
-    stickerSpacing?: number,
-  }>,
-  turnProgress?: PossiblyReactive<number>,
+    colors?: number[];
+    innerBrightness?: number;
+    stickerElevation?: number;
+    stickerRadius?: number;
+    stickerSpacing?: number;
+  }>;
+  turnProgress?: PossiblyReactive<number>;
 }
 
 export type NormalizedUseCubePuzzleOptions = {
-  currentTurn: string | null,
+  currentTurn: string | null;
   debug: boolean;
-  model: Cube,
+  model: Cube;
   options: PossiblyReactive<{
-    colors?: number[],
-    innerBrightness?: number,
-    stickerElevation?: number,
-    stickerRadius?: number,
-    stickerSpacing?: number,
-  }>,
-  turnProgress: PossiblyReactive<number>,
+    colors?: number[];
+    innerBrightness?: number;
+    stickerElevation?: number;
+    stickerRadius?: number;
+    stickerSpacing?: number;
+  }>;
+  turnProgress: PossiblyReactive<number>;
 }
 
 export type MaterialsArray = Array<{
-  inner: MeshLambertMaterial,
-  outer: MeshLambertMaterial,
+  inner: MeshLambertMaterial;
+  outer: MeshLambertMaterial;
 }>
 
 export type FaceOptions = {
-  colMap: number[],
-  geometry: ShapeBufferGeometry,
-  id: string,
-  materials: MaterialsArray,
-  normalizedOpts: NormalizedUseCubePuzzleOptions,
-  rowMap: number[],
+  colMap: number[];
+  geometry: ShapeBufferGeometry;
+  id: string;
+  materials: MaterialsArray;
+  normalizedOpts: NormalizedUseCubePuzzleOptions;
+  rowMap: number[];
 }
 
 /**
@@ -126,7 +130,7 @@ function adjustVisibleStickers(id: string, turnId: string, model: Cube, parsedTu
       },
     );
   } else {
-    getCubeStickers(model).forEach(sticker => {
+    getCubeStickers(model).forEach((sticker) => {
       sticker.data[id].visible = true;
       sticker.data[turnId].visible = false;
     });
@@ -136,7 +140,9 @@ function adjustVisibleStickers(id: string, turnId: string, model: Cube, parsedTu
 /**
  * Create a face of stickers
  */
-function createFace({ colMap, geometry, id, materials, normalizedOpts, rowMap }: FaceOptions, stickers: CubeSticker[]) {
+function createFace({
+  colMap, geometry, id, materials, normalizedOpts, rowMap,
+}: FaceOptions, stickers: CubeSticker[]) {
   const { model } = normalizedOpts;
   const options = getValue(normalizedOpts.options);
   const stickerSpacing = options.stickerSpacing || 0;
@@ -188,25 +194,22 @@ function createMaterials(id: string, opts: NormalizedUseCubePuzzleOptions): Mate
   const options = getValue(opts.options);
   const innerBrightness = options.innerBrightness || 0;
 
-  const materials = (options.colors || []).map((color) => {
-    return {
-      inner: new MeshLambertMaterial({
-        color,
-        opacity: innerBrightness,
-        side: BackSide,
-        transparent: innerBrightness > 0,
-      }),
-      outer: new MeshLambertMaterial({
-        color,
-        side: FrontSide
-      }),
-    };
-  });
+  const materials = (options.colors || []).map((color) => ({
+    inner: new MeshLambertMaterial({
+      color,
+      opacity: innerBrightness,
+      side: BackSide,
+      transparent: innerBrightness > 0,
+    }),
+    outer: new MeshLambertMaterial({
+      color,
+      side: FrontSide,
+    }),
+  }));
 
   garbage.add(id,
-    ...materials.map(obj => () => obj.inner.dispose()),
-    ...materials.map(obj => () => obj.outer.dispose()),
-  );
+    ...materials.map((obj) => () => obj.inner.dispose()),
+    ...materials.map((obj) => () => obj.outer.dispose()));
 
   return materials;
 }
@@ -225,7 +228,9 @@ function createPuzzle(id: string, normalizedOpts: NormalizedUseCubePuzzleOptions
   const geometry = createGeometry(id, normalizedOpts);
   const materials = createMaterials(id, normalizedOpts);
 
-  const faceOpts = { colMap, geometry, id, materials, normalizedOpts, rowMap };
+  const faceOpts = {
+    colMap, geometry, id, materials, normalizedOpts, rowMap,
+  };
 
   const puzzle = useBox({
     debug: normalizedOpts.debug,
@@ -266,7 +271,7 @@ function createSticker(id: string, geometry: ShapeBufferGeometry, materials: Mat
 /**
  * Walk the stickers effected by a turn
  */
-function walkStickers<T extends (sticker: CubeSticker) => void>(model: Cube, parsedTurn: CubeTurn, colMap: number[], rowMap: number[], effectedFn: T, uneffectedFn: T) {
+function walkStickers<T extends(sticker: CubeSticker) => void>(model: Cube, parsedTurn: CubeTurn, colMap: number[], rowMap: number[], effectedFn: T, uneffectedFn: T) {
   const stickers = getCubeStickers(model);
   const effectedStickers = getEffectedCubeStickers(model, parsedTurn, colMap, rowMap);
 
@@ -279,14 +284,14 @@ function walkStickers<T extends (sticker: CubeSticker) => void>(model: Cube, par
  * Create a column index map
  */
 function mapColumns(size: number) {
-  return times(size ** 2).map(i => i % size);
+  return times(size ** 2).map((i) => i % size);
 }
 
 /**
 * Create a row index map
 */
 function mapRows(size: number) {
-  return times(size ** 2).map(i => Math.floor(i / size));
+  return times(size ** 2).map((i) => Math.floor(i / size));
 }
 
 /**
@@ -299,7 +304,7 @@ export function normalizeOptions(opts: UseCubePuzzleOptions): NormalizedUseCubeP
     model: opts.model || new Cube({ size: 3 }),
     options: opts.options || {},
     turnProgress: getValue(opts.turnProgress) || 0,
-  }
+  };
 }
 
 /**
@@ -309,11 +314,11 @@ export function useCubePuzzle(opts: UseCubePuzzleOptions) {
   const id = garbage.createId();
   const turnId = garbage.createId();
   const normalizedOpts = normalizeOptions(opts);
-  const model = normalizedOpts.model;
+  const { model } = normalizedOpts;
   const colMap = mapColumns(normalizedOpts.model.options.size);
   const rowMap = mapRows(normalizedOpts.model.options.size);
 
-  const group = new Group;
+  const group = new Group();
 
   // draw the puzzle and add it to our group
   let puzzle: Group;
@@ -365,9 +370,9 @@ export function useCubePuzzle(opts: UseCubePuzzleOptions) {
   });
 
   // adjust for the current turn
-  watch(() => getValue(opts.turnProgress), (turnProgress) => {
+  watch(() => getValue(opts.turnProgress), (progress) => {
     if (turn && parsedTurn.value?.target) {
-      adjustTurnProgress(turn, parsedTurn.value.rotation, parsedTurn.value.target, Number(turnProgress) || 0);
+      adjustTurnProgress(turn, parsedTurn.value.rotation, parsedTurn.value.target, Number(progress) || 0);
     }
   }, {
     immediate: true,

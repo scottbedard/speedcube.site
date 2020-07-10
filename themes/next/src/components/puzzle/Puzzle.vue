@@ -10,11 +10,10 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Cube } from '@bedard/twister';
 import { stubObject } from 'lodash-es';
-import {
-  computed, defineComponent, ref, watch,
-} from '@vue/composition-api';
+import { defineComponent, ref } from '@vue/composition-api';
 import { getCubeSize, isCube } from '@/app/utils/puzzle';
 import { useAmbientLight } from '@/app/three/lights/useAmbientLight';
 import { useAxesHelper } from '@/app/three/utils/useAxesHelper';
