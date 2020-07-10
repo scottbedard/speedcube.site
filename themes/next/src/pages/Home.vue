@@ -2,12 +2,13 @@
   <div>
     <div class="max-w-md mx-auto">
       <Puzzle
+        type="3x3"
         :camera-angle="cameraAngle"
         :camera-distance="cameraDistance"
         :current-turn="currentTurn"
         :options="options"
         :turn-progress="turnProgress"
-        type="3x3"
+        @ready="onPuzzleReady"
       />
 
       <div class="flex">
@@ -77,15 +78,19 @@ import { useBox } from '@/app/three/geometries/useBox';
 import { useCubePuzzle } from '@/app/three/puzzles/useCubePuzzle';
 import { useGroup } from '@/app/three/utils/useGroup';
 import { Cube } from '@bedard/twister';
+import { createNoopPuzzle } from '@/app/utils/puzzle';
+import { PuzzleApi } from '../components/puzzle/types';
 
 export default {
   setup() {
+    let puzzle: PuzzleApi = createNoopPuzzle();
+
     const cameraAngle = ref(35);
     const cameraDistance = ref(3);
     const currentTurn = ref('R');
     const debug = true;
-    const position = ref({ x: 0, y: 0, z: 0 });
     const hidden = ref(false);
+    const position = ref({ x: 0, y: 0, z: 0 });
 
     const turnProgress = ref(0.2);
 
@@ -104,11 +109,18 @@ export default {
       stickerSpacing: 0.2,
     });
 
+    const onPuzzleReady = (puzzleApi: PuzzleApi) => {
+      puzzle = puzzleApi
+
+      console.log('its ready!');
+    }
+
     return {
       cameraAngle,
       cameraDistance,
       currentTurn,
       hidden,
+      onPuzzleReady,
       options,
       position,
       turnProgress,

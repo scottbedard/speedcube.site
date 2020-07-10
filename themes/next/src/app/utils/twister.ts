@@ -3,6 +3,20 @@
 import { Cube, CubeFace, CubeTurn } from '@bedard/twister';
 
 /**
+ * Get all of a cube's stickers.
+ */
+export function getCubeStickers(model: Cube) {
+  return [
+    ...model.state.U,
+    ...model.state.L,
+    ...model.state.F,
+    ...model.state.R,
+    ...model.state.B,
+    ...model.state.D,
+  ]
+}
+
+/**
  * Get the stickers effected by a turn.
  */
 export function getEffectedCubeStickers(model: Cube, parsedTurn: CubeTurn, colMap: number[], rowMap: number[]) {

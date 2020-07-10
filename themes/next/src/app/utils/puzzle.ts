@@ -1,3 +1,6 @@
+import { noop } from 'lodash-es';
+import { PuzzleApi } from '@/components/puzzle/types';
+
 /**
  * Returns the size of a cube.
  *
@@ -18,4 +21,15 @@ export function getCubeSize(type: string): number {
  */
 export function isCube(type: string): boolean {
   return /^(\d+)x\1$/.test(type);
+}
+
+/**
+ * No-op puzzle api
+ */
+export function createNoopPuzzle(): PuzzleApi {
+  return {
+    apply: noop,
+    turn: noop,
+    reset: noop,
+  };
 }

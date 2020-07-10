@@ -12,7 +12,9 @@
 <script lang="ts">
 import { Cube } from '@bedard/twister';
 import { stubObject } from 'lodash-es';
-import { computed, defineComponent, watch } from '@vue/composition-api';
+import {
+  computed, defineComponent, ref, watch,
+} from '@vue/composition-api';
 import { getCubeSize, isCube } from '@/app/utils/puzzle';
 import { useAmbientLight } from '@/app/three/lights/useAmbientLight';
 import { useAxesHelper } from '@/app/three/utils/useAxesHelper';
@@ -21,6 +23,7 @@ import { useGroup } from '@/app/three/utils/useGroup';
 import { usePointLight } from '@/app/three/lights/usePointLight';
 import { PossiblyReactive } from '@/app/three/types';
 import Scene from '@/components/three/Scene.vue';
+import { PuzzleApi } from './types';
 
 type Props = {
   cameraAngle: PossiblyReactive<number>;
@@ -58,10 +61,24 @@ function createPuzzle(props: Props, model: Cube) {
 
 export default defineComponent({
   setup(props: Props, { emit }) {
-    const currentTurn = computed(() => props.currentTurn);
-    const turnProgress = computed(() => props.turnProgress);
+    const animateCurrentTurn = ref<string|null>(null);
+    const animateTurnProgress = ref<number>(0);
     const model = createModel(props.type);
     const puzzle = createPuzzle(props, model);
+
+    const api: PuzzleApi = {
+      apply() {
+        // set puzzle state
+      },
+      turn(alg: string) {
+        console.log('applying', alg);
+      },
+      reset() {
+        // apply initial state
+      },
+    };
+
+    emit('ready', api);
 
     const children = useGroup({}, [
       useAxesHelper(),
@@ -98,7 +115,6 @@ export default defineComponent({
       type: Number,
     },
     currentTurn: {
-      default: null,
       type: String,
     },
     options: {
@@ -106,7 +122,6 @@ export default defineComponent({
       type: Object,
     },
     turnProgress: {
-      default: 0,
       type: Number,
     },
     type: {

@@ -9,7 +9,7 @@ import { useGroup } from '../utils/useGroup';
 import { MeshLambertMaterial, BackSide, FrontSide, Group, Mesh, ShapeBufferGeometry } from 'three';
 import { PossiblyReactive } from '../types';
 import { degreesToRadians } from '@/app/utils/math';
-import { getEffectedCubeStickers } from '@/app/utils/twister';
+import { getCubeStickers, getEffectedCubeStickers } from '@/app/utils/twister';
 
 /**
  * Options
@@ -109,21 +109,28 @@ function adjustTurnProgress(turn: Group, rotation: number, face: string | null, 
 /**
  * Show / hide stickers effected by a turn.
  */
-function adjustVisibleStickers(id: string, turnId: string, model: Cube, parsedTurn: CubeTurn, colMap: number[], rowMap: number[]) {
-  walkStickers(
-    model,
-    parsedTurn,
-    colMap,
-    rowMap,
-    (effectedSticker) => {
-      effectedSticker.data[id].visible = false;
-      effectedSticker.data[turnId].visible = true;
-    },
-    (uneffectedSticker) => {
-      uneffectedSticker.data[id].visible = true;
-      uneffectedSticker.data[turnId].visible = false;
-    },
-  );
+function adjustVisibleStickers(id: string, turnId: string, model: Cube, parsedTurn: CubeTurn | null, colMap: number[], rowMap: number[]) {
+  if (parsedTurn) {
+    walkStickers(
+      model,
+      parsedTurn,
+      colMap,
+      rowMap,
+      (effectedSticker) => {
+        effectedSticker.data[id].visible = false;
+        effectedSticker.data[turnId].visible = true;
+      },
+      (uneffectedSticker) => {
+        uneffectedSticker.data[id].visible = true;
+        uneffectedSticker.data[turnId].visible = false;
+      },
+    );
+  } else {
+    getCubeStickers(model).forEach(sticker => {
+      sticker.data[id].visible = true;
+      sticker.data[turnId].visible = false;
+    });
+  }
 }
 
 /**
@@ -260,15 +267,7 @@ function createSticker(id: string, geometry: ShapeBufferGeometry, materials: Mat
  * Walk the stickers effected by a turn
  */
 function walkStickers<T extends (sticker: CubeSticker) => void>(model: Cube, parsedTurn: CubeTurn, colMap: number[], rowMap: number[], effectedFn: T, uneffectedFn: T) {
-  const stickers = [
-    ...model.state.U,
-    ...model.state.L,
-    ...model.state.F,
-    ...model.state.R,
-    ...model.state.B,
-    ...model.state.D,
-  ];
-
+  const stickers = getCubeStickers(model);
   const effectedStickers = getEffectedCubeStickers(model, parsedTurn, colMap, rowMap);
 
   effectedStickers.forEach(effectedFn);
@@ -323,8 +322,13 @@ export function useCubePuzzle(opts: UseCubePuzzleOptions) {
   const turnProgress = computed(() => getValue(opts.turnProgress) || 0);
 
   const parsedTurn = computed(() => {
-    const currentTurn = getValue(opts.currentTurn);
-    return currentTurn ? model.parseTurn(currentTurn) : null;
+    try {
+      const currentTurn = getValue(opts.currentTurn);
+
+      return currentTurn ? model.parseTurn(currentTurn) : null;
+    } catch {
+      return null;
+    }
   });
 
   // redraw everything when the options change
@@ -351,10 +355,11 @@ export function useCubePuzzle(opts: UseCubePuzzleOptions) {
 
     if (newParsedTurn) {
       turn = createPuzzle(turnId, normalizedOpts);
-      adjustVisibleStickers(id, turnId, model, newParsedTurn, colMap, rowMap);
       adjustTurnProgress(turn, newParsedTurn.rotation, newParsedTurn.target, turnProgress.value);
       group.add(turn);
     }
+
+    adjustVisibleStickers(id, turnId, model, newParsedTurn, colMap, rowMap);
   }, {
     immediate: true,
   });
