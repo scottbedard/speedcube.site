@@ -1,5 +1,6 @@
-
 <?php
+
+use File;
 
 // shields
 Route::get('shields/average/{puzzle}', 'Speedcube\Speedcube\Http\Controllers\ShieldsController@average');
@@ -61,5 +62,9 @@ Route::prefix('api/speedcube/speedcube')
     });
 
 // application
+// Route::get('/static/{asset}', function ($asset) {
+//   return File::get(public_path() . '/frontend/dist/' . $asset);
+// })->where('asset', '.*');
+
 Route::any('/{any}', 'Speedcube\Speedcube\Http\Controllers\ApplicationController@index')
     ->where('any', '^(?!api|backend|shields).*');

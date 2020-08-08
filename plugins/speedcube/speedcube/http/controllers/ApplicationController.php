@@ -3,6 +3,7 @@
 namespace Speedcube\Speedcube\Http\Controllers;
 
 use Auth;
+use File;
 use Illuminate\Routing\Controller;
 
 class ApplicationController extends Controller
@@ -12,6 +13,6 @@ class ApplicationController extends Controller
      */
     public function index()
     {
-        return 'Hello from the index';
+        return view('speedcube.speedcube::index');
     }
 }
