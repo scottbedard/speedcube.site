@@ -1,3 +1,4 @@
+const { DefinePlugin } = require('webpack');
 const path = require('path');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 
@@ -24,6 +25,10 @@ module.exports = {
       public: 'http://localhost:8080',
     },
     plugins: [
+      new DefinePlugin({
+        '__VUE_OPTIONS_API__': JSON.stringify(true),
+        '__VUE_PROD_DEVTOOLS__': JSON.stringify(true),
+      }),
       new WriteFilePlugin({ test: /\.htm$/ }),
     ],
   },
