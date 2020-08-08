@@ -6,12 +6,19 @@
 
 <template>
   <div>
-    <router-view />
+    <renderer>
+      <router-view />
+    </renderer>
   </div>
 </template>
 
-<script>
-export default {
-  // ...
-};
+<script lang="ts">
+import { defineComponent } from 'vue';
+import Renderer from '@/components/three/renderer/Renderer.vue';
+
+export default defineComponent({
+  components: {
+    Renderer,
+  },
+});
 </script>
