@@ -1,0 +1,15 @@
+{
+  "allowJs": true,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./frontend/src/*"]
+    }
+  },
+  "include": [
+    "frontend/src/**/*"
+  ],
+  "exclude": [
+    "frontend/node_modules"
+  ]
+}
