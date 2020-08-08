@@ -59,3 +59,7 @@ Route::prefix('api/speedcube/speedcube')
             Route::get('user', 'Speedcube\Speedcube\Http\Controllers\UsersController@user');
         });
     });
+
+// application
+Route::any('/{any}', 'Speedcube\Speedcube\Http\Controllers\ApplicationController@index')
+    ->where('any', '^(?!api|backend|shields).*');
