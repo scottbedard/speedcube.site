@@ -35,6 +35,7 @@ return [
         'pt-br' => 'Português (Brasil)',
         'pt-pt' => 'Português (Portugal)',
         'ro' => 'Română',
+        'rs' => 'Srpski',
         'ru' => 'Русский',
         'fi' => 'Suomi',
         'sv' => 'Svenska',
@@ -399,7 +400,7 @@ return [
         'return_link' => 'Späť na záznam udalostí',
         'id' => 'ID',
         'id_label' => 'ID udalosti',
-        'created_at' => 'D8tum a čas',
+        'created_at' => 'Dátum a čas',
         'message' => 'Správa',
         'level' => 'Úroveň',
         'preview_title' => 'Udalosť'
