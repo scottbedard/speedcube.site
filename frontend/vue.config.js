@@ -16,14 +16,16 @@ module.exports = {
     });
   },
   configureWebpack: {
+    devServer: {
+      disableHostCheck: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+      public: 'http://localhost:8080',
+    },
     plugins: [
       new WriteFilePlugin({ test: /\.htm$/ }),
     ],
-  },
-  devServer: {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
   },
   outputDir: path.resolve(__dirname, '../storage/assets'),
   publicPath: production 
