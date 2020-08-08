@@ -12,6 +12,7 @@
   "dependencies": {
     "@vueuse/core": "^4.0.0-beta.4",
     "core-js": "^3.6.5",
+    "lodash-es": "^4.17.15",
     "register-service-worker": "^1.7.1",
     "tailwindcss": "^1.6.2",
     "three": "^0.119.1",
