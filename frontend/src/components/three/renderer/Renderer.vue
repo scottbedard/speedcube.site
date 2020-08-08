@@ -22,7 +22,15 @@ import {
 } from 'vue';
 import { Scene, WebGLRenderer } from 'three';
 import { useRafFn, useWindowScroll, useWindowSize } from '@vueuse/core';
-import { RendererSymbol } from '../types';
+import { RendererSymbol } from '@/app/constants';
+import { SceneData } from '../types';
+
+const defaultRect = {
+  bottom: 0,
+  left: 0,
+  right: 0,
+  top: 0,
+};
 
 export default defineComponent({
   setup() {
@@ -55,11 +63,11 @@ export default defineComponent({
       }
 
       // update size
-      const height = canvas.value.clientHeight;
-      const width = canvas.value.clientWidth;
+      const canvasHeight = canvas.value.clientHeight;
+      const canvasWidth = canvas.value.clientWidth;
 
-      if (canvas.value.width !== width || canvas.value.height !== height) {
-        renderer.setSize(width, height, false);
+      if (canvas.value.width !== canvasWidth || canvas.value.height !== canvasHeight) {
+        renderer.setSize(canvasWidth, canvasHeight, false);
       }
 
       // clear
@@ -69,13 +77,10 @@ export default defineComponent({
 
       // render scenes
       scenes.value.forEach((scene) => {
-        const { el } = scene.userData;
-
-        const rect = el.getBoundingClientRect() || {
-          bottom: 0, top: 0, right: 0, left: 0,
-        };
+        const { el } = scene.userData as SceneData;
 
         // set the viewport
+        const rect = el.getBoundingClientRect() || defaultRect;
         const width = rect.right - rect.left;
         const height = rect.bottom - rect.top;
         const bottom = document.body.clientHeight - rect.bottom;
@@ -88,15 +93,15 @@ export default defineComponent({
       });
     });
 
-    // start and stop raf loop
+    // start / stop the animation loop
     watch(empty, (newEmpty) => (newEmpty ? stop() : start()));
 
-    // renderer api
+    // expose renderer api to child components
     provide(RendererSymbol, {
-      addScene(scene) {
+      addScene() {
         // scenes.value.push(scene);
       },
-      removeScene(scene) {
+      removeScene() {
         // scenes.value = scenes.value.filter(obj => obj !== scene);
       },
     });

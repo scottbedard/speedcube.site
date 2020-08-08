@@ -1,4 +1,3 @@
-import { InjectionKey } from 'vue';
 import { Scene } from 'three';
 
 /**
@@ -10,6 +9,8 @@ export type RendererApi = {
 };
 
 /**
- * Symbol to access the global renderer.
+ * User data attached to scenes
  */
-export const RendererSymbol: InjectionKey<RendererApi> = Symbol('RendererSymbol');
+export type SceneData = {
+  el: HTMLElement;
+};
