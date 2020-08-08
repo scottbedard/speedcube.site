@@ -5,7 +5,9 @@ module.exports = {
     './src/**/*.vue',
   ],
   theme: {
-    extend: {},
+    fontFamily: {
+      mono: '"Fira Code", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
+    }
   },
   variants: {},
 }

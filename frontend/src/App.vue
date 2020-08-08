@@ -12,8 +12,6 @@
 
 <script>
 export default {
-  created() {
-    console.log('SCS');
-  },
+  // ...
 };
 </script>
