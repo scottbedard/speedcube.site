@@ -1,3 +1,9 @@
+<style lang="scss">
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+</style>
+
 <template>
   <div>
     Hello world
