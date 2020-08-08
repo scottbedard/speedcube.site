@@ -1,4 +1,4 @@
-import { Scene } from 'three';
+import { PerspectiveCamera, Scene } from 'three';
 
 /**
  * Methods exposed on renderer api.
@@ -12,5 +12,6 @@ export type RendererApi = {
  * User data attached to scenes
  */
 export type SceneData = {
+  camera: PerspectiveCamera,
   el: HTMLElement;
 };
