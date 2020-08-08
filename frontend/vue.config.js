@@ -6,6 +6,11 @@ const production = process.env.NODE_ENV === 'production';
 
 module.exports = {
   chainWebpack: (config) => {
+    config.module
+      .rule('eslint')
+      .use('eslint-loader')
+      .options({ fix: true });
+
     config.plugin('html').tap(function(args) {
       Object.assign(args[0], {
         minify: Object.assign((args[0].minify || {})),

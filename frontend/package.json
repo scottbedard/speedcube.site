@@ -13,7 +13,8 @@
     "core-js": "^3.6.5",
     "register-service-worker": "^1.7.1",
     "tailwindcss": "^1.6.2",
-    "vue": "^3.0.0-rc.5"
+    "vue": "^3.0.0-rc.5",
+    "vue-router": "^4.0.0-beta.6"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",

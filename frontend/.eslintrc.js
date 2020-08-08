@@ -1,3 +1,5 @@
+const production = process.env.NODE_ENV === 'production';
+
 module.exports = {
   root: true,
   env: {
@@ -12,8 +14,9 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'import/prefer-default-export': 0,
+    'no-console': production ? 'warn' : 'off',
+    'no-debugger': production ? 'warn' : 'off',
   },
   overrides: [
     {
