@@ -1,5 +1,5 @@
 <?php
 
 Route::get('/', function () {
-    return 'Soon';
+    return View::make('speedcube.speedcube::index');
 });

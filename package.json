@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "build": "(cd client && npm run build)",
+    "lint": "(cd client && npm run lint)",
+    "serve": "(cd client && npm run serve)"
+  }
+}
