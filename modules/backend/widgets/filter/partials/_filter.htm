@@ -1,0 +1,10 @@
+<div
+    id="<?= $this->getId(); ?>"
+    class="control-filter <?= $cssClasses ?>"
+    data-control="filterwidget"
+    data-options-handler="<?= $this->getEventHandler('onFilterGetOptions') ?>"
+    data-update-handler="<?= $this->getEventHandler('onFilterUpdate') ?>">
+
+    <?= $this->makePartial('filter_scopes') ?>
+
+</div>
