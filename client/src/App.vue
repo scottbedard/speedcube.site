@@ -12,12 +12,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Default from '@/layouts/Default.vue';
+import VDefault from '@/layouts/default.vue';
 
 export default defineComponent({
   computed: {
     layout() {
-      return Default;
+      return VDefault;
     },
   },
   name: 'App',

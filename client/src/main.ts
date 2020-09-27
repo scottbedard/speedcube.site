@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import { router } from '@/app/router';
-import App from './App.vue';
+import App from './app.vue';
 
 const root = document.getElementById('app') as HTMLElement;
 
