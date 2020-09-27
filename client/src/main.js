@@ -1,4 +1,7 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
 
-createApp(App).mount('#app')
+const root = document.getElementById('app');
+// const context = JSON.parse(root.dataset.context);
+
+createApp(App).mount(root);

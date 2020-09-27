@@ -1,5 +1,4 @@
 <?php
 
-Route::get('/', function () {
-    return View::make('speedcube.speedcube::index');
-});
+Route::get('{all}', 'Speedcube\Speedcube\Http\Controllers\SpaController@index')
+    ->where('all', '^(?!api|backend).*$');
