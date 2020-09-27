@@ -4,12 +4,12 @@ export const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      component: () => import('@/pages/Home.vue'),
+      component: () => import('@/pages/Home.vue' /* webpackChunkName: 'home' */),
       name: 'home',
       path: '/',
     },
     {
-      component: () => import('@/pages/Signup.vue'),
+      component: () => import('@/pages/Signup.vue' /* webpackChunkName: 'signup' */),
       name: 'signup',
       path: '/signup',
     },
