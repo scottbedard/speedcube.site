@@ -1,11 +1,11 @@
 module.exports = {
   env: {
-    node: true,
+    node: true
   },
   extends: [
     'plugin:vue/vue3-essential',
     'eslint:recommended',
-    '@vue/typescript',
+    '@vue/typescript'
   ],
   parserOptions: {
     parser: '@typescript-eslint/parser',

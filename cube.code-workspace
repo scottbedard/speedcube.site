@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"[php]": {
+			"editor.tabSize": 4,
+		},
+		"editor.tabSize": 2,
+		"vetur.validation.template": false
+	}
+}
