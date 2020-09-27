@@ -1,11 +1,11 @@
 <?php
 
-use System\Models\File as FileModel;
 use Database\Tester\Models\User;
+use System\Models\File as FileModel;
 
 class AttachManyModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 

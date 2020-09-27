@@ -18,14 +18,13 @@ class ExampleImportModel extends ImportModel
 
 class ImportModelTest extends TestCase
 {
-
     //
     // Tests
     //
 
     public function testDecodeArrayValue()
     {
-        $model = new ExampleImportModel;
+        $model = new ExampleImportModel();
         $data = 'foo|bar';
         $result = self::callProtectedMethod($model, 'decodeArrayValue', [$data]);
         $this->assertEquals(['foo', 'bar'], $result);

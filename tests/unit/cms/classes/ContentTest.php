@@ -1,11 +1,10 @@
 <?php
 
-use Cms\Classes\Theme;
 use Cms\Classes\Content;
+use Cms\Classes\Theme;
 
 class ContentTest extends TestCase
 {
-
     public function testMarkdownContent()
     {
         $theme = Theme::load('test');

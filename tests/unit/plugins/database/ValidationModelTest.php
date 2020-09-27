@@ -4,7 +4,7 @@ use Database\Tester\Models\ValidationPost;
 
 class ValidationModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -18,17 +18,17 @@ class ValidationModelTest extends PluginTestCase
         $this->expectException(\October\Rain\Database\ModelException::class);
 
         $post = ValidationPost::create([
-            'title' => 'This is a new post',
-            'slug' => 'post-1',
-            'description' => 'Testing...'
+            'title'       => 'This is a new post',
+            'slug'        => 'post-1',
+            'description' => 'Testing...',
         ]);
 
         $this->assertNotFalse($post);
 
         $post2 = ValidationPost::create([
-            'title' => 'this is another post with the same slug',
-            'slug' => 'post-1',
-            'description' => 'testing....'
+            'title'       => 'this is another post with the same slug',
+            'slug'        => 'post-1',
+            'description' => 'testing....',
         ]);
     }
 }

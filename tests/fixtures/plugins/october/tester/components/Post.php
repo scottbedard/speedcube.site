@@ -1,4 +1,6 @@
-<?php namespace October\Tester\Components;
+<?php
+
+namespace October\Tester\Components;
 
 use Cms\Classes\ComponentBase;
 
@@ -7,8 +9,8 @@ class Post extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name' => 'Blog Post Dummy Component',
-            'description' => 'Displays a blog post.'
+            'name'        => 'Blog Post Dummy Component',
+            'description' => 'Displays a blog post.',
         ];
     }
 
@@ -16,9 +18,9 @@ class Post extends ComponentBase
     {
         return [
             'show-featured' => [
-                 'description' => 'Display the post featured image or not',
-                 'default' => true
-            ]
+                'description' => 'Display the post featured image or not',
+                'default'     => true,
+            ],
         ];
     }
 }

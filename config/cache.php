@@ -29,16 +29,16 @@ return [
     'stores' => [
 
         'apc' => [
-            'driver' => 'apc'
+            'driver' => 'apc',
         ],
 
         'array' => [
-            'driver' => 'array'
+            'driver' => 'array',
         ],
 
         'database' => [
-            'driver' => 'database',
-            'table'  => 'cache',
+            'driver'     => 'database',
+            'table'      => 'cache',
             'connection' => null,
         ],
 
@@ -59,7 +59,7 @@ return [
         ],
 
         'redis' => [
-            'driver' => 'redis',
+            'driver'     => 'redis',
             'connection' => 'default',
         ],
 

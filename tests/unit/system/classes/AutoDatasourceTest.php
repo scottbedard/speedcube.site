@@ -38,37 +38,37 @@ class AutoDatasourceTest extends PluginTestCase
 
         // Create fixtures of template data
         $this->fixtures[] = CmsThemeTemplateFixture::create([
-            'source' => 'test',
-            'path' => 'partials/page-partial.htm',
-            'content' => 'AutoDatasource partials/page-partial.htm',
-            'file_size' => 40
+            'source'    => 'test',
+            'path'      => 'partials/page-partial.htm',
+            'content'   => 'AutoDatasource partials/page-partial.htm',
+            'file_size' => 40,
         ]);
 
         $this->fixtures[] = CmsThemeTemplateFixture::create([
-            'source' => 'test',
-            'path' => 'partials/testpost/default.htm',
-            'content' => 'AutoDatasource partials/testpost/default.htm',
-            'file_size' => 44
+            'source'    => 'test',
+            'path'      => 'partials/testpost/default.htm',
+            'content'   => 'AutoDatasource partials/testpost/default.htm',
+            'file_size' => 44,
         ]);
 
         $this->fixtures[] = CmsThemeTemplateFixture::create([
-            'source' => 'test',
-            'path' => 'partials/subdir/test.htm',
-            'content' => 'AutoDatasource partials/subdir/test.htm',
-            'file_size' => 39
+            'source'    => 'test',
+            'path'      => 'partials/subdir/test.htm',
+            'content'   => 'AutoDatasource partials/subdir/test.htm',
+            'file_size' => 39,
         ]);
 
         $this->fixtures[] = CmsThemeTemplateFixture::create([
-            'source' => 'test',
-            'path' => 'partials/nesting/level2.htm',
-            'content' => 'AutoDatasource partials/nesting/level2.htm',
-            'file_size' => 42,
-            'deleted_at' => '2019-01-01 00:00:00'
+            'source'     => 'test',
+            'path'       => 'partials/nesting/level2.htm',
+            'content'    => 'AutoDatasource partials/nesting/level2.htm',
+            'file_size'  => 42,
+            'deleted_at' => '2019-01-01 00:00:00',
         ]);
 
         // Create AutoDatasource
         $this->datasource = new AutoDatasource([
-            'database' => new DbDatasource('test', 'cms_theme_templates'),
+            'database'   => new DbDatasource('test', 'cms_theme_templates'),
             'filesystem' => new FileDatasource(base_path('tests/fixtures/themes/test'), App::make('files')),
         ]);
     }

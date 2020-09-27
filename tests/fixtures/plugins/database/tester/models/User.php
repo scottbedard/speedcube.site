@@ -1,4 +1,6 @@
-<?php namespace Database\Tester\Models;
+<?php
+
+namespace Database\Tester\Models;
 
 use Model;
 
@@ -20,7 +22,7 @@ class User extends Model
     public $hasOne = [
         'author' => [
             'Database\Tester\Models\Author',
-        ]
+        ],
     ];
 
     public $hasOneThrough = [
@@ -31,11 +33,11 @@ class User extends Model
     ];
 
     public $attachOne = [
-        'avatar' => 'System\Models\File'
+        'avatar' => 'System\Models\File',
     ];
 
     public $attachMany = [
-        'photos' => 'System\Models\File'
+        'photos' => 'System\Models\File',
     ];
 }
 

@@ -1,6 +1,5 @@
 <?php
 
-use Backend\Classes\Controller;
 use Backend\Classes\NavigationManager;
 
 class NavigationManagerTest extends TestCase
@@ -16,8 +15,8 @@ class NavigationManagerTest extends TestCase
                 'label'       => 'Dashboard',
                 'icon'        => 'icon-dashboard',
                 'url'         => 'http://dashboard.tld',
-                'order'       => 100
-            ]
+                'order'       => 100,
+            ],
         ]);
 
         $items = $manager->listMainMenuItems();
@@ -85,9 +84,9 @@ class NavigationManagerTest extends TestCase
         $manager->addMainMenuItems('October.Tester', [
             'print' => [
                 'label' => 'Print',
-                'icon' => 'icon-print',
-                'url' => 'javascript:window.print()'
-            ]
+                'icon'  => 'icon-print',
+                'url'   => 'javascript:window.print()',
+            ],
         ]);
 
         $items = $manager->listMainMenuItems();
@@ -110,9 +109,9 @@ class NavigationManagerTest extends TestCase
         $manager->addMainMenuItems('October.Tester', [
             'close' => [
                 'label' => 'Close',
-                'icon' => 'icon-times',
-                'url' => 'javascript:window.close()'
-            ]
+                'icon'  => 'icon-times',
+                'url'   => 'javascript:window.close()',
+            ],
         ]);
 
         $items = $manager->listMainMenuItems();
@@ -135,9 +134,9 @@ class NavigationManagerTest extends TestCase
                 'url'         => 'http://google.com',
                 'permissions' => [
                     'october.tester.access_foo',
-                    'october.tester.access_bar'
-                ]
-            ]
+                    'october.tester.access_bar',
+                ],
+            ],
         ]);
 
         $manager->setContext('October.Tester', 'blog');
@@ -168,9 +167,9 @@ class NavigationManagerTest extends TestCase
         $manager->addSideMenuItems('October.Tester', 'blog', [
             'bar' => [
                 'label' => 'Bar',
-                'icon' => 'icon-bars',
-                'url' => 'http://yahoo.com'
-            ]
+                'icon'  => 'icon-bars',
+                'url'   => 'http://yahoo.com',
+            ],
         ]);
 
         $manager->setContext('October.Tester', 'blog');

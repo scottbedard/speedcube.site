@@ -1,11 +1,10 @@
 <?php
 
-use Carbon\Carbon;
 use Database\Tester\Models\CategorySimple;
 
 class SimpleTreeModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -97,15 +96,15 @@ class SimpleTreeModelTest extends PluginTestCase
     {
         $array = CategorySimple::listsNested('name', 'id');
         $this->assertEquals([
-            1 => 'Web development',
-            2 => '&nbsp;&nbsp;&nbsp;HTML5',
-            3 => '&nbsp;&nbsp;&nbsp;CSS3',
-            4 => '&nbsp;&nbsp;&nbsp;jQuery',
-            5 => '&nbsp;&nbsp;&nbsp;Bootstrap',
-            6 => '&nbsp;&nbsp;&nbsp;Laravel',
-            7 => '&nbsp;&nbsp;&nbsp;OctoberCMS',
-            8 => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;September',
-            9 => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;October',
+            1  => 'Web development',
+            2  => '&nbsp;&nbsp;&nbsp;HTML5',
+            3  => '&nbsp;&nbsp;&nbsp;CSS3',
+            4  => '&nbsp;&nbsp;&nbsp;jQuery',
+            5  => '&nbsp;&nbsp;&nbsp;Bootstrap',
+            6  => '&nbsp;&nbsp;&nbsp;Laravel',
+            7  => '&nbsp;&nbsp;&nbsp;OctoberCMS',
+            8  => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;September',
+            9  => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;October',
             10 => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;November',
             11 => 'Mobile development',
             12 => '&nbsp;&nbsp;&nbsp;iOS',
@@ -115,20 +114,20 @@ class SimpleTreeModelTest extends PluginTestCase
             16 => 'Graphic design',
             17 => '&nbsp;&nbsp;&nbsp;Photoshop',
             18 => '&nbsp;&nbsp;&nbsp;Illustrator',
-            19 => '&nbsp;&nbsp;&nbsp;Fireworks'
+            19 => '&nbsp;&nbsp;&nbsp;Fireworks',
         ], $array);
 
         $array = CategorySimple::listsNested('name', 'id', '--');
         $this->assertEquals([
-            1 => 'Web development',
-            2 => '--HTML5',
-            3 => '--CSS3',
-            4 => '--jQuery',
-            5 => '--Bootstrap',
-            6 => '--Laravel',
-            7 => '--OctoberCMS',
-            8 => '----September',
-            9 => '----October',
+            1  => 'Web development',
+            2  => '--HTML5',
+            3  => '--CSS3',
+            4  => '--jQuery',
+            5  => '--Bootstrap',
+            6  => '--Laravel',
+            7  => '--OctoberCMS',
+            8  => '----September',
+            9  => '----October',
             10 => '----November',
             11 => 'Mobile development',
             12 => '--iOS',
@@ -138,30 +137,30 @@ class SimpleTreeModelTest extends PluginTestCase
             16 => 'Graphic design',
             17 => '--Photoshop',
             18 => '--Illustrator',
-            19 => '--Fireworks'
+            19 => '--Fireworks',
         ], $array);
 
         $array = CategorySimple::listsNested('id', 'name', '**');
         $this->assertEquals([
-            'Web development' => '1',
-            'HTML5' => '**2',
-            'CSS3' => '**3',
-            'jQuery' => '**4',
-            'Bootstrap' => '**5',
-            'Laravel' => '**6',
-            'OctoberCMS' => '**7',
-            'September' => '****8',
-            'October' => '****9',
-            'November' => '****10',
+            'Web development'    => '1',
+            'HTML5'              => '**2',
+            'CSS3'               => '**3',
+            'jQuery'             => '**4',
+            'Bootstrap'          => '**5',
+            'Laravel'            => '**6',
+            'OctoberCMS'         => '**7',
+            'September'          => '****8',
+            'October'            => '****9',
+            'November'           => '****10',
             'Mobile development' => '11',
-            'iOS' => '**12',
-            'iPhone' => '**13',
-            'iPad' => '**14',
-            'Android' => '**15',
-            'Graphic design' => '16',
-            'Photoshop' => '**17',
-            'Illustrator' => '**18',
-            'Fireworks' => '**19'
+            'iOS'                => '**12',
+            'iPhone'             => '**13',
+            'iPad'               => '**14',
+            'Android'            => '**15',
+            'Graphic design'     => '16',
+            'Photoshop'          => '**17',
+            'Illustrator'        => '**18',
+            'Fireworks'          => '**19',
         ], $array);
     }
 
@@ -178,15 +177,15 @@ class SimpleTreeModelTest extends PluginTestCase
         $array = CategorySimple::get()->listsNested('custom_name', 'id', '...');
 
         $this->assertEquals([
-            1 => 'Web development (#1)',
-            2 => '...HTML5 (#2)',
-            3 => '...CSS3 (#3)',
-            4 => '...jQuery (#4)',
-            5 => '...Bootstrap (#5)',
-            6 => '...Laravel (#6)',
-            7 => '...OctoberCMS (#7)',
-            8 => '......September (#8)',
-            9 => '......October (#9)',
+            1  => 'Web development (#1)',
+            2  => '...HTML5 (#2)',
+            3  => '...CSS3 (#3)',
+            4  => '...jQuery (#4)',
+            5  => '...Bootstrap (#5)',
+            6  => '...Laravel (#6)',
+            7  => '...OctoberCMS (#7)',
+            8  => '......September (#8)',
+            9  => '......October (#9)',
             10 => '......November (#10)',
             11 => 'Mobile development (#11)',
             12 => '...iOS (#12)',
@@ -196,17 +195,16 @@ class SimpleTreeModelTest extends PluginTestCase
             16 => 'Graphic design (#16)',
             17 => '...Photoshop (#17)',
             18 => '...Illustrator (#18)',
-            19 => '...Fireworks (#19)'
+            19 => '...Fireworks (#19)',
         ], $array);
     }
-
 
     public function seedSampleTree()
     {
         Model::unguard();
 
         $webdev = CategorySimple::create([
-            'name' => 'Web development'
+            'name' => 'Web development',
         ]);
 
         $webdev->children()->create(['name' => 'HTML5']);
@@ -220,7 +218,7 @@ class SimpleTreeModelTest extends PluginTestCase
         $october->children()->create(['name' => 'November']);
 
         $mobdev = CategorySimple::create([
-            'name' => 'Mobile development'
+            'name' => 'Mobile development',
         ]);
 
         $mobdev->children()->create(['name' => 'iOS']);
@@ -229,7 +227,7 @@ class SimpleTreeModelTest extends PluginTestCase
         $mobdev->children()->create(['name' => 'Android']);
 
         $design = CategorySimple::create([
-            'name' => 'Graphic design'
+            'name' => 'Graphic design',
         ]);
 
         $design->children()->create(['name' => 'Photoshop']);

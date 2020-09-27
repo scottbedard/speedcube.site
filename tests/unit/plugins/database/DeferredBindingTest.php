@@ -1,12 +1,12 @@
 <?php
 
-use Database\Tester\Models\Post;
 use Database\Tester\Models\Author;
+use Database\Tester\Models\Post;
 use October\Rain\Database\Models\DeferredBinding;
 
 class DeferredBindingTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -23,8 +23,8 @@ class DeferredBindingTest extends PluginTestCase
 
         Model::unguard();
         $author = Author::make(['name' => 'Stevie']);
-        $post = Post::create(['title' => "First post"]);
-        $post2 = Post::create(['title' => "Second post"]);
+        $post = Post::create(['title' => 'First post']);
+        $post2 = Post::create(['title' => 'Second post']);
         Model::reguard();
 
         $author->posts()->add($post, $sessionKey);
@@ -79,7 +79,7 @@ class DeferredBindingTest extends PluginTestCase
 
         Model::unguard();
         $author = Author::make(['name' => 'Stevie']);
-        $post = Post::create(['title' => "First post"]);
+        $post = Post::create(['title' => 'First post']);
         Model::reguard();
 
         $author->posts()->add($post, $sessionKey);
@@ -96,7 +96,7 @@ class DeferredBindingTest extends PluginTestCase
 
         Model::unguard();
         $author = Author::make(['name' => 'Stevie']);
-        $post = Post::create(['title' => "First post"]);
+        $post = Post::create(['title' => 'First post']);
         Model::reguard();
 
         $author->posts()->add($post, $sessionKey);

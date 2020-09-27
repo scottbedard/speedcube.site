@@ -1,11 +1,11 @@
 <?php
 
-use Database\Tester\Models\Role;
 use Database\Tester\Models\Author;
+use Database\Tester\Models\Role;
 
 class BelongsToManyModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -19,9 +19,9 @@ class BelongsToManyModelTest extends PluginTestCase
     {
         Model::unguard();
         $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
-        $role1 = Role::create(['name' => "Designer", 'description' => "Quality"]);
-        $role2 = Role::create(['name' => "Programmer", 'description' => "Speed"]);
-        $role3 = Role::create(['name' => "Manager", 'description' => "Budget"]);
+        $role1 = Role::create(['name' => 'Designer', 'description' => 'Quality']);
+        $role2 = Role::create(['name' => 'Programmer', 'description' => 'Speed']);
+        $role3 = Role::create(['name' => 'Manager', 'description' => 'Budget']);
         Model::reguard();
 
         // Add/remove to collection
@@ -68,8 +68,8 @@ class BelongsToManyModelTest extends PluginTestCase
     {
         Model::unguard();
         $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
-        $role1 = Role::create(['name' => "Designer", 'description' => "Quality"]);
-        $role2 = Role::create(['name' => "Programmer", 'description' => "Speed"]);
+        $role1 = Role::create(['name' => 'Designer', 'description' => 'Quality']);
+        $role2 = Role::create(['name' => 'Programmer', 'description' => 'Speed']);
         Model::reguard();
 
         $author->roles()->add($role1);
@@ -84,8 +84,8 @@ class BelongsToManyModelTest extends PluginTestCase
 
         Model::unguard();
         $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
-        $role1 = Role::create(['name' => "Designer", 'description' => "Quality"]);
-        $role2 = Role::create(['name' => "Programmer", 'description' => "Speed"]);
+        $role1 = Role::create(['name' => 'Designer', 'description' => 'Quality']);
+        $role2 = Role::create(['name' => 'Programmer', 'description' => 'Speed']);
         Model::reguard();
 
         // Deferred add
@@ -134,9 +134,9 @@ class BelongsToManyModelTest extends PluginTestCase
 
         Model::unguard();
         $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
-        $role1 = Role::create(['name' => "Designer", 'description' => "Quality"]);
-        $role2 = Role::create(['name' => "Programmer", 'description' => "Speed"]);
-        $role3 = Role::create(['name' => "Manager", 'description' => "Budget"]);
+        $role1 = Role::create(['name' => 'Designer', 'description' => 'Quality']);
+        $role2 = Role::create(['name' => 'Programmer', 'description' => 'Speed']);
+        $role3 = Role::create(['name' => 'Manager', 'description' => 'Budget']);
         Model::reguard();
 
         $author->roles()->add($role1);
@@ -152,9 +152,9 @@ class BelongsToManyModelTest extends PluginTestCase
     {
         Model::unguard();
         $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
-        $role1 = Role::create(['name' => "Designer", 'description' => "Quality"]);
-        $role2 = Role::create(['name' => "Programmer", 'description' => "Speed"]);
-        $role3 = Role::create(['name' => "Manager", 'description' => "Budget"]);
+        $role1 = Role::create(['name' => 'Designer', 'description' => 'Quality']);
+        $role2 = Role::create(['name' => 'Programmer', 'description' => 'Speed']);
+        $role3 = Role::create(['name' => 'Manager', 'description' => 'Budget']);
         Model::reguard();
 
         $author->roles()->add($role1, null, ['is_executive' => 1]);

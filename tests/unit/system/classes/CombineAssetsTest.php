@@ -1,11 +1,10 @@
 <?php
 
-use Cms\Classes\Theme;
 use System\Classes\CombineAssets;
 
 class CombineAssetsTest extends TestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -43,7 +42,7 @@ class CombineAssetsTest extends TestCase
         $url = $combiner->combine(
             [
                 'assets/css/style1.css',
-                'assets/css/style2.css'
+                'assets/css/style2.css',
             ],
             base_path().'/tests/fixtures/themes/test'
         );
@@ -53,7 +52,7 @@ class CombineAssetsTest extends TestCase
         $url = $combiner->combine(
             [
                 'assets/js/script1.js',
-                'assets/js/script2.js'
+                'assets/js/script2.js',
             ],
             base_path().'/tests/fixtures/themes/test'
         );

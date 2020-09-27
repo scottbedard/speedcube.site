@@ -1,8 +1,8 @@
 <?php
 
-use Cms\Classes\Theme;
-use Cms\Classes\CmsObject;
 use Cms\Classes\CmsCompoundObject;
+use Cms\Classes\CmsObject;
+use Cms\Classes\Theme;
 use October\Rain\Halcyon\Model;
 
 class TestCmsCompoundObject extends CmsCompoundObject
@@ -30,13 +30,13 @@ class TestTemporaryCmsCompoundObject extends CmsCompoundObject
 
 class CmsCompoundObjectTest extends TestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
         Model::clearBootedModels();
         Model::flushEventListeners();
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Archive.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Post.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/Archive.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/Post.php';
     }
 
     public function testLoadFile()
@@ -110,7 +110,7 @@ class CmsCompoundObjectTest extends TestCase
         $notExistingProperties = $obj->getComponentProperties('This\Is\Not\Component');
         $this->assertIsArray($properties);
         $this->assertArrayHasKey('show-featured', $properties);
-        $this->assertTrue((bool)$properties['show-featured']);
+        $this->assertTrue((bool) $properties['show-featured']);
         $this->assertEquals('true', $properties['show-featured']);
         $this->assertCount(1, $properties);
         $this->assertCount(0, $emptyProperties);
@@ -191,7 +191,7 @@ class CmsCompoundObjectTest extends TestCase
 
     public function testUndefinedProperty()
     {
-        $obj = new TestCmsCompoundObject;
+        $obj = new TestCmsCompoundObject();
         $this->assertNull($obj->something);
     }
 
@@ -208,8 +208,8 @@ class CmsCompoundObjectTest extends TestCase
 
         $obj = TestCmsCompoundObject::inTheme($theme);
         $obj->fill([
-            'markup' => '<p>Hello, world!</p>',
-            'fileName'=>'compound-markup'
+            'markup'  => '<p>Hello, world!</p>',
+            'fileName'=> 'compound-markup',
         ]);
         $obj->save();
 
@@ -233,9 +233,9 @@ class CmsCompoundObjectTest extends TestCase
 
         $obj = TestCmsCompoundObject::inTheme($theme);
         $obj->fill([
-            'settings'=>['var'=>'value'],
-            'markup' => '<p>Hello, world!</p>',
-            'fileName'=>'compound-markup-settings'
+            'settings'=> ['var'=>'value'],
+            'markup'  => '<p>Hello, world!</p>',
+            'fileName'=> 'compound-markup-settings',
         ]);
         $obj->save();
 
@@ -259,10 +259,10 @@ class CmsCompoundObjectTest extends TestCase
 
         $obj = TestCmsCompoundObject::inTheme($theme);
         $obj->fill([
-            'fileName'=>'compound',
-            'settings'=>['var'=>'value'],
-            'code' => 'function a() {return true;}',
-            'markup' => '<p>Hello, world!</p>'
+            'fileName'=> 'compound',
+            'settings'=> ['var'=>'value'],
+            'code'    => 'function a() {return true;}',
+            'markup'  => '<p>Hello, world!</p>',
         ]);
         $obj->save();
 

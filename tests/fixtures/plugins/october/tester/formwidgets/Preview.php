@@ -1,4 +1,6 @@
-<?php namespace October\Tester\FormWidgets;
+<?php
+
+namespace October\Tester\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
 

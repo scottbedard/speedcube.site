@@ -1,13 +1,13 @@
 <?php
 
+use Cms\Classes\Layout;
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
-use Cms\Classes\Layout;
 use October\Rain\Halcyon\Model;
 
 class CmsObjectQueryTest extends TestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -35,13 +35,13 @@ class CmsObjectQueryTest extends TestCase
         $pages = Page::withComponent('testArchive')->all();
         $this->assertCount(2, $pages);
         foreach ($pages as $page) {
-            $this->assertTrue(!!$page->hasComponent('testArchive'));
+            $this->assertTrue((bool) $page->hasComponent('testArchive'));
         }
     }
 
     public function testWithComponentCallback()
     {
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Archive.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/Archive.php';
 
         $pages = Page::withComponent('testArchive', function ($component) {
             return $component->property('posts-per-page') == '69';
@@ -57,54 +57,54 @@ class CmsObjectQueryTest extends TestCase
         sort($pages);
 
         $this->assertEquals([
-            "404",
-            "a/a-page",
-            "ajax-test",
-            "authors",
-            "b/b-page",
-            "blog-archive",
-            "blog-category",
-            "blog-post",
-            "code-namespaces",
-            "code-namespaces-aliases",
-            "component-custom-render",
-            "component-partial",
-            "component-partial-alias-override",
-            "component-partial-nesting",
-            "component-partial-override",
-            "cycle-test",
-            "index",
-            "no-component",
-            "no-component-class",
-            "no-layout",
-            "no-partial",
-            "no-soft-component-class",
-            "optional-full-php-tags",
-            "optional-short-php-tags",
-            "throw-php",
-            "with-component",
-            "with-components",
-            "with-content",
-            "with-layout",
-            "with-partials",
-            "with-placeholder",
-            "with-soft-component-class",
-            "with-soft-component-class-alias",
+            '404',
+            'a/a-page',
+            'ajax-test',
+            'authors',
+            'b/b-page',
+            'blog-archive',
+            'blog-category',
+            'blog-post',
+            'code-namespaces',
+            'code-namespaces-aliases',
+            'component-custom-render',
+            'component-partial',
+            'component-partial-alias-override',
+            'component-partial-nesting',
+            'component-partial-override',
+            'cycle-test',
+            'index',
+            'no-component',
+            'no-component-class',
+            'no-layout',
+            'no-partial',
+            'no-soft-component-class',
+            'optional-full-php-tags',
+            'optional-short-php-tags',
+            'throw-php',
+            'with-component',
+            'with-components',
+            'with-content',
+            'with-layout',
+            'with-partials',
+            'with-placeholder',
+            'with-soft-component-class',
+            'with-soft-component-class-alias',
         ], $pages);
 
         $layouts = Layout::lists('baseFileName');
         sort($layouts);
 
         $this->assertEquals([
-            "a/a-layout",
-            "ajax-test",
-            "content",
-            "cycle-test",
-            "no-php",
-            "partials",
-            "php-parser-test",
-            "placeholder",
-            "sidebar",
+            'a/a-layout',
+            'ajax-test',
+            'content',
+            'cycle-test',
+            'no-php',
+            'partials',
+            'php-parser-test',
+            'placeholder',
+            'sidebar',
         ], $layouts);
     }
 

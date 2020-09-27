@@ -12,13 +12,13 @@ class ExampleExportModel extends ExportModel
     {
         return [
             [
-                'foo' => 'bar',
-                'bar' => 'foo',
+                'foo'    => 'bar',
+                'bar'    => 'foo',
                 'foobar' => 'Hello World!',
             ],
             [
-                'foo' => 'bar2',
-                'bar' => 'foo2',
+                'foo'    => 'bar2',
+                'bar'    => 'foo2',
                 'foobar' => 'Hello World2!',
             ],
         ];
@@ -27,14 +27,13 @@ class ExampleExportModel extends ExportModel
 
 class ExportModelTest extends TestCase
 {
-
     //
     // Tests
     //
 
     public function testEncodeArrayValue()
     {
-        $model = new ExampleExportModel;
+        $model = new ExampleExportModel();
         $data = ['foo', 'bar'];
         $result = self::callProtectedMethod($model, 'encodeArrayValue', [$data]);
         $this->assertEquals('foo|bar', $result);
@@ -50,7 +49,7 @@ class ExportModelTest extends TestCase
 
     public function testDownload()
     {
-        $model = new ExampleExportModel;
+        $model = new ExampleExportModel();
 
         $csvName = $model->export(['foo' => 'title', 'bar' => 'title2'], []);
 
@@ -60,8 +59,8 @@ class ExportModelTest extends TestCase
 
         $response->prepare($request);
 
-        $this->assertTrue($response->headers->has('Content-Type'), "Response is missing the Content-Type header!");
-        $this->assertTrue($response->headers->contains('Content-Type', 'text/plain'), "Content-Type is not \"text/plain\"!");
+        $this->assertTrue($response->headers->has('Content-Type'), 'Response is missing the Content-Type header!');
+        $this->assertTrue($response->headers->contains('Content-Type', 'text/plain'), 'Content-Type is not "text/plain"!');
 
         ob_start();
         $response->send();
@@ -69,7 +68,7 @@ class ExportModelTest extends TestCase
 
         $utf8BOM = chr(239).chr(187).chr(191);
 
-        $this->assertEquals($utf8BOM."title,title2\nbar,foo\nbar2,foo2\n", $output, "CSV is not right!");
+        $this->assertEquals($utf8BOM."title,title2\nbar,foo\nbar2,foo2\n", $output, 'CSV is not right!');
 
         $filePath = temp_path($csvName);
 

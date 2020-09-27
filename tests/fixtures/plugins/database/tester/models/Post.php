@@ -1,4 +1,6 @@
-<?php namespace Database\Tester\Models;
+<?php
+
+namespace Database\Tester\Models;
 
 use Model;
 
@@ -65,8 +67,8 @@ class SluggablePost extends Post
      * @var array List of attributes to automatically generate unique URL names (slugs) for.
      */
     protected $slugs = [
-        'slug' => 'title',
-        'long_slug' => ['title', 'description']
+        'slug'      => 'title',
+        'long_slug' => ['title', 'description'],
     ];
 }
 
@@ -94,7 +96,7 @@ class RevisionablePost extends Post
         'description',
         'is_published',
         'published_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     /**
@@ -106,7 +108,7 @@ class RevisionablePost extends Post
      * @var array Relations
      */
     public $morphMany = [
-        'revision_history' => ['System\Models\Revision', 'name' => 'revisionable']
+        'revision_history' => ['System\Models\Revision', 'name' => 'revisionable'],
     ];
 
     /**
@@ -129,6 +131,6 @@ class ValidationPost extends Post
 
     public $rules = [
         'title' => 'required|min:3|max:255',
-        'slug' => ['required', 'regex:/^[a-z0-9\/\:_\-\*\[\]\+\?\|]*$/i', 'unique:database_tester_posts'],
+        'slug'  => ['required', 'regex:/^[a-z0-9\/\:_\-\*\[\]\+\?\|]*$/i', 'unique:database_tester_posts'],
     ];
 }

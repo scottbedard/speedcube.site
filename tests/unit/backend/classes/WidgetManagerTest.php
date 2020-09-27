@@ -1,6 +1,5 @@
 <?php
 
-use Backend\Classes\Controller;
 use Backend\Classes\WidgetManager;
 
 class WidgetManagerTest extends TestCase
@@ -18,8 +17,8 @@ class WidgetManagerTest extends TestCase
     {
         $manager = WidgetManager::instance();
         $manager->registerReportWidget('Acme\Fake\ReportWidget\HelloWorld', [
-            'name' => 'Hello World Test',
-            'context' => 'dashboard'
+            'name'    => 'Hello World Test',
+            'context' => 'dashboard',
         ]);
         $widgets = $manager->listReportWidgets();
 
@@ -30,12 +29,12 @@ class WidgetManagerTest extends TestCase
     {
         $manager = WidgetManager::instance();
         $manager->registerReportWidget('Acme\Fake\ReportWidget\HelloWorld', [
-            'name' => 'Hello World Test',
-            'context' => 'dashboard'
+            'name'    => 'Hello World Test',
+            'context' => 'dashboard',
         ]);
         $manager->registerReportWidget('Acme\Fake\ReportWidget\ByeWorld', [
-            'name' => 'Hello World Bye',
-            'context' => 'dashboard'
+            'name'    => 'Hello World Bye',
+            'context' => 'dashboard',
         ]);
 
         $manager->removeReportWidget('Acme\Fake\ReportWidget\ByeWorld');

@@ -6,7 +6,7 @@ use Database\Tester\Models\User;
 
 class HasOneThroughModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -31,7 +31,7 @@ class HasOneThroughModelTest extends PluginTestCase
         $author->save();
 
         $user = User::with([
-            'phone'
+            'phone',
         ])->find($user->id);
 
         $this->assertEquals($phone->id, $user->phone->id);

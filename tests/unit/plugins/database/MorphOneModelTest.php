@@ -1,12 +1,12 @@
 <?php
 
 use Database\Tester\Models\Author;
-use Database\Tester\Models\Post;
 use Database\Tester\Models\Meta;
+use Database\Tester\Models\Post;
 
 class MorphOneModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -21,34 +21,34 @@ class MorphOneModelTest extends PluginTestCase
     public function testSetRelationValue()
     {
         Model::unguard();
-        $post = Post::create(['title' => "First post", 'description' => "Yay!!"]);
+        $post = Post::create(['title' => 'First post', 'description' => 'Yay!!']);
         $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
         $meta1 = Meta::create([
-            'meta_title' => 'Question',
+            'meta_title'       => 'Question',
             'meta_description' => 'Industry',
-            'meta_keywords' => 'major',
-            'canonical_url' => 'http://google.com/search/jobs',
-            'redirect_url' => 'http://google.com',
-            'robot_index' => 'index',
-            'robot_follow' => 'follow',
+            'meta_keywords'    => 'major',
+            'canonical_url'    => 'http://google.com/search/jobs',
+            'redirect_url'     => 'http://google.com',
+            'robot_index'      => 'index',
+            'robot_follow'     => 'follow',
         ]);
         $meta2 = Meta::create([
-            'meta_title' => 'Comment',
+            'meta_title'       => 'Comment',
             'meta_description' => 'Social',
-            'meta_keywords' => 'startup',
-            'canonical_url' => 'http://facebook.com/search/users',
-            'redirect_url' => 'http://facebook.com',
-            'robot_index' => 'index',
-            'robot_follow' => 'follow',
+            'meta_keywords'    => 'startup',
+            'canonical_url'    => 'http://facebook.com/search/users',
+            'redirect_url'     => 'http://facebook.com',
+            'robot_index'      => 'index',
+            'robot_follow'     => 'follow',
         ]);
         $meta3 = Meta::make([
-            'meta_title' => 'Answer',
+            'meta_title'       => 'Answer',
             'meta_description' => 'Employment',
-            'meta_keywords' => 'minor',
-            'canonical_url' => 'http://yahoo.com/search/stats',
-            'redirect_url' => 'http://yahoo.com',
-            'robot_index' => 'index',
-            'robot_follow' => 'follow',
+            'meta_keywords'    => 'minor',
+            'canonical_url'    => 'http://yahoo.com/search/stats',
+            'redirect_url'     => 'http://yahoo.com',
+            'robot_index'      => 'index',
+            'robot_follow'     => 'follow',
         ]);
         Model::reguard();
 
@@ -92,13 +92,13 @@ class MorphOneModelTest extends PluginTestCase
         Model::unguard();
         $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
         $meta = Meta::create([
-            'meta_title' => 'Question',
+            'meta_title'       => 'Question',
             'meta_description' => 'Industry',
-            'meta_keywords' => 'major',
-            'canonical_url' => 'http://google.com/search/jobs',
-            'redirect_url' => 'http://google.com',
-            'robot_index' => 'index',
-            'robot_follow' => 'follow',
+            'meta_keywords'    => 'major',
+            'canonical_url'    => 'http://google.com/search/jobs',
+            'redirect_url'     => 'http://google.com',
+            'robot_index'      => 'index',
+            'robot_follow'     => 'follow',
         ]);
         Model::reguard();
 
@@ -119,15 +119,15 @@ class MorphOneModelTest extends PluginTestCase
         Model::unguard();
         $author = Author::create(['name' => 'Stevie']);
         $meta = Meta::create([
-            'taggable_id' => $author->id,
-            'taggable_type' => get_class($author),
-            'meta_title' => 'Question',
+            'taggable_id'      => $author->id,
+            'taggable_type'    => get_class($author),
+            'meta_title'       => 'Question',
             'meta_description' => 'Industry',
-            'meta_keywords' => 'major',
-            'canonical_url' => 'http://google.com/search/jobs',
-            'redirect_url' => 'http://google.com',
-            'robot_index' => 'index',
-            'robot_follow' => 'follow',
+            'meta_keywords'    => 'major',
+            'canonical_url'    => 'http://google.com/search/jobs',
+            'redirect_url'     => 'http://google.com',
+            'robot_index'      => 'index',
+            'robot_follow'     => 'follow',
         ]);
         Model::reguard();
 
@@ -141,13 +141,13 @@ class MorphOneModelTest extends PluginTestCase
         Model::unguard();
         $author = Author::create(['name' => 'Stevie']);
         $meta = Meta::create([
-            'meta_title' => 'Comment',
+            'meta_title'       => 'Comment',
             'meta_description' => 'Social',
-            'meta_keywords' => 'startup',
-            'canonical_url' => 'http://facebook.com/search/users',
-            'redirect_url' => 'http://facebook.com',
-            'robot_index' => 'index',
-            'robot_follow' => 'follow',
+            'meta_keywords'    => 'startup',
+            'canonical_url'    => 'http://facebook.com/search/users',
+            'redirect_url'     => 'http://facebook.com',
+            'robot_index'      => 'index',
+            'robot_follow'     => 'follow',
         ]);
         Model::reguard();
 

@@ -1,4 +1,6 @@
-<?php namespace Database\Tester\Models;
+<?php
+
+namespace Database\Tester\Models;
 
 use Model;
 
@@ -14,7 +16,6 @@ class Category extends Model
         return $this->name.' (#'.$this->id.')';
     }
 }
-
 
 class CategorySimple extends Category
 {
