@@ -1,6 +1,0 @@
-//
-// mutations
-//
-export default {
-
-};

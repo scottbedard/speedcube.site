@@ -1,6 +1,0 @@
-author: 'Scott Bedard'
-description: 'An opinionated SPA using Vue and October CMS'
-name: 'vuetober'
-require:
-  - RainLab.User
-  - Vuetober.RainLabUserApi
