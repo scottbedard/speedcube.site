@@ -1,12 +1,12 @@
 <?php
 
-use Database\Tester\Models\Post;
 use Database\Tester\Models\Author;
 use Database\Tester\Models\EventLog;
+use Database\Tester\Models\Post;
 
 class MorphToModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -21,9 +21,9 @@ class MorphToModelTest extends PluginTestCase
     {
         Model::unguard();
         $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
-        $post1 = Post::create(['title' => "First post", 'description' => "Yay!!"]);
-        $post2 = Post::make(['title' => "Second post", 'description' => "Woohoo!!"]);
-        $event = EventLog::create(['action' => "user-created"]);
+        $post1 = Post::create(['title' => 'First post', 'description' => 'Yay!!']);
+        $post2 = Post::make(['title' => 'Second post', 'description' => 'Woohoo!!']);
+        $event = EventLog::create(['action' => 'user-created']);
         Model::reguard();
 
         // Set by Model object
@@ -54,7 +54,7 @@ class MorphToModelTest extends PluginTestCase
     {
         Model::unguard();
         $author = Author::create(['name' => 'Stevie']);
-        $event = EventLog::make(['action' => "user-created", 'related_id' => $author->id, 'related_type' => get_class($author)]);
+        $event = EventLog::make(['action' => 'user-created', 'related_id' => $author->id, 'related_type' => get_class($author)]);
         Model::reguard();
 
         $this->assertEquals([$author->id, get_class($author)], $event->getRelationValue('related'));

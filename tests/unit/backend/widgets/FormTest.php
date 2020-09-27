@@ -6,14 +6,13 @@ use October\Tests\Fixtures\Backend\Models\UserFixture;
 
 class FormTestModel extends Model
 {
-
 }
 
 class FormTest extends PluginTestCase
 {
     public function testRestrictedFieldWithUserWithNoPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user);
 
         $form = $this->restrictedFormFixture();
@@ -24,7 +23,7 @@ class FormTest extends PluginTestCase
 
     public function testRestrictedFieldWithUserWithWrongPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->withPermission('test.wrong_permission', true));
 
         $form = $this->restrictedFormFixture();
@@ -35,7 +34,7 @@ class FormTest extends PluginTestCase
 
     public function testRestrictedFieldWithUserWithRightPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->withPermission('test.access_field', true));
 
         $form = $this->restrictedFormFixture();
@@ -46,23 +45,23 @@ class FormTest extends PluginTestCase
 
     public function testRestrictedFieldWithUserWithRightWildcardPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->withPermission('test.access_field', true));
 
         $form = new Form(null, [
-            'model' => new FormTestModel,
+            'model'     => new FormTestModel(),
             'arrayName' => 'array',
-            'fields' => [
+            'fields'    => [
                 'testField' => [
-                    'type' => 'text',
-                    'label' => 'Test 1'
+                    'type'  => 'text',
+                    'label' => 'Test 1',
                 ],
                 'testRestricted' => [
-                    'type' => 'text',
-                    'label' => 'Test 2',
-                    'permission' => 'test.*'
-                ]
-            ]
+                    'type'       => 'text',
+                    'label'      => 'Test 2',
+                    'permission' => 'test.*',
+                ],
+            ],
         ]);
 
         $form->render();
@@ -71,7 +70,7 @@ class FormTest extends PluginTestCase
 
     public function testRestrictedFieldWithSuperuser()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->asSuperUser());
 
         $form = $this->restrictedFormFixture();
@@ -82,7 +81,7 @@ class FormTest extends PluginTestCase
 
     public function testRestrictedFieldSinglePermissionWithUserWithWrongPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->withPermission('test.wrong_permission', true));
 
         $form = $this->restrictedFormFixture(true);
@@ -93,7 +92,7 @@ class FormTest extends PluginTestCase
 
     public function testRestrictedFieldSinglePermissionWithUserWithRightPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->withPermission('test.access_field', true));
 
         $form = $this->restrictedFormFixture(true);
@@ -105,24 +104,24 @@ class FormTest extends PluginTestCase
     public function testCheckboxlistTrigger()
     {
         $form = new Form(null, [
-            'model' => new FormTestModel,
+            'model'     => new FormTestModel(),
             'arrayName' => 'array',
-            'fields' => [
+            'fields'    => [
                 'trigger' => [
-                    'type' => 'checkboxlist',
+                    'type'    => 'checkboxlist',
                     'options' => [
-                        '1' => 'Value One'
-                    ]
+                        '1' => 'Value One',
+                    ],
                 ],
                 'triggered' => [
-                    'type' => 'text',
+                    'type'    => 'text',
                     'trigger' => [
-                        'field' => 'trigger[]',
-                        'action' => 'show',
-                        'condition' => 'value[1]'
-                    ]
-                ]
-            ]
+                        'field'     => 'trigger[]',
+                        'action'    => 'show',
+                        'condition' => 'value[1]',
+                    ],
+                ],
+            ],
         ]);
 
         $form->render();
@@ -134,21 +133,21 @@ class FormTest extends PluginTestCase
     protected function restrictedFormFixture(bool $singlePermission = false)
     {
         return new Form(null, [
-            'model' => new FormTestModel,
+            'model'     => new FormTestModel(),
             'arrayName' => 'array',
-            'fields' => [
+            'fields'    => [
                 'testField' => [
-                    'type' => 'text',
-                    'label' => 'Test 1'
+                    'type'  => 'text',
+                    'label' => 'Test 1',
                 ],
                 'testRestricted' => [
-                    'type' => 'text',
-                    'label' => 'Test 2',
+                    'type'        => 'text',
+                    'label'       => 'Test 2',
                     'permissions' => ($singlePermission) ? 'test.access_field' : [
-                        'test.access_field'
-                    ]
-                ]
-            ]
+                        'test.access_field',
+                    ],
+                ],
+            ],
         ]);
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
 use Backend\Classes\AuthManager;
-use System\Classes\UpdateManager;
-use System\Classes\PluginManager;
 use October\Rain\Database\Model as ActiveRecord;
 use October\Tests\Concerns\InteractsWithAuthentication;
+use System\Classes\PluginManager;
+use System\Classes\UpdateManager;
 
 abstract class PluginTestCase extends TestCase
 {
@@ -12,12 +12,13 @@ abstract class PluginTestCase extends TestCase
 
     /**
      * @var array Cache for storing which plugins have been loaded
-     * and refreshed.
+     *            and refreshed.
      */
     protected $pluginTestCaseLoadedPlugins = [];
 
     /**
      * Creates the application.
+     *
      * @return Symfony\Component\HttpKernel\HttpKernelInterface
      */
     public function createApplication()
@@ -43,17 +44,17 @@ abstract class PluginTestCase extends TestCase
         $dbConnections['sqlite'] = [
             'driver'   => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => ''
+            'prefix'   => '',
         ];
 
         if (env('APP_ENV') === 'testing' && Config::get('database.useConfigForTesting', false)) {
             $dbConnection = Config::get('database.default', 'sqlite');
 
-            $dbConnections[$dbConnection] = Config::get('database.connections' . $dbConnection, $dbConnections['sqlite']);
+            $dbConnections[$dbConnection] = Config::get('database.connections'.$dbConnection, $dbConnections['sqlite']);
         }
 
         $app['config']->set('database.default', $dbConnection);
-        $app['config']->set('database.connections.' . $dbConnection, $dbConnections[$dbConnection]);
+        $app['config']->set('database.connections.'.$dbConnection, $dbConnections[$dbConnection]);
 
         /*
          * Modify the plugin path away from the test context
@@ -65,9 +66,10 @@ abstract class PluginTestCase extends TestCase
 
     /**
      * Perform test case set up.
+     *
      * @return void
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         /*
          * Force reload of October singletons
@@ -103,9 +105,10 @@ abstract class PluginTestCase extends TestCase
 
     /**
      * Flush event listeners and collect garbage.
+     *
      * @return void
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         $this->flushModelEventListeners();
         parent::tearDown();
@@ -114,6 +117,7 @@ abstract class PluginTestCase extends TestCase
 
     /**
      * Migrate database using october:up command.
+     *
      * @return void
      */
     protected function runOctoberUpCommand()
@@ -125,6 +129,7 @@ abstract class PluginTestCase extends TestCase
      * Since the test environment has loaded all the test plugins
      * natively, this method will ensure the desired plugin is
      * loaded in the system before proceeding to migrate it.
+     *
      * @return void
      */
     protected function runPluginRefreshCommand($code, $throwException = true)
@@ -133,6 +138,7 @@ abstract class PluginTestCase extends TestCase
             if (!$throwException) {
                 return;
             }
+
             throw new Exception(sprintf('Invalid plugin code: "%s"', $code));
         }
 
@@ -150,6 +156,7 @@ abstract class PluginTestCase extends TestCase
                 if (!$throwException) {
                     return;
                 }
+
                 throw new Exception(sprintf('Unable to find plugin with code: "%s"', $code));
             }
 
@@ -179,6 +186,7 @@ abstract class PluginTestCase extends TestCase
 
     /**
      * Returns a plugin object from its code, useful for registering events, etc.
+     *
      * @return PluginBase
      */
     protected function getPluginObject($code = null)
@@ -196,6 +204,7 @@ abstract class PluginTestCase extends TestCase
      * The models in October use a static property to store their events, these
      * will need to be targeted and reset ready for a new test cycle.
      * Pivot models are an exception since they are internally managed.
+     *
      * @return void
      */
     protected function flushModelEventListeners()
@@ -222,6 +231,7 @@ abstract class PluginTestCase extends TestCase
 
     /**
      * Locates the plugin code based on the test file location.
+     *
      * @return string|bool
      */
     protected function guessPluginCodeFromTest()

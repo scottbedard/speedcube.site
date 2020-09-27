@@ -4,7 +4,7 @@ use Database\Tester\Models\SluggablePost;
 
 class SluggableModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -21,7 +21,7 @@ class SluggableModelTest extends PluginTestCase
 
     public function testSetAttributeOnPost()
     {
-        $post = new SluggablePost;
+        $post = new SluggablePost();
         $post->title = "Let's go, rock show!";
         $post->save();
 
@@ -30,7 +30,7 @@ class SluggableModelTest extends PluginTestCase
 
     public function testSetSlugAttributeManually()
     {
-        $post = new SluggablePost;
+        $post = new SluggablePost();
         $post->title = 'We parked in a comfortable spot';
         $post->slug = 'war-is-pain';
         $post->save();
@@ -40,7 +40,7 @@ class SluggableModelTest extends PluginTestCase
 
     public function testConcatenatedSlug()
     {
-        $post = new SluggablePost;
+        $post = new SluggablePost();
         $post->title = 'Sweetness and Light';
         $post->description = 'Itchee and Scratchee';
         $post->save();

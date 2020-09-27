@@ -1,12 +1,12 @@
 <?php
 
+use Cms\Classes\Controller as CmsController;
 use Cms\Classes\Theme;
+use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
+use October\Rain\Exception\SystemException;
 use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
 use System\Models\File as FileModel;
-use Cms\Classes\Controller as CmsController;
-use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
-use October\Rain\Exception\SystemException;
 
 class ImageResizerTest extends PluginTestCase
 {
@@ -42,14 +42,14 @@ class ImageResizerTest extends PluginTestCase
             100
         );
         self::assertArraySubset([
-            'width' => 100,
-            'height' => 100,
+            'width'   => 100,
+            'height'  => 100,
             'options' => [
-                'mode' => 'auto',
-                'offset' => [0, 0],
-                'sharpen' => 0,
+                'mode'      => 'auto',
+                'offset'    => [0, 0],
+                'sharpen'   => 0,
                 'interlace' => false,
-                'quality' => 90,
+                'quality'   => 90,
                 'extension' => 'png',
             ],
         ], $imageResizer->getConfig());
@@ -60,35 +60,35 @@ class ImageResizerTest extends PluginTestCase
             150,
             120,
             [
-                'mode' => 'fit',
-                'offset' => [2, 2],
-                'sharpen' => 23,
+                'mode'      => 'fit',
+                'offset'    => [2, 2],
+                'sharpen'   => 23,
                 'interlace' => true,
-                'quality' => 73,
-                'extension' => 'jpg'
+                'quality'   => 73,
+                'extension' => 'jpg',
             ]
         );
         self::assertArraySubset([
-            'width' => 150,
-            'height' => 120,
+            'width'   => 150,
+            'height'  => 120,
             'options' => [
-                'mode' => 'fit',
-                'offset' => [2, 2],
-                'sharpen' => 23,
+                'mode'      => 'fit',
+                'offset'    => [2, 2],
+                'sharpen'   => 23,
                 'interlace' => true,
-                'quality' => 73,
-                'extension' => 'jpg'
+                'quality'   => 73,
+                'extension' => 'jpg',
             ],
         ], $imageResizer->getConfig());
 
         // Resize with an customised defaults
         Event::listen('system.resizer.getDefaultOptions', function (&$options) {
             $options = array_merge($options, [
-                'mode' => 'fit',
-                'offset' => [2, 2],
-                'sharpen' => 23,
+                'mode'      => 'fit',
+                'offset'    => [2, 2],
+                'sharpen'   => 23,
                 'interlace' => true,
-                'quality' => 73,
+                'quality'   => 73,
             ]);
         });
 
@@ -99,14 +99,14 @@ class ImageResizerTest extends PluginTestCase
             []
         );
         self::assertArraySubset([
-            'width' => 100,
-            'height' => 100,
+            'width'   => 100,
+            'height'  => 100,
             'options' => [
-                'mode' => 'fit',
-                'offset' => [2, 2],
-                'sharpen' => 23,
+                'mode'      => 'fit',
+                'offset'    => [2, 2],
+                'sharpen'   => 23,
                 'interlace' => true,
-                'quality' => 73,
+                'quality'   => 73,
                 'extension' => 'png',
             ],
         ], $imageResizer->getConfig());
@@ -120,7 +120,7 @@ class ImageResizerTest extends PluginTestCase
             false
         );
         self::assertArraySubset([
-            'width' => 100,
+            'width'  => 100,
             'height' => 0,
         ], $imageResizer->getConfig());
 
@@ -130,7 +130,7 @@ class ImageResizerTest extends PluginTestCase
             null
         );
         self::assertArraySubset([
-            'width' => 100,
+            'width'  => 100,
             'height' => 0,
         ], $imageResizer->getConfig());
 
@@ -141,17 +141,17 @@ class ImageResizerTest extends PluginTestCase
             100
         );
         self::assertArraySubset([
-            'width' => 0,
+            'width'  => 0,
             'height' => 100,
         ], $imageResizer->getConfig());
 
         $imageResizer = new ImageResizer(
             (new CmsController())->themeUrl('assets/images/october.png'),
-            "0",
+            '0',
             100
         );
         self::assertArraySubset([
-            'width' => 0,
+            'width'  => 0,
             'height' => 100,
         ], $imageResizer->getConfig());
     }
@@ -271,7 +271,7 @@ class ImageResizerTest extends PluginTestCase
         $fileModel->save();
 
         $imageResizer = new ImageResizer(
-            str_replace(url('') . '/', '/', FileModel::first()->getPath()),
+            str_replace(url('').'/', '/', FileModel::first()->getPath()),
             100,
             100
         );
@@ -346,7 +346,7 @@ class ImageResizerTest extends PluginTestCase
 
         foreach (glob(base_path('tests/fixtures/media/*')) as $file) {
             $path = pathinfo($file);
-            copy($file, $mediaPath . DIRECTORY_SEPARATOR . $path['basename']);
+            copy($file, $mediaPath.DIRECTORY_SEPARATOR.$path['basename']);
         }
     }
 

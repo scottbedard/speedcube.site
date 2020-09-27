@@ -1,10 +1,11 @@
-<?php namespace Database\Tester\Models;
+<?php
+
+namespace Database\Tester\Models;
 
 use Model;
 
 class Author extends Model
 {
-
     /**
      * @var string The database table used by the model.
      */
@@ -19,8 +20,8 @@ class Author extends Model
      * @var array Relations
      */
     public $belongsTo = [
-        'user' => ['Database\Tester\Models\User', 'delete' => true],
-        'country' => ['Database\Tester\Models\Country'],
+        'user'      => ['Database\Tester\Models\User', 'delete' => true],
+        'country'   => ['Database\Tester\Models\Country'],
         'user_soft' => ['Database\Tester\Models\SoftDeleteUser', 'key' => 'user_id', 'softDelete' => true],
     ];
 
@@ -35,12 +36,12 @@ class Author extends Model
     public $belongsToMany = [
         'roles' => [
             'Database\Tester\Models\Role',
-            'table' => 'database_tester_authors_roles'
+            'table' => 'database_tester_authors_roles',
         ],
         'executive_authors' => [
             'Database\Tester\Models\Role',
-            'table' => 'database_tester_authors_roles',
-            'conditions' => 'is_executive = 1'
+            'table'      => 'database_tester_authors_roles',
+            'conditions' => 'is_executive = 1',
         ],
     ];
 

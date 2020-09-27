@@ -115,7 +115,7 @@ class MediaLibraryTest extends TestCase // @codingStandardsIgnoreLine
 
         foreach (glob(base_path('tests/fixtures/media/*')) as $file) {
             $path = pathinfo($file);
-            copy($file, $mediaPath . DIRECTORY_SEPARATOR . $path['basename']);
+            copy($file, $mediaPath.DIRECTORY_SEPARATOR.$path['basename']);
         }
     }
 

@@ -1,26 +1,25 @@
 <?php
 
-use Cms\Classes\Page;
-use Cms\Classes\Theme;
-use Cms\Classes\Layout;
-use Cms\Classes\Controller;
 use Cms\Classes\CodeParser;
 use Cms\Classes\ComponentManager;
+use Cms\Classes\Controller;
+use Cms\Classes\Layout;
+use Cms\Classes\Page;
+use Cms\Classes\Theme;
 
 class ComponentManagerTest extends TestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Archive.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Post.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/MainMenu.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/ContentBlock.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Comments.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/classes/Users.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/Archive.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/Post.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/MainMenu.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/ContentBlock.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/Comments.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/classes/Users.php';
     }
-
 
     public function testListComponents()
     {
@@ -95,7 +94,7 @@ class ComponentManagerTest extends TestCase
 
     public function testMakeComponent()
     {
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Archive.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/Archive.php';
 
         $pageObj = $this->spoofPageCode();
 
@@ -114,7 +113,7 @@ class ComponentManagerTest extends TestCase
 
     public function testDefineProperties()
     {
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Archive.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/Archive.php';
         $manager = ComponentManager::instance();
         $object = $manager->makeComponent('testArchive');
         $details = $object->componentDetails();
@@ -134,6 +133,7 @@ class ComponentManagerTest extends TestCase
         $controller = new Controller($theme);
         $parser = new CodeParser($page);
         $pageObj = $parser->source($page, $layout, $controller);
+
         return $pageObj;
     }
 }

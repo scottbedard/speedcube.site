@@ -1,24 +1,24 @@
 <?php
 
-use Cms\Classes\Theme;
 use Cms\Classes\Controller;
+use Cms\Classes\Theme;
 use October\Rain\Halcyon\Model;
 
 class ControllerTest extends TestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
         Model::clearBootedModels();
         Model::flushEventListeners();
 
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Archive.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Post.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/MainMenu.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/ContentBlock.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Comments.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/classes/Users.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/Archive.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/Post.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/MainMenu.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/ContentBlock.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/Comments.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/classes/Users.php';
     }
 
     public function testThemeUrl()
@@ -142,7 +142,7 @@ class ControllerTest extends TestCase
         $theme = Theme::load('test');
         $controller = new Controller($theme);
         $response = $controller->run('/apage')->getContent();
-        $this->assertEquals("<div>LAYOUT CONTENT <h1>This page is a subdirectory</h1></div>", $response);
+        $this->assertEquals('<div>LAYOUT CONTENT <h1>This page is a subdirectory</h1></div>', $response);
     }
 
     public function testPartialNotFound()
@@ -303,7 +303,7 @@ class ControllerTest extends TestCase
         $component = $page->components['testArchive'];
         $details = $component->componentDetails();
 
-        $content = <<<ESC
+        $content = <<<'ESC'
 <div>LAYOUT CONTENT<p>This page uses components.</p>
     <h3>Lorum ipsum</h3>
     <p>Post Content #1</p>
@@ -320,7 +320,7 @@ ESC;
 
     public function testComponentAliases()
     {
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Archive.php';
+        include_once base_path().'/tests/fixtures/plugins/october/tester/components/Archive.php';
 
         $theme = Theme::load('test');
         $controller = new Controller($theme);
@@ -333,7 +333,7 @@ ESC;
         $component = $page->components['firstAlias'];
         $component2 = $page->components['secondAlias'];
 
-        $content = <<<ESC
+        $content = <<<'ESC'
 <div>LAYOUT CONTENT<p>This page uses components.</p>
     <h3>Lorum ipsum</h3>
     <p>Post Content #1</p>
@@ -394,7 +394,7 @@ ESC;
         $component = $page->components['testArchive'];
         $details = $component->componentDetails();
 
-        $content = <<<ESC
+        $content = <<<'ESC'
 <div>LAYOUT CONTENT<p>This page uses components.</p>
     <h3>Lorum ipsum</h3>
     <p>Post Content #1</p>
@@ -420,7 +420,7 @@ ESC;
         $component = $page->components['someAlias'];
         $details = $component->componentDetails();
 
-        $content = <<<ESC
+        $content = <<<'ESC'
 <div>LAYOUT CONTENT<p>This page uses components.</p>
     <h3>Lorum ipsum</h3>
     <p>Post Content #1</p>
@@ -492,7 +492,7 @@ ESC;
         $controller = new Controller($theme);
         $response = $controller->run('/component-partial-nesting')->getContent();
 
-        $content = <<<ESC
+        $content = <<<'ESC'
 <h1>Level 1</h1>
 <ul>
     <strong>Home</strong>
@@ -532,7 +532,7 @@ ESC;
         $controller = new Controller($theme);
         $response = $controller->run('/component-custom-render')->getContent();
 
-        $content = <<<ESC
+        $content = <<<'ESC'
 Pass
 Custom output: Would you look over Picasso's shoulder
 Custom output: And tell him about his brush strokes?

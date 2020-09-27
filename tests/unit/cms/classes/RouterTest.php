@@ -7,7 +7,7 @@ class RouterTest extends TestCase
 {
     protected static $theme = null;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -19,6 +19,7 @@ class RouterTest extends TestCase
         $class = new ReflectionClass('\Cms\Classes\Router');
         $method = $class->getMethod($name);
         $method->setAccessible(true);
+
         return $method;
     }
 
@@ -27,6 +28,7 @@ class RouterTest extends TestCase
         $class = new ReflectionClass('\Cms\Classes\Router');
         $property = $class->getProperty($name);
         $property->setAccessible(true);
+
         return $property;
     }
 

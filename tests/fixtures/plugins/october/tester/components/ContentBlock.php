@@ -1,4 +1,6 @@
-<?php namespace October\Tester\Components;
+<?php
+
+namespace October\Tester\Components;
 
 use Cms\Classes\ComponentBase;
 
@@ -7,8 +9,8 @@ class ContentBlock extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name' => 'Content Block Dummy Component',
-            'description' => 'Displays a editable content block.'
+            'name'        => 'Content Block Dummy Component',
+            'description' => 'Displays a editable content block.',
         ];
     }
 

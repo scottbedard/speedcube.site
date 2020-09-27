@@ -25,7 +25,7 @@ class OctoberEnvTest extends TestCase
     {
         $command = new OctoberEnv();
         $command->setLaravel($this->app);
-        $command->run(new ArrayInput([]), new NullOutput);
+        $command->run(new ArrayInput([]), new NullOutput());
 
         // Check environment file
         $envFile = file_get_contents(base_path('.env'));
@@ -72,7 +72,7 @@ class OctoberEnvTest extends TestCase
 
         foreach (glob(base_path('tests/fixtures/config/*.php')) as $file) {
             $path = pathinfo($file);
-            copy($file, storage_path('temp/tests/config/' . $path['basename']));
+            copy($file, storage_path('temp/tests/config/'.$path['basename']));
         }
 
         static::$fixturesCopied = true;
@@ -83,7 +83,7 @@ class OctoberEnvTest extends TestCase
         $this->app->instance('path.config', storage_path('temp/tests/config'));
 
         // Re-load configuration
-        $configBootstrap = new LoadConfiguration;
+        $configBootstrap = new LoadConfiguration();
         $configBootstrap->bootstrap($this->app);
     }
 
@@ -108,7 +108,7 @@ class OctoberEnvTest extends TestCase
         }
 
         // Re-load configuration
-        $configBootstrap = new LoadConfiguration;
+        $configBootstrap = new LoadConfiguration();
         $configBootstrap->bootstrap($this->app);
     }
 

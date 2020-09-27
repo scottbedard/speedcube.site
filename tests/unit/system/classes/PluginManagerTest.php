@@ -1,11 +1,12 @@
 <?php
+
 use System\Classes\PluginManager;
 
 class PluginManagerTest extends TestCase
 {
     public $manager;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -60,7 +61,7 @@ class PluginManagerTest extends TestCase
     {
         $result = $this->manager->getPluginPath('October\Tester');
         $basePath = str_replace('\\', '/', base_path());
-        $this->assertEquals($basePath . '/tests/fixtures/plugins/october/tester', $result);
+        $this->assertEquals($basePath.'/tests/fixtures/plugins/october/tester', $result);
     }
 
     public function testGetPlugins()
@@ -114,7 +115,7 @@ class PluginManagerTest extends TestCase
         $this->assertFalse($result);
 
         /**
-         * Test case for https://github.com/octobercms/october/pull/4337
+         * Test case for https://github.com/octobercms/october/pull/4337.
          */
         $result = $this->manager->hasPlugin('dependencyTest\Wrongcase');
         $this->assertTrue($result);
@@ -214,7 +215,7 @@ class PluginManagerTest extends TestCase
         $this->assertTrue($result);
 
         /**
-         * Test case for https://github.com/octobercms/october/pull/4838
+         * Test case for https://github.com/octobercms/october/pull/4838.
          */
         $result = $this->manager->isDisabled('dependencyTest\Wrongcase');
         $this->assertFalse($result);

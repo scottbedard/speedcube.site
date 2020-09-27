@@ -4,7 +4,7 @@ use Database\Tester\Models\Post;
 
 class ModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -16,9 +16,9 @@ class ModelTest extends PluginTestCase
     public function testCreateFirstPost()
     {
         Post::truncate();
-        $post = new Post;
-        $post->title = "First post";
-        $post->description = "Yay!!";
+        $post = new Post();
+        $post->title = 'First post';
+        $post->description = 'Yay!!';
         $post->save();
         $this->assertEquals(1, $post->id);
     }

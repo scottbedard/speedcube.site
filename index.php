@@ -2,7 +2,6 @@
 /**
  * October - The PHP platform that gets back to basics.
  *
- * @package  October
  * @author   Alexey Bobkov, Samuel Georges
  */
 

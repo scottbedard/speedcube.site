@@ -4,24 +4,23 @@ use Cms\Classes\PartialStack;
 
 class PartialStackTest extends TestCase
 {
-
     public function testStackPartials()
     {
-        $stack = new PartialStack;
+        $stack = new PartialStack();
 
         /*
          * Stack em up
          */
         $stack->stackPartial();
-            $stack->addComponent('override1', 'October\Tester\Components\MainMenu');
-            $stack->addComponent('override2', 'October\Tester\Components\ContentBlock');
+        $stack->addComponent('override1', 'October\Tester\Components\MainMenu');
+        $stack->addComponent('override2', 'October\Tester\Components\ContentBlock');
 
-            $stack->stackPartial();
-                $stack->addComponent('override3', 'October\Tester\Components\Post');
-                $stack->addComponent('post', 'October\Tester\Components\Post');
+        $stack->stackPartial();
+        $stack->addComponent('override3', 'October\Tester\Components\Post');
+        $stack->addComponent('post', 'October\Tester\Components\Post');
 
-                $stack->stackPartial();
-                    $stack->addComponent('mainMenu', 'October\Tester\Components\MainMenu');
+        $stack->stackPartial();
+        $stack->addComponent('mainMenu', 'October\Tester\Components\MainMenu');
 
         /*
          * Knock em down
@@ -52,7 +51,7 @@ class PartialStackTest extends TestCase
 
     public function testEmptyStack()
     {
-        $stack = new PartialStack;
+        $stack = new PartialStack();
         $this->assertNull($stack->getComponent('xxx'));
     }
 }

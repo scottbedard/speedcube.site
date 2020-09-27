@@ -1,7 +1,9 @@
-<?php namespace Database\Tester\Updates;
+<?php
 
-use Schema;
+namespace Database\Tester\Updates;
+
 use October\Rain\Database\Updates\Migration;
+use Schema;
 
 class CreateCountriesTable extends Migration
 {

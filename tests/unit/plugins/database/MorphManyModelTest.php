@@ -6,7 +6,7 @@ use October\Rain\Database\Collection;
 
 class MorphManyModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -20,10 +20,10 @@ class MorphManyModelTest extends PluginTestCase
     {
         Model::unguard();
         $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
-        $event1 = EventLog::create(['action' => "user-created"]);
-        $event2 = EventLog::create(['action' => "user-updated"]);
-        $event3 = EventLog::create(['action' => "user-deleted"]);
-        $event4 = EventLog::make(['action' => "user-restored"]);
+        $event1 = EventLog::create(['action' => 'user-created']);
+        $event2 = EventLog::create(['action' => 'user-updated']);
+        $event3 = EventLog::create(['action' => 'user-deleted']);
+        $event4 = EventLog::make(['action' => 'user-restored']);
         Model::reguard();
 
         // Set by Model object
@@ -35,7 +35,7 @@ class MorphManyModelTest extends PluginTestCase
         $this->assertEquals('Database\Tester\Models\Author', $event2->related_type);
         $this->assertEquals([
             'user-created',
-            'user-updated'
+            'user-updated',
         ], $author->event_log->lists('action'));
 
         // Set by primary key
@@ -46,7 +46,7 @@ class MorphManyModelTest extends PluginTestCase
         $this->assertEquals($author->id, $event3->related_id);
         $this->assertEquals('Database\Tester\Models\Author', $event3->related_type);
         $this->assertEquals([
-            'user-deleted'
+            'user-deleted',
         ], $author->event_log->lists('action'));
 
         // Nullify
@@ -62,7 +62,7 @@ class MorphManyModelTest extends PluginTestCase
         $this->assertEquals($author->id, $event4->related_id);
         $this->assertEquals('Database\Tester\Models\Author', $event4->related_type);
         $this->assertEquals([
-            'user-restored'
+            'user-restored',
         ], $author->event_log->lists('action'));
     }
 
@@ -70,8 +70,8 @@ class MorphManyModelTest extends PluginTestCase
     {
         Model::unguard();
         $author = Author::create(['name' => 'Stevie']);
-        $event1 = EventLog::create(['action' => "user-created", 'related_id' => $author->id, 'related_type' => 'Database\Tester\Models\Author']);
-        $event2 = EventLog::create(['action' => "user-updated", 'related_id' => $author->id, 'related_type' => 'Database\Tester\Models\Author']);
+        $event1 = EventLog::create(['action' => 'user-created', 'related_id' => $author->id, 'related_type' => 'Database\Tester\Models\Author']);
+        $event2 = EventLog::create(['action' => 'user-updated', 'related_id' => $author->id, 'related_type' => 'Database\Tester\Models\Author']);
         Model::reguard();
 
         $this->assertEquals([$event1->id, $event2->id], $author->getRelationValue('event_log'));
@@ -83,7 +83,7 @@ class MorphManyModelTest extends PluginTestCase
 
         Model::unguard();
         $author = Author::create(['name' => 'Stevie']);
-        $event = EventLog::create(['action' => "user-created"]);
+        $event = EventLog::create(['action' => 'user-created']);
         Model::reguard();
 
         $eventId = $event->id;
@@ -102,7 +102,7 @@ class MorphManyModelTest extends PluginTestCase
         $this->assertEquals(1, $author->event_log()->count());
         $this->assertEquals($author->id, $event->related_id);
         $this->assertEquals([
-            'user-created'
+            'user-created',
         ], $author->event_log->lists('action'));
 
         // New session
@@ -114,7 +114,7 @@ class MorphManyModelTest extends PluginTestCase
         $this->assertEquals(0, $author->event_log()->withDeferred($sessionKey)->count());
         $this->assertEquals($author->id, $event->related_id);
         $this->assertEquals([
-            'user-created'
+            'user-created',
         ], $author->event_log->lists('action'));
 
         // Commit deferred (model is deleted as per definition)

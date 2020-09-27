@@ -1,23 +1,23 @@
 <?php
 
-use Cms\Classes\PageCode;
-use Cms\Classes\LayoutCode;
-use Cms\Classes\Page;
-use Cms\Classes\Theme;
-use Cms\Classes\Layout;
 use Cms\Classes\CodeParser;
 use Cms\Classes\Controller;
+use Cms\Classes\Layout;
+use Cms\Classes\LayoutCode;
+use Cms\Classes\Page;
+use Cms\Classes\PageCode;
+use Cms\Classes\Theme;
 
 class CodeParserTest extends TestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setup();
 
         /*
          * Clear cache
          */
-        foreach (File::directories(storage_path() . '/cms/cache') as $directory) {
+        foreach (File::directories(storage_path().'/cms/cache') as $directory) {
             File::deleteDirectory($directory);
         }
     }
@@ -57,12 +57,12 @@ class CodeParserTest extends TestCase
          */
 
         $body = preg_replace('/^\s*function/m', 'public function', $layout->code);
-        $expectedContent = '<?php ' . PHP_EOL;
+        $expectedContent = '<?php '.PHP_EOL;
 
-        $expectedContent .= 'class ' . $info['className'] . ' extends ' . LayoutCode::class . PHP_EOL;
-        $expectedContent .= '{' . PHP_EOL;
-        $expectedContent .= $body . PHP_EOL;
-        $expectedContent .= '}' . PHP_EOL;
+        $expectedContent .= 'class '.$info['className'].' extends '.LayoutCode::class.PHP_EOL;
+        $expectedContent .= '{'.PHP_EOL;
+        $expectedContent .= $body.PHP_EOL;
+        $expectedContent .= '}'.PHP_EOL;
 
         $this->assertEquals($expectedContent, file_get_contents($info['filePath']));
 
@@ -139,11 +139,11 @@ class CodeParserTest extends TestCase
 
         $this->assertFileExists($info['filePath']);
 
-        $expectedContent = '<?php ' . PHP_EOL;
-        $expectedContent .= 'class ' . $info['className'] . ' extends ' . LayoutCode::class . PHP_EOL;
-        $expectedContent .= '{' . PHP_EOL;
+        $expectedContent = '<?php '.PHP_EOL;
+        $expectedContent .= 'class '.$info['className'].' extends '.LayoutCode::class.PHP_EOL;
+        $expectedContent .= '{'.PHP_EOL;
         $expectedContent .= PHP_EOL;
-        $expectedContent .= '}' . PHP_EOL;
+        $expectedContent .= '}'.PHP_EOL;
 
         $this->assertEquals($expectedContent, file_get_contents($info['filePath']));
     }
@@ -169,11 +169,11 @@ class CodeParserTest extends TestCase
         $this->assertInstanceOf(PageCode::class, $obj);
 
         $body = preg_replace('/^\s*function/m', 'public function', $page->code);
-        $expectedContent = '<?php ' . PHP_EOL;
-        $expectedContent .= 'class ' . $info['className'] . ' extends ' . PageCode::class . PHP_EOL;
-        $expectedContent .= '{' . PHP_EOL;
-        $expectedContent .= $body . PHP_EOL;
-        $expectedContent .= '}' . PHP_EOL;
+        $expectedContent = '<?php '.PHP_EOL;
+        $expectedContent .= 'class '.$info['className'].' extends '.PageCode::class.PHP_EOL;
+        $expectedContent .= '{'.PHP_EOL;
+        $expectedContent .= $body.PHP_EOL;
+        $expectedContent .= '}'.PHP_EOL;
 
         $this->assertEquals($expectedContent, file_get_contents($info['filePath']));
     }
@@ -203,11 +203,11 @@ class CodeParserTest extends TestCase
         $this->assertInstanceOf('\Cms\Classes\PageCode', $obj);
 
         $body = preg_replace('/^\s*function/m', 'public function', $page->code);
-        $expectedContent = '<?php ' . PHP_EOL;
-        $expectedContent .= 'class ' . $info['className'] . ' extends ' . PageCode::class . PHP_EOL;
-        $expectedContent .= '{' . PHP_EOL;
-        $expectedContent .= $body . PHP_EOL;
-        $expectedContent .= '}' . PHP_EOL;
+        $expectedContent = '<?php '.PHP_EOL;
+        $expectedContent .= 'class '.$info['className'].' extends '.PageCode::class.PHP_EOL;
+        $expectedContent .= '{'.PHP_EOL;
+        $expectedContent .= $body.PHP_EOL;
+        $expectedContent .= '}'.PHP_EOL;
 
         $this->assertEquals($expectedContent, file_get_contents($info['filePath']));
 
@@ -232,11 +232,11 @@ class CodeParserTest extends TestCase
         $this->assertInstanceOf(PageCode::class, $obj);
 
         $body = preg_replace('/^\s*function/m', 'public function', $page->code);
-        $expectedContent = '<?php ' . PHP_EOL;
-        $expectedContent .= 'class ' . $info['className'] . ' extends ' . PageCode::class . PHP_EOL;
-        $expectedContent .= '{' . PHP_EOL;
-        $expectedContent .= $body . PHP_EOL;
-        $expectedContent .= '}' . PHP_EOL;
+        $expectedContent = '<?php '.PHP_EOL;
+        $expectedContent .= 'class '.$info['className'].' extends '.PageCode::class.PHP_EOL;
+        $expectedContent .= '{'.PHP_EOL;
+        $expectedContent .= $body.PHP_EOL;
+        $expectedContent .= '}'.PHP_EOL;
 
         $this->assertEquals($expectedContent, file_get_contents($info['filePath']));
     }
@@ -266,7 +266,7 @@ class CodeParserTest extends TestCase
         $obj = $parser->source($page, null, $controller);
         $this->assertInstanceOf(PageCode::class, $obj);
 
-        $referenceFilePath = base_path() . '/tests/fixtures/cms/reference/namespaces.php.stub';
+        $referenceFilePath = base_path().'/tests/fixtures/cms/reference/namespaces.php.stub';
         $this->assertFileExists($referenceFilePath);
         $referenceContents = $this->getContents($referenceFilePath);
 
@@ -295,7 +295,7 @@ class CodeParserTest extends TestCase
         $obj = $parser->source($page, null, $controller);
         $this->assertInstanceOf(PageCode::class, $obj);
 
-        $referenceFilePath = base_path() . '/tests/fixtures/cms/reference/namespaces-aliases.php.stub';
+        $referenceFilePath = base_path().'/tests/fixtures/cms/reference/namespaces-aliases.php.stub';
         $this->assertFileExists($referenceFilePath);
         $referenceContents = $this->getContents($referenceFilePath);
 
@@ -312,6 +312,7 @@ class CodeParserTest extends TestCase
     {
         $content = file_get_contents($path);
         $content = preg_replace('~\R~u', PHP_EOL, $content); // Normalize EOL
+
         return $content;
     }
 }

@@ -1,16 +1,17 @@
-<?php namespace October\Demo\Components;
+<?php
 
-use Cms\Classes\ComponentBase;
+namespace October\Demo\Components;
+
 use ApplicationException;
+use Cms\Classes\ComponentBase;
 
 class Todo extends ComponentBase
 {
-
     public function componentDetails()
     {
         return [
             'name'        => 'Todo List',
-            'description' => 'Implements a simple to-do list.'
+            'description' => 'Implements a simple to-do list.',
         ];
     }
 
@@ -23,8 +24,8 @@ class Todo extends ComponentBase
                 'default'           => 10,
                 'type'              => 'string',
                 'validationPattern' => '^[0-9]+$',
-                'validationMessage' => 'The Max Items value is required and should be integer.'
-            ]
+                'validationMessage' => 'The Max Items value is required and should be integer.',
+            ],
         ];
     }
 

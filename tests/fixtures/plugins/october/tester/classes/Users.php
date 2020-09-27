@@ -1,4 +1,6 @@
-<?php namespace October\Tester\Classes;
+<?php
+
+namespace October\Tester\Classes;
 
 class Users
 {
@@ -6,7 +8,7 @@ class Users
     {
         return [
             'Art Vandelay' => 'Arquitecht and Importer/Exporter',
-            'Carl' => 'where is he?',
+            'Carl'         => 'where is he?',
         ];
     }
 }

@@ -1,16 +1,15 @@
 <?php
 
-use Database\Tester\Models\User;
 use Database\Tester\Models\Author;
-use Database\Tester\Models\UserWithAuthor;
 use Database\Tester\Models\SoftDeleteAuthor;
-use Database\Tester\Models\UserWithSoftAuthor;
+use Database\Tester\Models\UserWithAuthor;
 use Database\Tester\Models\UserWithAuthorAndSoftDelete;
+use Database\Tester\Models\UserWithSoftAuthor;
 use Database\Tester\Models\UserWithSoftAuthorAndSoftDelete;
 
 class SoftDeleteModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
