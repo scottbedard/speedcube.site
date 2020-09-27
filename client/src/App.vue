@@ -1,8 +1,12 @@
+<style>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+</style>
+
 <template>
-  <div>
-    <h1>Vue 3</h1>
-    <div>Count: {{ count }}</div>
-    <button @click="inc">+1</button>
+  <div class="flex h-screen items-center justify-center p-6 text-center">
+    <h1 class="text-2xl">Soon...</h1>
   </div>
 </template>
 
