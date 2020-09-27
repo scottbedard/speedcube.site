@@ -15,7 +15,17 @@ module.exports = {
     preserveHtmlElements: false,
   },
   theme: {
-    extend: {},
+    extend: {
+      boxShadow: {
+        'outline': '0 0 0 3px rgba(66, 153, 225, 0.6)',
+      },
+      fontFamily: {
+        'sans': 'Quicksand, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+      },
+      screens: {
+        'xs': '480px',
+      },
+    },
   },
   variants: {},
 };
