@@ -29,17 +29,17 @@ return [
     'connections' => [
 
         'pusher' => [
-            'driver' => 'pusher',
-            'key' => '',
-            'secret' => '',
-            'app_id' => '',
+            'driver'  => 'pusher',
+            'key'     => '',
+            'secret'  => '',
+            'app_id'  => '',
             'options' => [
                 //
             ],
         ],
 
         'redis' => [
-            'driver' => 'redis',
+            'driver'     => 'redis',
             'connection' => 'default',
         ],
 
