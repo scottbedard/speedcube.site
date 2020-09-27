@@ -1,0 +1,55 @@
+name: Build
+
+on: [push]
+
+jobs:
+  # backend:
+  #   name: Test Backend
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Copy .env
+  #     run: php -r "file_exists('api/.env') || copy('api/.env.example', 'api/.env');"
+  #   - name: Install Dependencies
+  #     run: cd api && composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+  #   - name: Set permissions
+  #     run: chmod -R 777 api/storage
+  #   - name: Create Database
+  #     run: |
+  #       mkdir -p api/database
+  #       touch api/database/database.sqlite
+  #   - name: Execute tests
+  #     env:
+  #       DB_CONNECTION: sqlite
+  #       DB_DATABASE: database/database.sqlite
+  #     run: cd api && vendor/bin/phpunit --coverage-clover clover.xml
+  #   - name: Report coverage
+  #     run: cd api && bash <(curl -s https://codecov.io/bash) -t token -cF php
+  
+  # frontend:
+  #   name: Test Frontend
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node-version: [14.x]
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Use Node.js ${{ matrix.node-version }}
+  #     uses: actions/setup-node@v1
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
+  #   - name: Install
+  #     run: npm install
+  #   - name: Test
+  #     run: npm test
+  #   - name: Report coverage
+  #     run: bash <(curl -s https://codecov.io/bash)
+
+  deploy:
+    if: github.ref == 'refs/heads/l6'
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Deploy
+      run: curl ${{secrets.ENVOYER_NEXT_URL}}
