@@ -1,4 +1,4 @@
-/client/node_modules
-/client/dist
-/vendor
 .env
+/client/dist
+/client/node_modules
+/vendor
