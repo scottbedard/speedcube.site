@@ -9,6 +9,11 @@ export const router = createRouter({
       path: '/',
     },
     {
+      component: () => import('@/pages/records.vue' /* webpackChunkName: 'records' */),
+      name: 'records',
+      path: '/records',
+    },
+    {
       component: () => import('@/pages/signup.vue' /* webpackChunkName: 'signup' */),
       name: 'signup',
       path: '/signup',

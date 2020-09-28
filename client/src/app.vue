@@ -1,7 +1,13 @@
-<style>
+<style lang="scss">
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+a {
+  &:hover {
+    @apply underline;
+  }
+}
 </style>
 
 <template>
