@@ -1,4 +1,6 @@
-<?php namespace Speedcube\Speedcube;
+<?php
+
+namespace Speedcube\Speedcube;
 
 use Backend;
 use System\Classes\PluginBase;
@@ -37,6 +39,7 @@ class Plugin extends PluginBase
      */
     public function register()
     {
+        $this->registerConsoleCommand('speedcube.reset', 'Speedcube\Speedcube\Console\Reset');
     }
 
     /**
