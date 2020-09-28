@@ -4,31 +4,42 @@
     <v-card class="max-w-md mx-auto" padded>
       <form class="gap-6 grid" @submit.prevent="onSubmit">
         <v-labeled-input
+          v-model="form.username"
           autofocus
           label="Username"
           placeholder="Enter username"
-          required />
+          required
+          :disabled="createUserIsLoading" />
 
         <v-labeled-input
+          v-model="form.email"
           label="Email"
           placeholder="Enter email address"
           required
-          type="email" />
+          type="email"
+          :disabled="createUserIsLoading" />
 
         <v-labeled-input
+          v-model="form.password"
           label="Password"
           placeholder="Enter password"
           required
-          type="password" />
+          type="password"
+          :disabled="createUserIsLoading" />
 
         <v-labeled-input
+          v-model="form.passwordConfirmation"
           label="Confirm password"
           placeholder="Enter password confirmation"
           required
-          type="password" />
+          type="password"
+          :disabled="createUserIsLoading" />
 
         <div class="flex justify-end">
-          <v-button theme="primary" type="submit">
+          <v-button
+            theme="primary"
+            type="submit"
+            :disabled="createUserIsLoading">
             Sign up
           </v-button>
         </div>
@@ -39,11 +50,33 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useCreateUser } from '@/app/behaviors/create-user';
 import VButton from '@/components/button.vue';
 import VCard from '@/components/card.vue';
 import VLabeledInput from '@/components/labeled-input.vue';
 
 export default defineComponent({
+  data() {
+    return {
+      form: {
+        email: '',
+        password: '',
+        passwordConfirmation: '',
+        username: '',
+      },
+    };
+  },
+  setup() {
+    const {
+      createUser,
+      createUserIsLoading,
+    } = useCreateUser();
+
+    return {
+      createUser,
+      createUserIsLoading,
+    };
+  },
   components: {
     VButton,
     VCard,
@@ -51,7 +84,7 @@ export default defineComponent({
   },
   methods: {
     onSubmit() {
-      console.log('creating account...');
+      this.createUser(this.form);
     },
   },
 });

@@ -10,8 +10,8 @@
       :placeholder="placeholder"
       :required="required"
       :type="type"
-      :value="value"
-      @input="onInput" />
+      :value="modelValue"
+      @update:modelValue="$emit('update:modelValue', $event)" />
   </label>
 </template>
 
@@ -23,11 +23,6 @@ export default defineComponent({
   components: {
     VInput,
   },
-  methods: {
-    onInput(value: string) {
-      this.$emit('input', value);
-    },
-  },
   props: {
     autofocus: Boolean,
     disabled: Boolean,
@@ -35,10 +30,10 @@ export default defineComponent({
       required: true,
       type: String,
     },
+    modelValue: [Number, String],
     placeholder: String,
     required: Boolean,
     type: String,
-    value: [Number, String],
   },
 });
 </script>
