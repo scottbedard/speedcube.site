@@ -19,7 +19,7 @@
         :to="link.to" />
     </nav>
   </div>
-  <div>
+  <div class="px-6">
     <slot />
   </div>
 </template>
