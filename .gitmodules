@@ -1,3 +1,6 @@
 [submodule "plugins/bedard/rainlabuserapi"]
 	path = plugins/bedard/rainlabuserapi
 	url = git@github.com:scottbedard/rainlab-user-api.git
+[submodule "plugins/rainlab/user"]
+	path = plugins/rainlab/user
+	url = git@github.com:rainlab/user-plugin.git
