@@ -24,6 +24,12 @@ class UtilTest extends TestCase
         ], $result);
     }
 
+    public function test_isJson()
+    {
+        $this->assertTrue(Util::isJson('{"foo":"bar"}'));
+        $this->assertFalse(Util::isJson('not valid json'));
+    }
+
     public function test_keyByRecursive()
     {
         $result = Util::keyByRecursive([
