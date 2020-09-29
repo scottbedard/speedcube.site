@@ -84,7 +84,9 @@ export default defineComponent({
   },
   methods: {
     onSubmit() {
-      this.createUser(this.form);
+      this.createUser(this.form).then(() => {
+        this.$router.replace({ name: 'solve' });
+      });
     },
   },
 });

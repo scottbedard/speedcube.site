@@ -1,3 +1,4 @@
+import { currentUser } from '@/app/state/user';
 import { isValidationError } from '@/app/utils/api';
 import { ref } from 'vue';
 import { UserModel } from '@/app/types/user';
@@ -23,9 +24,11 @@ export function useCreateUser() {
     createUserFailed.value = false;
     createUserIsLoading.value = true;
 
-    return axios.post<UserModel>('/api/rainlab/user/users', data).then(response => {
+    const request = axios.post<UserModel>('/api/rainlab/user/users', data);
+
+    request.then(response => {
       // success
-      console.log('success', response.data);
+      currentUser.value = response.data;
     }).catch(err => {
       // failed
       if (isValidationError(err)) {
@@ -37,6 +40,8 @@ export function useCreateUser() {
       // complete
       createUserIsLoading.value = false;
     });
+
+    return request;
   };
 
   return {

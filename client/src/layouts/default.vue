@@ -25,26 +25,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { currentUser } from '@/app/state/user';
+import { computed, defineComponent } from 'vue';
+import { identity } from 'lodash-es';
 
 export default defineComponent({
   setup() {
-    const links = [
+    const links = computed(() => [
       {
         text: 'Records',
         to: {
           name: 'records',
         },
       },
-      {
-        text: 'Signup',
+      !currentUser.value && {
+        text: 'Sign up',
         to: {
           name: 'signup',
         },
       },
-    ];
+    ].filter(identity));
 
     return {
+      currentUser,
       links,
     };
   },

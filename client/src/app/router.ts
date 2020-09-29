@@ -18,5 +18,10 @@ export const router = createRouter({
       name: 'signup',
       path: '/signup',
     },
+    {
+      component: () => import('@/pages/solve.vue' /* webpackChunkName: 'solve' */),
+      name: 'solve',
+      path: '/solve',
+    },
   ],
 });
