@@ -3,20 +3,35 @@
 namespace Speedcube\Speedcube\Tests\Unit\Classes;
 
 use Speedcube\Speedcube\Classes\Util;
-use Speedcube\Speedcube\Tests\PluginTestCase;
+use TestCase;
 
-class UtilTest extends PluginTestCase
+class UtilTest extends TestCase
 {
+    public function test_camelCaseKeysRecursive()
+    {
+        $result = Util::camelCaseKeysRecursive([
+            'a_b' => 1,
+            'c_d' => [
+                'e_f' => 2,
+            ],
+        ]);
+
+        $this->assertEquals([
+            'aB' => 1,
+            'cD' => [
+                'eF' => 2,
+            ],
+        ], $result);
+    }
+
     public function test_keyByRecursive()
     {
-        $source = [
+        $result = Util::keyByRecursive([
             'foo' => 1,
             'bar' => [
                 'baz' => 2,
             ],
-        ];
-
-        $result = Util::keyByRecursive($source, function ($value, $key) {
+        ], function ($value, $key) {
             return strtoupper($key);
         });
 
@@ -24,6 +39,23 @@ class UtilTest extends PluginTestCase
             'FOO' => 1,
             'BAR' => [
                 'BAZ' => 2,
+            ],
+        ], $result);
+    }
+
+    public function test_snakeCaseKeysRecursive()
+    {
+        $result = Util::snakeCaseKeysRecursive([
+            'aB' => 1,
+            'cD' => [
+                'eF' => 2,
+            ],
+        ]);
+
+        $this->assertEquals([
+            'a_b' => 1,
+            'c_d' => [
+                'e_f' => 2,
             ],
         ], $result);
     }
