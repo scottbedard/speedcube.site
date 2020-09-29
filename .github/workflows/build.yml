@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        submodules: true
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-    - name: Clone Plugins
-      run: git submodule update --init --depth 1
     - name: Install Dependencies
       run: composer install
   
