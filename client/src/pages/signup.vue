@@ -49,6 +49,7 @@
 </template>
 
 <script lang="ts">
+import { currentUser } from '@/app/state/current-user';
 import { defineComponent } from 'vue';
 import { useCreateUser } from '@/app/behaviors/create-user';
 import VButton from '@/components/button.vue';
@@ -75,6 +76,7 @@ export default defineComponent({
     return {
       createUser,
       createUserIsLoading,
+      currentUser,
     };
   },
   components: {

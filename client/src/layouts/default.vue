@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { currentUser } from '@/app/state/user';
+import { currentUser } from '@/app/state/current-user';
 import { computed, defineComponent } from 'vue';
 import { identity } from 'lodash-es';
 

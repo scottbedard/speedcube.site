@@ -1,6 +1,6 @@
-import { currentUser } from '@/app/state/user';
 import { isValidationError } from '@/app/utils/api';
 import { ref } from 'vue';
+import { refreshCurrentUser } from '@/app/state/current-user';
 import { UserModel } from '@/app/types/user';
 import axios from 'axios';
 
@@ -26,10 +26,7 @@ export function useCreateUser() {
 
     const request = axios.post<UserModel>('/api/rainlab/user/users', data);
 
-    request.then(response => {
-      // success
-      currentUser.value = response.data;
-    }).catch(err => {
+    request.catch(err => {
       // failed
       if (isValidationError(err)) {
         createUserErrors.value = err.response.data;
@@ -41,7 +38,7 @@ export function useCreateUser() {
       createUserIsLoading.value = false;
     });
 
-    return request;
+    return request.then(refreshCurrentUser);
   };
 
   return {
