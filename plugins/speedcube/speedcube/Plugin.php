@@ -3,6 +3,7 @@
 namespace Speedcube\Speedcube;
 
 use Backend;
+use Event;
 use System\Classes\PluginBase;
 
 /**
@@ -17,6 +18,9 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
+        \Bedard\RainLabUserApi\Classes\ApiController::extend(function($controller) {
+            $controller->middleware('Speedcube\Speedcube\Http\Middleware\TransformKeys');
+        });
     }
 
     /**

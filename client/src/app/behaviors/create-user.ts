@@ -1,6 +1,6 @@
 import { isValidationError } from '@/app/utils/api';
 import { ref } from 'vue';
-import { snakeCaseKeysDeep } from '@/app/utils/object';
+import { UserModel } from '@/app/types/user';
 import axios from 'axios';
 
 export type CreateUserData = {
@@ -19,13 +19,11 @@ export function useCreateUser() {
   const createUserIsLoading = ref(false);
 
   const createUser = (data: CreateUserData) => {
-    const payload = snakeCaseKeysDeep(data);
-
     createUserErrors.value = {};
     createUserFailed.value = false;
     createUserIsLoading.value = true;
 
-    return axios.post('/api/rainlab/user/users', payload).then(response => {
+    return axios.post<UserModel>('/api/rainlab/user/users', data).then(response => {
       // success
       console.log('success', response.data);
     }).catch(err => {
