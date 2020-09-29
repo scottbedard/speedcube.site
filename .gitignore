@@ -1,5 +1,6 @@
 .env
+.phpunit.result.cache
 /client/dist
-/client/node_modules
 /plugins/speedcube/speedcube/views/index.htm
-/vendor
+node_modules
+vendor
