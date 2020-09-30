@@ -1,3 +1,7 @@
+<template>
+  <div />
+</template>
+
 <script>
 import { logout } from '@/app/state/current-user';
 
