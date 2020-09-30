@@ -9,6 +9,11 @@ export const router = createRouter({
       path: '/',
     },
     {
+      component: () => import('@/pages/logout.vue' /* webpackChunkName: 'logout' */),
+      name: 'logout',
+      path: '/logout',
+    },
+    {
       component: () => import('@/pages/records.vue' /* webpackChunkName: 'records' */),
       name: 'records',
       path: '/records',

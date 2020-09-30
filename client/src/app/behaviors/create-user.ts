@@ -1,7 +1,7 @@
 import { isValidationError } from '@/app/utils/api';
 import { ref } from 'vue';
 import { refreshCurrentUser } from '@/app/state/current-user';
-import { UserModel } from '@/app/types/user';
+import { UserModel } from '@/types/user';
 import axios from 'axios';
 
 export type CreateUserData = {

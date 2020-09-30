@@ -2,6 +2,7 @@
 
 namespace Speedcube\Speedcube\Http\Controllers;
 
+use Bedard\RainLabUserApi\Classes\AccountManager;
 use Illuminate\Routing\Controller;
 use View;
 
@@ -17,7 +18,7 @@ class SpaController extends Controller
     {
         return View::make('speedcube.speedcube::index', [
             'context' => [
-                'user' => null,
+                'user' => AccountManager::getAuthenticatedUser(),
             ],
         ]);
     }
