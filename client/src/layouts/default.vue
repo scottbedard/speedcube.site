@@ -38,6 +38,12 @@ export default defineComponent({
           name: 'records',
         },
       },
+      !currentUser.value && {
+        text: 'Sign up',
+        to: {
+          name: 'signup',
+        },
+      },
       currentUser.value
         ? {
           text: 'Logout',
@@ -46,9 +52,9 @@ export default defineComponent({
           },
         }
         : {
-          text: 'Sign up',
+          text: 'Login',
           to: {
-            name: 'signup',
+            name: 'login',
           },
         },
     ].filter(identity));
