@@ -4,6 +4,7 @@ namespace Speedcube\Speedcube;
 
 use Backend;
 use Event;
+use RainLab\User\Models\Settings as UserSettings;
 use System\Classes\PluginBase;
 
 /**
@@ -18,8 +19,24 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
+        // configure rainlab.user api
         \Bedard\RainLabUserApi\Classes\ApiController::extend(function($controller) {
             $controller->middleware('Speedcube\Speedcube\Http\Middleware\TransformKeys');
+        });
+
+        // configure rainlab.user settings
+        UserSettings::extend(function($model) {
+            $model->bindEvent('model.getAttribute', function($attribute, $value) {
+                if ($attribute == 'login_attribute') {
+                    return UserSettings::LOGIN_USERNAME;
+                }
+            });
+        });
+
+        Event::listen('backend.form.extendFields', function ($widget) {
+            if ($widget->model instanceof UserSettings) {
+                $widget->getField('login_attribute')->disabled = true;
+            }
         });
     }
 
