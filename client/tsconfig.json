@@ -23,7 +23,8 @@
     "strict": true,
     "target": "esnext",
     "types": [
-      "webpack-env"
+      "webpack-env",
+      "jest"
     ]
   },
   "exclude": [

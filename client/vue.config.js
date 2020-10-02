@@ -16,7 +16,7 @@ module.exports = {
       return args;
     });
   },
-  configureWebpack(config) {
+  configureWebpack() {
     if (!production) {
       return {
         devServer: {
