@@ -38,7 +38,7 @@ jobs:
     - name: Jest
       run: |
         cd client
-        npm run test:unit
+        npm run test:unit -- --coverage
     # - name: Report coverage
     #   run: bash <(curl -s https://codecov.io/bash)
 
