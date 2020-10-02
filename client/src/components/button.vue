@@ -27,7 +27,7 @@ export default defineComponent({
       }
 
       if (this.to) {
-        return 'nuxt-link';
+        return 'router-link';
       }
 
       return 'button';

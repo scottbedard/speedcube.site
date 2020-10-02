@@ -11,6 +11,24 @@ describe('<v-button>', () => {
     expect(wrapper.element.textContent).toBe('Click me');
   });
 
+  it('renders a button by default', () => {
+    const wrapper = mount({
+      components: { VButton },
+      template: `<v-button />`,
+    });
+
+    expect(wrapper.element.tagName).toBe('BUTTON');
+  });
+
+  it('renders anchor tags when href is present', () => {
+    const wrapper = mount({
+      components: { VButton },
+      template: `<v-button href="#" />`,
+    });
+
+    expect(wrapper.element.tagName).toBe('A');
+  });
+
   it('emits click event', () => {
     const onClick = jest.fn();
     
