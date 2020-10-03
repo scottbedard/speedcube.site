@@ -6,6 +6,7 @@
         v-model="loginData.username"
         autofocus
         label="Username"
+        name="username"
         placeholder="Enter username"
         required
         :disabled="loginIsLoading" />
@@ -13,6 +14,7 @@
       <v-labeled-input
         v-model="loginData.password"
         label="Password"
+        name="password"
         placeholder="Enter password"
         required
         type="password"
