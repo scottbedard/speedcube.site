@@ -6,6 +6,7 @@
         v-model="createUserData.username"
         autofocus
         label="Username"
+        name="username"
         placeholder="Enter username"
         required
         :disabled="createUserIsLoading" />
@@ -13,6 +14,7 @@
       <v-labeled-input
         v-model="createUserData.email"
         label="Email"
+        name="email"
         placeholder="Enter email address"
         required
         type="email"
@@ -21,6 +23,7 @@
       <v-labeled-input
         v-model="createUserData.password"
         label="Password"
+        name="password"
         placeholder="Enter password"
         required
         type="password"
@@ -29,6 +32,7 @@
       <v-labeled-input
         v-model="createUserData.passwordConfirmation"
         label="Confirm password"
+        name="passwordConfirmation"
         placeholder="Enter password confirmation"
         required
         type="password"
