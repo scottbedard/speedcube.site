@@ -22,12 +22,16 @@
   <div class="px-6">
     <slot />
   </div>
+
+  <!-- threejs renderer -->
+  <v-renderer />
 </template>
 
 <script lang="ts">
-import { isAuthenticated } from '@/app/store/user/getters';
 import { computed, defineComponent } from 'vue';
 import { identity } from 'lodash-es';
+import { isAuthenticated } from '@/app/store/user/getters';
+import VRenderer from '@/components/three/renderer.vue';
 
 export default defineComponent({
   setup() {
@@ -62,6 +66,9 @@ export default defineComponent({
     return {
       links,
     };
+  },
+  components: {
+    VRenderer,
   },
 });
 </script>
