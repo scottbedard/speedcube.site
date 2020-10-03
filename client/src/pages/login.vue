@@ -20,7 +20,6 @@
 
       <div class="flex justify-end">
         <v-button
-          theme="primary"
           type="submit"
           :disabled="loginIsLoading">
           Login

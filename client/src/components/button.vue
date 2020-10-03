@@ -1,12 +1,9 @@
 <template>
-  <component
+  <button
     class="border-none font-bold h-10 px-6 rounded text-white focus:outline-none focus:shadow-outline hover:shadow"
-    :class="[color]"
-    :href="href"
-    :is="is"
-    :to="to">
+    :class="[color]">
     <slot />
-  </component>
+  </button>
 </template>
 
 <script lang="ts">
@@ -15,28 +12,8 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   computed: {
     color() {
-      if (this.theme === 'primary') {
-        return 'bg-green-600 hover:bg-green-500';
-      }
-
-      return 'bg-gray-700 hover:bg-gray-600';
+      return 'bg-green-600 hover:bg-green-500';
     },
-    is() {
-      if (this.href) {
-        return 'a';
-      }
-
-      if (this.to) {
-        return 'router-link';
-      }
-
-      return 'button';
-    },
-  },
-  props: {
-    href: String,
-    theme: String,
-    to: [Object, String],
   },
 });
 </script>
