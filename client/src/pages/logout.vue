@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import { logout } from '@/app/state/current-user';
+import { logoutCurrentUser } from '@/app/store/user/actions';
 
 export default {
   created() {
-    logout().then(() => {
+    logoutCurrentUser().then(() => {
       this.$router.replace({ name: 'home' });
     });
   },

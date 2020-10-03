@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useLogin } from '@/app/behaviors/login';
+import { useLogin } from '@/app/store/user/behaviors/login';
 import VButton from '@/components/button.vue';
 import VCard from '@/components/card.vue';
 import VLabeledInput from '@/components/labeled-input.vue';

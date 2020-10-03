@@ -26,6 +26,7 @@
 
 <script lang="ts">
 import { currentUser } from '@/app/state/current-user';
+import { isAuthenticated } from '@/app/store/user/getters';
 import { computed, defineComponent } from 'vue';
 import { identity } from 'lodash-es';
 
@@ -38,13 +39,13 @@ export default defineComponent({
           name: 'records',
         },
       },
-      !currentUser.value && {
+      !isAuthenticated.value && {
         text: 'Sign up',
         to: {
           name: 'signup',
         },
       },
-      currentUser.value
+      isAuthenticated.value
         ? {
           text: 'Logout',
           to: {

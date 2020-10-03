@@ -3,7 +3,7 @@
   <v-card class="max-w-md mx-auto" padded>
     <form class="gap-6 grid" @submit.prevent="onSubmit">
       <v-labeled-input
-        v-model="form.username"
+        v-model="createUserData.username"
         autofocus
         label="Username"
         placeholder="Enter username"
@@ -11,7 +11,7 @@
         :disabled="createUserIsLoading" />
 
       <v-labeled-input
-        v-model="form.email"
+        v-model="createUserData.email"
         label="Email"
         placeholder="Enter email address"
         required
@@ -19,7 +19,7 @@
         :disabled="createUserIsLoading" />
 
       <v-labeled-input
-        v-model="form.password"
+        v-model="createUserData.password"
         label="Password"
         placeholder="Enter password"
         required
@@ -27,7 +27,7 @@
         :disabled="createUserIsLoading" />
 
       <v-labeled-input
-        v-model="form.passwordConfirmation"
+        v-model="createUserData.passwordConfirmation"
         label="Confirm password"
         placeholder="Enter password confirmation"
         required
@@ -46,34 +46,24 @@
 </template>
 
 <script lang="ts">
-import { currentUser } from '@/app/state/current-user';
 import { defineComponent } from 'vue';
-import { useCreateUser } from '@/app/behaviors/create-user';
+import { useCreateUser } from '@/app/store/user/behaviors/create-user';
 import VButton from '@/components/button.vue';
 import VCard from '@/components/card.vue';
 import VLabeledInput from '@/components/labeled-input.vue';
 
 export default defineComponent({
-  data() {
-    return {
-      form: {
-        email: '',
-        password: '',
-        passwordConfirmation: '',
-        username: '',
-      },
-    };
-  },
   setup() {
     const {
       createUser,
+      createUserData,
       createUserIsLoading,
     } = useCreateUser();
 
     return {
       createUser,
+      createUserData,
       createUserIsLoading,
-      currentUser,
     };
   },
   components: {
@@ -83,7 +73,7 @@ export default defineComponent({
   },
   methods: {
     onSubmit() {
-      this.createUser(this.form).then(() => {
+      this.createUser().then(() => {
         this.$router.replace({ name: 'solve' });
       });
     },
