@@ -27,15 +27,21 @@ class Plugin extends PluginBase
         // configure rainlab.user settings
         UserSettings::extend(function($model) {
             $model->bindEvent('model.getAttribute', function($attribute, $value) {
-                if ($attribute == 'login_attribute') {
+                if ($attribute === 'activate_mode') {
+                    return UserSettings::ACTIVATE_AUTO;
+                } elseif ($attribute === 'login_attribute') {
                     return UserSettings::LOGIN_USERNAME;
+                } elseif ($attribute === 'require_activation') {
+                    return false;
                 }
             });
         });
 
         Event::listen('backend.form.extendFields', function ($widget) {
             if ($widget->model instanceof UserSettings) {
+                $widget->getField('activate_mode')->disabled = true;
                 $widget->getField('login_attribute')->disabled = true;
+                $widget->getField('require_activation')->disabled = true;
             }
         });
     }
