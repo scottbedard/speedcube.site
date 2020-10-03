@@ -1,4 +1,4 @@
-import { currentUser } from '@/app/state/current-user';
+import { currentUser } from '@/app/store/user/state';
 import { isValidationError } from '@/app/utils/api';
 import { ref } from 'vue';
 import { UserModel } from '@/types/user';

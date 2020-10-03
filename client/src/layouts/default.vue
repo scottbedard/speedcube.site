@@ -25,7 +25,6 @@
 </template>
 
 <script lang="ts">
-import { currentUser } from '@/app/state/current-user';
 import { isAuthenticated } from '@/app/store/user/getters';
 import { computed, defineComponent } from 'vue';
 import { identity } from 'lodash-es';
@@ -61,7 +60,6 @@ export default defineComponent({
     ].filter(identity));
 
     return {
-      currentUser,
       links,
     };
   },
