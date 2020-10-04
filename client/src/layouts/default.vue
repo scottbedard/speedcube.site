@@ -20,11 +20,10 @@
     </nav>
   </div>
   <div class="px-6">
-    <slot />
+    <v-renderer>
+      <slot />
+    </v-renderer>
   </div>
-
-  <!-- threejs renderer -->
-  <v-renderer />
 </template>
 
 <script lang="ts">
