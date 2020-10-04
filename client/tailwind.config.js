@@ -25,6 +25,9 @@ module.exports = {
       screens: {
         'xs': '480px',
       },
+      spacing: {
+        'full': '100%',
+      },
     },
   },
   variants: {},
