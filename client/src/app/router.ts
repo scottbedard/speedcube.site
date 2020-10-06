@@ -9,6 +9,11 @@ export const router = createRouter({
       path: '/',
     },
     {
+      component: () => import('@/pages/components/components.vue' /* webpackChunkName: 'components' */),
+      name: 'components',
+      path: '/components',
+    },
+    {
       component: () => import('@/pages/login.vue' /* webpackChunkName: 'login' */),
       name: 'login',
       path: '/login',
