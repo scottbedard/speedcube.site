@@ -8,9 +8,11 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, onMounted, onUnmounted, ref } from 'vue';
+import { computed, defineComponent, inject, onMounted, onUnmounted, PropType, ref } from 'vue';
 import { RendererSymbol, SceneApi } from '@/components/three/types';
-import { Scene } from 'three';
+import { Object3D, Scene } from 'three';
+import { stubArray } from 'lodash-es';
+import { useNestable } from '@/app/three/utils/nestable';
 import { usePerspectiveCamera } from '@/app/three/cameras/perspective-camera';
 
 export default defineComponent({
@@ -21,6 +23,9 @@ export default defineComponent({
     // scene
     const scene = new Scene();
 
+    useNestable(scene, props.children);
+
+    // camera
     const camera = usePerspectiveCamera({
       cameraAngle: computed(() => props.cameraAngle || 0),
       cameraAspect: props.cameraAspect,
@@ -76,6 +81,10 @@ export default defineComponent({
     cameraNear: {
       default: 0,
       type: Number,
+    },
+    children: {
+      default: stubArray,
+      type: Array as PropType<Object3D[]>,
     },
     square: {
       default: false,
