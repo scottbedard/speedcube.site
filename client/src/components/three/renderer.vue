@@ -95,8 +95,6 @@ export default defineComponent({
         renderer.setViewport(left, bottom, width, height);
         renderer.setScissor(left, bottom, width, height);
         renderer.render(scene, camera);
-
-        console.log('render');
       });
     });
 
