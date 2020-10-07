@@ -6,7 +6,7 @@
   <p v-else v-text="value" />
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
 import VInput from '@/components/input.vue';
 

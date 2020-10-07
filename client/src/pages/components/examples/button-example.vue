@@ -2,7 +2,7 @@
   <v-button @click="onClick">Click me</v-button>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
 import VButton from '@/components/button.vue';
 
