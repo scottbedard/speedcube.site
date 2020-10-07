@@ -19,7 +19,7 @@
         :to="link.to" />
     </nav>
   </div>
-  <div class="px-6">
+  <div class="p-6">
     <v-renderer>
       <slot />
     </v-renderer>

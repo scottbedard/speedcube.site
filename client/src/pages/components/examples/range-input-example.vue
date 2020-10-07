@@ -5,7 +5,9 @@
     :max="100"
     :min="0"
     :step="1" />
-  <p class="mt-2 text-sm">Value: {{ value }}</p>
+  <div class="text-gray-400 mt-4 text-sm">
+    <p>Value: {{ value }}</p>
+  </div>
 </template>
 
 <script lang="ts">

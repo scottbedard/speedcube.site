@@ -1,9 +1,12 @@
 <template>
   <v-input
-    class="mb-2"
-    v-model="value" />
-  <p v-if="!value">The input is empty</p>
-  <p v-else v-text="value" />
+    v-model="value"
+    class="max-w-md"
+    placeholder="Enter something awesome" />
+  <div class="text-gray-400 mt-4 text-sm">
+    <p v-if="!value">The input is empty</p>
+    <p v-else v-text="value" />
+  </div>
 </template>
 
 <script lang="ts">

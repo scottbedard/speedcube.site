@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-gray-800 rounded shadow"
+    class="bg-gray-800 rounded shadow-xl"
     :class="{
       'p-6': padded,
     }">

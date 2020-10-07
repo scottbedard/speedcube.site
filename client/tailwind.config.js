@@ -17,7 +17,7 @@ module.exports = {
   theme: {
     extend: {
       boxShadow: {
-        'outline': '0 0 0 3px rgba(66, 153, 225, 0.6)',
+        'outline': '0 0 0 2px rgba(66, 153, 225, 0.9)',
       },
       fontFamily: {
         'sans': 'Quicksand, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
