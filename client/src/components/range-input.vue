@@ -142,6 +142,9 @@ $ie-bottom-track-color: darken($track-color, $contrast);
 <template>
   <input
     type="range"
+    :max="max"
+    :min="min"
+    :step="step"
     :value="modelValue"
     @input="onInput" />
 </template>
@@ -156,7 +159,10 @@ export default defineComponent({
     },
   },
   props: {
+    max: Number,
+    min: Number,
     modelValue: Number,
+    step: Number,
   },
 });
 </script>
