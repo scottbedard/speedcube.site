@@ -1,20 +1,28 @@
 <template>
-  <h1 class="font-bold mb-4 text-2xl">
+  <h1 class="font-bold mb-4 text-3xl">
     Components
   </h1>
 
   <v-input
-    v-model="filter"
     autofocus
     placeholder="Search components"
-    type="search" />
+    type="search"
+    :value="filter"
+    @input="onFilter" />
 
   <div
     v-for="example in examples"
     :key="example.key">
-    <h2
-      v-text="example.key"
-      class="font-bold mb-4 mt-16" />
+    <h2 class="font-bold mb-4 mt-16 text-xl">
+      <router-link
+        v-text="example.key"
+        :to="{
+          name: 'components',
+          query: {
+            filter: example.key,
+          },
+        }" />
+    </h2>
     <component :is="example.component" />
   </div>
 </template>
@@ -25,11 +33,6 @@ import VInput from '@/components/input.vue';
 import examples from './examples/index';
 
 export default defineComponent({
-  data() {
-    return {
-      filter: '',
-    };
-  },
   components: {
     VInput,
   },
@@ -46,6 +49,22 @@ export default defineComponent({
       }
       
       return arr;
+    },
+    filter(): string {
+      return typeof this.$route.query.filter === 'string'
+        ? this.$route.query.filter
+        : '';
+    }
+  },
+  methods: {
+    onFilter(e: Event) {
+      const value = (e.target as HTMLInputElement).value.trim();
+
+      this.$router.replace({
+        query: {
+          filter: value || undefined,
+        },
+      });
     },
   },
 });
