@@ -1,5 +1,5 @@
 import { clamp } from 'lodash-es';
-import { clampPositive, degreesToRadians } from '@/app/utils/math';
+import { degreesToRadians } from '@/app/utils/math';
 import { computed, ComputedRef, Ref, watchEffect } from 'vue';
 import { PerspectiveCamera } from 'three';
 
@@ -11,6 +11,8 @@ interface PerspectiveCameraOptions {
   cameraFov?: number,
   cameraNear?: number,
 }
+
+const MIN_CAMERA_DISTANCE = 0.01;
 
 /**
  * Use perspective camera.
@@ -24,7 +26,7 @@ export function usePerspectiveCamera(opts: PerspectiveCameraOptions = {}) {
   
   // computed
   const angle = computed(() => clamp(-(opts.cameraAngle?.value || 0) + 90, 0, 90));
-  const distance = computed(() => clampPositive(opts.cameraDistance?.value || 0));
+  const distance = computed(() => clamp(opts.cameraDistance?.value || 0, MIN_CAMERA_DISTANCE, Infinity));
 
   // create camera
   const camera = new PerspectiveCamera(fov, aspect, near, far);

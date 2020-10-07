@@ -36,7 +36,7 @@ export default defineComponent({
   data() {
     return {
       cameraAngle: 20,
-      cameraDistance: 100,
+      cameraDistance: 250,
     };
   },
   components: {
