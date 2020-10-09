@@ -40,7 +40,7 @@ export default defineComponent({
         camera,
         el: el.value,
         scene,
-      }
+      };
     };
 
     if (renderer) {
@@ -84,7 +84,7 @@ export default defineComponent({
     },
     children: {
       default: stubArray,
-      type: Array as PropType<Object3D[]>,
+      type: Object as PropType<Object3D | Object3D[]>,
     },
     square: {
       default: false,

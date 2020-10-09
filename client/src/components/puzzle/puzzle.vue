@@ -2,28 +2,45 @@
   <v-scene
     class="w-full"
     square
-    :children="children" />
+    :camera-angle="cameraAngle"
+    :camera-distance="cameraDistance"
+    :children="cube" />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { useAxesHelper } from '@/app/three/utils/axes-helper';
+import { defineComponent, PropType } from 'vue';
+import { stubObject } from 'lodash-es';
+import { useCube } from './cube';
 import VScene from '@/components/three/scene.vue';
 
 export default defineComponent({
-  setup() {
-    const axesHelper = useAxesHelper();
-
-    const children = [
-      axesHelper,
-    ];
+  setup(props) {
+    const cube = useCube(props.options);
 
     return {
-      children,
+      cube,
     };
   },
   components: {
     VScene,
+  },
+  props: {
+    cameraDistance: {
+      default: 0,
+      Number,
+    },
+    cameraAngle: {
+      default: 0,
+      type: Number,
+    },
+    name: {
+      required: true,
+      type: String as PropType<'cube'>,
+    },
+    options: {
+      default: stubObject,
+      type: Object,
+    },
   },
 });
 </script>

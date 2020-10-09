@@ -6,8 +6,12 @@
   <div class="max-w-sm mb-12 mx-auto">
     <v-puzzle
       class="max-w-sm"
+      name="cube"
       :camera-angle="cameraAngle"
-      :camera-distance="cameraDistance" />
+      :camera-distance="cameraDistance"
+      :options="{
+        size: 3,
+      }" />
   </div>
   
   <div class="max-w-sm mx-auto">

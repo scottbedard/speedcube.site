@@ -4,7 +4,7 @@ import { Object3D } from 'three';
 /**
  * Nestable 3D objects
  */
-export function useNestable(parent: Object3D, children: Object3D[]) {
+export function useNestable(parent: Object3D, children: Object3D | Object3D[]) {
   if (!children) {
     return;
   }
