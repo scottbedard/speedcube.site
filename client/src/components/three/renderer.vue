@@ -3,6 +3,9 @@
   <canvas
     class="fixed h-full left-0 pointer-events-none top-0 w-full"
     ref="canvas"
+    :class="{
+      hidden: empty,
+    }"
     :data-scenes="scenes.length"
     :height="height"
     :width="width" />
@@ -109,6 +112,7 @@ export default defineComponent({
 
     return {
       canvas,
+      empty,
       height,
       scenes,
       width,
