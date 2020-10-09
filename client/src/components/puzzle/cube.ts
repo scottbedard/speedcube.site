@@ -1,8 +1,7 @@
-/* eslint-disable */
-import { Group, Object3D } from 'three';
+import { Group } from 'three';
 import { isInteger } from '@/app/utils/math';
-import { ref } from 'vue';
-import { useAxesHelper } from '@/app/three/utils/axes-helper';
+// import { useAxesHelper } from '@/app/three/utils/axes-helper';
+import { useBoxGeometry } from '@/app/three/geometries/box-geometry';
 import { useNestable } from '@/app/three/utils/nestable';
 
 // normalize cube options
@@ -21,12 +20,23 @@ function normalize(opts: Record<string, any>) {
  */
 export function useCube(rawOpts: Record<string, any>) {
   const opts = normalize(rawOpts);
-  const origin = useAxesHelper();
+  // const origin = useAxesHelper();
+
+  console.log('cube', opts);
 
   const cube = new Group();
 
+  const geometry = useBoxGeometry({
+    size: {
+      depth: 100,
+      height: 100,
+      width: 100,
+    },
+  });
+
   useNestable(cube, [
-    origin,
+    // origin,
+    geometry,
   ]);
 
   return cube;
