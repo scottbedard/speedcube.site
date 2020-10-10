@@ -1,10 +1,12 @@
-import { Group, Object3D } from 'three';
+import { Group, Object3D, Quaternion } from 'three';
 import { useNestable } from '@/app/three/utils/nestable';
 import { usePosition } from '@/app/three/utils/position';
+import { useRotation } from '@/app/three/utils/rotation';
 import { Vector } from '@/app/three/types';
 
 interface SlotLocation {
   position?: Partial<Vector>,
+  rotation?: Quaternion,
 }
 
 /**
@@ -27,6 +29,10 @@ export function useSlots(
 
         if (location.position) {
           usePosition(slot, location.position);
+        }
+
+        if (location.rotation) {
+          useRotation(slot, location.rotation);
         }
       }
     }

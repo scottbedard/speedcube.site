@@ -1,5 +1,6 @@
-import { Group, Object3D } from 'three';
+import { Group, Object3D, Quaternion, Vector3 } from 'three';
 import { useSlots } from '@/app/three/utils/slots';
+import { degreesToRadians } from '@/app/utils/math';
 
 interface BoxGeometryOptions {
   size: {
@@ -29,21 +30,26 @@ export function useBoxGeometry(opts: BoxGeometryOptions) {
   useSlots(geometry, {
     top: {
       position: { y: halfHeight },
+      rotation: new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -degreesToRadians(90))
     },
     left: {
       position: { x: -halfWidth },
+      rotation: new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), -degreesToRadians(90))
     },
     front: {
       position: { z: halfDepth },
     },
     right: {
       position: { x: halfWidth },
+      rotation: new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), degreesToRadians(90))
     },
     back: {
       position: { z: -halfDepth },
+      rotation: new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), degreesToRadians(180))
     },
     down: {
       position: { y: -halfHeight },
+      rotation: new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), degreesToRadians(90))
     },
   }, opts.slots);
 

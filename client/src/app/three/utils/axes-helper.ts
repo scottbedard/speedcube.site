@@ -8,7 +8,7 @@ export type AxesHelperOptions = {
  * Axes helper
  */
 export function useAxesHelper() {
-  const axesHelper = new AxesHelper(0.1);
+  const axesHelper = new AxesHelper(0.2);
 
   return axesHelper;
 }

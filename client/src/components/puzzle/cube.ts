@@ -1,9 +1,8 @@
 import { Group } from 'three';
 import { isInteger } from '@/app/utils/math';
-// import { useAxesHelper } from '@/app/three/utils/axes-helper';
+import { useAxesHelper } from '@/app/three/utils/axes-helper';
 import { useBoxGeometry } from '@/app/three/geometries/box-geometry';
 import { useNestable } from '@/app/three/utils/nestable';
-import { useAxesHelper } from '@/app/three/utils/axes-helper';
 
 // size of cube inscribed in a sphere of radius 1
 const edgeLength = 2 / Math.sqrt(3);
@@ -24,7 +23,6 @@ function normalize(opts: Record<string, any>) {
  */
 export function useCube(rawOpts: Record<string, any>) {
   const opts = normalize(rawOpts);
-  // const origin = useAxesHelper();
 
   console.log('cube', opts);
 
