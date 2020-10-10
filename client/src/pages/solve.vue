@@ -18,8 +18,9 @@
     <div>Camera distance:</div>
     <v-range-input
       v-model="cameraDistance"
-      :min="0"
-      :max="1000" />
+      :min="1"
+      :max="3"
+      :step="0.001" />
     
     <div>Camera angle:</div>
     <v-range-input
@@ -40,7 +41,7 @@ export default defineComponent({
   data() {
     return {
       cameraAngle: 20,
-      cameraDistance: 250,
+      cameraDistance: 2,
     };
   },
   components: {
