@@ -24,6 +24,7 @@ module.exports = {
   root: true,
   rules: {
     '@typescript-eslint/no-unused-vars': 'error',
+    'comma-dangle': ['error', 'always-multiline'],
     'no-unused-vars': 'off',
   },
 };

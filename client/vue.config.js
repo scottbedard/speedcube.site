@@ -7,6 +7,7 @@ module.exports = {
     public: 'http://localhost:8080',
   },
   chainWebpack(config) {
+    // save our entry point as a view for the plugin to serve
     config.plugin('html').tap(function(args) {
       Object.assign(args[0], {
           filename: '../../plugins/speedcube/speedcube/views/index.htm',
@@ -15,6 +16,12 @@ module.exports = {
 
       return args;
     });
+
+    // auto-fix eslint errors
+    config.module
+      .rule('eslint')
+      .use('eslint-loader')
+      .options({ fix: true });
   },
   configureWebpack() {
     if (!production) {
