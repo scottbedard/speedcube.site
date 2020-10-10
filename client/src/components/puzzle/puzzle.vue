@@ -1,6 +1,6 @@
 <template>
   <v-scene
-    class="w-full"
+    class="mb-8 w-full"
     square
     :camera-angle="cameraAngle"
     :camera-distance="cameraDistance"

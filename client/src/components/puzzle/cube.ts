@@ -1,10 +1,9 @@
-import { Group } from 'three';
 import { isInteger } from '@/app/utils/math';
 import { useAxesHelper } from '@/app/three/utils/axes-helper';
 import { useBoxGeometry } from '@/app/three/geometries/box-geometry';
-import { useNestable } from '@/app/three/utils/nestable';
+import { useGroup } from '@/app/three/utils/group';
 
-// size of cube inscribed in a sphere of radius 1
+// edge length of a cube inscribed in a sphere of radius 1
 const edgeLength = 2 / Math.sqrt(3);
 
 // normalize cube options
@@ -26,28 +25,21 @@ export function useCube(rawOpts: Record<string, any>) {
 
   console.log('cube', opts);
 
-  const cube = new Group();
-
-  const geometry = useBoxGeometry({
-    size: {
-      depth: edgeLength,
-      height: edgeLength,
-      width: edgeLength,
-    },
-    slots: {
-      top: useAxesHelper(),
-      left: useAxesHelper(),
-      front: useAxesHelper(),
-      right: useAxesHelper(),
-      back: useAxesHelper(),
-      down: useAxesHelper(),
-    },
-  });
-
-  useNestable(cube, [
-    // origin,
-    geometry,
+  return useGroup([
+    useBoxGeometry({
+      size: {
+        depth: edgeLength,
+        height: edgeLength,
+        width: edgeLength,
+      },
+      slots: {
+        top: useAxesHelper(),
+        left: useAxesHelper(),
+        front: useAxesHelper(),
+        right: useAxesHelper(),
+        back: useAxesHelper(),
+        down: useAxesHelper(),
+      },
+    }),
   ]);
-
-  return cube;
 }
