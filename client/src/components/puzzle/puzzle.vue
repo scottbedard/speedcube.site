@@ -8,6 +8,7 @@
 </template>
 
 <script lang="ts">
+import { Cube } from '@bedard/twister';
 import { defineComponent, PropType } from 'vue';
 import { stubObject } from 'lodash-es';
 import { useCube } from './cube';
@@ -15,7 +16,8 @@ import VScene from '@/components/three/scene.vue';
 
 export default defineComponent({
   setup(props) {
-    const cube = useCube(props.options);
+    const model = new Cube({ size: 3 });
+    const cube = useCube(model, props.options);
 
     return {
       cube,

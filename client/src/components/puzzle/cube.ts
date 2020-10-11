@@ -1,4 +1,5 @@
-import { isInteger } from '@/app/utils/math';
+import { Cube } from '@bedard/twister';
+import { isNumber } from 'lodash';
 import { useAxesHelper } from '@/app/three/utils/axes-helper';
 import { useBoxGeometry } from '@/app/three/geometries/box-geometry';
 import { useGroup } from '@/app/three/utils/group';
@@ -8,19 +9,19 @@ const edgeLength = 2 / Math.sqrt(3);
 
 // normalize cube options
 function normalize(opts: Record<string, any>) {
-  if (!isInteger(opts.size) || opts.size < 2) {
-    throw new Error('Cube size must be an integer greater than one');
-  }
-
   return {
-    size: opts.size,
+    innerBrightness: isNumber(opts.innerBrightness) ? opts.innerBrightness : 0,
+    stickerElevation: isNumber(opts.stickerElevation) ? opts.stickerElevation : 0,
+    stickerRadius: isNumber(opts.stickerRadius) ? opts.stickerRadius : 0,
+    stickerSpacing: isNumber(opts.stickerSpacing) ? opts.stickerSpacing : 0,
+    turnDuration: isNumber(opts.turnDuration) ? opts.turnDuration : 200,
   };
 }
 
 /**
  * Cube
  */
-export function useCube(rawOpts: Record<string, any>) {
+export function useCube(model: Cube<Record<string, any>>, rawOpts: Record<string, any>) {
   const opts = normalize(rawOpts);
 
   console.log('cube', opts);

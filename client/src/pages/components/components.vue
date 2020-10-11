@@ -54,7 +54,7 @@ export default defineComponent({
       return typeof this.$route.query.filter === 'string'
         ? this.$route.query.filter
         : '';
-    }
+    },
   },
   methods: {
     onFilter(e: Event) {
