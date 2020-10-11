@@ -9,9 +9,7 @@
       name="cube"
       :camera-angle="cameraAngle"
       :camera-distance="cameraDistance"
-      :options="{
-        size: 3,
-      }" />
+      :options="options" />
   </div>
   
   <div class="max-w-sm mx-auto">
@@ -22,13 +20,41 @@
       :max="3"
       :step="0.001" />
     
-    <div>Camera angle:</div>
+    <div class="mt-2">Camera angle:</div>
     <v-range-input
       v-model="cameraAngle"
       :min="0"
       :max="90" />
 
-    <pre>{{ $data }}</pre>
+    <div class="mt-2">Sticker spacing:</div>
+    <v-range-input
+      v-model="options.stickerSpacing"
+      :min="0"
+      :max="1"
+      :step="0.01" />
+
+    <div class="mt-2">Sticker elevation:</div>
+    <v-range-input
+      v-model="options.stickerElevation"
+      :min="0"
+      :max="1"
+      :step="0.01" />
+
+    <div class="mt-2">Sticker radius:</div>
+    <v-range-input
+      v-model="options.stickerRadius"
+      :min="0"
+      :max="1"
+      :step="0.01" />
+
+    <div class="mt-2">Inner brightness:</div>
+    <v-range-input
+      v-model="options.innerBrightness"
+      :min="0"
+      :max="1"
+      :step="0.01" />
+
+    <pre class="mt-2">{{ $data }}</pre>
   </div>
 </template>
 
@@ -42,6 +68,13 @@ export default defineComponent({
     return {
       cameraAngle: 20,
       cameraDistance: 2,
+      options: {
+        innerBrightness: 1,
+        stickerElevation: 0,
+        stickerRadius: 0,
+        stickerSpacing: 0,
+        turnDuration: 200,
+      },
     };
   },
   components: {

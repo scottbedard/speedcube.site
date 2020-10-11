@@ -28,6 +28,7 @@ export function useCube(model: Cube<Record<string, any>>, rawOpts: Record<string
 
   return useGroup([
     useBoxGeometry({
+      debug: true,
       size: {
         depth: edgeLength,
         height: edgeLength,

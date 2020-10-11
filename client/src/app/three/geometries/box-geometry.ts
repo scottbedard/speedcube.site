@@ -1,8 +1,9 @@
-import { Group, Object3D, Quaternion, Vector3 } from 'three';
+import { BoxGeometry, Group, Mesh, MeshBasicMaterial, Object3D, Quaternion, Vector3 } from 'three';
 import { useSlots } from '@/app/three/utils/slots';
 import { degreesToRadians } from '@/app/utils/math';
 
 interface BoxGeometryOptions {
+  debug?: boolean,
   size: {
     height: number,
     width: number,
@@ -52,6 +53,13 @@ export function useBoxGeometry(opts: BoxGeometryOptions) {
       rotation: new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), degreesToRadians(90)),
     },
   }, opts.slots);
+
+  if (opts.debug) {
+    const box = new BoxGeometry(opts.size.width, opts.size.height, opts.size.depth);
+    const material = new MeshBasicMaterial({ color: 0x888888, wireframe: true });
+    const mesh = new Mesh(box, material);
+    geometry.add(mesh);
+  }
 
   return geometry;
 }
