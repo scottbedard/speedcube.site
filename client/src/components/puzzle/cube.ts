@@ -94,7 +94,7 @@ export function useCube(model: Cube<Record<string, any>>, rawOpts: Record<string
         width: edgeLength,
       },
       slots: {
-        top: useAxesHelper(),
+        up: useAxesHelper(),
         left: useAxesHelper(),
         front,
         right: useAxesHelper(),

@@ -10,7 +10,7 @@ interface BoxGeometryOptions {
     depth: number,
   },
   slots?: {
-    top?: Object3D | Object3D[],
+    up?: Object3D | Object3D[],
     left?: Object3D | Object3D[],
     front?: Object3D | Object3D[],
     right?: Object3D | Object3D[],
@@ -29,7 +29,7 @@ export function useBoxGeometry(opts: BoxGeometryOptions) {
   const halfDepth = opts.size.depth / 2;
 
   useSlots(geometry, {
-    top: {
+    up: {
       position: { y: halfHeight },
       rotation: new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -degreesToRadians(90)),
     },
