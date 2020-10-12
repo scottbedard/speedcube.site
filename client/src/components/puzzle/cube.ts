@@ -15,10 +15,15 @@ interface CubeOptions {
   turnDuration: number,
 }
 
-// edge length of a cube inscribed in a sphere of radius 1
+/**
+ * The edge length of our cube. This value is the size
+ * of a cube inscribed inside a sphere of radius 1.
+ */
 const edgeLength = 2 / Math.sqrt(3);
 
-// create fresh sticker materials
+/**
+ * Create materials, and dispose of old ones.
+ */
 function createMaterials(opts: CubeOptions, oldMaterials: MeshLambertMaterial[]) {
   oldMaterials.forEach(obj => obj.dispose());
 
@@ -30,15 +35,17 @@ function createMaterials(opts: CubeOptions, oldMaterials: MeshLambertMaterial[])
   });
 }
 
-// create fresh shape geometry for our stickers
-function createShape(size: number, radius: number, oldShape?: ShapeBufferGeometry) {
+/**
+ * Create a shape buffer geometry, and dispose of the old one.
+ */
+function createShape(model: Cube, options: CubeOptions, oldShape?: ShapeBufferGeometry) {
   if (oldShape) {
     oldShape.dispose();
   }
 
-  radius = (size * radius) / 2;
-
   const shape = new Shape();
+  const size = edgeLength / model.options.size;
+  const radius = (size * options.stickerRadius) / 2;
 
   shape.moveTo(0, radius);
   shape.lineTo(0, size - radius);
@@ -53,7 +60,9 @@ function createShape(size: number, radius: number, oldShape?: ShapeBufferGeometr
   return new ShapeBufferGeometry(shape);
 }
 
-// normalize cube options
+/**
+ * Normalize puzzle options.
+ */
 function normalize(opts: Record<string, any>): CubeOptions {
   return {
     colors: Array.isArray(opts.colors) ? opts.colors : [],
@@ -69,15 +78,16 @@ function normalize(opts: Record<string, any>): CubeOptions {
  * Cube
  */
 export function useCube(model: Cube<Record<string, any>>, rawOpts: Record<string, any>) {
+  // @todo: dispose on unmount
   let shape: ShapeBufferGeometry | undefined;
   let materials: MeshLambertMaterial[] = [];
 
   const front = new Group();
 
   watchEffect(() => {
-    const opts = normalize(rawOpts);
-    materials = createMaterials(opts, materials);
-    shape = createShape(edgeLength / model.options.size, opts.stickerRadius, shape);
+    const options = normalize(rawOpts);
+    materials = createMaterials(options, materials);
+    shape = createShape(model, options, shape);
 
     const mesh = new Mesh(shape, materials[0]);
 
