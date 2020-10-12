@@ -18,7 +18,7 @@
     <v-range-input
       v-model="cameraDistance"
       :min="1"
-      :max="3"
+      :max="4"
       :step="0.001" />
     
     <div class="mt-2">Camera angle:</div>
@@ -68,7 +68,7 @@ export default defineComponent({
   data() {
     return {
       cameraAngle: 20,
-      cameraDistance: 2,
+      cameraDistance: 2.5,
       options: {
         colors: ['ff0000', '00ff00', '0000ff'],
         innerBrightness: 1,
