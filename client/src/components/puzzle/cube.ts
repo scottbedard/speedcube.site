@@ -3,14 +3,41 @@ import { isNumber } from 'lodash';
 import { useAxesHelper } from '@/app/three/utils/axes-helper';
 import { useBoxGeometry } from '@/app/three/geometries/box-geometry';
 import { useGroup } from '@/app/three/utils/group';
-import { usePosition } from '@/app/three/utils/position';
-import { DoubleSide, Mesh, MeshLambertMaterial, Shape, ShapeBufferGeometry } from 'three';
+import { DoubleSide, Group, Mesh, MeshLambertMaterial, Shape, ShapeBufferGeometry } from 'three';
+import { watchEffect } from 'vue';
+
+interface CubeOptions {
+  colors: string[],
+  innerBrightness: number,
+  stickerElevation: number,
+  stickerRadius: number,
+  stickerSpacing: number,
+  turnDuration: number,
+}
 
 // edge length of a cube inscribed in a sphere of radius 1
 const edgeLength = 2 / Math.sqrt(3);
 
-// create a rounded square shape buffer geometry
-function createStickerShape(size: number, radius: number) {
+// create fresh sticker materials
+function createMaterials(opts: CubeOptions, oldMaterials: MeshLambertMaterial[]) {
+  oldMaterials.forEach(obj => obj.dispose());
+
+  return opts.colors.map(() => {
+    return new MeshLambertMaterial({
+      color: 0xff0000,
+      side: DoubleSide,
+    });
+  });
+}
+
+// create fresh shape geometry for our stickers
+function createShape(size: number, radius: number, oldShape?: ShapeBufferGeometry) {
+  if (oldShape) {
+    oldShape.dispose();
+  }
+
+  radius = (size * radius) / 2;
+
   const shape = new Shape();
 
   shape.moveTo(0, radius);
@@ -27,8 +54,9 @@ function createStickerShape(size: number, radius: number) {
 }
 
 // normalize cube options
-function normalizeOptions(opts: Record<string, any>) {
+function normalize(opts: Record<string, any>): CubeOptions {
   return {
+    colors: Array.isArray(opts.colors) ? opts.colors : [],
     innerBrightness: isNumber(opts.innerBrightness) ? opts.innerBrightness : 0,
     stickerElevation: isNumber(opts.stickerElevation) ? opts.stickerElevation : 0,
     stickerRadius: isNumber(opts.stickerRadius) ? opts.stickerRadius : 0,
@@ -41,21 +69,20 @@ function normalizeOptions(opts: Record<string, any>) {
  * Cube
  */
 export function useCube(model: Cube<Record<string, any>>, rawOpts: Record<string, any>) {
-  const opts = normalizeOptions(rawOpts);
-  const layerSize = edgeLength / model.options.size;
+  let shape: ShapeBufferGeometry | undefined;
+  let materials: MeshLambertMaterial[] = [];
 
-  const sticker = createStickerShape(layerSize, opts.stickerRadius);
+  const front = new Group();
 
-  const material = new MeshLambertMaterial({
-    color: 0x00ff00,
-    side: DoubleSide,
-  });
+  watchEffect(() => {
+    const opts = normalize(rawOpts);
+    materials = createMaterials(opts, materials);
+    shape = createShape(edgeLength / model.options.size, opts.stickerRadius, shape);
 
-  const mesh = new Mesh(sticker, material);
+    const mesh = new Mesh(shape, materials[0]);
 
-  usePosition(mesh, {
-    x: -(edgeLength / 2),
-    y: (edgeLength / 2) - layerSize,
+    front.remove(...front.children);
+    front.add(mesh);
   });
 
   return useGroup([
@@ -69,9 +96,7 @@ export function useCube(model: Cube<Record<string, any>>, rawOpts: Record<string
       slots: {
         top: useAxesHelper(),
         left: useAxesHelper(),
-        front: useGroup([
-          mesh,
-        ]),
+        front,
         right: useAxesHelper(),
         back: useAxesHelper(),
         down: useAxesHelper(),

@@ -10,7 +10,7 @@ interface UseGroupOptions {
 /**
  * Group
  */
-export function useGroup(children: Object3D | Object3D[], opts: UseGroupOptions = {}) {
+export function useGroup(children: Object3D | Object3D[] = [], opts: UseGroupOptions = {}) {
   const group = new Group();
 
   useNestable(group, children);

@@ -9,7 +9,8 @@
       name="cube"
       :camera-angle="cameraAngle"
       :camera-distance="cameraDistance"
-      :options="options" />
+      :options="options"
+      :hmm="options.stickerRadius" />
   </div>
   
   <div class="max-w-sm mx-auto">
@@ -69,6 +70,7 @@ export default defineComponent({
       cameraAngle: 20,
       cameraDistance: 2,
       options: {
+        colors: ['ff0000', '00ff00', '0000ff'],
         innerBrightness: 1,
         stickerElevation: 0,
         stickerRadius: 0,
