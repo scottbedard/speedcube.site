@@ -92,6 +92,7 @@ function createStickers(group: Group, stickers: CubeSticker<StickerData>[], cont
   const leftOffset = -(edgeLength / 2);
   const topOffset = (edgeLength / 2) - stickerSize;
   const spacingOffset = (spacingGap * (model.options.size - 1)) / 2;
+  const z = (stickerSize * options.stickerElevation) + spacingOffset;
 
   group.remove(...group.children);
 
@@ -102,7 +103,7 @@ function createStickers(group: Group, stickers: CubeSticker<StickerData>[], cont
     const mesh = new Mesh(stickerShape, materials[0]);
     mesh.position.x = leftOffset + (stickerSize * col) + (spacingGap * col) - spacingOffset;
     mesh.position.y = topOffset - (stickerSize * row) - (spacingGap * row) + spacingOffset;
-    mesh.position.z = stickerSize * options.stickerElevation;
+    mesh.position.z = z;
 
     group.add(mesh);
   });
@@ -130,7 +131,12 @@ export function useCube(model: Cube<Record<string, any>>, rawOpts: Record<string
   let stickerShape: ShapeBufferGeometry | undefined;
   let materials: MeshLambertMaterial[] = [];
 
+  const up = new Group();
+  const left = new Group();
   const front = new Group();
+  const right = new Group();
+  const back = new Group();
+  const down = new Group();
 
   watchEffect(() => {
     const options = normalize(rawOpts);
@@ -150,7 +156,12 @@ export function useCube(model: Cube<Record<string, any>>, rawOpts: Record<string
       stickerSize,
     };
 
+    createStickers(up, model.state.u, context);
+    createStickers(left, model.state.l, context);
     createStickers(front, model.state.f, context);
+    createStickers(right, model.state.r, context);
+    createStickers(back, model.state.b, context);
+    createStickers(down, model.state.d, context);
   });
 
   return useGroup([
@@ -162,12 +173,12 @@ export function useCube(model: Cube<Record<string, any>>, rawOpts: Record<string
         width: edgeLength,
       },
       slots: {
-        up: useAxesHelper(),
-        left: useAxesHelper(),
+        up,
+        left,
         front,
-        right: useAxesHelper(),
-        back: useAxesHelper(),
-        down: useAxesHelper(),
+        right,
+        back,
+        down,
       },
     }),
   ]);
