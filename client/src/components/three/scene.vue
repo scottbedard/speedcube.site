@@ -12,7 +12,7 @@ import { computed, defineComponent, inject, onMounted, onUnmounted, PropType, re
 import { RendererSymbol, SceneApi } from '@/components/three/types';
 import { Object3D, Scene } from 'three';
 import { stubArray } from 'lodash-es';
-import { useNestable } from '@/app/three/utils/nestable';
+import { useNesting } from '@/app/three/utils/nestable';
 import { usePerspectiveCamera } from '@/app/three/cameras/perspective-camera';
 
 export default defineComponent({
@@ -23,7 +23,7 @@ export default defineComponent({
     // scene
     const scene = new Scene();
 
-    useNestable(scene, props.children);
+    useNesting(scene, true);
 
     // camera
     const camera = usePerspectiveCamera({
