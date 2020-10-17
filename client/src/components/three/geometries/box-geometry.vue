@@ -16,7 +16,7 @@
     <slot name="back" />
   </v-group>
   <v-group :position="{ y: -halfHeight }" :rotation="[1, 0, 0, -90]">
-    <slot name="back" />
+    <slot name="down" />
   </v-group>
 </template>
 
@@ -61,8 +61,14 @@ export default defineComponent({
     useRotation(group, () => props.rotation);
 
     const geometry = new BoxGeometry(1, 1, 1);
-    const material = new MeshLambertMaterial({ color: 0x666666 });
+
+    const material = new MeshLambertMaterial({
+      color: 0x666666,
+      wireframe: props.wireframe,
+    });
+
     const cube = new Mesh(geometry, material);
+
     group.add(cube);
 
     watchEffect(() => {
@@ -88,6 +94,10 @@ export default defineComponent({
     rotation: {
       default: () => [0, 0, 0, 0],
       type: Array as unknown as PropType<Rotation>,
+    },
+    wireframe: {
+      default: false,
+      type: Boolean,
     },
   },
 });

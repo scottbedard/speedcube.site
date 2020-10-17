@@ -1,61 +1,59 @@
 <template>
-  <p class="max-w-2xl mb-12">
-    Scenes represent containers for 3D components. Their bounding
+  <!--
+    scenes represent containers for 3D components. their bounding
     box is used by the renderer to determine where 3D components
-    should exist. Scenes can be sized using traditional CSS methods,
+    should exist. scenes can be sized using traditional CSS methods,
     and will resize responsively.
-  </p>
+  -->
 
-  <div class="max-w-md mx-auto">
-    <v-scene
-      class="mb-6"
-      square
-      :camera-angle="cameraAngle"
-      :camera-distance="cameraDistance">
+  <v-scene
+    class="max-w-md mb-6"
+    square
+    :camera-angle="cameraAngle"
+    :camera-distance="cameraDistance">
+    <!--
+      ambient lights are used to globally illuminate scenes. they don't
+      cast shadows because they have no direction or position.
+    -->
+    <v-ambient-light color="#0f0f00" />
+
+    <!--
+      point lights illuminate equally in all directions from a specific
+      position. think of these sort of like an bare light bulb.
+    -->
+    <v-point-light :position="{ y: 5, z: 3 }" />
+
+    <!--
+      groups provide a way to organize the nesting context of child
+      components. grouped components can be controlled by a single
+      set of position / rotation props.
+    -->
+    <v-group
+      :position="position"
+      :rotation="[rotation.x, rotation.y, rotation.z, rotation.deg]">
       <!--
-        ambient lights are used to globally illuminate scenes. they don't
-        cast shadows because they have no direction or position.
+        axes helpers are useful when creating scenes, but obviously
+        have to be removed before shipping a puzzle.
       -->
-      <v-ambient-light color="#0f0f00" />
+      <v-axes-helper />
 
-      <!--
-        point lights illuminate equally in all directions from a specific
-        position. think of these sort of like an bare light bulb.
+      <!--\
+        geometry components expose slots for common puzzle shapes.
+        they are useful when positioning stickers, and will eventually
+        handle raycasting to emit mouse events.
       -->
-      <v-point-light :position="{ y: 5, z: 3 }" />
+      <v-box-geometry :dimensions="dimensions">
+        <template #up>
+          <v-sphere-geometry color="#ff0" wireframe :radius="0.1" />
+        </template>
+        <template #front>
+          <v-sphere-geometry color="#00f" wireframe :radius="0.1" />
+        </template>
+      </v-box-geometry>
+    </v-group>
+  </v-scene>
 
-      <!--
-        groups provide a way to organize the nesting context of child
-        components. grouped components can be controlled by a single
-        set of position / rotation props.
-      -->
-      <v-group
-        :position="position"
-        :rotation="[rotation.x, rotation.y, rotation.z, rotation.deg]">
-        <v-axes-helper />
-        <v-box-geometry :dimensions="dimensions">
-          <!-- <template #up>
-            <v-axes-helper />
-          </template>
-          <template #left>
-            <v-axes-helper />
-          </template>
-          <template #front>
-            <v-axes-helper />
-          </template>
-          <template #right>
-            <v-axes-helper />
-          </template>
-          <template #back>
-            <v-axes-helper />
-          </template>
-          <template #down>
-            <v-axes-helper />
-          </template> -->
-        </v-box-geometry>
-      </v-group>
-    </v-scene>
-
+  <div class="gap-6 grid max-w-md">
     <div class="gap-6 grid mb-6 sm:grid-cols-2">
       <div>
         <div>Camera angle</div>
@@ -67,7 +65,7 @@
       </div>
     </div>
 
-    <div class="mb-6">
+    <div>
       <div>Position</div>
       <div class="gap-6 grid sm:grid-cols-3">
         <div>
@@ -85,7 +83,7 @@
       </div>
     </div>
 
-    <div class="mb-6">
+    <div>
       <div>Dimensions</div>
       <div class="gap-6 grid sm:grid-cols-3">
         <div>
@@ -140,6 +138,7 @@ import VGroup from '@/components/three/utils/group.vue';
 import VPointLight from '@/components/three/lights/point-light.vue';
 import VRangeInput from '@/components/range-input.vue';
 import VScene from '@/components/three/scene.vue';
+import VSphereGeometry from '@/components/three/geometries/sphere-geometry.vue';
 
 export default defineComponent({
   components: {
@@ -150,6 +149,7 @@ export default defineComponent({
     VPointLight,
     VRangeInput,
     VScene,
+    VSphereGeometry,
   },
   data() {
     return {
