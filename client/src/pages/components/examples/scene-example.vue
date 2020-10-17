@@ -16,8 +16,10 @@
         <!-- <v-axes-helper /> -->
         <v-box-geometry
           :dimensions="boxDimensions"
-          :position="boxPosition">
-          <template #up>
+          :position="boxPosition"
+          :rotation="[boxRotation.x, boxRotation.y, boxRotation.z, boxRotation.deg]">
+          <v-axes-helper />
+          <!-- <template #up>
             <v-axes-helper />
           </template>
           <template #left>
@@ -34,7 +36,7 @@
           </template>
           <template #down>
             <v-axes-helper />
-          </template>
+          </template> -->
         </v-box-geometry>
       </v-group>
     </v-scene>
@@ -147,6 +149,44 @@
         </div>
       </div>
     </div>
+
+    <div>
+      <div>Box rotation</div>
+      <div class="gap-6 grid sm:grid-cols-4">
+        <div>
+          <div>X</div>
+          <v-range-input
+            v-model="boxRotation.x"
+            :max="10"
+            :min="-10"
+            :step="0.01" />
+        </div>
+        <div>
+          <div>Y</div>
+          <v-range-input
+            v-model="boxRotation.y"
+            :max="10"
+            :min="-10"
+            :step="0.01" />
+        </div>
+        <div>
+          <div>Z</div>
+          <v-range-input
+            v-model="boxRotation.z"
+            :max="10"
+            :min="-10"
+            :step="0.01" />
+        </div>
+        <div>
+          <div>Degrees</div>
+          <v-range-input
+            v-model="boxRotation.deg"
+            :max="360"
+            :min="-360"
+            :step="0.01" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -170,6 +210,7 @@ export default defineComponent({
     return {
       boxDimensions: { depth: 1, width: 1, height: 1 },
       boxPosition: { x: 0, y: 0, z: 0 },
+      boxRotation: { x: 0, y: 0, z: 0, deg: 0 },
       cameraAngle: 20,
       cameraDistance: 5,
       groupPosition: { x: 0, y: 0, z: 0 },

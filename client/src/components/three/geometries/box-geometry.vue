@@ -27,6 +27,7 @@ import { computed, defineComponent, PropType, watchEffect } from 'vue';
 import { isNumber, stubObject } from 'lodash-es';
 import { useNesting } from '@/app/three/utils/nestable';
 import { usePosition } from '@/app/three/utils/position';
+import { Rotation, useRotation } from '@/app/three/utils/rotation';
 import { Vector } from '@/app/three/types';
 import VGroup from '@/components/three/utils/group.vue';
 
@@ -59,6 +60,7 @@ export default defineComponent({
     const group = new Group;
     useNesting(group);
     usePosition(group, () => props.position);
+    useRotation(group, () => props.rotation);
 
     const geometry = new BoxGeometry(1, 1, 1);
     const material = new MeshBasicMaterial({ color: 0x666666, wireframe: true });
@@ -87,6 +89,10 @@ export default defineComponent({
     position: {
       default: stubObject,
       type: Object as PropType<Partial<Vector>>,
+    },
+    rotation: {
+      default: () => [0, 0, 0, 0],
+      type: Array as unknown as PropType<Rotation>,
     },
   },
 });
