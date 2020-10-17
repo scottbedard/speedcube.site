@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { BoxGeometry, Group, Mesh, MeshBasicMaterial } from 'three';
+import { BoxGeometry, Group, Mesh, MeshLambertMaterial } from 'three';
 import { computed, defineComponent, PropType, watchEffect } from 'vue';
 import { isNumber } from 'lodash-es';
 import { useNesting } from '@/app/three/utils/nestable';
@@ -61,7 +61,7 @@ export default defineComponent({
     useRotation(group, () => props.rotation);
 
     const geometry = new BoxGeometry(1, 1, 1);
-    const material = new MeshBasicMaterial({ color: 0x666666 });
+    const material = new MeshLambertMaterial({ color: 0x666666 });
     const cube = new Mesh(geometry, material);
     group.add(cube);
 

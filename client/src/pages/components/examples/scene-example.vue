@@ -12,6 +12,14 @@
       square
       :camera-angle="cameraAngle"
       :camera-distance="cameraDistance">
+
+      <!--
+        3D compoenents will manage their nesting contexts. So just
+        add child components and use slots just like you would with
+        any other DOM component.
+      -->
+      <v-point-light :position="{ y: 5, z: 3 }" />
+
       <v-group :position="groupPosition">
         <!-- <v-axes-helper /> -->
         <v-box-geometry
@@ -195,6 +203,7 @@ import { defineComponent } from 'vue';
 import VAxesHelper from '@/components/three/utils/axes-helper.vue';
 import VBoxGeometry from '@/components/three/geometries/box-geometry.vue';
 import VGroup from '@/components/three/utils/group.vue';
+import VPointLight from '@/components/three/lights/point-light.vue';
 import VRangeInput from '@/components/range-input.vue';
 import VScene from '@/components/three/scene.vue';
 
@@ -203,6 +212,7 @@ export default defineComponent({
     VAxesHelper,
     VBoxGeometry,
     VGroup,
+    VPointLight,
     VRangeInput,
     VScene,
   },
@@ -212,7 +222,7 @@ export default defineComponent({
       boxPosition: { x: 0, y: 0, z: 0 },
       boxRotation: { x: 0, y: 0, z: 0, deg: 0 },
       cameraAngle: 20,
-      cameraDistance: 5,
+      cameraDistance: 3,
       groupPosition: { x: 0, y: 0, z: 0 },
     };
   },
