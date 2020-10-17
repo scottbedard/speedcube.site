@@ -1,4 +1,3 @@
-import { isArray } from 'lodash-es';
 import { Object3D } from 'three';
 import { inject, InjectionKey, onMounted, onUnmounted, provide } from 'vue';
 
@@ -8,7 +7,7 @@ const ParentSymbol: InjectionKey<{
 }> = Symbol('ParentSymbol');
 
 /**
- * Three.js nesting context
+ * Nesting context
  */
 export function useNesting(obj: Object3D, isRoot: boolean = false) {
   if (!isRoot) {
@@ -24,20 +23,4 @@ export function useNesting(obj: Object3D, isRoot: boolean = false) {
     add: (child) => obj.add(child),
     remove: (child) => obj.remove(child),
   });
-}
-
-/**
- * Nestable 3D objects
- * DEPRECATED
- */
-export function useNestable(parent: Object3D, children: Object3D | Object3D[]) {
-  if (!children) {
-    return;
-  }
-
-  if (!isArray(children)) {
-    children = [children];
-  }
-
-  children.forEach((child) => parent.add(child));
 }
