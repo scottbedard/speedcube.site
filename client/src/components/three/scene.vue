@@ -12,7 +12,7 @@ import { computed, defineComponent, inject, onMounted, onUnmounted, PropType, re
 import { RendererSymbol, SceneApi } from '@/components/three/types';
 import { Object3D, Scene } from 'three';
 import { stubArray } from 'lodash-es';
-import { useNesting } from '@/app/three/utils/nestable';
+import { useNesting } from '@/app/three/nesting';
 import { usePerspectiveCamera } from '@/app/three/cameras/perspective-camera';
 
 export default defineComponent({

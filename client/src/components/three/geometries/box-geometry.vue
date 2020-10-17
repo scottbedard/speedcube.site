@@ -24,10 +24,10 @@
 import { BoxGeometry, Group, Mesh, MeshLambertMaterial } from 'three';
 import { computed, defineComponent, PropType, watchEffect } from 'vue';
 import { isNumber } from 'lodash-es';
-import { useDisposable } from '@/app/three/utils/disposable';
-import { useNesting } from '@/app/three/utils/nestable';
-import { positionProp, usePosition } from '@/app/three/utils/position';
-import { Rotation, useRotation } from '@/app/three/utils/rotation';
+import { useDisposable } from '@/app/three/disposable';
+import { useNesting } from '@/app/three/nesting';
+import { positionProp, usePosition } from '@/app/three/position';
+import { Rotation, useRotation } from '@/app/three/rotation';
 import VGroup from '@/components/three/utils/group.vue';
 
 interface Dimensions {
