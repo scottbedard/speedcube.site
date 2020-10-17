@@ -12,21 +12,28 @@
       square
       :camera-angle="cameraAngle"
       :camera-distance="cameraDistance">
+      <!--
+        ambient lights are used to globally illuminate scenes. they don't
+        cast shadows because they have no direction or position.
+      -->
+      <v-ambient-light color="#0f0f00" />
 
       <!--
-        3D compoenents will manage their nesting contexts. So just
-        add child components and use slots just like you would with
-        any other DOM component.
+        point lights illuminate equally in all directions from a specific
+        position. think of these sort of like an bare light bulb.
       -->
       <v-point-light :position="{ y: 5, z: 3 }" />
 
-      <v-group :position="groupPosition">
-        <!-- <v-axes-helper /> -->
-        <v-box-geometry
-          :dimensions="boxDimensions"
-          :position="boxPosition"
-          :rotation="[boxRotation.x, boxRotation.y, boxRotation.z, boxRotation.deg]">
-          <v-axes-helper />
+      <!--
+        groups provide a way to organize the nesting context of child
+        components. grouped components can be controlled by a single
+        set of position / rotation props.
+      -->
+      <v-group
+        :position="position"
+        :rotation="[rotation.x, rotation.y, rotation.z, rotation.deg]">
+        <v-axes-helper />
+        <v-box-geometry :dimensions="dimensions">
           <!-- <template #up>
             <v-axes-helper />
           </template>
@@ -52,146 +59,72 @@
     <div class="gap-6 grid mb-6 sm:grid-cols-2">
       <div>
         <div>Camera angle</div>
-        <v-range-input
-          v-model="cameraAngle"
-          :max="90"
-          :min="0"
-          :step="0.01" />
+        <v-range-input v-model="cameraAngle" :max="90" :min="0" :step="0.01" />
       </div>
       <div>
         <div>Camera distance</div>
-        <v-range-input
-          v-model="cameraDistance"
-          :max="10"
-          :min="0"
-          :step="0.01" />
+        <v-range-input v-model="cameraDistance" :max="10" :min="0" :step="0.01" />
       </div>
     </div>
 
     <div class="mb-6">
-      <div>Group position</div>
+      <div>Position</div>
       <div class="gap-6 grid sm:grid-cols-3">
         <div>
-          <div>X</div>
-          <v-range-input
-            v-model="groupPosition.x"
-            :max="5"
-            :min="-5"
-            :step="0.01" />
+          <div class="text-gray-500 text-xs">X</div>
+          <v-range-input v-model="position.x" :max="5" :min="-5" :step="0.01" />
         </div>
         <div>
-          <div>Y</div>
-          <v-range-input
-            v-model="groupPosition.y"
-            :max="5"
-            :min="-5"
-            :step="0.01" />
+          <div class="text-gray-500 text-xs">Y</div>
+          <v-range-input v-model="position.y" :max="5" :min="-5" :step="0.01" />
         </div>
         <div>
-          <div>Z</div>
-          <v-range-input
-            v-model="groupPosition.z"
-            :max="5"
-            :min="-5"
-            :step="0.01" />
+          <div class="text-gray-500 text-xs">Z</div>
+          <v-range-input v-model="position.z" :max="5" :min="-5" :step="0.01" />
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <div>Dimensions</div>
+      <div class="gap-6 grid sm:grid-cols-3">
+        <div>
+          <div class="text-gray-500 text-xs">Height</div>
+          <v-range-input v-model="dimensions.height" :max="5" :min="0" :step="0.01" />
+        </div>
+        <div>
+          <div class="text-gray-500 text-xs">Width</div>
+          <v-range-input v-model="dimensions.width" :max="5" :min="0" :step="0.01" />
+        </div>
+        <div>
+          <div class="text-gray-500 text-xs">Depth</div>
+          <v-range-input v-model="dimensions.depth" :max="5" :min="0" :step="0.01" />
         </div>
       </div>
     </div>
 
     <div>
-      <div>Box position</div>
-      <div class="gap-6 grid sm:grid-cols-3">
-        <div>
-          <div>X</div>
-          <v-range-input
-            v-model="boxPosition.x"
-            :max="5"
-            :min="-5"
-            :step="0.01" />
-        </div>
-        <div>
-          <div>Y</div>
-          <v-range-input
-            v-model="boxPosition.y"
-            :max="5"
-            :min="-5"
-            :step="0.01" />
-        </div>
-        <div>
-          <div>Z</div>
-          <v-range-input
-            v-model="boxPosition.z"
-            :max="5"
-            :min="-5"
-            :step="0.01" />
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <div>Box dimensions</div>
-      <div class="gap-6 grid sm:grid-cols-3">
-        <div>
-          <div>Height</div>
-          <v-range-input
-            v-model="boxDimensions.height"
-            :max="5"
-            :min="-5"
-            :step="0.01" />
-        </div>
-        <div>
-          <div>Width</div>
-          <v-range-input
-            v-model="boxDimensions.width"
-            :max="5"
-            :min="-5"
-            :step="0.01" />
-        </div>
-        <div>
-          <div>Depth</div>
-          <v-range-input
-            v-model="boxDimensions.depth"
-            :max="5"
-            :min="-5"
-            :step="0.01" />
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <div>Box rotation</div>
+      <div>Rotation</div>
       <div class="gap-6 grid sm:grid-cols-4">
         <div>
-          <div>X</div>
+          <div class="text-gray-500 text-xs">X</div>
+          <v-range-input v-model="rotation.x" :max="10" :min="-10" :step="0.01" />
+        </div>
+        <div>
+          <div class="text-gray-500 text-xs">Y</div>
           <v-range-input
-            v-model="boxRotation.x"
+            v-model="rotation.y"
             :max="10"
             :min="-10"
             :step="0.01" />
         </div>
         <div>
-          <div>Y</div>
-          <v-range-input
-            v-model="boxRotation.y"
-            :max="10"
-            :min="-10"
-            :step="0.01" />
+          <div class="text-gray-500 text-xs">Z</div>
+          <v-range-input v-model="rotation.z" :max="10" :min="-10" :step="0.01" />
         </div>
         <div>
-          <div>Z</div>
-          <v-range-input
-            v-model="boxRotation.z"
-            :max="10"
-            :min="-10"
-            :step="0.01" />
-        </div>
-        <div>
-          <div>Degrees</div>
-          <v-range-input
-            v-model="boxRotation.deg"
-            :max="360"
-            :min="-360"
-            :step="0.01" />
+          <div class="text-gray-500 text-xs">Degrees</div>
+          <v-range-input v-model="rotation.deg" :max="360" :min="-360" :step="0.01" />
         </div>
       </div>
     </div>
@@ -200,6 +133,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import VAmbientLight from '@/components/three/lights/ambient-light.vue';
 import VAxesHelper from '@/components/three/utils/axes-helper.vue';
 import VBoxGeometry from '@/components/three/geometries/box-geometry.vue';
 import VGroup from '@/components/three/utils/group.vue';
@@ -209,6 +143,7 @@ import VScene from '@/components/three/scene.vue';
 
 export default defineComponent({
   components: {
+    VAmbientLight,
     VAxesHelper,
     VBoxGeometry,
     VGroup,
@@ -218,12 +153,11 @@ export default defineComponent({
   },
   data() {
     return {
-      boxDimensions: { depth: 1, width: 1, height: 1 },
-      boxPosition: { x: 0, y: 0, z: 0 },
-      boxRotation: { x: 0, y: 0, z: 0, deg: 0 },
       cameraAngle: 20,
       cameraDistance: 3,
-      groupPosition: { x: 0, y: 0, z: 0 },
+      dimensions: { depth: 1, width: 1, height: 1 },
+      position: { x: 0, y: 0, z: 0 },
+      rotation: { x: 0, y: 0, z: 0, deg: 0 },
     };
   },
 });
