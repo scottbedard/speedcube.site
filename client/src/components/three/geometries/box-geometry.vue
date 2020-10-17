@@ -24,6 +24,7 @@
 import { BoxGeometry, Group, Mesh, MeshLambertMaterial } from 'three';
 import { computed, defineComponent, PropType, watchEffect } from 'vue';
 import { isNumber } from 'lodash-es';
+import { useDisposable } from '@/app/three/utils/disposable';
 import { useNesting } from '@/app/three/utils/nestable';
 import { positionProp, usePosition } from '@/app/three/utils/position';
 import { Rotation, useRotation } from '@/app/three/utils/rotation';
@@ -68,6 +69,9 @@ export default defineComponent({
     });
 
     const cube = new Mesh(geometry, material);
+
+    useDisposable(geometry);
+    useDisposable(material);
 
     group.add(cube);
 

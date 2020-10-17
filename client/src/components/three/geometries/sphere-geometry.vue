@@ -6,6 +6,7 @@
 import { defineComponent } from 'vue';
 import { Color, Mesh, MeshLambertMaterial, SphereGeometry } from 'three';
 import { positionProp, usePosition } from '@/app/three/utils/position';
+import { useDisposable } from '@/app/three/utils/disposable';
 import { useNesting } from '@/app/three/utils/nestable';
 
 export default defineComponent({
@@ -19,6 +20,8 @@ export default defineComponent({
 
     const sphere = new Mesh(geometry, material);
 
+    useDisposable(geometry);
+    useDisposable(material);
     useNesting(sphere);
     usePosition(sphere, () => props.position);
   },
