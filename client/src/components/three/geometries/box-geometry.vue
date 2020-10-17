@@ -21,14 +21,12 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable */
 import { BoxGeometry, Group, Mesh, MeshBasicMaterial } from 'three';
 import { computed, defineComponent, PropType, watchEffect } from 'vue';
-import { isNumber, stubObject } from 'lodash-es';
+import { isNumber } from 'lodash-es';
 import { useNesting } from '@/app/three/utils/nestable';
-import { usePosition } from '@/app/three/utils/position';
+import { positionProp, usePosition } from '@/app/three/utils/position';
 import { Rotation, useRotation } from '@/app/three/utils/rotation';
-import { Vector } from '@/app/three/types';
 import VGroup from '@/components/three/utils/group.vue';
 
 interface Dimensions {
@@ -63,7 +61,7 @@ export default defineComponent({
     useRotation(group, () => props.rotation);
 
     const geometry = new BoxGeometry(1, 1, 1);
-    const material = new MeshBasicMaterial({ color: 0x666666, wireframe: true });
+    const material = new MeshBasicMaterial({ color: 0x666666 });
     const cube = new Mesh(geometry, material);
     group.add(cube);
 
@@ -86,10 +84,7 @@ export default defineComponent({
       default: 1,
       type: [Number, Object] as PropType<number | Partial<Dimensions>>,
     },
-    position: {
-      default: stubObject,
-      type: Object as PropType<Partial<Vector>>,
-    },
+    position: positionProp,
     rotation: {
       default: () => [0, 0, 0, 0],
       type: Array as unknown as PropType<Rotation>,

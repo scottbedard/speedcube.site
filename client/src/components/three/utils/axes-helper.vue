@@ -1,23 +1,20 @@
 <script lang="ts">
-// import { usePosition } from '@/app/three/utils/position';
 import { AxesHelper } from 'three';
-import { defineComponent, PropType } from 'vue';
-import { noop, stubObject } from 'lodash-es';
+import { defineComponent } from 'vue';
+import { noop } from 'lodash-es';
+import { positionProp, usePosition } from '@/app/three/utils/position';
 import { useNesting } from '@/app/three/utils/nestable';
-import { Vector } from '@/app/three/types';
 
 export default defineComponent({
-  setup() {
+  setup(props) {
     const axesHelper = new AxesHelper(1);
 
     useNesting(axesHelper);
+    usePosition(axesHelper, () => props.position);
   },
   render: noop,
   props: {
-    position: {
-      default: stubObject,
-      type: Object as PropType<Partial<Vector>>,
-    },
+    position: positionProp,
   },
 });
 </script>

@@ -5,11 +5,9 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { Group } from 'three';
-import { stubObject } from 'lodash-es';
 import { useNesting } from '@/app/three/utils/nestable';
-import { usePosition } from '@/app/three/utils/position';
+import { positionProp, usePosition } from '@/app/three/utils/position';
 import { useRotation } from '@/app/three/utils/rotation';
-import { Vector } from '@/app/three/types';
 
 export default defineComponent({
   setup(props) {
@@ -20,10 +18,7 @@ export default defineComponent({
     useRotation(group, () => props.rotation);
   },
   props: {
-    position: {
-      default: stubObject,
-      type: Object as PropType<Partial<Vector>>,
-    },
+    position: positionProp,
     rotation: {
       default: () => [0, 0, 0, 0],
       type: Array as unknown as PropType<[number, number, number, number]>,
