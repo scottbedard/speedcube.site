@@ -54,7 +54,7 @@
   </v-scene>
 
   <div class="gap-6 grid max-w-md">
-    <div class="gap-6 grid mb-6 sm:grid-cols-2">
+    <div class="gap-6 grid sm:grid-cols-2">
       <div>
         <div>Camera angle</div>
         <v-range-input v-model="cameraAngle" :max="90" :min="0" :step="0.01" />
