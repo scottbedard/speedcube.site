@@ -8,7 +8,7 @@ import { Vector } from '@/app/three/types';
 
 export default defineComponent({
   setup() {
-    const axesHelper = new AxesHelper;
+    const axesHelper = new AxesHelper(1);
 
     useNesting(axesHelper);
   },

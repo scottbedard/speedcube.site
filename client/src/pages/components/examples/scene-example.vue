@@ -13,8 +13,29 @@
       :camera-angle="cameraAngle"
       :camera-distance="cameraDistance">
       <v-group :position="groupPosition">
-        <v-axes-helper />
-        <v-box-geometry :dimensions="boxDimensions" :position="boxPosition" />
+        <!-- <v-axes-helper /> -->
+        <v-box-geometry
+          :dimensions="boxDimensions"
+          :position="boxPosition">
+          <template #up>
+            <v-axes-helper />
+          </template>
+          <template #left>
+            <v-axes-helper />
+          </template>
+          <template #front>
+            <v-axes-helper />
+          </template>
+          <template #right>
+            <v-axes-helper />
+          </template>
+          <template #back>
+            <v-axes-helper />
+          </template>
+          <template #down>
+            <v-axes-helper />
+          </template>
+        </v-box-geometry>
       </v-group>
     </v-scene>
 

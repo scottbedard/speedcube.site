@@ -1,7 +1,7 @@
 import { Group, Object3D } from 'three';
 import { useNestable } from '@/app/three/utils/nestable';
 import { Vector } from '@/app/three/types';
-import { usePosition } from './position';
+// import { usePosition } from './position';
 
 interface UseGroupOptions {
   position?: Partial<Vector>,
@@ -16,7 +16,7 @@ export function useGroup(children: Object3D | Object3D[] = [], opts: UseGroupOpt
   useNestable(group, children);
 
   if (opts.position) {
-    usePosition(group, opts.position);
+    // usePosition(group, opts.position);
   }
 
   return group;
