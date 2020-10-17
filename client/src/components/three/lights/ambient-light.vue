@@ -5,7 +5,7 @@
 <script lang="ts">
 import { Color, AmbientLight } from 'three';
 import { defineComponent } from 'vue';
-import { useNesting } from '@/app/three/nesting';
+import { useNesting } from '@/app/three/behaviors/nesting';
 
 export default defineComponent({
   setup(props) {

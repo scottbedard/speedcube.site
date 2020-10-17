@@ -8,17 +8,19 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, onMounted, onUnmounted, PropType, ref } from 'vue';
+import { defineComponent, inject, onMounted, onUnmounted, PropType, ref, watchEffect } from 'vue';
 import { RendererSymbol, SceneApi } from '@/components/three/types';
-import { Object3D, Scene } from 'three';
-import { stubArray } from 'lodash-es';
-import { useNesting } from '@/app/three/nesting';
-import { usePerspectiveCamera } from '@/app/three/cameras/perspective-camera';
+import { Object3D, PerspectiveCamera, Scene } from 'three';
+import { clamp, stubArray } from 'lodash-es';
+import { useNesting } from '@/app/three/behaviors/nesting';
+import { degreesToRadians } from '@/app/utils/math';
+
+// @todo: figure out why Number.EPSILON doesn't work for this value
+const EPSILON = 0.001;
 
 export default defineComponent({
   setup(props) {
     const el = ref<HTMLElement>();
-    const renderer = inject(RendererSymbol);
 
     // scene
     const scene = new Scene();
@@ -26,31 +28,27 @@ export default defineComponent({
     useNesting(scene, true);
 
     // camera
-    const camera = usePerspectiveCamera({
-      cameraAngle: computed(() => props.cameraAngle || 0),
-      cameraAspect: props.cameraAspect,
-      cameraDistance: computed(() => props.cameraDistance || 0),
-      cameraFar: props.cameraFar,
-      cameraFov: props.cameraFov,
-      cameraNear: props.cameraNear,
+    const camera = new PerspectiveCamera(props.cameraFov, props.cameraAspect, props.cameraNear, props.cameraFar);
+
+    watchEffect(() => {
+      const angle = clamp(-props.cameraAngle + 90, 0, 90);
+      const distance = clamp(props.cameraDistance, EPSILON, Infinity);
+      const radians = degreesToRadians(angle);
+      const adjacent = Math.sin(radians) * distance;
+      const opposite = Math.cos(radians) * distance;
+
+      camera.position.set(0, opposite, adjacent);
+      camera.lookAt(0, 0, 0);
     });
 
-    const sceneFn = (): SceneApi => {
-      return {
-        camera,
-        el: el.value,
-        scene,
-      };
-    };
+    // register scene with renderer
+    const renderer = inject(RendererSymbol);
 
     if (renderer) {
-      onMounted(() => {
-        renderer.addScene(sceneFn);
-      });
-
-      onUnmounted(() => {
-        renderer.removeScene(sceneFn);
-      });
+      const sceneFn = (): SceneApi => ({ camera, el: el.value, scene });
+  
+      onMounted(() => renderer.addScene(sceneFn));
+      onUnmounted(() => renderer.removeScene(sceneFn));
     }
 
     return {
@@ -79,7 +77,7 @@ export default defineComponent({
       type: Number,
     },
     cameraNear: {
-      default: 0,
+      default: EPSILON,
       type: Number,
     },
     children: {

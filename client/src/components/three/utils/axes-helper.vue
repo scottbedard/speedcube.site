@@ -2,8 +2,8 @@
 import { AxesHelper } from 'three';
 import { defineComponent } from 'vue';
 import { noop } from 'lodash-es';
-import { positionProp, usePosition } from '@/app/three/position';
-import { useNesting } from '@/app/three/nesting';
+import { positionProp, usePosition } from '@/app/three/behaviors/position';
+import { useNesting } from '@/app/three/behaviors/nesting';
 
 export default defineComponent({
   setup(props) {

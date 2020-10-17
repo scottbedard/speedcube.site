@@ -5,9 +5,9 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { Group } from 'three';
-import { useNesting } from '@/app/three/nesting';
-import { positionProp, usePosition } from '@/app/three/position';
-import { useRotation } from '@/app/three/rotation';
+import { useNesting } from '@/app/three/behaviors/nesting';
+import { positionProp, usePosition } from '@/app/three/behaviors/position';
+import { useRotation } from '@/app/three/behaviors/rotation';
 
 export default defineComponent({
   setup(props) {

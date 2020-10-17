@@ -5,9 +5,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { Color, Mesh, MeshLambertMaterial, SphereGeometry } from 'three';
-import { positionProp, usePosition } from '@/app/three/position';
-import { useDisposable } from '@/app/three/disposable';
-import { useNesting } from '@/app/three/nesting';
+import { positionProp, usePosition } from '@/app/three/behaviors/position';
+import { useDisposable } from '@/app/three/behaviors/disposable';
+import { useNesting } from '@/app/three/behaviors/nesting';
 
 export default defineComponent({
   setup(props) {
