@@ -24,6 +24,7 @@
 import { BoxGeometry, Group, Mesh, MeshLambertMaterial } from 'three';
 import { computed, defineComponent, PropType, watchEffect } from 'vue';
 import { isNumber } from 'lodash-es';
+import { useColor } from '@/app/three/behaviors/color';
 import { useDisposable } from '@/app/three/behaviors/disposable';
 import { useNesting } from '@/app/three/behaviors/nesting';
 import { positionProp, usePosition } from '@/app/three/behaviors/position';
@@ -62,17 +63,13 @@ export default defineComponent({
     useRotation(group, () => props.rotation);
 
     const geometry = new BoxGeometry(1, 1, 1);
-
-    const material = new MeshLambertMaterial({
-      color: 0x666666,
-      wireframe: props.wireframe,
-    });
-
-    const cube = new Mesh(geometry, material);
-
     useDisposable(geometry);
+
+    const material = new MeshLambertMaterial({ wireframe: props.wireframe });
+    useColor(material, () => props.color);
     useDisposable(material);
 
+    const cube = new Mesh(geometry, material);
     group.add(cube);
 
     watchEffect(() => {
@@ -90,6 +87,10 @@ export default defineComponent({
     VGroup,
   },
   props: {
+    color: {
+      default: 0xffffff,
+      type: [String, Number],
+    },
     dimensions: {
       default: 1,
       type: [Number, Object] as PropType<number | Partial<Dimensions>>,

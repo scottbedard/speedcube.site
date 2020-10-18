@@ -16,7 +16,7 @@ export default defineComponent({
   },
   props: {
     color: {
-      default: '#fff',
+      default: 0xffffff,
       type: [Number, String],
     },
     intensity: {

@@ -25,11 +25,11 @@ export default defineComponent({
   },
   props: {
     color: {
-      default: '#ff0',
+      default: 0xffffff,
       type: [Number, String],
     },
     heightSegments: {
-      default: 6,
+      default: 12,
       type: Number,
     },
     position: positionProp,
@@ -38,7 +38,7 @@ export default defineComponent({
       type: Number,
     },
     widthSegments: {
-      default: 8,
+      default: 16,
       type: Number,
     },
     wireframe: {
