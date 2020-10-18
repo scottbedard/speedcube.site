@@ -4,24 +4,22 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Color, Mesh, MeshLambertMaterial, SphereGeometry } from 'three';
+import { Mesh, MeshLambertMaterial, SphereGeometry } from 'three';
 import { positionProp, usePosition } from '@/app/three/behaviors/position';
+import { useColor } from '@/app/three/behaviors/color';
 import { useDisposable } from '@/app/three/behaviors/disposable';
 import { useNesting } from '@/app/three/behaviors/nesting';
 
 export default defineComponent({
   setup(props) {
     const geometry = new SphereGeometry(props.radius, props.widthSegments, props.heightSegments);
-
-    const material = new MeshLambertMaterial({
-      color: new Color(props.color),
-      wireframe: props.wireframe,
-    });
-
-    const sphere = new Mesh(geometry, material);
-
     useDisposable(geometry);
+
+    const material = new MeshLambertMaterial({ wireframe: props.wireframe });
+    useColor(material, () => props.color);
     useDisposable(material);
+  
+    const sphere = new Mesh(geometry, material);
     useNesting(sphere);
     usePosition(sphere, () => props.position);
   },
