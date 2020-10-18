@@ -32,7 +32,7 @@ export default defineComponent({
     onMounted(() => {
       renderer = new WebGLRenderer({
         alpha: true,
-        antialias: false,
+        antialias: true,
         canvas: canvas.value,
       });
 
