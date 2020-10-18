@@ -51,7 +51,7 @@
 <script lang="ts">
 import { computed, defineComponent, onUnmounted, PropType, watch } from 'vue';
 import { Cube } from '@bedard/twister';
-import { DoubleSide, MeshLambertMaterial, Shape, ShapeBufferGeometry } from 'three';
+import { BackSide, FrontSide, Material, MeshLambertMaterial, Shape, ShapeBufferGeometry } from 'three';
 import { isNumber, times } from 'lodash-es';
 import { useDisposable } from '@/app/three/behaviors/disposable';
 import VBoxGeometry from '@/components/three/geometries/box-geometry.vue';
@@ -93,15 +93,29 @@ const createGeometry = (config: CubeConfig, stickerLength: number) => {
  */
 const createMaterials = (config: CubeConfig) => {
   return config.colors.map((color) => {
-    return new MeshLambertMaterial({ color, side: DoubleSide });
+    return {
+      innerMaterial: new MeshLambertMaterial({
+        color,
+        opacity: config.innerBrightness,
+        side: BackSide,
+        transparent: config.innerBrightness < 1,
+      }),
+      outerMaterial: new MeshLambertMaterial({
+        color,
+        side: FrontSide,
+      }),
+    };
   });
 }
 
 /**
  * Dispose of sticker materials
  */
-const disposeMaterials = (materials: MeshLambertMaterial[]) => {
-  materials.forEach(material => material.dispose());
+const disposeMaterials = (materials: { innerMaterial: Material, outerMaterial: Material }[]) => {
+  materials.forEach(obj => {
+    obj.innerMaterial.dispose();
+    obj.outerMaterial.dispose();
+  });
 }
 
 /**

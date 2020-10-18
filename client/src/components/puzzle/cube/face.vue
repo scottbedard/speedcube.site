@@ -3,7 +3,8 @@
     v-for="(sticker, index) in stickers"
     :geometry="geometry"
     :key="index"
-    :material="materials[sticker.value]"
+    :inner-material="materials[sticker.value].innerMaterial"
+    :outer-material="materials[sticker.value].outerMaterial"
     :position="position(index)" />
 </template>
 

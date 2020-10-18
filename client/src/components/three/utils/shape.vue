@@ -10,10 +10,9 @@ export default defineComponent({
     const group = new Group;
 
     watchEffect(() => {
-      const mesh = new Mesh(props.geometry, props.material);
-
       group.remove(...group.children);
-      group.add(mesh);
+      group.add(new Mesh(props.geometry, props.innerMaterial));
+      group.add(new Mesh(props.geometry, props.outerMaterial));
     });
 
     useNesting(group);
@@ -24,7 +23,11 @@ export default defineComponent({
       required: true,
       type: Object as PropType<ShapeBufferGeometry>,
     },
-    material: {
+    innerMaterial: {
+      required: true,
+      type: Object as PropType<Material>,
+    },
+    outerMaterial: {
       required: true,
       type: Object as PropType<Material>,
     },
