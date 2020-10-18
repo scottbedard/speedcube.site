@@ -48,7 +48,7 @@ export default defineComponent({
         cameraDistance: 3,
         innerBrightness: 0,
         stickerElevation: 0,
-        stickerRadius: 0,
+        stickerRadius: 0.5,
         stickerSpacing: 0,
       },
       model: new Cube({ size: 3 }),

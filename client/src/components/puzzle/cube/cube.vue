@@ -42,6 +42,8 @@ const baseEdgeLength = 2 / Math.sqrt(3);
  * Create sticker geometry
  */
 const createGeometry = (config: CubeConfig, edgeLength: number) => {
+  console.log('calculating geometry');
+
   const shape = new Shape();
   const radius = (edgeLength * config.stickerRadius) / 2;
 
