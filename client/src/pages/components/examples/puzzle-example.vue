@@ -44,14 +44,14 @@ export default defineComponent({
   data() {
     return {
       config: {
-        cameraAngle: 25,
+        cameraAngle: 45,
         cameraDistance: 3,
         innerBrightness: 0,
-        stickerElevation: 0,
-        stickerRadius: 0.5,
-        stickerSpacing: 0,
+        stickerElevation: 0.25,
+        stickerRadius: 0.25,
+        stickerSpacing: 0.25,
       },
-      model: new Cube({ size: 2 }),
+      model: new Cube({ size: 3 }),
     };
   },
   components: {

@@ -92,11 +92,8 @@ const createGeometry = (config: CubeConfig, stickerLength: number) => {
  * Create sticker materials
  */
 const createMaterials = (config: CubeConfig) => {
-  return config.colors.map(() => {
-    return new MeshLambertMaterial({
-      color: 0xff0000,
-      side: DoubleSide,
-    });
+  return config.colors.map((color) => {
+    return new MeshLambertMaterial({ color, side: DoubleSide });
   });
 }
 
