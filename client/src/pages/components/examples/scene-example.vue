@@ -41,12 +41,12 @@
         they are useful when positioning stickers, and will eventually
         handle raycasting to emit mouse events.
       -->
-      <v-box-geometry :dimensions="dimensions">
+      <v-box-geometry visible :dimensions="dimensions">
         <template #up>
-          <v-sphere-geometry color="#ff0" wireframe :radius="0.1" />
+          <v-sphere-geometry color="#ff0" wireframe visible :radius="0.1" />
         </template>
         <template #front>
-          <v-sphere-geometry color="#00f" wireframe :radius="0.1" />
+          <v-sphere-geometry color="#00f" wireframe visible :radius="0.1" />
         </template>
       </v-box-geometry>
     </v-group>
