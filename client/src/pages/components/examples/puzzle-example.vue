@@ -51,7 +51,7 @@ export default defineComponent({
         stickerRadius: 0.5,
         stickerSpacing: 0,
       },
-      model: new Cube({ size: 3 }),
+      model: new Cube({ size: 2 }),
     };
   },
   components: {

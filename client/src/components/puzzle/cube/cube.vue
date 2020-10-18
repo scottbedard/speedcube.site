@@ -1,31 +1,61 @@
 <template>
-  <!-- <v-axes-helper /> -->
-
-  <v-sphere-geometry
-    color="#444"
-    wireframe
-    :radius="1" />
-
   <v-box-geometry
     color="#0f0"
     wireframe
     :dimensions="edgeLength">
     <template #up>
       <v-face
+        :geometry="geometry"
         :materials="materials"
-        :geometry="geometry" />
+        :position="position"
+        :stickers="model.state.u" />
+    </template>
+    <template #left>
+      <v-face
+        :geometry="geometry"
+        :materials="materials"
+        :position="position"
+        :stickers="model.state.l" />
+    </template>
+    <template #front>
+      <v-face
+        :geometry="geometry"
+        :materials="materials"
+        :position="position"
+        :stickers="model.state.f" />
+    </template>
+    <template #right>
+      <v-face
+        :geometry="geometry"
+        :materials="materials"
+        :position="position"
+        :stickers="model.state.r" />
+    </template>
+    <template #back>
+      <v-face
+        :geometry="geometry"
+        :materials="materials"
+        :position="position"
+        :stickers="model.state.b" />
+    </template>
+    <template #down>
+      <v-face
+        :geometry="geometry"
+        :materials="materials"
+        :position="position"
+        :stickers="model.state.d" />
     </template>
   </v-box-geometry>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onUnmounted, PropType, watch } from 'vue';
-import { isNumber } from 'lodash-es';
+import { Cube } from '@bedard/twister';
 import { DoubleSide, MeshLambertMaterial, Shape, ShapeBufferGeometry } from 'three';
+import { isNumber, times } from 'lodash-es';
 import { useDisposable } from '@/app/three/behaviors/disposable';
 import VBoxGeometry from '@/components/three/geometries/box-geometry.vue';
 import VFace from './face.vue';
-import VSphereGeometry from '@/components/three/geometries/sphere-geometry.vue';
 
 interface CubeConfig {
   colors: [string, string, string, string, string, string],
@@ -41,19 +71,17 @@ const baseEdgeLength = 2 / Math.sqrt(3);
 /**
  * Create sticker geometry
  */
-const createGeometry = (config: CubeConfig, edgeLength: number) => {
-  console.log('calculating geometry');
-
+const createGeometry = (config: CubeConfig, stickerLength: number) => {
   const shape = new Shape();
-  const radius = (edgeLength * config.stickerRadius) / 2;
+  const radius = (stickerLength * config.stickerRadius) / 2;
 
   shape.moveTo(0, radius);
-  shape.lineTo(0, edgeLength - radius);
-  shape.quadraticCurveTo(0, edgeLength, radius, edgeLength);
-  shape.lineTo(edgeLength - radius, edgeLength);
-  shape.quadraticCurveTo(edgeLength, edgeLength, edgeLength, edgeLength - radius);
-  shape.lineTo(edgeLength, radius);
-  shape.quadraticCurveTo(edgeLength, 0, edgeLength - radius, 0);
+  shape.lineTo(0, stickerLength - radius);
+  shape.quadraticCurveTo(0, stickerLength, radius, stickerLength);
+  shape.lineTo(stickerLength - radius, stickerLength);
+  shape.quadraticCurveTo(stickerLength, stickerLength, stickerLength, stickerLength - radius);
+  shape.lineTo(stickerLength, radius);
+  shape.quadraticCurveTo(stickerLength, 0, stickerLength - radius, 0);
   shape.lineTo(radius, 0);
   shape.quadraticCurveTo(0, 0, 0, radius);
 
@@ -80,6 +108,16 @@ const disposeMaterials = (materials: MeshLambertMaterial[]) => {
 }
 
 /**
+ * Create column map.
+ */
+const mapColumns = (n: number) => times(n ** 2).map((x, i) => i % n);
+
+/**
+ * Create row map.
+ */
+const mapRows = (n: number) => times(n ** 2).map((x, i) => Math.floor(i / n));
+
+/**
  * Normalize cube config
  */
 const normalize = (config: Partial<CubeConfig>): CubeConfig => {
@@ -101,10 +139,29 @@ const normalize = (config: Partial<CubeConfig>): CubeConfig => {
 
 export default defineComponent({
   setup(props) {
+    const colMap = computed(() => mapColumns(props.model.options.size));
     const config = computed(() => normalize(props.config));
+    const rowMap = computed(() => mapRows(props.model.options.size));
+    const stickerLength = computed(() => baseEdgeLength / props.model.options.size);
+    const stickerSpacingGap = computed(() => stickerLength.value * config.value.stickerSpacing);
+    const stickerSpacingOffset = computed(() => (stickerSpacingGap.value * (props.model.options.size - 1)) / 2);
+    const stickerXOffset = computed(() => baseEdgeLength / -2);
+    const stickerYOffset = computed(() => (baseEdgeLength / 2) - stickerLength.value);
+    const edgeLength = computed(() => baseEdgeLength + (stickerSpacingGap.value * (props.model.options.size - 1)) + (stickerLength.value * config.value.stickerElevation * 2));
+
+    // calculate position a sticker by index
+    const position = (index: number) => {
+      const col = colMap.value[index];
+      const row = rowMap.value[index];
+      
+      return {
+        x: stickerXOffset.value + (stickerLength.value * col) + (stickerSpacingGap.value * col) - stickerSpacingOffset.value,
+        y: stickerYOffset.value - (stickerLength.value * row) - (stickerSpacingGap.value * row) + stickerSpacingOffset.value,
+      };
+    }
 
     // sticker geometry
-    const geometry = computed(() => createGeometry(config.value, baseEdgeLength));
+    const geometry = computed(() => createGeometry(config.value, stickerLength.value));
     watch(geometry, (current, prev) => prev.dispose());
     useDisposable(geometry);
 
@@ -114,19 +171,17 @@ export default defineComponent({
     onUnmounted(() => disposeMaterials(materials.value));
 
     return {
+      edgeLength,
       geometry,
       materials,
+      position,
     };
   },
   components: {
     VBoxGeometry,
     VFace,
-    VSphereGeometry,
   },
   computed: {
-    edgeLength() {
-      return baseEdgeLength;
-    },
     normalizedConfig(): CubeConfig {
       const {
         innerBrightness,
@@ -148,6 +203,10 @@ export default defineComponent({
     config: {
       required: true,
       type: Object as PropType<Partial<CubeConfig>>,
+    },
+    model: {
+      required: true,
+      type: Object as PropType<Cube>,
     },
   },
 });

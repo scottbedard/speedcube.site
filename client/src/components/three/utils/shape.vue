@@ -3,6 +3,7 @@ import { defineComponent, PropType, watchEffect } from 'vue';
 import { Group, Material, Mesh, ShapeBufferGeometry } from 'three';
 import { noop } from 'lodash-es';
 import { useNesting } from '@/app/three/behaviors/nesting';
+import { positionProp, usePosition } from '@/app/three/behaviors/position';
 
 export default defineComponent({
   setup(props) {
@@ -16,6 +17,7 @@ export default defineComponent({
     });
 
     useNesting(group);
+    usePosition(group, () => props.position);
   },
   props: {
     geometry: {
@@ -26,6 +28,7 @@ export default defineComponent({
       required: true,
       type: Object as PropType<Material>,
     },
+    position: positionProp,
   },
   render: noop,
 });

@@ -7,7 +7,8 @@
 
     <component
       :config="config"
-      :is="puzzle" />
+      :is="puzzle"
+      :model="model" />
   </v-scene>
 </template>
 

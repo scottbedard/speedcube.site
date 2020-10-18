@@ -5,7 +5,6 @@
     should exist. scenes can be sized using traditional CSS methods,
     and will resize responsively.
   -->
-
   <v-scene
     class="max-w-md mb-6"
     square
@@ -19,7 +18,7 @@
 
     <!--
       point lights illuminate equally in all directions from a specific
-      position. think of these sort of like an bare light bulb.
+      position. think of these sort of like a bare light bulb.
     -->
     <v-point-light :position="{ y: 5, z: 3 }" />
 
@@ -37,7 +36,7 @@
       -->
       <v-axes-helper />
 
-      <!--\
+      <!--
         geometry components expose slots for common puzzle shapes.
         they are useful when positioning stickers, and will eventually
         handle raycasting to emit mouse events.
