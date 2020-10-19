@@ -41,12 +41,12 @@
         they are useful when positioning stickers, and will eventually
         handle raycasting to emit mouse events.
       -->
-      <v-box-geometry visible :dimensions="dimensions">
+      <v-box-geometry :dimensions="dimensions">
         <template #up>
-          <v-sphere-geometry color="#ff0" wireframe visible :radius="0.1" />
+          <v-sphere-geometry color="#ff0" wireframe :radius="0.1" />
         </template>
         <template #front>
-          <v-sphere-geometry color="#00f" wireframe visible :radius="0.1" />
+          <v-sphere-geometry color="#00f" wireframe :radius="0.1" />
         </template>
       </v-box-geometry>
     </v-group>
@@ -105,23 +105,19 @@
       <div class="gap-6 grid sm:grid-cols-4">
         <div>
           <div class="text-gray-500 text-xs">X</div>
-          <v-range-input v-model="rotation.x" :max="10" :min="-10" :step="0.01" />
+          <v-range-input v-model="rotation.x" :max="1" :min="0" :step="0.01" />
         </div>
         <div>
           <div class="text-gray-500 text-xs">Y</div>
-          <v-range-input
-            v-model="rotation.y"
-            :max="10"
-            :min="-10"
-            :step="0.01" />
+          <v-range-input v-model="rotation.y" :max="1" :min="0" :step="0.01" />
         </div>
         <div>
           <div class="text-gray-500 text-xs">Z</div>
-          <v-range-input v-model="rotation.z" :max="10" :min="-10" :step="0.01" />
+          <v-range-input v-model="rotation.z" :max="1" :min="0" :step="0.01" />
         </div>
         <div>
           <div class="text-gray-500 text-xs">Degrees</div>
-          <v-range-input v-model="rotation.deg" :max="360" :min="-360" :step="0.01" />
+          <v-range-input v-model="rotation.deg" :max="180" :min="-180" :step="0.01" />
         </div>
       </div>
     </div>
