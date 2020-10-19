@@ -2,6 +2,7 @@
   <v-shape
     v-for="(sticker, index) in stickers"
     :geometry="geometry"
+    :hidden="isHidden(sticker)"
     :key="index"
     :inner-material="materials[sticker.value].innerMaterial"
     :outer-material="materials[sticker.value].outerMaterial"
@@ -18,6 +19,15 @@ import VShape from '@/components/three/utils/shape.vue';
 type StickerData = Record<string, unknown>;
 
 export default defineComponent({
+  setup(props) {
+    const isHidden = (sticker: CubeSticker<StickerData>) => {
+      return !props.visibleStickers.includes(sticker);
+    }
+
+    return {
+      isHidden,
+    };
+  },
   components: {
     VShape,
   },
@@ -37,6 +47,10 @@ export default defineComponent({
     stickerPosition: {
       required: true,
       type: Function as PropType<(index: number) => Partial<Vector>>,
+    },
+    visibleStickers: {
+      required: true,
+      type: Array as PropType<CubeSticker<StickerData>[]>,
     },
   },
 });

@@ -4,7 +4,7 @@ import { stubObject } from 'lodash-es';
 import { Vector } from '@/app/three/types';
 
 /**
- * Position props
+ * Position prop
  */
 export const positionProp = {
   default: stubObject,

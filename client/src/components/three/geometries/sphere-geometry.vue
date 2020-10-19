@@ -9,7 +9,7 @@ import { positionProp, usePosition } from '@/app/three/behaviors/position';
 import { useColor } from '@/app/three/behaviors/color';
 import { useDisposable } from '@/app/three/behaviors/disposable';
 import { useNesting } from '@/app/three/behaviors/nesting';
-import { useVisible } from '@/app/three/behaviors/visible';
+import { useHidden } from '@/app/three/behaviors/hidden';
 
 export default defineComponent({
   setup(props) {
@@ -23,7 +23,7 @@ export default defineComponent({
     const sphere = new Mesh(geometry, material);
     useNesting(sphere);
     usePosition(sphere, () => props.position);
-    useVisible(sphere, () => props.visible);
+    useHidden(sphere, () => props.hidden);
   },
   props: {
     color: {
@@ -34,14 +34,14 @@ export default defineComponent({
       default: 12,
       type: Number,
     },
+    hidden: {
+      default: false,
+      type: Boolean,
+    },
     position: positionProp,
     radius: {
       default: 1,
       type: Number,
-    },
-    visible: {
-      default: false,
-      type: Boolean,
     },
     widthSegments: {
       default: 16,

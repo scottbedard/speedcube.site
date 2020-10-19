@@ -26,8 +26,8 @@ import { computed, defineComponent, PropType, watchEffect } from 'vue';
 import { isNumber } from 'lodash-es';
 import { useColor } from '@/app/three/behaviors/color';
 import { useDisposable } from '@/app/three/behaviors/disposable';
+import { useHidden } from '@/app/three/behaviors/hidden';
 import { useNesting } from '@/app/three/behaviors/nesting';
-import { useVisible } from '@/app/three/behaviors/visible';
 import { positionProp, usePosition } from '@/app/three/behaviors/position';
 import { Rotation, useRotation } from '@/app/three/behaviors/rotation';
 import VGroup from '@/components/three/utils/group.vue';
@@ -71,7 +71,7 @@ export default defineComponent({
     useDisposable(material);
 
     const cube = new Mesh(geometry, material);
-    useVisible(cube, () => props.visible);
+    useHidden(cube, () => props.hidden);
     group.add(cube);
 
     watchEffect(() => {
@@ -97,14 +97,14 @@ export default defineComponent({
       default: 1,
       type: [Number, Object] as PropType<number | Partial<Dimensions>>,
     },
+    hidden: {
+      default: false,
+      type: Boolean,
+    },
     position: positionProp,
     rotation: {
       default: () => [0, 0, 0, 0],
       type: Array as unknown as PropType<Rotation>,
-    },
-    visible: {
-      default: false,
-      type: Boolean,
     },
     wireframe: {
       default: false,

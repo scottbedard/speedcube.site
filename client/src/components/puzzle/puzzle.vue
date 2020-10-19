@@ -7,8 +7,10 @@
 
     <component
       :config="config"
+      :current-turn="currentTurn"
       :is="puzzle"
-      :model="model" />
+      :model="model"
+      :turn-progress="turnProgress" />
   </v-scene>
 </template>
 
@@ -47,9 +49,17 @@ export default defineComponent({
       default: stubObject,
       type: Object as PropType<Record<string, unknown>>,
     },
+    currentTurn: {
+      default: '',
+      type: String,
+    },
     model: {
       required: true,
       type: Object as PropType<Cube>,
+    },
+    turnProgress: {
+      default: 0,
+      type: Number,
     },
   },
 });

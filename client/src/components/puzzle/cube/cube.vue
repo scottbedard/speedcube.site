@@ -4,14 +4,24 @@
     :geometry="geometry"
     :materials="materials"
     :model="model"
-    :sticker-position="stickerPosition" />
+    :sticker-position="stickerPosition"
+    :visible-stickers="idleStickers" />
+  <v-core
+    :edge-length="edgeLength"
+    :geometry="geometry"
+    :materials="materials"
+    :model="model"
+    :rotation="turnRotation"
+    :sticker-position="stickerPosition"
+    :visible-stickers="turningStickers" />
 </template>
 
 <script lang="ts">
 import { BackSide, FrontSide, Material, MeshLambertMaterial, Shape, ShapeBufferGeometry } from 'three';
 import { computed, defineComponent, onUnmounted, PropType, watch } from 'vue';
 import { Cube } from '@bedard/twister';
-import { isNumber, times } from 'lodash-es';
+import { attempt, isError, isNumber, times } from 'lodash-es';
+import { Rotation } from '@/app/three/behaviors/rotation';
 import { useDisposable } from '@/app/three/behaviors/disposable';
 import VCore from './core.vue';
 
@@ -69,6 +79,36 @@ const createMaterials = (config: CubeConfig) => {
 }
 
 /**
+ * Get rotation value for the current turn.
+ */
+const getTurnRotation = (model: Cube, currentTurn: string, turnProgress: number): Rotation => {
+  let x = 0;
+  let y = 0;
+  let z = 0;
+  let deg = 90 * turnProgress;
+
+  const parsedTurn = attempt(model.parse, currentTurn);
+  
+  if (!isError(parsedTurn)) {
+    const { target, rotation } = parsedTurn;
+
+    // set rotation axis angle
+    if (target === 'l' || target === 'r' || target === 'x') x = 1;
+    else if (target === 'u' || target === 'd' || target === 'y') y = 1;
+    else if (target === 'f' || target === 'b' || target === 'z') z = 1;
+
+    // invert rotation degrees for B, L, and D turns to
+    // ensure they are clockwise by default
+    if (target === 'b' || target === 'l' || target === 'd') deg *= -1;
+
+    // invert rotation degrees for prime turns
+    if (rotation === -1) deg *= -1;
+  }
+  
+  return [x, y, z, deg];
+}
+
+/**
  * Dispose of sticker materials
  */
 const disposeMaterials = (materials: { innerMaterial: Material, outerMaterial: Material }[]) => {
@@ -119,7 +159,34 @@ export default defineComponent({
     const stickerXOffset = computed(() => baseEdgeLength / -2);
     const stickerYOffset = computed(() => (baseEdgeLength / 2) - stickerLength.value);
     const edgeLength = computed(() => baseEdgeLength + (stickerSpacingGap.value * (props.model.options.size - 1)) + (stickerLength.value * config.value.stickerElevation * 2));
+    const turnRotation = computed(() => getTurnRotation(props.model, props.currentTurn, props.turnProgress));
+  
+    // determine which stickers are turning and which are idle
+    const allStickers = computed(() => {
+      return props.model.state.u.concat(
+        props.model.state.l,
+        props.model.state.f,
+        props.model.state.r,
+        props.model.state.b,
+        props.model.state.d,
+      );
+    });
 
+    const turningStickers = computed(() => {
+      try {
+        return props.model.getStickersForTurn(props.currentTurn);
+      } catch {
+        return [];
+      }
+    });
+
+    const idleStickers = computed(() => {
+      return allStickers.value.filter(sticker => {
+        return !turningStickers.value.includes(sticker);
+      });
+    });
+
+  
     // calculate position a sticker by index
     const stickerPosition = (index: number) => {
       const col = colMap.value[index];
@@ -144,8 +211,11 @@ export default defineComponent({
     return {
       edgeLength,
       geometry,
+      idleStickers,
       materials,
       stickerPosition,
+      turningStickers,
+      turnRotation,
     };
   },
   components: {
@@ -156,9 +226,17 @@ export default defineComponent({
       required: true,
       type: Object as PropType<Partial<CubeConfig>>,
     },
+    currentTurn: {
+      default: '',
+      type: String,
+    },
     model: {
       required: true,
       type: Object as PropType<Cube>,
+    },
+    turnProgress: {
+      default: 0,
+      type: Number,
     },
   },
 });
