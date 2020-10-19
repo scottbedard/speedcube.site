@@ -100,7 +100,7 @@ const normalize = (config: Partial<CubeConfig>): CubeConfig => {
   } = config;
 
   return {
-    colors: ['#f00', '#0f0', '#00f', '#f0f', '#ff0', '#0ff'],
+    colors: ['#F6E05E', '#ED8936', '#3182CE', '#E53E3E', '#48BB78', '#F7FAFC'],
     innerBrightness: isNumber(innerBrightness) ? innerBrightness : 0,
     stickerElevation: isNumber(stickerElevation) ? stickerElevation : 0,
     stickerRadius: isNumber(stickerRadius) ? stickerRadius : 0,
@@ -150,24 +150,6 @@ export default defineComponent({
   },
   components: {
     VCore,
-  },
-  computed: {
-    normalizedConfig(): CubeConfig {
-      const {
-        innerBrightness,
-        stickerElevation,
-        stickerRadius,
-        stickerSpacing,
-      } = this.config;
-
-      return {
-        colors: ['#f00', '#0f0', '#00f', '#f0f', '#ff0', '#0ff'],
-        innerBrightness: isNumber(innerBrightness) ? innerBrightness : 0,
-        stickerElevation: isNumber(stickerElevation) ? stickerElevation : 0,
-        stickerRadius: isNumber(stickerRadius) ? stickerRadius : 0,
-        stickerSpacing: isNumber(stickerSpacing) ? stickerSpacing : 0,
-      };
-    },
   },
   props: {
     config: {
