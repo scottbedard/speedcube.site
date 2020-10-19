@@ -5,7 +5,7 @@
     :key="index"
     :inner-material="materials[sticker.value].innerMaterial"
     :outer-material="materials[sticker.value].outerMaterial"
-    :position="position(index)" />
+    :position="stickerPosition(index)" />
 </template>
 
 <script lang="ts">
@@ -30,13 +30,13 @@ export default defineComponent({
       required: true,
       type: Array as PropType<MeshLambertMaterial[]>,
     },
-    position: {
-      required: true,
-      type: Function as PropType<(index: number) => Partial<Vector>>,
-    },
     stickers: {
       required: true,
       type: Object as PropType<CubeSticker<StickerData>[]>,
+    },
+    stickerPosition: {
+      required: true,
+      type: Function as PropType<(index: number) => Partial<Vector>>,
     },
   },
 });

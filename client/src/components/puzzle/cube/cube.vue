@@ -1,61 +1,19 @@
 <template>
-  <v-box-geometry
-    color="#0f0"
-    wireframe
-    :dimensions="edgeLength">
-    <template #up>
-      <v-face
-        :geometry="geometry"
-        :materials="materials"
-        :position="position"
-        :stickers="model.state.u" />
-    </template>
-    <template #left>
-      <v-face
-        :geometry="geometry"
-        :materials="materials"
-        :position="position"
-        :stickers="model.state.l" />
-    </template>
-    <template #front>
-      <v-face
-        :geometry="geometry"
-        :materials="materials"
-        :position="position"
-        :stickers="model.state.f" />
-    </template>
-    <template #right>
-      <v-face
-        :geometry="geometry"
-        :materials="materials"
-        :position="position"
-        :stickers="model.state.r" />
-    </template>
-    <template #back>
-      <v-face
-        :geometry="geometry"
-        :materials="materials"
-        :position="position"
-        :stickers="model.state.b" />
-    </template>
-    <template #down>
-      <v-face
-        :geometry="geometry"
-        :materials="materials"
-        :position="position"
-        :stickers="model.state.d" />
-    </template>
-  </v-box-geometry>
+  <v-core
+    :edge-length="edgeLength"
+    :geometry="geometry"
+    :materials="materials"
+    :model="model"
+    :sticker-position="stickerPosition" />
 </template>
 
 <script lang="ts">
+import { BackSide, FrontSide, Material, MeshLambertMaterial, Shape, ShapeBufferGeometry } from 'three';
 import { computed, defineComponent, onUnmounted, PropType, watch } from 'vue';
 import { Cube } from '@bedard/twister';
-import { BackSide, FrontSide, Material, MeshLambertMaterial, Shape, ShapeBufferGeometry } from 'three';
 import { isNumber, times } from 'lodash-es';
 import { useDisposable } from '@/app/three/behaviors/disposable';
-import VBoxGeometry from '@/components/three/geometries/box-geometry.vue';
-import VFace from './face.vue';
+import VCore from './core.vue';
 
 interface CubeConfig {
   colors: [string, string, string, string, string, string],
@@ -65,7 +23,9 @@ interface CubeConfig {
   stickerSpacing: number, // 0 = no spacing, 1 = sticker dist spacing
 }
 
-// edge length of a cube inside a sphere of radius 1
+/**
+ * Edge length of a cube inside a sphere of radius 1
+ */
 const baseEdgeLength = 2 / Math.sqrt(3);
 
 /**
@@ -161,7 +121,7 @@ export default defineComponent({
     const edgeLength = computed(() => baseEdgeLength + (stickerSpacingGap.value * (props.model.options.size - 1)) + (stickerLength.value * config.value.stickerElevation * 2));
 
     // calculate position a sticker by index
-    const position = (index: number) => {
+    const stickerPosition = (index: number) => {
       const col = colMap.value[index];
       const row = rowMap.value[index];
       
@@ -185,12 +145,11 @@ export default defineComponent({
       edgeLength,
       geometry,
       materials,
-      position,
+      stickerPosition,
     };
   },
   components: {
-    VBoxGeometry,
-    VFace,
+    VCore,
   },
   computed: {
     normalizedConfig(): CubeConfig {

@@ -46,7 +46,7 @@ export default defineComponent({
       config: {
         cameraAngle: 45,
         cameraDistance: 3,
-        innerBrightness: 0,
+        innerBrightness: 0.9,
         stickerElevation: 0.25,
         stickerRadius: 0.25,
         stickerSpacing: 0.25,
