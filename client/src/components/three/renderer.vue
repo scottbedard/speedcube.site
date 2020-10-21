@@ -1,23 +1,20 @@
 <template>
   <slot />
   <canvas
-    class="absolute h-full left-0 pointer-events-none top-0 w-full"
+    class="fixed h-full left-0 pointer-events-none top-0 w-full"
     ref="canvas"
     :class="{
       hidden: empty,
     }"
     :data-scenes="scenes.length"
     :height="height"
-    :style="{
-      transform: `translateY(${scrollY}px)`, 
-    }"
     :width="width" />
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, onUnmounted, provide, ref, watch } from 'vue';
 import { RendererSymbol, SceneFactory } from '@/components/three/types';
-import { useRafFn, useWindowScroll, useWindowSize } from '@vueuse/core';
+import { useRafFn, useWindowSize } from '@vueuse/core';
 import { WebGLRenderer } from 'three';
 
 // https://threejs.org/examples/webgl_multiple_elements.html
@@ -30,7 +27,6 @@ export default defineComponent({
     const scenes = ref<SceneFactory[]>([]);
     const empty = computed(() => scenes.value.length === 0);
     const { height, width } = useWindowSize();
-    const { y: scrollY } = useWindowScroll();
 
     // manage renderer
     onMounted(() => {
@@ -119,7 +115,6 @@ export default defineComponent({
       empty,
       height,
       scenes,
-      scrollY,
       width,
     };
   },
