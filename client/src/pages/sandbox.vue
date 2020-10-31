@@ -8,6 +8,13 @@
     :camera-angle="cameraAngle"
     :camera-distance="cameraDistance">
     <v-axes-helper />
+    <v-ambient-light color="#fff" :intensity="0.5" />
+    <v-point-light :intensity="0.2" :position="{ x: -5, y: 5 }" />
+    <v-point-light :intensity="0.5" :position="{ x: 0, y: 5 }" />
+    <v-point-light :intensity="0.2" :position="{ x: 5, y: 5 }" />
+    <v-point-light :intensity="0.2" :position="{ x: 5, y: -5 }" />
+    
+    <v-dodecahedron-geometry color="#bbb" />
   </v-scene>
 
   <div class="gap-6 grid grid-cols-12 max-w-2xl mx-auto">
@@ -23,10 +30,14 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { defineComponent } from 'vue';
+import VAmbientLight from '@/components/three/lights/ambient-light.vue';
 import VAxesHelper from '@/components/three/utils/axes-helper.vue';
-import VScene from '@/components/three/scene.vue';
+import VDodecahedronGeometry from '@/components/three/geometries/dodecahedron-geometry.vue';
+import VPointLight from '@/components/three/lights/point-light.vue';
 import VRangeInput from '@/components/range-input.vue';
+import VScene from '@/components/three/scene.vue';
 
 export default defineComponent({
   data() {
@@ -36,7 +47,10 @@ export default defineComponent({
     };
   },
   components: {
+    VAmbientLight,
     VAxesHelper,
+    VDodecahedronGeometry,
+    VPointLight,
     VRangeInput,
     VScene,
   },

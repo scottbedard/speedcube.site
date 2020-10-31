@@ -24,7 +24,7 @@
 import { BoxGeometry, Group, Mesh, MeshLambertMaterial } from 'three';
 import { computed, defineComponent, PropType, watchEffect } from 'vue';
 import { isNumber } from 'lodash-es';
-import { useColor } from '@/app/three/behaviors/color';
+import { colorProp, useColor } from '@/app/three/behaviors/color';
 import { useDisposable } from '@/app/three/behaviors/disposable';
 import { useHidden } from '@/app/three/behaviors/hidden';
 import { useNesting } from '@/app/three/behaviors/nesting';
@@ -89,10 +89,7 @@ export default defineComponent({
     VGroup,
   },
   props: {
-    color: {
-      default: 0xffffff,
-      type: [String, Number],
-    },
+    color: colorProp,
     dimensions: {
       default: 1,
       type: [Number, Object] as PropType<number | Partial<Dimensions>>,

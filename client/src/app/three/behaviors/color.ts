@@ -6,6 +6,14 @@ interface Colored {
 }
 
 /**
+ * Color prop
+ */
+export const colorProp = {
+  default: 0xffffff,
+  type: [Number, String],
+};
+
+/**
  * Color
  */
 export function useColor(obj: Colored, color: () => number | string | Color) {

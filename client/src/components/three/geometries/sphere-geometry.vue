@@ -6,7 +6,7 @@
 import { defineComponent } from 'vue';
 import { Mesh, MeshLambertMaterial, SphereGeometry } from 'three';
 import { positionProp, usePosition } from '@/app/three/behaviors/position';
-import { useColor } from '@/app/three/behaviors/color';
+import { colorProp, useColor } from '@/app/three/behaviors/color';
 import { useDisposable } from '@/app/three/behaviors/disposable';
 import { useNesting } from '@/app/three/behaviors/nesting';
 import { useHidden } from '@/app/three/behaviors/hidden';
@@ -26,10 +26,7 @@ export default defineComponent({
     useHidden(sphere, () => props.hidden);
   },
   props: {
-    color: {
-      default: 0xffffff,
-      type: [Number, String],
-    },
+    color: colorProp,
     heightSegments: {
       default: 12,
       type: Number,
