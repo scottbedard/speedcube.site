@@ -7,7 +7,7 @@
     square
     :camera-angle="cameraAngle"
     :camera-distance="cameraDistance">
-    <v-axes-helper />
+    <v-axes-helper size="1.5" />
     <v-ambient-light color="#fff" :intensity="0.5" />
     <v-point-light :intensity="0.2" :position="{ x: -5, y: 5 }" />
     <v-point-light :intensity="0.5" :position="{ x: 0, y: 5 }" />
@@ -15,6 +15,8 @@
     <v-point-light :intensity="0.2" :position="{ x: 5, y: -5 }" />
     
     <v-dodecahedron-geometry color="#bbb" />
+
+    <v-sphere-geometry color="#f00" wireframe :radius="1" />
   </v-scene>
 
   <div class="gap-6 grid grid-cols-12 max-w-2xl mx-auto">
@@ -30,7 +32,7 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable */
+/* eslint-disable vue/no-unused-components */
 import { defineComponent } from 'vue';
 import VAmbientLight from '@/components/three/lights/ambient-light.vue';
 import VAxesHelper from '@/components/three/utils/axes-helper.vue';
@@ -38,12 +40,13 @@ import VDodecahedronGeometry from '@/components/three/geometries/dodecahedron-ge
 import VPointLight from '@/components/three/lights/point-light.vue';
 import VRangeInput from '@/components/range-input.vue';
 import VScene from '@/components/three/scene.vue';
+import VSphereGeometry from '@/components/three/geometries/sphere-geometry.vue';
 
 export default defineComponent({
   data() {
     return {
       cameraAngle: 25,
-      cameraDistance: 3,
+      cameraDistance: 4,
     };
   },
   components: {
@@ -53,6 +56,7 @@ export default defineComponent({
     VPointLight,
     VRangeInput,
     VScene,
+    VSphereGeometry,
   },
 });
 </script>
