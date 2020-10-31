@@ -29,6 +29,11 @@ export const router = createRouter({
       path: '/records',
     },
     {
+      component: () => import('@/pages/sandbox.vue' /* webpackChunkName: 'sandbox' */),
+      name: 'sandbox',
+      path: '/sandbox',
+    },
+    {
       component: () => import('@/pages/signup.vue' /* webpackChunkName: 'signup' */),
       name: 'signup',
       path: '/signup',
