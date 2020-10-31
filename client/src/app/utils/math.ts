@@ -1,4 +1,4 @@
-import { Vector2 } from '@/app/types';
+import { Vector2 } from '@/types/math';
 
 /**
  * Bi-linear interpolation between vectors

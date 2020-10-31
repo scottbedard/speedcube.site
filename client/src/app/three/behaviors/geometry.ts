@@ -4,7 +4,7 @@ import { measure, translate } from '@/app/utils/math';
 import { roll } from '@/app/utils/array';
 import { Shape, ShapeBufferGeometry } from 'three';
 import { useDisposable } from './disposable';
-import { Vector2 } from '@/app/types';
+import { Vector2 } from '@/types/math';
 
 type PolygonVectors = [Vector2, Vector2, Vector2, ...Vector2[]];
 
