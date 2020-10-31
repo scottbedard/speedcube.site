@@ -17,12 +17,12 @@
 </template>
 
 <script lang="ts">
-import { BackSide, FrontSide, Material, MeshLambertMaterial, Shape, ShapeBufferGeometry } from 'three';
+import { attempt, isError, isNumber, times } from 'lodash-es';
+import { BackSide, FrontSide, Material, MeshLambertMaterial } from 'three';
 import { computed, defineComponent, onUnmounted, PropType, watch } from 'vue';
 import { Cube } from '@bedard/twister';
-import { attempt, isError, isNumber, times } from 'lodash-es';
 import { Rotation } from '@/app/three/behaviors/rotation';
-import { useDisposable } from '@/app/three/behaviors/disposable';
+import { useGeometry } from '@/app/three/behaviors/geometry';
 import VCore from './core.vue';
 
 interface CubeConfig {
@@ -39,36 +39,16 @@ interface CubeConfig {
 const baseEdgeLength = 2 / Math.sqrt(3);
 
 /**
- * Create sticker geometry
- */
-const createGeometry = (config: CubeConfig, stickerLength: number) => {
-  const shape = new Shape();
-  const radius = (stickerLength * config.stickerRadius) / 2;
-
-  shape.moveTo(0, radius);
-  shape.lineTo(0, stickerLength - radius);
-  shape.quadraticCurveTo(0, stickerLength, radius, stickerLength);
-  shape.lineTo(stickerLength - radius, stickerLength);
-  shape.quadraticCurveTo(stickerLength, stickerLength, stickerLength, stickerLength - radius);
-  shape.lineTo(stickerLength, radius);
-  shape.quadraticCurveTo(stickerLength, 0, stickerLength - radius, 0);
-  shape.lineTo(radius, 0);
-  shape.quadraticCurveTo(0, 0, 0, radius);
-
-  return new ShapeBufferGeometry(shape);
-}
-
-/**
  * Create sticker materials
  */
-const createMaterials = (config: CubeConfig) => {
-  return config.colors.map((color) => {
+const createMaterials = (colors: string[], innerBrightness: number) => {
+  return colors.map((color) => {
     return {
       innerMaterial: new MeshLambertMaterial({
         color,
-        opacity: config.innerBrightness,
+        opacity: innerBrightness,
         side: BackSide,
-        transparent: config.innerBrightness < 1,
+        transparent: innerBrightness < 1,
       }),
       outerMaterial: new MeshLambertMaterial({
         color,
@@ -128,64 +108,42 @@ const mapColumns = (n: number) => times(n ** 2).map((x, i) => i % n);
  */
 const mapRows = (n: number) => times(n ** 2).map((x, i) => Math.floor(i / n));
 
-/**
- * Normalize cube config
- */
-const normalize = (config: Partial<CubeConfig>): CubeConfig => {
-  const {
-    innerBrightness,
-    stickerElevation,
-    stickerRadius,
-    stickerSpacing,
-  } = config;
-
-  return {
-    colors: ['#F6E05E', '#ED8936', '#3182CE', '#E53E3E', '#48BB78', '#F7FAFC'],
-    innerBrightness: isNumber(innerBrightness) ? innerBrightness : 0,
-    stickerElevation: isNumber(stickerElevation) ? stickerElevation : 0,
-    stickerRadius: isNumber(stickerRadius) ? stickerRadius : 0,
-    stickerSpacing: isNumber(stickerSpacing) ? stickerSpacing : 0,
-  };
-}
-
 export default defineComponent({
   setup(props) {
+    // normalize configuration
+    const colors = computed(() => ['#F6E05E', '#ED8936', '#3182CE', '#E53E3E', '#48BB78', '#F7FAFC']);
+    const innerBrightness = computed(() => isNumber(props.config.innerBrightness) ? props.config.innerBrightness : 0);
+    const stickerRadius = computed(() => isNumber(props.config.stickerRadius) ? props.config.stickerRadius : 0);
+    const stickerSpacing = computed(() => isNumber(props.config.stickerSpacing) ? props.config.stickerSpacing : 0);
+    const stickerElevation = computed(() => isNumber(props.config.stickerElevation) ? props.config.stickerElevation : 0);
+
     const colMap = computed(() => mapColumns(props.model.options.size));
-    const config = computed(() => normalize(props.config));
     const rowMap = computed(() => mapRows(props.model.options.size));
     const stickerLength = computed(() => baseEdgeLength / props.model.options.size);
-    const stickerSpacingGap = computed(() => stickerLength.value * config.value.stickerSpacing);
+    const stickerSpacingGap = computed(() => stickerLength.value * stickerSpacing.value);
     const stickerSpacingOffset = computed(() => (stickerSpacingGap.value * (props.model.options.size - 1)) / 2);
     const stickerXOffset = computed(() => baseEdgeLength / -2);
     const stickerYOffset = computed(() => (baseEdgeLength / 2) - stickerLength.value);
-    const edgeLength = computed(() => baseEdgeLength + (stickerSpacingGap.value * (props.model.options.size - 1)) + (stickerLength.value * config.value.stickerElevation * 2));
+    const edgeLength = computed(() => baseEdgeLength + (stickerSpacingGap.value * (props.model.options.size - 1)) + (stickerLength.value * stickerElevation.value * 2));
     const turnRotation = computed(() => getTurnRotation(props.model, props.currentTurn, props.turnProgress));
   
     // determine which stickers are turning and which are idle
-    const allStickers = computed(() => {
-      return props.model.state.u.concat(
-        props.model.state.l,
-        props.model.state.f,
-        props.model.state.r,
-        props.model.state.b,
-        props.model.state.d,
-      );
-    });
+    const allStickers = computed(() => props.model.state.u.concat(
+      props.model.state.l,
+      props.model.state.f,
+      props.model.state.r,
+      props.model.state.b,
+      props.model.state.d,
+    ));
 
     const turningStickers = computed(() => {
-      try {
-        return props.model.getStickersForTurn(props.currentTurn);
-      } catch {
-        return [];
-      }
+      const stickers = attempt(() => props.model.getStickersForTurn(props.currentTurn));
+      return !isError(stickers) ? stickers : [];
     });
 
     const idleStickers = computed(() => {
-      return allStickers.value.filter(sticker => {
-        return !turningStickers.value.includes(sticker);
-      });
+      return allStickers.value.filter(sticker => !turningStickers.value.includes(sticker));
     });
-
   
     // calculate position a sticker by index
     const stickerPosition = (index: number) => {
@@ -198,13 +156,15 @@ export default defineComponent({
       };
     }
 
-    // sticker geometry
-    const geometry = computed(() => createGeometry(config.value, stickerLength.value));
-    watch(geometry, (current, prev) => prev.dispose());
-    useDisposable(geometry);
+    const geometry = useGeometry([
+      [0, 0],
+      [0, stickerLength.value],
+      [stickerLength.value, stickerLength.value],
+      [stickerLength.value, 0],
+    ], stickerRadius);
 
     // sticker materials
-    const materials = computed(() => createMaterials(config.value));
+    const materials = computed(() => createMaterials(colors.value, innerBrightness.value));
     watch(materials, (current, prev) => disposeMaterials(prev));
     onUnmounted(() => disposeMaterials(materials.value));
 

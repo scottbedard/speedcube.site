@@ -1,4 +1,4 @@
-import { ComputedRef, isRef, onUnmounted } from 'vue';
+import { onUnmounted, Ref, unref } from 'vue';
 
 interface Disposable {
   dispose: Function,
@@ -7,12 +7,6 @@ interface Disposable {
 /**
  * Disposable
  */
-export function useDisposable(obj: Disposable | ComputedRef<Disposable>) {
-  onUnmounted(() => {
-    if (isRef(obj)) {
-      obj.value.dispose();
-    } else {
-      obj.dispose();
-    }
-  });
+export function useDisposable(obj: Disposable | Ref<Disposable>) {
+  onUnmounted(() => unref(obj).dispose());
 }
