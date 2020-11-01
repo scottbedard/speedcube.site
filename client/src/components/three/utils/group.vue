@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { Group } from 'three';
+import { Group, Quaternion } from 'three';
 import { useNesting } from '@/app/three/behaviors/nesting';
 import { positionProp, usePosition } from '@/app/three/behaviors/position';
 import { useRotation } from '@/app/three/behaviors/rotation';
@@ -21,7 +21,7 @@ export default defineComponent({
     position: positionProp,
     rotation: {
       default: () => [0, 0, 0, 0],
-      type: Array as unknown as PropType<[number, number, number, number]>,
+      type: [Array, Object] as PropType<Quaternion | [number, number, number, number]>,
     },
   },
 });

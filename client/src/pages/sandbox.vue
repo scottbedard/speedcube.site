@@ -22,13 +22,22 @@
         <v-shape
           :geometry="triangle"
           :inner-material="triangleMaterial"
-          :outer-material="triangleMaterial" />
+          :outer-material="triangleMaterial"
+          :position="{ z: 0.01 }" />
       </template>
       <template #l>
         <v-shape
           :geometry="triangle"
           :inner-material="triangleMaterial"
-          :outer-material="triangleMaterial" />
+          :outer-material="triangleMaterial"
+          :position="{ z: 0.01 }" />
+      </template>
+      <template #f>
+        <v-shape
+          :geometry="triangle"
+          :inner-material="triangleMaterial"
+          :outer-material="triangleMaterial"
+          :position="{ z: 0.01 }" />
       </template>
     </v-dodecahedron-geometry>
   </v-scene>
@@ -53,7 +62,7 @@
 /* eslint-disable vue/no-unused-components */
 import { defineComponent } from 'vue';
 import { useGeometry } from '@/app/three/behaviors/geometry';
-import { MeshBasicMaterial } from 'three';
+import { DoubleSide, MeshBasicMaterial } from 'three';
 import VAmbientLight from '@/components/three/lights/ambient-light.vue';
 import VAxesHelper from '@/components/three/utils/axes-helper.vue';
 import VDodecahedronGeometry from '@/components/three/geometries/dodecahedron-geometry.vue';
@@ -67,12 +76,13 @@ export default defineComponent({
   setup() {
     const triangle = useGeometry([
       [0, 0],
-      [0, 0.4],
-      [0.2, 0],
+      [0, .6],
+      [0.3, 0],
     ]);
 
     const triangleMaterial = new MeshBasicMaterial({
       color: 0x00ff00,
+      side: DoubleSide,
     });
 
     return {
@@ -82,7 +92,7 @@ export default defineComponent({
   },
   data() {
     return {
-      cameraAngle: 25,
+      cameraAngle: 0,
       cameraDistance: 4,
       radius: 1,
     };
