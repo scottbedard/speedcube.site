@@ -13,7 +13,7 @@ import { useHidden } from '@/app/three/behaviors/hidden';
 
 export default defineComponent({
   setup(props) {
-    const geometry = new SphereGeometry(props.radius, props.widthSegments, props.heightSegments);
+    const geometry = new SphereGeometry(Number(props.radius), Number(props.widthSegments), Number(props.heightSegments));
     useDisposable(geometry);
 
     const material = new MeshLambertMaterial({ wireframe: props.wireframe });
@@ -29,7 +29,7 @@ export default defineComponent({
     color: colorProp,
     heightSegments: {
       default: 12,
-      type: Number,
+      type: [Number, String],
     },
     hidden: {
       default: false,
@@ -38,11 +38,11 @@ export default defineComponent({
     position: positionProp,
     radius: {
       default: 1,
-      type: Number,
+      type: [Number, String],
     },
     widthSegments: {
       default: 16,
-      type: Number,
+      type: [Number, String],
     },
     wireframe: {
       default: false,
