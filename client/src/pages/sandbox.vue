@@ -14,9 +14,12 @@
     <v-point-light :intensity="0.2" :position="{ x: 5, y: 5 }" />
     <v-point-light :intensity="0.2" :position="{ x: 5, y: -5 }" />
     
-    <v-dodecahedron-geometry color="#bbb" />
+    <v-dodecahedron-geometry
+      color="#bbb"
+      wireframe
+      :radius="radius" />
 
-    <v-sphere-geometry color="#f00" wireframe :radius="1" />
+    <!-- <v-sphere-geometry color="#f00" wireframe :radius="1" /> -->
   </v-scene>
 
   <div class="gap-6 grid grid-cols-12 max-w-2xl mx-auto">
@@ -27,6 +30,10 @@
     <div class="col-span-12 sm:col-span-6">
       <div>Camera distance</div>
       <v-range-input v-model="cameraDistance" :max="5" :min="0" :step="0.01" />
+    </div>
+    <div class="col-span-12 sm:col-span-6">
+      <div>Radius</div>
+      <v-range-input v-model="radius" :max="3" :min="0" :step="0.01" />
     </div>
   </div>
 </template>
@@ -47,6 +54,7 @@ export default defineComponent({
     return {
       cameraAngle: 25,
       cameraDistance: 4,
+      radius: 1,
     };
   },
   components: {
