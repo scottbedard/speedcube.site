@@ -18,21 +18,10 @@
       color="#bbb"
       wireframe
       :radius="radius">
-      <template #u>
-        <v-shape
-          :geometry="triangle"
-          :inner-material="triangleMaterial"
-          :outer-material="triangleMaterial"
-          :position="{ z: 0.01 }" />
-      </template>
-      <template #l>
-        <v-shape
-          :geometry="triangle"
-          :inner-material="triangleMaterial"
-          :outer-material="triangleMaterial"
-          :position="{ z: 0.01 }" />
-      </template>
-      <template #f>
+      <template
+        v-bind:key="key"
+        v-for="key in ['u', 'l', 'f', 'r', 'br', 'bl', 'd', 'dbr', 'dbl', 'b', 'dl', 'dr']"
+        v-slot:[key]>
         <v-shape
           :geometry="triangle"
           :inner-material="triangleMaterial"
@@ -59,7 +48,7 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable vue/no-unused-components */
+/* eslint-disable */
 import { defineComponent } from 'vue';
 import { useGeometry } from '@/app/three/behaviors/geometry';
 import { DoubleSide, MeshBasicMaterial } from 'three';
@@ -92,7 +81,7 @@ export default defineComponent({
   },
   data() {
     return {
-      cameraAngle: 0,
+      cameraAngle: 45,
       cameraDistance: 4,
       radius: 1,
     };
