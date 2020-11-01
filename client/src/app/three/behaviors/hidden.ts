@@ -5,6 +5,14 @@ interface Hideable {
 }
 
 /**
+ * Hidden prop
+ */
+export const hiddenProp = {
+  default: false,
+  type: Boolean,
+};
+
+/**
  * Hidden
  */
 export function useHidden(obj: Hideable, hidden: () => boolean) {

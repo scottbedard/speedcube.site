@@ -6,13 +6,7 @@
       :position="slots[face].position"
       :rotation="slots[face].rotation">
       <slot :name="face" />
-      <v-sphere-geometry color="#f00" radius="0.05" wireframe />
     </v-group>
-
-    <v-sphere-geometry
-      color="#00f"
-      :position="vertices[16]"
-      :radius="0.05" />
   </v-group>
 </template>
 
@@ -21,12 +15,11 @@ import { colorProp, useColor } from '@/app/three/behaviors/color';
 import { computed, defineComponent, watchEffect } from 'vue';
 import { degreesToRadians } from '@/app/utils/math';
 import { DodecahedronGeometry, Group, Matrix4, Mesh, MeshLambertMaterial, Quaternion, Vector3 } from 'three';
+import { hiddenProp, useHidden } from '@/app/three/behaviors/hidden';
 import { positionProp, usePosition } from '@/app/three/behaviors/position';
 import { useDisposable } from '@/app/three/behaviors/disposable';
-import { useHidden } from '@/app/three/behaviors/hidden';
 import { useNesting } from '@/app/three/behaviors/nesting';
 import VGroup from '@/components/three/utils/group.vue';
-import VSphereGeometry from '@/components/three/geometries/sphere-geometry.vue';
 
 // the dodecahedron mesh and slot positions need to be oriented from
 // their default position to one where the U face is pointing up
@@ -34,15 +27,21 @@ const defaultRotation = new Quaternion().setFromAxisAngle(
   new Vector3(1, 0, 0).normalize(), degreesToRadians(-144),
 );
 
-// this object is used to position and orient slots. the first piece of the tuple
-// defines the "up" orientation of that face, and the second two are the opposites
+// this object is used to position and orient slots. the first vertices index
+// defines the "up" orientation, the second two are the opposites corners
 const faceMap: Record<string, [number, number, number]> = {
-  u: [17, 14, 18],
-  l: [15, 11, 12],
-  f: [18, 9, 11],
-  r: [5, 18, 8],
-  br: [1, 17, 19],
+  b: [0, 3, 4],
   bl: [0, 15, 16],
+  br: [1, 17, 19],
+  d: [4, 7, 10],
+  dbl: [2, 12, 13],
+  dbr: [1, 6, 7],
+  dl: [13, 9, 11],
+  dr: [7, 8, 9],
+  f: [18, 9, 11],
+  l: [15, 11, 12],
+  r: [5, 8, 18],
+  u: [17, 14, 18],
 };
 
 // caching a few constants to avoid re-calculating when props changes
@@ -52,27 +51,28 @@ const inradiusDenominator = 2 * Math.tan(degreesToRadians(36));
 
 export default defineComponent({
   setup(props) {
-    const group = new Group();
-    const matrix = new Matrix4();
-
+    // create a dodecahedron of radius
     const geometry = new DodecahedronGeometry(1);
-
-    const material = new MeshLambertMaterial({
-      wireframe: props.wireframe,
-    });
-
+    const material = new MeshLambertMaterial({ wireframe: props.wireframe });
     const dodecahedron = new Mesh(geometry, material);
 
     dodecahedron.applyQuaternion(defaultRotation);
 
     useColor(material, () => props.color);
+    useDisposable(geometry);
     useDisposable(material);
+    useHidden(dodecahedron, () => props.geometryHidden);
+
+    // in order to orient the dodacahedron correctly, we'll wrap
+    // the child objects in a group so they can be rotated together
+    // this group is what owns the component's nesting context.
+    const group = new Group();
 
     group.add(dodecahedron);
 
+    useHidden(group, () => props.hidden);
     useNesting(group);
     usePosition(group, () => props.position);
-    useHidden(group, () => props.hidden);
 
     // size the dodecahedron based on the radius. note that this scaling
     // does not effect slot content, as they are not descendent objects.
@@ -100,7 +100,7 @@ export default defineComponent({
           .lerp(vertices.value[up], centerInterpolation);
           
         const rotation = new Quaternion().setFromRotationMatrix(
-          matrix.lookAt(position, dodecahedron.position, vertices.value[up]),
+          new Matrix4().lookAt(position, dodecahedron.position, vertices.value[up]),
         );
 
         acc[face] = { position, rotation };
@@ -117,14 +117,11 @@ export default defineComponent({
   },
   components: {
     VGroup,
-    VSphereGeometry,
   },
   props: {
     color: colorProp,
-    hidden: {
-      default: false,
-      type: Boolean,
-    },
+    geometryHidden: hiddenProp,
+    hidden: hiddenProp,
     position: positionProp,
     radius: {
       default: 1,

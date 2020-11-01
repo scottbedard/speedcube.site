@@ -16,7 +16,6 @@
     
     <v-dodecahedron-geometry
       color="#bbb"
-      wireframe
       :radius="radius">
       <template
         v-bind:key="key"
@@ -64,13 +63,13 @@ import VShape from '@/components/three/utils/shape.vue';
 export default defineComponent({
   setup() {
     const triangle = useGeometry([
-      [0, 0],
-      [0, .6],
-      [0.3, 0],
+      [-0.2, 0],
+      [0, 0.5],
+      [0.2, 0],
     ]);
 
     const triangleMaterial = new MeshBasicMaterial({
-      color: 0x00ff00,
+      color: 0x63B3ED,
       side: DoubleSide,
     });
 

@@ -9,7 +9,7 @@ export type Rotation = [number, number, number, number];
  */
 export const rotationProp = {
   default: () => [0, 0, 0, 0],
-  type: Array as unknown as PropType<[number, number, number, number]>,
+  type: [Array, Object] as PropType<Rotation | Quaternion>,
 };
 
 /**
@@ -30,6 +30,5 @@ export function useRotation(obj: Object3D, rotation: () => Rotation | Quaternion
         ),
       );
     }
-    
   });
 }

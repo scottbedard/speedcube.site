@@ -22,14 +22,14 @@
 
 <script lang="ts">
 import { BoxGeometry, Group, Mesh, MeshLambertMaterial } from 'three';
-import { computed, defineComponent, PropType, watchEffect } from 'vue';
-import { isNumber } from 'lodash-es';
 import { colorProp, useColor } from '@/app/three/behaviors/color';
-import { useDisposable } from '@/app/three/behaviors/disposable';
-import { useHidden } from '@/app/three/behaviors/hidden';
-import { useNesting } from '@/app/three/behaviors/nesting';
+import { computed, defineComponent, PropType, watchEffect } from 'vue';
+import { hiddenProp, useHidden } from '@/app/three/behaviors/hidden';
+import { isNumber } from 'lodash-es';
 import { positionProp, usePosition } from '@/app/three/behaviors/position';
 import { Rotation, useRotation } from '@/app/three/behaviors/rotation';
+import { useDisposable } from '@/app/three/behaviors/disposable';
+import { useNesting } from '@/app/three/behaviors/nesting';
 import VGroup from '@/components/three/utils/group.vue';
 
 interface Dimensions {
@@ -94,10 +94,7 @@ export default defineComponent({
       default: 1,
       type: [Number, Object] as PropType<number | Partial<Dimensions>>,
     },
-    hidden: {
-      default: false,
-      type: Boolean,
-    },
+    hidden: hiddenProp,
     position: positionProp,
     rotation: {
       default: () => [0, 0, 0, 0],
