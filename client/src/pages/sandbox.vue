@@ -17,9 +17,20 @@
     <v-dodecahedron-geometry
       color="#bbb"
       wireframe
-      :radius="radius" />
-
-    <!-- <v-sphere-geometry color="#f00" wireframe :radius="1" /> -->
+      :radius="radius">
+      <template #u>
+        <v-shape
+          :geometry="triangle"
+          :inner-material="triangleMaterial"
+          :outer-material="triangleMaterial" />
+      </template>
+      <template #l>
+        <v-shape
+          :geometry="triangle"
+          :inner-material="triangleMaterial"
+          :outer-material="triangleMaterial" />
+      </template>
+    </v-dodecahedron-geometry>
   </v-scene>
 
   <div class="gap-6 grid grid-cols-12 max-w-2xl mx-auto">
@@ -41,6 +52,8 @@
 <script lang="ts">
 /* eslint-disable vue/no-unused-components */
 import { defineComponent } from 'vue';
+import { useGeometry } from '@/app/three/behaviors/geometry';
+import { MeshBasicMaterial } from 'three';
 import VAmbientLight from '@/components/three/lights/ambient-light.vue';
 import VAxesHelper from '@/components/three/utils/axes-helper.vue';
 import VDodecahedronGeometry from '@/components/three/geometries/dodecahedron-geometry.vue';
@@ -48,8 +61,25 @@ import VPointLight from '@/components/three/lights/point-light.vue';
 import VRangeInput from '@/components/range-input.vue';
 import VScene from '@/components/three/scene.vue';
 import VSphereGeometry from '@/components/three/geometries/sphere-geometry.vue';
+import VShape from '@/components/three/utils/shape.vue';
 
 export default defineComponent({
+  setup() {
+    const triangle = useGeometry([
+      [0, 0],
+      [0, 0.4],
+      [0.2, 0],
+    ]);
+
+    const triangleMaterial = new MeshBasicMaterial({
+      color: 0x00ff00,
+    });
+
+    return {
+      triangle,
+      triangleMaterial,
+    };
+  },
   data() {
     return {
       cameraAngle: 25,
@@ -64,6 +94,7 @@ export default defineComponent({
     VPointLight,
     VRangeInput,
     VScene,
+    VShape,
     VSphereGeometry,
   },
 });

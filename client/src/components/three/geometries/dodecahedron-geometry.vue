@@ -1,39 +1,39 @@
 <template>
   <slot />
-  <v-group :position="position.u">
+  <v-group :position="positions.u">
+    <slot name="u" />
+  </v-group>
+  <v-group :position="positions.l">
+    <slot name="l" />
+  </v-group>
+  <v-group :position="positions.f">
     <v-sphere-geometry color="#f00" radius="0.05" wireframe />
   </v-group>
-  <v-group :position="position.l">
+  <v-group :position="positions.r">
     <v-sphere-geometry color="#f00" radius="0.05" wireframe />
   </v-group>
-  <v-group :position="position.f">
+  <v-group :position="positions.br">
     <v-sphere-geometry color="#f00" radius="0.05" wireframe />
   </v-group>
-  <v-group :position="position.r">
+  <v-group :position="positions.bl">
     <v-sphere-geometry color="#f00" radius="0.05" wireframe />
   </v-group>
-  <v-group :position="position.br">
+  <v-group :position="positions.b">
     <v-sphere-geometry color="#f00" radius="0.05" wireframe />
   </v-group>
-  <v-group :position="position.bl">
+  <v-group :position="positions.dbl">
     <v-sphere-geometry color="#f00" radius="0.05" wireframe />
   </v-group>
-  <v-group :position="position.b">
+  <v-group :position="positions.dbr">
     <v-sphere-geometry color="#f00" radius="0.05" wireframe />
   </v-group>
-  <v-group :position="position.dbl">
+  <v-group :position="positions.dl">
     <v-sphere-geometry color="#f00" radius="0.05" wireframe />
   </v-group>
-  <v-group :position="position.dbr">
+  <v-group :position="positions.dr">
     <v-sphere-geometry color="#f00" radius="0.05" wireframe />
   </v-group>
-  <v-group :position="position.dl">
-    <v-sphere-geometry color="#f00" radius="0.05" wireframe />
-  </v-group>
-  <v-group :position="position.dr">
-    <v-sphere-geometry color="#f00" radius="0.05" wireframe />
-  </v-group>
-  <v-group :position="position.d">
+  <v-group :position="positions.d">
     <v-sphere-geometry color="#f00" radius="0.05" wireframe />
   </v-group>
 </template>
@@ -41,7 +41,7 @@
 <script lang="ts">
 /* eslint-disable */
 import { colorProp, useColor } from '@/app/three/behaviors/color';
-import { computed, defineComponent, watchEffect } from 'vue';
+import { computed, defineComponent, reactive, watchEffect } from 'vue';
 import { degreesToRadians } from '@/app/utils/math';
 import { DodecahedronGeometry, Group, IcosahedronGeometry, Mesh, MeshLambertMaterial } from 'three';
 import { positionProp, usePosition } from '@/app/three/behaviors/position';
@@ -55,55 +55,64 @@ export default defineComponent({
   setup(props) {
     const group = new Group();
 
-    const dodecahedronGeometry = new DodecahedronGeometry(1);
+    // outer dodecahedron for scaling and hit box
+    const geometry = new DodecahedronGeometry(1);
 
     const material = new MeshLambertMaterial({
-      // wireframe: props.wireframe,
+      wireframe: props.wireframe,
     });
+
+    const dodecahedron = new Mesh(geometry, material);
 
     useColor(material, () => props.color);
     useDisposable(material);
 
-    const dodecahedron = new Mesh(dodecahedronGeometry, material);
     dodecahedron.rotateX(degreesToRadians(-144));
+
     group.add(dodecahedron);
 
     useNesting(group);
     usePosition(group, () => props.position);
     useHidden(group, () => props.hidden);
+    
+    const positions = reactive({
+      dbl: {},
+      d: {},
+      dl: {},
+      dr: {},
+      f: {},
+      l: {},
+      dbr: {},
+      b: {},
+      bl: {},
+      u: {},
+      r: {},
+      br: {},
+    });
 
     watchEffect(() => {
-      dodecahedron.scale.set(props.radius, props.radius, props.radius)
-    });
+      dodecahedron.scale.set(props.radius, props.radius, props.radius);
 
-    // create an inscribed icosahedron to define slot positions
-    const innerRadius = computed(() => {
-      return ((4 * props.radius) / (Math.sqrt(3) * (1 + Math.sqrt(5)))) / 2 * Math.sqrt((25 + (11 * Math.sqrt(5))) / 10);
-    });
-
-    const icosahedronGeometry = new IcosahedronGeometry(innerRadius.value);
-    icosahedronGeometry.rotateX(degreesToRadians(-234));
-
-    // position
-    const position = computed(() => {
-      return {
-        dbl: icosahedronGeometry.vertices[0],
-        d: icosahedronGeometry.vertices[1],
-        dl: icosahedronGeometry.vertices[2],
-        dr: icosahedronGeometry.vertices[3],
-        f: icosahedronGeometry.vertices[4],
-        l: icosahedronGeometry.vertices[5],
-        dbr: icosahedronGeometry.vertices[6],
-        b: icosahedronGeometry.vertices[7],
-        bl: icosahedronGeometry.vertices[8],
-        u: icosahedronGeometry.vertices[9],
-        r: icosahedronGeometry.vertices[10],
-        br: icosahedronGeometry.vertices[11],
-      };
+      const innerRadius = ((4 * props.radius) / (Math.sqrt(3) * (1 + Math.sqrt(5)))) / 2 * Math.sqrt((25 + (11 * Math.sqrt(5))) / 10);
+      const icosahedron = new IcosahedronGeometry(innerRadius);
+      icosahedron.rotateX(degreesToRadians(-234));
+      positions.dbl = icosahedron.vertices[0];
+      positions.d = icosahedron.vertices[1];
+      positions.dl = icosahedron.vertices[2];
+      positions.dr = icosahedron.vertices[3];
+      positions.f = icosahedron.vertices[4];
+      positions.l = icosahedron.vertices[5];
+      positions.dbr = icosahedron.vertices[6];
+      positions.b = icosahedron.vertices[7];
+      positions.bl = icosahedron.vertices[8];
+      positions.u = icosahedron.vertices[9];
+      positions.r = icosahedron.vertices[10];
+      positions.br = icosahedron.vertices[11];
+      icosahedron.dispose();
     });
 
     return {
-      position,
+      positions,
     };
   },
   components: {

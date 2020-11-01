@@ -11,7 +11,7 @@ type PolygonVectors = [Vector2, Vector2, Vector2, ...Vector2[]];
 /**
  * Create rounded geometry from points.
  */
-export function useGeometry(path: PolygonVectors, radius: Ref<number> | number) {
+export function useGeometry(path: PolygonVectors, radius: Ref<number> | number = 0) {
   const geometry = computed(() => {
     const shape = new Shape();
     const normalizedRadius = clamp(unref(radius), 0, 1);
