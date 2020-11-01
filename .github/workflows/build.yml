@@ -13,7 +13,7 @@ jobs:
     - name: Downgrade Composer
       run: |
         echo "Temporary, see https://github.com/octobercms/october/issues/5033"
-        composer self-update 1.10.17
+        sudo composer self-update 1.10.17
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
