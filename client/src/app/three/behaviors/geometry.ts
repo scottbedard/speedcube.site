@@ -11,13 +11,13 @@ type PolygonVectors = [Vector2, Vector2, Vector2, ...Vector2[]];
 /**
  * Create rounded geometry from points.
  */
-export function useGeometry(path: PolygonVectors, radius: Ref<number> | number = 0) {
+export function useGeometry(path: PolygonVectors | Ref<PolygonVectors>, radius: Ref<number> | number = 0) {
   const geometry = computed(() => {
     const shape = new Shape();
-    const normalizedRadius = clamp(unref(radius), 0, 1);
+    const normalizedRadius = clamp(unref(radius), Number.EPSILON, 1);
 
-    path.forEach((point, index) => {
-      const pathFromPoint = roll(path, index);
+    unref(path).forEach((point, index, arr) => {
+      const pathFromPoint = roll(arr, index);
   
       // find end point of previous curve
       const prev = roll(pathFromPoint, -1).shift() as Vector2;
