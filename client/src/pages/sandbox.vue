@@ -8,17 +8,17 @@
     :camera-angle="cameraAngle"
     :camera-distance="cameraDistance">
     <!-- lights -->
-    <v-ambient-light color="#fff" :intensity="0.5" />
-    <v-point-light :intensity="0.2" :position="{ x: -5, y: 5 }" />
+    <v-ambient-light color="#fff" :intensity="0.7" />
+    <v-point-light :intensity="0.5" :position="{ x: -5, y: 5 }" />
     <v-point-light :intensity="0.5" :position="{ x: 0, y: 5 }" />
-    <v-point-light :intensity="0.2" :position="{ x: 5, y: 5 }" />
+    <v-point-light :intensity="0.5" :position="{ x: 5, y: 5 }" />
     <v-point-light :intensity="0.2" :position="{ x: 5, y: -5 }" />
     
     <!-- axes helper -->
     <v-axes-helper size="2" />
 
     <!-- dodecaminx -->
-    <v-dodecaminx />
+    <v-dodecaminx :radius="radius" />
   </v-scene>
 
   <div class="gap-6 grid grid-cols-12 max-w-2xl mx-auto">
@@ -29,6 +29,10 @@
     <div class="col-span-12 sm:col-span-6">
       <div>Camera distance</div>
       <v-range-input v-model="cameraDistance" :max="5" :min="0" :step="0.01" />
+    </div>
+    <div class="col-span-12 sm:col-span-6">
+      <div>Radius</div>
+      <v-range-input v-model="radius" :max="5" :min="0" :step="0.01" />
     </div>
   </div>
 </template>
@@ -51,6 +55,7 @@ export default defineComponent({
     return {
       cameraAngle: 45,
       cameraDistance: 3,
+      radius: 1,
     };
   },
   components: {
