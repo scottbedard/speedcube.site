@@ -7,27 +7,15 @@
     square
     :camera-angle="cameraAngle"
     :camera-distance="cameraDistance">
-    <v-axes-helper size="1.5" />
+    <!-- lights -->
     <v-ambient-light color="#fff" :intensity="0.5" />
     <v-point-light :intensity="0.2" :position="{ x: -5, y: 5 }" />
     <v-point-light :intensity="0.5" :position="{ x: 0, y: 5 }" />
     <v-point-light :intensity="0.2" :position="{ x: 5, y: 5 }" />
     <v-point-light :intensity="0.2" :position="{ x: 5, y: -5 }" />
     
-    <v-dodecahedron-geometry
-      color="#bbb"
-      :radius="radius">
-      <template
-        v-bind:key="key"
-        v-for="key in ['u', 'l', 'f', 'r', 'br', 'bl', 'd', 'dbr', 'dbl', 'b', 'dl', 'dr']"
-        v-slot:[key]>
-        <v-shape
-          :geometry="triangle"
-          :inner-material="triangleMaterial"
-          :outer-material="triangleMaterial"
-          :position="{ z: 0.01 }" />
-      </template>
-    </v-dodecahedron-geometry>
+    <!-- axes helper -->
+    <v-axes-helper />
   </v-scene>
 
   <div class="gap-6 grid grid-cols-12 max-w-2xl mx-auto">
@@ -39,61 +27,33 @@
       <div>Camera distance</div>
       <v-range-input v-model="cameraDistance" :max="5" :min="0" :step="0.01" />
     </div>
-    <div class="col-span-12 sm:col-span-6">
-      <div>Radius</div>
-      <v-range-input v-model="radius" :max="3" :min="0" :step="0.01" />
-    </div>
   </div>
 </template>
 
 <script lang="ts">
-/* eslint-disable */
 import { defineComponent } from 'vue';
-import { useGeometry } from '@/app/three/behaviors/geometry';
-import { DoubleSide, MeshBasicMaterial } from 'three';
 import VAmbientLight from '@/components/three/lights/ambient-light.vue';
 import VAxesHelper from '@/components/three/utils/axes-helper.vue';
-import VDodecahedronGeometry from '@/components/three/geometries/dodecahedron-geometry.vue';
 import VPointLight from '@/components/three/lights/point-light.vue';
 import VRangeInput from '@/components/range-input.vue';
 import VScene from '@/components/three/scene.vue';
-import VSphereGeometry from '@/components/three/geometries/sphere-geometry.vue';
-import VShape from '@/components/three/utils/shape.vue';
 
 export default defineComponent({
   setup() {
-    const triangle = useGeometry([
-      [-0.2, 0],
-      [0, 0.5],
-      [0.2, 0],
-    ]);
-
-    const triangleMaterial = new MeshBasicMaterial({
-      color: 0x63B3ED,
-      side: DoubleSide,
-    });
-
-    return {
-      triangle,
-      triangleMaterial,
-    };
+    // ...
   },
   data() {
     return {
       cameraAngle: 45,
       cameraDistance: 4,
-      radius: 1,
     };
   },
   components: {
     VAmbientLight,
     VAxesHelper,
-    VDodecahedronGeometry,
     VPointLight,
     VRangeInput,
     VScene,
-    VShape,
-    VSphereGeometry,
   },
 });
 </script>
