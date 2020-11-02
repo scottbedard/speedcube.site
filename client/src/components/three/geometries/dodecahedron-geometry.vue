@@ -1,4 +1,5 @@
 <template>
+  <slot />
   <v-group :rotation="defaultRotation">
     <v-group
       v-for="face in Object.keys(slots)"
@@ -14,6 +15,7 @@
 import { colorProp, useColor } from '@/app/three/behaviors/color';
 import { computed, defineComponent, watchEffect } from 'vue';
 import { degreesToRadians } from '@/app/utils/math';
+import { dodecahedronEdgeLength, pentagonCircumradius, pentagonInradius } from '@/app/utils/geometry';
 import { DodecahedronGeometry, Group, Matrix4, Mesh, MeshLambertMaterial, Quaternion, Vector3 } from 'three';
 import { hiddenProp, useHidden } from '@/app/three/behaviors/hidden';
 import { positionProp, usePosition } from '@/app/three/behaviors/position';
@@ -43,11 +45,6 @@ const faceMap: Record<string, [number, number, number]> = {
   r: [5, 8, 18],
   u: [17, 14, 18],
 };
-
-// caching a few constants to avoid re-calculating when props changes
-const circumradiusDenominator = 2 * Math.sin(degreesToRadians(36));
-const edgeLengthDenominator = Math.sqrt(3) * (1 + Math.sqrt(5));
-const inradiusDenominator = 2 * Math.tan(degreesToRadians(36));
 
 export default defineComponent({
   setup(props) {
@@ -87,9 +84,9 @@ export default defineComponent({
 
     // slot position and rotations
     const slots = computed(() => {
-      const edgeLength = (4 * props.radius) / edgeLengthDenominator;
-      const circumradius = edgeLength / circumradiusDenominator;
-      const inradius = edgeLength / inradiusDenominator;
+      const edgeLength = dodecahedronEdgeLength(props.radius, 'circumRadius');
+      const circumradius = pentagonCircumradius(edgeLength, 'edgeLength');
+      const inradius = pentagonInradius(edgeLength, 'edgeLength');
       const centerInterpolation = inradius / (circumradius + inradius);
 
       return Object.keys(faceMap).reduce((acc: any, face: string) => {
