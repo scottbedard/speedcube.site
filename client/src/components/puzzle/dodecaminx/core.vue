@@ -1,5 +1,8 @@
 <template>
-  <v-dodecahedron-geometry :radius="radius" wireframe>
+  <v-dodecahedron-geometry
+    :geometry-hidden="false"
+    :radius="radius"
+    :wireframe="true">
     <!-- <v-face /> -->
     <template #u>
       <v-face :radius="radius" />

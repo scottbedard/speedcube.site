@@ -36,6 +36,17 @@ export function measure([x1, y1]: Vector2, [x2, y2]: Vector2) {
 }
 
 /**
+ * Rotate a vector clockwise by degrees.
+ */
+export function rotate([x, y]: Vector2, degrees: number): Vector2 {
+  const angle = degreesToRadians(-degrees);
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+
+  return [(x * cos) - (y * sin), (x * sin) + (y * cos)];
+}
+
+/**
  * Translate an explicit distance between vectors
  */
 export function translate(v1: Vector2, v2: Vector2, distance: number) {

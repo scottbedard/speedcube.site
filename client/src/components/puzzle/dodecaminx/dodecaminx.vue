@@ -1,11 +1,12 @@
 <template>
   <v-core :radius="radius" />
   <v-sphere
-    :height-segments="50"
-    :width-segments="50"
-    wireframe
     :color="0x444444"
-    :radius="1" />
+    :height-segments="50"
+    :hidden="true"
+    :radius="1"
+    :width-segments="50"
+    :wireframe="true" />
 </template>
 
 <script lang="ts">

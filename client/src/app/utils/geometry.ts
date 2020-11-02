@@ -1,8 +1,11 @@
+import { rotate } from './math';
+import { Polygon } from '@/types/math';
+
 type Unit = 
   | 'circumRadius'
   | 'edgeLength';
 
-// these functions only support certain input units. this will
+// these functions only support certain input units. this will be
 // be thrown if the input does not match a supported unit.
 const NOT_IMPLEMENTED = 'not implemented';
 
@@ -37,4 +40,11 @@ export function pentagonInradius(val: number, unit: Unit): number {
   }
 
   throw NOT_IMPLEMENTED;
+}
+
+/**
+ * Create a regular polygon.
+ */
+export function polygon(sides: number, radius: number = 1): Polygon {
+  return new Array(sides).fill(null).map((n, i) => rotate([0, radius], (360 / sides) * i)) as Polygon;
 }
