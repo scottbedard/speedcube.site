@@ -15,7 +15,10 @@
     <v-point-light :intensity="0.2" :position="{ x: 5, y: -5 }" />
     
     <!-- axes helper -->
-    <v-axes-helper />
+    <v-axes-helper size="2" />
+
+    <!-- dodecaminx -->
+    <v-dodecaminx />
   </v-scene>
 
   <div class="gap-6 grid grid-cols-12 max-w-2xl mx-auto">
@@ -38,6 +41,8 @@ import VPointLight from '@/components/three/lights/point-light.vue';
 import VRangeInput from '@/components/range-input.vue';
 import VScene from '@/components/three/scene.vue';
 
+import VDodecaminx from '@/components/puzzle/dodecaminx/dodecaminx.vue';
+
 export default defineComponent({
   setup() {
     // ...
@@ -45,12 +50,13 @@ export default defineComponent({
   data() {
     return {
       cameraAngle: 45,
-      cameraDistance: 4,
+      cameraDistance: 3,
     };
   },
   components: {
     VAmbientLight,
     VAxesHelper,
+    VDodecaminx,
     VPointLight,
     VRangeInput,
     VScene,

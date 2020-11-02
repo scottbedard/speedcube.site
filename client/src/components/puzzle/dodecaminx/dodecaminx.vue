@@ -1,26 +1,23 @@
 <template>
-  <v-sphere-geometry
-    wireframe
-    :color="0xff0000"
-    :radius="1" />
+  <v-core />
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { Dodecaminx } from '@bedard/twister';
 import { stubObject } from 'lodash-es';
-import VSphereGeometry from '@/components/three/geometries/sphere-geometry.vue';
+import VCore from './core.vue';
 
 type DodecaminxConfig = {
   // ...
 }
 
 export default defineComponent({
-  setup(props) {
-    console.log('Hello from the dodecaminx!');
+  setup() {
+    // ...
   },
   components: {
-    VSphereGeometry,
+    VCore,
   },
   props: {
     config: {
