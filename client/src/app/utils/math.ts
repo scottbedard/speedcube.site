@@ -15,6 +15,13 @@ export function degreesToRadians(degrees: number) {
 }
 
 /**
+ * Test if a number is even.
+ */
+export function isEven(val: number) {
+  return val % 2 === 0;
+}
+
+/**
  * Alias of Number.isInteger that acts as a type-guard.
  */
 export function isInteger(val: any): val is number {
@@ -33,6 +40,13 @@ export function lerp(p1: number, p2: number, alpha: number) {
  */
 export function measure([x1, y1]: Vector2, [x2, y2]: Vector2) {
   return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
+}
+
+/**
+ * Midpoint between two vectors.
+ */
+export function midpoint(v1: Vector2, v2: Vector2) {
+  return bilerp(v1, v2, 0.5);
 }
 
 /**
