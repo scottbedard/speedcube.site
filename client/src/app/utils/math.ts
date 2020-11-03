@@ -1,4 +1,4 @@
-import { Vector2 } from '@/types/math';
+import { Line2, Vector2 } from '@/types/math';
 
 /**
  * Bi-linear interpolation between vectors
@@ -12,6 +12,40 @@ export function bilerp([x1, y1]: Vector2, [x2, y2]: Vector2, alpha: number): Vec
  */
 export function degreesToRadians(degrees: number) {
   return degrees * (Math.PI / 180);
+}
+
+/**
+ * Intersect two lines
+ */
+export function intersect([v1, v2]: Line2, [v3, v4]: Line2) {
+  const [x1, y1] = v1, [x3, y3] = v3;
+  const m1 = slope(v1, v2);
+  const m3 = slope(v3, v4);
+
+  // lines are parallel
+  if (m1 === m3) {
+    throw new Error('Cannot intersect parallel lines');
+  }
+
+  // first line is vertical
+  const b3 = y3 - (m3 * x3);
+
+  if (!isFinite(m1)) {
+    return [x1, (m3 * x1) + b3];
+  }
+
+  // second line is vertical
+  const b1 = y1 - (m1 * x1);
+
+  if (!isFinite(m3)) {
+    return [x3, (m1 * x3) + b1];
+  }
+
+  // calculate intersection point
+  const x = (b3 - b1) / (m1 - m3);
+  const y = (m1 * x) + b1;
+
+  return [x, y];
 }
 
 /**
@@ -58,6 +92,13 @@ export function rotate([x, y]: Vector2, degrees: number): Vector2 {
   const sin = Math.sin(angle);
 
   return [(x * cos) - (y * sin), (x * sin) + (y * cos)];
+}
+
+/**
+ * Calculate the slope between two vectors.
+ */
+export function slope([x1, y1]: Vector2, [x2, y2]: Vector2): number {
+  return (y2 - y1) / (x2 - x1);
 }
 
 /**
