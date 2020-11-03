@@ -17,7 +17,7 @@ export function degreesToRadians(degrees: number) {
 /**
  * Intersect two lines
  */
-export function intersect([v1, v2]: Line2, [v3, v4]: Line2) {
+export function intersect([v1, v2]: Line2, [v3, v4]: Line2): Vector2 {
   const [x1, y1] = v1, [x3, y3] = v3;
   const m1 = slope(v1, v2);
   const m3 = slope(v3, v4);

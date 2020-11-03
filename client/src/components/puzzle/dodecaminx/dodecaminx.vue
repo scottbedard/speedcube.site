@@ -30,7 +30,7 @@ import { BackSide, CircleGeometry, DoubleSide, FrontSide, Material, MeshLambertM
 import { computed, defineComponent, PropType } from 'vue';
 import { dodecahedronEdgeLength, pentagonCircumradius, pentagonInradius, polygon } from '@/app/utils/geometry';
 import { Dodecaminx } from '@bedard/twister';
-import { isEven, midpoint } from '@/app/utils/math';
+import { intersect, isEven, midpoint } from '@/app/utils/math';
 import { stubObject } from 'lodash-es';
 import { useGeometry } from '@/app/three/behaviors/geometry';
 import { Polygon, Vector2 } from '@/types/math';
@@ -55,18 +55,22 @@ export default defineComponent({
     });
 
     // create boundries for corner matrices
-    const cornerBounds = computed(() => {
-      const [v1, v2,,, v5] = pentagon.value;
+    const cornerBounds = computed<Polygon>(() => {
+      const [v1, v2, v3, v4, v5] = pentagon.value;
+      const m_v1_v2 = midpoint(v1, v2);
+      const m_v5_v1 = midpoint(v5, v1);
 
       if (isEven(props.model.options.size)) {
-        return [v1, midpoint(v1, v2), origin, midpoint(v5, v1)] as Polygon;
+        return [v1, m_v1_v2, origin, m_v5_v1];
       }
 
-      throw 'odd layers not implemented yet';
+      const m_v2_v3 = midpoint(v2, v3);
+      const m_v4_v5 = midpoint(v4, v5);
+      return [v1, m_v1_v2, intersect([m_v1_v2, m_v4_v5], [m_v5_v1, m_v2_v3]), m_v5_v1];
     });
 
     // temp
-    const cornerGeometry = useGeometry(cornerBounds);
+    const cornerGeometry = useGeometry(cornerBounds, 0.2);
 
     // temp
     const material = new MeshLambertMaterial({
@@ -76,6 +80,7 @@ export default defineComponent({
 
     return {
       cornerGeometry,
+      material,
     }
   },
   components: {
@@ -94,7 +99,7 @@ export default defineComponent({
       type: String,
     },
     model: {
-      default: () => new Dodecaminx({ size: 2 }),
+      default: () => new Dodecaminx({ size: 3 }),
       type: Object as PropType<Dodecaminx>,
     },
     radius: {
