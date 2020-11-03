@@ -49,24 +49,31 @@ const origin: Vector2 = [0, 0];
 export default defineComponent({
   setup(props) {
     // create pentagonal polygon to calculate sticker shapes from
+    const evenLayers = computed(() => isEven(props.model.options.size));
+
     const pentagon = computed(() => {
       const radius = pentagonCircumradius(dodecahedronEdgeLength(props.radius, 'circumRadius'), 'edgeLength');
       return polygon(5, radius)
     });
 
+    const midpoints = computed(() => {
+      return pentagon.value.map((v, i, arr) => midpoint(v, arr[(i + 1) % 5]))
+    });
+
     // create boundries for corner matrices
     const cornerBounds = computed<Polygon>(() => {
-      const [v1, v2, v3, v4, v5] = pentagon.value;
-      const m_v1_v2 = midpoint(v1, v2);
-      const m_v5_v1 = midpoint(v5, v1);
+      const [v1] = pentagon.value;
+      const [m1, m2,, m4, m5] = midpoints.value;
+      return evenLayers.value
+        ? [v1, m1, origin, m5]
+        : [v1, m1, intersect([m1, m4], [m5, m2]), m5];
+    });
 
-      if (isEven(props.model.options.size)) {
-        return [v1, m_v1_v2, origin, m_v5_v1];
-      }
-
-      const m_v2_v3 = midpoint(v2, v3);
-      const m_v4_v5 = midpoint(v4, v5);
-      return [v1, m_v1_v2, intersect([m_v1_v2, m_v4_v5], [m_v5_v1, m_v2_v3]), m_v5_v1];
+    const edgeBounds = computed<Polygon | null>(() => {
+      const [m1, m2, m3, m4, m5] = midpoints.value;
+      return evenLayers.value
+        ? null
+        : [m1, intersect([m1, m3], [m5, m2]), intersect([m5, m2], [m4, m1])];
     });
 
     // temp
