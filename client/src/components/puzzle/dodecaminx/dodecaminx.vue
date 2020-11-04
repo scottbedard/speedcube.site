@@ -6,22 +6,35 @@
     :geometry-hidden="false"
     :radius="radius"
     :wireframe="true">
-    <template #u>
+    <template
+      v-for="face in ['u', 'f', 'l', 'r']"
+      :key="face"
+      v-slot:[face]>
       <!-- temp: this will be moved to a face -->
       <v-shape
         :geometry="centerGeometry"
         :inner-material="greenMaterial"
         :outer-material="greenMaterial" />
 
-      <v-shape
-        :geometry="cornerGeometry"
-        :inner-material="redMaterial"
-        :outer-material="redMaterial" />
+      <v-group
+        v-for="n in 5"
+        :key="n"
+        :rotation="[0, 0, 1, 72 * n]">
+        <v-shape
+          :geometry="cornerGeometry"
+          :inner-material="redMaterial"
+          :outer-material="redMaterial" />
+      </v-group>
       
-      <v-shape
-        :geometry="edgeGeometry"
-        :inner-material="blueMaterial"
-        :outer-material="blueMaterial" />
+      <v-group
+        v-for="n in 5"
+        :key="n"
+        :rotation="[0, 0, 1, 72 * n]">
+        <v-shape
+          :geometry="edgeGeometry"
+          :inner-material="blueMaterial"
+          :outer-material="blueMaterial" />
+      </v-group>
     </template>
   </v-dodecahedron-geometry>
 
@@ -46,6 +59,7 @@ import { useGeometry } from '@/app/three/behaviors/geometry';
 import { Vector2 } from '@/types/math';
 import VCore from './core.vue';
 import VDodecahedronGeometry from '@/components/three/geometries/dodecahedron-geometry.vue';
+import VGroup from '@/components/three/utils/group.vue';
 import VShape from '@/components/three/utils/shape.vue';
 import VSphere from '@/components/three/geometries/sphere-geometry.vue';
 
@@ -63,20 +77,25 @@ export default defineComponent({
 
     const evenLayers = computed(() => isEven(layers.value));
 
-    const vertices = computed(() => {
-      const radius = pentagonCircumradius(dodecahedronEdgeLength(props.radius, 'circumRadius'), 'edgeLength');
-      return polygon(5, radius)
-    });
+    const vertices = polygon(5, pentagonCircumradius(dodecahedronEdgeLength(1, 'circumRadius'), 'edgeLength'));
 
     const middleSize = computed(() => {
       return clamp(props.config?.middleSize ?? 0 / layers.value, 0, 1);
     });
 
+    const stickerSpacingAlpha = computed(() => {
+      const stickerSpacing = clamp(props.config?.stickerSpacing ?? 0, 0, 1);
+      return evenLayers.value
+        ? stickerSpacing * ((2 / 3) / layers.value)
+        : stickerSpacing / layers.value;
+    });
+
     const midpoints = computed(() => {
-      const [ v1, v2, v3, v4, v5 ] = vertices.value;
+      const [ v1, v2, v3, v4, v5 ] = vertices;
       const alpha = Math.floor(layers.value / 2) / (layers.value + middleSize.value - 1);
 
       return {
+        m1: bilerp(v1, v2, 0.5),
         m1a: bilerp(v1, v2, alpha),
         m1b: bilerp(v2, v1, alpha),
         m2a: bilerp(v2, v3, alpha),
@@ -85,6 +104,7 @@ export default defineComponent({
         m3b: bilerp(v4, v3, alpha),
         m4a: bilerp(v4, v5, alpha),
         m4b: bilerp(v5, v4, alpha),
+        m5: bilerp(v5, v1, 0.5),
         m5a: bilerp(v5, v1, alpha),
         m5b: bilerp(v1, v5, alpha),
       };
@@ -108,16 +128,26 @@ export default defineComponent({
 
     // create boundries for corner matrices
     const cornerBounds = computed<Vector2[]>(() => {
-      const [ v1 ] = vertices.value;
-      const { m1a, m5b } = midpoints.value;
+      const [ v1 ] = vertices;
+      const { m1, m1a, m5, m5b } = midpoints.value;
 
       if (evenLayers.value) {
-        return [v1, m1a, origin, m5b];
+        return [
+          v1, 
+          bilerp(m1, v1, stickerSpacingAlpha.value),
+          bilerp(origin, v1, stickerSpacingAlpha.value), 
+          bilerp(m5, v1, stickerSpacingAlpha.value),
+        ];
       }
 
       const [ c1 ] = centerBounds.value;
 
-      return [v1, m1a, c1, m5b];
+      return [
+        v1, 
+        bilerp(m1a, v1, stickerSpacingAlpha.value), 
+        bilerp(c1, v1, stickerSpacingAlpha.value), 
+        bilerp(m5b, v1, stickerSpacingAlpha.value),
+      ];
     });
 
     const edgeBounds = computed<Vector2[]>(() => {
@@ -128,7 +158,12 @@ export default defineComponent({
       const [ c1, c2 ] = centerBounds.value;
       const { m1a, m1b } = midpoints.value;
 
-      return [m1a, m1b, c2, c1];
+      return [
+        m1a, 
+        m1b, 
+        bilerp(c2, m1b, stickerSpacingAlpha.value),
+        bilerp(c1, m1a, stickerSpacingAlpha.value),
+      ];
     });
 
     // temp
@@ -165,6 +200,7 @@ export default defineComponent({
   components: {
     VCore,
     VDodecahedronGeometry,
+    VGroup,
     VShape,
     VSphere,
   },

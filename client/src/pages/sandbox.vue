@@ -21,6 +21,7 @@
     <v-dodecaminx
       :config="{
         middleSize,
+        stickerSpacing,
       }"
       :radius="radius" />
   </v-scene>
@@ -41,6 +42,10 @@
     <div class="col-span-12 sm:col-span-6">
       <div>Middle size</div>
       <v-range-input v-model="middleSize" :max="1" :min="0" :step="0.01" />
+    </div>
+    <div class="col-span-12 sm:col-span-6">
+      <div>Sticker spacing</div>
+      <v-range-input v-model="stickerSpacing" :max="1" :min="0" :step="0.01" />
     </div>
   </div>
 </template>
@@ -65,6 +70,7 @@ export default defineComponent({
       cameraDistance: 3,
       middleSize: 0,
       radius: 1,
+      stickerSpacing: 0,
     };
   },
   components: {
