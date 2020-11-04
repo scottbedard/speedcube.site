@@ -9,6 +9,11 @@
     <template #u>
       <!-- temp: this will be moved to a face -->
       <v-shape
+        :geometry="centerGeometry"
+        :inner-material="greenMaterial"
+        :outer-material="greenMaterial" />
+
+      <v-shape
         :geometry="cornerGeometry"
         :inner-material="redMaterial"
         :outer-material="redMaterial" />
@@ -57,18 +62,30 @@ export default defineComponent({
     // create pentagonal polygon to calculate sticker shapes from
     const evenLayers = computed(() => isEven(props.model.options.size));
 
-    const pentagon = computed(() => {
+    const vertices = computed(() => {
       const radius = pentagonCircumradius(dodecahedronEdgeLength(props.radius, 'circumRadius'), 'edgeLength');
       return polygon(5, radius)
     });
 
     const midpoints = computed(() => {
-      return pentagon.value.map((v, i, arr) => midpoint(v, arr[(i + 1) % 5]))
+      return vertices.value.map((v: Vector2, i: number, arr: Vector2[]) => midpoint(v, arr[(i + 1) % 5]))
+    });
+
+    const centerBounds = computed<Vector2[]>(() => {
+      const [m1, m2, m3, m4, m5] = midpoints.value;
+
+      return [
+        intersect([m1, m4], [m2, m5]),
+        intersect([m2, m5], [m3, m1]),
+        intersect([m3, m1], [m4, m2]),
+        intersect([m4, m2], [m5, m3]),
+        intersect([m5, m3], [m1, m4]),
+      ];
     });
 
     // create boundries for corner matrices
     const cornerBounds = computed<Vector2[]>(() => {
-      const [v1] = pentagon.value;
+      const [v1] = vertices.value;
       const [m1, m2,, m4, m5] = midpoints.value;
       return evenLayers.value
         ? [v1, m1, origin, m5]
@@ -83,9 +100,9 @@ export default defineComponent({
     });
 
     // temp
-    const cornerGeometry = useGeometry(cornerBounds, 0.2);
-
-    const edgeGeometry = edgeBounds.value !== null && useGeometry(edgeBounds.value);
+    const centerGeometry = useGeometry(centerBounds);
+    const cornerGeometry = useGeometry(cornerBounds);
+    const edgeGeometry = useGeometry(edgeBounds);
 
     // temp
     const redMaterial = new MeshLambertMaterial({
@@ -93,14 +110,21 @@ export default defineComponent({
       side: DoubleSide,
     });
 
+    const greenMaterial = new MeshLambertMaterial({
+      color: 0x00ff00,
+      side: DoubleSide,
+    });
+
     const blueMaterial = new MeshLambertMaterial({
-      color: 0x0000fff,
+      color: 0x0000ff,
       side: DoubleSide,
     });
 
     return {
       blueMaterial,
+      centerGeometry,
       cornerGeometry,
+      greenMaterial,
       edgeBounds,
       edgeGeometry,
       redMaterial,
