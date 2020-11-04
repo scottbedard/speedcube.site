@@ -40,8 +40,8 @@ import { BackSide, CircleGeometry, DoubleSide, FrontSide, Material, MeshLambertM
 import { computed, defineComponent, PropType } from 'vue';
 import { dodecahedronEdgeLength, pentagonCircumradius, pentagonInradius, polygon } from '@/app/utils/geometry';
 import { Dodecaminx } from '@bedard/twister';
-import { intersect, isEven, midpoint } from '@/app/utils/math';
-import { stubObject } from 'lodash-es';
+import { bilerp, intersect, isEven, midpoint } from '@/app/utils/math';
+import { clamp, stubObject } from 'lodash-es';
 import { useGeometry } from '@/app/three/behaviors/geometry';
 import { Vector2 } from '@/types/math';
 import VCore from './core.vue';
@@ -50,7 +50,8 @@ import VShape from '@/components/three/utils/shape.vue';
 import VSphere from '@/components/three/geometries/sphere-geometry.vue';
 
 type DodecaminxConfig = {
-  // ...
+  middleSize: number,
+  stickerSpacing: number,
 }
 
 // the center of a face
@@ -58,48 +59,76 @@ const origin: Vector2 = [0, 0];
 
 export default defineComponent({
   setup(props) {
-    // create pentagonal polygon to calculate sticker shapes from
-    const evenLayers = computed(() => isEven(props.model.options.size));
+    const layers = computed(() => props.model.options.size);
+
+    const evenLayers = computed(() => isEven(layers.value));
 
     const vertices = computed(() => {
       const radius = pentagonCircumradius(dodecahedronEdgeLength(props.radius, 'circumRadius'), 'edgeLength');
       return polygon(5, radius)
     });
 
+    const middleSize = computed(() => {
+      return clamp(props.config?.middleSize ?? 0 / layers.value, 0, 1);
+    });
+
     const midpoints = computed(() => {
-      return vertices.value.map((v: Vector2, i: number, arr: Vector2[]) => midpoint(v, arr[(i + 1) % 5]))
+      const [ v1, v2, v3, v4, v5 ] = vertices.value;
+      const alpha = Math.floor(layers.value / 2) / (layers.value + middleSize.value - 1);
+
+      return {
+        m1a: bilerp(v1, v2, alpha),
+        m1b: bilerp(v2, v1, alpha),
+        m2a: bilerp(v2, v3, alpha),
+        m2b: bilerp(v3, v2, alpha),
+        m3a: bilerp(v3, v4, alpha),
+        m3b: bilerp(v4, v3, alpha),
+        m4a: bilerp(v4, v5, alpha),
+        m4b: bilerp(v5, v4, alpha),
+        m5a: bilerp(v5, v1, alpha),
+        m5b: bilerp(v1, v5, alpha),
+      };
     });
 
     const centerBounds = computed<Vector2[]>(() => {
-      const [m1, m2, m3, m4, m5] = midpoints.value;
+      if (evenLayers.value) {
+        return [];
+      }
 
-      return evenLayers.value
-        ? []
-        : [
-          intersect([m1, m4], [m2, m5]),
-          intersect([m2, m5], [m3, m1]),
-          intersect([m3, m1], [m4, m2]),
-          intersect([m4, m2], [m5, m3]),
-          intersect([m5, m3], [m1, m4]),
-        ];
+      const { m1a, m1b, m2a, m2b, m3a, m3b, m4a, m4b, m5a, m5b } = midpoints.value;
+
+      return [
+        intersect([m4b, m1a], [m5b, m2a]),
+        intersect([m5b, m2a], [m1b, m3a]),
+        intersect([m1b, m3a], [m2b, m4a]),
+        intersect([m2b, m4a], [m3b, m5a]),
+        intersect([m3b, m5a], [m4b, m1a]),
+      ];
     });
 
     // create boundries for corner matrices
     const cornerBounds = computed<Vector2[]>(() => {
-      const [v1] = vertices.value;
-      const [m1, m2,, m4, m5] = midpoints.value;
+      const [ v1 ] = vertices.value;
+      const { m1a, m5b } = midpoints.value;
 
-      return evenLayers.value
-        ? [v1, m1, origin, m5]
-        : [v1, m1, intersect([m1, m4], [m5, m2]), m5];
+      if (evenLayers.value) {
+        return [v1, m1a, origin, m5b];
+      }
+
+      const [ c1 ] = centerBounds.value;
+
+      return [v1, m1a, c1, m5b];
     });
 
     const edgeBounds = computed<Vector2[]>(() => {
-      const [m1, m2, m3, m4, m5] = midpoints.value;
+      if (evenLayers.value) {
+        return [];
+      }
 
-      return evenLayers.value
-        ? []
-        : [m1, intersect([m1, m3], [m5, m2]), intersect([m5, m2], [m4, m1])];
+      const [ c1, c2 ] = centerBounds.value;
+      const { m1a, m1b } = midpoints.value;
+
+      return [m1a, m1b, c2, c1];
     });
 
     // temp
@@ -141,7 +170,12 @@ export default defineComponent({
   },
   props: {
     config: {
-      default: stubObject,
+      default: () => {
+        return {
+          middleWidth: 1,
+          stickerSpacing: 0,
+        };
+      },
       type: Object as PropType<Partial<DodecaminxConfig>>,
     },
     currentTurn: {
@@ -149,7 +183,7 @@ export default defineComponent({
       type: String,
     },
     model: {
-      default: () => new Dodecaminx({ size: 2 }),
+      default: () => new Dodecaminx({ size: 3 }),
       type: Object as PropType<Dodecaminx>,
     },
     radius: {
