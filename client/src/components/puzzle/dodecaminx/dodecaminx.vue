@@ -10,8 +10,14 @@
       <!-- temp: this will be moved to a face -->
       <v-shape
         :geometry="cornerGeometry"
-        :inner-material="material"
-        :outer-material="material" />
+        :inner-material="redMaterial"
+        :outer-material="redMaterial" />
+      
+      <v-shape
+        v-if="edgeGeometry"
+        :geometry="edgeGeometry"
+        :inner-material="blueMaterial"
+        :outer-material="blueMaterial" />
     </template>
   </v-dodecahedron-geometry>
 
@@ -33,7 +39,7 @@ import { Dodecaminx } from '@bedard/twister';
 import { intersect, isEven, midpoint } from '@/app/utils/math';
 import { stubObject } from 'lodash-es';
 import { useGeometry } from '@/app/three/behaviors/geometry';
-import { Polygon, Vector2 } from '@/types/math';
+import { Vector2 } from '@/types/math';
 import VCore from './core.vue';
 import VDodecahedronGeometry from '@/components/three/geometries/dodecahedron-geometry.vue';
 import VShape from '@/components/three/utils/shape.vue';
@@ -61,7 +67,7 @@ export default defineComponent({
     });
 
     // create boundries for corner matrices
-    const cornerBounds = computed<Polygon>(() => {
+    const cornerBounds = computed<Vector2[]>(() => {
       const [v1] = pentagon.value;
       const [m1, m2,, m4, m5] = midpoints.value;
       return evenLayers.value
@@ -69,25 +75,35 @@ export default defineComponent({
         : [v1, m1, intersect([m1, m4], [m5, m2]), m5];
     });
 
-    const edgeBounds = computed<Polygon | null>(() => {
+    const edgeBounds = computed<Vector2[]>(() => {
       const [m1, m2, m3, m4, m5] = midpoints.value;
       return evenLayers.value
-        ? null
+        ? []
         : [m1, intersect([m1, m3], [m5, m2]), intersect([m5, m2], [m4, m1])];
     });
 
     // temp
     const cornerGeometry = useGeometry(cornerBounds, 0.2);
 
+    const edgeGeometry = edgeBounds.value !== null && useGeometry(edgeBounds.value);
+
     // temp
-    const material = new MeshLambertMaterial({
+    const redMaterial = new MeshLambertMaterial({
       color: 0xff0000,
       side: DoubleSide,
     });
 
+    const blueMaterial = new MeshLambertMaterial({
+      color: 0x0000fff,
+      side: DoubleSide,
+    });
+
     return {
+      blueMaterial,
       cornerGeometry,
-      material,
+      edgeBounds,
+      edgeGeometry,
+      redMaterial,
     }
   },
   components: {

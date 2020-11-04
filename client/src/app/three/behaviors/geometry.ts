@@ -6,12 +6,10 @@ import { Shape, ShapeBufferGeometry } from 'three';
 import { useDisposable } from './disposable';
 import { Vector2 } from '@/types/math';
 
-type PolygonVectors = [Vector2, Vector2, Vector2, ...Vector2[]];
-
 /**
  * Create rounded geometry from points.
  */
-export function useGeometry(path: PolygonVectors | Ref<PolygonVectors>, radius: Ref<number> | number = 0) {
+export function useGeometry(path: Vector2[] | Ref<Vector2[]>, radius: Ref<number> | number = 0) {
   const geometry = computed(() => {
     const shape = new Shape();
     const normalizedRadius = clamp(unref(radius), Number.EPSILON, 1);
