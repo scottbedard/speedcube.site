@@ -1,5 +1,5 @@
 import { rotate } from './math';
-import { Polygon } from '@/types/math';
+import { Vector2 } from '@/types/math';
 
 type Unit = 
   | 'circumRadius'
@@ -45,6 +45,6 @@ export function pentagonInradius(val: number, unit: Unit): number {
 /**
  * Create a regular polygon.
  */
-export function polygon(sides: number, radius: number = 1): Polygon {
-  return new Array(sides).fill(null).map((n, i) => rotate([0, radius], (360 / sides) * i)) as Polygon;
+export function polygon(sides: number, radius: number = 1): Vector2[] {
+  return new Array(sides).fill(null).map((n, i) => rotate([0, radius], (360 / sides) * i));
 }
