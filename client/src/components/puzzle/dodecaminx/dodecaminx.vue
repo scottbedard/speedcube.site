@@ -19,7 +19,6 @@
         :outer-material="redMaterial" />
       
       <v-shape
-        v-if="edgeGeometry"
         :geometry="edgeGeometry"
         :inner-material="blueMaterial"
         :outer-material="blueMaterial" />
@@ -74,19 +73,22 @@ export default defineComponent({
     const centerBounds = computed<Vector2[]>(() => {
       const [m1, m2, m3, m4, m5] = midpoints.value;
 
-      return [
-        intersect([m1, m4], [m2, m5]),
-        intersect([m2, m5], [m3, m1]),
-        intersect([m3, m1], [m4, m2]),
-        intersect([m4, m2], [m5, m3]),
-        intersect([m5, m3], [m1, m4]),
-      ];
+      return evenLayers.value
+        ? []
+        : [
+          intersect([m1, m4], [m2, m5]),
+          intersect([m2, m5], [m3, m1]),
+          intersect([m3, m1], [m4, m2]),
+          intersect([m4, m2], [m5, m3]),
+          intersect([m5, m3], [m1, m4]),
+        ];
     });
 
     // create boundries for corner matrices
     const cornerBounds = computed<Vector2[]>(() => {
       const [v1] = vertices.value;
       const [m1, m2,, m4, m5] = midpoints.value;
+
       return evenLayers.value
         ? [v1, m1, origin, m5]
         : [v1, m1, intersect([m1, m4], [m5, m2]), m5];
@@ -94,6 +96,7 @@ export default defineComponent({
 
     const edgeBounds = computed<Vector2[]>(() => {
       const [m1, m2, m3, m4, m5] = midpoints.value;
+
       return evenLayers.value
         ? []
         : [m1, intersect([m1, m3], [m5, m2]), intersect([m5, m2], [m4, m1])];
@@ -146,7 +149,7 @@ export default defineComponent({
       type: String,
     },
     model: {
-      default: () => new Dodecaminx({ size: 3 }),
+      default: () => new Dodecaminx({ size: 2 }),
       type: Object as PropType<Dodecaminx>,
     },
     radius: {
