@@ -17,10 +17,11 @@
 </template>
 
 <script lang="ts">
-import { attempt, isError, isNumber, times } from 'lodash-es';
+import { attempt, isError, isNumber } from 'lodash-es';
 import { BackSide, FrontSide, Material, MeshLambertMaterial } from 'three';
 import { computed, defineComponent, onUnmounted, PropType, watch } from 'vue';
 import { Cube } from '@bedard/twister';
+import { mapColumns, mapRows } from '@/app/utils/matrix';
 import { Rotation } from '@/app/three/behaviors/rotation';
 import { useGeometry } from '@/app/three/behaviors/geometry';
 import VCore from './core.vue';
@@ -97,16 +98,6 @@ const disposeMaterials = (materials: { innerMaterial: Material, outerMaterial: M
     obj.outerMaterial.dispose();
   });
 }
-
-/**
- * Create column map.
- */
-const mapColumns = (n: number) => times(n ** 2).map((x, i) => i % n);
-
-/**
- * Create row map.
- */
-const mapRows = (n: number) => times(n ** 2).map((x, i) => Math.floor(i / n));
 
 export default defineComponent({
   setup(props) {

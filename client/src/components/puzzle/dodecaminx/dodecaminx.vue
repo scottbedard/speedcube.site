@@ -20,10 +20,16 @@
         v-for="n in 5"
         :key="n"
         :rotation="[0, 0, 1, 72 * n]">
-        <v-shape
+        <!-- <v-shape
           :geometry="cornerGeometry"
           :inner-material="redMaterial"
-          :outer-material="redMaterial" />
+          :outer-material="redMaterial" /> -->
+        <v-shape
+          v-for="(shape, i) in cornerShapes"
+          :geometry="shape"
+          :inner-material="coloredMaterials[i % coloredMaterials.length]"
+          :key="i"
+          :outer-material="coloredMaterials[i % coloredMaterials.length]" />
       </v-group>
       
       <v-group
@@ -50,13 +56,15 @@
 <script lang="ts">
 /* eslint-disable */
 import { BackSide, CircleGeometry, DoubleSide, FrontSide, Material, MeshLambertMaterial } from 'three';
+import { bilerp, intersect, isEven, midpoint } from '@/app/utils/math';
+import { clamp, stubObject, times } from 'lodash-es';
 import { computed, defineComponent, PropType } from 'vue';
+import { createShape } from '@/app/three/utils/shape';
 import { dodecahedronEdgeLength, pentagonCircumradius, pentagonInradius, polygon } from '@/app/utils/geometry';
 import { Dodecaminx } from '@bedard/twister';
-import { bilerp, intersect, isEven, midpoint } from '@/app/utils/math';
-import { clamp, stubObject } from 'lodash-es';
+import { mapColumns, mapRows } from '@/app/utils/matrix';
 import { useGeometry } from '@/app/three/behaviors/geometry';
-import { Vector2 } from '@/types/math';
+import { Line2, Vector2 } from '@/types/math';
 import VCore from './core.vue';
 import VDodecahedronGeometry from '@/components/three/geometries/dodecahedron-geometry.vue';
 import VGroup from '@/components/three/utils/group.vue';
@@ -77,18 +85,25 @@ export default defineComponent({
 
     const evenLayers = computed(() => isEven(layers.value));
 
-    const vertices = polygon(5, pentagonCircumradius(dodecahedronEdgeLength(1, 'circumRadius'), 'edgeLength'));
-
+    // value 0 to 1 that defines the center size
+    // 0 = corners matrices touch each other
+    // 1 = outer edge size is equal to center size when value is 0
     const middleSize = computed(() => {
       return clamp(props.config?.middleSize ?? 0 / layers.value, 0, 1);
     });
 
-    const stickerSpacingAlpha = computed(() => {
+    // value 0 to 1 that defines sticker spacing
+    // 0 = ...
+    // 1 = ...
+    const stickerSpacing = computed(() => {
       const stickerSpacing = clamp(props.config?.stickerSpacing ?? 0, 0, 1);
       return evenLayers.value
         ? stickerSpacing * ((2 / 3) / layers.value)
         : stickerSpacing / layers.value;
     });
+
+    // vertices of pentagonal faces
+    const vertices = polygon(5, pentagonCircumradius(dodecahedronEdgeLength(1, 'circumRadius'), 'edgeLength'));
 
     const midpoints = computed(() => {
       const [ v1, v2, v3, v4, v5 ] = vertices;
@@ -110,7 +125,9 @@ export default defineComponent({
       };
     });
 
-    const centerBounds = computed<Vector2[]>(() => {
+    // vectors to define shape of center sticker
+    // for even-layered puzzles, this will be empty
+    const centerVectors = computed<Vector2[]>(() => {
       if (evenLayers.value) {
         return [];
       }
@@ -126,50 +143,88 @@ export default defineComponent({
       ];
     });
 
-    // create boundries for corner matrices
-    const cornerBounds = computed<Vector2[]>(() => {
+    // vectors for corner matrices
+    const cornerVectors = computed<Vector2[]>(() => {
       const [ v1 ] = vertices;
       const { m1, m1a, m5, m5b } = midpoints.value;
 
       if (evenLayers.value) {
         return [
           v1, 
-          bilerp(m1, v1, stickerSpacingAlpha.value),
-          bilerp(origin, v1, stickerSpacingAlpha.value), 
-          bilerp(m5, v1, stickerSpacingAlpha.value),
+          bilerp(m1, v1, stickerSpacing.value),
+          bilerp(origin, v1, stickerSpacing.value), 
+          bilerp(m5, v1, stickerSpacing.value),
         ];
       }
 
-      const [ c1 ] = centerBounds.value;
-
       return [
         v1, 
-        bilerp(m1a, v1, stickerSpacingAlpha.value), 
-        bilerp(c1, v1, stickerSpacingAlpha.value), 
-        bilerp(m5b, v1, stickerSpacingAlpha.value),
+        bilerp(m1a, v1, stickerSpacing.value), 
+        bilerp(centerVectors.value[0], v1, stickerSpacing.value), 
+        bilerp(m5b, v1, stickerSpacing.value),
       ];
     });
 
-    const edgeBounds = computed<Vector2[]>(() => {
+    const cornerShapes = computed(() => {
+      const [ c1, c2, c3, c4 ] = cornerVectors.value;
+      const matrixLayers = Math.floor(layers.value / 2);
+      const colMap = mapColumns(matrixLayers);
+      const rowMap = mapRows(matrixLayers);
+
+      return times(matrixLayers ** 2).map((x, i) => {
+        const col = colMap[i];
+        const row = rowMap[i];
+
+        const top: Line2 = [
+          bilerp(c1, c4, row / matrixLayers),
+          bilerp(c2, c3, row / matrixLayers),
+        ];
+
+        const bottom: Line2 = [
+          bilerp(c1, c4, (row + 1) / matrixLayers),
+          bilerp(c2, c3, (row + 1) / matrixLayers),
+        ];
+
+        const left: Line2 = [
+          bilerp(c1, c2, col / matrixLayers),
+          bilerp(c4, c3, col / matrixLayers),
+        ];
+
+        const right: Line2 = [
+          bilerp(c1, c2, (col + 1) / matrixLayers),
+          bilerp(c4, c3, (col + 1) / matrixLayers),
+        ];
+
+        return createShape([
+          intersect(top, left),
+          intersect(top, right),
+          intersect(bottom, right),
+          intersect(bottom, left),
+        ]);
+      });
+    });
+
+    // vectors for edge stickers
+    const edgeVectors = computed<Vector2[]>(() => {
       if (evenLayers.value) {
         return [];
       }
 
-      const [ c1, c2 ] = centerBounds.value;
+      const [ c1, c2 ] = centerVectors.value;
       const { m1a, m1b } = midpoints.value;
 
       return [
         m1a, 
         m1b, 
-        bilerp(c2, m1b, stickerSpacingAlpha.value),
-        bilerp(c1, m1a, stickerSpacingAlpha.value),
+        bilerp(c2, m1b, stickerSpacing.value),
+        bilerp(c1, m1a, stickerSpacing.value),
       ];
     });
 
     // temp
-    const centerGeometry = useGeometry(centerBounds);
-    const cornerGeometry = useGeometry(cornerBounds);
-    const edgeGeometry = useGeometry(edgeBounds);
+    const centerGeometry = useGeometry(centerVectors);
+    const cornerGeometry = useGeometry(cornerVectors);
+    const edgeGeometry = useGeometry(edgeVectors);
 
     // temp
     const redMaterial = new MeshLambertMaterial({
@@ -187,13 +242,27 @@ export default defineComponent({
       side: DoubleSide,
     });
 
+    const pinkMaterial = new MeshLambertMaterial({
+      color: 0xff00ff,
+      side: DoubleSide,
+    });
+
+    const coloredMaterials = [
+      redMaterial,
+      greenMaterial,
+      blueMaterial,
+      pinkMaterial,
+    ];
+
     return {
       blueMaterial,
       centerGeometry,
+      coloredMaterials,
       cornerGeometry,
-      greenMaterial,
-      edgeBounds,
+      cornerShapes,
       edgeGeometry,
+      edgeVectors,
+      greenMaterial,
       redMaterial,
     }
   },
@@ -219,7 +288,7 @@ export default defineComponent({
       type: String,
     },
     model: {
-      default: () => new Dodecaminx({ size: 3 }),
+      default: () => new Dodecaminx({ size: 4 }),
       type: Object as PropType<Dodecaminx>,
     },
     radius: {
