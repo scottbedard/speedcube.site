@@ -56,7 +56,7 @@
 <script lang="ts">
 /* eslint-disable */
 import { BackSide, CircleGeometry, DoubleSide, FrontSide, Material, MeshLambertMaterial } from 'three';
-import { bilerp, intersect, isEven, midpoint } from '@/app/utils/math';
+import { bilerp, intersect, isEven, midpoint, translate } from '@/app/utils/math';
 import { clamp, stubObject, times } from 'lodash-es';
 import { computed, defineComponent, PropType } from 'vue';
 import { createShape } from '@/app/three/utils/shape';
@@ -76,35 +76,35 @@ type DodecaminxConfig = {
   stickerSpacing: number,
 }
 
+// geometry constants for a dodecahedron inside a sphere of radius 1
+const edgeLength = dodecahedronEdgeLength(1, 'circumRadius');
+const pentagonRadius = pentagonCircumradius(edgeLength, 'edgeLength');
+const vertices = polygon(5, pentagonRadius);
+
 // the center of a face
 const origin: Vector2 = [0, 0];
 
 export default defineComponent({
   setup(props) {
+    // number of puzzle layers and if that is an even number
     const layers = computed(() => props.model.options.size);
-
     const evenLayers = computed(() => isEven(layers.value));
+
+    // size of a layer, and max size of sticker spacing gap
+    const layerSize = computed(() => edgeLength / layers.value);
 
     // value 0 to 1 that defines the center size
     // 0 = corners matrices touch each other
     // 1 = outer edge size is equal to center size when value is 0
-    const middleSize = computed(() => {
-      return clamp(props.config?.middleSize ?? 0 / layers.value, 0, 1);
-    });
+    const middleSize = computed(() => clamp(props.config?.middleSize ?? 0 / layers.value, 0, 1));
 
-    // value 0 to 1 that defines sticker spacing
-    // 0 = ...
-    // 1 = ...
-    const stickerSpacing = computed(() => {
-      const stickerSpacing = clamp(props.config?.stickerSpacing ?? 0, 0, 1);
-      return evenLayers.value
-        ? stickerSpacing * ((2 / 3) / layers.value)
-        : stickerSpacing / layers.value;
-    });
-
-    // vertices of pentagonal faces
-    const vertices = polygon(5, pentagonCircumradius(dodecahedronEdgeLength(1, 'circumRadius'), 'edgeLength'));
-
+    // size of gap between adjacent stickers
+    // 0 = no gap between stickers
+    // 1 = layerSize gap between stickers
+    const stickerSpacing = computed(() => clamp(props.config?.stickerSpacing ?? 0, 0, 1));
+    const stickerSpacingGap = computed(() => layerSize.value * stickerSpacing.value);
+    
+    // midpoints between vertices that are needed to calculate sticker shapes
     const midpoints = computed(() => {
       const [ v1, v2, v3, v4, v5 ] = vertices;
       const alpha = Math.floor(layers.value / 2) / (layers.value + middleSize.value - 1);
@@ -128,9 +128,7 @@ export default defineComponent({
     // vectors to define shape of center sticker
     // for even-layered puzzles, this will be empty
     const centerVectors = computed<Vector2[]>(() => {
-      if (evenLayers.value) {
-        return [];
-      }
+      if (evenLayers.value) return [];
 
       const { m1a, m1b, m2a, m2b, m3a, m3b, m4a, m4b, m5a, m5b } = midpoints.value;
 
@@ -148,21 +146,9 @@ export default defineComponent({
       const [ v1 ] = vertices;
       const { m1, m1a, m5, m5b } = midpoints.value;
 
-      if (evenLayers.value) {
-        return [
-          v1, 
-          bilerp(m1, v1, stickerSpacing.value),
-          bilerp(origin, v1, stickerSpacing.value), 
-          bilerp(m5, v1, stickerSpacing.value),
-        ];
-      }
-
-      return [
-        v1, 
-        bilerp(m1a, v1, stickerSpacing.value), 
-        bilerp(centerVectors.value[0], v1, stickerSpacing.value), 
-        bilerp(m5b, v1, stickerSpacing.value),
-      ];
+      return evenLayers.value
+        ? [v1, m1, origin, m5]
+        : [v1, m1a, centerVectors.value[0], m5b];
     });
 
     const cornerShapes = computed(() => {
@@ -170,6 +156,7 @@ export default defineComponent({
       const matrixLayers = Math.floor(layers.value / 2);
       const colMap = mapColumns(matrixLayers);
       const rowMap = mapRows(matrixLayers);
+      const spacing = stickerSpacing.value / 2;
 
       return times(matrixLayers ** 2).map((x, i) => {
         const col = colMap[i];
@@ -180,19 +167,19 @@ export default defineComponent({
           bilerp(c2, c3, row / matrixLayers),
         ];
 
-        const bottom: Line2 = [
-          bilerp(c1, c4, (row + 1) / matrixLayers),
-          bilerp(c2, c3, (row + 1) / matrixLayers),
-        ];
-
         const left: Line2 = [
           bilerp(c1, c2, col / matrixLayers),
           bilerp(c4, c3, col / matrixLayers),
         ];
 
+        const bottom: Line2 = [
+          bilerp(bilerp(c1, c4, (row + 1) / matrixLayers), top[0], spacing),
+          bilerp(bilerp(c2, c3, (row + 1) / matrixLayers), top[1], spacing),
+        ];
+
         const right: Line2 = [
-          bilerp(c1, c2, (col + 1) / matrixLayers),
-          bilerp(c4, c3, (col + 1) / matrixLayers),
+          bilerp(bilerp(c1, c2, (col + 1) / matrixLayers), left[0], spacing),
+          bilerp(bilerp(c4, c3, (col + 1) / matrixLayers), left[1], spacing),
         ];
 
         return createShape([
@@ -213,12 +200,7 @@ export default defineComponent({
       const [ c1, c2 ] = centerVectors.value;
       const { m1a, m1b } = midpoints.value;
 
-      return [
-        m1a, 
-        m1b, 
-        bilerp(c2, m1b, stickerSpacing.value),
-        bilerp(c1, m1a, stickerSpacing.value),
-      ];
+      return [m1a, m1b, c2, c1];
     });
 
     // temp
@@ -288,7 +270,7 @@ export default defineComponent({
       type: String,
     },
     model: {
-      default: () => new Dodecaminx({ size: 4 }),
+      default: () => new Dodecaminx({ size: 5 }),
       type: Object as PropType<Dodecaminx>,
     },
     radius: {
