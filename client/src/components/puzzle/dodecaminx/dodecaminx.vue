@@ -12,7 +12,8 @@
       v-slot:[face]>
       <!-- temp: this will be moved to a face -->
       <v-shape
-        :geometry="centerGeometry"
+        v-if="centerShape"
+        :geometry="centerShape"
         :inner-material="greenMaterial"
         :outer-material="greenMaterial" />
 
@@ -50,7 +51,7 @@
 import { BackSide, CircleGeometry, DoubleSide, FrontSide, Material, MeshLambertMaterial } from 'three';
 import { bilerp, intersect, isEven, midpoint, translate } from '@/app/utils/math';
 import { clamp, stubObject, times } from 'lodash-es';
-import { computed, defineComponent, PropType } from 'vue';
+import { computed, defineComponent, onUnmounted, PropType, watch } from 'vue';
 import { createShape } from '@/app/three/utils/shape';
 import { dodecahedronEdgeLength, pentagonCircumradius, pentagonInradius, polygon } from '@/app/utils/geometry';
 import { Dodecaminx } from '@bedard/twister';
@@ -165,6 +166,9 @@ export default defineComponent({
       ];
     });
 
+    // center shape geometry
+    const centerShape = computed(() => !evenLayers.value && createShape(centerVectors));
+
     // shape geometries for corner stickers
     const cornerShapes = computed(() => {
       const [ c1, c2, c3, c4 ] = cornerVectors.value;
@@ -195,9 +199,7 @@ export default defineComponent({
 
     // shape geometries for middle stickers
     const middleShapes = computed(() => {
-      if (evenLayers.value) {
-        return [];
-      }
+      if (evenLayers.value) return [];
 
       const [ c1, c2 ] = centerVectors.value;
       const { m1a, m1b } = midpoints.value;
@@ -220,8 +222,16 @@ export default defineComponent({
       });
     });
 
-    // temp
-    const centerGeometry = useGeometry(centerVectors);
+    // dispose old shape geometries
+    watch(centerShape, (cur, prev) => prev && prev.dispose());
+    watch(cornerShapes, (cur, prev) => prev.forEach(obj => obj.dispose()));
+    watch(middleShapes, (cur, prev) => prev.forEach(obj => obj.dispose()));
+
+    onUnmounted(() => {
+      centerShape.value && centerShape.value.dispose();
+      cornerShapes.value.forEach(obj => obj.dispose());
+      middleShapes.value.forEach(obj => obj.dispose());
+    });
 
     // temp
     const redMaterial = new MeshLambertMaterial({
@@ -253,7 +263,7 @@ export default defineComponent({
 
     return {
       blueMaterial,
-      centerGeometry,
+      centerShape,
       coloredMaterials,
       cornerShapes,
       greenMaterial,
