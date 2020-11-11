@@ -21,10 +21,11 @@ import { mapColumns, mapRows } from '@/app/utils/matrix';
 import VCore from './core.vue';
 
 type DodecaminxConfig = {
+  innerBrightness: number,
   middleSize: number,
   stickerElevation: number,
-  stickerSpacing: number,
   stickerRadius: number,
+  stickerSpacing: number,
 }
 
 // geometry constants for a dodecahedron inside a sphere of radius 1
@@ -60,6 +61,11 @@ export default defineComponent({
         '#F687B3', // dbr: pink
       ];
     });
+
+    // inner brightness
+    // 0 = transparent
+    // 1 = opaque
+    const innerBrightness = computed(() => clamp(props.config?.innerBrightness ?? 0, 0, 1));
 
     // sticker elevation
     // 0 = dodecahedron circumradius of 1 (no sticker elevation)
@@ -213,8 +219,16 @@ export default defineComponent({
     const materials = computed(() => {
       return colors.value.map((color) => {
         return {
-          inner: new MeshLambertMaterial({ color, side: BackSide }),
-          outer: new MeshLambertMaterial({ color, side: FrontSide }),
+          inner: new MeshLambertMaterial({
+            color,
+            opacity: innerBrightness.value,
+            side: BackSide,
+            transparent: true,
+          }),
+          outer: new MeshLambertMaterial({
+            color,
+            side: FrontSide,
+          }),
         };
       });
     });
