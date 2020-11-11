@@ -24,8 +24,7 @@
         stickerElevation,
         stickerRadius,
         stickerSpacing,
-      }"
-      :radius="radius" />
+      }" />
   </v-scene>
 
   <div class="gap-6 grid grid-cols-12 max-w-2xl mx-auto">

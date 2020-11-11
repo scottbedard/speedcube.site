@@ -5,7 +5,7 @@
     :materials="materials"
     :middle-shapes="middleShapes"
     :model="model"
-    :radius="1 + stickerElevation" />
+    :radius="stickerElevation + 1" />
 </template>
 
 <script lang="ts">
@@ -269,10 +269,6 @@ export default defineComponent({
     model: {
       default: () => new Dodecaminx({ size: 3 }),
       type: Dodecaminx,
-    },
-    radius: {
-      default: 1,
-      type: Number,
     },
     turnProgress: {
       default: 0,
