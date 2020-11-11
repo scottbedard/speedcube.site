@@ -1,34 +1,77 @@
 <template>
   <v-shape
-    :geometry="cornerGeometry"
-    :inner-material="material"
-    :outer-material="material" />
+    v-if="centerShape"
+    :geometry="centerShape"
+    :inner-material="materials[face.center.value].inner"
+    :outer-material="materials[face.center.value].outer" />
+  <v-group
+    v-for="i in 5"
+    :key="i"
+    :rotation="[0, 0, 1, 72 * i]">
+    <v-shape
+      v-for="(sticker, j) in face.corners[i - 1]"
+      :geometry="cornerShapes[j]"
+      :inner-material="innerMaterial(sticker.value)"
+      :key="`corner-${j}`"
+      :outer-material="outerMaterial(sticker.value)" />
+    <v-shape
+      v-for="(sticker, j) in face.middles[i - 1]"
+      :geometry="middleShapes[j]"
+      :inner-material="innerMaterial(sticker.value)"
+      :key="`middle-${j}`"
+      :outer-material="outerMaterial(sticker.value)" />
+  </v-group>
 </template>
 
 <script lang="ts">
-/* eslint-disable */
-import { BackSide, CircleGeometry, DoubleSide, FrontSide, Material, MeshLambertMaterial } from 'three';
-import { defineComponent, computed, watch } from 'vue';
-import { bilerp, degreesToRadians } from '@/app/utils/math';
-import { dodecahedronEdgeLength, pentagonCircumradius, pentagonInradius, polygon } from '@/app/utils/geometry';
-import { useDisposable } from '@/app/three/behaviors/disposable';
-import { useGeometry } from '@/app/three/behaviors/geometry';
+import { computed, defineComponent, PropType } from 'vue';
+import { Dodecaminx } from '@bedard/twister';
+import { DodecaminxFace } from '@bedard/twister/dist/dodecaminx/dodecaminx';
+import { Material, ShapeBufferGeometry } from 'three';
 import VGroup from '@/components/three/utils/group.vue';
 import VShape from '@/components/three/utils/shape.vue';
 
 export default defineComponent({
-  setup() {
-    // ...
+  setup(props) {
+    const face = computed(() => props.model.state[props.faceKey]);
+    const innerMaterial = (val: number) => props.materials[val]?.inner;
+    const outerMaterial = (val: number) => props.materials[val]?.outer;
+
+    return {
+      face,
+      innerMaterial,
+      outerMaterial,
+    };
   },
   components: {
     VGroup,
     VShape,
   },
   props: {
-    radius: {
-      default: 1,
-      type: Number,
+    centerShape: {
+      required: true,
+      type: [Boolean, ShapeBufferGeometry] as PropType<false | ShapeBufferGeometry>,
     },
-  }
+    cornerShapes: {
+      required: true,
+      type: Array as PropType<ShapeBufferGeometry[]>,
+    },
+    faceKey: {
+      required: true,
+      type: String as PropType<DodecaminxFace>,
+    },
+    materials: {
+      required: true,
+      type: Array as PropType<{ inner: Material, outer: Material, }[]>,
+    },
+    middleShapes: {
+      required: true,
+      type: Array as PropType<ShapeBufferGeometry[]>,
+    },
+    model: {
+      required: true,
+      type: Dodecaminx,
+    },
+  },
 });
 </script>

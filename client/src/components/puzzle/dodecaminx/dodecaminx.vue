@@ -1,68 +1,24 @@
 <template>
-  <!-- <v-core :radius="radius" /> -->
-
-  <!-- temp: this will be moved to a core -->
-  <v-dodecahedron-geometry
-    :geometry-hidden="false"
-    :radius="radius"
-    :wireframe="true">
-    <template
-      v-for="face in ['u', 'l', 'f', 'r', 'bl', 'br']"
-      :key="face"
-      v-slot:[face]>
-      <!-- temp: this will be moved to a face -->
-      <v-shape
-        v-if="centerShape"
-        :geometry="centerShape"
-        :inner-material="blueMaterial"
-        :outer-material="blueMaterial" />
-
-      <v-group
-        v-for="n in 5"
-        :key="n"
-        :rotation="[0, 0, 1, 72 * n]">
-        <v-shape
-          v-for="(shape, i) in cornerShapes"
-          :geometry="shape"
-          :inner-material="coloredMaterials[i % coloredMaterials.length]"
-          :key="`corner-${i}`"
-          :outer-material="coloredMaterials[i % coloredMaterials.length]" />
-        <v-shape
-          v-for="(shape, i) in middleShapes"
-          :geometry="shape"
-          :inner-material="coloredMaterials[i % coloredMaterials.length]"
-          :key="`middle-${i}`"
-          :outer-material="coloredMaterials[i % coloredMaterials.length]" />
-      </v-group>
-    </template>
-  </v-dodecahedron-geometry>
-
-  <v-sphere
-    :color="0x444444"
-    :height-segments="50"
-    :hidden="true"
-    :radius="1"
-    :width-segments="50"
-    :wireframe="true" />
+  <v-core
+    :center-shape="centerShape"
+    :corner-shapes="cornerShapes"
+    :materials="materials"
+    :middle-shapes="middleShapes"
+    :model="model"
+    :radius="radius" />
 </template>
 
 <script lang="ts">
-/* eslint-disable */
-import { BackSide, CircleGeometry, DoubleSide, FrontSide, Material, MeshLambertMaterial } from 'three';
-import { bilerp, intersect, isEven, midpoint, translate } from '@/app/utils/math';
-import { clamp, stubObject, times } from 'lodash-es';
+import { BackSide, FrontSide, MeshLambertMaterial } from 'three';
+import { bilerp, intersect, isEven } from '@/app/utils/math';
+import { clamp, times } from 'lodash-es';
 import { computed, defineComponent, onUnmounted, PropType, watch } from 'vue';
 import { createShape } from '@/app/three/utils/shape';
-import { dodecahedronEdgeLength, pentagonCircumradius, pentagonInradius, polygon } from '@/app/utils/geometry';
+import { dodecahedronEdgeLength, pentagonCircumradius, polygon } from '@/app/utils/geometry';
 import { Dodecaminx } from '@bedard/twister';
-import { mapColumns, mapRows } from '@/app/utils/matrix';
-import { useGeometry } from '@/app/three/behaviors/geometry';
 import { Line2, Vector2 } from '@/types/math';
+import { mapColumns, mapRows } from '@/app/utils/matrix';
 import VCore from './core.vue';
-import VDodecahedronGeometry from '@/components/three/geometries/dodecahedron-geometry.vue';
-import VGroup from '@/components/three/utils/group.vue';
-import VShape from '@/components/three/utils/shape.vue';
-import VSphere from '@/components/three/geometries/sphere-geometry.vue';
 
 type DodecaminxConfig = {
   middleSize: number,
@@ -79,15 +35,30 @@ const vertices = polygon(5, pentagonRadius);
 // we cannot use Number.EPSILON here because it breaks BufferGeometry.computeBoundingSphere
 const minMiddleSize = 0.0000001;
 
-// the center of a face
-const origin: Vector2 = [0, 0];
-
 export default defineComponent({
   setup(props) {
     // number of puzzle layers and if that is an even number
     const layers = computed(() => props.model.options.size);
     const evenLayers = computed(() => isEven(layers.value));
     const matrixLayers = computed(() => Math.floor(layers.value / 2));
+
+    // puzzle colors
+    const colors = computed(() => {
+      return [
+        '#718096', // b: gray
+        '#ED8936', // bl: orange
+        '#9AE6B4', // br: light green
+        '#FBD38D', // d: creme
+        '#90CDF4', // dbl: light blue
+        '#F687B3', // dbr: pink
+        '#2F855A', // dl: dark green
+        '#E53E3E', // dr: red
+        '#F7FAFC', // f: white
+        '#9F7AEA', // l: purple
+        '#2B6CB0', // r: dark blue
+        '#F6E05E', // u: yellow
+      ];
+    });
 
     // radius of sticker geometries
     // 0 = no radius
@@ -161,7 +132,7 @@ export default defineComponent({
         return [
           v1,
           bilerp(v1, m1, alpha),
-          bilerp(v1, origin, alpha),
+          bilerp(v1, [0, 0], alpha),
           bilerp(v1, m5, alpha),
         ];
       }
@@ -232,67 +203,53 @@ export default defineComponent({
       });
     });
 
-    // dispose old shape geometries
+    // colored materials
+    const materials = computed(() => {
+      return colors.value.map((color) => {
+        return {
+          inner: new MeshLambertMaterial({ color, side: BackSide }),
+          outer: new MeshLambertMaterial({ color, side: FrontSide }),
+        };
+      });
+    });
+
+    // dispose geometries and materials
     watch(centerShape, (cur, prev) => prev && prev.dispose());
     watch(cornerShapes, (cur, prev) => prev.forEach(obj => obj.dispose()));
     watch(middleShapes, (cur, prev) => prev.forEach(obj => obj.dispose()));
+    watch(materials, (cur, prev) => {
+      prev.forEach(obj => {
+        obj.inner.dispose();
+        obj.outer.dispose();
+      });
+    });
 
     onUnmounted(() => {
       centerShape.value && centerShape.value.dispose();
       cornerShapes.value.forEach(obj => obj.dispose());
       middleShapes.value.forEach(obj => obj.dispose());
+      materials.value.forEach(obj => {
+        obj.inner.dispose();
+        obj.outer.dispose();
+      });
     });
-
-    // temp
-    const redMaterial = new MeshLambertMaterial({
-      color: 0xff0000,
-      side: DoubleSide,
-    });
-
-    const greenMaterial = new MeshLambertMaterial({
-      color: 0x00ff00,
-      side: DoubleSide,
-    });
-
-    const blueMaterial = new MeshLambertMaterial({
-      color: 0x0000ff,
-      side: DoubleSide,
-    });
-
-    const pinkMaterial = new MeshLambertMaterial({
-      color: 0xff00ff,
-      side: DoubleSide,
-    });
-
-    const coloredMaterials = [
-      redMaterial,
-      greenMaterial,
-      blueMaterial,
-      pinkMaterial,
-    ];
 
     return {
-      blueMaterial,
       centerShape,
-      coloredMaterials,
       cornerShapes,
-      greenMaterial,
+      materials,
       middleShapes,
-      redMaterial,
     }
   },
   components: {
     VCore,
-    VDodecahedronGeometry,
-    VGroup,
-    VShape,
-    VSphere,
   },
   props: {
     config: {
       default: () => {
         return {
           middleWidth: 1,
+          stickerRadius: 0,
           stickerSpacing: 0,
         };
       },
@@ -303,8 +260,8 @@ export default defineComponent({
       type: String,
     },
     model: {
-      default: () => new Dodecaminx({ size: 5 }),
-      type: Object as PropType<Dodecaminx>,
+      default: () => new Dodecaminx({ size: 3 }),
+      type: Dodecaminx,
     },
     radius: {
       default: 1,

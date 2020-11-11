@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, PropType, watchEffect } from 'vue';
+import { defineComponent, watchEffect } from 'vue';
 import { Group, Material, Mesh, ShapeBufferGeometry } from 'three';
 import { noop } from 'lodash-es';
 import { useHidden } from '@/app/three/behaviors/hidden';
@@ -12,8 +12,16 @@ export default defineComponent({
 
     watchEffect(() => {
       group.remove(...group.children);
-      group.add(new Mesh(props.geometry, props.innerMaterial));
-      group.add(new Mesh(props.geometry, props.outerMaterial));
+
+      if (props.geometry) {
+        if (props.innerMaterial) {
+          group.add(new Mesh(props.geometry, props.innerMaterial));
+        }
+
+        if (props.outerMaterial) {
+          group.add(new Mesh(props.geometry, props.outerMaterial));
+        }
+      }
     });
 
     useNesting(group);
@@ -21,22 +29,13 @@ export default defineComponent({
     usePosition(group, () => props.position);
   },
   props: {
-    geometry: {
-      required: true,
-      type: Object as PropType<ShapeBufferGeometry>,
-    },
+    geometry: ShapeBufferGeometry,
     hidden: {
       default: false,
       type: Boolean,
     },
-    innerMaterial: {
-      required: true,
-      type: Object as PropType<Material>,
-    },
-    outerMaterial: {
-      required: true,
-      type: Object as PropType<Material>,
-    },
+    innerMaterial: Material,
+    outerMaterial: Material,
     position: positionProp,
   },
   render: noop,

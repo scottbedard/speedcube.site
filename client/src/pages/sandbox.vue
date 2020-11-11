@@ -73,8 +73,8 @@ export default defineComponent({
       cameraDistance: 2.5,
       middleSize: 0,
       radius: 1,
-      stickerRadius: 0,
-      stickerSpacing: 0,
+      stickerRadius: 0.1,
+      stickerSpacing: 0.1,
     };
   },
   components: {
