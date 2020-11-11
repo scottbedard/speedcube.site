@@ -48,3 +48,26 @@ export function pentagonInradius(val: number, unit: Unit): number {
 export function polygon(sides: number, radius: number = 1): Vector2[] {
   return new Array(sides).fill(null).map((n, i) => rotate([0, radius], (360 / sides) * i));
 }
+
+/**
+ * Collapse duplicate points in a vector path.
+ */
+export function uniquePath(vectors: Vector2[]): Vector2[] {
+  return vectors.reduce<Vector2[]>((acc, v, i, arr) => {
+    if (i === arr.length - 1) {
+      const first = acc[0];
+
+      if (first && (first[0] !== v[0] || first[1] !== v[1])) {
+        acc.push(v);
+      }
+    } else {
+      const prev = acc.slice(-1).pop();
+
+      if (!prev || prev[0] !== v[0] || prev[1] !== v[1]) {
+        acc.push(v);
+      }
+    }
+
+    return acc;
+  }, []);
+}
