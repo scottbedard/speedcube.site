@@ -20,26 +20,18 @@
         v-for="n in 5"
         :key="n"
         :rotation="[0, 0, 1, 72 * n]">
-        <!-- <v-shape
-          :geometry="cornerGeometry"
-          :inner-material="redMaterial"
-          :outer-material="redMaterial" /> -->
         <v-shape
           v-for="(shape, i) in cornerShapes"
           :geometry="shape"
           :inner-material="coloredMaterials[i % coloredMaterials.length]"
-          :key="i"
+          :key="`corner-${i}`"
           :outer-material="coloredMaterials[i % coloredMaterials.length]" />
-      </v-group>
-      
-      <v-group
-        v-for="n in 5"
-        :key="n"
-        :rotation="[0, 0, 1, 72 * n]">
         <v-shape
-          :geometry="edgeGeometry"
-          :inner-material="blueMaterial"
-          :outer-material="blueMaterial" />
+          v-for="(shape, i) in middleShapes"
+          :geometry="shape"
+          :inner-material="coloredMaterials[i % coloredMaterials.length]"
+          :key="`middle-${i}`"
+          :outer-material="coloredMaterials[i % coloredMaterials.length]" />
       </v-group>
     </template>
   </v-dodecahedron-geometry>
@@ -173,6 +165,7 @@ export default defineComponent({
       ];
     });
 
+    // shape geometries for corner stickers
     const cornerShapes = computed(() => {
       const [ c1, c2, c3, c4 ] = cornerVectors.value;
       const colMap = mapColumns(matrixLayers.value);
@@ -186,26 +179,10 @@ export default defineComponent({
         const leftAlpha = (col + (col * stickerSpacing.value)) / matrixAndSpacing;
         const bottomAlpha = (row + 1 + (row * stickerSpacing.value)) / matrixAndSpacing;
         const rightAlpha = (col + 1 + (col * stickerSpacing.value)) / matrixAndSpacing;
-        
-        const top: Line2 = [
-          bilerp(c1, c4, topAlpha),
-          bilerp(c2, c3, topAlpha),
-        ];
-
-        const left: Line2 = [
-          bilerp(c1, c2, leftAlpha),
-          bilerp(c4, c3, leftAlpha),
-        ];
-
-        const bottom: Line2 = [
-          bilerp(c1, c4, bottomAlpha),
-          bilerp(c2, c3, bottomAlpha),
-        ];
-
-        const right: Line2 = [
-          bilerp(c1, c2, rightAlpha),
-          bilerp(c4, c3, rightAlpha),
-        ];
+        const top: Line2 = [bilerp(c1, c4, topAlpha), bilerp(c2, c3, topAlpha)];
+        const left: Line2 = [bilerp(c1, c2, leftAlpha), bilerp(c4, c3, leftAlpha)];
+        const bottom: Line2 = [bilerp(c1, c4, bottomAlpha), bilerp(c2, c3, bottomAlpha)];
+        const right: Line2 = [bilerp(c1, c2, rightAlpha), bilerp(c4, c3, rightAlpha)];
 
         return createShape([
           intersect(top, left),
@@ -216,22 +193,35 @@ export default defineComponent({
       });
     });
 
-    // vectors for edge stickers
-    const edgeVectors = computed<Vector2[]>(() => {
+    // shape geometries for middle stickers
+    const middleShapes = computed(() => {
       if (evenLayers.value) {
         return [];
       }
 
       const [ c1, c2 ] = centerVectors.value;
       const { m1a, m1b } = midpoints.value;
+  
+      return times(matrixLayers.value).map((x, i) => {
+        const topAlpha = i / matrixLayers.value;
+        const bottomAlpha = (i + 1 + (i * stickerSpacing.value)) / (matrixLayers.value + (matrixLayers.value * stickerSpacing.value));
 
-      return [m1a, m1b, c2, c1];
+        const right: Line2 = [m1b, c2];
+        const left: Line2 = [c1, m1a];
+        const top: Line2 = [bilerp(m1a, c1, topAlpha), bilerp(m1b, c2, topAlpha)];
+        const bottom: Line2 = [bilerp(m1a, c1, bottomAlpha), bilerp(m1b, c2, bottomAlpha)];
+
+        return createShape([
+          intersect(left, top),
+          intersect(top, right),
+          intersect(right, bottom),
+          intersect(bottom, left),
+        ]);
+      });
     });
 
     // temp
     const centerGeometry = useGeometry(centerVectors);
-    const cornerGeometry = useGeometry(cornerVectors);
-    const edgeGeometry = useGeometry(edgeVectors);
 
     // temp
     const redMaterial = new MeshLambertMaterial({
@@ -265,11 +255,9 @@ export default defineComponent({
       blueMaterial,
       centerGeometry,
       coloredMaterials,
-      cornerGeometry,
       cornerShapes,
-      edgeGeometry,
-      edgeVectors,
       greenMaterial,
+      middleShapes,
       redMaterial,
     }
   },
