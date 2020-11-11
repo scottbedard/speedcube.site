@@ -7,7 +7,7 @@
     :radius="radius"
     :wireframe="true">
     <template
-      v-for="face in ['u', 'f', 'l', 'r']"
+      v-for="face in ['u']"
       :key="face"
       v-slot:[face]>
       <!-- temp: this will be moved to a face -->
@@ -89,9 +89,7 @@ export default defineComponent({
     // number of puzzle layers and if that is an even number
     const layers = computed(() => props.model.options.size);
     const evenLayers = computed(() => isEven(layers.value));
-
-    // size of a layer, and max size of sticker spacing gap
-    const layerSize = computed(() => edgeLength / layers.value);
+    const matrixLayers = computed(() => Math.floor(layers.value / 2));
 
     // value 0 to 1 that defines the center size
     // 0 = corners matrices touch each other
@@ -102,7 +100,6 @@ export default defineComponent({
     // 0 = no gap between stickers
     // 1 = layerSize gap between stickers
     const stickerSpacing = computed(() => clamp(props.config?.stickerSpacing ?? 0, 0, 1));
-    const stickerSpacingGap = computed(() => layerSize.value * stickerSpacing.value);
     
     // midpoints between vertices that are needed to calculate sticker shapes
     const midpoints = computed(() => {
@@ -146,40 +143,59 @@ export default defineComponent({
       const [ v1 ] = vertices;
       const { m1, m1a, m5, m5b } = midpoints.value;
 
-      return evenLayers.value
-        ? [v1, m1, origin, m5]
-        : [v1, m1a, centerVectors.value[0], m5b];
+      if (evenLayers.value) {
+        const alpha = (matrixLayers.value + ((matrixLayers.value - 1) * stickerSpacing.value)) / (matrixLayers.value + (matrixLayers.value * stickerSpacing.value) - (stickerSpacing.value / 2));
+
+        return [
+          v1,
+          bilerp(v1, m1, alpha),
+          bilerp(v1, origin, alpha),
+          bilerp(v1, m5, alpha),
+        ];
+      }
+
+      const alpha = (matrixLayers.value + ((matrixLayers.value - 1) * stickerSpacing.value)) / (matrixLayers.value + (matrixLayers.value * stickerSpacing.value));
+
+      return [
+        v1,
+        bilerp(v1, m1a, alpha),
+        bilerp(v1, centerVectors.value[0], alpha),
+        bilerp(v1, m5b, alpha),
+      ];
     });
 
     const cornerShapes = computed(() => {
       const [ c1, c2, c3, c4 ] = cornerVectors.value;
-      const matrixLayers = Math.floor(layers.value / 2);
-      const colMap = mapColumns(matrixLayers);
-      const rowMap = mapRows(matrixLayers);
-      const spacing = stickerSpacing.value / 2;
+      const colMap = mapColumns(matrixLayers.value);
+      const rowMap = mapRows(matrixLayers.value);
+      const matrixAndSpacing = matrixLayers.value + ((matrixLayers.value - 1) * stickerSpacing.value);
 
-      return times(matrixLayers ** 2).map((x, i) => {
+      return times(matrixLayers.value ** 2).map((x, i) => {
         const col = colMap[i];
         const row = rowMap[i];
-
+        const topAlpha = (row + (row * stickerSpacing.value)) / matrixAndSpacing;
+        const leftAlpha = (col + (col * stickerSpacing.value)) / matrixAndSpacing;
+        const bottomAlpha = (row + 1 + (row * stickerSpacing.value)) / matrixAndSpacing;
+        const rightAlpha = (col + 1 + (col * stickerSpacing.value)) / matrixAndSpacing;
+        
         const top: Line2 = [
-          bilerp(c1, c4, row / matrixLayers),
-          bilerp(c2, c3, row / matrixLayers),
+          bilerp(c1, c4, topAlpha),
+          bilerp(c2, c3, topAlpha),
         ];
 
         const left: Line2 = [
-          bilerp(c1, c2, col / matrixLayers),
-          bilerp(c4, c3, col / matrixLayers),
+          bilerp(c1, c2, leftAlpha),
+          bilerp(c4, c3, leftAlpha),
         ];
 
         const bottom: Line2 = [
-          bilerp(bilerp(c1, c4, (row + 1) / matrixLayers), top[0], spacing),
-          bilerp(bilerp(c2, c3, (row + 1) / matrixLayers), top[1], spacing),
+          bilerp(c1, c4, bottomAlpha),
+          bilerp(c2, c3, bottomAlpha),
         ];
 
         const right: Line2 = [
-          bilerp(bilerp(c1, c2, (col + 1) / matrixLayers), left[0], spacing),
-          bilerp(bilerp(c4, c3, (col + 1) / matrixLayers), left[1], spacing),
+          bilerp(c1, c2, rightAlpha),
+          bilerp(c4, c3, rightAlpha),
         ];
 
         return createShape([

@@ -66,8 +66,8 @@ export default defineComponent({
   },
   data() {
     return {
-      cameraAngle: 45,
-      cameraDistance: 3,
+      cameraAngle: 90,
+      cameraDistance: 2,
       middleSize: 0,
       radius: 1,
       stickerSpacing: 0,
