@@ -146,9 +146,14 @@ export default defineComponent({
     const cornerVectors = computed<Vector2[]>(() => {
       const [ v1 ] = vertices;
       const { m1, m1a, m5, m5b } = midpoints.value;
+      const usedArea = matrixLayers.value + ((matrixLayers.value - 1) * stickerSpacing.value);
+      const totalArea = matrixLayers.value + (matrixLayers.value * stickerSpacing.value);
 
       if (evenLayers.value) {
-        const alpha = (matrixLayers.value + ((matrixLayers.value - 1) * stickerSpacing.value)) / (matrixLayers.value + (matrixLayers.value * stickerSpacing.value) - (stickerSpacing.value / 2));
+        // for even layer puzzles we subtract half sticker spacing from
+        // the total area because there is no middle segment, so the two
+        // spacing gaps in the center should be counted as one gap.
+        const alpha = usedArea / (totalArea - (stickerSpacing.value / 2));
 
         return [
           v1,
@@ -158,7 +163,7 @@ export default defineComponent({
         ];
       }
 
-      const alpha = (matrixLayers.value + ((matrixLayers.value - 1) * stickerSpacing.value)) / (matrixLayers.value + (matrixLayers.value * stickerSpacing.value));
+      const alpha = usedArea / totalArea;
 
       return [
         v1,
