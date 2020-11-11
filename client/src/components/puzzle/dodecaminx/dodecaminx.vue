@@ -7,15 +7,15 @@
     :radius="radius"
     :wireframe="true">
     <template
-      v-for="face in ['u']"
+      v-for="face in ['u', 'l', 'f', 'r', 'bl', 'br']"
       :key="face"
       v-slot:[face]>
       <!-- temp: this will be moved to a face -->
       <v-shape
         v-if="centerShape"
         :geometry="centerShape"
-        :inner-material="greenMaterial"
-        :outer-material="greenMaterial" />
+        :inner-material="blueMaterial"
+        :outer-material="blueMaterial" />
 
       <v-group
         v-for="n in 5"
@@ -67,12 +67,17 @@ import VSphere from '@/components/three/geometries/sphere-geometry.vue';
 type DodecaminxConfig = {
   middleSize: number,
   stickerSpacing: number,
+  stickerRadius: number,
 }
 
 // geometry constants for a dodecahedron inside a sphere of radius 1
 const edgeLength = dodecahedronEdgeLength(1, 'circumRadius');
 const pentagonRadius = pentagonCircumradius(edgeLength, 'edgeLength');
 const vertices = polygon(5, pentagonRadius);
+
+// minimum middle size
+// we cannot use Number.EPSILON here because it breaks BufferGeometry.computeBoundingSphere
+const minMiddleSize = 0.0000001;
 
 // the center of a face
 const origin: Vector2 = [0, 0];
@@ -84,6 +89,11 @@ export default defineComponent({
     const evenLayers = computed(() => isEven(layers.value));
     const matrixLayers = computed(() => Math.floor(layers.value / 2));
 
+    // radius of sticker geometries
+    // 0 = no radius
+    // 1 = half the distance to nearest corner
+    const stickerRadius = computed(() => clamp(props.config?.stickerRadius ?? 0, 0, 1));
+
     // size of gap between adjacent stickers
     // 0 = no gap between stickers
     // 1 = layerSize gap between stickers
@@ -93,7 +103,7 @@ export default defineComponent({
     // 0 = adjacent corner matrices
     // 1 = corner matrices one layer length apart
     const middleSize = computed(() => {
-      return clamp(props.config?.middleSize ?? 0, 0, 1) * (
+      return clamp(props.config?.middleSize ?? 0, minMiddleSize, 1) * (
         layers.value / (layers.value + (layers.value * stickerSpacing.value))
       );
     });
@@ -167,7 +177,7 @@ export default defineComponent({
     });
 
     // center shape geometry
-    const centerShape = computed(() => !evenLayers.value && createShape(centerVectors));
+    const centerShape = computed(() => !evenLayers.value && createShape(centerVectors, stickerRadius));
 
     // shape geometries for corner stickers
     const cornerShapes = computed(() => {
@@ -193,7 +203,7 @@ export default defineComponent({
           intersect(top, right),
           intersect(bottom, right),
           intersect(bottom, left),
-        ]);
+        ], stickerRadius);
       });
     });
 
@@ -218,7 +228,7 @@ export default defineComponent({
           intersect(top, right),
           intersect(right, bottom),
           intersect(bottom, left),
-        ]);
+        ], stickerRadius);
       });
     });
 

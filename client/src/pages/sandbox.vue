@@ -22,6 +22,7 @@
       :config="{
         middleSize,
         stickerSpacing,
+        stickerRadius,
       }"
       :radius="radius" />
   </v-scene>
@@ -36,8 +37,8 @@
       <v-range-input v-model="cameraDistance" :max="5" :min="0" :step="0.01" />
     </div>
     <div class="col-span-12 sm:col-span-6">
-      <div>Radius</div>
-      <v-range-input v-model="radius" :max="5" :min="0" :step="0.01" />
+      <div>Circumsphere Radius</div>
+      <v-range-input v-model="radius" :max="5" :min="0" :step="0.0001" />
     </div>
     <div class="col-span-12 sm:col-span-6">
       <div>Middle size</div>
@@ -47,29 +48,32 @@
       <div>Sticker spacing</div>
       <v-range-input v-model="stickerSpacing" :max="1" :min="0" :step="0.01" />
     </div>
+    <div class="col-span-12 sm:col-span-6">
+      <div>Sticker radius</div>
+      <v-range-input v-model="stickerRadius" :max="1" :min="0" :step="0.01" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
+/* eslint-disable */
+import { createShape } from '@/app/three/utils/shape';
 import { defineComponent } from 'vue';
 import VAmbientLight from '@/components/three/lights/ambient-light.vue';
 import VAxesHelper from '@/components/three/utils/axes-helper.vue';
 import VPointLight from '@/components/three/lights/point-light.vue';
 import VRangeInput from '@/components/range-input.vue';
 import VScene from '@/components/three/scene.vue';
-
 import VDodecaminx from '@/components/puzzle/dodecaminx/dodecaminx.vue';
 
 export default defineComponent({
-  setup() {
-    // ...
-  },
   data() {
     return {
-      cameraAngle: 90,
-      cameraDistance: 2,
+      cameraAngle: 40,
+      cameraDistance: 2.5,
       middleSize: 0,
       radius: 1,
+      stickerRadius: 0,
       stickerSpacing: 0,
     };
   },
