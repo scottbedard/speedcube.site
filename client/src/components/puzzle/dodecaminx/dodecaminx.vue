@@ -5,7 +5,7 @@
     :materials="materials"
     :middle-shapes="middleShapes"
     :model="model"
-    :radius="radius" />
+    :radius="1 + stickerElevation" />
 </template>
 
 <script lang="ts">
@@ -22,6 +22,7 @@ import VCore from './core.vue';
 
 type DodecaminxConfig = {
   middleSize: number,
+  stickerElevation: number,
   stickerSpacing: number,
   stickerRadius: number,
 }
@@ -59,6 +60,11 @@ export default defineComponent({
         '#F6E05E', // u: yellow
       ];
     });
+
+    // sticker elevation
+    // 0 = dodecahedron circumradius of 1 (no sticker elevation)
+    // 1 = dodecahedron circumradius of 2
+    const stickerElevation = computed(() => clamp(props.config?.stickerElevation ?? 0, 0, 1));
 
     // radius of sticker geometries
     // 0 = no radius
@@ -239,6 +245,7 @@ export default defineComponent({
       cornerShapes,
       materials,
       middleShapes,
+      stickerElevation,
     }
   },
   components: {

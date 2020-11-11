@@ -21,8 +21,9 @@
     <v-dodecaminx
       :config="{
         middleSize,
-        stickerSpacing,
+        stickerElevation,
         stickerRadius,
+        stickerSpacing,
       }"
       :radius="radius" />
   </v-scene>
@@ -37,8 +38,8 @@
       <v-range-input v-model="cameraDistance" :max="5" :min="0" :step="0.01" />
     </div>
     <div class="col-span-12 sm:col-span-6">
-      <div>Circumsphere Radius</div>
-      <v-range-input v-model="radius" :max="5" :min="0" :step="0.0001" />
+      <div>Sticker elevation</div>
+      <v-range-input v-model="stickerElevation" :max="1" :min="0" :step="0.0001" />
     </div>
     <div class="col-span-12 sm:col-span-6">
       <div>Middle size</div>
@@ -72,7 +73,7 @@ export default defineComponent({
       cameraAngle: 40,
       cameraDistance: 2.5,
       middleSize: 0,
-      radius: 1,
+      stickerElevation: 0,
       stickerRadius: 0.1,
       stickerSpacing: 0.1,
     };
