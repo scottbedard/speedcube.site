@@ -91,20 +91,24 @@ export default defineComponent({
     const evenLayers = computed(() => isEven(layers.value));
     const matrixLayers = computed(() => Math.floor(layers.value / 2));
 
-    // value 0 to 1 that defines the center size
-    // 0 = corners matrices touch each other
-    // 1 = outer edge size is equal to center size when value is 0
-    const middleSize = computed(() => clamp(props.config?.middleSize ?? 0 / layers.value, 0, 1));
-
     // size of gap between adjacent stickers
     // 0 = no gap between stickers
     // 1 = layerSize gap between stickers
     const stickerSpacing = computed(() => clamp(props.config?.stickerSpacing ?? 0, 0, 1));
+
+    // size of middle segment for odd-layered puzzles
+    // 0 = adjacent corner matrices
+    // 1 = corner matrices one layer length apart
+    const middleSize = computed(() => {
+      return clamp(props.config?.middleSize ?? 0, 0, 1) * (
+        layers.value / (layers.value + (layers.value * stickerSpacing.value))
+      );
+    });
     
     // midpoints between vertices that are needed to calculate sticker shapes
     const midpoints = computed(() => {
       const [ v1, v2, v3, v4, v5 ] = vertices;
-      const alpha = Math.floor(layers.value / 2) / (layers.value + middleSize.value - 1);
+      const alpha = matrixLayers.value / (layers.value + middleSize.value - 1);
 
       return {
         m1: bilerp(v1, v2, 0.5),
