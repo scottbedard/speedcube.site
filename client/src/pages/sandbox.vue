@@ -8,11 +8,11 @@
     :camera-angle="cameraAngle"
     :camera-distance="cameraDistance">
     <!-- lights -->
-    <v-ambient-light color="#fff" :intensity="0.7" />
-    <v-point-light :intensity="0.5" :position="{ x: -5, y: 5 }" />
+    <v-ambient-light color="#fff" :intensity="1" />
+    <!-- <v-point-light :intensity="0.5" :position="{ x: -5, y: 5 }" />
     <v-point-light :intensity="0.5" :position="{ x: 0, y: 5 }" />
     <v-point-light :intensity="0.5" :position="{ x: 5, y: 5 }" />
-    <v-point-light :intensity="0.2" :position="{ x: 5, y: -5 }" />
+    <v-point-light :intensity="0.2" :position="{ x: 5, y: -5 }" /> -->
     
     <!-- axes helper -->
     <v-axes-helper size="2" />

@@ -46,18 +46,18 @@ export default defineComponent({
     // puzzle colors
     const colors = computed(() => {
       return [
-        '#718096', // b: gray
-        '#ED8936', // bl: orange
-        '#9AE6B4', // br: light green
-        '#FBD38D', // d: creme
-        '#90CDF4', // dbl: light blue
-        '#F687B3', // dbr: pink
-        '#2F855A', // dl: dark green
-        '#E53E3E', // dr: red
+        '#F6E05E', // u: yellow
         '#F7FAFC', // f: white
         '#9F7AEA', // l: purple
+        '#ED8936', // bl: orange
+        '#9AE6B4', // br: light green
         '#2B6CB0', // r: dark blue
-        '#F6E05E', // u: yellow
+        '#FBD38D', // d: creme
+        '#718096', // b: gray
+        '#90CDF4', // dbl: light blue
+        '#2F855A', // dl: dark green
+        '#E53E3E', // dr: red
+        '#F687B3', // dbr: pink
       ];
     });
 
