@@ -5,13 +5,22 @@
     :materials="materials"
     :middle-shapes="middleShapes"
     :model="model"
-    :radius="stickerElevation + 1" />
+    :radius="stickerElevation + 1"
+    :visible-stickers="idleStickers" />
+  <!-- <v-core
+    :center-shape="centerShape"
+    :corner-shapes="cornerShapes"
+    :materials="materials"
+    :middle-shapes="middleShapes"
+    :model="model"
+    :radius="stickerElevation + 1"
+    :visible-stickers="turningStickers" /> -->
 </template>
 
 <script lang="ts">
 import { BackSide, FrontSide, MeshLambertMaterial } from 'three';
 import { bilerp, intersect, isEven } from '@/app/utils/math';
-import { clamp, times } from 'lodash-es';
+import { attempt, clamp, flattenDeep, isError, times } from 'lodash-es';
 import { computed, defineComponent, onUnmounted, PropType, watch } from 'vue';
 import { createShape } from '@/app/three/utils/shape';
 import { dodecahedronEdgeLength, pentagonCircumradius, polygon } from '@/app/utils/geometry';
@@ -19,6 +28,7 @@ import { Dodecaminx } from '@bedard/twister';
 import { Line2, Vector2 } from '@/types/math';
 import { mapColumns, mapRows } from '@/app/utils/matrix';
 import VCore from './core.vue';
+import { DodecaminxFace } from '@bedard/twister/dist/dodecaminx/dodecaminx';
 
 type DodecaminxConfig = {
   innerBrightness: number,
@@ -233,6 +243,29 @@ export default defineComponent({
       });
     });
 
+    // idle / turning stickers
+    const allStickers = computed(() => {
+      return (Object.keys(props.model.state) as DodecaminxFace[])
+        .reduce((acc: any[], face) => {
+          const { center, corners, middles } = props.model.state[face];
+
+          if (center) acc.push(center);
+          acc.push(...flattenDeep(corners));
+          acc.push(...flattenDeep(middles));
+
+          return acc;
+        }, []);
+    });
+
+    const turningStickers = computed(() => {
+      const stickers = attempt(() => props.model.getStickersForTurn(props.currentTurn));
+      return !isError(stickers) ? stickers : [];
+    });
+
+    const idleStickers = computed(() => {
+      return allStickers.value.filter(sticker => !turningStickers.value.includes(sticker));
+    });
+
     // dispose geometries and materials
     watch(centerShape, (cur, prev) => prev && prev.dispose());
     watch(cornerShapes, (cur, prev) => prev.forEach(obj => obj.dispose()));
@@ -257,9 +290,11 @@ export default defineComponent({
     return {
       centerShape,
       cornerShapes,
+      idleStickers,
       materials,
       middleShapes,
       stickerElevation,
+      turningStickers,
     }
   },
   components: {
@@ -269,7 +304,9 @@ export default defineComponent({
     config: {
       default: () => {
         return {
-          middleWidth: 1,
+          innerBrightness: 1,
+          middleSize: 0,
+          stickerElevation: 0,
           stickerRadius: 0,
           stickerSpacing: 0,
         };
