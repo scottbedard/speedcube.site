@@ -28,14 +28,14 @@
   </v-scene>
 
   <div class="gap-6 grid grid-cols-12 max-w-2xl mx-auto">
-    <!-- <div class="col-span-12 sm:col-span-6">
+    <div class="col-span-12 sm:col-span-6">
       <div>Current turn</div>
       <v-input v-model="currentTurn" />
     </div>
     <div class="col-span-12 sm:col-span-6">
       <div>Turn progress</div>
       <v-range-input v-model="turnProgress" :max="1" :min="0" :step="0.01" />
-    </div> -->
+    </div>
     <div class="col-span-12 sm:col-span-6">
       <div>Camera angle</div>
       <v-range-input v-model="cameraAngle" :max="90" :min="0" :step="0.01" />

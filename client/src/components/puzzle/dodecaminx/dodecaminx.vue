@@ -7,28 +7,28 @@
     :model="model"
     :radius="stickerElevation + 1"
     :visible-stickers="idleStickers" />
-  <!-- <v-core
+  <v-core
     :center-shape="centerShape"
     :corner-shapes="cornerShapes"
     :materials="materials"
     :middle-shapes="middleShapes"
     :model="model"
     :radius="stickerElevation + 1"
-    :visible-stickers="turningStickers" /> -->
+    :visible-stickers="turningStickers" />
 </template>
 
 <script lang="ts">
+import { attempt, clamp, flattenDeep, isError, times } from 'lodash-es';
 import { BackSide, FrontSide, MeshLambertMaterial } from 'three';
 import { bilerp, intersect, isEven } from '@/app/utils/math';
-import { attempt, clamp, flattenDeep, isError, times } from 'lodash-es';
 import { computed, defineComponent, onUnmounted, PropType, watch } from 'vue';
 import { createShape } from '@/app/three/utils/shape';
 import { dodecahedronEdgeLength, pentagonCircumradius, polygon } from '@/app/utils/geometry';
 import { Dodecaminx } from '@bedard/twister';
+import { DodecaminxFace, DodecaminxSticker } from '@bedard/twister/dist/dodecaminx/dodecaminx';
 import { Line2, Vector2 } from '@/types/math';
 import { mapColumns, mapRows } from '@/app/utils/matrix';
 import VCore from './core.vue';
-import { DodecaminxFace } from '@bedard/twister/dist/dodecaminx/dodecaminx';
 
 type DodecaminxConfig = {
   innerBrightness: number,
@@ -246,7 +246,7 @@ export default defineComponent({
     // idle / turning stickers
     const allStickers = computed(() => {
       return (Object.keys(props.model.state) as DodecaminxFace[])
-        .reduce((acc: any[], face) => {
+        .reduce<DodecaminxSticker<unknown>[]>((acc, face) => {
           const { center, corners, middles } = props.model.state[face];
 
           if (center) acc.push(center);
