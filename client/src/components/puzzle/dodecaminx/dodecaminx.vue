@@ -15,7 +15,7 @@
     :model="model"
     :radius="stickerElevation + 1"
     :rotation-axis="parsedTurn && parsedTurn.target"
-    :rotation-degrees="72 * turnProgress"
+    :rotation-degrees="turnDegrees"
     :visible-stickers="turningStickers" />
 </template>
 
@@ -251,6 +251,14 @@ export default defineComponent({
       return isError(obj) ? null : obj;
     });
 
+    const turnDegrees = computed(() => {
+      if (parsedTurn.value) {
+        return (parsedTurn.value.rotation < 0 ? -72 : 72) * props.turnProgress;
+      }
+
+      return 0;
+    });
+
     // idle / turning stickers
     const allStickers = computed(() => {
       return (Object.keys(props.model.state) as DodecaminxFace[])
@@ -303,6 +311,7 @@ export default defineComponent({
       middleShapes,
       parsedTurn,
       stickerElevation,
+      turnDegrees,
       turningStickers,
     };
   },
