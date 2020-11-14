@@ -63,6 +63,13 @@ export function isInteger(val: any): val is number {
 }
 
 /**
+ * Test if a number is odd.
+ */
+export function isOdd(val: number) {
+  return !isEven(val);
+}
+
+/**
  * Linear interpolation between points
  */
 export function lerp(p1: number, p2: number, alpha: number) {

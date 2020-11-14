@@ -15,11 +15,12 @@
 </template>
 
 <script lang="ts">
-import { Cube } from '@bedard/twister';
+import { Cube, Dodecaminx } from '@bedard/twister';
 import { defineComponent, PropType } from 'vue';
 import { isNumber, stubObject } from 'lodash-es';
 import VAmbientLight from '@/components/three/lights/ambient-light.vue';
 import VCube from '@/components/puzzle/cube/cube.vue';
+import VDodecaminx from '@/components/puzzle/dodecaminx/dodecaminx.vue';
 import VScene from '@/components/three/scene.vue';
 
 export default defineComponent({
@@ -41,6 +42,10 @@ export default defineComponent({
         return VCube;
       }
 
+      if (this.model instanceof Dodecaminx) {
+        return VDodecaminx;
+      }
+
       throw 'Puzzle not implemented';
     },
   },
@@ -55,7 +60,7 @@ export default defineComponent({
     },
     model: {
       required: true,
-      type: Object as PropType<Cube>,
+      type: Object as PropType<Cube | Dodecaminx>,
     },
     turnProgress: {
       default: 0,
