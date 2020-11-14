@@ -15,13 +15,13 @@ export const rotationProp = {
 /**
  * Set object rotation by axis angle and degrees
  */
-export function useRotation(obj: Object3D, rotation: () => Rotation | Quaternion) {
+export function useRotation(obj: Object3D, rotation: () => Rotation | Quaternion | undefined | null) {
   watchEffect(() => {
     const r = rotation();
 
     if (r instanceof Quaternion) {
       obj.setRotationFromQuaternion(r);
-    } else {
+    } else if (Array.isArray(r)) {
       const [x, y, z, deg] = r;
 
       obj.setRotationFromQuaternion(
@@ -29,6 +29,8 @@ export function useRotation(obj: Object3D, rotation: () => Rotation | Quaternion
           new Vector3(x, y, z).normalize(), -degreesToRadians(deg),
         ),
       );
+    } else {
+      obj.setRotationFromQuaternion(new Quaternion());
     }
   });
 }

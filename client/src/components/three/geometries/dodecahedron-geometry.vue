@@ -1,19 +1,21 @@
 <template>
   <slot />
   <v-group :rotation="defaultRotation">
-    <v-group
-      v-for="face in Object.keys(slots)"
-      :key="face"
-      :position="slots[face].position"
-      :rotation="slots[face].rotation">
-      <slot :name="face" />
+    <v-group :rotation="axisRotation">
+      <v-group
+        v-for="face in Object.keys(slots)"
+        :key="face"
+        :position="slots[face].position"
+        :rotation="slots[face].rotation">
+        <slot :name="face" />
+      </v-group>
     </v-group>
   </v-group>
 </template>
 
 <script lang="ts">
 import { colorProp, useColor } from '@/app/three/behaviors/color';
-import { computed, defineComponent, watchEffect } from 'vue';
+import { computed, defineComponent, PropType, watchEffect } from 'vue';
 import { degreesToRadians } from '@/app/utils/math';
 import { dodecahedronEdgeLength, pentagonCircumradius, pentagonInradius } from '@/app/utils/geometry';
 import { DodecahedronGeometry, Group, Matrix4, Mesh, MeshLambertMaterial, Quaternion, Vector3 } from 'three';
@@ -23,6 +25,9 @@ import { useDisposable } from '@/app/three/behaviors/disposable';
 import { useNesting } from '@/app/three/behaviors/nesting';
 import VGroup from '@/components/three/utils/group.vue';
 
+// face names
+type DodecahedronFace = 'b' | 'bl' | 'br'| 'd'| 'dbl'| 'dbr'| 'dl'| 'dr'| 'f'| 'l'| 'r'| 'u';
+
 // the dodecahedron mesh and slot positions need to be oriented from
 // their default position to one where the U face is pointing up
 const defaultRotation = new Quaternion().setFromAxisAngle(
@@ -31,7 +36,7 @@ const defaultRotation = new Quaternion().setFromAxisAngle(
 
 // this object is used to position and orient slots. the first vertices index
 // defines the "up" orientation, the second two are the opposites corners
-const faceMap: Record<string, [number, number, number]> = {
+const faceMap: Record<DodecahedronFace, [number, number, number]> = {
   b: [0, 3, 4],
   bl: [0, 15, 16],
   br: [1, 17, 19],
@@ -89,24 +94,40 @@ export default defineComponent({
       const inradius = pentagonInradius(edgeLength, 'edgeLength');
       const centerInterpolation = inradius / (circumradius + inradius);
 
-      return Object.keys(faceMap).reduce((acc: any, face: string) => {
-        const [up, opposite1, opposite2] = faceMap[face];
+      type Slots = Record<DodecahedronFace, {
+        position: Vector3,
+        rotation: Quaternion,
+      }>;
 
-        const position = new Vector3()
-          .lerpVectors(vertices.value[opposite1], vertices.value[opposite2], 0.5)
-          .lerp(vertices.value[up], centerInterpolation);
-          
-        const rotation = new Quaternion().setFromRotationMatrix(
-          new Matrix4().lookAt(position, dodecahedron.position, vertices.value[up]),
-        );
+      return (Object.keys(faceMap) as DodecahedronFace[])
+        .reduce((acc: Slots, face: DodecahedronFace) => {
+          const [up, opposite1, opposite2] = faceMap[face];
 
-        acc[face] = { position, rotation };
+          const position = new Vector3()
+            .lerpVectors(vertices.value[opposite1], vertices.value[opposite2], 0.5)
+            .lerp(vertices.value[up], centerInterpolation);
+            
+          const rotation = new Quaternion().setFromRotationMatrix(
+            new Matrix4().lookAt(position, dodecahedron.position, vertices.value[up]),
+          );
 
-        return acc;
-      }, {});
+          acc[face] = { position, rotation };
+
+          return acc;
+        }, {} as Slots);
+    });
+
+    // rotate the entire puzzle around an axis
+    const axisRotation = computed(() => {
+      if (props.rotationAxis) {
+        const { x, y, z } = slots.value[props.rotationAxis].position;
+
+        return [x, y, z, props.rotationDegrees];
+      }
     });
 
     return {
+      axisRotation,
       defaultRotation,
       slots,
       vertices,
@@ -122,6 +143,13 @@ export default defineComponent({
     position: positionProp,
     radius: {
       default: 1,
+      type: Number,
+    },
+    rotationAxis: {
+      type: String as PropType<DodecahedronFace>,
+    },
+    rotationDegrees: {
+      default: 0,
       type: Number,
     },
     wireframe: {

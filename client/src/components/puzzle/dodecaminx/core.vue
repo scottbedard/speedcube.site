@@ -1,5 +1,9 @@
 <template>
-  <v-dodecahedron-geometry geometry-hidden :radius="radius">
+  <v-dodecahedron-geometry
+    geometry-hidden
+    :radius="radius"
+    :rotation-axis="rotationAxis"
+    :rotation-degrees="rotationDegrees">
     <template
       v-for="face in Object.keys(model.state)"
       v-slot:[face]
@@ -52,6 +56,13 @@ export default defineComponent({
     },
     radius: {
       required: true,
+      type: Number,
+    },
+    rotationAxis: {
+      type: String,
+    },
+    rotationDegrees: {
+      default: 0,
       type: Number,
     },
     visibleStickers: {
