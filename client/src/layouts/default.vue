@@ -1,7 +1,7 @@
 <template>
-  <div class="flex h-16 items-center justify-between px-6">
+  <div class="flex h-24 items-center justify-between px-6">
     <!-- logo -->
-    <router-link :to="{ name: 'home' }">
+    <router-link class="font-bold text-xl" :to="{ name: 'home' }">
       speedcube.site
     </router-link>
     
@@ -36,9 +36,12 @@ export default defineComponent({
   setup() {
     const links = computed(() => [
       {
-        text: 'Records',
+        text: 'Solve',
         to: {
-          name: 'records',
+          name: 'solve',
+          params: {
+            puzzle: '3x3',
+          },
         },
       },
       !isAuthenticated.value && {

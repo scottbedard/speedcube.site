@@ -4,6 +4,8 @@
 @tailwind utilities;
 
 a {
+  @apply text-green-500;
+
   &:hover {
     @apply underline;
   }

@@ -72,17 +72,17 @@ export const routes: RouteRecordRaw[] = [
   //
   {
     beforeEnter(to) {
-      if (!to.params.id) {
+      if (!to.params.puzzle) {
         return {
           name: 'solve',
           params: {
-            id: '3x3',
+            puzzle: '3x3',
           },
         };
       }
     },
     component: () => import('@/pages/solve/solve.vue' /* webpackChunkName: 'solve' */),
     name: 'solve',
-    path: '/solve/:id?',
+    path: '/solve/:puzzle?',
   },
 ];
