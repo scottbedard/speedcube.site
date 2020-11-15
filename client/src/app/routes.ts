@@ -1,4 +1,6 @@
-export const routes = [
+import { RouteRecordRaw } from 'vue-router';
+
+export const routes: RouteRecordRaw[] = [
   {
     component: () => import('@/pages/home.vue' /* webpackChunkName: 'home' */),
     name: 'home',
@@ -35,6 +37,16 @@ export const routes = [
     path: '/signup',
   },
   {
+    beforeEnter(to) {
+      if (!to.params.id) {
+        return {
+          name: 'solve',
+          params: {
+            id: '3x3',
+          },
+        };
+      }
+    },
     component: () => import('@/pages/solve/solve.vue' /* webpackChunkName: 'solve' */),
     name: 'solve',
     path: '/solve/:id?',
