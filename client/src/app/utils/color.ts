@@ -1,5 +1,9 @@
 /**
  * Convert HSV to RGB
+ *
+ * @param {number} hue value 0 to 1 representing the hue
+ * @param {number} saturation value 0 to 1 representing saturation
+ * @param {number} value value 0 to 1 representing lightness
  */
 export function hsvToRgb(hue: number, saturation: number, value: number) {
   const i = Math.floor(hue * 6);
@@ -11,24 +15,24 @@ export function hsvToRgb(hue: number, saturation: number, value: number) {
   let r = 0, g = 0, b = 0;
 
   switch (i % 6) {
-   case 0:
-    r = value, g = t, b = p;
-    break;
-   case 1:
-    r = q, g = value, b = p;
-    break;
-   case 2:
-    r = p, g = value, b = t;
-    break;
-   case 3:
-    r = p, g = q, b = value;
-    break;
-   case 4:
-    r = t, g = p, b = value;
-    break;
-   case 5:
-    r = value, g = p, b = q;
-    break;
+    case 0:
+      r = value, g = t, b = p;
+      break;
+    case 1:
+      r = q, g = value, b = p;
+      break;
+    case 2:
+      r = p, g = value, b = t;
+      break;
+    case 3:
+      r = p, g = q, b = value;
+      break;
+    case 4:
+      r = t, g = p, b = value;
+      break;
+    case 5:
+      r = value, g = p, b = q;
+      break;
   }
 
   return [
@@ -36,4 +40,13 @@ export function hsvToRgb(hue: number, saturation: number, value: number) {
     Math.round(g * 255),
     Math.round(b * 255),
   ];
- }
+}
+ 
+ /**
+  * RGB to hex
+  */
+export function rgbToHex(red: number, green: number, blue: number) {
+  const toHexChar = (n: number) => n.toString(16).padStart(2, '0');
+
+  return `#${toHexChar(red)}${toHexChar(green)}${toHexChar(blue)}`;
+}
