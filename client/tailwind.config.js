@@ -19,6 +19,10 @@ module.exports = {
       boxShadow: {
         'outline': '0 0 0 2px rgba(66, 153, 225, 0.9)',
       },
+      cursor: {
+        grab: 'grab',
+        grabbing: 'grabbing',
+      },
       fontFamily: {
         'sans': 'Quicksand, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
       },
