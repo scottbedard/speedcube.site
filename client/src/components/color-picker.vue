@@ -26,13 +26,22 @@
         
         <div
           class="h-32 mb-6 relative rounded overflow-hidden"
-          :style="{ background: `hsl(${hueAlpha * 360}, 100%, 50%)` }">
+          ref="colorElement"
+          :style="{
+            background: `hsl(${hueAlpha * 360}, 100%, 50%)`,
+          }"
+          @mousedown="onColorMousedown">
+          <div class="absolute h-full w-full" data-saturation-white />
+          <div class="absolute h-full w-full" data-saturation-black />
           <div
-            class="absolute h-full w-full"
-            :style="{ background: 'linear-gradient(to right, #fff, rgba(255, 255, 255, 0))' }" />
-          <div
-            class="absolute h-full w-full"
-            :style="{ background: 'linear-gradient(to top, #000, rgba(0, 0, 0, 0))' }" />
+            class="absolute border-4 border-white-500 h-4 opacity-50 rounded-full transform -translate-x-1/2 -translate-y-1/2 w-4"
+            :class="[
+              activeElement === 'color' ? 'cursor-grabbing' : 'cursor-grab',
+            ]"
+            :style="{
+              left: `${colorSelectorX * 100}%`,
+              top: `${colorSelectorY * 100}%`,
+            }" />
         </div>
 
         <div
@@ -47,7 +56,6 @@
             ]"
             :style="{
               left: `${hueAlpha * 100}%`,
-              top: '50%',
             }" />
         </div>
       </div>
@@ -96,6 +104,7 @@ export default defineComponent({
     onClickOutside(container, () => {
       document.body.classList.remove('select-none');
       expanded.value = false;
+      setActiveElement(null);
     });
 
     // track the mouse state
@@ -107,22 +116,48 @@ export default defineComponent({
       mouseIsActive.value = false;
     };
 
-    // hue selector mouse interactions
-    const { elementX: hueX, elementWidth: hueWidth } = useMouseInElement(hueElement);
+    // color box
+    const colorElement = ref<HTMLElement>();
+    const colorSelectorX = ref(0);
+    const colorSelectorY = ref(0);
 
-    const setHueAlpha = () => {
+    const {
+      elementHeight: colorHeight,
+      elementWidth: colorWidth,
+      elementX: colorX,
+      elementY: colorY,
+    } = useMouseInElement(colorElement);
+
+    const syncColor = () => {
+      colorSelectorX.value = clamp(colorX.value / colorWidth.value, 0, 1);
+      colorSelectorY.value = clamp(colorY.value / colorHeight.value, 0, 1);
+    }
+
+    const onColorMousedown = () => {
+      syncColor();
+      setActiveElement('color');
+    }
+
+    // hue selector mouse interactions
+    const {
+      elementWidth: hueWidth,
+      elementX: hueX,
+    } = useMouseInElement(hueElement);
+
+    const syncHue = () => {
       hueAlpha.value = clamp(hueX.value / hueWidth.value, 0, 1);
     }
 
     const onHueMousedown = () => {
-      setHueAlpha();
+      syncHue();
       setActiveElement('hue');
     }
 
     // update draggable items on mousemove
     useEventListener(document, 'mousemove', () => {
       if (mouseIsActive.value) {
-        if (activeElement.value === 'hue') setHueAlpha();
+        if (activeElement.value === 'hue') syncHue();
+        else if (activeElement.value === 'color') syncColor();
       }
     });
 
@@ -130,10 +165,14 @@ export default defineComponent({
 
     return {
       activeElement,
+      colorElement,
+      colorSelectorX,
+      colorSelectorY,
       container,
       expanded,
-      hueElement,
       hueAlpha,
+      hueElement,
+      onColorMousedown,
       onContainerClick,
       onHueMousedown,
       onMousedown,
