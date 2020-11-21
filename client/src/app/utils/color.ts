@@ -1,11 +1,22 @@
 /**
+ * Convert HSV to hex
+ *
+ * @param {number} hue value 0 to 1 representing the hue
+ * @param {number} saturation value 0 to 1 representing saturation
+ * @param {number} value value 0 to 1 representing lightness
+ */
+export function hsvToHex(hue: number, saturation: number, value: number) {
+  return rgbToHex(...hsvToRgb(hue, saturation, value));
+}
+
+/**
  * Convert HSV to RGB
  *
  * @param {number} hue value 0 to 1 representing the hue
  * @param {number} saturation value 0 to 1 representing saturation
  * @param {number} value value 0 to 1 representing lightness
  */
-export function hsvToRgb(hue: number, saturation: number, value: number) {
+export function hsvToRgb(hue: number, saturation: number, value: number): [number, number, number] {
   const i = Math.floor(hue * 6);
   const f = hue * 6 - i;
   const p = value * (1 - saturation);
@@ -43,7 +54,7 @@ export function hsvToRgb(hue: number, saturation: number, value: number) {
 }
  
  /**
-  * RGB to hex
+  * Convert RGB to hex
   */
 export function rgbToHex(red: number, green: number, blue: number) {
   const toHexChar = (n: number) => n.toString(16).padStart(2, '0');
