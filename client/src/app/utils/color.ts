@@ -1,7 +1,14 @@
 /**
- * Parse a hex color string into RGB values.
+ * Convert hex string to HSV values.
  */
-export function hexToRgb(hex: string) { //}: [number, number, number] {
+export function hexToHsv(hex: string): [number, number, number] {
+  return rgbToHsv(...hexToRgb(hex));
+}
+
+/**
+ * Convert hex string to RGB values.
+ */
+export function hexToRgb(hex: string): [number, number, number] {
   if (isHexColor(hex)) {
     const chars = hex.replace('#', '').toLowerCase();
 
@@ -94,4 +101,42 @@ export function rgbToHex(red: number, green: number, blue: number) {
   const toHexChar = (n: number) => n.toString(16).padStart(2, '0');
 
   return `#${toHexChar(red)}${toHexChar(green)}${toHexChar(blue)}`;
+}
+
+/**
+ * Convert RGB to HSV
+ */
+export function rgbToHsv (red: number, green: number, blue: number): [number, number, number] {
+  red = red / 255;
+  green = green / 255;
+  blue = blue / 255;
+
+  const min = Math.min(Math.min(red, green), blue);
+  const max = Math.max(Math.max(red, green), blue);
+  const value = max;
+
+  // gray
+  if (max - min === 0) {
+    return [0, 0, value];
+  }
+
+  // hue
+  let hue;
+
+  if (max === red) {
+    hue = (60 * ((green - blue) / (max - min))) % 360;
+  } else if (max === green) {
+    hue = 60 * ((blue - red) / (max - min)) + 120;
+  } else {
+    hue = 60 * ((red - green) / (max - min)) + 240;
+  }
+
+  if (hue < 0) {
+    hue += 360;
+  }
+
+  // saturation
+  const saturation = 1 - (min / max);
+
+  return [hue / 360, saturation, value];
 }
