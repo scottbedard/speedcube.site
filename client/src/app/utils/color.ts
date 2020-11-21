@@ -1,4 +1,31 @@
 /**
+ * Parse a hex color string into RGB values.
+ */
+export function hexToRgb(hex: string) { //}: [number, number, number] {
+  if (isHexColor(hex)) {
+    const chars = hex.replace('#', '').toLowerCase();
+
+    if (chars.length === 3) {
+      return [
+        parseInt(chars[0].repeat(2), 16),
+        parseInt(chars[1].repeat(2), 16),
+        parseInt(chars[2].repeat(2), 16),
+      ];
+    }
+
+    if (chars.length === 6) {
+      return [
+        parseInt(chars.slice(0, 2), 16),
+        parseInt(chars.slice(2, 4), 16),
+        parseInt(chars.slice(4), 16),
+      ];
+    }
+  }
+
+  throw new Error('Invalid color');
+}
+
+/**
  * Convert HSV to hex
  *
  * @param {number} hue value 0 to 1 representing the hue
@@ -52,10 +79,17 @@ export function hsvToRgb(hue: number, saturation: number, value: number): [numbe
     Math.round(b * 255),
   ];
 }
+
+/**
+ * Test if a string is an acceptable color value.
+ */
+export function isHexColor(str: string): boolean {
+  return str.match(/^#?([0-9a-f]{3}){1,2}$/i) !== null;
+}
  
- /**
-  * Convert RGB to hex
-  */
+/**
+ * Convert RGB to hex
+ */
 export function rgbToHex(red: number, green: number, blue: number) {
   const toHexChar = (n: number) => n.toString(16).padStart(2, '0');
 

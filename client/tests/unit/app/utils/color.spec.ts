@@ -1,10 +1,27 @@
 import {
+  hexToRgb,
   hsvToHex,
   hsvToRgb,
   rgbToHex,
 } from '@/app/utils/color';
 
 describe('color utils', () => {
+  it.only('hexToRgb', () => {
+    expect(() => hexToRgb('not a color')).toThrow();
+
+    Object.entries({
+      '000': [0, 0, 0],
+      'f00': [255, 0, 0],
+      'ff0': [255, 255, 0],
+      'fff': [255, 255, 255],
+      '010203': [1, 2, 3],
+      '#fff': [255, 255, 255],
+      '#123456': [18, 52, 86],
+    }).forEach(([hex, expected]) => {
+      expect(hexToRgb(hex)).toEqual(expected);
+    });
+  });
+
   it('hsvToRgb', () => {
     expect(hsvToHex(0, 0, 0)).toEqual('#000000');
     expect(hsvToHex(0, 0, 1)).toEqual('#ffffff');
