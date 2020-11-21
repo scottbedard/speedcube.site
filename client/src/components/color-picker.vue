@@ -1,10 +1,8 @@
 <template>
   <div
     class="h-8 inline-block relative rounded-full shadow w-8"
+    style="background: #f00"
     ref="container"
-    :style="{
-      background: value,
-    }"
     @click.prevent="onContainerClick"
     @mousedown="onMousedown"
     @mouseup="onMouseup">
@@ -19,22 +17,20 @@
       <div
         v-if="expanded"
         class="absolute bg-gray-800 left-0 ml-12 p-4 rounded shadow text-gray-900 top-0 w-64"
-        :class="[
-          activeElement ? 'cursor-grabbing' : 'cursor-default',
-        ]"
+        :class="[activeElement ? 'cursor-grabbing' : 'cursor-default']"
         @click.stop>
         
         <div
           class="h-32 mb-6 relative rounded overflow-hidden"
           ref="colorElement"
           :style="{
-            background: `hsl(${hueAlpha * 360}, 100%, 50%)`,
+            backgroundColor: `hsl(${hueAlpha * 360}, 100%, 50%)`,
           }"
           @mousedown="onColorMousedown">
           <div class="absolute h-full w-full" data-saturation-white />
           <div class="absolute h-full w-full" data-saturation-black />
           <div
-            class="absolute border-4 border-white-500 h-4 opacity-50 rounded-full transform -translate-x-1/2 -translate-y-1/2 w-4"
+            class="absolute border-4 border-white-500 h-4 rounded-full transform -translate-x-1/2 -translate-y-1/2 w-4"
             :class="[
               activeElement === 'color' ? 'cursor-grabbing' : 'cursor-grab',
             ]"
@@ -61,47 +57,16 @@
       </div>
     </transition>
   </div>
-
-  <pre>{{ { activeElement } }}</pre>
 </template>
 
 <script lang="ts">
 /* eslint-disable */
-import { clamp } from 'lodash-es';
+import { clamp, throttle } from 'lodash-es';
 import { computed, defineComponent, ref, watch } from 'vue';
+import { hsvToRgb } from '@/app/utils/color';
 import { onClickOutside, useEventListener, useMouseInElement } from '@vueuse/core';
 
 type ActiveElement = 'color' | 'hue' | null;
-
-function hsvToRgb(h: number, s: number, v: number) {
- let r = 0, g = 0, b = 0;
- var i = Math.floor(h * 6);
- var f = h * 6 - i;
- var p = v * (1 - s);
- var q = v * (1 - f * s);
- var t = v * (1 - (1 - f) * s);
- switch (i % 6) {
-  case 0:
-   r = v, g = t, b = p;
-   break;
-  case 1:
-   r = q, g = v, b = p;
-   break;
-  case 2:
-   r = p, g = v, b = t;
-   break;
-  case 3:
-   r = p, g = q, b = v;
-   break;
-  case 4:
-   r = t, g = p, b = v;
-   break;
-  case 5:
-   r = v, g = p, b = q;
-   break;
- }
- return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-}
 
 export default defineComponent({
   setup() {
@@ -193,14 +158,15 @@ export default defineComponent({
     useEventListener(document, 'mouseup', () => setActiveElement(null));
 
     // calculate selected color
-    const value = computed(() => {
+    watch([hueAlpha, colorSelectorX, colorSelectorY], () => {
       const h = hueAlpha.value;
       const s = colorSelectorX.value;
       const v = 1 - colorSelectorY.value;
-
       const [r, g, b] = hsvToRgb(h, s, v);
 
-      return `rgb(${r}, ${g}, ${b})`;
+      if (container.value) {
+        container.value.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+      }
     });
 
     return {
@@ -218,7 +184,6 @@ export default defineComponent({
       onMousedown,
       onMouseup,
       setActiveElement,
-      value,
     };
   },
 });
