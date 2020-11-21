@@ -25,10 +25,15 @@
         @click.stop>
         
         <div
-          class="h-32 mb-6"
-          :style="{
-            background: `hsl(${hueAlpha * 360}, 100%, 50%)`,
-          }" />
+          class="h-32 mb-6 relative rounded overflow-hidden"
+          :style="{ background: `hsl(${hueAlpha * 360}, 100%, 50%)` }">
+          <div
+            class="absolute h-full w-full"
+            :style="{ background: 'linear-gradient(to right, #fff, rgba(255, 255, 255, 0))' }" />
+          <div
+            class="absolute h-full w-full"
+            :style="{ background: 'linear-gradient(to top, #000, rgba(0, 0, 0, 0))' }" />
+        </div>
 
         <div
           data-hue
@@ -143,5 +148,13 @@ export default defineComponent({
 <style lang="scss" scoped>
 [data-hue] {
   background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
+}
+
+[data-saturation-white] {
+  background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0));
+}
+
+[data-saturation-black] {
+  background: linear-gradient(to top, #000, rgba(0, 0, 0, 0));
 }
 </style>
