@@ -5,7 +5,9 @@
     :style="{
       background: value,
     }"
-    @click.prevent="expand">
+    @click.prevent="onContainerClick"
+    @mousedown="onMousedown"
+    @mouseup="onMouseup">
 
     <transition
       enter-active-class="duration-150 ease-in-out transition transform"
@@ -21,13 +23,14 @@
         
         <div class="px-2">
           <div
-            data-hue-selector
+            data-hue
             class="h-3 relative rounded w-full"
-            ref="hue">
+            ref="hue"
+            @mousedown="onHueMousedown">
             <div
               class="absolute bg-gray-100 h-4 rounded-full shadow transform -translate-x-1/2 -translate-y-1/2 top-1/2 w-4"
               :style="{
-                left: `${hueXLeft}%`,
+                left: `${hueAlpha * 100}%`,
                 top: '50%',
               }" />
           </div>
@@ -36,24 +39,34 @@
     </transition>
   </div>
 
-  <pre>{{ { hueXLeft, hueX, hueWidth } }}</pre>
+  <pre>{{ { activeElement } }}</pre>
 </template>
 
 <script lang="ts">
 /* eslint-disable */
 import { clamp } from 'lodash-es';
 import { computed, defineComponent, ref } from 'vue';
-import { onClickOutside, useMouseInElement } from '@vueuse/core';
+import { onClickOutside, useEventListener, useMouseInElement } from '@vueuse/core';
+
+type ActiveElement = 'color' | 'hue' | null;
 
 export default defineComponent({
   setup() {
+    const activeElement = ref<ActiveElement>(null);
     const container = ref<HTMLElement>();
     const expanded = ref(false);
     const hue = ref<HTMLElement>();
+    const hueAlpha = ref(0);
+    const mouseIsActive = ref(false);
     const value = ref('#f00');
 
+    // set the active element
+    const setActiveElement = (el: ActiveElement) => {
+      activeElement.value = el;
+    }
+
     // manage expanded state
-    const expand = () => {
+    const onContainerClick = () => {
       expanded.value = true;
     };
 
@@ -61,27 +74,55 @@ export default defineComponent({
       expanded.value = false;
     });
 
+    // track the mouse state
+    const onMousedown = () => {
+      mouseIsActive.value = true;
+    };
+
+    const onMouseup = () => {
+      mouseIsActive.value = false;
+    };
+
     // hue selector mouse interactions
     const { elementX: hueX, elementWidth: hueWidth } = useMouseInElement(hue);
 
-    const hueXLeft = computed(() => clamp(hueX.value / hueWidth.value, 0, 1) * 100);
+    const setHueAlpha = () => {
+      hueAlpha.value = clamp(hueX.value / hueWidth.value, 0, 1);
+    }
+
+    const onHueMousedown = () => {
+      setHueAlpha();
+      setActiveElement('hue');
+    }
+
+    // update draggable items on mousemove
+    useEventListener(document, 'mousemove', () => {
+      if (mouseIsActive.value) {
+        if (activeElement.value === 'hue') setHueAlpha();
+      }
+    });
+
+    useEventListener(document, 'mouseup', () => setActiveElement(null));
 
     return {
+      activeElement,
       container,
-      expand,
       expanded,
       hue,
+      hueAlpha,
+      onContainerClick,
+      onHueMousedown,
+      onMousedown,
+      onMouseup,
+      setActiveElement,
       value,
-      hueX,
-      hueXLeft,
-      hueWidth,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-[data-hue-selector] {
+[data-hue] {
   background: linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
 }
 </style>
