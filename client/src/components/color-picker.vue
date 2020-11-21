@@ -73,6 +73,36 @@ import { onClickOutside, useEventListener, useMouseInElement } from '@vueuse/cor
 
 type ActiveElement = 'color' | 'hue' | null;
 
+function hsvToRgb(h: number, s: number, v: number) {
+ let r = 0, g = 0, b = 0;
+ var i = Math.floor(h * 6);
+ var f = h * 6 - i;
+ var p = v * (1 - s);
+ var q = v * (1 - f * s);
+ var t = v * (1 - (1 - f) * s);
+ switch (i % 6) {
+  case 0:
+   r = v, g = t, b = p;
+   break;
+  case 1:
+   r = q, g = v, b = p;
+   break;
+  case 2:
+   r = p, g = v, b = t;
+   break;
+  case 3:
+   r = p, g = q, b = v;
+   break;
+  case 4:
+   r = t, g = p, b = v;
+   break;
+  case 5:
+   r = v, g = p, b = q;
+   break;
+ }
+ return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+
 export default defineComponent({
   setup() {
     const activeElement = ref<ActiveElement>(null);
@@ -81,7 +111,6 @@ export default defineComponent({
     const hueElement = ref<HTMLElement>();
     const hueAlpha = ref(0);
     const mouseIsActive = ref(false);
-    const value = ref('#f00');
 
     // the active element represents the current drag-and-drop container
     const setActiveElement = (el: ActiveElement) => {
@@ -162,6 +191,17 @@ export default defineComponent({
     });
 
     useEventListener(document, 'mouseup', () => setActiveElement(null));
+
+    // calculate selected color
+    const value = computed(() => {
+      const h = hueAlpha.value;
+      const s = colorSelectorX.value;
+      const v = 1 - colorSelectorY.value;
+
+      const [r, g, b] = hsvToRgb(h, s, v);
+
+      return `rgb(${r}, ${g}, ${b})`;
+    });
 
     return {
       activeElement,
