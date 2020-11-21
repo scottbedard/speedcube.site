@@ -6,7 +6,6 @@
     @click.prevent="onContainerClick"
     @mousedown="onMousedown"
     @mouseup="onMouseup">
-
     <transition
       enter-active-class="duration-150 ease-in-out transition transform"
       enter-from-class="opacity-0 -translate-x-6"
@@ -16,12 +15,12 @@
       leave-to-class="opacity-0 -translate-x-6">
       <div
         v-if="expanded"
-        class="absolute bg-gray-800 left-0 ml-12 p-4 rounded shadow text-gray-900 top-0 w-64"
+        class="absolute bg-gray-800 left-0 ml-12 overflow-hidden rounded shadow text-gray-900 top-0 w-64"
         :class="[activeElement ? 'cursor-grabbing' : 'cursor-default']"
         @click.stop>
-        
+        <!-- color box -->
         <div
-          class="h-32 mb-6 relative rounded overflow-hidden"
+          class="h-32 relative"
           ref="colorElement"
           :style="{
             backgroundColor: `hsl(${hueAlpha * 360}, 100%, 50%)`,
@@ -40,19 +39,22 @@
             }" />
         </div>
 
-        <div
-          data-hue
-          class="h-3 relative rounded w-full"
-          ref="hueElement"
-          @mousedown="onHueMousedown">
+        <!-- hue selector -->
+        <div class="px-4 py-4">
           <div
-            class="absolute bg-gray-100 h-4 rounded-full shadow transform -translate-x-1/2 -translate-y-1/2 top-1/2 w-4"
-            :class="[
-              activeElement === 'hue' ? 'cursor-grabbing' : 'cursor-grab',
-            ]"
-            :style="{
-              left: `${hueAlpha * 100}%`,
-            }" />
+            data-hue
+            class="h-3 relative rounded w-full"
+            ref="hueElement"
+            @mousedown="onHueMousedown">
+            <div
+              class="absolute bg-gray-100 h-4 rounded-full shadow transform -translate-x-1/2 -translate-y-1/2 top-1/2 w-4"
+              :class="[
+                activeElement === 'hue' ? 'cursor-grabbing' : 'cursor-grab',
+              ]"
+              :style="{
+                left: `${hueAlpha * 100}%`,
+              }" />
+          </div>
         </div>
       </div>
     </transition>
