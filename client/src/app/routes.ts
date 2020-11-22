@@ -71,18 +71,37 @@ export const routes: RouteRecordRaw[] = [
   // solve
   //
   {
-    beforeEnter(to) {
-      if (!to.params.puzzle) {
-        return {
-          name: 'solve',
-          params: {
-            puzzle: '3x3',
-          },
-        };
-      }
+    path: '/solve',
+    redirect: {
+      name: 'solve',
+      params: { puzzle: '3x3' },
     },
+  },
+
+  {
+    children: [
+      {
+        component: () => import('@/pages/solve/appearance/appearance.vue' /* webpackChunkName: 'solve-appearance' */),
+        name: 'solve-appearance',
+        path: 'appearance',
+      },
+      {
+        component: () => import('@/pages/solve/controls/controls.vue' /* webpackChunkName: 'solve-controls' */),
+        name: 'solve-controls',
+        path: 'controls',
+      },
+      {
+        component: () => import('@/pages/solve/index/index.vue' /* webpackChunkName: 'solve' */),
+        name: 'solve-index',
+        path: '',
+      },
+      {
+        redirect: { name: 'solve' },
+        path: ':any+',
+      },
+    ],
     component: () => import('@/pages/solve/solve.vue' /* webpackChunkName: 'solve' */),
     name: 'solve',
-    path: '/solve/:puzzle?',
+    path: '/solve/:puzzle',
   },
 ];
