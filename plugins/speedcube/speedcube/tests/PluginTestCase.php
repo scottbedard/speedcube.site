@@ -2,6 +2,9 @@
 
 namespace Speedcube\Speedcube\Tests;
 
+use App;
+use Auth;
+use Illuminate\Foundation\AliasLoader;
 use PluginTestCase as BasePluginTestCase;
 use System\Classes\PluginManager;
 
@@ -27,6 +30,18 @@ abstract class PluginTestCase extends BasePluginTestCase
         $pluginManager = PluginManager::instance();
         $pluginManager->registerAll(true);
         $pluginManager->bootAll(true);
+
+        // register the Auth facade in our test environment
+        // @todo: figure out why RainLab.User isn't doing this for us
+        $alias = AliasLoader::getInstance();
+        $alias->alias('Auth', 'RainLab\User\Facades\Auth');
+
+        App::singleton('user.auth', function() {
+            return \RainLab\User\Classes\AuthManager::instance();
+        });
+
+        // always start from a logged out state
+        Auth::logout();
     }
 
     /**
