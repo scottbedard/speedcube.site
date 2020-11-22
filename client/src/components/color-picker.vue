@@ -12,7 +12,7 @@
       leave-from-class="opacity-75 translate-x-0"
       leave-to-class="opacity-0 -translate-x-6">
       <div
-        v-if="expanded"
+        v-if="isExpanded"
         class="absolute bg-gray-700 left-0 ml-12 overflow-hidden rounded shadow text-gray-900 top-0 w-64"
         :class="[activeElement ? 'cursor-grabbing' : 'cursor-default']"
         @click.stop>
@@ -89,11 +89,11 @@ export default defineComponent({
     const colorSelectorX = ref(0);
     const colorSelectorY = ref(0);
     const container = ref<HTMLElement>();
-    const expanded = ref(false);
     const hexElement = ref<HTMLElement>();
     const hexInput = ref('');
     const hueElement = ref<HTMLElement>();
     const hueSelector = ref(0);
+    const isExpanded = ref(false);
     const isInvalid = ref(false);
 
     const {
@@ -148,19 +148,19 @@ export default defineComponent({
     // collapse the color picker
     const collapse = () => {
       setActiveElement(null);
-      expanded.value = false;
+      isExpanded.value = false;
     };
 
     // expand the color picker
     const expand = () => {
       setFromHex(props.modelValue);
-      expanded.value = true;
+      isExpanded.value = true;
       hexInput.value = currentValue.value;
     };
 
     // update the v-model binding and close on foreign clicks
     onClickOutside(container, () => {
-      if (expanded.value) {
+      if (isExpanded.value) {
         emit('update:modelValue', currentValue.value);
       }
 
@@ -169,7 +169,7 @@ export default defineComponent({
 
     // use escape / enter to cancel / submit
     useEventListener(document, 'keyup', (e) => {
-      if (expanded.value) {
+      if (isExpanded.value) {
         if (e.key === 'Escape') {
           collapse();
         } else if (e.key === 'Enter' && !isInvalid.value) {
@@ -202,6 +202,7 @@ export default defineComponent({
     watch(currentValue, () => {
       if (document.activeElement !== hexElement.value) {
         hexInput.value = currentValue.value;
+        isInvalid.value = false;
       }
     });
 
@@ -221,7 +222,7 @@ export default defineComponent({
       container,
       currentValue,
       expand,
-      expanded,
+      isExpanded,
       hexElement,
       hexInput,
       hueElement,
