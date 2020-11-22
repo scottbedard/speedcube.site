@@ -3,6 +3,7 @@
 namespace Speedcube\Speedcube\Models;
 
 use Model;
+use October\Rain\Exception\ValidationException;
 
 /**
  * PuzzleConfig Model
@@ -24,12 +25,19 @@ class PuzzleConfig extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'puzzle_id',
+        'json',
+    ];
 
     /**
      * @var array Validation rules for attributes
      */
-    public $rules = [];
+    public $rules = [
+        'json' => 'required',
+        'puzzle_id' => 'required',
+        'user_id' => 'required',
+    ];
 
     /**
      * @var array Attributes to be cast to native types
@@ -39,17 +47,9 @@ class PuzzleConfig extends Model
     /**
      * @var array Attributes to be cast to JSON
      */
-    protected $jsonable = [];
-
-    /**
-     * @var array Attributes to be appended to the API representation of the model (ex. toArray())
-     */
-    protected $appends = [];
-
-    /**
-     * @var array Attributes to be removed from the API representation of the model (ex. toArray())
-     */
-    protected $hidden = [];
+    protected $jsonable = [
+        'json',
+    ];
 
     /**
      * @var array Attributes to be cast to Argon (Carbon) instances
@@ -62,15 +62,7 @@ class PuzzleConfig extends Model
     /**
      * @var array Relations
      */
-    public $hasOne = [];
-    public $hasMany = [];
-    public $hasOneThrough = [];
-    public $hasManyThrough = [];
-    public $belongsTo = [];
-    public $belongsToMany = [];
-    public $morphTo = [];
-    public $morphOne = [];
-    public $morphMany = [];
-    public $attachOne = [];
-    public $attachMany = [];
+    public $belongsTo = [
+        'user' => 'RainLab\User\Models\User',
+    ];
 }

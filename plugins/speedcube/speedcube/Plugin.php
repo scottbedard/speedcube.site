@@ -5,6 +5,7 @@ namespace Speedcube\Speedcube;
 use Backend;
 use Event;
 use RainLab\User\Models\Settings as UserSettings;
+use RainLab\User\Models\User as UserModel;
 use System\Classes\PluginBase;
 
 /**
@@ -13,15 +14,37 @@ use System\Classes\PluginBase;
 class Plugin extends PluginBase
 {
     /**
+     * @var array Plugin dependencies
+     */
+    public $require = [
+        'RainLab.User',
+    ];
+
+    /**
      * Boot method, called right before the request route.
      *
      * @return array
      */
     public function boot()
     {
+        $this->extendRainLabUser();
+    }
+
+    /**
+     * Extend the RainLab.User plugin
+     *
+     * @return void
+     */
+    public function extendRainLabUser()
+    {
         // configure rainlab.user api
         \Bedard\RainLabUserApi\Classes\ApiController::extend(function($controller) {
             $controller->middleware('Speedcube\Speedcube\Http\Middleware\TransformKeys');
+        });
+
+        // extend user model
+        UserModel::extend(function ($model) {
+            $model->hasMany['puzzleConfigs'] = 'SpeedCube\SpeedCube\Models\PuzzleConfig';
         });
 
         // configure rainlab.user settings

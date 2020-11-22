@@ -4,12 +4,17 @@ Route::middleware('web')->group(function () {
     //
     // api
     //
-    Route::prefix('api/speedcube/speedcube')->group(function () {
+    Route::group([
+        'middleware' => 'Speedcube\Speedcube\Http\Middleware\TransformKeys',
+        'prefix' => 'api/speedcube/speedcube',
+    ], function () {
 
         //
         // auth
         //
-        Route::group(['middleware' => 'RainLab\User\Classes\AuthMiddleware'], function () {
+        Route::group([
+            'middleware' => 'RainLab\User\Classes\AuthMiddleware',
+        ], function () {
             Route::post('puzzleconfigs', 'Speedcube\Speedcube\Http\Controllers\PuzzleConfigsController@create');
         });
     });

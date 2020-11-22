@@ -2,18 +2,31 @@
 
 namespace Speedcube\Speedcube\Http\Controllers;
 
-use Illuminate\Routing\Controller;
+use Auth;
+use Speedcube\Speedcube\Classes\ApiController;
+use Speedcube\Speedcube\Models\PuzzleConfig;
 
 /**
  * Puzzle Configs
  */
-class PuzzleConfigsController extends Controller
+class PuzzleConfigsController extends ApiController
 {
     /**
      * Create
      */
     public function create()
     {
-        return 'Soon...';
+        $data = post();
+
+        $user = Auth::getUser();
+
+        $model = $user->puzzleConfigs()->create([
+            'puzzle_id' => $data['puzzle_id'],
+            'json' => $data['json'],
+        ]);
+        
+        return $this->success([
+            'model' => $model,
+        ]);
     }
 }
