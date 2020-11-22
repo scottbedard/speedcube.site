@@ -5,7 +5,7 @@
     :style="{
       background: modelValue,
     }"
-    @click.prevent="onContainerClick"
+    @click.prevent="expand"
     @mousedown="onMousedown"
     @mouseup="onMouseup">
     <transition
@@ -42,26 +42,42 @@
         </div>
 
         <!-- hue selector -->
-        <div class="flex items-center p-3">
-          <div
-            class="bg-white h-6 items-center mr-2 rounded-full shadow w-6"
-            ref="previewElement"
-            :style="{
-              backgroundColor: hex,
-            }" />
-          <div
-            data-hue
-            class="flex-1 h-3 ml-2 relative rounded"
-            ref="hueElement"
-            @mousedown="onHueMousedown">
+        <div class="gap-3 grid p-3">
+          <div class="flex items-center">
             <div
-              class="absolute bg-gray-100 h-4 rounded-full shadow transform -translate-x-1/2 -translate-y-1/2 top-1/2 w-4"
-              :class="[
-                activeElement === 'hue' ? 'cursor-grabbing' : 'cursor-grab',
-              ]"
+              class="bg-white h-6 items-center mr-2 rounded-full shadow w-6"
+              ref="previewElement"
               :style="{
-                left: `${hueAlpha * 100}%`,
+                backgroundColor: hex,
               }" />
+            <div
+              data-hue
+              class="flex-1 h-3 ml-2 relative rounded"
+              ref="hueElement"
+              @mousedown="onHueMousedown">
+              <div
+                class="absolute bg-gray-100 h-4 rounded-full shadow transform -translate-x-1/2 -translate-y-1/2 top-1/2 w-4"
+                :class="[
+                  activeElement === 'hue' ? 'cursor-grabbing' : 'cursor-grab',
+                ]"
+                :style="{
+                  left: `${hueAlpha * 100}%`,
+                }" />
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <input
+              class="bg-transparent border-b-1 border-transparent outline-none text-gray-300 text-sm w-16 focus:border-green-500"
+              maxlength="7"
+              :value="hex" />
+              <a
+                class="flex items-center hover:no-underline text-gray-500 text-sm hover:text-red-500"
+                href="#"
+                title="Discard changes"
+                @click.prevent="collapse">
+                <v-icon name="trash-2" stroke="2" />
+              </a>
           </div>
         </div>
       </div>
@@ -75,17 +91,16 @@ import { clamp } from 'lodash-es';
 import { computed, defineComponent, ref, watch, watchEffect } from 'vue';
 import { hexToHsv, hsvToHex } from '@/app/utils/color';
 import { onClickOutside, useEventListener, useMouseInElement } from '@vueuse/core';
+import VIcon from '@/components/icon.vue';
 
 type ActiveElement = 'color' | 'hue' | null;
 
 export default defineComponent({
   setup(props, { emit }) {
-    const [h, s, v] = hexToHsv(props.modelValue);
-
     const container = ref<HTMLElement>();
+    const hueAlpha = ref(0);
     const hueElement = ref<HTMLElement>();
     const previewElement = ref<HTMLElement>();
-    const hueAlpha = ref(h);
 
     // the active element represents the current drag-and-drop container
     const activeElement = ref<ActiveElement>(null);
@@ -105,15 +120,26 @@ export default defineComponent({
     // manage expanded state
     const expanded = ref(false);
 
-    const onContainerClick = () => {
+    const collapse = () => {
+      document.body.classList.remove('select-none');
+      expanded.value = false;
+      setActiveElement(null);
+    };
+
+    const expand = () => {
+      const [h, s, v] = hexToHsv(props.modelValue);
+      colorSelectorX.value = s;
+      colorSelectorY.value = 1 - v;
+      hueAlpha.value = h;
       expanded.value = true;
     };
 
     onClickOutside(container, () => {
-      document.body.classList.remove('select-none');
-      expanded.value = false;
-      setActiveElement(null);
-      emit('update:modelValue', hex.value);
+      if (expanded.value) {
+        emit('update:modelValue', hex.value);
+      }
+
+      collapse();
     });
 
     // manage mouse state
@@ -129,8 +155,8 @@ export default defineComponent({
 
     // color box
     const colorElement = ref<HTMLElement>();
-    const colorSelectorX = ref(s);
-    const colorSelectorY = ref(1 - v);
+    const colorSelectorX = ref(0);
+    const colorSelectorY = ref(0);
 
     const {
       elementHeight: colorHeight,
@@ -177,25 +203,29 @@ export default defineComponent({
     const hex = computed(() => {
       return hsvToHex(hueAlpha.value, colorSelectorX.value, 1 - colorSelectorY.value);
     });
-
+  
     return {
       activeElement,
+      collapse,
       colorElement,
       colorSelectorX,
       colorSelectorY,
       container,
+      expand,
       expanded,
       hex,
       hueAlpha,
       hueElement,
       onColorMousedown,
-      onContainerClick,
       onHueMousedown,
       onMousedown,
       onMouseup,
       previewElement,
       setActiveElement,
     };
+  },
+  components: {
+    VIcon,
   },
   props: {
     modelValue: {

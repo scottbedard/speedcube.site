@@ -2,7 +2,9 @@
   <svg
     v-bind="icon.attrs"
     v-html="contents"
-    :stroke-width="stroke" />
+    :height="height || sizePx"
+    :stroke-width="stroke"
+    :width="width || sizePx" />
 </template>
 
 <script>
@@ -17,15 +19,28 @@ export default {
     icon() {
       return feather.icons[this.name];
     },
+    sizePx() {
+      return Number(this.size) * 4;
+    },
   },
   props: {
+    height: {
+      type: Number,
+    },
     name: {
       required: true,
       type: String,
     },
+    size: {
+      default: 4,
+      type: [Number, String],
+    },
     stroke: {
       default: 2,
       type: [Number, String],
+    },
+    width: {
+      type: Number,
     },
   },
 };
