@@ -9,7 +9,7 @@ import VColorPicker from '@/components/color-picker.vue';
 export default defineComponent({
   data() {
     return {
-      color: '#bada55',
+      color: '#3B82F6',
     };
   },
   components: {

@@ -5,9 +5,7 @@
     :style="{
       background: modelValue,
     }"
-    @click.prevent="expand"
-    @mousedown="onMousedown"
-    @mouseup="onMouseup">
+    @click.prevent="expand">
     <transition
       enter-active-class="duration-150 ease-in-out transition transform"
       enter-from-class="opacity-0 -translate-x-6"
@@ -25,9 +23,9 @@
           class="h-32 relative"
           ref="colorElement"
           :style="{
-            backgroundColor: `hsl(${hueAlpha * 360}, 100%, 50%)`,
+            backgroundColor: `hsl(${hueSelector * 360}, 100%, 50%)`,
           }"
-          @mousedown="onColorMousedown">
+          @mousedown="setActiveElement('color')">
           <div class="absolute h-full w-full" data-saturation-white />
           <div class="absolute h-full w-full" data-saturation-black />
           <div
@@ -46,31 +44,34 @@
           <div class="flex items-center">
             <div
               class="bg-white h-6 items-center mr-2 rounded-full shadow w-6"
-              ref="previewElement"
               :style="{
-                backgroundColor: hex,
+                backgroundColor: currentValue,
               }" />
             <div
               data-hue
               class="flex-1 h-3 ml-2 relative rounded"
               ref="hueElement"
-              @mousedown="onHueMousedown">
+              @mousedown="setActiveElement('hue')">
               <div
                 class="absolute bg-gray-100 h-4 rounded-full shadow transform -translate-x-1/2 -translate-y-1/2 top-1/2 w-4"
                 :class="[
                   activeElement === 'hue' ? 'cursor-grabbing' : 'cursor-grab',
                 ]"
                 :style="{
-                  left: `${hueAlpha * 100}%`,
+                  left: `${hueSelector * 100}%`,
                 }" />
             </div>
           </div>
 
           <div class="flex items-center justify-between">
             <input
-              class="bg-transparent border-b-1 border-transparent outline-none text-gray-300 text-sm w-16 focus:border-green-500"
+              v-model="hexInput"
+              class="bg-transparent border-b-1 border-transparent outline-none text-sm w-16 focus:border-green-500"
               maxlength="7"
-              :value="hex" />
+              ref="hexElement"
+              :class="[
+                isInvalid ? 'text-red-500' : 'text-gray-300',
+              ]" />
               <a
                 class="flex items-center hover:no-underline text-gray-500 text-sm hover:text-red-500"
                 href="#"
@@ -97,66 +98,21 @@ type ActiveElement = 'color' | 'hue' | null;
 
 export default defineComponent({
   setup(props, { emit }) {
-    const container = ref<HTMLElement>();
-    const hueAlpha = ref(0);
-    const hueElement = ref<HTMLElement>();
-    const previewElement = ref<HTMLElement>();
-
-    // the active element represents the current drag-and-drop container
-    const activeElement = ref<ActiveElement>(null);
-
-    const setActiveElement = (el: ActiveElement) => {
-      activeElement.value = el;
-    }
-
-    watch(activeElement, (value) => {
-      if (value) {
-        document.body.classList.add('select-none');
-      } else {
-        document.body.classList.remove('select-none');
-      }
-    });
-
-    // manage expanded state
-    const expanded = ref(false);
-
-    const collapse = () => {
-      document.body.classList.remove('select-none');
-      expanded.value = false;
-      setActiveElement(null);
-    };
-
-    const expand = () => {
-      const [h, s, v] = hexToHsv(props.modelValue);
-      colorSelectorX.value = s;
-      colorSelectorY.value = 1 - v;
-      hueAlpha.value = h;
-      expanded.value = true;
-    };
-
-    onClickOutside(container, () => {
-      if (expanded.value) {
-        emit('update:modelValue', hex.value);
-      }
-
-      collapse();
-    });
-
-    // manage mouse state
-    const mouseIsActive = ref(false);
-    
-    const onMousedown = () => {
-      mouseIsActive.value = true;
-    };
-
-    const onMouseup = () => {
-      mouseIsActive.value = false;
-    };
-
-    // color box
     const colorElement = ref<HTMLElement>();
     const colorSelectorX = ref(0);
     const colorSelectorY = ref(0);
+    const container = ref<HTMLElement>();
+    const expanded = ref(false);
+    const hexElement = ref<HTMLElement>();
+    const hexInput = ref('');
+    const hueElement = ref<HTMLElement>();
+    const hueSelector = ref(0);
+    const isInvalid = ref(false);
+
+    const {
+      elementWidth: hueWidth,
+      elementX: hueX,
+    } = useMouseInElement(hueElement);
 
     const {
       elementHeight: colorHeight,
@@ -165,45 +121,100 @@ export default defineComponent({
       elementY: colorY,
     } = useMouseInElement(colorElement);
 
-    const syncColor = () => {
-      colorSelectorX.value = clamp(colorX.value / colorWidth.value, 0, 1);
-      colorSelectorY.value = clamp(colorY.value / colorHeight.value, 0, 1);
+    // current value of the color picker
+    const currentValue = computed(() => {
+      return hsvToHex(hueSelector.value, colorSelectorX.value, 1 - colorSelectorY.value);
+    });
+
+    // manage the active element
+    // this is used to determine if mousemove events should be
+    // treated as drag-and-drop actions, and for which element
+    const activeElement = ref<ActiveElement>(null);
+
+    const setActiveElement = (el: ActiveElement) => {
+      activeElement.value = el;
     }
 
-    const onColorMousedown = () => {
-      syncColor();
-      setActiveElement('color');
+    // sync drag-and-drop selector for the active element
+    const syncSelectors = () => {
+      const el = activeElement.value;
+
+      if (el === 'color') {
+        colorSelectorX.value = clamp(colorX.value / colorWidth.value, 0, 1);
+        colorSelectorY.value = clamp(colorY.value / colorHeight.value, 0, 1);
+      } else if (el === 'hue') {
+        hueSelector.value = clamp(hueX.value / hueWidth.value, 0, 1);
+      }
     }
 
-    // hue selector mouse interactions
-    const {
-      elementWidth: hueWidth,
-      elementX: hueX,
-    } = useMouseInElement(hueElement);
-
-    const syncHue = () => {
-      hueAlpha.value = clamp(hueX.value / hueWidth.value, 0, 1);
+    // set the color picker to reflect a hex value
+    const setFromHex = (val: string) => {
+      try {
+        const [h, s, v] = hexToHsv(val);
+        colorSelectorX.value = s;
+        colorSelectorY.value = 1 - v;
+        hueSelector.value = h;
+        isInvalid.value = false;
+      } catch {
+        isInvalid.value = true;
+      }
     }
 
-    const onHueMousedown = () => {
-      syncHue();
-      setActiveElement('hue');
-    }
+    // collapse the color picker
+    const collapse = () => {
+      setActiveElement(null);
+      expanded.value = false;
+    };
+
+    // expand the color picker
+    const expand = () => {
+      setFromHex(props.modelValue);
+      expanded.value = true;
+      hexInput.value = currentValue.value;
+    };
+
+    // update the v-model binding and close on foreign clicks
+    onClickOutside(container, () => {
+      if (expanded.value) {
+        emit('update:modelValue', currentValue.value);
+      }
+
+      collapse();
+    });
 
     // update draggable items on mousemove
-    useEventListener(document, 'mousemove', () => {
-      if (mouseIsActive.value) {
-        if (activeElement.value === 'hue') syncHue();
-        else if (activeElement.value === 'color') syncColor();
+    useEventListener(document, 'mousemove', (e) => {
+      if (e.buttons) {
+        syncSelectors();
       }
     });
 
-    useEventListener(document, 'mouseup', () => setActiveElement(null));
-
-    const hex = computed(() => {
-      return hsvToHex(hueAlpha.value, colorSelectorX.value, 1 - colorSelectorY.value);
+    // clear the active element when the mouse is released
+    useEventListener(document, 'mouseup', () => {
+      setActiveElement(null);
     });
-  
+
+    // manage body classes and sync selectors when the active element changes
+    watch(activeElement, (el) => {
+      document.body.classList[el ? 'add' : 'remove']('select-none');
+
+      syncSelectors();
+    });
+
+    // update the hex input on color change
+    watch(currentValue, () => {
+      if (document.activeElement !== hexElement.value) {
+        hexInput.value = currentValue.value;
+      }
+    });
+
+    // update color on hex input change
+    watch(hexInput, (value) => {
+      if (document.activeElement === hexElement.value) {
+        setFromHex(value);
+      }
+    });
+
     return {
       activeElement,
       collapse,
@@ -211,16 +222,14 @@ export default defineComponent({
       colorSelectorX,
       colorSelectorY,
       container,
+      currentValue,
       expand,
       expanded,
-      hex,
-      hueAlpha,
+      hexElement,
+      hexInput,
       hueElement,
-      onColorMousedown,
-      onHueMousedown,
-      onMousedown,
-      onMouseup,
-      previewElement,
+      hueSelector,
+      isInvalid,
       setActiveElement,
     };
   },
