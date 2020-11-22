@@ -10,11 +10,9 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable */
 import { defineComponent } from 'vue';
 import { useModel } from './model';
 import { useRoute, useRouter } from 'vue-router';
-// import VNavigation from '@/partials/solve/navigation.vue';
 import VPuzzle from '@/components/puzzle/puzzle.vue';
 
 export default defineComponent({
@@ -37,7 +35,6 @@ export default defineComponent({
     };
   },
   components: {
-    // VNavigation,
     VPuzzle,
   },
 });

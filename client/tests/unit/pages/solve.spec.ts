@@ -21,8 +21,8 @@ describe('solve', () => {
   
     it('redirects to solve index if child param is unknown', async () => {
       // known paths should be matched
-      const appearance = await createRouter('/solve/3x3/appearance');
-      expect(appearance.currentRoute.value.fullPath).toBe('/solve/3x3/appearance');
+      const config = await createRouter('/solve/3x3/config');
+      expect(config.currentRoute.value.fullPath).toBe('/solve/3x3/config');
 
       const controls = await createRouter('/solve/4x4/controls');
       expect(controls.currentRoute.value.fullPath).toBe('/solve/4x4/controls');

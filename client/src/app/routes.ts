@@ -81,9 +81,9 @@ export const routes: RouteRecordRaw[] = [
   {
     children: [
       {
-        component: () => import('@/pages/solve/appearance/appearance.vue' /* webpackChunkName: 'solve-appearance' */),
-        name: 'solve-appearance',
-        path: 'appearance',
+        component: () => import('@/pages/solve/config/config.vue' /* webpackChunkName: 'solve-config' */),
+        name: 'solve-config',
+        path: 'config',
       },
       {
         component: () => import('@/pages/solve/controls/controls.vue' /* webpackChunkName: 'solve-controls' */),
@@ -92,7 +92,7 @@ export const routes: RouteRecordRaw[] = [
       },
       {
         component: () => import('@/pages/solve/index/index.vue' /* webpackChunkName: 'solve' */),
-        name: 'solve-index',
+        name: 'solve',
         path: '',
       },
       {
@@ -101,7 +101,6 @@ export const routes: RouteRecordRaw[] = [
       },
     ],
     component: () => import('@/pages/solve/solve.vue' /* webpackChunkName: 'solve' */),
-    name: 'solve',
     path: '/solve/:puzzle',
   },
 ];

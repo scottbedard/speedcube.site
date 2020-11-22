@@ -7,7 +7,7 @@ a {
   @apply text-green-500;
 
   &:hover {
-    @apply underline;
+    @apply text-green-400
   }
 }
 </style>
