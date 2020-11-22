@@ -1,5 +1,6 @@
 <template>
   <v-color-picker v-model="color" />
+  <pre class="mt-2">{{ color }}</pre>
 </template>
 
 <script lang="ts">
