@@ -1,8 +1,10 @@
 <template>
   <div
-    class="h-8 inline-block relative rounded-full shadow w-8"
-    style="background: #f00"
+    class="cursor-pointer h-8 inline-block relative rounded-full shadow w-8"
     ref="container"
+    :style="{
+      background: modelValue,
+    }"
     @click.prevent="onContainerClick"
     @mousedown="onMousedown"
     @mouseup="onMouseup">
@@ -15,7 +17,7 @@
       leave-to-class="opacity-0 -translate-x-6">
       <div
         v-if="expanded"
-        class="absolute bg-gray-800 left-0 ml-12 overflow-hidden rounded shadow text-gray-900 top-0 w-64"
+        class="absolute bg-gray-700 left-0 ml-12 overflow-hidden rounded shadow text-gray-900 top-0 w-64"
         :class="[activeElement ? 'cursor-grabbing' : 'cursor-default']"
         @click.stop>
         <!-- color box -->
@@ -40,10 +42,16 @@
         </div>
 
         <!-- hue selector -->
-        <div class="px-4 py-4">
+        <div class="flex items-center p-3">
+          <div
+            class="bg-white h-6 items-center mr-2 rounded-full shadow w-6"
+            ref="previewElement"
+            :style="{
+              backgroundColor: hex,
+            }" />
           <div
             data-hue
-            class="h-3 relative rounded w-full"
+            class="flex-1 h-3 ml-2 relative rounded"
             ref="hueElement"
             @mousedown="onHueMousedown">
             <div
@@ -63,23 +71,25 @@
 
 <script lang="ts">
 /* eslint-disable */
-import { clamp, throttle } from 'lodash-es';
-import { computed, defineComponent, ref, watch } from 'vue';
-import { hsvToRgb } from '@/app/utils/color';
+import { clamp } from 'lodash-es';
+import { computed, defineComponent, ref, watch, watchEffect } from 'vue';
+import { hexToHsv, hsvToHex } from '@/app/utils/color';
 import { onClickOutside, useEventListener, useMouseInElement } from '@vueuse/core';
 
 type ActiveElement = 'color' | 'hue' | null;
 
 export default defineComponent({
-  setup() {
-    const activeElement = ref<ActiveElement>(null);
+  setup(props, { emit }) {
+    const [h, s, v] = hexToHsv(props.modelValue);
+
     const container = ref<HTMLElement>();
-    const expanded = ref(false);
     const hueElement = ref<HTMLElement>();
-    const hueAlpha = ref(0);
-    const mouseIsActive = ref(false);
+    const previewElement = ref<HTMLElement>();
+    const hueAlpha = ref(h);
 
     // the active element represents the current drag-and-drop container
+    const activeElement = ref<ActiveElement>(null);
+
     const setActiveElement = (el: ActiveElement) => {
       activeElement.value = el;
     }
@@ -93,6 +103,8 @@ export default defineComponent({
     });
 
     // manage expanded state
+    const expanded = ref(false);
+
     const onContainerClick = () => {
       expanded.value = true;
     };
@@ -101,9 +113,12 @@ export default defineComponent({
       document.body.classList.remove('select-none');
       expanded.value = false;
       setActiveElement(null);
+      emit('update:modelValue', hex.value);
     });
 
-    // track the mouse state
+    // manage mouse state
+    const mouseIsActive = ref(false);
+    
     const onMousedown = () => {
       mouseIsActive.value = true;
     };
@@ -114,8 +129,8 @@ export default defineComponent({
 
     // color box
     const colorElement = ref<HTMLElement>();
-    const colorSelectorX = ref(0);
-    const colorSelectorY = ref(0);
+    const colorSelectorX = ref(s);
+    const colorSelectorY = ref(1 - v);
 
     const {
       elementHeight: colorHeight,
@@ -159,16 +174,8 @@ export default defineComponent({
 
     useEventListener(document, 'mouseup', () => setActiveElement(null));
 
-    // calculate selected color
-    watch([hueAlpha, colorSelectorX, colorSelectorY], () => {
-      const h = hueAlpha.value;
-      const s = colorSelectorX.value;
-      const v = 1 - colorSelectorY.value;
-      const [r, g, b] = hsvToRgb(h, s, v);
-
-      if (container.value) {
-        container.value.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-      }
+    const hex = computed(() => {
+      return hsvToHex(hueAlpha.value, colorSelectorX.value, 1 - colorSelectorY.value);
     });
 
     return {
@@ -178,6 +185,7 @@ export default defineComponent({
       colorSelectorY,
       container,
       expanded,
+      hex,
       hueAlpha,
       hueElement,
       onColorMousedown,
@@ -185,8 +193,15 @@ export default defineComponent({
       onHueMousedown,
       onMousedown,
       onMouseup,
+      previewElement,
       setActiveElement,
     };
+  },
+  props: {
+    modelValue: {
+      default: '#000000',
+      type: String,
+    },
   },
 });
 </script>
