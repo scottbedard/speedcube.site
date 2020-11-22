@@ -21,6 +21,11 @@ export async function createRouter(path = '/') {
 }
 
 /**
+ * Mount a component.
+ */
+export { mount } from '@vue/test-utils';
+
+/**
  * Mount component with a router.
  */
 export async function mountRoute(component: any, path = '/', options = {}) {

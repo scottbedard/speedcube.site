@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount } from '~/utils';
 import VInput from '@/components/input.vue';
 
 describe('<v-input>', () => {
