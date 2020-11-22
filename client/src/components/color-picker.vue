@@ -58,6 +58,7 @@
               class="bg-transparent border-b-1 border-transparent outline-none text-sm w-16 focus:border-green-500"
               maxlength="7"
               ref="hexElement"
+              spellcheck="false"
               :class="[isInvalid ? 'text-red-500' : 'text-gray-300']" />
             <a
               class="flex items-center hover:no-underline text-gray-500 text-sm hover:text-red-500"
