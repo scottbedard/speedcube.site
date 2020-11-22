@@ -113,10 +113,9 @@ export default defineComponent({
       return hsvToHex(hueSelector.value, colorSelectorX.value, 1 - colorSelectorY.value);
     });
 
-    // manage the active element
+    // set the active element
     // this is used to determine if mousemove events should be
     // treated as drag-and-drop actions, and for which element
-
     const setActiveElement = (el: ActiveElement) => {
       activeElement.value = el;
     }
