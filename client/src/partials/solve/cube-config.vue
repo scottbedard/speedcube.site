@@ -63,21 +63,26 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable */
-import { defineComponent } from 'vue';
+import { CubeConfig } from '@/types/puzzle';
+import { defineComponent, PropType } from 'vue';
+import { PuzzleConfig } from '@/types/models/puzzle-config';
 import VColorPicker from '@/components/color-picker.vue';
 import VLabel from '@/components/label.vue';
 import VRangeInput from '@/components/range-input.vue';
 
 export default defineComponent({
+  setup() {
+    // ..
+  },
   components: {
     VColorPicker,
     VLabel,
     VRangeInput,
   },
   props: {
-    config: {
-      type: Object,
+    puzzleConfig: {
+      required: true,
+      type: Object as PropType<Partial<PuzzleConfig<CubeConfig>>>,
     },
   },
 });

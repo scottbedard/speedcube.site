@@ -1,7 +1,8 @@
 <template>
   <div class="max-w-5xl w-full">
     <component
-      :is="configComponent" />
+      :is="configComponent"
+      :puzzle-config="{}" />
   </div>
 </template>
 
