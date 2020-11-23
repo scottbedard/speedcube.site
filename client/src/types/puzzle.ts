@@ -1,13 +1,13 @@
 /**
  * Cube configuration
  */
-export interface CubeConfig {
+export type CubeConfig = PuzzleConfig & {
   /**
    * Colors
    *
    * U, L, F, R, B, D
    */
-  colors: [string, string, string, string, string, string],
+  colors: string[],
 
   /**
    * Inner brightness
@@ -54,7 +54,14 @@ export type CubeId =
 /**
  * Dodecaminx config
  */
-export interface DodecaminxConfig {
+export type DodecaminxConfig = PuzzleConfig & {
+  /**
+   * Colors
+   *
+   * @todo: document face order
+   */
+  colors: string[],
+
   /**
    * Inner brightness
    *
@@ -104,3 +111,23 @@ export type DodecaminxId =
   | 'megaminx'
   | 'masterminx'
   | 'gigaminx';
+
+/**
+ * Puzzle config
+ */
+export type PuzzleConfig = {
+  /**
+   * Camera angle
+   *
+   * 0 = looking at front of puzzle
+   * 1 = looking at top of puzzle
+   */
+  cameraAngle: number,
+
+  /**
+   * Camera distance
+   *
+   * 0 = origin
+   */
+  cameraDistance: number,
+}

@@ -3,9 +3,9 @@ import {
   dodecaminxSize,
   isCube,
   isDodecaminx,
-} from '@/app/utils/twister';
+} from '@/app/utils/puzzle';
 
-describe('twister utils', () => {
+describe('puzzle utils', () => {
   it('cubeSize', () => {
     expect(cubeSize('2x2')).toBe(2);
     expect(cubeSize('3x3')).toBe(3);

@@ -1,5 +1,5 @@
 import { Cube, Dodecaminx } from '@bedard/twister';
-import { cubeSize, dodecaminxSize, isCube, isDodecaminx } from '@/app/utils/twister';
+import { cubeSize, dodecaminxSize, isCube, isDodecaminx } from '@/app/utils/puzzle';
 import { computed } from 'vue';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 
