@@ -13,7 +13,7 @@
       leave-to-class="opacity-0 -translate-x-6">
       <div
         v-if="isExpanded"
-        class="absolute bg-gray-700 left-0 ml-12 overflow-hidden rounded shadow text-gray-900 top-0 w-64"
+        class="absolute bg-gray-700 left-0 ml-12 overflow-hidden rounded shadow text-gray-900 top-0 w-64 z-10"
         :class="[activeElement ? 'cursor-grabbing' : 'cursor-default']"
         @click.stop>
         <!-- color box -->
