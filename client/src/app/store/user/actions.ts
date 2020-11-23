@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UserModel } from '@/types/user';
+import { UserModel } from '@/types/models/user';
 import { currentUser } from '@/app/store/user/state';
 
 /**

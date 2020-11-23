@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { UserModel } from '@/types/user';
+import { UserModel } from '@/types/models/user';
 
 /**
  * State for the current user.

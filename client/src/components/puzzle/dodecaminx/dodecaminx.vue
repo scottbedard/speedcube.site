@@ -29,16 +29,9 @@ import { dodecahedronEdgeLength, pentagonCircumradius, polygon } from '@/app/uti
 import { Dodecaminx } from '@bedard/twister';
 import { DodecaminxFace, DodecaminxSticker } from '@bedard/twister/dist/dodecaminx/dodecaminx';
 import { Line2, Vector2 } from '@/types/math';
+import { DodecaminxConfig } from '@/types/puzzle';
 import { mapColumns, mapRows } from '@/app/utils/matrix';
 import VCore from './core.vue';
-
-type DodecaminxConfig = {
-  innerBrightness: number,
-  middleSize: number,
-  stickerElevation: number,
-  stickerRadius: number,
-  stickerSpacing: number,
-}
 
 // geometry constants for a dodecahedron inside a sphere of radius 1
 const edgeLength = dodecahedronEdgeLength(1, 'circumRadius');
@@ -74,29 +67,15 @@ export default defineComponent({
       ];
     });
 
-    // inner brightness
-    // 0 = transparent
-    // 1 = opaque
+    // normalize config values
     const innerBrightness = computed(() => clamp(props.config?.innerBrightness ?? 0, 0, 1));
 
-    // sticker elevation
-    // 0 = dodecahedron circumradius of 1 (no sticker elevation)
-    // 1 = dodecahedron circumradius of 2
     const stickerElevation = computed(() => clamp(props.config?.stickerElevation ?? 0, 0, 1));
 
-    // radius of sticker geometries
-    // 0 = no radius
-    // 1 = half the distance to nearest corner
     const stickerRadius = computed(() => clamp(props.config?.stickerRadius ?? 0, 0, 1));
 
-    // size of gap between adjacent stickers
-    // 0 = no gap between stickers
-    // 1 = layerSize gap between stickers
     const stickerSpacing = computed(() => clamp(props.config?.stickerSpacing ?? 0, 0, 1));
 
-    // size of middle segment for odd-layered puzzles
-    // 0 = adjacent corner matrices
-    // 1 = corner matrices one layer length apart
     const middleSize = computed(() => {
       return clamp(props.config?.middleSize ?? 0, minMiddleSize, 1) * (
         layers.value / (layers.value + (layers.value * stickerSpacing.value))

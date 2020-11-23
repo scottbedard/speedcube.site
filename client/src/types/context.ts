@@ -1,4 +1,4 @@
-import { UserModel } from './user';
+import { UserModel } from './models/user';
 
 /**
  * Application context

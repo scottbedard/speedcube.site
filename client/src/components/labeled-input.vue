@@ -1,9 +1,5 @@
 <template>
-  <label>
-    <div
-      v-text="label"
-      class="font-bold mb-1"
-      :data-required="required" />
+  <v-label :label="label" :required="required">
     <v-input
       :autofocus="autofocus"
       :disabled="disabled"
@@ -13,16 +9,18 @@
       :type="type"
       :value="modelValue"
       @update:modelValue="$emit('update:modelValue', $event)" />
-  </label>
+  </v-label>
 </template>
 
 <script lang="ts">
 import VInput from '@/components/input.vue';
+import VLabel from '@/components/label.vue';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
   components: {
     VInput,
+    VLabel,
   },
   props: {
     autofocus: Boolean,
@@ -39,12 +37,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-[data-required]:after {
-  content: '';
-  height: 0.35rem;
-  width: 0.35rem;
-  @apply align-text-top inline-block bg-green-500 ml-1 rounded-full;
-}
-</style>

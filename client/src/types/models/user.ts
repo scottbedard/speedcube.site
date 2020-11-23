@@ -1,4 +1,4 @@
-export type UserModel = {
+export interface UserModel {
   activatedAt: string,
   createdAt: string,
   createdIpAddress: string,

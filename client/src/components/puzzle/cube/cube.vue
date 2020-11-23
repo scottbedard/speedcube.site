@@ -21,18 +21,11 @@ import { attempt, isError, isNumber } from 'lodash-es';
 import { BackSide, FrontSide, Material, MeshLambertMaterial } from 'three';
 import { computed, defineComponent, onUnmounted, PropType, watch } from 'vue';
 import { Cube } from '@bedard/twister';
+import { CubeConfig } from '@/types/puzzle';
 import { mapColumns, mapRows } from '@/app/utils/matrix';
 import { Rotation } from '@/app/three/behaviors/rotation';
 import { useGeometry } from '@/app/three/behaviors/geometry';
 import VCore from './core.vue';
-
-interface CubeConfig {
-  colors: [string, string, string, string, string, string],
-  innerBrightness: number, // 0 = invisible, 1 = full brightness
-  stickerElevation: number, // 0 = no elevation, 1 = sticker dist elevation
-  stickerRadius: number, // 0 = square stickers, 1 = circle stickers
-  stickerSpacing: number, // 0 = no spacing, 1 = sticker dist spacing
-}
 
 /**
  * Edge length of a cube inside a sphere of radius 1
@@ -117,7 +110,7 @@ export default defineComponent({
     const stickerYOffset = computed(() => (baseEdgeLength / 2) - stickerLength.value);
     const edgeLength = computed(() => baseEdgeLength + (stickerSpacingGap.value * (props.model.options.size - 1)) + (stickerLength.value * stickerElevation.value * 2));
     const turnRotation = computed(() => getTurnRotation(props.model, props.currentTurn, props.turnProgress));
-  
+
     // determine which stickers are turning and which are idle
     const allStickers = computed(() => props.model.state.u.concat(
       props.model.state.l,

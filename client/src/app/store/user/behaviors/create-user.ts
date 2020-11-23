@@ -1,7 +1,7 @@
 import { currentUser } from '@/app/store/user/state';
 import { isValidationError } from '@/app/utils/api';
 import { ref } from 'vue';
-import { UserModel } from '@/types/user';
+import { UserModel } from '@/types/models/user';
 import { ValidationError } from '@/types/api';
 import axios from 'axios';
 

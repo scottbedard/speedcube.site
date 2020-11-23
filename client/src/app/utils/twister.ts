@@ -1,4 +1,4 @@
-import { CubeId, DodecaminxId } from '@/types/twister';
+import { CubeId, DodecaminxId } from '@/types/puzzle';
 
 /**
  * Cube identifiers
