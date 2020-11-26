@@ -19,6 +19,11 @@ module.exports = {
       boxShadow: {
         'outline': '0 0 0 2px rgba(66, 153, 225, 0.9)',
       },
+      colors: {
+        alpha: {
+          '50': 'rgba(0, 0, 0, 0.5)',
+        },
+      },
       cursor: {
         grab: 'grab',
         grabbing: 'grabbing',
