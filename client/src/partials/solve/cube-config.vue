@@ -5,6 +5,7 @@
         <div class="gap-6 flex flex-wrap">
           <v-color-picker
             v-for="n in 6"
+            v-model="pendingPuzzleConfig.colors[n - 1]"
             value="#ffffff"
             :key="n" />
         </div>
@@ -13,27 +14,31 @@
 
     <v-label label="Camera Angle">
       <v-range-input
-        :max="1"
+        v-model="pendingPuzzleConfig.cameraAngle"
+        :max="90"
         :min="0"
         :step="0.01" />
     </v-label>
 
     <v-label label="Camera Distance">
       <v-range-input
-        :max="1"
+        v-model="pendingPuzzleConfig.cameraDistance"
+        :max="5"
         :min="0"
         :step="0.01" />
     </v-label>
 
     <v-label label="Turn Duration">
       <v-range-input
-        :max="1"
-        :min="0"
-        :step="0.01" />
+        v-model="pendingPuzzleConfig.turnDuration"
+        :max="1000"
+        :min="20"
+        :step="1" />
     </v-label>
 
     <v-label label="Sticker Spacing">
       <v-range-input
+        v-model="pendingPuzzleConfig.stickerSpacing"
         :max="1"
         :min="0"
         :step="0.01" />
@@ -41,6 +46,7 @@
 
     <v-label label="Sticker Elevation">
       <v-range-input
+        v-model="pendingPuzzleConfig.stickerElevation"
         :max="1"
         :min="0"
         :step="0.01" />
@@ -48,6 +54,7 @@
 
     <v-label label="Sticker Radius">
       <v-range-input
+        v-model="pendingPuzzleConfig.stickerRadius"
         :max="1"
         :min="0"
         :step="0.01" />
@@ -55,6 +62,7 @@
 
     <v-label label="Inner Brightness">
       <v-range-input
+        v-model="pendingPuzzleConfig.innerBrightness"
         :max="1"
         :min="0"
         :step="0.01" />
@@ -63,27 +71,22 @@
 </template>
 
 <script lang="ts">
-import { CubeConfig } from '@/types/puzzle';
-import { defineComponent, PropType } from 'vue';
-import { PuzzleConfig } from '@/types/models/puzzle-config';
+import { defineComponent } from 'vue';
+import { pendingPuzzleConfig } from '@/pages/solve/state';
 import VColorPicker from '@/components/color-picker.vue';
 import VLabel from '@/components/label.vue';
 import VRangeInput from '@/components/range-input.vue';
 
 export default defineComponent({
   setup() {
-    // ..
+    return {
+      pendingPuzzleConfig,
+    };
   },
   components: {
     VColorPicker,
     VLabel,
     VRangeInput,
-  },
-  props: {
-    puzzleConfig: {
-      required: true,
-      type: Object as PropType<Partial<PuzzleConfig<CubeConfig>>>,
-    },
   },
 });
 </script>

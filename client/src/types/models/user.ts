@@ -1,3 +1,5 @@
+import { PuzzleConfig } from './puzzle-config';
+
 export interface UserModel {
   activatedAt: string,
   createdAt: string,
@@ -13,6 +15,7 @@ export interface UserModel {
   lastSeen: string | null,
   name: string | null,
   permissions: null,
+  puzzleConfigs: PuzzleConfig[],
   surname: string | null,
   updatedAt: string,
   username: string,

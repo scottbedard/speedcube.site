@@ -1,36 +1,39 @@
 <template>
   <div class="max-w-5xl w-full">
-    <component
-      :is="configComponent"
-      :puzzle-config="{}" />
+    <component :is="configComponent" />
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
-import { isCube, isDodecaminx } from '@/app/utils/twister';
-import { useRoute } from 'vue-router';
+import { isCube, isDodecaminx } from '@/app/utils/puzzle';
+import { onUnmounted } from 'vue';
+import { pendingPuzzleConfig } from '../state';
+import { usePuzzleName } from '../behaviors';
+import { userPuzzleConfig } from '@/app/store/user/getters';
 import VCubeConfig from '@/partials/solve/cube-config.vue';
 import VDodecaminxConfig from '@/partials/solve/dodecaminx-config.vue';
 
 export default defineComponent({
   setup() {
-    const route = useRoute();
-    
+    const puzzleName = usePuzzleName();
+
     const configComponent = computed(() => {
-      const puzzle = route.params.puzzle as string;
+      if (isCube(puzzleName.value)) return VCubeConfig;
+      if (isDodecaminx(puzzleName.value)) return VDodecaminxConfig;
+    });
 
-      if (isCube(puzzle)) {
-        return VCubeConfig;
-      }
+    // set pending config to equal the current config
+    pendingPuzzleConfig.value = userPuzzleConfig.value(puzzleName.value);
 
-      if (isDodecaminx(puzzle)) {
-        return VDodecaminxConfig;
-      }
+    // flush pending config when the editor is closed
+    onUnmounted(() => {
+      pendingPuzzleConfig.value = null;
     });
 
     return {
       configComponent,
+      pendingPuzzleConfig,
     };
   },
 });

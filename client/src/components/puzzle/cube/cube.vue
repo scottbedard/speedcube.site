@@ -21,6 +21,7 @@ import { attempt, isError, isNumber } from 'lodash-es';
 import { BackSide, FrontSide, Material, MeshLambertMaterial } from 'three';
 import { computed, defineComponent, onUnmounted, PropType, watch } from 'vue';
 import { Cube } from '@bedard/twister';
+import { cubeConfig } from '@/app/utils/puzzle';
 import { CubeConfig } from '@/types/puzzle';
 import { mapColumns, mapRows } from '@/app/utils/matrix';
 import { Rotation } from '@/app/three/behaviors/rotation';
@@ -95,11 +96,11 @@ const disposeMaterials = (materials: { innerMaterial: Material, outerMaterial: M
 export default defineComponent({
   setup(props) {
     // normalize configuration
-    const colors = computed(() => ['#F6E05E', '#ED8936', '#3182CE', '#E53E3E', '#48BB78', '#F7FAFC']);
-    const innerBrightness = computed(() => isNumber(props.config.innerBrightness) ? props.config.innerBrightness : 0);
-    const stickerRadius = computed(() => isNumber(props.config.stickerRadius) ? props.config.stickerRadius : 0);
-    const stickerSpacing = computed(() => isNumber(props.config.stickerSpacing) ? props.config.stickerSpacing : 0);
-    const stickerElevation = computed(() => isNumber(props.config.stickerElevation) ? props.config.stickerElevation : 0);
+    const colors = computed(() => Array.isArray(props.config.colors) ? props.config.colors : cubeConfig.colors);
+    const innerBrightness = computed(() => isNumber(props.config.innerBrightness) ? props.config.innerBrightness : cubeConfig.innerBrightness);
+    const stickerRadius = computed(() => isNumber(props.config.stickerRadius) ? props.config.stickerRadius : cubeConfig.stickerRadius);
+    const stickerSpacing = computed(() => isNumber(props.config.stickerSpacing) ? props.config.stickerSpacing : cubeConfig.stickerSpacing);
+    const stickerElevation = computed(() => isNumber(props.config.stickerElevation) ? props.config.stickerElevation : cubeConfig.stickerElevation);
 
     const colMap = computed(() => mapColumns(props.model.options.size));
     const rowMap = computed(() => mapRows(props.model.options.size));

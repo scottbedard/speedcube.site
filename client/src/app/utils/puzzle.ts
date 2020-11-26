@@ -1,8 +1,9 @@
 import {
   CubeConfig,
-  CubeId,
+  CubeName,
   DodecaminxConfig,
-  DodecaminxId,
+  DodecaminxName,
+  PuzzleName,
 } from '@/types/puzzle';
 
 /**
@@ -16,12 +17,13 @@ export const cubeConfig: CubeConfig = {
   stickerElevation: 0.25,
   stickerRadius: 0.25,
   stickerSpacing: 0.25,
+  turnDuration: 100,
 };
 
 /**
  * Cube identifiers
  */
-export const cubeIds: CubeId[] = [
+export const cubeNames: CubeName[] = [
   '2x2',
   '3x3',
   '4x4',
@@ -31,8 +33,8 @@ export const cubeIds: CubeId[] = [
 /**
  * Determine the size of a cube.
  */
-export function cubeSize(id: CubeId): number {
-  return parseInt(id, 10);
+export function cubeSize(name: CubeName): number {
+  return parseInt(name, 10);
 }
 
 /**
@@ -60,12 +62,13 @@ export const dodecaminxConfig: DodecaminxConfig = {
   stickerElevation: 0.05,
   stickerRadius: 0.1,
   stickerSpacing: 0.1,
+  turnDuration: 100,
 };
 
 /**
  * Dodecaminx identifiers
  */
-export const dodecaminxIds: DodecaminxId[] = [
+export const dodecaminxNames: DodecaminxName[] = [
   'kilominx',
   'megaminx',
   'masterminx',
@@ -75,20 +78,35 @@ export const dodecaminxIds: DodecaminxId[] = [
 /**
  * Determine the size of a dodecaminx.
  */
-export function dodecaminxSize(id: DodecaminxId): number {
-  return dodecaminxIds.indexOf(id) + 2;
+export function dodecaminxSize(name: DodecaminxName): number {
+  return dodecaminxNames.indexOf(name) + 2;
 }
 
 /**
  * Test if puzzle identifier is a cube
  */
-export function isCube(str: string): str is CubeId {
-  return (cubeIds as string[]).includes(str);
+export function isCube(str: string): str is CubeName {
+  return (cubeNames as string[]).includes(str);
 }
 
 /**
  * Test if puzzle identifier is a dodecaminx
  */
-export function isDodecaminx(str: string): str is DodecaminxId {
-  return (dodecaminxIds as string[]).includes(str);
+export function isDodecaminx(str: string): str is DodecaminxName {
+  return (dodecaminxNames as string[]).includes(str);
 }
+
+/**
+ * Puzzle ids are stored in the database as integers. This
+ * constant maps those ids to their cooresponding names.
+ */
+export const puzzleIds: Record<PuzzleName, number> = {
+  '2x2': 0,
+  '3x3': 1,
+  '4x4': 2,
+  '5x5': 3,
+  'kilominx': 4,
+  'megaminx': 5,
+  'masterminx': 6,
+  'gigaminx': 7,
+};

@@ -45,7 +45,7 @@ export type CubeConfig = PuzzleConfig & {
 /**
  * Cube identifiers
  */
-export type CubeId =
+export type CubeName =
   | '2x2'
   | '3x3'
   | '4x4'
@@ -106,7 +106,7 @@ export type DodecaminxConfig = PuzzleConfig & {
 /**
  * Dodecaminx identifiers
  */
-export type DodecaminxId = 
+export type DodecaminxName = 
   | 'kilominx'
   | 'megaminx'
   | 'masterminx'
@@ -120,7 +120,7 @@ export type PuzzleConfig = {
    * Camera angle
    *
    * 0 = looking at front of puzzle
-   * 1 = looking at top of puzzle
+   * 90 = looking at top of puzzle
    */
   cameraAngle: number,
 
@@ -130,4 +130,14 @@ export type PuzzleConfig = {
    * 0 = origin
    */
   cameraDistance: number,
+
+  /**
+   * Turn duration in milliseconds
+   */
+  turnDuration: number,
 }
+
+/**
+ * Puzzle name
+ */
+export type PuzzleName = CubeName | DodecaminxName;
