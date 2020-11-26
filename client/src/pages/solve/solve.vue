@@ -11,12 +11,10 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable */
 import { computed, defineComponent } from 'vue';
-import { flattenDeep } from 'lodash-es';
 import { pendingPuzzleConfig, resetSolveState } from './state';
 import { usePuzzleName, useModel } from './behaviors';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { userPuzzleConfig } from '@/app/store/user/getters';
 import VPuzzle from '@/components/puzzle/puzzle.vue';
 

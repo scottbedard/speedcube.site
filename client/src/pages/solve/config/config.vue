@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts">
+import { cloneDeep } from 'lodash-es';
 import { computed, defineComponent } from 'vue';
 import { isCube, isDodecaminx } from '@/app/utils/puzzle';
 import { onUnmounted } from 'vue';
@@ -24,7 +25,7 @@ export default defineComponent({
     });
 
     // set pending config to equal the current config
-    pendingPuzzleConfig.value = userPuzzleConfig.value(puzzleName.value);
+    pendingPuzzleConfig.value = cloneDeep(userPuzzleConfig.value(puzzleName.value));
 
     // flush pending config when the editor is closed
     onUnmounted(() => {
