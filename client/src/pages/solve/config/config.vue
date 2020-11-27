@@ -1,6 +1,14 @@
 <template>
   <div class="max-w-5xl w-full">
     <component :is="configComponent" />
+    <div class="flex items-center justify-end mt-6">
+      <router-link
+        class="flex items-center mr-12"
+        :to="{ name: 'solve' }">
+        Cancel
+      </router-link>
+      <v-button disabled>Save</v-button>
+    </div>
   </div>
 </template>
 
@@ -12,6 +20,7 @@ import { onUnmounted } from 'vue';
 import { pendingPuzzleConfig } from '../state';
 import { usePuzzleName } from '../behaviors';
 import { userPuzzleConfig } from '@/app/store/user/getters';
+import VButton from '@/components/button.vue';
 import VCubeConfig from '@/partials/solve/cube-config.vue';
 import VDodecaminxConfig from '@/partials/solve/dodecaminx-config.vue';
 
@@ -36,6 +45,9 @@ export default defineComponent({
       configComponent,
       pendingPuzzleConfig,
     };
+  },
+  components: {
+    VButton,
   },
 });
 </script>

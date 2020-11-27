@@ -1,7 +1,7 @@
 <template>
   <v-puzzle
     v-if="model"
-    class="max-w-md mb-16 mx-auto"
+    class="max-w-md mb-12 mx-auto"
     :config="config"
     :model="model" />
   
