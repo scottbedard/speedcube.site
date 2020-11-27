@@ -64,7 +64,7 @@
               class="flex items-center hover:no-underline text-gray-500 text-sm hover:text-red-500"
               href="#"
               title="Discard changes"
-              @click.prevent="collapse">
+              @click.prevent="discard">
               <v-icon name="trash-2" stroke="2" />
             </a>
           </div>
@@ -76,7 +76,7 @@
 
 <script lang="ts">
 import { clamp } from 'lodash-es';
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import { hexToHsv, hsvToHex } from '@/app/utils/color';
 import { onClickOutside, useEventListener, useMouseInElement } from '@vueuse/core';
 import VIcon from '@/components/icon.vue';
@@ -109,10 +109,23 @@ export default defineComponent({
       elementY: colorY,
     } = useMouseInElement(colorElement);
 
+    // cache the original value so we can discard changes
+    let originalValue: string = '';
+
+    onMounted(() => {
+      originalValue = props.modelValue;
+    });
+
     // current value of the color picker
     const currentValue = computed(() => {
       return hsvToHex(hueSelector.value, colorSelectorX.value, 1 - colorSelectorY.value);
     });
+
+    // discard the current value
+    const discard = () => {
+      emit('update:modelValue', originalValue);
+      collapse();
+    }
 
     // set the active element
     // this is used to determine if mousemove events should be
@@ -172,6 +185,7 @@ export default defineComponent({
     useEventListener(document, 'keyup', (e) => {
       if (isExpanded.value) {
         if (e.key === 'Escape') {
+          emit('update:modelValue', originalValue);
           collapse();
         } else if (e.key === 'Enter' && !isInvalid.value) {
           emit('update:modelValue', currentValue.value);
@@ -214,6 +228,10 @@ export default defineComponent({
       }
     });
 
+    watch(currentValue, (value) => {
+      emit('update:modelValue', value);
+    });
+
     return {
       activeElement,
       collapse,
@@ -222,6 +240,7 @@ export default defineComponent({
       colorSelectorY,
       container,
       currentValue,
+      discard,
       expand,
       isExpanded,
       hexElement,
