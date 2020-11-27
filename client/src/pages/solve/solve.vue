@@ -31,8 +31,6 @@ export default defineComponent({
         name: 'solve',
         params: { puzzle: '3x3' },
       });
-
-      return;
     }
 
     resetSolveState();
