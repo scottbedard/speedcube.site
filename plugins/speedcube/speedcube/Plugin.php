@@ -47,19 +47,7 @@ class Plugin extends PluginBase
             $model->hasMany['puzzleConfigs'] = 'SpeedCube\SpeedCube\Models\PuzzleConfig';
         });
 
-        // configure rainlab.user settings
-        UserSettings::extend(function($model) {
-            $model->bindEvent('model.getAttribute', function($attribute, $value) {
-                if ($attribute === 'activate_mode') {
-                    return UserSettings::ACTIVATE_AUTO;
-                } elseif ($attribute === 'login_attribute') {
-                    return UserSettings::LOGIN_USERNAME;
-                } elseif ($attribute === 'require_activation') {
-                    return false;
-                }
-            });
-        });
-
+        // disable ui for settings defined in config file
         Event::listen('backend.form.extendFields', function ($widget) {
             if ($widget->model instanceof UserSettings) {
                 $widget->getField('activate_mode')->disabled = true;
