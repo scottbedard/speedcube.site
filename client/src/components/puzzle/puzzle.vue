@@ -1,6 +1,7 @@
 <template>
   <v-scene
     square
+    :border="border"
     :camera-angle="cameraAngle"
     :camera-distance="cameraDistance">
     <v-ambient-light />
@@ -50,6 +51,10 @@ export default defineComponent({
     },
   },
   props: {
+    border: {
+      default: false,
+      type: Boolean,
+    },
     config: {
       default: stubObject,
       type: Object as PropType<Record<string, unknown>>,

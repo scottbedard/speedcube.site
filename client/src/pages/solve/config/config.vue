@@ -1,5 +1,7 @@
 <template>
-  <div class="max-w-5xl w-full">
+  <form
+    class="max-w-5xl w-full"
+    @submit.prevent="onSubmit">
     <component :is="configComponent" />
     <div class="flex items-center justify-end mt-6">
       <router-link
@@ -7,9 +9,9 @@
         :to="{ name: 'solve' }">
         Cancel
       </router-link>
-      <v-button disabled>Save</v-button>
+      <v-button type="submit">Save</v-button>
     </div>
-  </div>
+  </form>
 </template>
 
 <script lang="ts">
@@ -41,8 +43,13 @@ export default defineComponent({
       pendingPuzzleConfig.value = null;
     });
 
+    const onSubmit = () => {
+      console.log('submit');
+    }
+
     return {
       configComponent,
+      onSubmit,
       pendingPuzzleConfig,
     };
   },

@@ -1,14 +1,15 @@
 <template>
   <div
-    class="border-4 border-dashed border-blue-500"
-    ref="el">
+    class="border-4 border-dashed"
+    ref="el"
+    :class="[borderColor]">
     <slot />
     <div v-if="square" class="pb-full" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onMounted, onUnmounted, PropType, ref, watchEffect } from 'vue';
+import { computed, defineComponent, inject, onMounted, onUnmounted, PropType, ref, watchEffect } from 'vue';
 import { RendererSymbol, SceneApi } from '@/components/three/types';
 import { Object3D, PerspectiveCamera, Scene } from 'three';
 import { clamp, stubArray } from 'lodash-es';
@@ -51,7 +52,13 @@ export default defineComponent({
       onUnmounted(() => renderer.removeScene(sceneFn));
     }
 
+    // border
+    const borderColor = computed(() => {
+      return props.border ? 'border-gray-600': 'border-transparent';
+    });
+
     return {
+      borderColor,
       el,
     };
   },
@@ -83,6 +90,10 @@ export default defineComponent({
     children: {
       default: stubArray,
       type: Object as PropType<Object3D | Object3D[]>,
+    },
+    border: {
+      default: false,
+      type: Boolean,
     },
     square: {
       default: false,
