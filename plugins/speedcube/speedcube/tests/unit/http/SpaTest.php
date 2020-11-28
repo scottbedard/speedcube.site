@@ -3,6 +3,7 @@
 namespace Speedcube\Speedcube\Tests\Unit\Http;
 
 use PHPHtmlParser\Dom;
+use Speedcube\Speedcube\Models\PuzzleConfig;
 use Speedcube\Speedcube\Tests\Factory;
 use Speedcube\Speedcube\Tests\PluginTestCase;
 
@@ -32,9 +33,14 @@ class SpaTest extends PluginTestCase
     public function test_puzzle_configs_are_part_of_context()
     {
         $user = Factory::authenticatedUser();
+        
+        $puzzleConfig = Factory::create(new PuzzleConfig, [
+            'user_id' => $user->id,
+        ]);
 
         $context = $this->getContext();
 
-        $this->assertEquals([], $context['user']['puzzleConfigs']);
+        $this->assertEquals(1, count($context['user']['puzzleConfigs']));
+        $this->assertEquals($puzzleConfig->id, $context['user']['puzzleConfigs'][0]['id']);
     }
 }

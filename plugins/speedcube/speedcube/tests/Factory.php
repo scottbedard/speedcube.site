@@ -5,7 +5,9 @@ namespace Speedcube\Speedcube\Tests;
 use Auth;
 use Carbon\Carbon;
 use Faker;
+use Model;
 use RainLab\User\Models\User;
+use Speedcube\Speedcube\Models\PuzzleConfig;
 
 class Factory
 {
@@ -21,6 +23,73 @@ class Factory
         Auth::login($user);
 
         return $user;
+    }
+
+    /**
+     * Create a model and save it to the database.
+     *
+     * @param  Model    $model  Model to create
+     * @param  array    $data   Data to fill model with
+     * @param  array    $omit   Data to omit
+     * @return Model
+     */
+    public static function create(Model $model, array $data = [], array $omit = [])
+    {
+        if (get_class($model) === 'RainLab\User\Models\User') {
+            return self::registerUser($data);
+        }
+
+        $model = self::fill($model, $data, $omit);
+        
+        $model->save();
+
+        return $model;
+    }
+
+    /**
+     * Create a model and fill it with data.
+     *
+     * @param  Model    $model  Model to fill
+     * @param  array    $data   Data to fill the model with
+     * @return Model
+     */
+    public static function fill(Model $model, array $data = [], array $omit = [])
+    {
+        $seed = [];
+
+        switch (get_class($model)) {
+            case 'RainLab\User\Models\User': $seed = self::user($data); break;
+            case 'Speedcube\Speedcube\Models\PuzzleConfig': $seed = self::puzzleConfig($data); break;
+        }
+        
+        $mergedData = array_merge($seed, $data);
+
+        foreach ($mergedData as $key => $value) {
+            $model->$key = $value;
+        }
+
+        foreach ($omit as $key) {
+            unset($model->attributes[$key]);
+        }
+
+        return $model;
+    }
+
+    /**
+     * Puzzle config
+     *
+     * @return array
+     */
+    public static function puzzleConfig()
+    {
+        return [
+            'json' => [
+                'cameraAngle' => 45,
+                'cameraDistance' => 2,
+            ],
+            'puzzle_id' => 0,
+            'user_id' => 0,
+        ];
     }
 
     /**

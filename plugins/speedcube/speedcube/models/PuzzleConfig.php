@@ -35,14 +35,18 @@ class PuzzleConfig extends Model
      */
     public $rules = [
         'json' => 'required',
-        'puzzle_id' => 'required',
-        'user_id' => 'required',
+        'puzzle_id' => 'required|integer|min:0',
+        'user_id' => 'required|integer|min:0',
     ];
 
     /**
      * @var array Attributes to be cast to native types
      */
-    protected $casts = [];
+    protected $casts = [
+        'id' => 'integer',
+        'puzzle_id' => 'integer',
+        'user_id' => 'integer',
+    ];
 
     /**
      * @var array Attributes to be cast to JSON
@@ -56,7 +60,7 @@ class PuzzleConfig extends Model
      */
     protected $dates = [
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     /**
