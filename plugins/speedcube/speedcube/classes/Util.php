@@ -2,6 +2,8 @@
 
 namespace Speedcube\Speedcube\Classes;
 
+use Illuminate\Database\Eloquent\Model;
+
 class Util
 {
     /**
@@ -47,6 +49,8 @@ class Util
             ->map(function ($item) use ($fn) {
                 if (is_array($item)) {
                     return self::keyByRecursive($item, $fn);
+                } elseif ($item instanceof Model) {
+                    return self::keyByRecursive($item->toArray(), $fn);
                 }
 
                 return $item;

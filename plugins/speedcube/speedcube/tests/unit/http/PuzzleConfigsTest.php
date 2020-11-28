@@ -1,6 +1,6 @@
 <?php
 
-namespace Speedcube\Speedcube\Tests\Unit\Api;
+namespace Speedcube\Speedcube\Tests\Unit\Http;
 
 use Speedcube\Speedcube\Tests\Factory;
 use Speedcube\Speedcube\Tests\PluginTestCase;

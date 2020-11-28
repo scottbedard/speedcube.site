@@ -4,6 +4,7 @@ namespace Speedcube\Speedcube\Http\Controllers;
 
 use Bedard\RainLabUserApi\Classes\AccountManager;
 use Illuminate\Routing\Controller;
+use Speedcube\Speedcube\Classes\Util;
 use View;
 
 /**
@@ -16,10 +17,18 @@ class SpaController extends Controller
      */
     public function index()
     {
-        return View::make('speedcube.speedcube::index', [
+        $user = AccountManager::getAuthenticatedUser();
+
+        if ($user) {
+            $user->load('puzzleConfigs');
+        }
+
+        $data = Util::camelCaseKeysRecursive([
             'context' => [
-                'user' => AccountManager::getAuthenticatedUser(),
+                'user' => $user,
             ],
         ]);
+
+        return View::make('speedcube.speedcube::index', $data);
     }
 }
