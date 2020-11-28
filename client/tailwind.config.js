@@ -1,7 +1,4 @@
 module.exports = {
-  corePlugins: {
-    animation: false,
-  },
   future: {
     purgeLayersByDefault: true,
     removeDeprecatedGapUtilities: true,

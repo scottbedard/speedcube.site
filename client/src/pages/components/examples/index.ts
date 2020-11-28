@@ -12,6 +12,7 @@ const examples: Record<string, () => Promise<any>> = {
   '<v-modal>': () => import('./modal-example.vue' /* webpackChunkName: 'modal-example' */),
   '<v-range-input>': () => import('./range-input-example.vue' /* webpackChunkName: 'component-example' */),
   '<v-scene>': () => import('./scene-example.vue' /* webpackChunkName: 'scene-example' */),
+  '<v-spinner>': () => import('./spinner-example.vue' /* webpackChunkName: 'spinner-example' */),
 };
 
 export default examples;
