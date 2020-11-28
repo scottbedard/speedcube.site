@@ -1,5 +1,7 @@
 <template>
-  <v-checkbox />
+  <v-checkbox :checked="true">
+    I agree to the terms and conditions
+  </v-checkbox>
 </template>
 
 <script lang="ts">
