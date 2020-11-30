@@ -6,12 +6,21 @@
 </style>
 
 <template>
-  <div class="flex items-center">
+  <div
+    class="flex items-center"
+    :class="{
+      'cursor-pointer': !disabled,
+    }"
+    @click="toggle">
     <div
-      class="bg-gray-700 flex items-center justify-center h-6 rounded w-6 focus:outline-none"
+      class="bg-gray-700 flex items-center justify-center h-6 rounded w-6 focus:shadow-outline"
       role="checkbox"
-      :aria-checked="checked ? 'true' : 'false'"
-      :tabindex="disabled ? null : 0">
+      :aria-checked="modelValue ? 'true' : 'false'"
+      :class="{
+        'opacity-50': disabled,
+      }"
+      :tabindex="disabled ? null : 0"
+      @keypress.space="toggle">
       <svg
         class="text-green-500 w-4/5"
         focusable="false"
@@ -25,8 +34,8 @@
           stroke-dashoffset="50"
           stroke-width="4"
           :style="{
-            animation: checked
-              ? 'checkbox 50ms cubic-bezier(.41,.88,.84,-0.45) 250ms 1 normal forwards'
+            animation: modelValue
+              ? 'checkbox 50ms cubic-bezier(.41,.88,.84,-0.45) 50ms 1 normal forwards'
               : null,
           }"
         />
@@ -42,12 +51,26 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
+  setup(props, { emit }) {
+    const toggle = () => {
+      if (!props.disabled) {
+        emit('update:modelValue', !props.modelValue);
+      }
+    }
+
+    return {
+      toggle,
+    };
+  },
+  emits: [
+    'update:modelValue',
+  ],
   props: {
-    checked: {
+    disabled: {
       default: false,
       type: Boolean,
     },
-    disabled: {
+    modelValue: {
       default: false,
       type: Boolean,
     },
