@@ -13,14 +13,15 @@
     }"
     @click="toggle">
     <div
-      class="bg-gray-700 flex items-center justify-center h-6 rounded w-6 focus:shadow-outline"
+      class="bg-gray-700 flex items-center justify-center h-6 rounded w-6 focus:outline-none focus:shadow-outline"
+      ref="target"
       role="checkbox"
       :aria-checked="modelValue ? 'true' : 'false'"
       :class="{
         'opacity-50': disabled,
       }"
       :tabindex="disabled ? null : 0"
-      @keypress.space="toggle">
+      @keypress.space.prevent="toggle">
       <svg
         class="text-green-500 w-4/5"
         focusable="false"
@@ -48,17 +49,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   setup(props, { emit }) {
+    const target = ref<HTMLElement>();
+
     const toggle = () => {
+      target.value?.focus();
+  
       if (!props.disabled) {
         emit('update:modelValue', !props.modelValue);
       }
     }
 
     return {
+      target,
       toggle,
     };
   },
