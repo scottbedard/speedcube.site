@@ -26,23 +26,6 @@ class Factory
     }
 
     /**
-     * Config
-     *
-     * @return array
-     */
-    public static function config()
-    {
-        return [
-            'json' => [
-                'cameraAngle' => 45,
-                'cameraDistance' => 2,
-            ],
-            'puzzle_id' => 0,
-            'user_id' => 0,
-        ];
-    }
-
-    /**
      * Create a model and save it to the database.
      *
      * @param  Model    $model  Model to create
@@ -103,9 +86,28 @@ class Factory
     }
 
     /**
-     * User
+     * Speedcube\Speedcube\Models\Config
+     *
+     * @return array
      */
-    public static function user(array $data = [])
+    public static function config()
+    {
+        return [
+            'json' => [
+                'cameraAngle' => 45,
+                'cameraDistance' => 2,
+            ],
+            'puzzle_id' => 0,
+            'user_id' => 0,
+        ];
+    }
+
+    /**
+     * RainLab\User\Models\User
+     *
+     * @return array
+     */
+    public static function user()
     {
         $faker = Faker\Factory::create('en_US');
 
