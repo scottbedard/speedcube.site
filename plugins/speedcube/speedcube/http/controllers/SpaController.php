@@ -20,7 +20,7 @@ class SpaController extends Controller
         $user = AccountManager::getAuthenticatedUser();
 
         if ($user) {
-            $user->load('puzzleConfigs');
+            $user->load('configs');
         }
 
         $data = Util::camelCaseKeysRecursive([

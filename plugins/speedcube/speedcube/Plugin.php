@@ -44,10 +44,11 @@ class Plugin extends PluginBase
 
         // extend user model
         UserModel::extend(function ($model) {
-            $model->hasMany['puzzleConfigs'] = 'SpeedCube\SpeedCube\Models\PuzzleConfig';
+            $model->hasMany['configs'] = 'SpeedCube\SpeedCube\Models\Config';
         });
 
         // disable ui for settings defined in config file
+        // these settings are defined in config/rainlab/user/config.php
         Event::listen('backend.form.extendFields', function ($widget) {
             if ($widget->model instanceof UserSettings) {
                 $widget->getField('activate_mode')->disabled = true;
@@ -87,15 +88,13 @@ class Plugin extends PluginBase
      */
     public function registerNavigation()
     {
-        return []; // Remove this line to activate
-
         return [
             'speedcube' => [
-                'icon' => 'icon-leaf',
+                'icon' => 'icon-cube',
                 'label' => 'Speedcube',
                 'order' => 500,
                 'permissions' => ['speedcube.speedcube.*'],
-                'url' => Backend::url('speedcube/speedcube/mycontroller'),
+                'url' => Backend::url('speedcube/speedcube/solves'),
             ],
         ];
     }

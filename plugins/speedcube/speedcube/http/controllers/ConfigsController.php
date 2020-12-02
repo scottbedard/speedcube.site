@@ -4,12 +4,12 @@ namespace Speedcube\Speedcube\Http\Controllers;
 
 use Auth;
 use Speedcube\Speedcube\Classes\ApiController;
-use Speedcube\Speedcube\Models\PuzzleConfig;
+use Speedcube\Speedcube\Models\Config;
 
 /**
- * Puzzle Configs
+ * Configs
  */
-class PuzzleConfigsController extends ApiController
+class ConfigsController extends ApiController
 {
     /**
      * Create
@@ -20,7 +20,7 @@ class PuzzleConfigsController extends ApiController
 
         $user = Auth::getUser();
 
-        $model = $user->puzzleConfigs()->create([
+        $model = $user->configs()->create([
             'puzzle_id' => $data['puzzle_id'],
             'json' => $data['json'],
         ]);

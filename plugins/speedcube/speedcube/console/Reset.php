@@ -21,6 +21,7 @@ class Reset extends Command
 
     /**
      * Execute the console command.
+     *
      * @return void
      */
     public function handle()
@@ -31,14 +32,24 @@ class Reset extends Command
         }
         
         $this->call('october:down', ['--force' => true]);
-
         $this->call('october:up');
-
         $this->resetBackendUser();
+        $this->refreshPlugin();
+    }
+
+    /**
+     * Refresh plugin and dummy data.
+     *
+     * @return void
+     */
+    protected function refreshPlugin()
+    {
+        $this->call('plugin:refresh', ['name' => 'Speedcube.Speedcube']);
     }
 
     /**
      * Configure backend user.
+     *
      * @return void
      */
     protected function resetBackendUser()

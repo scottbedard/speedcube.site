@@ -6,16 +6,16 @@ use Model;
 use October\Rain\Exception\ValidationException;
 
 /**
- * PuzzleConfig Model
+ * Config Model
  */
-class PuzzleConfig extends Model
+class Config extends Model
 {
     use \October\Rain\Database\Traits\Validation;
 
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'speedcube_speedcube_puzzle_configs';
+    public $table = 'speedcube_speedcube_configs';
 
     /**
      * @var array Guarded fields

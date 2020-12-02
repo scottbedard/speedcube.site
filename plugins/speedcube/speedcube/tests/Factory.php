@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Faker;
 use Model;
 use RainLab\User\Models\User;
-use Speedcube\Speedcube\Models\PuzzleConfig;
+use Speedcube\Speedcube\Models\Config;
 
 class Factory
 {
@@ -23,6 +23,23 @@ class Factory
         Auth::login($user);
 
         return $user;
+    }
+
+    /**
+     * Config
+     *
+     * @return array
+     */
+    public static function config()
+    {
+        return [
+            'json' => [
+                'cameraAngle' => 45,
+                'cameraDistance' => 2,
+            ],
+            'puzzle_id' => 0,
+            'user_id' => 0,
+        ];
     }
 
     /**
@@ -59,7 +76,7 @@ class Factory
 
         switch (get_class($model)) {
             case 'RainLab\User\Models\User': $seed = self::user($data); break;
-            case 'Speedcube\Speedcube\Models\PuzzleConfig': $seed = self::puzzleConfig($data); break;
+            case 'Speedcube\Speedcube\Models\Config': $seed = self::config($data); break;
         }
         
         $mergedData = array_merge($seed, $data);
@@ -73,23 +90,6 @@ class Factory
         }
 
         return $model;
-    }
-
-    /**
-     * Puzzle config
-     *
-     * @return array
-     */
-    public static function puzzleConfig()
-    {
-        return [
-            'json' => [
-                'cameraAngle' => 45,
-                'cameraDistance' => 2,
-            ],
-            'puzzle_id' => 0,
-            'user_id' => 0,
-        ];
     }
 
     /**

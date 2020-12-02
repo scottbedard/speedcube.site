@@ -15,7 +15,7 @@ Route::middleware('web')->group(function () {
         Route::group([
             'middleware' => 'RainLab\User\Classes\AuthMiddleware',
         ], function () {
-            Route::post('puzzleconfigs', 'Speedcube\Speedcube\Http\Controllers\PuzzleConfigsController@create');
+            Route::post('configs', 'Speedcube\Speedcube\Http\Controllers\ConfigsController@create');
         });
     });
 
