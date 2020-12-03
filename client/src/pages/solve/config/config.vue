@@ -17,17 +17,19 @@
 <script lang="ts">
 import { cloneDeep } from 'lodash-es';
 import { computed, defineComponent } from 'vue';
-import { isCube, isDodecaminx } from '@/app/utils/puzzle';
-import { onUnmounted } from 'vue';
+import { config } from '@/app/store/user/getters';
+import { createConfig } from '@/app/store/user/actions';
+import { getPuzzleId, isCube, isDodecaminx } from '@/app/utils/puzzle';
+import { onUnmounted, ref } from 'vue';
 import { pendingConfig } from '../state';
 import { usePuzzleName } from '../behaviors';
-import { config } from '@/app/store/user/getters';
 import VButton from '@/components/button.vue';
 import VCubeConfig from '@/partials/solve/cube-config.vue';
 import VDodecaminxConfig from '@/partials/solve/dodecaminx-config.vue';
 
 export default defineComponent({
   setup() {
+    const isLoading = ref(false);
     const puzzleName = usePuzzleName();
 
     const configComponent = computed(() => {
@@ -43,8 +45,16 @@ export default defineComponent({
       pendingConfig.value = null;
     });
 
+    // create the config and refresh the user
     const onSubmit = () => {
-      console.log('submit');
+      isLoading.value = true;
+
+      createConfig({
+        puzzleId: getPuzzleId(puzzleName.value),
+        json: pendingConfig.value || {},
+      }).then(() => {
+        isLoading.value = false;
+      });
     }
 
     return {

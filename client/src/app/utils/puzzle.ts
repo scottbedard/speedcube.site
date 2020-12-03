@@ -83,6 +83,13 @@ export function dodecaminxSize(name: DodecaminxName): number {
 }
 
 /**
+ * Get puzzle ID by name. Returns -1 if puzzle name is not valid.
+ */
+export function getPuzzleId(name: string) {
+  return puzzleIds[name.trim().toLowerCase() as PuzzleName] || -1;
+}
+
+/**
  * Test if puzzle identifier is a cube
  */
 export function isCube(str: string): str is CubeName {
@@ -94,6 +101,13 @@ export function isCube(str: string): str is CubeName {
  */
 export function isDodecaminx(str: string): str is DodecaminxName {
   return (dodecaminxNames as string[]).includes(str);
+}
+
+/**
+ * Test if string is a puzzle name
+ */
+export function isPuzzle(str: string): str is PuzzleName {
+  return isCube(str) || isDodecaminx(str);
 }
 
 /**

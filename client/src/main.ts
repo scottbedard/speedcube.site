@@ -6,11 +6,19 @@ import { routes } from '@/app/routes';
 
 import App from './app.vue';
 
+// configure namespace
+interface Speedcube extends Window {
+  context: Context;
+}
+
+declare var window: Speedcube;
+
 // setup initial state
 const root = document.getElementById('app') as HTMLElement;
-const context = JSON.parse(root.dataset.context as string) as Context;
 
-boot(context);
+window.context = JSON.parse(root.dataset.context as string) as Context;
+
+boot(window.context);
 
 // create a router
 const router = createRouter({
