@@ -12,7 +12,7 @@ use Speedcube\Speedcube\Models\Config;
 class ConfigsController extends ApiController
 {
     /**
-     * Create
+     * Create a new config.
      */
     public function create()
     {
@@ -27,6 +27,18 @@ class ConfigsController extends ApiController
         
         return $this->success([
             'model' => $model,
+        ]);
+    }
+
+    /**
+     * Fetch a user's configs.
+     */
+    public function index()
+    {
+        $user = Auth::getUser();
+
+        return $this->success([
+            'configs' => $user->configs,
         ]);
     }
 }

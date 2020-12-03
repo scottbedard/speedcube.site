@@ -1,5 +1,8 @@
 <?php
 
+use Speedcube\Speedcube\Http\Controllers\ConfigsController;
+use Speedcube\Speedcube\Http\Controllers\SpaController;
+
 Route::middleware('web')->group(function () {
     //
     // api
@@ -15,13 +18,14 @@ Route::middleware('web')->group(function () {
         Route::group([
             'middleware' => 'RainLab\User\Classes\AuthMiddleware',
         ], function () {
-            Route::post('configs', 'Speedcube\Speedcube\Http\Controllers\ConfigsController@create');
+            Route::get('configs', [ConfigsController::class, 'index']);
+            Route::post('configs', [ConfigsController::class, 'create']);
         });
     });
 
     //
     // client
     //
-    Route::get('{all}', 'Speedcube\Speedcube\Http\Controllers\SpaController@index')
+    Route::get('{all}', [SpaController::class, 'index'])
         ->where('all', '^(?!api|backend).*$');
 });

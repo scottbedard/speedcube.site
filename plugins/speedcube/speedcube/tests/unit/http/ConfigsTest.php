@@ -2,12 +2,13 @@
 
 namespace Speedcube\Speedcube\Tests\Unit\Http;
 
+use Speedcube\Speedcube\Models\Config;
 use Speedcube\Speedcube\Tests\Factory;
 use Speedcube\Speedcube\Tests\PluginTestCase;
 
 class ConfigsTest extends PluginTestCase
 {
-    public function test_create_success()
+    public function test_configs_create_success()
     {
         $user = Factory::authenticatedUser();
 
@@ -25,12 +26,37 @@ class ConfigsTest extends PluginTestCase
         $this->assertEquals(['foo' => 'bar'], $data['model']['json']);
     }
 
-    public function test_create_forbidden()
+    public function test_configs_create_forbidden()
     {
         $response = $this->postJson('/api/speedcube/speedcube/configs', [
             'puzzleId' => 1,
             'json' => [],
         ]);
+
+        $response->assertStatus(403);
+    }
+
+    public function test_configs_index_success()
+    {
+        $user = Factory::authenticatedUser();
+
+        $config = Factory::create(new Config, [
+            'puzzle_id' => 1,
+            'user_id' => $user->id,
+        ]);
+
+        $response = $this->get('/api/speedcube/speedcube/configs');
+
+        $response->assertStatus(200);
+
+        $data = json_decode($response->getContent(), true);
+
+        $this->assertEquals($config->id, $data['configs'][0]['id']);
+    }
+
+    public function test_configs_index_forbidden()
+    {
+        $response = $this->get('/api/speedcube/speedcube/configs');
 
         $response->assertStatus(403);
     }
