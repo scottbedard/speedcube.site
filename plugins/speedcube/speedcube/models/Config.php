@@ -91,7 +91,7 @@ class Config extends Model
     public function scopeCurrent(Builder $query): Builder
     {
         $current = self::select(DB::raw('max(id)'))
-            ->groupBy('puzzle_id')
+            ->groupBy(['puzzle_id', 'user_id'])
             ->toSql();
 
         return $query->whereRaw("id in ($current)");
