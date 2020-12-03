@@ -9,7 +9,7 @@
         :to="{ name: 'solve' }">
         Cancel
       </router-link>
-      <v-button type="submit">Save</v-button>
+      <v-button type="submit" :loading="isLoading">Save</v-button>
     </div>
   </form>
 </template>
@@ -59,6 +59,7 @@ export default defineComponent({
 
     return {
       configComponent,
+      isLoading,
       onSubmit,
       pendingConfig,
     };

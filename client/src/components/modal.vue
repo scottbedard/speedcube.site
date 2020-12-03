@@ -1,7 +1,7 @@
 <template>
   <teleport to="body">
     <div
-      class="bg-alpha-50 fixed grid h-full items-center left-0 overflow-y-auto top-0 w-full z-10 focus:outline-none"
+      class="bg-darken-50 fixed grid h-full items-center left-0 overflow-y-auto top-0 w-full z-10 focus:outline-none"
       ref="container"
       role="dialog"
       tabindex="-1"

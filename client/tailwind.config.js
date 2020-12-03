@@ -17,8 +17,11 @@ module.exports = {
         'outline': '0 0 0 2px rgba(66, 153, 225, 0.9)',
       },
       colors: {
-        alpha: {
+        darken: {
           '50': 'rgba(0, 0, 0, 0.5)',
+        },
+        lighten: {
+          '50': 'rgba(255, 255, 255, 0.5)',
         },
       },
       cursor: {
