@@ -17,7 +17,10 @@ jobs:
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
-      run: composer install
+      run: |
+        composer install
+        cd plugins/speedcube/speedcube
+        composer install
     - name: PHPUnit
       run: |
         cd plugins/speedcube/speedcube
