@@ -17,7 +17,7 @@ jobs:
     - name: Copfigure environment
       run: cp .env.example .env
     - name: Copy static assets
-      run: cp client/public/index.htm plugins/speedcube/speedcube/views/index.htm
+      run: cp client/public/index.html plugins/speedcube/speedcube/views/index.htm
     - name: Install October
       run: composer install
     - name: Install plugins
