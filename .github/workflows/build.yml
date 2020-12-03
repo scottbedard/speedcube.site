@@ -14,11 +14,14 @@ jobs:
       run: |
         echo "Temporary, see https://github.com/octobercms/october/issues/5033"
         sudo composer self-update 1.10.17
-    - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-    - name: Install Dependencies
+    - name: Copfigure environment
+      run: cp .env.example .env
+    - name: Copy static assets
+      run: cp client/public/index.htm plugins/speedcube/speedcube/views/index.htm
+    - name: Install October
+      run: composer install
+    - name: Install plugins
       run: |
-        composer install
         cd plugins/speedcube/speedcube
         composer install
     - name: PHPUnit
