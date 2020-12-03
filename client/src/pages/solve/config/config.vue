@@ -19,9 +19,9 @@ import { cloneDeep } from 'lodash-es';
 import { computed, defineComponent } from 'vue';
 import { isCube, isDodecaminx } from '@/app/utils/puzzle';
 import { onUnmounted } from 'vue';
-import { pendingPuzzleConfig } from '../state';
+import { pendingConfig } from '../state';
 import { usePuzzleName } from '../behaviors';
-import { userPuzzleConfig } from '@/app/store/user/getters';
+import { config } from '@/app/store/user/getters';
 import VButton from '@/components/button.vue';
 import VCubeConfig from '@/partials/solve/cube-config.vue';
 import VDodecaminxConfig from '@/partials/solve/dodecaminx-config.vue';
@@ -36,11 +36,11 @@ export default defineComponent({
     });
 
     // set pending config to equal the current config
-    pendingPuzzleConfig.value = cloneDeep(userPuzzleConfig.value(puzzleName.value));
+    pendingConfig.value = cloneDeep(config.value(puzzleName.value));
 
     // flush pending config when the editor is closed
     onUnmounted(() => {
-      pendingPuzzleConfig.value = null;
+      pendingConfig.value = null;
     });
 
     const onSubmit = () => {
@@ -50,7 +50,7 @@ export default defineComponent({
     return {
       configComponent,
       onSubmit,
-      pendingPuzzleConfig,
+      pendingConfig,
     };
   },
   components: {

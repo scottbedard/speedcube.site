@@ -5,7 +5,7 @@
         <div class="gap-6 flex flex-wrap">
           <v-color-picker
             v-for="n in 6"
-            v-model="pendingPuzzleConfig.colors[n - 1]"
+            v-model="pendingConfig.colors[n - 1]"
             value="#ffffff"
             :key="n" />
         </div>
@@ -14,7 +14,7 @@
 
     <v-label label="Camera Angle">
       <v-range-input
-        v-model="pendingPuzzleConfig.cameraAngle"
+        v-model="pendingConfig.cameraAngle"
         :max="90"
         :min="0"
         :step="0.01" />
@@ -22,7 +22,7 @@
 
     <v-label label="Camera Distance">
       <v-range-input
-        v-model="pendingPuzzleConfig.cameraDistance"
+        v-model="pendingConfig.cameraDistance"
         :max="5"
         :min="0"
         :step="0.01" />
@@ -30,7 +30,7 @@
 
     <v-label label="Turn Duration">
       <v-range-input
-        v-model="pendingPuzzleConfig.turnDuration"
+        v-model="pendingConfig.turnDuration"
         :max="1000"
         :min="20"
         :step="1" />
@@ -38,7 +38,7 @@
 
     <v-label label="Sticker Spacing">
       <v-range-input
-        v-model="pendingPuzzleConfig.stickerSpacing"
+        v-model="pendingConfig.stickerSpacing"
         :max="1"
         :min="0"
         :step="0.01" />
@@ -46,7 +46,7 @@
 
     <v-label label="Sticker Elevation">
       <v-range-input
-        v-model="pendingPuzzleConfig.stickerElevation"
+        v-model="pendingConfig.stickerElevation"
         :max="1"
         :min="0"
         :step="0.01" />
@@ -54,7 +54,7 @@
 
     <v-label label="Sticker Radius">
       <v-range-input
-        v-model="pendingPuzzleConfig.stickerRadius"
+        v-model="pendingConfig.stickerRadius"
         :max="1"
         :min="0"
         :step="0.01" />
@@ -62,7 +62,7 @@
 
     <v-label label="Inner Brightness">
       <v-range-input
-        v-model="pendingPuzzleConfig.innerBrightness"
+        v-model="pendingConfig.innerBrightness"
         :max="1"
         :min="0"
         :step="0.01" />
@@ -72,7 +72,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { pendingPuzzleConfig } from '@/pages/solve/state';
+import { pendingConfig } from '@/pages/solve/state';
 import VColorPicker from '@/components/color-picker.vue';
 import VLabel from '@/components/label.vue';
 import VRangeInput from '@/components/range-input.vue';
@@ -80,7 +80,7 @@ import VRangeInput from '@/components/range-input.vue';
 export default defineComponent({
   setup() {
     return {
-      pendingPuzzleConfig,
+      pendingConfig,
     };
   },
   components: {

@@ -1,7 +1,7 @@
 /**
  * Puzzle config
  */
-export type PuzzleConfig<T = Record<string, any>> = {
+export type Config<T = Record<string, any>> = {
   createdAt: string,
   id: number,
   json: T,

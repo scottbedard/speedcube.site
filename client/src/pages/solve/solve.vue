@@ -3,7 +3,7 @@
     v-if="model"
     class="max-w-md mb-12 mx-auto"
     :border="border"
-    :config="config"
+    :config="activeConfig"
     :model="model" />
   
   <div class="flex justify-center">
@@ -13,10 +13,10 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
-import { pendingPuzzleConfig, resetSolveState } from './state';
+import { pendingConfig, resetSolveState } from './state';
 import { usePuzzleName, useModel } from './behaviors';
 import { useRoute, useRouter } from 'vue-router';
-import { userPuzzleConfig } from '@/app/store/user/getters';
+import { config } from '@/app/store/user/getters';
 import VPuzzle from '@/components/puzzle/puzzle.vue';
 
 export default defineComponent({
@@ -38,18 +38,18 @@ export default defineComponent({
     resetSolveState();
 
     // current puzzle configuration
-    const config = computed(() => {
-      return pendingPuzzleConfig.value
-        ? pendingPuzzleConfig.value
-        : userPuzzleConfig.value(puzzleName.value);
+    const activeConfig = computed(() => {
+      return pendingConfig.value
+        ? pendingConfig.value
+        : config.value(puzzleName.value);
     });
 
     // show puzzle border when config editor is open
     const border = computed(() => route.name === 'solve-config');
 
     return {
+      activeConfig,
       border,
-      config,
       model,
     };
   },

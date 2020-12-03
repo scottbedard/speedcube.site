@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { computed } from 'vue';
 import { currentUser } from '@/app/store/user/state';
 import { cubeConfig, dodecaminxConfig, isCube, isDodecaminx, puzzleIds } from '@/app/utils/puzzle';
@@ -6,24 +5,22 @@ import { cubeConfig, dodecaminxConfig, isCube, isDodecaminx, puzzleIds } from '@
 /**
  * Get a puzzle config.
  */
-export const userPuzzleConfig = computed(() => {
+export const config = computed(() => {
   return (name: string): Record<string, any> => {
     name = name.trim().toLowerCase();
 
     if (isCube(name)) {
       const id = puzzleIds[name];
-      const userConfig = currentUser.value?.puzzleConfigs
-        .find(obj => obj.puzzleId === id);
-  
-      return { ...cubeConfig, ...userConfig }
+      const config = currentUser.value?.configs.find(obj => obj.puzzleId === id);
+
+      return { ...cubeConfig, ...config }
     }
 
     if (isDodecaminx(name)) {
       const id = puzzleIds[name];
-      const userConfig = currentUser.value?.puzzleConfigs
-        .find(obj => obj.puzzleId === id);
+      const config = currentUser.value?.configs.find(obj => obj.puzzleId === id);
   
-      return { ...dodecaminxConfig, ...userConfig }
+      return { ...dodecaminxConfig, ...config }
     }
 
     return {};
