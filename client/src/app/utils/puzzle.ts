@@ -10,14 +10,21 @@ import {
  * Default cube configuration.
  */
 export const cubeConfig: CubeConfig = {
-  cameraAngle: 45,
+  cameraAngle: 50,
   cameraDistance: 3,
-  colors: ['#f00', '#0f0', '#00f', '#f0f', '#ff0', '#0ff'],
+  colors: [
+      '#FCD34D', // U
+      '#D97706', // L
+      '#3B82F6', // F
+      '#EF4444', // R
+      '#10B981', // B
+      '#F9FAFB', // D
+  ],
   innerBrightness: 0.9,
-  stickerElevation: 0.25,
-  stickerRadius: 0.25,
-  stickerSpacing: 0.25,
-  turnDuration: 100,
+  stickerElevation: 0.2,
+  stickerRadius: 0.2,
+  stickerSpacing: 0.2,
+  turnDuration: 65,
 };
 
 /**
