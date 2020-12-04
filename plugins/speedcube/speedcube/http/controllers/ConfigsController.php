@@ -21,8 +21,8 @@ class ConfigsController extends ApiController
         $user = Auth::getUser();
 
         $model = $user->configs()->create([
+            'data' => $data['data'],
             'puzzle_id' => $data['puzzle_id'],
-            'json' => $data['json'],
         ]);
         
         return $this->success([

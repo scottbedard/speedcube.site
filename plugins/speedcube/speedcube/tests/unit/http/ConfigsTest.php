@@ -13,8 +13,8 @@ class ConfigsTest extends PluginTestCase
         $user = Factory::authenticatedUser();
 
         $response = $this->postJson('/api/speedcube/speedcube/configs', [
+            'data' => ['foo' => 'bar'],
             'puzzleId' => 1,
-            'json' => ['foo' => 'bar'],
         ]);
         
         $response->assertStatus(200);
@@ -23,14 +23,14 @@ class ConfigsTest extends PluginTestCase
         
         $this->assertEquals(1, $data['model']['puzzleId']);
         $this->assertEquals(1, $user->configs()->count());
-        $this->assertEquals(['foo' => 'bar'], $data['model']['json']);
+        $this->assertEquals(['foo' => 'bar'], $data['model']['data']);
     }
 
     public function test_configs_create_forbidden()
     {
         $response = $this->postJson('/api/speedcube/speedcube/configs', [
+            'data' => [],
             'puzzleId' => 1,
-            'json' => [],
         ]);
 
         $response->assertStatus(403);

@@ -15,8 +15,8 @@ export const config = computed(() => {
       : isDodecaminx(name) ? dodecaminxConfig
       : {};
 
-    const userConfig = currentUser.value?.configs
-      .find(obj => obj.puzzleId === id)?.json ?? {};
+    const userConfig = currentUser.value?.activeConfigs
+      .find(obj => obj.puzzleId === id)?.data ?? {};
 
     return { ...defaultConfig, ...userConfig };
   };

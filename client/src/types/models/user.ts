@@ -2,7 +2,7 @@ import { Config } from './config';
 
 export interface UserModel {
   activatedAt: string,
-  configs: Config[],
+  activeConfigs: Config[],
   createdAt: string,
   createdIpAddress: string,
   deletedAt: string | null,

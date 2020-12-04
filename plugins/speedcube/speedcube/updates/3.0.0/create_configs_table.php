@@ -15,7 +15,8 @@ class CreateConfigsTable extends Migration
             $table->increments('id');
             $table->tinyInteger('puzzle_id')->unsigned()->index();
             $table->integer('user_id')->unsigned()->index();
-            $table->text('json');
+            $table->boolean('is_active')->index();
+            $table->text('data');
             $table->timestamps();
         });
     }

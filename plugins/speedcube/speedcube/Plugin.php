@@ -44,10 +44,12 @@ class Plugin extends PluginBase
 
         // extend user model
         UserModel::extend(function ($model) {
-            $model->hasMany['configs'] = [
+            $model->hasMany['activeConfigs'] = [
                 'SpeedCube\SpeedCube\Models\Config',
-                'scope' => 'current',
+                'scope' => 'isActive',
             ];
+
+            $model->hasMany['configs'] = 'SpeedCube\SpeedCube\Models\Config';
         });
 
         // disable ui for settings defined in config file

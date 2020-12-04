@@ -113,14 +113,17 @@ export function isPuzzle(str: string): str is PuzzleName {
 /**
  * Puzzle ids are stored in the database as integers. This
  * constant maps those ids to their cooresponding names.
+ * 
+ * 0 is reserved as an unknown puzzle id, and is only used
+ * for testing purposes.
  */
 export const puzzleIds: Record<PuzzleName, number> = {
-  '2x2': 0,
-  '3x3': 1,
-  '4x4': 2,
-  '5x5': 3,
-  'kilominx': 4,
-  'megaminx': 5,
-  'masterminx': 6,
-  'gigaminx': 7,
+  '2x2': 1,
+  '3x3': 2,
+  '4x4': 3,
+  '5x5': 4,
+  'kilominx': 5,
+  'megaminx': 6,
+  'masterminx': 7,
+  'gigaminx': 8,
 };

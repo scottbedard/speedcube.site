@@ -3,7 +3,7 @@ import { UserModel } from '@/types/models/user';
 import { currentUser } from '@/app/store/user/state';
 
 export type CreateConfigPayload = {
-  json: Record<string, any>,
+  data: Record<string, any>,
   puzzleId: number,
 };
 

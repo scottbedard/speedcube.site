@@ -10,9 +10,45 @@ class Solve extends Model
     use \October\Rain\Database\Traits\Validation;
 
     /**
-     * @var string The database table used by the model.
+     * @var array Default attributes
      */
-    public $table = 'speedcube_speedcube_solves';
+    public $attributes = [
+        'config_id' => 0,
+        'user_id' => 0,
+    ];
+
+    /**
+     * @var array Belongs to
+     */
+    public $belongsTo = [
+        'config' => 'Speedcube\Speedcube\Models\Config',
+        'user' => 'RainLab\User\Models\User',
+    ];
+
+    /**
+     * @var array Attributes to be cast to native types
+     */
+    protected $casts = [
+        'config_id' => 'integer',
+        'id' => 'integer',
+        'user_id' => 'integer',
+    ];
+
+    /**
+     * @var array Attributes to be cast to Argon (Carbon) instances
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+    ];
+
+    /**
+     * @var array Fillable fields
+     */
+    protected $fillable = [
+        'config_id',
+        'user_id',
+    ];
 
     /**
      * @var array Guarded fields
@@ -20,55 +56,20 @@ class Solve extends Model
     protected $guarded = ['*'];
 
     /**
-     * @var array Fillable fields
-     */
-    protected $fillable = [];
-
-    /**
-     * @var array Validation rules for attributes
-     */
-    public $rules = [];
-
-    /**
-     * @var array Attributes to be cast to native types
-     */
-    protected $casts = [];
-
-    /**
-     * @var array Attributes to be cast to JSON
-     */
-    protected $jsonable = [];
-
-    /**
-     * @var array Attributes to be appended to the API representation of the model (ex. toArray())
-     */
-    protected $appends = [];
-
-    /**
      * @var array Attributes to be removed from the API representation of the model (ex. toArray())
      */
     protected $hidden = [];
 
     /**
-     * @var array Attributes to be cast to Argon (Carbon) instances
+     * @var array Validation rules for attributes
      */
-    protected $dates = [
-        'created_at',
-        'updated_at'
+    public $rules = [
+        'config_id' => 'required|integer|min:0',
+        'user_id' => 'required|integer|min:0',
     ];
 
     /**
-     * @var array Relations
+     * @var string The database table used by the model.
      */
-    public $hasOne = [];
-    public $hasMany = [];
-    public $hasOneThrough = [];
-    public $hasManyThrough = [];
-    public $belongsTo = [];
-    public $belongsToMany = [];
-    public $morphTo = [];
-    public $morphOne = [];
-    public $morphMany = [];
-    public $attachOne = [];
-    public $attachMany = [];
+    public $table = 'speedcube_speedcube_solves';
 }

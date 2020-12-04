@@ -2,10 +2,8 @@
 
 namespace Speedcube\Speedcube\Models;
 
-use DB;
 use Model;
 use October\Rain\Database\Builder;
-use October\Rain\Exception\ValidationException;
 
 /**
  * Config Model
@@ -15,39 +13,20 @@ class Config extends Model
     use \October\Rain\Database\Traits\Validation;
 
     /**
-     * @var string The database table used by the model.
+     * @var array Default attributes
      */
-    public $table = 'speedcube_speedcube_configs';
-
-    /**
-     * @var array Fillable fields
-     */
-    protected $fillable = [
-        'puzzle_id',
-        'json',
+    public $attributes = [
+        'data' => '{}',
+        'is_active' => true,
+        'puzzle_id' => 0,
+        'user_id' => 0,
     ];
 
     /**
-     * @var array Guarded fields
+     * @var array Belongs to
      */
-    protected $guarded = ['*'];
-
-    /**
-     * @var array Hidden fields
-     */
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-        'user_id',
-    ];
-
-    /**
-     * @var array Validation rules for attributes
-     */
-    public $rules = [
-        'json' => 'required',
-        'puzzle_id' => 'required|integer|min:0',
-        'user_id' => 'required|integer|min:0',
+    public $belongsTo = [
+        'user' => 'RainLab\User\Models\User',
     ];
 
     /**
@@ -55,15 +34,9 @@ class Config extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'is_active' => 'boolean',
         'puzzle_id' => 'integer',
         'user_id' => 'integer',
-    ];
-
-    /**
-     * @var array Attributes to be cast to JSON
-     */
-    protected $jsonable = [
-        'json',
     ];
 
     /**
@@ -75,25 +48,99 @@ class Config extends Model
     ];
 
     /**
-     * @var array Relations
+     * @var array Fillable fields
      */
-    public $belongsTo = [
-        'user' => 'RainLab\User\Models\User',
+    protected $fillable = [
+        'data',
+        'is_active',
+        'puzzle_id',
+        'user_id',
     ];
 
     /**
-     * Select current configs
+     * @var array Guarded fields
+     */
+    protected $guarded = ['*'];
+
+    /**
+     * @var array Has many
+     */
+    public $hasMany = [
+        'solves' => 'Speedcube\Speedcube\Models\Solve',
+    ];
+
+    /**
+     * @var array Hidden fields
+     */
+    protected $hidden = [
+        'created_at',
+        'is_active',
+        'updated_at',
+        'user_id',
+    ];
+
+    /**
+     * @var array Jsonable fields
+     */
+    protected $jsonable = [
+        'data',
+    ];
+
+    /**
+     * @var array Validation rules
+     */
+    public $rules = [
+        'data' => 'array',
+        'is_active' => 'boolean',
+        'puzzle_id' => 'required|integer|min:0',
+        'user_id' => 'required|integer|min:0',
+    ];
+
+    /**
+     * @var string The database table used by the model.
+     */
+    public $table = 'speedcube_speedcube_configs';
+
+    /**
+     * After create.
+     */
+    public function afterCreate()
+    {
+        $this->managePriorConfig();
+    }
+
+    /**
+     * Manage the prior config.
+     */
+    protected function managePriorConfig()
+    {
+        // delete configs that have no related solves
+        self::isActive()
+            ->where('id', '!=', $this->id)
+            ->where('puzzle_id', $this->puzzle_id)
+            ->where('user_id', $this->user_id)
+            ->doesntHave('solves')
+            ->delete();
+
+        // and deactivate all others
+        self::isActive()
+            ->where('id', '!=', $this->id)
+            ->where('puzzle_id', $this->puzzle_id)
+            ->where('user_id', $this->user_id)
+            ->update([
+                'is_active' => false,
+            ]);
+    }
+
+    /**
+     * Select active configs.
      *
      * @param October\Rain\Database\Builder $query
      *
      * @return October\Rain\Database\Builder
      */
-    public function scopeCurrent(Builder $query): Builder
+    public function scopeIsActive(Builder $query): Builder
     {
-        $current = self::select(DB::raw('max(id)'))
-            ->groupBy(['puzzle_id', 'user_id'])
-            ->toSql();
-
-        return $query->whereRaw("id in ($current)");
+        return $query->where('is_active', true);
     }
 }

@@ -51,7 +51,7 @@ export default defineComponent({
 
       createConfig({
         puzzleId: getPuzzleId(puzzleName.value),
-        json: pendingConfig.value || {},
+        data: pendingConfig.value || {},
       }).then(() => {
         isLoading.value = false;
       });

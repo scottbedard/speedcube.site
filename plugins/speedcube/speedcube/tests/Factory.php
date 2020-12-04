@@ -92,14 +92,7 @@ class Factory
      */
     public static function config()
     {
-        return [
-            'json' => [
-                'cameraAngle' => 45,
-                'cameraDistance' => 2,
-            ],
-            'puzzle_id' => 0,
-            'user_id' => 0,
-        ];
+        return [];
     }
 
     /**
