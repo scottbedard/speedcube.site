@@ -112,6 +112,12 @@ class Plugin extends PluginBase
                         'permissions' => ['speedcube.speedcube.access_configs'],
                         'url'         => Backend::url('speedcube/speedcube/configs'),
                     ],
+                    'keyboardconfigs' => [
+                        'icon'        => 'icon-code',
+                        'label'       => 'Keyboard Configs',
+                        'permissions' => ['speedcube.speedcube.access_keyboard_configs'],
+                        'url'         => Backend::url('speedcube/speedcube/keyboardconfigs'),
+                    ],
                 ],
                 'url' => Backend::url('speedcube/speedcube/solves'),
             ],

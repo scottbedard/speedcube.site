@@ -75,6 +75,8 @@ class Configs extends Controller
 
     /**
      * Load scoreboard.
+     *
+     * @return void
      */
     protected function loadScoreboard()
     {
