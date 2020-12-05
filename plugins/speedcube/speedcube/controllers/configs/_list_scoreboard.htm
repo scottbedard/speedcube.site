@@ -1,0 +1,17 @@
+<style>
+#configs-scoreboard [data-control="chart-pie"] tr:nth-child(n + 4) {
+    display: none;
+}
+</style>
+
+<div class="scoreboard" id="configs-scoreboard">
+    <div data-control="toolbar">
+        <div class="scoreboard-item control-chart" data-control="chart-pie">
+            <ul>
+                <?php foreach($totals as $puzzle => $total): ?>
+                    <li><?= $puzzle ?> <span><?= $total ?></span></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+</div>

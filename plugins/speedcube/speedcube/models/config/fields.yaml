@@ -7,14 +7,23 @@ fields:
         disabled: true
         label: ID
         span: left
+
+    puzzle_id:
+        label: Puzzle
+        path: $/speedcube/speedcube/models/config/_field_puzzle_id.htm
+        required: false
+        type: partial
+
     is_active:
         label: Active
         span: left
         type: checkbox
+
     # blocked by https://github.com/octobercms/docs/pull/502
     # data:
     #     fontSize: 14
     #     label: Data
     #     language: javascript
     #     size: giant
+    #     span: right
     #     type: codeeditor

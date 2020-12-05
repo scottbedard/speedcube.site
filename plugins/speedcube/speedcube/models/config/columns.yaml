@@ -28,4 +28,3 @@ columns:
         label: Status
         path: $/speedcube/speedcube/models/config/_column_is_active.htm
         type: partial
-
