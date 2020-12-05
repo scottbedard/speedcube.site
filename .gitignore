@@ -4,4 +4,5 @@
 /client/dist
 /plugins/speedcube/speedcube/views/index.htm
 node_modules
+storage/debugbar
 vendor
