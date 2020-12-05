@@ -6,6 +6,24 @@
     associated binding if one exists.
   </p>
 
+  <div class="gap-x-12 flex flex-wrap justify-center leading-loose tracking-wide sm:justify-start">
+    <a class="inline-flex items-center" href="#" @click.prevent>
+      <v-icon class="mr-2" name="plus" size="5" stroke="4" /> Add Binding
+    </a>
+    <a class="inline-flex items-center" href="#" @click.prevent>
+      <v-icon class="mr-2" name="hash" size="5" stroke="3" /> Add Keyspace
+    </a>
+    <a class="inline-flex items-center" href="#" @click.prevent>
+      <v-icon class="mr-2" name="code" size="5" stroke="3" /> Edit JSON
+    </a>
+    <a class="inline-flex items-center" href="#" @click.prevent>
+      <v-icon class="mr-2" name="rotate-ccw" size="5" stroke="3" /> Reset Default
+    </a>
+    <a class="inline-flex items-center" href="#" @click.prevent>
+      <v-icon class="mr-2" name="trash-2" size="5" stroke="3" /> Clear All
+    </a>
+  </div>
+
   <div class="flex justify-end">
     <v-button disabled>Save</v-button>
   </div>
