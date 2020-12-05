@@ -1,7 +1,5 @@
 <template>
-  <form
-    class="max-w-5xl w-full"
-    @submit.prevent="onSubmit">
+  <form @submit.prevent="onSubmit">
 
     <!-- fields -->
     <div class="gap-6 grid xs:grid-cols-2 md:grid-cols-3">

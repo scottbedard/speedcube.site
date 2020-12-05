@@ -1,13 +1,15 @@
 <template>
   <v-puzzle
     v-if="model"
-    class="max-w-md mb-12 mx-auto"
+    class="max-w-md mb-6 mx-auto"
     :border="border"
     :config="activeConfig"
     :model="model" />
   
   <div class="flex justify-center">
-    <router-view />
+    <div class="max-w-6xl mx-auto w-full">
+      <router-view />
+    </div>
   </div>
 </template>
 
