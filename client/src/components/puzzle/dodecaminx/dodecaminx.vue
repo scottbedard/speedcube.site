@@ -27,9 +27,10 @@ import { computed, defineComponent, onUnmounted, PropType, watch } from 'vue';
 import { createShape } from '@/app/three/utils/shape';
 import { dodecahedronEdgeLength, pentagonCircumradius, polygon } from '@/app/utils/geometry';
 import { Dodecaminx } from '@bedard/twister';
+import { dodecaminxConfig } from '@/app/utils/puzzle';
+import { DodecaminxConfig } from '@/types/puzzle';
 import { DodecaminxFace, DodecaminxSticker } from '@bedard/twister/dist/dodecaminx/dodecaminx';
 import { Line2, Vector2 } from '@/types/math';
-import { DodecaminxConfig } from '@/types/puzzle';
 import { mapColumns, mapRows } from '@/app/utils/matrix';
 import VCore from './core.vue';
 
@@ -49,25 +50,13 @@ export default defineComponent({
     const evenLayers = computed(() => isEven(layers.value));
     const matrixLayers = computed(() => Math.floor(layers.value / 2));
 
-    // puzzle colors
+    // normalize config values
     const colors = computed(() => {
-      return [
-        '#F6E05E', // u: yellow
-        '#F7FAFC', // f: white
-        '#9F7AEA', // l: purple
-        '#ED8936', // bl: orange
-        '#9AE6B4', // br: light green
-        '#2B6CB0', // r: dark blue
-        '#FBD38D', // d: creme
-        '#718096', // b: gray
-        '#90CDF4', // dbl: light blue
-        '#2F855A', // dl: dark green
-        '#E53E3E', // dr: red
-        '#F687B3', // dbr: pink
-      ];
+      return Array.isArray(props.config.colors)
+        ? props.config.colors
+        : dodecaminxConfig.colors;
     });
 
-    // normalize config values
     const innerBrightness = computed(() => clamp(props.config?.innerBrightness ?? 0, 0, 1));
 
     const stickerElevation = computed(() => clamp(props.config?.stickerElevation ?? 0, 0, 1));

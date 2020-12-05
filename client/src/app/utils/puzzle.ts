@@ -1,3 +1,5 @@
+import { colors } from '@/app/utils/color';
+
 import {
   CubeConfig,
   CubeName,
@@ -13,12 +15,12 @@ export const cubeConfig: CubeConfig = {
   cameraAngle: 50,
   cameraDistance: 3,
   colors: [
-      '#FCD34D', // U
-      '#D97706', // L
-      '#3B82F6', // F
-      '#EF4444', // R
-      '#10B981', // B
-      '#F9FAFB', // D
+      colors.yellow, // U
+      colors.orange, // L
+      colors.blue, // F
+      colors.red, // R
+      colors.green, // B
+      colors.white, // D
   ],
   innerBrightness: 0.9,
   stickerElevation: 0.2,
@@ -51,18 +53,18 @@ export const dodecaminxConfig: DodecaminxConfig = {
   cameraAngle: 45,
   cameraDistance: 3,
   colors: [
-    '#F6E05E', // u: yellow
-    '#F7FAFC', // f: white
-    '#9F7AEA', // l: purple
-    '#ED8936', // bl: orange
-    '#9AE6B4', // br: light green
-    '#2B6CB0', // r: dark blue
-    '#FBD38D', // d: creme
-    '#718096', // b: gray
-    '#90CDF4', // dbl: light blue
-    '#2F855A', // dl: dark green
-    '#E53E3E', // dr: red
-    '#F687B3', // dbr: pink
+    colors.gray, // B
+    colors.orange, // BL
+    colors.lightGreen, // BR
+    colors.creme, // D
+    colors.lightBlue, // DBL
+    colors.pink, // DBR
+    colors.green, // DL
+    colors.red, // DR
+    colors.white, // F
+    colors.purple, // L
+    colors.blue, // R
+    colors.yellow, // U
   ],
   innerBrightness: 0.9,
   middleSize: 0,
