@@ -4,3 +4,6 @@
 [submodule "plugins/rainlab/user"]
 	path = plugins/rainlab/user
 	url = git@github.com:rainlab/user-plugin.git
+[submodule "plugins/rainlab/debugbar"]
+	path = plugins/rainlab/debugbar
+	url = git@github.com:rainlab/debugbar-plugin.git
