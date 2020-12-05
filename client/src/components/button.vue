@@ -1,8 +1,8 @@
 <template>
   <button
-    class="border-none font-bold h-12 px-6 rounded text-white focus:outline-none focus:shadow-outline hover:shadow"
+    class="border-none font-bold h-12 px-6 rounded tracking-wide transition-colors focus:outline-none focus:shadow-outline hover:shadow"
     :class="[color, pointer]"
-    :disabled="loading">
+    :disabled="!isClickable">
     <v-spinner v-if="loading" class="text-lighten-50" />
     <slot v-else />
   </button>
@@ -14,16 +14,21 @@ import VSpinner from '@/components/spinner.vue';
 
 export default defineComponent({
   setup(props) {
+    const isClickable = computed(() => !props.disabled && !props.loading);
+
     const color = computed(() => {
-      return 'bg-green-600 hover:bg-green-500';
+      if (props.disabled) {
+        return 'bg-gray-700 text-gray-300';
+      }
+  
+      return 'bg-green-600 text-gray-100 hover:bg-green-500 hover:text-white';
     });
 
-    const pointer = computed(() => {
-      return props.loading ? 'pointer-events-none' : 'cursor-pointer';
-    });
+    const pointer = computed(() => isClickable.value ? 'cursor-pointer' : 'pointer-events-none');
 
     return {
       color,
+      isClickable,
       pointer,
     };
   },
@@ -31,6 +36,13 @@ export default defineComponent({
     VSpinner,
   },
   props: {
+    disabled: {
+      default: false,
+      type: Boolean,
+    },
+    icon: {
+      type: String,
+    },
     loading: {
       default: false,
       type: Boolean,
