@@ -40,7 +40,6 @@ class Factory
         }
 
         $model = self::fill($model, $data, $omit);
-        
         $model->save();
 
         return $model;
@@ -100,27 +99,38 @@ class Factory
      *
      * @return array
      */
-    public static function user()
+    public static function user(array $data = [])
     {
         $faker = Faker\Factory::create('en_US');
 
-        $email = '';
-        $username = '';
+        $email = array_key_exists('email', $data) ? $data['email'] : '';
         
-        do {
-            $email = $faker->safeEmail;
-        } while (User::whereEmail($email)->count() > 0);
+        if (!$email) {
+            do {
+                $email = $faker->safeEmail;
+            } while (User::whereEmail($email)->count() > 0);
+        }
 
-        do {
-            $username = preg_replace("/[^A-Za-z0-9 ]/", '', $faker->username);
-        } while (User::whereUsername($username)->count() > 0);
+        $name = array_key_exists('name', $data)
+            ? $data['name']
+            : $faker->firstName(rand(0, 1)) . ' ' . $faker->lastName;
+
+        $password = array_key_exists('password', $data) ? $data['password'] : '12345678';
+
+        $username = array_key_exists('username', $data) ? $data['username'] : '';
+
+        if (!$username) {
+            do {
+                $username = preg_replace("/[^A-Za-z0-9 ]/", '', $faker->username);
+            } while (User::whereUsername($username)->count() > 0);
+        }
 
         return [
             'created_at' => Carbon::now()->subDays(rand(0, 365)),
             'email' => $email,
-            'name' => $faker->firstName(rand(0, 1)) . ' ' . $faker->lastName,
-            'password' => '12345678',
-            'password_confirmation' => '12345678',
+            'name' => $name,
+            'password_confirmation' => $password,
+            'password' => $password,
             'username' => $username,
         ];
     }

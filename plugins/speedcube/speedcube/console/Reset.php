@@ -2,8 +2,10 @@
 
 namespace Speedcube\Speedcube\Console;
 
-use Backend\Models\User;
+use Backend\Models\User as BackendUser;
 use Illuminate\Console\Command;
+use RainLab\User\Models\User;
+use Speedcube\Speedcube\Tests\Factory;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -28,13 +30,18 @@ class Reset extends Command
     {
         if (app()->env === 'production') {
             $this->output->writeLn('<fg=red>Error:</> Reset command cannot be run in production.');
+
             return;
         }
         
         $this->call('october:down', ['--force' => true]);
         $this->call('october:up');
-        $this->resetBackendUser();
+
         $this->refreshPlugin();
+
+        $this->createBackendUsers();
+
+        $this->createFrontendUsers();
     }
 
     /**
@@ -48,18 +55,36 @@ class Reset extends Command
     }
 
     /**
-     * Configure backend user.
+     * Create backend users.
      *
      * @return void
      */
-    protected function resetBackendUser()
+    protected function createBackendUsers()
     {
-        $admin = User::find(1);
-        $admin->login = env('DEV_BACKEND_LOGIN', 'admin');
-        $admin->password = env('DEV_BACKEND_PASSWORD', 'admin');
-        $admin->password_confirmation = env('DEV_BACKEND_PASSWORD', 'admin');
+        $admin = BackendUser::find(1);
+
+        $admin->login = 'admin';
+        $admin->password = 'admin';
+        $admin->password_confirmation = 'admin';
         $admin->save();
 
-        $this->output->writeLn('<fg=green>Backend User Reset</>');
+        $this->output->writeLn('<fg=green>Backend User Created</>');
+    }
+
+    /**
+     * Create frontend users.
+     *
+     * @return void
+     */
+    protected function createFrontendUsers()
+    {
+        Factory::create(new User, [
+            'email' => 'homer@speedcube.site',
+            'name' => 'Homer Simpson',
+            'password' => '12345678',
+            'username' => 'homer',
+        ]);
+
+        $this->output->writeLn('<fg=green>Frontend Users Created</>');
     }
 }
