@@ -81,6 +81,7 @@ class Configs extends Controller
         $totals = [];
 
         Config::select('puzzle_id', DB::raw('count(*) as total'))
+            ->isActive()
             ->groupBy('puzzle_id')
             ->get()
             ->each(function ($result) use (&$totals) {
