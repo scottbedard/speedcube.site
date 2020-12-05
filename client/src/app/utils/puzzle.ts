@@ -51,7 +51,7 @@ export function cubeSize(name: CubeName): number {
  */
 export const dodecaminxConfig: DodecaminxConfig = {
   cameraAngle: 45,
-  cameraDistance: 3,
+  cameraDistance: 2.5,
   colors: [
     colors.gray, // B
     colors.orange, // BL
@@ -66,10 +66,10 @@ export const dodecaminxConfig: DodecaminxConfig = {
     colors.blue, // R
     colors.yellow, // U
   ],
-  innerBrightness: 0.9,
-  middleSize: 0,
-  stickerElevation: 0.05,
-  stickerRadius: 0.1,
+  innerBrightness: 0.5,
+  middleSize: 0.5,
+  stickerElevation: 0.03,
+  stickerRadius: 0.5,
   stickerSpacing: 0.1,
   turnDuration: 100,
 };
