@@ -4,6 +4,7 @@ namespace Speedcube\Speedcube\Models;
 
 use Model;
 use October\Rain\Database\Builder;
+use Speedcube\Speedcube\Classes\Puzzle;
 
 /**
  * Config Model
@@ -110,6 +111,32 @@ class Config extends Model
     }
 
     /**
+     * Get puzzle name.
+     *
+     * @return string
+     */
+    public function getPuzzleName()
+    {
+        return Puzzle::getName($this->puzzle_id);
+    }
+
+    /**
+     * Get puzzle filter options.
+     *
+     * @return array
+     */
+    public function getPuzzleFilterOptions()
+    {
+        $options = [];
+
+        foreach (Puzzle::IDS as $name => $id) {
+            $options[$id] = ucfirst($name);
+        }
+
+        return $options;
+    }
+
+    /**
      * Manage the prior config.
      */
     protected function managePriorConfig()
@@ -130,6 +157,18 @@ class Config extends Model
             ->update([
                 'is_active' => false,
             ]);
+    }
+
+    /**
+     * Select active configs.
+     *
+     * @param October\Rain\Database\Builder $query
+     *
+     * @return October\Rain\Database\Builder
+     */
+    public function scopeFilterUserIds(Builder $query, $ids): Builder
+    {
+        return $query->whereIn('user_id', $ids);
     }
 
     /**

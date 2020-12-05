@@ -1,0 +1,11 @@
+<?php
+$color = $record->is_active ? '#95b753' : '#ddd';
+$status = $record->is_active ? 'Active' : 'Inactive';
+?>
+
+<i
+    class="icon-circle"
+    data-toggle="tooltip"
+    title="<?= $status ?>"
+    style="color: <?= $color ?>">
+</i>

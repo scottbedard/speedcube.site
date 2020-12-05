@@ -6,12 +6,26 @@ columns:
     id:
         label: ID
         searchable: true
+
     user:
         label: User
         path: $/speedcube/speedcube/models/config/_column_user.htm
         searchable: false
         sortable: false
         type: partial
+
+    puzzle_id:
+        label: Puzzle
+        path: $/speedcube/speedcube/models/config/_column_puzzle_id.htm
+        sortable: false
+        type: partial
+
     created_at:
         label: Created
         type: timetense
+
+    is_active:
+        label: Status
+        path: $/speedcube/speedcube/models/config/_column_is_active.htm
+        type: partial
+
