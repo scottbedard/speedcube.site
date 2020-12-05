@@ -27,5 +27,5 @@ Route::middleware('web')->group(function () {
     // client
     //
     Route::get('{all}', [SpaController::class, 'index'])
-        ->where('all', '^(?!api|backend).*$');
+        ->where('all', '^(?!api|backend|_debugbar).*$');
 });
