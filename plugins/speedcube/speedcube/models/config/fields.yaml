@@ -6,3 +6,10 @@ fields:
     id:
         label: ID
         disabled: true
+    # blocked by https://github.com/octobercms/docs/pull/502
+    # data:
+    #     fontSize: 14
+    #     label: Data
+    #     language: javascript
+    #     size: giant
+    #     type: codeeditor
