@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Config
+
+# Model Form Field configuration
+form: $/speedcube/speedcube/models/config/fields.yaml
+
+# Model Class name
+modelClass: Speedcube\Speedcube\Models\Config
+
+# Default redirect location
+defaultRedirect: speedcube/speedcube/configs
+
+# Create page
+create:
+    title: Create Config
+    redirect: speedcube/speedcube/configs/update/:id
+    redirectClose: speedcube/speedcube/configs
+
+# Update page
+update:
+    title: Edit Config
+    redirect: speedcube/speedcube/configs
+    redirectClose: speedcube/speedcube/configs
+
+# Preview page
+preview:
+    title: Preview Config

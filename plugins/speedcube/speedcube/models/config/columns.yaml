@@ -6,3 +6,12 @@ columns:
     id:
         label: ID
         searchable: true
+    user:
+        label: User
+        path: $/speedcube/speedcube/models/config/_column_user.htm
+        searchable: false
+        sortable: false
+        type: partial
+    created_at:
+        label: Created
+        type: timetense

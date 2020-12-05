@@ -97,8 +97,22 @@ class Plugin extends PluginBase
             'speedcube' => [
                 'icon' => 'icon-cube',
                 'label' => 'Speedcube',
-                'order' => 500,
+                'order' => 300,
                 'permissions' => ['speedcube.speedcube.*'],
+                'sideMenu'    => [
+                    'solves' => [
+                        'icon'        => 'icon-clock-o',
+                        'label'       => 'Solves',
+                        'permissions' => ['speedcube.speedcube.access_solves'],
+                        'url'         => Backend::url('speedcube/speedcube/solves'),
+                    ],
+                    'configs' => [
+                        'icon'        => 'icon-paint-brush',
+                        'label'       => 'Configs',
+                        'permissions' => ['speedcube.speedcube.access_configs'],
+                        'url'         => Backend::url('speedcube/speedcube/configs'),
+                    ],
+                ],
                 'url' => Backend::url('speedcube/speedcube/solves'),
             ],
         ];

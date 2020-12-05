@@ -4,11 +4,12 @@ namespace Speedcube\Speedcube\Controllers;
 
 use Backend\Classes\Controller;
 use BackendMenu;
+use October\Rain\Database\Builder;
 
 /**
- * Solves Back-end Controller
+ * Configs Back-end Controller
  */
-class Solves extends Controller
+class Configs extends Controller
 {
     /**
      * @var string Configuration file for the `FormController` behavior.
@@ -32,7 +33,7 @@ class Solves extends Controller
      * @var array Required permissions.
      */
     public $requiredPermissions = [
-        'speedcube.speedcube.access_solves',
+        'speedcube.speedcube.access_configs',
     ];
 
     /**
@@ -44,6 +45,20 @@ class Solves extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('Speedcube.Speedcube', 'speedcube', 'solves');
+        BackendMenu::setContext('Speedcube.Speedcube', 'speedcube', 'configs');
+    }
+
+    /**
+     * List extend query.
+     *
+     * @param October\Rain\Database\Builder $query
+     *
+     * @return October\Rain\Database\Builder
+     */
+    public function listExtendQuery(Builder $query): Builder
+    {
+        return $query
+            ->with('solvesCount')
+            ->with('user');
     }
 }
