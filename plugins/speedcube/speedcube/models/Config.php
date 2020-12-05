@@ -67,10 +67,6 @@ class Config extends Model
      */
     public $hasMany = [
         'solves' => 'Speedcube\Speedcube\Models\Solve',
-        'solvesCount' => [
-            'Speedcube\Speedcube\Models\Solve',
-            'count' => true,
-        ],
     ];
 
     /**

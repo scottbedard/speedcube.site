@@ -57,8 +57,6 @@ class Configs extends Controller
      */
     public function listExtendQuery(Builder $query): Builder
     {
-        return $query
-            ->with('solvesCount')
-            ->with('user');
+        return $query->with('user:id,username');
     }
 }
