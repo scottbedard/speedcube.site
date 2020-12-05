@@ -44,7 +44,6 @@ export function createShape(vectors: Ref<Vector2[]> | Vector2[], rawRadius: Ref<
       shape.lineTo(curveStart[0], curveStart[1]);
 
       // draw the current curve
-      // shape.lineTo(curveEnd[0], curveEnd[1]);
       shape.quadraticCurveTo(vector[0], vector[1], curveEnd[0], curveEnd[1]);
     }
   });
