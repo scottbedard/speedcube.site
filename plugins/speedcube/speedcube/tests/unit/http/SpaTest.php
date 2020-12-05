@@ -40,7 +40,7 @@ class SpaTest extends PluginTestCase
 
         $context = $this->getContext();
 
-        $this->assertEquals(1, count($context['user']['configs']));
-        $this->assertEquals($config->id, $context['user']['configs'][0]['id']);
+        $this->assertEquals(1, count($context['user']['activeConfigs']));
+        $this->assertEquals($config->id, $context['user']['activeConfigs'][0]['id']);
     }
 }
