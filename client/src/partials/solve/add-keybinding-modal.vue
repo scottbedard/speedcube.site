@@ -38,14 +38,11 @@ import VLabeledInput from '@/components/labeled-input.vue';
 import VModal from '@/components/modal.vue';
 
 export default defineComponent({
-  setup() {
-    const form = reactive({
-      key: '',
-      binding: '',
-    });
+  setup(props, { emit }) {
+    const form = reactive({ key: '', turn: '' });
 
     const onSubmit = () => {
-      console.log('submit');
+      emit('add', form);
     }
 
     return {
@@ -58,5 +55,8 @@ export default defineComponent({
     VLabeledInput,
     VModal,
   },
+  emits: [
+    'add',
+  ],
 });
 </script>

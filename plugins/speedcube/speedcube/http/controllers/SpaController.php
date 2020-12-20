@@ -20,7 +20,10 @@ class SpaController extends Controller
         $user = AccountManager::getAuthenticatedUser();
 
         if ($user) {
-            $user->load('activeConfigs');
+            $user->load([
+                'activeConfigs',
+                'keyboardConfigs',
+            ]);
         }
 
         $data = Util::camelCaseKeysRecursive([

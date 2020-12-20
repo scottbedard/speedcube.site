@@ -1,7 +1,7 @@
 /**
- * Puzzle config
+ * Keyboard config
  */
-export type Config<T = Record<string, any>> = {
+export type KeyboardConfig<T = Record<string, any>> = {
   createdAt: string,
   data: T,
   id: number,

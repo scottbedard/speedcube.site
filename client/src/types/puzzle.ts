@@ -113,6 +113,14 @@ export type DodecaminxName =
   | 'gigaminx';
 
 /**
+ * Keyboard config
+ */
+export type KeyboardConfig = {
+  default: Record<string, string>,
+  keyspaces: Record<string, Record<string, string>>,
+}
+
+/**
  * Puzzle config
  */
 export type PuzzleConfig = {

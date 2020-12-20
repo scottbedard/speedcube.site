@@ -1,4 +1,5 @@
 import { Config } from './config';
+import { KeyboardConfig } from './keyboard-config';
 
 export interface UserModel {
   activatedAt: string,
@@ -11,6 +12,7 @@ export interface UserModel {
   isActivated: boolean,
   isGuest: number,
   isSuperuser: number,
+  keyboardConfigs: KeyboardConfig[],
   lastIpAddress: string,
   lastLogin: string,
   lastSeen: string | null,

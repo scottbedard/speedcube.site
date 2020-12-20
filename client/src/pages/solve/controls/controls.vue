@@ -27,9 +27,13 @@
   <!-- modals -->
   <v-add-keybinding-modal
     v-if="isActiveModal('add')"
+    @add="addBinding"
     @dismiss="closeModal" />
 
   <!-- keyspace -->
+  <div>
+    <pre>{{ { pendingKeyboardConfig } }}</pre>
+  </div>
 
   <!-- footer -->
   <div class="flex justify-end">
@@ -38,22 +42,58 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+/* eslint-disable */
+import { cloneDeep } from 'lodash-es';
+import { defineComponent, onUnmounted, ref } from 'vue';
+import { keyboardConfig } from '@/app/store/user/getters';
+import { pendingKeyboardConfig } from '../state';
+import { usePuzzleName } from '../behaviors';
 import VAddKeybindingModal from '@/partials/solve/add-keybinding-modal.vue';
 import VButton from '@/components/button.vue';
 import VIcon from '@/components/icon.vue';
 
 export default defineComponent({
   setup() {
-    const activeModal = ref<string>('');
+    const activeKeyspace = ref('');
+    const activeModal = ref('');
+    const puzzleName = usePuzzleName();
 
-    const closeModal = () => activeModal.value = '';
-    const isActiveModal = (value: string) => activeModal.value === value
-    const showModal = (value: string) => { activeModal.value = value }
+    // modal visibility
+    const closeModal = () => {
+      activeModal.value = '';
+    }
+
+    const isActiveModal = (value: string) => activeModal.value === value;
+
+    const showModal = (value: string) => {
+      activeModal.value = value;
+    }
+
+    // add a key binding
+    const addBinding = ({ key, turn }: { key: string, turn: string }) => {
+      if (pendingKeyboardConfig.value) {
+        if (!activeKeyspace.value) {
+          pendingKeyboardConfig.value.default[key] = turn;
+        }
+      }
+
+      closeModal();
+    }
+
+    // set pending keyboard config to equal the current config
+    pendingKeyboardConfig.value = cloneDeep(keyboardConfig.value(puzzleName.value));
+
+    // flush pending keyboard config when the editor is closed
+    onUnmounted(() => {
+      pendingKeyboardConfig.value = null;
+    });
 
     return {
+      activeKeyspace,
+      addBinding,
       closeModal,
       isActiveModal,
+      pendingKeyboardConfig,
       showModal,
     };
   },
