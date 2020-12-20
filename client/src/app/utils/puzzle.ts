@@ -40,6 +40,67 @@ export const cubeNames: CubeName[] = [
 ];
 
 /**
+ * Default cube keyboard config
+ */
+export const cubeKeyboardConfig = {
+  default: {
+    // face turns
+    j: `U`,
+    f: `U'`,
+    d: `L`,
+    e: `L'`,
+    h: `F`,
+    g: `F'`,
+    i: `R`,
+    k: `R'`,
+    w: `B`,
+    o: `B'`,
+    s: `D`,
+    l: `D'`,
+
+    // wide turns
+    J: `Uw`,
+    F: `Uw'`,
+    D: `Lw`,
+    E: `Lw'`,
+    H: `Fw`,
+    G: `Fw'`,
+    I: `Rw`,
+    K: `Rw'`,
+    W: `Bw`,
+    O: `Bw'`,
+    S: `Dw`,
+    L: `Dw'`,
+
+    // rotations
+    a: `Y'`,
+    A: `Y'`,
+    ';': `Y`,
+    R: `X`,
+    r: `X`,
+    U: `X`,
+    u: `X`,
+    T: `X`,
+    t: `X`,
+    Y: `X`,
+    y: `X`,
+    V: `X'`,
+    v: `X'`,
+    C: `X'`,
+    c: `X'`,
+    N: `X'`,
+    n: `X'`,
+    M: `X'`,
+    m: `X'`,
+    Q: `Z'`,
+    q: `Z'`,
+    P: `Z`,
+    p: `Z`,
+  },
+  keyspaces: {},
+};
+
+/**
  * Determine the size of a cube.
  */
 export function cubeSize(name: CubeName): number {
@@ -83,6 +144,14 @@ export const dodecaminxNames: DodecaminxName[] = [
   'masterminx',
   'gigaminx',
 ];
+
+/**
+ * Default dodecaminx keyboard config
+ */
+export const dodecaminxKeyboardConfig = {
+  default: {},
+  keyspaces: {},
+};
 
 /**
  * Determine the size of a dodecaminx.

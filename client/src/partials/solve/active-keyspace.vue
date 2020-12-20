@@ -5,7 +5,7 @@
     This keyspace is empty
   </p>
 
-  <div v-else class="flex flex-wrap font-mono gap-6 justify-center">
+  <div v-else class="flex flex-wrap font-mono gap-6 justify-center text-sm">
     <a
       v-for="[key, turn] in keybindings"
       class="bg-gray-700 rounded shadow-xl text-gray-300 px-3 py-1"

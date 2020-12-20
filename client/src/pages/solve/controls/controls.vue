@@ -22,7 +22,8 @@
 
   <v-reset-default-modal
     v-if="isActiveModal('reset-default')"
-    @dismiss="closeModal" />
+    @dismiss="closeModal"
+    @reset="resetDefault" />
 
   <div class="gap-6 grid">
     <!-- info -->
@@ -66,9 +67,9 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable */
 import { cloneDeep } from 'lodash-es';
 import { computed, defineComponent, onUnmounted, ref } from 'vue';
+import { cubeKeyboardConfig, dodecaminxKeyboardConfig, isCube, isDodecaminx } from '@/app/utils/puzzle';
 import { keyboardConfig } from '@/app/store/user/getters';
 import { pendingKeyboardConfig } from '../state';
 import { saveKeyboardConfig } from '@/app/store/user/actions';
@@ -169,6 +170,17 @@ export default defineComponent({
       closeModal();
     }
 
+    // reset default config
+    const resetDefault = () => {
+      if (isCube(puzzleName.value)) {
+        pendingKeyboardConfig.value = cloneDeep(cubeKeyboardConfig);
+      } else if (isDodecaminx(puzzleName.value)) {
+        pendingKeyboardConfig.value = cloneDeep(dodecaminxKeyboardConfig);
+      }
+      
+      closeModal();
+    }
+
     // set pending keyboard config to equal the current config
     pendingKeyboardConfig.value = cloneDeep(keyboardConfig.value(puzzleName.value));
 
@@ -179,8 +191,8 @@ export default defineComponent({
     const onSave = async () => {
       if (pendingKeyboardConfig.value) {
         await saveKeyboardConfig(puzzleId.value, pendingKeyboardConfig.value);
-
-        console.log('hooray!');
+        
+        // @todo: fire alert
       }
     }
 
@@ -202,6 +214,7 @@ export default defineComponent({
       pendingKeyspaces,
       removeBinding,
       removeKeyspace,
+      resetDefault,
       showAddModal,
       showEditModal,
       showModal,
