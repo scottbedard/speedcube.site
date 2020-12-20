@@ -14,14 +14,13 @@
         <a
           class="flex items-center text-gray-300"
           href="#"
-          @click.prevent>
+          @click.prevent="$emit('remove', keyspace)">
           <v-icon class="mr-2" name="trash-2" size="5" /> Delete keyspace
         </a>
         <div class="flex flex-wrap items-center gap-8">
           <a
             class="text-gray-300"
             href="#"
-
             @click.prevent="$emit('dismiss')">
             Cancel
           </a>
@@ -61,6 +60,7 @@ export default defineComponent({
   emits: [
     'add',
     'dismiss',
+    'remove',
   ],
   props: {
     activeKeyspace: {

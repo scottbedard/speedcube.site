@@ -38,6 +38,10 @@ class Plugin extends PluginBase
     public function extendRainLabUser()
     {
         // configure rainlab.user api
+        Event::listen('bedard.rainlabuserapi.afterGetUser', function ($user) {
+            $user->load(['activeConfigs', 'keyboardConfigs']);
+        });
+
         \Bedard\RainLabUserApi\Classes\ApiController::extend(function($controller) {
             $controller->middleware('Speedcube\Speedcube\Http\Middleware\TransformKeys');
         });

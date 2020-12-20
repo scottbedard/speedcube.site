@@ -19,13 +19,6 @@ class SpaController extends Controller
     {
         $user = AccountManager::getAuthenticatedUser();
 
-        if ($user) {
-            $user->load([
-                'activeConfigs',
-                'keyboardConfigs',
-            ]);
-        }
-
         $data = Util::camelCaseKeysRecursive([
             'context' => [
                 'user' => $user,

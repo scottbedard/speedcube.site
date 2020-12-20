@@ -8,7 +8,7 @@
   <div v-else class="flex flex-wrap font-mono gap-6 justify-center">
     <a
       v-for="[key, turn] in keybindings"
-      class="bg-gray-800 rounded shadow-xl text-gray-300 px-3 py-1"
+      class="bg-gray-700 rounded shadow-xl text-gray-300 px-3 py-1"
       href="#"
       :key="key"
       @click.prevent="$emit('edit', { key, turn })">
@@ -24,11 +24,9 @@ import { KeyboardConfig } from '@/types/puzzle';
 export default defineComponent({
   setup(props) {
     const keybindings = computed(() => {
-      return Object.entries(
-        props.activeKeyspace
-          ? {}
-          : props.pendingKeyboardConfig.default,
-      );
+      return props.activeKeyspace
+        ? Object.entries(props.pendingKeyboardConfig.keyspaces[props.activeKeyspace] ?? {})
+        : Object.entries(props.pendingKeyboardConfig.default ?? {});
     });
 
     return {

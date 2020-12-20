@@ -41,10 +41,14 @@ export const isAuthenticated = computed(() => currentUser.value !== null);
 /* eslint-disable */
 export const keyboardConfig = computed(() => {
   return (name: string): KeyboardConfig => {
-    // const id = getPuzzleId(name);
+    const id = getPuzzleId(name);
 
-    // const userKeyboardConfig = currentUser.value?.keyboardConfigs
-    //   .find(obj => obj.puzzleId === id)?.data ?? {};
+    const userKeyboardConfig = currentUser.value?.keyboardConfigs.find(obj => obj.puzzleId === id);
+
+    if (userKeyboardConfig) {
+      return userKeyboardConfig.data as KeyboardConfig;
+    }
+    
 
     return {
       default: {},

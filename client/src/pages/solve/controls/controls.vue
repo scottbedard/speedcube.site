@@ -11,7 +11,8 @@
     v-if="isActiveModal('keyspace')"
     :active-keyspace="activeKeyspace"
     @add="addKeyspace"
-    @dismiss="closeModal" />
+    @dismiss="closeModal"
+    @remove="removeKeyspace" />
 
   <div class="gap-6 grid">
     <!-- info -->
@@ -52,8 +53,6 @@
       <v-button @click="onSave">Save</v-button>
     </div>
   </div>
-
-  <pre>{{ pendingKeyboardConfig }}</pre>
 </template>
 
 <script lang="ts">
@@ -129,10 +128,25 @@ export default defineComponent({
     // remove a key binding
     const removeBinding = (key: string) => {
       if (pendingKeyboardConfig.value) {
-        if (!activeKeyspace.value) {
+        if (activeKeyspace.value) {
+          if (pendingKeyboardConfig.value.keyspaces[activeKeyspace.value]) {
+            delete pendingKeyboardConfig.value.keyspaces[activeKeyspace.value][key];
+          }
+        } else {
           delete pendingKeyboardConfig.value.default[key];
         }
       }
+
+      closeModal();
+    }
+
+    // remove a keyspace
+    const removeKeyspace = (keyspace: string) => {
+      if (pendingKeyboardConfig.value) {
+        delete pendingKeyboardConfig.value.keyspaces[keyspace];
+      }
+
+      activeKeyspace.value = '';
 
       closeModal();
     }
@@ -168,6 +182,7 @@ export default defineComponent({
       pendingKeyboardConfig,
       pendingKeyspaces,
       removeBinding,
+      removeKeyspace,
       showAddModal,
       showEditModal,
       showModal,
