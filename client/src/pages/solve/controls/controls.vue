@@ -1,13 +1,13 @@
 <template>
-  <p class="leading-normal max-w-4xl mb-6 mx-auto text-center">
-    These are your current key bindings, displayed in <span class="inline-flex items-center">
-    &quot;key <v-icon class="mx-px" name="chevron-right" stroke="3" /> turn&quot;</span> format.
-    Feel free to make turns while the editor is open. Pressing a key will highlight the
-    associated binding if one exists.
+  <!-- info -->
+  <p class="leading-loose max-w-xl mb-6 mx-auto text-center">
+    These are your current key bindings, displayed in <strong class="inline-flex items-center">
+    &quot;key &bull; turn&quot;</strong> format. Pressing a key will highlight the associated binding.
   </p>
 
+  <!-- actions -->
   <div class="gap-x-12 flex flex-wrap justify-center leading-loose tracking-wide sm:justify-start">
-    <a class="inline-flex items-center" href="#" @click.prevent>
+    <a class="inline-flex items-center" href="#" @click.prevent="showModal('add')">
       <v-icon class="mr-2" name="plus" size="5" stroke="4" /> Add Binding
     </a>
     <a class="inline-flex items-center" href="#" @click.prevent>
@@ -24,18 +24,41 @@
     </a>
   </div>
 
+  <!-- modals -->
+  <v-add-keybinding-modal
+    v-if="isActiveModal('add')"
+    @dismiss="closeModal" />
+
+  <!-- keyspace -->
+
+  <!-- footer -->
   <div class="flex justify-end">
     <v-button disabled>Save</v-button>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import VAddKeybindingModal from '@/partials/solve/add-keybinding-modal.vue';
 import VButton from '@/components/button.vue';
 import VIcon from '@/components/icon.vue';
 
 export default defineComponent({
+  setup() {
+    const activeModal = ref<string>('');
+
+    const closeModal = () => activeModal.value = '';
+    const isActiveModal = (value: string) => activeModal.value === value
+    const showModal = (value: string) => { activeModal.value = value }
+
+    return {
+      closeModal,
+      isActiveModal,
+      showModal,
+    };
+  },
   components: {
+    VAddKeybindingModal,
     VButton,
     VIcon,
   },

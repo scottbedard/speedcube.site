@@ -7,7 +7,10 @@
       tabindex="-1"
       @click="dismiss">
       <div class="p-8">
-        <v-card class="max-w-2xl mx-auto" :padded="padded">
+        <v-card
+          class="max-w-2xl mx-auto"
+          :padded="padded"
+          @click.stop>
           <slot />
         </v-card>
       </div>

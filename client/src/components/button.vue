@@ -1,6 +1,6 @@
 <template>
   <button
-    class="border-none font-bold h-12 px-6 rounded tracking-wide transition-colors focus:outline-none focus:shadow-outline hover:shadow"
+    class="border-none font-bold h-12 px-8 rounded tracking-wide transition-colors focus:outline-none focus:shadow-outline hover:shadow"
     :class="[color, pointer]"
     :disabled="!isClickable">
     <v-spinner v-if="loading" class="text-lighten-50" />
