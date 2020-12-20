@@ -2,6 +2,9 @@
   <v-label :label="label" :required="required">
     <v-input
       :autofocus="autofocus"
+      :class="{
+        'font-mono': monospaceInput, 
+      }"
       :disabled="disabled"
       :maxlength="maxlength"
       :name="name"
@@ -32,6 +35,7 @@ export default defineComponent({
     },
     maxlength: [Number, String],
     modelValue: [Number, String],
+    monospaceInput: Boolean,
     name: String,
     placeholder: String,
     required: Boolean,

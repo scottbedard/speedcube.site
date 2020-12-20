@@ -1,7 +1,6 @@
 <template>
   <v-modal
     padded
-    size="xl"
     @dismiss="$emit('dismiss')">
     <form class="grid gap-6" @submit.prevent="onSubmit">
       <v-labeled-input
@@ -10,13 +9,16 @@
         label="Keyspace"
         maxlength="1"
         placeholder="Enter keyspace character" />
-      <div class="flex justify-between">
-        <a
-          class="flex items-center text-gray-300"
-          href="#"
-          @click.prevent="$emit('remove', keyspace)">
-          <v-icon class="mr-2" name="trash-2" size="5" /> Delete keyspace
-        </a>
+      <div class="flex flex-wrap gap-6 justify-between">
+        <div class="flex items-center">
+          <a
+            v-if="activeKeyspace"
+            class="flex items-center text-gray-300"
+            href="#"
+            @click.prevent="$emit('remove', keyspace)">
+            <v-icon class="mr-2" name="trash-2" size="5" /> Delete keyspace
+          </a>
+        </div>
         <div class="flex flex-wrap items-center gap-8">
           <a
             class="text-gray-300"

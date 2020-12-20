@@ -18,7 +18,7 @@ export default defineComponent({
 
     const color = computed(() => {
       if (props.disabled) {
-        return 'bg-gray-700 text-gray-300';
+        return 'bg-gray-600 text-gray-300';
       }
   
       return 'bg-green-600 text-gray-100 hover:bg-green-500 hover:text-white';

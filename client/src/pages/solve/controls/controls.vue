@@ -14,6 +14,12 @@
     @dismiss="closeModal"
     @remove="removeKeyspace" />
 
+  <v-edit-json-modal
+    v-if="isActiveModal('json')"
+    :pending-keyboard-config="pendingKeyboardConfig"
+    @apply="applyJson"
+    @dismiss="closeModal" />
+
   <div class="gap-6 grid">
     <!-- info -->
     <p class="leading-loose max-w-xl mx-auto text-center">
@@ -29,7 +35,7 @@
       <a class="inline-flex items-center" href="#" @click.prevent="showModal('keyspace')">
         <v-icon class="mr-3" name="hash" size="5" stroke="3" /> Manage Keyspace
       </a>
-      <a class="inline-flex items-center" href="#" @click.prevent>
+      <a class="inline-flex items-center" href="#" @click.prevent="showModal('json')">
         <v-icon class="mr-3" name="code" size="5" stroke="3" /> Edit JSON
       </a>
       <a class="inline-flex items-center" href="#" @click.prevent>
@@ -65,10 +71,10 @@ import { saveKeyboardConfig } from '@/app/store/user/actions';
 import { usePuzzleId, usePuzzleName } from '../behaviors';
 import VActiveKeyspace from '@/partials/solve/active-keyspace.vue';
 import VButton from '@/components/button.vue';
+import VEditJsonModal from '@/partials/solve/edit-json-modal.vue';
 import VIcon from '@/components/icon.vue';
 import VKeybindingModal from '@/partials/solve/keybinding-modal.vue';
 import VKeyspaceModal from '@/partials/solve/keyspace-modal.vue';
-
 
 type Keybinding = { key: string, turn: string };
 
@@ -125,6 +131,13 @@ export default defineComponent({
       closeModal();
     }
 
+    // apply json
+    const applyJson = (json: string) => {
+      pendingKeyboardConfig.value = JSON.parse(json);
+
+      closeModal();
+    }
+
     // remove a key binding
     const removeBinding = (key: string) => {
       if (pendingKeyboardConfig.value) {
@@ -175,6 +188,7 @@ export default defineComponent({
       activeKeyspace,
       addBinding,
       addKeyspace,
+      applyJson,
       closeModal,
       editingBinding,
       isActiveModal,
@@ -191,6 +205,7 @@ export default defineComponent({
   components: {
     VActiveKeyspace,
     VButton,
+    VEditJsonModal,
     VIcon,
     VKeybindingModal,
     VKeyspaceModal,
