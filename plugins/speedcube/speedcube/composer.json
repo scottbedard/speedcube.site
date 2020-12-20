@@ -5,9 +5,10 @@
     }
   },
   "name": "speedcube/speedcube",
-  "require": {},
+  "require": {
+    "fakerphp/faker": "^1.13"
+  },
   "require-dev": {
-    "fzaninotto/faker": "~1.7",
     "phpunit/phpunit": "8.5.8",
     "paquettg/php-html-parser": "^3.1"
   },
