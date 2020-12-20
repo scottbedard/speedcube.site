@@ -4,6 +4,7 @@ namespace Speedcube\Speedcube\Controllers;
 
 use Backend\Classes\Controller;
 use BackendMenu;
+use October\Rain\Database\Builder;
 
 /**
  * Keyboard Configs Back-end Controller
@@ -45,5 +46,17 @@ class KeyboardConfigs extends Controller
         parent::__construct();
 
         BackendMenu::setContext('Speedcube.Speedcube', 'speedcube', 'keyboardconfigs');
+    }
+
+    /**
+     * List extend query.
+     *
+     * @param October\Rain\Database\Builder $query
+     *
+     * @return October\Rain\Database\Builder
+     */
+    public function listExtendQuery(Builder $query): Builder
+    {
+        return $query->with('user:id,username');
     }
 }

@@ -1,6 +1,8 @@
 <?php namespace Speedcube\Speedcube\Models;
 
+use Flash;
 use Model;
+use October\Rain\Exception\ValidationException;
 
 /**
  * KeyboardConfig Model
@@ -79,4 +81,28 @@ class KeyboardConfig extends Model
      * @var string The database table used by the model.
      */
     public $table = 'speedcube_speedcube_keyboard_configs';
+
+    /**
+     * Get configuration data as string.
+     */
+    public function getDataStringAttribute()
+    {
+        return \json_encode($this->data, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Set configuration data from string.
+     *
+     * @param string $value
+     */
+    public function setDataStringAttribute($value)
+    {
+        $data = \json_decode($value);
+        
+        if ($data === null) {
+            throw new \Exception('Invalid JSON');
+        }
+
+        $this->data = $data;
+    }
 }

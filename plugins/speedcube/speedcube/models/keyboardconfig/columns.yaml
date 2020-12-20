@@ -6,3 +6,24 @@ columns:
     id:
         label: ID
         searchable: true
+    
+    user:
+        label: User
+        path: $/speedcube/speedcube/models/keyboardconfig/_column_user.htm
+        searchable: false
+        sortable: false
+        type: partial
+    
+    puzzle:
+        label: Puzzle
+        path: $/speedcube/speedcube/models/keyboardconfig/_column_puzzle.htm
+        searchable: false
+        type: partial
+
+    created_at:
+        label: Created
+        type: datetime
+    
+    updated_at:
+        label: Updated
+        type: datetime

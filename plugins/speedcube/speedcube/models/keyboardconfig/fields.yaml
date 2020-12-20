@@ -3,6 +3,30 @@
 # ===================================
 
 fields:
-    id:
-        label: ID
-        disabled: true
+    user_id:
+        label: User ID
+        min: 0
+        span: left
+        type: number
+
+    puzzle_id:
+        default: 1
+        label: Puzzle
+        options:
+            1: 2x2
+            2: 3x3
+            3: 4x4
+            4: 5x5
+            5: Kilominx
+            6: Megaminx
+            7: Masterminx
+            8: Gigaminx
+        span: left
+        type: dropdown
+    
+    data_string:
+        label: Configuration
+        language: javascript
+        span: left
+        type: codeeditor
+
