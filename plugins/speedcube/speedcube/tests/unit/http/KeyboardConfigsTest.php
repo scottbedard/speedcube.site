@@ -8,25 +8,34 @@ use Speedcube\Speedcube\Tests\PluginTestCase;
 
 class KeyboardConfigsTest extends PluginTestCase
 {
-    public function test_keyboard_config_create_success()
+    public function test_keyboard_config_save_success()
     {
         $user = Factory::authenticatedUser();
 
-        $response = $this->postJson('/api/speedcube/speedcube/keyboardconfigs', [
-            'data' => ['foo' => 'bar'],
+        // first request should create 
+        $create = $this->postJson('/api/speedcube/speedcube/keyboardconfigs', [
+            'data' => ['a' => 'b'],
             'puzzleId' => 1,
         ]);
 
-        $response->assertStatus(200);
-
-        $data = json_decode($response->getContent(), true);
-
-        $this->assertEquals(1, $data['model']['puzzleId']);
+        $create->assertStatus(200);
+        $createModel = $user->keyboardConfigs()->wherePuzzleId(1)->first();
         $this->assertEquals(1, $user->keyboardConfigs()->count());
-        $this->assertEquals(['foo' => 'bar'], $data['model']['data']);
+        $this->assertEquals(['a' => 'b'], $createModel->data);
+
+        // subsequent requests should update
+        $update = $this->postJson('/api/speedcube/speedcube/keyboardconfigs', [
+            'data' => ['c' => 'd'],
+            'puzzleId' => 1,
+        ]);
+
+        $update->assertStatus(200);
+        $updateModel = $user->keyboardConfigs()->wherePuzzleId(1)->first();
+        $this->assertEquals(1, $user->keyboardConfigs()->count());
+        $this->assertEquals(['c' => 'd'], $updateModel->data);
     }
 
-    public function test_keyboard_configs_create_forbidden()
+    public function test_keyboard_configs_save_forbidden()
     {
         $response = $this->postJson('/api/speedcube/speedcube/keyboardconfigs', [
             'data' => [],

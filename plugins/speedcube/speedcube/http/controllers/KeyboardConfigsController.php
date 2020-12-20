@@ -12,18 +12,22 @@ use Speedcube\Speedcube\Models\Config;
 class KeyboardConfigsController extends ApiController
 {
     /**
-     * Create a new config.
+     * Save keyboard config.
      */
-    public function create()
+    public function save()
     {
         $data = post();
 
         $user = Auth::getUser();
 
-        $model = $user->keyboardConfigs()->create([
-            'data' => $data['data'],
-            'puzzle_id' => $data['puzzle_id'],
-        ]);
+        $model = $user
+            ->keyboardConfigs()
+            ->updateOrCreate([
+                'puzzle_id' => $data['puzzle_id'],
+            ], [
+                'data' => $data['data'],
+                'puzzle_id' => $data['puzzle_id'],
+            ]);
         
         return $this->success([
             'model' => $model,

@@ -24,7 +24,7 @@ Route::middleware('web')->group(function () {
             Route::post('configs', [ConfigsController::class, 'create']);
 
             // keyboard configs
-            Route::post('keyboardconfigs', [KeyboardConfigsController::class, 'create']);
+            Route::post('keyboardconfigs', [KeyboardConfigsController::class, 'save']);
         });
     });
 
