@@ -10,14 +10,11 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: true
-    - name: Setup PHP
+    - name: Setup PHP with composer v2
       uses: shivammathur/setup-php@v2
       with:
         php-version: '7.4'
-    - name: Downgrade Composer
-      run: |
-        echo "Temporary, see https://github.com/octobercms/october/issues/5033"
-        sudo composer self-update 1.10.17
+        tools: composer:v1
     - name: Copfigure environment
       run: cp .env.example .env
     - name: Copy static assets
