@@ -2,17 +2,21 @@
   <v-modal
     padded
     @dismiss="$emit('dismiss')">
-    <form class="gap-6 grid md:grid-cols-2" @submit.prevent="onSubmit">
+    <form
+      class="gap-6 grid md:grid-cols-2"
+      @submit.prevent="onSubmit">
       <v-labeled-input
         v-model="form.key"
         autofocus
         label="Key binding"
-        placeholder="Enter a key" />
+        placeholder="Enter a key"
+        required />
 
       <v-labeled-input
         v-model="form.turn"
         label="Turn to execute"
-        placeholder="Enter a puzzle turn" />
+        placeholder="Enter a puzzle turn"
+        required />
 
       <div class="flex gap-6 items-center justify-end md:col-span-2">
         <a
