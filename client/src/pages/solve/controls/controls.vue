@@ -1,43 +1,50 @@
 <template>
-  <!-- info -->
-  <p class="leading-loose max-w-xl mb-6 mx-auto text-center">
-    These are your current key bindings, displayed in <strong class="inline-flex items-center">
-    &quot;key &bull; turn&quot;</strong> format. Pressing a key will highlight the associated binding.
-  </p>
-
-  <!-- actions -->
-  <div class="gap-x-12 flex flex-wrap justify-center leading-loose tracking-wide sm:justify-start">
-    <a class="inline-flex items-center" href="#" @click.prevent="showModal('add')">
-      <v-icon class="mr-2" name="plus" size="5" stroke="4" /> Add Binding
-    </a>
-    <a class="inline-flex items-center" href="#" @click.prevent>
-      <v-icon class="mr-2" name="hash" size="5" stroke="3" /> Add Keyspace
-    </a>
-    <a class="inline-flex items-center" href="#" @click.prevent>
-      <v-icon class="mr-2" name="code" size="5" stroke="3" /> Edit JSON
-    </a>
-    <a class="inline-flex items-center" href="#" @click.prevent>
-      <v-icon class="mr-2" name="rotate-ccw" size="5" stroke="3" /> Reset Default
-    </a>
-    <a class="inline-flex items-center" href="#" @click.prevent>
-      <v-icon class="mr-2" name="trash-2" size="5" stroke="3" /> Clear All
-    </a>
-  </div>
-
   <!-- modals -->
-  <v-add-keybinding-modal
-    v-if="isActiveModal('add')"
+  <v-keybinding-modal
+    v-if="isActiveModal('keybinding')"
+    :initial-value="editingBinding"
     @add="addBinding"
-    @dismiss="closeModal" />
+    @dismiss="closeModal"
+    @remove="removeBinding" />
 
-  <!-- keyspace -->
-  <div>
-    <pre>{{ { pendingKeyboardConfig } }}</pre>
-  </div>
+  <div class="gap-6 grid">
+    <!-- info -->
+    <p class="leading-loose max-w-xl mx-auto text-center">
+      These are your current key bindings, displayed in <span class="inline-flex items-center">
+      &quot;key &bull; turn&quot;</span> format. Pressing a key will highlight the associated binding.
+    </p>
 
-  <!-- footer -->
-  <div class="flex justify-end">
-    <v-button disabled>Save</v-button>
+    <!-- actions -->
+    <div class="gap-x-12 flex flex-wrap justify-center leading-loose tracking-wide sm:justify-start">
+      <a class="inline-flex items-center" href="#" @click.prevent="showAddModal">
+        <v-icon class="mr-2" name="plus" size="5" stroke="4" /> Add Binding
+      </a>
+      <a class="inline-flex items-center" href="#" @click.prevent>
+        <v-icon class="mr-2" name="hash" size="5" stroke="3" /> Add Keyspace
+      </a>
+      <a class="inline-flex items-center" href="#" @click.prevent>
+        <v-icon class="mr-2" name="code" size="5" stroke="3" /> Edit JSON
+      </a>
+      <a class="inline-flex items-center" href="#" @click.prevent>
+        <v-icon class="mr-2" name="rotate-ccw" size="5" stroke="3" /> Reset Default
+      </a>
+      <a class="inline-flex items-center" href="#" @click.prevent>
+        <v-icon class="mr-2" name="trash-2" size="5" stroke="2" /> Clear All
+      </a>
+    </div>
+
+    <!-- active keyspace -->
+    <div>
+      <v-active-keyspace
+        :active-keyspace="activeKeyspace"
+        :pending-keyboard-config="pendingKeyboardConfig"
+        @edit="showEditModal" />
+    </div>
+
+    <!-- footer -->
+    <div class="flex justify-end">
+      <v-button disabled>Save</v-button>
+    </div>
   </div>
 </template>
 
@@ -48,14 +55,18 @@ import { defineComponent, onUnmounted, ref } from 'vue';
 import { keyboardConfig } from '@/app/store/user/getters';
 import { pendingKeyboardConfig } from '../state';
 import { usePuzzleName } from '../behaviors';
-import VAddKeybindingModal from '@/partials/solve/add-keybinding-modal.vue';
+import VActiveKeyspace from '@/partials/solve/active-keyspace.vue';
+import VKeybindingModal from '@/partials/solve/keybinding-modal.vue';
 import VButton from '@/components/button.vue';
 import VIcon from '@/components/icon.vue';
+
+type Keybinding = { key: string, turn: string };
 
 export default defineComponent({
   setup() {
     const activeKeyspace = ref('');
     const activeModal = ref('');
+    const editingBinding = ref<Keybinding | null>(null);
     const puzzleName = usePuzzleName();
 
     // modal visibility
@@ -64,6 +75,16 @@ export default defineComponent({
     }
 
     const isActiveModal = (value: string) => activeModal.value === value;
+
+    const showAddModal = () => {
+      editingBinding.value = null;
+      showModal('keybinding');
+    }
+
+    const showEditModal = (keybinding: Keybinding) => {
+      editingBinding.value = keybinding;
+      showModal('keybinding');
+    }
 
     const showModal = (value: string) => {
       activeModal.value = value;
@@ -74,6 +95,17 @@ export default defineComponent({
       if (pendingKeyboardConfig.value) {
         if (!activeKeyspace.value) {
           pendingKeyboardConfig.value.default[key] = turn;
+        }
+      }
+
+      closeModal();
+    }
+
+    // remove a key binding
+    const removeBinding = (key: string) => {
+      if (pendingKeyboardConfig.value) {
+        if (!activeKeyspace.value) {
+          delete pendingKeyboardConfig.value.default[key];
         }
       }
 
@@ -92,13 +124,17 @@ export default defineComponent({
       activeKeyspace,
       addBinding,
       closeModal,
+      editingBinding,
       isActiveModal,
       pendingKeyboardConfig,
-      showModal,
+      removeBinding,
+      showAddModal,
+      showEditModal,
     };
   },
   components: {
-    VAddKeybindingModal,
+    VActiveKeyspace,
+    VKeybindingModal,
     VButton,
     VIcon,
   },
