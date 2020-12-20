@@ -3,6 +3,7 @@
     <v-input
       :autofocus="autofocus"
       :disabled="disabled"
+      :maxlength="maxlength"
       :name="name"
       :placeholder="placeholder"
       :required="required"
@@ -29,6 +30,7 @@ export default defineComponent({
       required: true,
       type: String,
     },
+    maxlength: [Number, String],
     modelValue: [Number, String],
     name: String,
     placeholder: String,

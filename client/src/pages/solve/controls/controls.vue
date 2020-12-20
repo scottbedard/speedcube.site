@@ -7,6 +7,11 @@
     @dismiss="closeModal"
     @remove="removeBinding" />
 
+  <v-keyspace-modal
+    v-if="isActiveModal('keyspace')"
+    @add="addKeyspace"
+    @dismiss="closeModal" />
+
   <div class="gap-6 grid">
     <!-- info -->
     <p class="leading-loose max-w-xl mx-auto text-center">
@@ -19,7 +24,7 @@
       <a class="inline-flex items-center" href="#" @click.prevent="showAddModal">
         <v-icon class="mr-3" name="plus" size="5" stroke="3" /> Add Binding
       </a>
-      <a class="inline-flex items-center" href="#" @click.prevent>
+      <a class="inline-flex items-center" href="#" @click.prevent="showModal('keyspace')">
         <v-icon class="mr-3" name="hash" size="5" stroke="3" /> Add Keyspace
       </a>
       <a class="inline-flex items-center" href="#" @click.prevent>
@@ -56,9 +61,10 @@ import { keyboardConfig } from '@/app/store/user/getters';
 import { pendingKeyboardConfig } from '../state';
 import { usePuzzleName } from '../behaviors';
 import VActiveKeyspace from '@/partials/solve/active-keyspace.vue';
-import VKeybindingModal from '@/partials/solve/keybinding-modal.vue';
 import VButton from '@/components/button.vue';
 import VIcon from '@/components/icon.vue';
+import VKeybindingModal from '@/partials/solve/keybinding-modal.vue';
+import VKeyspaceModal from '@/partials/solve/keyspace-modal.vue';
 
 type Keybinding = { key: string, turn: string };
 
@@ -90,12 +96,25 @@ export default defineComponent({
       activeModal.value = value;
     }
 
-    // add a key binding
+    // add key binding
     const addBinding = ({ key, turn }: { key: string, turn: string }) => {
       if (pendingKeyboardConfig.value) {
-        if (!activeKeyspace.value) {
+        if (activeKeyspace.value) {
+          pendingKeyboardConfig.value.keyspaces[activeKeyspace.value][key] = turn;
+        } else {
           pendingKeyboardConfig.value.default[key] = turn;
         }
+      }
+
+      closeModal();
+    }
+
+    // add keyspace
+    const addKeyspace = (key: string) => {
+      if (pendingKeyboardConfig.value) {
+        const char = key.trim();
+        activeKeyspace.value = char;
+        pendingKeyboardConfig.value.keyspaces[char] = pendingKeyboardConfig.value.keyspaces[char] || {}
       }
 
       closeModal();
@@ -123,6 +142,7 @@ export default defineComponent({
     return {
       activeKeyspace,
       addBinding,
+      addKeyspace,
       closeModal,
       editingBinding,
       isActiveModal,
@@ -130,13 +150,15 @@ export default defineComponent({
       removeBinding,
       showAddModal,
       showEditModal,
+      showModal,
     };
   },
   components: {
     VActiveKeyspace,
-    VKeybindingModal,
     VButton,
     VIcon,
+    VKeybindingModal,
+    VKeyspaceModal,
   },
 });
 </script>

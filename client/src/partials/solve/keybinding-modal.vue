@@ -7,7 +7,8 @@
         <v-labeled-input
           v-model="form.key"
           autofocus
-          label="Key binding"
+          label="Key"
+          maxlength="1"
           placeholder="Enter a key"
           required />
 

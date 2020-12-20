@@ -8,7 +8,8 @@
       @click="dismiss">
       <div class="p-8">
         <v-card
-          class="max-w-2xl mx-auto"
+          class="mx-auto"
+          :class="[sizeClass]"
           :padded="padded"
           @click.stop>
           <slot />
@@ -20,7 +21,7 @@
 
 <script lang="ts">
 import { createFocusTrap, FocusTrap } from 'focus-trap';
-import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, defineComponent, onBeforeUnmount, onMounted, PropType, ref } from 'vue';
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { useEventListener } from '@vueuse/core'
 import VCard from '@/components/card.vue';
@@ -30,6 +31,15 @@ export default defineComponent({
     let trap: FocusTrap | undefined;
 
     const container = ref<HTMLElement>();
+
+    // size class
+    const sizeClass = computed(() => {
+      if (props.size === 'sm') return 'max-w-sm';
+      if (props.size === 'md') return 'max-w-md';
+      if (props.size === 'lg') return 'max-w-lg';
+      if (props.size === 'xl') return 'max-w-xl';
+      return 'max-w-2xl';
+    });
 
     // listen for dismiss events
     const dismiss = () => emit('dismiss');
@@ -60,6 +70,7 @@ export default defineComponent({
     return {
       container,
       dismiss,
+      sizeClass,
     };
   },
   components: {
@@ -72,6 +83,10 @@ export default defineComponent({
     padded: {
       default: false,
       type: Boolean,
+    },
+    size: {
+      default: '2xl',
+      type: String as PropType<'sm'|'md'|'lg'|'xl'|'2xl'>,
     },
   },
 });
