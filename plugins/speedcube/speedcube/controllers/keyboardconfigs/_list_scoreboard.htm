@@ -1,0 +1,23 @@
+<style>
+  #keyboard-configs-scoreboard [data-control="chart-pie"] tr:nth-child(n + 4) {
+      display: none;
+  }
+  </style>
+  
+  <div class="scoreboard" id="keyboard-configs-scoreboard">
+      <div data-control="toolbar">
+          <div class="scoreboard-item control-chart" data-control="chart-pie">
+              <ul>
+                  <?php foreach($totals as $puzzle => $total): ?>
+                      <li><?= $puzzle ?> <span><?= $total ?></span></li>
+                  <?php endforeach; ?>
+              </ul>
+          </div>
+          <div class="scoreboard-item title-value">
+              <h4>Users</h4>
+              <p><?= $usersWithKeyboardConfigs ?></p>
+              <p class="description"><?= round(($usersWithKeyboardConfigs / $users) * 100) ?>% of <?= $users ?> users</p>
+          </div>
+      </div>
+  </div>
+  

@@ -1,0 +1,22 @@
+# ===================================
+# Filter Scope Definitions
+# ===================================
+
+scopes:
+    user:
+        label: User
+        modelClass: RainLab\User\Models\User
+        nameFrom: username
+        scope: filterUserIds
+
+    puzzle:
+        conditions: puzzle_id in (:filtered)
+        label: Puzzle
+        modelClass: Speedcube\Speedcube\Models\KeyboardConfig
+        options: getPuzzleFilterOptions
+        type: group
+
+    created_at:
+        conditions: created_at >= ':after' AND created_at <= ':before'
+        label: Date
+        type: daterange

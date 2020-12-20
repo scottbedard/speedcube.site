@@ -1,8 +1,8 @@
 <?php namespace Speedcube\Speedcube\Models;
 
-use Flash;
 use Model;
-use October\Rain\Exception\ValidationException;
+use October\Rain\Database\Builder;
+use Speedcube\Speedcube\Classes\Puzzle;
 
 /**
  * KeyboardConfig Model
@@ -88,6 +88,34 @@ class KeyboardConfig extends Model
     public function getDataStringAttribute()
     {
         return \json_encode($this->data, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Get puzzle filter options.
+     *
+     * @return array
+     */
+    public function getPuzzleFilterOptions()
+    {
+        $options = [];
+
+        foreach (Puzzle::IDS as $name => $id) {
+            $options[$id] = ucfirst($name);
+        }
+
+        return $options;
+    }
+
+    /**
+     * Select active configs.
+     *
+     * @param October\Rain\Database\Builder $query
+     *
+     * @return October\Rain\Database\Builder
+     */
+    public function scopeFilterUserIds(Builder $query, $ids): Builder
+    {
+        return $query->whereIn('user_id', $ids);
     }
 
     /**

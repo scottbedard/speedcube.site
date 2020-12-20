@@ -41,3 +41,6 @@ showCheckboxes: true
 toolbar:
     # Partial for toolbar buttons
     buttons: list_toolbar
+
+# Filter configuration
+filter: config_filter.yaml

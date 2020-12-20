@@ -50,6 +50,8 @@ class Plugin extends PluginBase
             ];
 
             $model->hasMany['configs'] = 'SpeedCube\SpeedCube\Models\Config';
+
+            $model->hasMany['keyboardConfigs'] = 'Speedcube\Speedcube\Models\KeyboardConfig';
         });
 
         // disable ui for settings defined in config file
