@@ -9,6 +9,7 @@
 
   <v-keyspace-modal
     v-if="isActiveModal('keyspace')"
+    :active-keyspace="activeKeyspace"
     @add="addKeyspace"
     @dismiss="closeModal" />
 
@@ -22,10 +23,10 @@
     <!-- actions -->
     <div class="gap-x-8 gap-y-6 flex flex-wrap justify-center tracking-wide xl:gap-x-12">
       <a class="inline-flex items-center" href="#" @click.prevent="showAddModal">
-        <v-icon class="mr-3" name="plus" size="5" stroke="3" /> Add Binding
+        <v-icon class="mr-3" name="plus" size="5" stroke="3" /> Add Key Binding
       </a>
       <a class="inline-flex items-center" href="#" @click.prevent="showModal('keyspace')">
-        <v-icon class="mr-3" name="hash" size="5" stroke="3" /> Add Keyspace
+        <v-icon class="mr-3" name="hash" size="5" stroke="3" /> Manage Keyspace
       </a>
       <a class="inline-flex items-center" href="#" @click.prevent>
         <v-icon class="mr-3" name="code" size="5" stroke="3" /> Edit JSON
@@ -38,7 +39,7 @@
       </a>
     </div>
 
-    <!-- active keyspace -->
+    <!-- keyspaces -->
     <div class="py-6">
       <v-active-keyspace
         :active-keyspace="activeKeyspace"
@@ -48,23 +49,27 @@
 
     <!-- footer -->
     <div class="flex gap-8 items-center justify-center">
-      <v-button>Save</v-button>
+      <v-button @click="onSave">Save</v-button>
     </div>
   </div>
+
+  <pre>{{ pendingKeyboardConfig }}</pre>
 </template>
 
 <script lang="ts">
 /* eslint-disable */
 import { cloneDeep } from 'lodash-es';
-import { defineComponent, onUnmounted, ref } from 'vue';
+import { computed, defineComponent, onUnmounted, ref } from 'vue';
 import { keyboardConfig } from '@/app/store/user/getters';
 import { pendingKeyboardConfig } from '../state';
-import { usePuzzleName } from '../behaviors';
+import { saveKeyboardConfig } from '@/app/store/user/actions';
+import { usePuzzleId, usePuzzleName } from '../behaviors';
 import VActiveKeyspace from '@/partials/solve/active-keyspace.vue';
 import VButton from '@/components/button.vue';
 import VIcon from '@/components/icon.vue';
 import VKeybindingModal from '@/partials/solve/keybinding-modal.vue';
 import VKeyspaceModal from '@/partials/solve/keyspace-modal.vue';
+
 
 type Keybinding = { key: string, turn: string };
 
@@ -73,6 +78,7 @@ export default defineComponent({
     const activeKeyspace = ref('');
     const activeModal = ref('');
     const editingBinding = ref<Keybinding | null>(null);
+    const puzzleId = usePuzzleId();
     const puzzleName = usePuzzleName();
 
     // modal visibility
@@ -134,6 +140,18 @@ export default defineComponent({
     // set pending keyboard config to equal the current config
     pendingKeyboardConfig.value = cloneDeep(keyboardConfig.value(puzzleName.value));
 
+    // pending keyspaces
+    const pendingKeyspaces = computed(() => ['default', ...Object.keys(pendingKeyboardConfig.value?.keyspaces ?? {})]);
+
+    // save keyboard config for this puzzle
+    const onSave = async () => {
+      if (pendingKeyboardConfig.value) {
+        await saveKeyboardConfig(puzzleId.value, pendingKeyboardConfig.value);
+
+        console.log('hooray!');
+      }
+    }
+
     // flush pending keyboard config when the editor is closed
     onUnmounted(() => {
       pendingKeyboardConfig.value = null;
@@ -146,7 +164,9 @@ export default defineComponent({
       closeModal,
       editingBinding,
       isActiveModal,
+      onSave,
       pendingKeyboardConfig,
+      pendingKeyspaces,
       removeBinding,
       showAddModal,
       showEditModal,

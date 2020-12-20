@@ -1,6 +1,6 @@
 import { computed, ComputedRef } from 'vue';
 import { Cube, Dodecaminx } from '@bedard/twister';
-import { cubeSize, dodecaminxSize, isCube, isDodecaminx } from '@/app/utils/puzzle';
+import { cubeSize, dodecaminxSize, getPuzzleId, isCube, isDodecaminx } from '@/app/utils/puzzle';
 import { useRoute } from 'vue-router';
 
 interface UseModelOptions {
@@ -24,6 +24,15 @@ export function useModel({ puzzleName }: UseModelOptions) {
       });
     }
   });
+}
+
+/**
+ * Puzzle ID
+ */
+export function usePuzzleId() {
+  const route = useRoute();
+
+  return computed(() => getPuzzleId(route.params.puzzle as string))
 }
 
 /**

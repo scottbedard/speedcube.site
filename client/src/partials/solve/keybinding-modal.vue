@@ -22,15 +22,15 @@
           <div>
             <a
               v-if="initialValue"
-              class="flex items-center text-gray-300 hover:text-gray-400"
+              class="flex items-center text-gray-300"
               href="#"
               @click.prevent="onRemove">
-              <v-icon class="mr-3" name="trash-2" size="5" /> Remove
+              <v-icon class="mr-2" name="trash-2" size="5" /> Remove binding
             </a>
           </div>
           <div class="flex flex-wrap items-center gap-8">
             <a
-              class="text-gray-300 hover:text-gray-400"
+              class="text-gray-300"
               href="#"
               @click.prevent="$emit('dismiss')">
               Cancel

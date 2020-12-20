@@ -1,8 +1,8 @@
 <template>
   <p
     v-if="keybindings.length === 0"
-    class="text-center text-gray-600 tracking-wide">
-    Keyspace is empty
+    class="text-center text-gray-500">
+    This keyspace is empty
   </p>
 
   <div v-else class="flex flex-wrap font-mono gap-6 justify-center">
