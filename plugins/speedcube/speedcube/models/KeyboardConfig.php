@@ -66,13 +66,6 @@ class KeyboardConfig extends Model
     ];
 
     /**
-     * @var array Attributes to be cast to JSON
-     */
-    protected $jsonable = [
-        'data',
-    ];
-
-    /**
      * @var array Validation rules for attributes
      */
     public $rules = [];
@@ -83,7 +76,22 @@ class KeyboardConfig extends Model
     public $table = 'speedcube_speedcube_keyboard_configs';
 
     /**
+     * Get configuration data.
+     *
+     * We have to do this manually rather than using the jsonable
+     * helper in order to preserve empty objects.
+     *
+     * @return array
+     */
+    public function getDataAttribute()
+    {
+        return \json_decode($this->attributes['data'], false);
+    }
+
+    /**
      * Get configuration data as string.
+     *
+     * @return string
      */
     public function getDataStringAttribute()
     {
@@ -107,7 +115,7 @@ class KeyboardConfig extends Model
     }
 
     /**
-     * Select active configs.
+     * Filter by user ID.
      *
      * @param October\Rain\Database\Builder $query
      *
@@ -116,6 +124,19 @@ class KeyboardConfig extends Model
     public function scopeFilterUserIds(Builder $query, $ids): Builder
     {
         return $query->whereIn('user_id', $ids);
+    }
+
+    /**
+     * Set configuration data.
+     *
+     * We have to do this manually rather than using the jsonable
+     * helper in order to preserve empty objects.
+     *
+     * @param array $value
+     */
+    public function setDataAttribute($value)
+    {
+        $this->attributes['data'] = \json_encode($value, JSON_FORCE_OBJECT);
     }
 
     /**
