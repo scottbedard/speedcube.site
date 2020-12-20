@@ -1,5 +1,11 @@
 <template>
-  <div class="flex flex-wrap font-mono gap-6 justify-center">
+  <p
+    v-if="keybindings.length === 0"
+    class="text-center text-gray-600 tracking-wide">
+    Keyspace is empty
+  </p>
+
+  <div v-else class="flex flex-wrap font-mono gap-6 justify-center">
     <a
       v-for="[key, turn] in keybindings"
       class="bg-gray-800 rounded shadow-xl text-gray-300 px-3 py-1"

@@ -15,26 +15,26 @@
     </p>
 
     <!-- actions -->
-    <div class="gap-x-12 flex flex-wrap justify-center leading-loose tracking-wide sm:justify-start">
+    <div class="gap-x-8 gap-y-6 flex flex-wrap justify-center tracking-wide xl:gap-x-12">
       <a class="inline-flex items-center" href="#" @click.prevent="showAddModal">
-        <v-icon class="mr-2" name="plus" size="5" stroke="4" /> Add Binding
+        <v-icon class="mr-3" name="plus" size="5" stroke="3" /> Add Binding
       </a>
       <a class="inline-flex items-center" href="#" @click.prevent>
-        <v-icon class="mr-2" name="hash" size="5" stroke="3" /> Add Keyspace
+        <v-icon class="mr-3" name="hash" size="5" stroke="3" /> Add Keyspace
       </a>
       <a class="inline-flex items-center" href="#" @click.prevent>
-        <v-icon class="mr-2" name="code" size="5" stroke="3" /> Edit JSON
+        <v-icon class="mr-3" name="code" size="5" stroke="3" /> Edit JSON
       </a>
       <a class="inline-flex items-center" href="#" @click.prevent>
-        <v-icon class="mr-2" name="rotate-ccw" size="5" stroke="3" /> Reset Default
+        <v-icon class="mr-3" name="rotate-ccw" size="5" stroke="3" /> Reset Default
       </a>
       <a class="inline-flex items-center" href="#" @click.prevent>
-        <v-icon class="mr-2" name="trash-2" size="5" stroke="2" /> Clear All
+        <v-icon class="mr-3" name="trash-2" size="5" stroke="2" /> Clear All
       </a>
     </div>
 
     <!-- active keyspace -->
-    <div>
+    <div class="py-6">
       <v-active-keyspace
         :active-keyspace="activeKeyspace"
         :pending-keyboard-config="pendingKeyboardConfig"
@@ -42,8 +42,8 @@
     </div>
 
     <!-- footer -->
-    <div class="flex justify-end">
-      <v-button disabled>Save</v-button>
+    <div class="flex gap-8 items-center justify-center">
+      <v-button>Save</v-button>
     </div>
   </div>
 </template>
