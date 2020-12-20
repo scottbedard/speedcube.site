@@ -15,9 +15,13 @@
     @remove="removeKeyspace" />
 
   <v-edit-json-modal
-    v-if="isActiveModal('json')"
+    v-if="isActiveModal('edit-json')"
     :pending-keyboard-config="pendingKeyboardConfig"
     @apply="applyJson"
+    @dismiss="closeModal" />
+
+  <v-reset-default-modal
+    v-if="isActiveModal('reset-default')"
     @dismiss="closeModal" />
 
   <div class="gap-6 grid">
@@ -35,10 +39,10 @@
       <a class="inline-flex items-center" href="#" @click.prevent="showModal('keyspace')">
         <v-icon class="mr-3" name="hash" size="5" stroke="3" /> Manage Keyspace
       </a>
-      <a class="inline-flex items-center" href="#" @click.prevent="showModal('json')">
+      <a class="inline-flex items-center" href="#" @click.prevent="showModal('edit-json')">
         <v-icon class="mr-3" name="code" size="5" stroke="3" /> Edit JSON
       </a>
-      <a class="inline-flex items-center" href="#" @click.prevent>
+      <a class="inline-flex items-center" href="#" @click.prevent="showModal('reset-default')">
         <v-icon class="mr-3" name="rotate-ccw" size="5" stroke="3" /> Reset Default
       </a>
       <a class="inline-flex items-center" href="#" @click.prevent>
@@ -75,6 +79,7 @@ import VEditJsonModal from '@/partials/solve/edit-json-modal.vue';
 import VIcon from '@/components/icon.vue';
 import VKeybindingModal from '@/partials/solve/keybinding-modal.vue';
 import VKeyspaceModal from '@/partials/solve/keyspace-modal.vue';
+import VResetDefaultModal from '@/partials/solve/reset-default-modal.vue';
 
 type Keybinding = { key: string, turn: string };
 
@@ -209,6 +214,7 @@ export default defineComponent({
     VIcon,
     VKeybindingModal,
     VKeyspaceModal,
+    VResetDefaultModal,
   },
 });
 </script>

@@ -20,6 +20,10 @@ export default defineComponent({
       if (props.disabled) {
         return 'bg-gray-600 text-gray-300';
       }
+
+      if (props.danger) {
+        return 'bg-red-500 text-gray-100 hover:bg-red-400 hover:text-white';
+      }
   
       return 'bg-green-600 text-gray-100 hover:bg-green-500 hover:text-white';
     });
@@ -36,6 +40,10 @@ export default defineComponent({
     VSpinner,
   },
   props: {
+    danger: {
+      default: false,
+      type: Boolean,
+    },
     disabled: {
       default: false,
       type: Boolean,
