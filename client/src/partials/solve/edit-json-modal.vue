@@ -10,7 +10,8 @@
         autofocus
         label="Keyboard Configuration"
         monospace-input
-        placeholder="Enter JSON keyboard configuration" />
+        placeholder="Enter JSON keyboard configuration"
+        required />
 
       <p>
         Be careful editing this, invalid JSON can cause errors. This primarily exists to make copy / pasting between puzzles easier.

@@ -6,9 +6,10 @@
       <v-labeled-input
         v-model="keyspace"
         autofocus
-        label="Keyspace"
+        label="Keyspace Character"
         maxlength="1"
-        placeholder="Enter keyspace character" />
+        placeholder="Enter keyspace character"
+        required />
 
       <p>
         Keyspaces allow for diffferent layouts. To change keyspaces when solving, press Cmd or Ctrl and the assigned character.
