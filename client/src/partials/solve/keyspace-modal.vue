@@ -11,7 +11,7 @@
         placeholder="Enter keyspace character" />
 
       <p>
-        Keyspaces organize multiple keyboard layouts. This is primarily used with big puzzles to use different layouts for different steps in the solution. To change your keyspace during a solve, press Cmd or Ctrl and the keyspace character.
+        Keyspaces allow for diffferent layouts. To change keyspaces when solving, press Cmd or Ctrl and the assigned character.
       </p>
 
       <div class="flex flex-wrap gap-6 justify-between">
@@ -47,7 +47,7 @@ import VModal from '@/components/modal.vue';
 
 export default defineComponent({
   setup(props, { emit }) {
-    const keyspace = ref(props.activeKeyspace);
+    const keyspace = ref('');
 
     const onSubmit = () => {
       emit('add', keyspace.value)

@@ -35,10 +35,10 @@
     <!-- actions -->
     <div class="gap-x-8 gap-y-6 flex flex-wrap justify-center tracking-wide xl:gap-x-12">
       <a class="inline-flex items-center" href="#" @click.prevent="showAddModal">
-        <v-icon class="mr-3" name="plus" size="5" stroke="3" /> Add Key Binding
+        <v-icon class="mr-3" name="plus" size="5" stroke="3" /> Add Binding
       </a>
       <a class="inline-flex items-center" href="#" @click.prevent="showModal('keyspace')">
-        <v-icon class="mr-3" name="hash" size="5" stroke="3" /> Manage Keyspace
+        <v-icon class="mr-3" name="hash" size="5" stroke="3" /> Add Keyspace
       </a>
       <a class="inline-flex items-center" href="#" @click.prevent="showModal('edit-json')">
         <v-icon class="mr-3" name="code" size="5" stroke="3" /> Edit JSON
@@ -56,6 +56,8 @@
       <v-active-keyspace
         :active-keyspace="activeKeyspace"
         :pending-keyboard-config="pendingKeyboardConfig"
+        :pending-keyspaces="pendingKeyspaces"
+        @click-keyspace="onKeyspaceClick"
         @edit="showEditModal" />
     </div>
 
@@ -144,6 +146,11 @@ export default defineComponent({
       closeModal();
     }
 
+    // handle a keyspace click
+    const onKeyspaceClick = (keyspace: string) => {
+      setKeyspace(keyspace);
+    }
+
     // remove a key binding
     const removeBinding = (key: string) => {
       if (pendingKeyboardConfig.value) {
@@ -181,6 +188,11 @@ export default defineComponent({
       closeModal();
     }
 
+    // set the active keyspace
+    const setKeyspace = (keyspace: string) => {
+      activeKeyspace.value = keyspace;
+    }
+
     // set pending keyboard config to equal the current config
     pendingKeyboardConfig.value = cloneDeep(keyboardConfig.value(puzzleName.value));
 
@@ -209,6 +221,7 @@ export default defineComponent({
       closeModal,
       editingBinding,
       isActiveModal,
+      onKeyspaceClick,
       onSave,
       pendingKeyboardConfig,
       pendingKeyspaces,
