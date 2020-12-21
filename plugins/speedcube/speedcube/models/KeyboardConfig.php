@@ -127,19 +127,6 @@ class KeyboardConfig extends Model
     }
 
     /**
-     * Set configuration data.
-     *
-     * We have to do this manually rather than using the jsonable
-     * helper in order to preserve empty objects.
-     *
-     * @param array $value
-     */
-    public function setDataAttribute($value)
-    {
-        $this->attributes['data'] = \json_encode($value, JSON_FORCE_OBJECT);
-    }
-
-    /**
      * Set configuration data from string.
      *
      * @param string $value
