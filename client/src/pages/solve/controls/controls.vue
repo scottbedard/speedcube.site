@@ -72,7 +72,14 @@
           <v-icon class="mr-2" name="trash-2" size="5" /> Delete keyspace
         </a>
       </div>
-      <v-button @click="onSave">Save</v-button>
+      <div class="gap-x-12 flex items-center">
+        <router-link
+          class="flex items-center"
+          :to="{ name: 'solve' }">
+          Cancel
+        </router-link>
+        <v-button @click="onSave">Save</v-button>
+      </div>
     </div>
   </div>
 </template>
