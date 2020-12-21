@@ -12,7 +12,7 @@
         monospace-input
         placeholder="Enter JSON keyboard configuration" />
 
-      <p class="leading-loose">
+      <p>
         Be careful editing this, invalid JSON can break key bindings and cause errors. This feature exists to make copy / pasting between puzzles easier.
       </p>
 

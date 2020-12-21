@@ -9,6 +9,11 @@
         label="Keyspace"
         maxlength="1"
         placeholder="Enter keyspace character" />
+
+      <p>
+        Keyspaces organize multiple keyboard layouts. This is primarily used with big puzzles to use different layouts for different steps in the solution. To change your keyspace during a solve, press Cmd or Ctrl and the keyspace character.
+      </p>
+
       <div class="flex flex-wrap gap-6 justify-between">
         <div class="flex items-center">
           <a
