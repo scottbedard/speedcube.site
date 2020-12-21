@@ -20,9 +20,10 @@ class KeyboardConfigsTest extends PluginTestCase
 
         $create->assertStatus(200);
         $createModel = $user->keyboardConfigs()->wherePuzzleId(1)->first();
+        $createData = \json_decode($createModel->data);
         $this->assertEquals(1, $user->keyboardConfigs()->count());
-        $this->assertEquals('a', $createModel->data->a);
-        $this->assertEquals('A', $createModel->data->A);
+        $this->assertEquals('a', $createData->a);
+        $this->assertEquals('A', $createData->A);
 
         // subsequent requests should update
         $update = $this->postJson('/api/speedcube/speedcube/keyboardconfigs', [
@@ -32,8 +33,9 @@ class KeyboardConfigsTest extends PluginTestCase
 
         $update->assertStatus(200);
         $updateModel = $user->keyboardConfigs()->wherePuzzleId(1)->first();
+        $updateData = \json_decode($updateModel->data);
         $this->assertEquals(1, $user->keyboardConfigs()->count());
-        $this->assertEquals('c', $updateModel->data->c);
+        $this->assertEquals('c', $updateData->c);
     }
 
     public function test_keyboard_configs_save_forbidden()
