@@ -1,4 +1,8 @@
 <template>
+  <v-keyboard
+    :keyboard-config="activeKeyboardConfig"
+    @turn="queueTurn" />
+
   <v-puzzle
     v-if="model"
     class="max-w-md mb-6 mx-auto"
@@ -15,10 +19,11 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
+import { config, keyboardConfig } from '@/app/store/user/getters';
 import { pendingConfig, pendingKeyboardConfig, resetSolveState } from './state';
 import { usePuzzleName, useModel } from './behaviors';
 import { useRoute, useRouter } from 'vue-router';
-import { config, keyboardConfig } from '@/app/store/user/getters';
+import VKeyboard from '@/components/keyboard.vue';
 import VPuzzle from '@/components/puzzle/puzzle.vue';
 
 export default defineComponent({
@@ -52,14 +57,21 @@ export default defineComponent({
     // show puzzle border when config editor is open
     const border = computed(() => route.name === 'solve-config');
 
+    // queue a turn for execution
+    const queueTurn = (turn: string) => {
+      console.log('queing', turn);
+    }
+
     return {
       activeConfig,
       activeKeyboardConfig,
       border,
       model,
+      queueTurn,
     };
   },
   components: {
+    VKeyboard,
     VPuzzle,
   },
 });
