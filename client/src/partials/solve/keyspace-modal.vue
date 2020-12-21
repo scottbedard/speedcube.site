@@ -18,15 +18,14 @@
         <div class="flex items-center">
           <a
             v-if="activeKeyspace"
-            class="flex items-center text-gray-300"
+            class="flex items-center"
             href="#"
             @click.prevent="$emit('remove', keyspace)">
             <v-icon class="mr-2" name="trash-2" size="5" /> Delete keyspace
           </a>
         </div>
-        <div class="flex flex-wrap items-center gap-8">
+        <div class="flex flex-wrap items-center gap-12">
           <a
-            class="text-gray-300"
             href="#"
             @click.prevent="$emit('dismiss')">
             Cancel

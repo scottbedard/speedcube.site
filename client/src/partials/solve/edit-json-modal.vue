@@ -13,7 +13,7 @@
         placeholder="Enter JSON keyboard configuration" />
 
       <p>
-        Be careful editing this, invalid JSON can break key bindings and cause errors. This feature exists to make copy / pasting between puzzles easier.
+        Be careful editing this, invalid JSON can cause errors. This primarily exists to make copy / pasting between puzzles easier.
       </p>
 
       <p
@@ -25,14 +25,13 @@
       
       <div class="flex gap-6 items-center justify-between">
         <a
-          class="flex items-center text-gray-300"
+          class="flex items-center"
           href="#"
           @click.prevent="onCopy">
           <v-icon class="mr-2" name="clipboard" size="5" /> Copy to clipboard
         </a>
         <div class="flex flex-wrap items-center gap-8">
           <a
-            class="text-gray-300"
             href="#"
             @click.prevent="$emit('dismiss')">
             Cancel
