@@ -4,10 +4,8 @@
 @tailwind utilities;
 
 a {
-  @apply text-green-500;
-
   &:hover {
-    @apply text-green-400
+    @apply text-green-500
   }
 }
 </style>

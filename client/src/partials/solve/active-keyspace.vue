@@ -39,7 +39,7 @@ export default defineComponent({
   setup(props) {
     const keyspaceColors = (keyspace: string) => {
       return keyspace === props.activeKeyspace || (keyspace === 'default' && !props.activeKeyspace)
-        ? 'bg-purple-700 hover:bg-purple-500'
+        ? 'bg-purple-700 hover:bg-purple-600'
         : 'bg-blue-700 hover:bg-blue-600'
     }
 

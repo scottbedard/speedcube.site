@@ -27,10 +27,10 @@
 
   <div class="gap-6 grid">
     <!-- info -->
-    <p class="leading-loose max-w-xl mx-auto text-center">
+    <!-- <p class="max-w-xl mx-auto text-center">
       These are your current key bindings, displayed in <span class="inline-flex items-center">
       &quot;key &bull; turn&quot;</span> format. Pressing a key will highlight the associated binding.
-    </p>
+    </p> -->
 
     <!-- actions -->
     <div class="gap-x-8 gap-y-6 flex flex-wrap justify-center tracking-wide xl:gap-x-12">
@@ -62,7 +62,16 @@
     </div>
 
     <!-- footer -->
-    <div class="flex gap-8 items-center justify-center">
+    <div class="flex gap-8 items-center justify-between">
+      <div>
+        <a
+          v-if="activeKeyspace"
+          class="flex items-center hover:text-red-500"
+          href="#"
+          @click.prevent="deleteActiveKeyspace">
+          <v-icon class="mr-2" name="trash-2" size="5" /> Delete keyspace
+        </a>
+      </div>
       <v-button @click="onSave">Save</v-button>
     </div>
   </div>
@@ -146,6 +155,17 @@ export default defineComponent({
       closeModal();
     }
 
+    // delete the active keyspace
+    const deleteActiveKeyspace = () => {
+      if (pendingKeyboardConfig.value) {
+        if (activeKeyspace.value) {
+          delete pendingKeyboardConfig.value.keyspaces[activeKeyspace.value]
+        }
+      }
+
+      setKeyspace('');
+    }
+
     // handle a keyspace click
     const onKeyspaceClick = (keyspace: string) => {
       setKeyspace(keyspace);
@@ -219,6 +239,7 @@ export default defineComponent({
       addKeyspace,
       applyJson,
       closeModal,
+      deleteActiveKeyspace,
       editingBinding,
       isActiveModal,
       onKeyspaceClick,
