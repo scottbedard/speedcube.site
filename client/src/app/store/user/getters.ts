@@ -50,7 +50,7 @@ export const keyboardConfig = computed(() => {
     const userKeyboardConfig = currentUser.value?.keyboardConfigs.find(obj => obj.puzzleId === id);
 
     if (userKeyboardConfig) {
-      return userKeyboardConfig.data as KeyboardConfig;
+      return JSON.parse(userKeyboardConfig.data) as KeyboardConfig;
     } else if (isCube(name)) {
       return cloneDeep(cubeKeyboardConfig);
     } else if (isDodecaminx(name)) {

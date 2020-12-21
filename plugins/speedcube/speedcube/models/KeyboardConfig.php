@@ -76,19 +76,6 @@ class KeyboardConfig extends Model
     public $table = 'speedcube_speedcube_keyboard_configs';
 
     /**
-     * Get configuration data.
-     *
-     * We have to do this manually rather than using the jsonable
-     * helper in order to preserve empty objects.
-     *
-     * @return array
-     */
-    public function getDataAttribute()
-    {
-        return \json_decode($this->attributes['data'], false);
-    }
-
-    /**
      * Get configuration data as string.
      *
      * @return string

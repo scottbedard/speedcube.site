@@ -1,9 +1,9 @@
 /**
  * Keyboard config
  */
-export type KeyboardConfig<T = Record<string, any>> = {
+export type KeyboardConfig = {
   createdAt: string,
-  data: T,
+  data: string,
   id: number,
   puzzleId: number,
 }
