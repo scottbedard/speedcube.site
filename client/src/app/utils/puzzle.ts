@@ -108,6 +108,16 @@ export function cubeSize(name: CubeName): number {
 }
 
 /**
+ * Create a totally blank keyboard config.
+ */
+export function createFreshKeyboardConfig() {
+  return {
+    default: {},
+    keyspaces: {},
+  };
+}
+
+/**
  * Default dodecaminx configuration.
  */
 export const dodecaminxConfig: DodecaminxConfig = {

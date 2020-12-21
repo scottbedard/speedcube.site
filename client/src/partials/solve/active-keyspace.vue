@@ -17,7 +17,7 @@
       <p
         v-if="keybindings.length === 0"
         class="py-6 text-center">
-        This keyspace is empty
+        {{ activeKeyspace ? 'This keyspace' : 'The default keyspace'}} is empty
       </p>
       <a
         v-for="[key, turn] in keybindings"

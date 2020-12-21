@@ -8,30 +8,29 @@
     @remove="removeBinding" />
 
   <v-keyspace-modal
-    v-if="isActiveModal('keyspace')"
+    v-else-if="isActiveModal('keyspace')"
     :active-keyspace="activeKeyspace"
     @add="addKeyspace"
     @dismiss="closeModal"
     @remove="removeKeyspace" />
 
   <v-edit-json-modal
-    v-if="isActiveModal('edit-json')"
+    v-else-if="isActiveModal('edit-json')"
     :pending-keyboard-config="pendingKeyboardConfig"
     @apply="applyJson"
     @dismiss="closeModal" />
 
   <v-reset-default-modal
-    v-if="isActiveModal('reset-default')"
+    v-else-if="isActiveModal('reset-default')"
     @dismiss="closeModal"
-    @reset="resetDefault" />
+    @confirm="resetDefault" />
+
+  <v-clear-all-modal
+    v-else-if="isActiveModal('clear-all')"
+    @dismiss="closeModal"
+    @confirm="clearAll" />
 
   <div class="gap-6 grid">
-    <!-- info -->
-    <!-- <p class="max-w-xl mx-auto text-center">
-      These are your current key bindings, displayed in <span class="inline-flex items-center">
-      &quot;key &bull; turn&quot;</span> format. Pressing a key will highlight the associated binding.
-    </p> -->
-
     <!-- actions -->
     <div class="gap-x-12 gap-y-6 flex flex-wrap justify-center tracking-wide">
       <a class="inline-flex items-center" href="#" @click.prevent="showAddModal">
@@ -46,7 +45,7 @@
       <a class="inline-flex items-center" href="#" @click.prevent="showModal('reset-default')">
         <v-icon class="mr-3" name="rotate-ccw" size="5" stroke="3" /> Reset Default
       </a>
-      <a class="inline-flex items-center" href="#" @click.prevent>
+      <a class="inline-flex items-center" href="#" @click.prevent="showModal('clear-all')">
         <v-icon class="mr-3" name="trash-2" size="5" stroke="2" /> Clear All
       </a>
     </div>
@@ -100,7 +99,7 @@
 <script lang="ts">
 import { cloneDeep } from 'lodash-es';
 import { computed, defineComponent, onUnmounted, ref } from 'vue';
-import { cubeKeyboardConfig, dodecaminxKeyboardConfig, isCube, isDodecaminx } from '@/app/utils/puzzle';
+import { cubeKeyboardConfig, createFreshKeyboardConfig, dodecaminxKeyboardConfig, isCube, isDodecaminx } from '@/app/utils/puzzle';
 import { isAuthenticated } from '@/app/store/user/getters';
 import { keyboardConfig } from '@/app/store/user/getters';
 import { pendingKeyboardConfig } from '../state';
@@ -109,6 +108,7 @@ import { usePuzzleId, usePuzzleName } from '../behaviors';
 import { useRouter } from 'vue-router';
 import VActiveKeyspace from '@/partials/solve/active-keyspace.vue';
 import VButton from '@/components/button.vue';
+import VClearAllModal from '@/partials/solve/clear-all-modal.vue';
 import VEditJsonModal from '@/partials/solve/edit-json-modal.vue';
 import VIcon from '@/components/icon.vue';
 import VKeybindingModal from '@/partials/solve/keybinding-modal.vue';
@@ -126,6 +126,13 @@ export default defineComponent({
     const puzzleId = usePuzzleId();
     const puzzleName = usePuzzleName();
     const router = useRouter();
+
+    // clear all bindings
+    const clearAll = () => {
+      pendingKeyboardConfig.value = createFreshKeyboardConfig();
+
+      closeModal();
+    }
 
     // modal visibility
     const closeModal = () => {
@@ -266,6 +273,7 @@ export default defineComponent({
       addBinding,
       addKeyspace,
       applyJson,
+      clearAll,
       closeModal,
       deleteActiveKeyspace,
       editingBinding,
@@ -287,6 +295,7 @@ export default defineComponent({
   components: {
     VActiveKeyspace,
     VButton,
+    VClearAllModal,
     VEditJsonModal,
     VIcon,
     VKeybindingModal,

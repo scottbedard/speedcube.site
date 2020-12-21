@@ -1,12 +1,12 @@
 <template>
-  <div class="gap-12 flex flex-wrap font-bold justify-center text-center">
+  <div class="gap-12 flex flex-wrap justify-center text-center">
     <router-link
       class="flex items-center"
       :to="{ name: 'solve-config' }">
       <v-icon
         class="mr-2 rotate-90 transform"
         name="sliders"
-        size="6" />
+        size="5" />
       Puzzle Settings
     </router-link>
 
@@ -16,7 +16,7 @@
       <v-icon
         class="mr-2"
         name="code"
-        size="6" />
+        size="5" />
         Key Bindings
     </router-link>
   </div>
