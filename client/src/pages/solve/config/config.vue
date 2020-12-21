@@ -50,6 +50,7 @@ import { dodecaminxSize, getPuzzleId, isCube, isDodecaminx } from '@/app/utils/p
 import { onUnmounted, ref } from 'vue';
 import { pendingConfig } from '../state';
 import { usePuzzleName } from '../behaviors';
+import { useRouter } from 'vue-router';
 import VButton from '@/components/button.vue';
 import VColorPicker from '@/components/color-picker.vue';
 import VLabel from '@/components/label.vue';
@@ -59,6 +60,7 @@ export default defineComponent({
   setup() {
     const isLoading = ref(false);
     const puzzleName = usePuzzleName();
+    const router = useRouter();
 
     // config fields
     const fields = computed(() => {
@@ -84,15 +86,17 @@ export default defineComponent({
     });
 
     // create the config and refresh the user
-    const onSubmit = () => {
+    const onSubmit = async () => {
       isLoading.value = true;
 
-      createConfig({
+      await createConfig({
         puzzleId: getPuzzleId(puzzleName.value),
         data: pendingConfig.value || {},
-      }).then(() => {
-        isLoading.value = false;
       });
+
+      isLoading.value = false;
+      
+      router.push({ name: 'solve' });
     }
 
     return {

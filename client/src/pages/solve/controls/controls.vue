@@ -33,7 +33,7 @@
     </p> -->
 
     <!-- actions -->
-    <div class="gap-x-8 gap-y-6 flex flex-wrap justify-center tracking-wide xl:gap-x-12">
+    <div class="gap-x-12 gap-y-6 flex flex-wrap justify-center tracking-wide">
       <a class="inline-flex items-center" href="#" @click.prevent="showAddModal">
         <v-icon class="mr-3" name="plus" size="5" stroke="3" /> Add Binding
       </a>
@@ -78,7 +78,11 @@
           :to="{ name: 'solve' }">
           Cancel
         </router-link>
-        <v-button @click="onSave">Save</v-button>
+        <v-button
+          :loading="isLoading"
+          @click="onSave">
+          Save
+        </v-button>
       </div>
     </div>
   </div>
@@ -92,6 +96,7 @@ import { keyboardConfig } from '@/app/store/user/getters';
 import { pendingKeyboardConfig } from '../state';
 import { saveKeyboardConfig } from '@/app/store/user/actions';
 import { usePuzzleId, usePuzzleName } from '../behaviors';
+import { useRouter } from 'vue-router';
 import VActiveKeyspace from '@/partials/solve/active-keyspace.vue';
 import VButton from '@/components/button.vue';
 import VEditJsonModal from '@/partials/solve/edit-json-modal.vue';
@@ -107,8 +112,10 @@ export default defineComponent({
     const activeKeyspace = ref('');
     const activeModal = ref('');
     const editingBinding = ref<Keybinding | null>(null);
+    const isLoading = ref(false);
     const puzzleId = usePuzzleId();
     const puzzleName = usePuzzleName();
+    const router = useRouter();
 
     // modal visibility
     const closeModal = () => {
@@ -229,9 +236,13 @@ export default defineComponent({
     // save keyboard config for this puzzle
     const onSave = async () => {
       if (pendingKeyboardConfig.value) {
+        isLoading.value = true;
+
         await saveKeyboardConfig(puzzleId.value, pendingKeyboardConfig.value);
-        
-        // @todo: fire alert
+
+        isLoading.value = false;
+
+        router.push({ name: 'solve' });
       }
     }
 
@@ -249,6 +260,7 @@ export default defineComponent({
       deleteActiveKeyspace,
       editingBinding,
       isActiveModal,
+      isLoading,
       onKeyspaceClick,
       onSave,
       pendingKeyboardConfig,
