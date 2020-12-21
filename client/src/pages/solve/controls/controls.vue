@@ -62,7 +62,7 @@
     </div>
 
     <!-- footer -->
-    <div class="flex gap-8 items-center justify-between">
+    <div v-if="isAuthenticated" class="flex gap-8 items-center justify-between">
       <div>
         <a
           v-if="activeKeyspace"
@@ -85,6 +85,15 @@
         </v-button>
       </div>
     </div>
+
+    <!-- guest message -->
+    <div v-else class="flex justify-end">
+      <p>
+        Please <router-link :to="{ name: 'login' }">sign in</router-link> or
+        <router-link :to="{ name: 'signup' }">create an account</router-link>
+        to save
+      </p>
+    </div>
   </div>
 </template>
 
@@ -92,6 +101,7 @@
 import { cloneDeep } from 'lodash-es';
 import { computed, defineComponent, onUnmounted, ref } from 'vue';
 import { cubeKeyboardConfig, dodecaminxKeyboardConfig, isCube, isDodecaminx } from '@/app/utils/puzzle';
+import { isAuthenticated } from '@/app/store/user/getters';
 import { keyboardConfig } from '@/app/store/user/getters';
 import { pendingKeyboardConfig } from '../state';
 import { saveKeyboardConfig } from '@/app/store/user/actions';
@@ -260,6 +270,7 @@ export default defineComponent({
       deleteActiveKeyspace,
       editingBinding,
       isActiveModal,
+      isAuthenticated,
       isLoading,
       onKeyspaceClick,
       onSave,

@@ -1,6 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit">
-
+  <form class="gap-6 grid" @submit.prevent="onSubmit">
     <!-- fields -->
     <div class="gap-6 grid xs:grid-cols-2 md:grid-cols-3">
       <div
@@ -29,13 +28,24 @@
     </div>
 
     <!-- actions -->
-    <div class="flex items-center justify-end mt-6">
+    <div
+      v-if="isAuthenticated"
+      class="flex items-center justify-end">
       <router-link
         class="flex items-center mr-12"
         :to="{ name: 'solve' }">
         Cancel
       </router-link>
       <v-button type="submit" :loading="isLoading">Save</v-button>
+    </div>
+
+    <!-- guest message -->
+    <div v-else class="flex justify-end">
+      <p>
+        Please <router-link :to="{ name: 'login' }">sign in</router-link> or
+        <router-link :to="{ name: 'signup' }">create an account</router-link>
+        to save
+      </p>
     </div>
   </form>
 </template>
@@ -47,6 +57,7 @@ import { config } from '@/app/store/user/getters';
 import { createConfig } from '@/app/store/user/actions';
 import { cubeFields, dodecaminxEvenFields, dodecaminxOddFields } from './fields';
 import { dodecaminxSize, getPuzzleId, isCube, isDodecaminx } from '@/app/utils/puzzle';
+import { isAuthenticated } from '@/app/store/user/getters';
 import { onUnmounted, ref } from 'vue';
 import { pendingConfig } from '../state';
 import { usePuzzleName } from '../behaviors';
@@ -101,6 +112,7 @@ export default defineComponent({
 
     return {
       fields,
+      isAuthenticated,
       isLoading,
       onSubmit,
       pendingConfig,
