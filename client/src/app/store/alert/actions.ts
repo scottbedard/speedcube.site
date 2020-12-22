@@ -14,7 +14,7 @@ export function fireAlert(rawAlert: string | Partial<Alert>): void {
   const timeoutKey = uniqueId();
 
   const alert: Alert = {
-    duration: 2000,
+    duration: 5000,
     id: uniqueId(),
     message: '',
     timeoutKey,

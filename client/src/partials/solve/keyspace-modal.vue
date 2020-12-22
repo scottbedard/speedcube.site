@@ -12,7 +12,7 @@
         required />
 
       <p>
-        Keyspaces allow for diffferent layouts. To change keyspaces when solving, press Cmd or Ctrl and the assigned character.
+        Keyspaces enable multiple keyboard layouts. To access a different keyspace while solving, press control and the assigned character.
       </p>
 
       <div class="flex flex-wrap gap-6 justify-between">

@@ -262,7 +262,10 @@ export default defineComponent({
 
         router.push({ name: 'solve' });
 
-        fireAlert('Success!');
+        fireAlert({
+          duration: 3000,
+          message: 'Key bindings saved',
+        });
       }
     }
 

@@ -57,6 +57,7 @@ import { config } from '@/app/store/user/getters';
 import { createConfig } from '@/app/store/user/actions';
 import { cubeFields, dodecaminxEvenFields, dodecaminxOddFields } from './fields';
 import { dodecaminxSize, getPuzzleId, isCube, isDodecaminx } from '@/app/utils/puzzle';
+import { fireAlert } from '@/app/store/alert/actions';
 import { isAuthenticated } from '@/app/store/user/getters';
 import { onUnmounted, ref } from 'vue';
 import { pendingConfig } from '../state';
@@ -108,6 +109,11 @@ export default defineComponent({
       isLoading.value = false;
       
       router.push({ name: 'solve' });
+
+      fireAlert({
+        duration: 3000,
+        message: 'Puzzle settings saved',
+      });
     }
 
     return {
