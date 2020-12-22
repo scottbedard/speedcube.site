@@ -15,7 +15,7 @@
         required />
 
       <p>
-        Be careful editing this, invalid JSON can cause errors. This primarily exists to make copy / pasting between puzzles easier.
+        Be careful editing this, invalid JSON can cause errors. This feature exists to facilitate copy / pasting between puzzles.
       </p>
 
       <p
