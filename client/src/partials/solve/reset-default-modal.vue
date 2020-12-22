@@ -2,10 +2,10 @@
   <v-modal padded @dismiss="$emit('dismiss')">
     <div class="gap-6 grid">
       <h3 class="font-bold text-3xl">
-        You're about to reset to default controls
+        You're about to reset all custom bindings
       </h3>
       <p>
-        This will reset all bindings and keyspaces to their default state. You could still recover your current setup by canceling, but any unsaved changes would be lost.
+        This will reset all custom bindings and keyspaces. You could still recover your current setup by canceling, but any unsaved changes would be lost.
       </p>
       <div class="flex gap-12 items-center justify-end">
         <a

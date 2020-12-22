@@ -4,7 +4,7 @@
       class="flex items-center"
       :to="{ name: 'solve-config' }">
       <v-icon
-        class="mr-2 rotate-90 transform"
+        class="mr-3 rotate-90 transform"
         name="sliders"
         size="5" />
       Puzzle Settings
@@ -14,8 +14,8 @@
       class="flex items-center"
       :to="{ name: 'solve-controls' }">
       <v-icon
-        class="mr-2"
-        name="code"
+        class="mr-3"
+        name="hash"
         size="5" />
         Key Bindings
     </router-link>

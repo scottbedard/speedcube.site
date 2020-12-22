@@ -2,7 +2,7 @@
   <v-modal padded @dismiss="$emit('dismiss')">
     <div class="gap-6 grid">
       <h3 class="font-bold text-3xl">
-        You're about to clear all bindings
+        You're about to delete all bindings
       </h3>
       <p>
         This removes all key bindings and keyspaces. You could still recover your current setup by canceling, but any unsaved changes would be lost.

@@ -34,13 +34,13 @@
     <!-- actions -->
     <div class="gap-x-12 gap-y-6 flex flex-wrap justify-center tracking-wide">
       <a class="inline-flex items-center" href="#" @click.prevent="showAddModal">
-        <v-icon class="mr-3" name="plus" size="5" stroke="3" /> Add Binding
+        <v-icon class="mr-3" name="plus" size="5" stroke="3" /> Add Key Binding
       </a>
       <a class="inline-flex items-center" href="#" @click.prevent="showModal('keyspace')">
-        <v-icon class="mr-3" name="hash" size="5" stroke="3" /> Add Keyspace
+        <v-icon class="mr-3" name="chevron-up" size="5" stroke="3" /> Add Keyspace
       </a>
       <a class="inline-flex items-center" href="#" @click.prevent="showModal('edit-json')">
-        <v-icon class="mr-3" name="code" size="5" stroke="3" /> Edit JSON
+        <v-icon class="mr-3" name="tool" size="5" stroke="2" /> Edit JSON
       </a>
       <a class="inline-flex items-center" href="#" @click.prevent="showModal('reset-default')">
         <v-icon class="mr-3" name="rotate-ccw" size="5" stroke="3" /> Reset Default
