@@ -19,10 +19,15 @@
         :to="link.to" />
     </nav>
   </div>
+
   <div class="p-6">
     <v-renderer>
       <slot />
     </v-renderer>
+  </div>
+
+  <div class="bottom-0 fixed right-0 z-20">
+    <v-alerts />
   </div>
 </template>
 
@@ -30,6 +35,7 @@
 import { computed, defineComponent } from 'vue';
 import { identity } from 'lodash-es';
 import { isAuthenticated } from '@/app/store/user/getters';
+import VAlerts from '@/partials/alerts.vue'; 
 import VRenderer from '@/components/three/renderer.vue';
 
 export default defineComponent({
@@ -70,6 +76,7 @@ export default defineComponent({
     };
   },
   components: {
+    VAlerts,
     VRenderer,
   },
 });

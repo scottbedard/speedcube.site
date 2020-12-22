@@ -100,6 +100,7 @@
 import { cloneDeep } from 'lodash-es';
 import { computed, defineComponent, onUnmounted, ref } from 'vue';
 import { cubeKeyboardConfig, createFreshKeyboardConfig, dodecaminxKeyboardConfig, isCube, isDodecaminx } from '@/app/utils/puzzle';
+import { fireAlert } from '@/app/store/alert/actions';
 import { isAuthenticated } from '@/app/store/user/getters';
 import { keyboardConfig } from '@/app/store/user/getters';
 import { pendingKeyboardConfig } from '../state';
@@ -260,6 +261,8 @@ export default defineComponent({
         isLoading.value = false;
 
         router.push({ name: 'solve' });
+
+        fireAlert('Success!');
       }
     }
 
