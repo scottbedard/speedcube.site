@@ -56,33 +56,23 @@
         :active-keyspace="activeKeyspace"
         :pending-keyboard-config="pendingKeyboardConfig"
         :pending-keyspaces="pendingKeyspaces"
-        @click-keyspace="onKeyspaceClick"
+        @click-add-keyspace="onKeyspaceClick"
+        @click-delete-keyspace="deleteActiveKeyspace"
         @edit="showEditModal" />
     </div>
 
     <!-- footer -->
-    <div v-if="isAuthenticated" class="flex gap-8 items-center justify-between">
-      <div>
-        <a
-          v-if="activeKeyspace"
-          class="flex items-center hover:text-red-500"
-          href="#"
-          @click.prevent="deleteActiveKeyspace">
-          <v-icon class="mr-2" name="trash-2" size="5" /> Delete keyspace
-        </a>
-      </div>
-      <div class="gap-x-12 flex items-center">
-        <router-link
-          class="flex items-center"
-          :to="{ name: 'solve' }">
-          Cancel
-        </router-link>
-        <v-button
-          :loading="isLoading"
-          @click="onSave">
-          Save
-        </v-button>
-      </div>
+    <div v-if="isAuthenticated" class="flex gap-x-12 items-center justify-end">
+      <router-link
+        class="flex items-center"
+        :to="{ name: 'solve' }">
+        Cancel
+      </router-link>
+      <v-button
+        :loading="isLoading"
+        @click="onSave">
+        Save
+      </v-button>
     </div>
 
     <!-- guest message -->

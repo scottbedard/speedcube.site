@@ -1,5 +1,5 @@
 <template>
-  <div class="gap-12 flex flex-wrap justify-center text-center">
+  <div class="gap-x-16 gap-y-6 flex flex-wrap justify-center text-center">
     <router-link
       class="flex items-center"
       :to="{ name: 'solve-config' }">

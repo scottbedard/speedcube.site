@@ -2,15 +2,26 @@
   <div class="gap-6 grid">
     <div
       v-if="pendingKeyspaces.length > 1"
-      class="font-mono gap-6 flex flex-wrap justify-center text-sm">
+      class="font-mono gap-6 flex flex-wrap items-center justify-center text-sm">
       <a
         v-for="keyspace in pendingKeyspaces"
         class="rounded shadow text-gray-200 px-2 py-1 hover:text-white"
         href="#"
         :class="[keyspaceColors(keyspace)]"
         :key="keyspace"
-        @click.prevent="$emit('click-keyspace', keyspace === 'default' ? '' : keyspace)">
+        @click.prevent="$emit('click-add-keyspace', keyspace === 'default' ? '' : keyspace)">
         {{ keyspace }}
+      </a>
+      <a
+        v-if="activeKeyspace"
+        class="flex font-sans items-center tracking-wide hover:text-red-500"
+        href="#"
+        @click.prevent="$emit('click-delete-keyspace', activeKeyspace)">
+        <v-icon
+          class="mr-2"
+          name="trash-2"
+          size="4" />
+        Delete Keyspace
       </a>
     </div>
     <div class="gap-6 flex flex-wrap justify-center">
@@ -34,6 +45,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue';
 import { KeyboardConfig } from '@/types/puzzle';
+import VIcon from '@/components/icon.vue';
 
 export default defineComponent({
   setup(props) {
@@ -54,8 +66,12 @@ export default defineComponent({
       keyspaceColors,
     };
   },
+  components: {
+    VIcon,
+  },
   emits: [
-    'click-keyspace',
+    'click-add-keyspace',
+    'click-delete-keyspace',
     'edit',
   ],
   props: {
