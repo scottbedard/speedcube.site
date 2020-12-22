@@ -8,6 +8,7 @@
       <v-labeled-input
         v-model="json"
         autofocus
+        disable-spellcheck
         label="Keyboard Configuration"
         monospace-input
         placeholder="Enter JSON keyboard configuration"

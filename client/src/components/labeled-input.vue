@@ -5,6 +5,7 @@
       :class="{
         'font-mono': monospaceInput, 
       }"
+      :disable-spellcheck="disableSpellcheck"
       :disabled="disabled"
       :maxlength="maxlength"
       :name="name"
@@ -29,10 +30,8 @@ export default defineComponent({
   props: {
     autofocus: Boolean,
     disabled: Boolean,
-    label: {
-      required: true,
-      type: String,
-    },
+    disableSpellcheck: Boolean,
+    label: { required: true, type: String },
     maxlength: [Number, String],
     modelValue: [Number, String],
     monospaceInput: Boolean,

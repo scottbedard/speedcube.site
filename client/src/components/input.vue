@@ -2,6 +2,7 @@
 <template>
   <input
     class="block bg-gray-100 h-10 outline-none placeholder-gray-500 px-3 rounded text-gray-800 w-full focus:shadow-outline"
+    :spellcheck="disableSpellcheck ? 'false' : undefined"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)" />
 </template>
@@ -17,6 +18,7 @@ export default defineComponent({
   },
   props: {
     autofocus: Boolean,
+    disableSpellcheck: Boolean,
     modelValue: [Number, String],
   },
 });
