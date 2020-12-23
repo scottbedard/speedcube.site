@@ -9,7 +9,6 @@
 
   <v-keyspace-modal
     v-else-if="isActiveModal('keyspace')"
-    :active-keyspace="activeKeyspace"
     @add="addKeyspace"
     @dismiss="closeModal"
     @remove="removeKeyspace" />
@@ -52,12 +51,11 @@
 
     <!-- keyspaces -->
     <div class="py-6">
-      <v-active-keyspace
-        :active-keyspace="activeKeyspace"
-        :pending-keyboard-config="pendingKeyboardConfig"
-        :pending-keyspaces="pendingKeyspaces"
+      <v-keyspaces
+        :keyboard-config="pendingKeyboardConfig"
+        :selected-keyspace="currentKeyspace"
         @click-add-keyspace="onKeyspaceClick"
-        @click-delete-keyspace="deleteActiveKeyspace"
+        @click-delete-keyspace="deleteKeyspace"
         @edit="showEditModal" />
     </div>
 
@@ -93,24 +91,23 @@ import { cubeKeyboardConfig, createFreshKeyboardConfig, dodecaminxKeyboardConfig
 import { fireAlert } from '@/app/store/alert/actions';
 import { isAuthenticated } from '@/app/store/user/getters';
 import { keyboardConfig } from '@/app/store/user/getters';
-import { pendingKeyboardConfig } from '../state';
+import { currentKeyspace, pendingKeyboardConfig } from '../state';
 import { saveKeyboardConfig } from '@/app/store/user/actions';
 import { usePuzzleId, usePuzzleName } from '../behaviors';
 import { useRouter } from 'vue-router';
-import VActiveKeyspace from '@/partials/solve/active-keyspace.vue';
 import VButton from '@/components/button.vue';
 import VClearAllModal from '@/partials/solve/clear-all-modal.vue';
 import VEditJsonModal from '@/partials/solve/edit-json-modal.vue';
 import VIcon from '@/components/icon.vue';
 import VKeybindingModal from '@/partials/solve/keybinding-modal.vue';
 import VKeyspaceModal from '@/partials/solve/keyspace-modal.vue';
+import VKeyspaces from '@/partials/solve/keyspaces.vue';
 import VResetDefaultModal from '@/partials/solve/reset-default-modal.vue';
 
 type Keybinding = { key: string, turn: string };
 
 export default defineComponent({
   setup() {
-    const activeKeyspace = ref('');
     const activeModal = ref('');
     const editingBinding = ref<Keybinding | null>(null);
     const isLoading = ref(false);
@@ -149,10 +146,10 @@ export default defineComponent({
     // add key binding
     const addBinding = ({ key, turn }: { key: string, turn: string }) => {
       if (pendingKeyboardConfig.value) {
-        if (activeKeyspace.value) {
-          pendingKeyboardConfig.value.keyspaces[activeKeyspace.value][key] = turn;
-        } else {
+        if (currentKeyspace.value === 'default') {
           pendingKeyboardConfig.value.default[key] = turn;
+        } else {
+          pendingKeyboardConfig.value.keyspaces[currentKeyspace.value][key] = turn;
         }
       }
 
@@ -162,9 +159,9 @@ export default defineComponent({
     // add keyspace
     const addKeyspace = (key: string) => {
       if (pendingKeyboardConfig.value) {
-        const char = key.trim();
-        activeKeyspace.value = char;
-        pendingKeyboardConfig.value.keyspaces[char] = pendingKeyboardConfig.value.keyspaces[char] || {}
+        const keyspace = key.trim();
+        currentKeyspace.value = keyspace;
+        pendingKeyboardConfig.value.keyspaces[keyspace] = pendingKeyboardConfig.value.keyspaces[keyspace] || {}
       }
 
       closeModal();
@@ -177,31 +174,27 @@ export default defineComponent({
       closeModal();
     }
 
-    // delete the active keyspace
-    const deleteActiveKeyspace = () => {
-      if (pendingKeyboardConfig.value) {
-        if (activeKeyspace.value) {
-          delete pendingKeyboardConfig.value.keyspaces[activeKeyspace.value]
-        }
+    // delete a keyspace
+    const deleteKeyspace = (keyspace: string) => {
+      if (pendingKeyboardConfig.value && keyspace) {
+        delete pendingKeyboardConfig.value.keyspaces[keyspace];
       }
 
-      setKeyspace('');
+      currentKeyspace.value = 'default';
     }
 
     // handle a keyspace click
     const onKeyspaceClick = (keyspace: string) => {
-      setKeyspace(keyspace);
+      currentKeyspace.value = keyspace;
     }
 
     // remove a key binding
     const removeBinding = (key: string) => {
       if (pendingKeyboardConfig.value) {
-        if (activeKeyspace.value) {
-          if (pendingKeyboardConfig.value.keyspaces[activeKeyspace.value]) {
-            delete pendingKeyboardConfig.value.keyspaces[activeKeyspace.value][key];
-          }
-        } else {
+        if (currentKeyspace.value === 'default') {
           delete pendingKeyboardConfig.value.default[key];
+        } else if (pendingKeyboardConfig.value.keyspaces[currentKeyspace.value]) {
+          delete pendingKeyboardConfig.value.keyspaces[currentKeyspace.value][key];
         }
       }
 
@@ -214,7 +207,7 @@ export default defineComponent({
         delete pendingKeyboardConfig.value.keyspaces[keyspace];
       }
 
-      activeKeyspace.value = '';
+      currentKeyspace.value = 'default';
 
       closeModal();
     }
@@ -228,11 +221,6 @@ export default defineComponent({
       }
       
       closeModal();
-    }
-
-    // set the active keyspace
-    const setKeyspace = (keyspace: string) => {
-      activeKeyspace.value = keyspace;
     }
 
     // set pending keyboard config to equal the current config
@@ -261,17 +249,18 @@ export default defineComponent({
 
     // flush pending keyboard config when the editor is closed
     onUnmounted(() => {
+      currentKeyspace.value = 'default';
       pendingKeyboardConfig.value = null;
     });
 
     return {
-      activeKeyspace,
       addBinding,
       addKeyspace,
       applyJson,
       clearAll,
       closeModal,
-      deleteActiveKeyspace,
+      currentKeyspace,
+      deleteKeyspace,
       editingBinding,
       isActiveModal,
       isAuthenticated,
@@ -289,13 +278,13 @@ export default defineComponent({
     };
   },
   components: {
-    VActiveKeyspace,
     VButton,
     VClearAllModal,
     VEditJsonModal,
     VIcon,
     VKeybindingModal,
     VKeyspaceModal,
+    VKeyspaces,
     VResetDefaultModal,
   },
 });

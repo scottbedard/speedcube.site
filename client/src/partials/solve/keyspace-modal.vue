@@ -18,7 +18,7 @@
       <div class="flex flex-wrap gap-6 justify-between">
         <div class="flex items-center">
           <a
-            v-if="activeKeyspace"
+            v-if="currentKeyspace !== 'default'"
             class="flex items-center"
             href="#"
             @click.prevent="$emit('remove', keyspace)">
@@ -40,6 +40,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { currentKeyspace } from '@/pages/solve/state';
 import VButton from '@/components/button.vue';
 import VIcon from '@/components/icon.vue';
 import VLabeledInput from '@/components/labeled-input.vue';
@@ -54,6 +55,7 @@ export default defineComponent({
     }
 
     return {
+      currentKeyspace,
       keyspace,
       onSubmit,
     };
@@ -69,11 +71,5 @@ export default defineComponent({
     'dismiss',
     'remove',
   ],
-  props: {
-    activeKeyspace: {
-      required: true,
-      type: String,
-    },
-  },
 });
 </script>

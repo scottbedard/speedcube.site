@@ -1,48 +1,45 @@
 <script lang="ts">
-import { computed, defineComponent, ref, PropType } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
 import { KeyboardConfig } from '@/types/puzzle';
 import { noop } from 'lodash-es';
 import { useEventListener } from '@vueuse/core';
 
 export default defineComponent({
   setup(props, { emit }) {
-    const selectedKeyspace = ref('');
-
-    const keybindings = computed(() => {
-      return selectedKeyspace.value === ''
-        ? props.keyboardConfig.default
-        : props.keyboardConfig.keyspaces[selectedKeyspace.value]
+    const currentBindings = computed(() => {
+      return props.currentKeyspace !== 'default' && props.keyboardConfig.keyspaces[props.currentKeyspace]
+        ? props.keyboardConfig.keyspaces[props.currentKeyspace]
+        : props.keyboardConfig.default;
     });
 
-    // listen for keypress events
-    useEventListener(document.body, 'keypress', (e: any) => {
-      const key: string = e.key;
-      const ctrlKey: boolean = e.ctrlKey;
-
-      if (ctrlKey && key !== ' ' && Object.keys(props.keyboardConfig.keyspaces).includes(key)) {
-        selectedKeyspace.value = key;
-      } else if (keybindings.value[key]) {
-        emit('turn', keybindings.value[key]);
+    // listen for turns
+    useEventListener(document.body, 'keypress', ({ ctrlKey, key }: any) => {
+      if (!ctrlKey && currentBindings.value[key]) {
+        emit('turn', currentBindings.value[key]);
       }
     });
 
-    // use keyup for default keyspace
-    // @todo: look into why this doesn't fire on keypress
-    useEventListener(document.body, 'keyup', (e: any) => {
-      if (e.key === ' ' && e.ctrlKey) {
-        selectedKeyspace.value = '';
+    // listen for keyspace changes
+    useEventListener(document.body, 'keyup', ({ ctrlKey, key }: any) => {
+      if (ctrlKey && (key === ' ' || Object.keys(props.keyboardConfig.keyspaces).includes(key))) {
+        emit('change-keyspace', key === ' ' ? 'default' : key);
       }
     });
 
     return {
-      selectedKeyspace,
+      currentBindings,
     };
   },
   emits: [
+    'change-keyspace',
     'turn',
   ],
   render: noop,
   props: {
+    currentKeyspace: {
+      default: ' ',
+      type: String,
+    },
     keyboardConfig: {
       required: true,
       type: Object as PropType<KeyboardConfig>,

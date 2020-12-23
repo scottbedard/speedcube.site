@@ -2,6 +2,11 @@ import { ref } from 'vue';
 import { KeyboardConfig } from '@/types/puzzle';
 
 /**
+ * Current keyspace, null is default
+ */
+export const currentKeyspace = ref<string>('default');
+
+/**
  * Pending puzzle configuration.
  */
 export const pendingConfig = ref<Record<string, any> | null>(null);

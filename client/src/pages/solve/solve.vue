@@ -1,6 +1,9 @@
 <template>
+  <pre class="text-xs">{{ { currentKeyspace } }}</pre>
   <v-keyboard
+    :current-keyspace="currentKeyspace"
     :keyboard-config="activeKeyboardConfig"
+    @change-keyspace="changeKeyspace"
     @turn="queueTurn" />
 
   <v-puzzle
@@ -20,7 +23,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
 import { config, keyboardConfig } from '@/app/store/user/getters';
-import { pendingConfig, pendingKeyboardConfig, resetSolveState } from './state';
+import { currentKeyspace, pendingConfig, pendingKeyboardConfig, resetSolveState } from './state';
 import { usePuzzleName, useModel } from './behaviors';
 import { useRoute, useRouter } from 'vue-router';
 import VKeyboard from '@/components/keyboard.vue';
@@ -52,10 +55,15 @@ export default defineComponent({
     // current keyboard configuration
     const activeKeyboardConfig = computed(() => {
       return pendingKeyboardConfig.value || keyboardConfig.value(puzzleName.value)
-    })
+    });
 
     // show puzzle border when config editor is open
     const border = computed(() => route.name === 'solve-config');
+
+    // change the user's keyspace
+    const changeKeyspace = (keyspace: string) => {
+      currentKeyspace.value = keyspace;
+    }
 
     // queue a turn for execution
     const queueTurn = (turn: string) => {
@@ -65,6 +73,8 @@ export default defineComponent({
     return {
       activeConfig,
       activeKeyboardConfig,
+      changeKeyspace,
+      currentKeyspace,
       border,
       model,
       queueTurn,
