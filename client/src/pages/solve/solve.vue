@@ -1,5 +1,4 @@
 <template>
-  <pre class="text-xs">{{ { currentKeyspace } }}</pre>
   <v-keyboard
     :current-keyspace="currentKeyspace"
     :keyboard-config="activeKeyboardConfig"
