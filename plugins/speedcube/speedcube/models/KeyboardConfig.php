@@ -82,7 +82,7 @@ class KeyboardConfig extends Model
      */
     public function getDataStringAttribute()
     {
-        return \json_encode($this->data, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT);
+        return \json_encode(\json_decode($this->data), JSON_FORCE_OBJECT | JSON_PRETTY_PRINT);
     }
 
     /**
@@ -126,6 +126,6 @@ class KeyboardConfig extends Model
             throw new \Exception('Invalid JSON');
         }
 
-        $this->data = $data;
+        $this->data = $value;
     }
 }
