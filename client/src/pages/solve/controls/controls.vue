@@ -52,6 +52,7 @@
     <!-- keyspaces -->
     <div class="py-6">
       <v-keyspaces
+        :highlighted-keys="highlightedKeys"
         :keyboard-config="pendingKeyboardConfig"
         :selected-keyspace="currentKeyspace"
         @click-add-keyspace="onKeyspaceClick"
@@ -88,11 +89,13 @@
 import { cloneDeep } from 'lodash-es';
 import { computed, defineComponent, onUnmounted, ref, watchEffect } from 'vue';
 import { cubeKeyboardConfig, createFreshKeyboardConfig, dodecaminxKeyboardConfig, isCube, isDodecaminx } from '@/app/utils/puzzle';
+import { currentKeyspace, isTurningDisabled, pendingKeyboardConfig } from '../state';
 import { fireAlert } from '@/app/store/alert/actions';
+import { HighlightedKey } from '@/pages/solve/types';
 import { isAuthenticated } from '@/app/store/user/getters';
 import { keyboardConfig } from '@/app/store/user/getters';
-import { currentKeyspace, isTurningDisabled, pendingKeyboardConfig } from '../state';
 import { saveKeyboardConfig } from '@/app/store/user/actions';
+import { useEventListener } from '@vueuse/core';
 import { usePuzzleId, usePuzzleName } from '../behaviors';
 import { useRouter } from 'vue-router';
 import VButton from '@/components/button.vue';
@@ -110,6 +113,7 @@ export default defineComponent({
   setup() {
     const activeModal = ref('');
     const editingBinding = ref<Keybinding | null>(null);
+    const highlightedKeys = ref<HighlightedKey[]>([]);
     const isLoading = ref(false);
     const puzzleId = usePuzzleId();
     const puzzleName = usePuzzleName();
@@ -247,6 +251,19 @@ export default defineComponent({
       }
     }
 
+    // highlight keys when pressed
+    useEventListener(document.body, 'keypress', ({ key }: any) => {
+      const timeoutId = setTimeout(() => {
+        const index = highlightedKeys.value.findIndex(obj => obj.timeoutId === timeoutId);
+
+        if (index > -1) {
+          highlightedKeys.value.splice(index, 1);
+        }
+      }, 200);
+      
+      highlightedKeys.value.push({ key, timeoutId });
+    });
+
     // disabe turning while modals are open
     watchEffect(() => {
       isTurningDisabled.value = Boolean(activeModal.value);
@@ -255,6 +272,7 @@ export default defineComponent({
     // flush pending keyboard config when the editor is closed
     onUnmounted(() => {
       currentKeyspace.value = 'default';
+      highlightedKeys.value.forEach(obj => clearTimeout(obj.timeoutId));
       isTurningDisabled.value = false;
       pendingKeyboardConfig.value = null;
     });
@@ -268,6 +286,7 @@ export default defineComponent({
       currentKeyspace,
       deleteKeyspace,
       editingBinding,
+      highlightedKeys,
       isActiveModal,
       isAuthenticated,
       isLoading,

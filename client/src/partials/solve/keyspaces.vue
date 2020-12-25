@@ -32,8 +32,13 @@
       </p>
       <a
         v-for="[key, turn] in keybindings"
-        class="bg-gray-700 font-mono rounded shadow text-gray-200 text-sm px-2 py-1 hover:bg-gray-600 hover:text-white"
+        class="font-mono rounded shadow text-gray-100 text-sm px-2 py-1 hover:text-white"
         href="#"
+        :class="[
+          isHighlighted(key)
+            ? 'bg-blue-600'
+            : 'bg-gray-700 hover:bg-gray-600'
+        ]"
         :key="key"
         @click.prevent="$emit('edit', { key, turn })">
         {{ key }} &bull; {{ turn }}
@@ -44,15 +49,20 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue';
+import { HighlightedKey } from '@/pages/solve/types';
 import { KeyboardConfig } from '@/types/puzzle';
 import VIcon from '@/components/icon.vue';
 
 export default defineComponent({
   setup(props) {
+    const isHighlighted = (key: string) => {
+      return props.highlightedKeys.some(obj => obj.key === key);
+    }
+  
     const keyspaceColors = (keyspace: string) => {
       return keyspace === props.selectedKeyspace || (keyspace === 'default' && !props.selectedKeyspace)
         ? 'bg-purple-700 hover:bg-purple-600'
-        : 'bg-blue-700 hover:bg-blue-600'
+        : 'bg-blue-600 hover:bg-blue-500'
     }
 
     const keybindings = computed(() => {
@@ -70,6 +80,7 @@ export default defineComponent({
     });
 
     return {
+      isHighlighted,
       keybindings,
       keyspaceColors,
       keyspaces,
@@ -85,6 +96,10 @@ export default defineComponent({
     'edit',
   ],
   props: {
+    highlightedKeys: {
+      required: true,
+      type: Array as PropType<HighlightedKey[]>,
+    },
     keyboardConfig: {
       required: true,
       type: Object as PropType<KeyboardConfig>,
