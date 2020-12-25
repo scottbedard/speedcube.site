@@ -1,5 +1,4 @@
-/* eslint-disable */
-import { computed, readonly, ref, watch } from 'vue';
+import { computed, ref, unref, watch } from 'vue';
 import { identity as linear } from 'lodash-es';
 import { MaybeRef } from '@/types/vue';
 import { Cube, Dodecaminx } from '@bedard/twister';
@@ -19,6 +18,7 @@ type QueuedTurn = {
  * Behavior options
  */
 type PuzzleControllerOptions = {
+  disabled?: MaybeRef<boolean>,
   duration: MaybeRef<number>,
   puzzle: Cube | Dodecaminx,
 }
@@ -39,6 +39,11 @@ export function usePuzzleController(options: PuzzleControllerOptions) {
   // tracks if the puzzle is currently turning
   const isTurning = ref(false);
 
+  // normalized value for if turning is disabled
+  const isTurningDisabled = computed(() => {
+    return Boolean(unref(options.disabled));
+  });
+
   // number of turns that have been executed
   const turnCount = ref(0);
 
@@ -55,7 +60,9 @@ export function usePuzzleController(options: PuzzleControllerOptions) {
 
   // queue a turn for execution
   const queueTurn = (turn: string) => {
-    queue.value.push({ turn });
+    if (!isTurningDisabled.value) {
+      queue.value.push({ turn });
+    }
   }
 
   watch(currentTurn, (turn) => {

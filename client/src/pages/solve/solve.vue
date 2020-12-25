@@ -1,5 +1,4 @@
 <template>
-  <!-- <pre class="fixed top-24 left-6 text-xs">{{ { currentTurn, turnProgress, isTurning } }}</pre> -->
   <v-keyboard
     :current-keyspace="currentKeyspace"
     :keyboard-config="currentKeyboardConfig"
@@ -25,7 +24,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
 import { config, keyboardConfig } from '@/app/store/user/getters';
-import { currentKeyspace, pendingConfig, pendingKeyboardConfig, resetSolveState } from './state';
+import { currentKeyspace, isTurningDisabled, pendingConfig, pendingKeyboardConfig, resetSolveState } from './state';
 import { usePuzzleController } from '@/app/behaviors/puzzle-controller';
 import { usePuzzleName, useModel } from './behaviors';
 import { useRoute, useRouter } from 'vue-router';
@@ -73,10 +72,10 @@ export default defineComponent({
     // puzzle manager
     const {
       currentTurn,
-      isTurning,
       queueTurn,
       turnProgress,
     } = usePuzzleController({
+      disabled: isTurningDisabled,
       duration: currentTurnDuration,
       puzzle: model.value,
     });
@@ -92,7 +91,6 @@ export default defineComponent({
       currentKeyboardConfig,
       currentKeyspace,
       currentTurn,
-      isTurning,
       model,
       queueTurn,
       route,

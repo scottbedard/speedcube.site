@@ -86,12 +86,12 @@
 
 <script lang="ts">
 import { cloneDeep } from 'lodash-es';
-import { computed, defineComponent, onUnmounted, ref } from 'vue';
+import { computed, defineComponent, onUnmounted, ref, watchEffect } from 'vue';
 import { cubeKeyboardConfig, createFreshKeyboardConfig, dodecaminxKeyboardConfig, isCube, isDodecaminx } from '@/app/utils/puzzle';
 import { fireAlert } from '@/app/store/alert/actions';
 import { isAuthenticated } from '@/app/store/user/getters';
 import { keyboardConfig } from '@/app/store/user/getters';
-import { currentKeyspace, pendingKeyboardConfig } from '../state';
+import { currentKeyspace, isTurningDisabled, pendingKeyboardConfig } from '../state';
 import { saveKeyboardConfig } from '@/app/store/user/actions';
 import { usePuzzleId, usePuzzleName } from '../behaviors';
 import { useRouter } from 'vue-router';
@@ -247,9 +247,15 @@ export default defineComponent({
       }
     }
 
+    // disabe turning while modals are open
+    watchEffect(() => {
+      isTurningDisabled.value = Boolean(activeModal.value);
+    });
+
     // flush pending keyboard config when the editor is closed
     onUnmounted(() => {
       currentKeyspace.value = 'default';
+      isTurningDisabled.value = false;
       pendingKeyboardConfig.value = null;
     });
 
@@ -265,6 +271,7 @@ export default defineComponent({
       isActiveModal,
       isAuthenticated,
       isLoading,
+      isTurningDisabled,
       onKeyspaceClick,
       onSave,
       pendingKeyboardConfig,

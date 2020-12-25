@@ -7,6 +7,11 @@ import { KeyboardConfig } from '@/types/puzzle';
 export const currentKeyspace = ref<string>('default');
 
 /**
+ * Disable puzzle turning.
+ */
+export const isTurningDisabled = ref(false);
+
+/**
  * Pending puzzle configuration.
  */
 export const pendingConfig = ref<Record<string, any> | null>(null);
@@ -17,8 +22,12 @@ export const pendingConfig = ref<Record<string, any> | null>(null);
 export const pendingKeyboardConfig = ref<KeyboardConfig | null>(null);
 
 /**
- * Reset all solve state.
+ * Reset solve state.
  */
 export function resetSolveState() {
+  currentKeyspace.value = 'default';
+  isTurningDisabled.value = false;
   pendingConfig.value = null;
+  pendingConfig.value = null;
+  pendingKeyboardConfig.value = null;
 }
