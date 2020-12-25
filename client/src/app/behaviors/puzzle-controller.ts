@@ -18,7 +18,7 @@ type QueuedTurn = {
 /**
  * Behavior options
  */
-type UsePuzzleManagerOptions = {
+type PuzzleControllerOptions = {
   duration: MaybeRef<number>,
   puzzle: Cube | Dodecaminx,
 }
@@ -29,7 +29,7 @@ const tempDuration = 80;
 /**
  * Manage a puzzle's current turn and turn progress
  */
-export function usePuzzleManager(options: UsePuzzleManagerOptions) {
+export function usePuzzleController(options: PuzzleControllerOptions) {
   // turns awaiting execution
   const queue = ref<QueuedTurn[]>([]);
 

@@ -26,7 +26,7 @@
 import { computed, defineComponent } from 'vue';
 import { config, keyboardConfig } from '@/app/store/user/getters';
 import { currentKeyspace, pendingConfig, pendingKeyboardConfig, resetSolveState } from './state';
-import { usePuzzleManager } from '@/app/behaviors/puzzle-manager';
+import { usePuzzleController } from '@/app/behaviors/puzzle-controller';
 import { usePuzzleName, useModel } from './behaviors';
 import { useRoute, useRouter } from 'vue-router';
 import VKeyboard from '@/components/keyboard.vue';
@@ -76,7 +76,7 @@ export default defineComponent({
       isTurning,
       queueTurn,
       turnProgress,
-    } = usePuzzleManager({
+    } = usePuzzleController({
       duration: currentTurnDuration,
       puzzle: model.value,
     });
