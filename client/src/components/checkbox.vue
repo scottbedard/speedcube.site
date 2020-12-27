@@ -7,13 +7,13 @@
 
 <template>
   <div
-    class="flex items-center"
+    class="flex items-center transition-colors hover:text-white"
     :class="{
       'cursor-pointer': !disabled,
     }"
     @click="toggle">
     <div
-      class="bg-gray-700 flex items-center justify-center h-6 rounded w-6 focus:outline-none focus:shadow-outline"
+      class="bg-gray-600 flex items-center justify-center h-6 rounded w-6 focus:outline-none focus:shadow-outline"
       ref="target"
       role="checkbox"
       :aria-checked="modelValue ? 'true' : 'false'"

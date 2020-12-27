@@ -1,9 +1,11 @@
 <template>
   <div class="grid gap-6">
     <h1 class="font-bold text-center text-2xl">Welcome back</h1>
+
     <p v-if="loginFailed" class="text-center text-red-500">
       Invalid username / password combination.
     </p>
+
     <div>
       <v-card class="max-w-md mx-auto" padded>
         <form
@@ -28,7 +30,10 @@
             type="password"
             :disabled="loginIsLoading" />
 
-          <div class="flex justify-end">
+          <div class="flex flex-wrap gap-6 items-center justify-between">
+            <v-checkbox v-model="loginData.remember">
+              Remember me
+            </v-checkbox>
             <v-button
               type="submit"
               :loading="loginIsLoading">
@@ -47,6 +52,7 @@ import { useLogin } from '@/app/store/user/behaviors/login';
 import { useRouter } from 'vue-router';
 import VButton from '@/components/button.vue';
 import VCard from '@/components/card.vue';
+import VCheckbox from '@/components/checkbox.vue';
 import VLabeledInput from '@/components/labeled-input.vue';
 
 export default defineComponent({
@@ -84,6 +90,7 @@ export default defineComponent({
   components: {
     VButton,
     VCard,
+    VCheckbox,
     VLabeledInput,
   },
 });

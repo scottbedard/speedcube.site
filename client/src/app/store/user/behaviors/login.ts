@@ -6,8 +6,9 @@ import { ValidationError } from '@/types/api';
 import axios from 'axios';
 
 export type LoginData = {
-  username: string,
   password: string,
+  remember: boolean,
+  username: string,
 };
 
 /**
@@ -15,8 +16,9 @@ export type LoginData = {
  */
 export function useLogin() {
   const loginData = ref<LoginData>({
-    username: '',
     password: '',
+    remember: false,
+    username: '',
   });
 
   const loginFailed = ref(false);
