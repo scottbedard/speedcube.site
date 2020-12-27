@@ -1,6 +1,6 @@
 <template>
   <h1 class="font-bold mb-6 text-center text-2xl">Select a puzzle</h1>
-  <div class="gap-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 lg:gap-20">
+  <div class="gap-6 grid grid-cols-2 max-w-6xl mx-auto sm:grid-cols-3 lg:grid-cols-4 lg:gap-20">
     <router-link
       v-for="[puzzle, model] in puzzles"
       :key="puzzle.param"
