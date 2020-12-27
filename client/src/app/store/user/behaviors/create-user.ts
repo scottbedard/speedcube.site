@@ -1,5 +1,5 @@
 import { currentUser } from '@/app/store/user/state';
-import { isValidationError } from '@/app/utils/api';
+import { isThrottledError, isValidationError } from '@/app/utils/api';
 import { ref } from 'vue';
 import { UserModel } from '@/types/models/user';
 import { ValidationError } from '@/types/api';
@@ -25,13 +25,17 @@ export function useCreateUser() {
 
   const createUserFailed = ref(false);
   const createUserIsLoading = ref(false);
+  const createUserIsThrottled = ref(false);
   const createUserValidationErrors = ref<ValidationError<CreateUserData>>({});
 
   const createUser = () => {
     createUserFailed.value = false;
     createUserIsLoading.value = true;
+    createUserIsThrottled.value = false;
 
-    return axios.post<UserModel>('/api/rainlab/user/users', createUserData.value)
+    const xhr = axios.post<UserModel>('/api/rainlab/user/users', createUserData.value);
+
+    xhr
       .then((response) => {
         // success
         currentUser.value = response.data;
@@ -40,6 +44,8 @@ export function useCreateUser() {
         // failed
         if (isValidationError<CreateUserData>(err)) {
           createUserValidationErrors.value = err.response.data;
+        } else if (isThrottledError(err)) {
+          createUserIsThrottled.value = true;
         }
 
         createUserFailed.value = true;
@@ -48,6 +54,8 @@ export function useCreateUser() {
         // complete
         createUserIsLoading.value = false;
       });
+    
+    return xhr;
   }
   
   return {
@@ -55,6 +63,7 @@ export function useCreateUser() {
     createUserData,
     createUserFailed,
     createUserIsLoading,
+    createUserIsThrottled,
     createUserValidationErrors,
   };
 }

@@ -27,8 +27,9 @@ export function useLogin() {
     loginFailed.value = false;
     loginIsLoading.value = true;
 
-    return axios.post<UserModel>('/api/rainlab/user/auth/login', loginData.value)
-      .then((response) => {
+    const xhr = axios.post<UserModel>('/api/rainlab/user/auth/login', loginData.value);
+
+    xhr.then((response) => {
         // success
         currentUser.value = response.data;
       })
@@ -44,6 +45,8 @@ export function useLogin() {
         // complete
         loginIsLoading.value = false;
       });
+    
+    return xhr;
   };
 
   return {

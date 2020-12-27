@@ -14,6 +14,10 @@
       :type="type"
       :value="modelValue"
       @update:modelValue="$emit('update:modelValue', $event)" />
+    <p
+      v-if="errorMessage"
+      v-text="errorMessage"
+      class="mt-2 text-red-500 text-sm" />
   </v-label>
 </template>
 
@@ -31,6 +35,7 @@ export default defineComponent({
     autofocus: Boolean,
     disabled: Boolean,
     disableSpellcheck: Boolean,
+    errorMessage: String,
     label: { required: true, type: String },
     maxlength: [Number, String],
     modelValue: [Number, String],
