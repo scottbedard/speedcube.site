@@ -1,4 +1,4 @@
-import { computed, ComputedRef } from 'vue';
+import { computed, ComputedRef, ref, watch } from 'vue';
 import { Cube, Dodecaminx } from '@bedard/twister';
 import { cubeSize, dodecaminxSize, getPuzzleId, isCube, isDodecaminx } from '@/app/utils/puzzle';
 import { useRoute } from 'vue-router';
@@ -11,19 +11,23 @@ interface UseModelOptions {
  * Solve model
  */
 export function useModel({ puzzleName }: UseModelOptions) {
-  return computed(() => {
-    if (isCube(puzzleName.value)) {
-      return new Cube({
-        size: cubeSize(puzzleName.value),
-      });
-    }
+  const model = ref<Cube | Dodecaminx | null>(null);
 
-    if (isDodecaminx(puzzleName.value)) {
-      return new Dodecaminx({
-        size: dodecaminxSize(puzzleName.value),
-      });
+  watch(puzzleName, (name, oldName) => {
+    if (name !== oldName) {
+      if (isCube(name)) {
+        model.value = new Cube({ size: cubeSize(name) });
+      }
+  
+      if (isDodecaminx(name)) {
+        model.value = new Dodecaminx({ size: dodecaminxSize(name) });
+      }
     }
+  }, {
+    immediate: true,
   });
+  
+  return model;
 }
 
 /**
