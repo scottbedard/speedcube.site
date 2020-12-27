@@ -14,9 +14,8 @@
           class="mr-3"
           name="box"
           size="6" />
-          Change Puzzles
+          Other Puzzles
       </router-link>
-  
       <router-link
         class="flex items-center"
         :to="{ name: 'solve-config' }">
@@ -26,7 +25,6 @@
           size="5" />
         Customize Appearance
       </router-link>
-
       <router-link
         class="flex items-center"
         :to="{ name: 'solve-controls' }">
