@@ -7,7 +7,7 @@
 
 <template>
   <div
-    class="flex items-center transition-colors hover:text-white"
+    class="flex font-bold items-center transition-colors hover:text-white"
     :class="{
       'cursor-pointer': !disabled,
     }"

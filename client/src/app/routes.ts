@@ -14,6 +14,15 @@ export const routes: RouteRecordRaw[] = [
   },
 
   //
+  // account
+  //
+  {
+    component: () => import('@/pages/account/index.vue' /* webpackChunkName: 'account' */),
+    name: 'account',
+    path: '/account',
+  },
+
+  //
   // components
   //
   {
@@ -86,7 +95,6 @@ export const routes: RouteRecordRaw[] = [
       params: { puzzle: '3x3' },
     },
   },
-
   {
     children: [
       {
@@ -111,5 +119,23 @@ export const routes: RouteRecordRaw[] = [
     ],
     component: () => import('@/pages/solve/solve.vue' /* webpackChunkName: 'solve' */),
     path: '/solve/:puzzle',
+  },
+
+  //
+  // users
+  //
+  {
+    component: () => import('@/pages/users/index.vue' /* webpackChunkName: 'users' */),
+    name: 'users',
+    path: '/users',
+  },
+
+  //
+  // users user
+  //
+  {
+    component: () => import('@/pages/users/user/index.vue' /* webpackChunkName: 'users-user' */),
+    name: 'users-user',
+    path: '/users/:username',
   },
 ];

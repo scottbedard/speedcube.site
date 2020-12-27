@@ -1,23 +1,79 @@
 <template>
   <div class="flex h-24 items-center justify-between px-6">
-    <!-- logo -->
-    <router-link class="font-bold text-xl" :to="{ name: 'home' }">
-      speedcube.site
-    </router-link>
+    <div class="gap-6 flex items-center md:gap-12">
+      <!-- logo -->
+      <router-link class="flex font-bold items-center text-2xl" :to="{ name: 'home' }">
+        <v-icon class="mr-2" name="box" size="7" stroke="2" />
+        speedcube.site
+      </router-link>
+
+      <!-- desktop nav -->
+      <router-link
+        v-for="(link, index) in links"
+        v-text="link.text"
+        :class="{
+          'text-green-500': link.to.name === route.name,
+        }"
+        :key="index"
+        :to="link.to" />
+    </div>
     
     <!-- mobile nav -->
     <div class="sm:hidden">
       Mobile nav
     </div>
 
-    <!-- desktop nav -->
-    <nav class="gap-6 hidden sm:flex">
-      <router-link
-        v-for="(link, index) in links"
-        v-text="link.text"
-        :key="index"
-        :to="link.to" />
-    </nav>
+    <!-- user -->
+    <div
+      v-if="isAuthenticated"
+      class="flex gap-6 items-center">
+      <div class="relative">
+        <a
+          class="flex items-center"
+          href="#"
+          @click.prevent.stop="expandDropdown">
+          <v-icon name="user" size="7" stroke="2" />
+        </a>
+        <v-card
+          v-if="dropdownIsExpanded"
+          class="absolute mt-6 right-0 top-full w-64 z-10">
+          <v-card-nav label="User navigation" :links="[
+            {
+              icon: 'user',
+              text: 'My Account',
+              to: {
+                name: 'account',
+              },
+            },
+            {
+              icon: 'bar-chart-2',
+              text: 'Stats',
+              to: {
+                name: 'users-user',
+                params: {
+                  username: currentUser.username,
+                },
+              },
+            },
+            {
+              icon: 'log-out',
+              text: 'Sign Out',
+              to: {
+                name: 'logout',
+              },
+            },
+          ]" />
+        </v-card>
+      </div>
+    </div>
+
+    <!-- guest -->
+    <div v-else class="gap-6 flex items-center md:gap-12">
+      <router-link :to="{ name: 'login' }">
+        Sign in
+      </router-link>
+      <v-button size="sm" :to="{ name: 'signup' }">Create account</v-button>
+    </div>
   </div>
 
   <div class="p-6">
@@ -32,14 +88,24 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+/* eslint-disable */
+import { computed, defineComponent, ref } from 'vue';
+import { currentUser } from '@/app/store/user/state';
 import { identity } from 'lodash-es';
 import { isAuthenticated } from '@/app/store/user/getters';
-import VAlerts from '@/partials/alerts.vue'; 
+import { useEventListener } from '@vueuse/core';
+import { useRoute } from 'vue-router';
+import VAlerts from '@/partials/alerts.vue';
+import VButton from '@/components/button.vue';
+import VCard from '@/components/card.vue';
+import VCardNav from '@/components/card-nav.vue';
+import VIcon from '@/components/icon.vue';
 import VRenderer from '@/components/three/renderer.vue';
 
 export default defineComponent({
   setup() {
+    const dropdownIsExpanded = ref(false);
+
     const links = computed(() => [
       {
         text: 'Solve',
@@ -50,33 +116,39 @@ export default defineComponent({
           },
         },
       },
-      !isAuthenticated.value && {
-        text: 'Sign up',
+      {
+        text: 'Records',
         to: {
-          name: 'signup',
+          name: 'records',
         },
       },
-      isAuthenticated.value
-        ? {
-          text: 'Logout',
-          to: {
-            name: 'logout',
-          },
-        }
-        : {
-          text: 'Login',
-          to: {
-            name: 'login',
-          },
-        },
     ].filter(identity));
 
+    const route = useRoute();
+
+    const expandDropdown = () => {
+      dropdownIsExpanded.value = true;
+    }
+
+    useEventListener(document, 'click', (e) => {
+      dropdownIsExpanded.value = false;
+    });
+
     return {
+      currentUser,
+      dropdownIsExpanded,
+      expandDropdown,
+      isAuthenticated,
       links,
+      route,
     };
   },
   components: {
     VAlerts,
+    VButton,
+    VCard,
+    VCardNav,
+    VIcon,
     VRenderer,
   },
 });

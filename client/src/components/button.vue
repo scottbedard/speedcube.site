@@ -1,22 +1,33 @@
 <template>
-  <button
-    class="border-none font-bold h-12 px-8 rounded tracking-wide transition-colors focus:outline-none focus:shadow-outline hover:shadow"
-    :class="[color, pointer]"
-    :disabled="!isClickable">
+  <component
+    class="border-none flex font-bold items-center rounded tracking-wide transition-colors focus:outline-none focus:shadow-outline hover:shadow"
+    :class="[colorClasses, pointerClasses, sizeClasses]"
+    :disabled="!isClickable"
+    :is="is"
+    :to="to">
     <v-spinner v-if="loading" class="text-lighten-50" />
     <slot v-else />
-  </button>
+  </component>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
+import { RouteLocationNormalized } from 'vue-router';
 import VSpinner from '@/components/spinner.vue';
 
 export default defineComponent({
   setup(props) {
+    const is = computed(() => {
+      if (props.to) {
+        return 'router-link';
+      }
+
+      return 'button';
+    });
+
     const isClickable = computed(() => !props.disabled && !props.loading);
 
-    const color = computed(() => {
+    const colorClasses = computed(() => {
       if (props.disabled) {
         return 'bg-gray-600 text-gray-300';
       }
@@ -28,12 +39,22 @@ export default defineComponent({
       return 'bg-green-600 text-gray-100 hover:bg-green-500 hover:text-white';
     });
 
-    const pointer = computed(() => isClickable.value ? 'cursor-pointer' : 'pointer-events-none');
+    const pointerClasses = computed(() => isClickable.value ? 'cursor-pointer' : 'pointer-events-none');
+
+    const sizeClasses = computed(() => {
+      if (props.size === 'sm') {
+        return 'h-10 px-4';
+      }
+
+      return 'h-12 px-8';
+    });
 
     return {
-      color,
+      colorClasses,
+      is,
       isClickable,
-      pointer,
+      pointerClasses,
+      sizeClasses,
     };
   },
   components: {
@@ -54,6 +75,13 @@ export default defineComponent({
     loading: {
       default: false,
       type: Boolean,
+    },
+    size: {
+      default: 'default',
+      type: String as PropType<'sm' | 'default'>,
+    },
+    to: {
+      type: Object as PropType<RouteLocationNormalized>,
     },
   },
 });
