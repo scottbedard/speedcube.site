@@ -166,4 +166,13 @@ export const routes: RouteRecordRaw[] = [
     name: 'users-user',
     path: '/users/:username',
   },
+
+  //
+  // 404
+  //
+  {
+    component: () => import('@/pages/404.vue' /* webpackChunkName: '404' */),
+    name: '404',
+    path: '/:path(.*)*',
+  },
 ];
