@@ -41,6 +41,15 @@ export const routes: RouteRecordRaw[] = [
   },
 
   //
+  // puzzles
+  //
+  {
+    component: () => import('@/pages/puzzles.vue' /* webpackChunkName: 'puzzles' */),
+    name: 'puzzles',
+    path: '/puzzles',
+  },
+
+  //
   // records
   //
   {
