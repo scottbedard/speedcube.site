@@ -30,6 +30,17 @@ const tempDuration = 80;
  * Manage a puzzle's current turn and turn progress
  */
 export function usePuzzleController(options: PuzzleControllerOptions) {
+  // advance to the next turn
+  const advanceNextTurn = () => {
+    if (currentTurn.value) {
+      options.puzzle.turn(currentTurn.value.turn);
+    }
+
+    isTurning.value = false;
+
+    queue.value.splice(0, 1);
+  }
+
   // turns awaiting execution
   const queue = ref<QueuedTurn[]>([]);
 
@@ -50,6 +61,7 @@ export function usePuzzleController(options: PuzzleControllerOptions) {
   // total progress from 0 to the current turn count
   const totalProgress = useTransition(turnCount, {
     duration: tempDuration,
+    onFinished: advanceNextTurn,
     transition: linear,
   });
 
@@ -71,18 +83,6 @@ export function usePuzzleController(options: PuzzleControllerOptions) {
       turnCount.value += 1;
     }
   });
-
-  watch(totalProgress, (p) => {
-    if (p >= turnCount.value) {
-      if (currentTurn.value) {
-        options.puzzle.turn(currentTurn.value.turn);
-      }
-
-      isTurning.value = false;
-
-      queue.value.splice(0, 1);
-    }
-  })
 
   return {
     currentTurn,
