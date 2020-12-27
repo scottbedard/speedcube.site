@@ -32,6 +32,7 @@
           class="flex items-center"
           href="#"
           @click.prevent.stop="expandDropdown">
+          <v-icon class="mr-1" name="chevron-down" size="5" stroke="2" />
           <v-icon name="user" size="7" stroke="2" />
         </a>
         <v-card
