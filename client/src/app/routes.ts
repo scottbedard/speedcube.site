@@ -1,3 +1,4 @@
+import { isAuthenticated } from '@/app/store/user/getters';
 import { RouteRecordRaw } from 'vue-router';
 
 /**
@@ -35,6 +36,16 @@ export const routes: RouteRecordRaw[] = [
   // login
   //
   {
+    beforeEnter(to, from, next) {
+      if (isAuthenticated.value) {
+        return next({
+          name: 'solve',
+          params: { puzzle: '3x3' },
+        });
+      }
+
+      next();
+    },
     component: () => import('@/pages/login.vue' /* webpackChunkName: 'login' */),
     name: 'login',
     path: '/login',
@@ -44,6 +55,13 @@ export const routes: RouteRecordRaw[] = [
   // logout
   //
   {
+    beforeEnter(to, from, next) {
+      if (!isAuthenticated.value) {
+        return next({ name: 'login' });
+      }
+
+      next();
+    },
     component: () => import('@/pages/logout.vue' /* webpackChunkName: 'logout' */),
     name: 'logout',
     path: '/logout',
@@ -80,6 +98,16 @@ export const routes: RouteRecordRaw[] = [
   // signup
   //
   {
+    beforeEnter(to, from, next) {
+      if (isAuthenticated.value) {
+        return next({
+          name: 'solve',
+          params: { puzzle: '3x3' },
+        });
+      }
+
+      next();
+    },
     component: () => import('@/pages/signup.vue' /* webpackChunkName: 'signup' */),
     name: 'signup',
     path: '/signup',

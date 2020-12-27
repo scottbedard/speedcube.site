@@ -1,15 +1,19 @@
 <template>
-  <div />
+  <h1 class="font-bold text-2xl">Signout out...</h1>
 </template>
 
 <script>
+import { defineComponent } from 'vue';
 import { logoutCurrentUser } from '@/app/store/user/actions';
+import { useRouter } from 'vue-router';
 
-export default {
-  created() {
+export default defineComponent({
+  setup() {
+    const router = useRouter();
+
     logoutCurrentUser().then(() => {
-      this.$router.replace({ name: 'home' });
+      router.replace({ name: 'home' });
     });
   },
-};
+});
 </script>
