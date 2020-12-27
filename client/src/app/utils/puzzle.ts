@@ -159,7 +159,17 @@ export const dodecaminxNames: DodecaminxName[] = [
  * Default dodecaminx keyboard config
  */
 export const dodecaminxKeyboardConfig = {
-  default: {},
+  default: {
+    // face turns
+    j: `U`,
+    f: `U'`,
+    d: `L`,
+    e: `L'`,
+    h: `F`,
+    g: `F'`,
+    i: `R`,
+    k: `R'`,
+  },
   keyspaces: {},
 };
 
