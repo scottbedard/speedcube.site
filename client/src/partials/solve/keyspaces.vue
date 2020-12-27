@@ -5,9 +5,11 @@
       class="font-mono gap-6 flex flex-wrap items-center justify-center text-sm">
       <a
         v-for="keyspace in keyspaces"
-        class="rounded shadow text-gray-200 px-2 py-1 hover:text-white"
+        class="rounded shadow text-gray-200 transition-colors px-2 py-1 hover:text-white"
         href="#"
-        :class="[keyspaceColors(keyspace)]"
+        :class="[
+          colorClasses(isHighlightedKeyspace(keyspace)),
+        ]"
         :key="keyspace"
         @click.prevent="$emit('click-add-keyspace', keyspace)">
         {{ keyspace }}
@@ -32,12 +34,10 @@
       </p>
       <a
         v-for="[key, turn] in keybindings"
-        class="font-mono rounded shadow text-gray-100 text-sm px-2 py-1 hover:text-white"
+        class="font-mono rounded shadow text-gray-100 text-sm transition-colors px-2 py-1 hover:text-white"
         href="#"
         :class="[
-          isHighlighted(key)
-            ? 'bg-blue-600'
-            : 'bg-gray-700 hover:bg-gray-600'
+          colorClasses(isHighlightedKey(key)),
         ]"
         :key="key"
         @click.prevent="$emit('edit', { key, turn })">
@@ -55,14 +55,18 @@ import VIcon from '@/components/icon.vue';
 
 export default defineComponent({
   setup(props) {
-    const isHighlighted = (key: string) => {
+    const colorClasses = (highlighted: boolean) => {
+      return highlighted
+        ? 'bg-blue-700 hover:bg-blue-600'
+        : 'bg-gray-700 hover:bg-gray-600'
+    }
+
+    const isHighlightedKey = (key: string) => {
       return props.highlightedKeys.some(obj => obj.key === key);
     }
-  
-    const keyspaceColors = (keyspace: string) => {
+
+    const isHighlightedKeyspace = (keyspace: string) => {
       return keyspace === props.selectedKeyspace || (keyspace === 'default' && !props.selectedKeyspace)
-        ? 'bg-purple-700 hover:bg-purple-600'
-        : 'bg-blue-600 hover:bg-blue-500'
     }
 
     const keybindings = computed(() => {
@@ -80,9 +84,10 @@ export default defineComponent({
     });
 
     return {
-      isHighlighted,
+      colorClasses,
+      isHighlightedKey,
+      isHighlightedKeyspace,
       keybindings,
-      keyspaceColors,
       keyspaces,
       selectedKeyspaceIsDefault,
     };
