@@ -46,6 +46,6 @@ export function usePuzzleName() {
   const route = useRoute();
 
   return computed(() => {
-    return (route.params.puzzle as string).trim().toLowerCase();
+    return (route.params.puzzle as string)?.trim().toLowerCase();
   });
 }
