@@ -43,7 +43,7 @@
               icon: 'user',
               text: 'My Account',
               to: {
-                name: 'account',
+                name: 'account-profile',
               },
             },
             {

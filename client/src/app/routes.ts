@@ -18,8 +18,29 @@ export const routes: RouteRecordRaw[] = [
   // account
   //
   {
-    component: () => import('@/pages/account/index.vue' /* webpackChunkName: 'account' */),
-    name: 'account',
+    beforeEnter(to, from, next) {
+      if (!isAuthenticated.value) {
+        return next({
+          name: 'login',
+          query: { to: to.path },
+        });
+      }
+
+      next();
+    },
+    children: [
+      {
+        component: () => import('@/pages/account/profile/profile.vue' /* webpackChunkName: 'account-profile' */),
+        name: 'account-profile',
+        path: 'profile',
+      },
+      {
+        component: () => import('@/pages/account/security/security.vue' /* webpackChunkName: 'account-security' */),
+        name: 'account-security',
+        path: 'security',
+      },
+    ],
+    component: () => import('@/pages/account/account.vue' /* webpackChunkName: 'account' */),
     path: '/account',
   },
 

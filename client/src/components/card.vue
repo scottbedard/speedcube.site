@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-gray-700 rounded shadow-xl"
+    class="bg-gray-700 rounded shadow-lg"
     :class="{
       'p-6': padded,
     }">
@@ -13,7 +13,10 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   props: {
-    padded: Boolean,
+    padded: {
+      default: false,
+      type: Boolean,
+    },
   },
 });
 </script>

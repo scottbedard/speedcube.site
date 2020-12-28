@@ -7,7 +7,7 @@
       class="flex h-12 items-center"
       :key="index"
       :to="link.to">
-      <span class="inline-flex justify-center w-12">
+      <span class="inline-flex justify-center w-16">
         <v-icon
           :name="link.icon"
           :size="6"

@@ -47,9 +47,10 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { defineComponent, ref } from 'vue';
 import { useLogin } from '@/app/store/user/behaviors/login';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import VButton from '@/components/button.vue';
 import VCard from '@/components/card.vue';
 import VCheckbox from '@/components/checkbox.vue';
@@ -66,9 +67,19 @@ export default defineComponent({
       loginIsLoading,
     } = useLogin();
 
+    const route = useRoute();
+
     const router = useRouter();
 
     const onSubmit = async () => {
+      const returnPath = route.query?.to as string ?? '';
+
+      if (returnPath) {
+        return login().then(() => {
+          router.replace(returnPath);
+        });
+      }
+  
       return login().then(() => {
         router.replace({
           name: 'solve',

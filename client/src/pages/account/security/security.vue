@@ -1,5 +1,5 @@
 <template>
   <div>
-    Hello from the account index
+    Hello from the security index
   </div>
 </template>
