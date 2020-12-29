@@ -75,6 +75,7 @@ export default defineComponent({
       const returnPath = route.query?.to as string ?? '';
 
       if (returnPath) {
+        console.log({ returnPath });
         return login().then(() => {
           router.replace(returnPath);
         });

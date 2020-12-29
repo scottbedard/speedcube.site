@@ -57,16 +57,16 @@ export const routes: RouteRecordRaw[] = [
   // login
   //
   {
-    beforeEnter(to, from, next) {
-      if (isAuthenticated.value) {
-        return next({
-          name: 'solve',
-          params: { puzzle: '3x3' },
-        });
-      }
+    // beforeEnter(to, from, next) {
+    //   if (isAuthenticated.value) {
+    //     return next({
+    //       name: 'solve',
+    //       params: { puzzle: '3x3' },
+    //     });
+    //   }
 
-      next();
-    },
+    //   next();
+    // },
     component: () => import('@/pages/login.vue' /* webpackChunkName: 'login' */),
     name: 'login',
     path: '/login',
