@@ -73,7 +73,8 @@
       <router-link :to="{ name: 'login' }">
         Sign in
       </router-link>
-      <v-button size="sm" :to="{ name: 'signup' }">Create account</v-button>
+      <v-button
+        :to="{ name: 'signup' }">Create account</v-button>
     </div>
   </div>
 
@@ -89,7 +90,6 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable */
 import { computed, defineComponent, ref } from 'vue';
 import { currentUser } from '@/app/store/user/state';
 import { identity } from 'lodash-es';
@@ -131,7 +131,7 @@ export default defineComponent({
       dropdownIsExpanded.value = true;
     }
 
-    useEventListener(document, 'click', (e) => {
+    useEventListener(document, 'click', () => {
       dropdownIsExpanded.value = false;
     });
 

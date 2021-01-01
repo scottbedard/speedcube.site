@@ -1,7 +1,7 @@
 <template>
   <component
-    class="border-none flex font-bold items-center rounded tracking-wide transition-colors focus:outline-none focus:shadow-outline hover:shadow"
-    :class="[colorClasses, pointerClasses, sizeClasses]"
+    class="border-none flex font-bold h-12 items-center px-6 rounded tracking-wide transition-colors focus:outline-none focus:shadow-outline hover:shadow"
+    :class="[colorClasses, pointerClasses]"
     :disabled="!isClickable"
     :is="is"
     :to="to">
@@ -41,20 +41,11 @@ export default defineComponent({
 
     const pointerClasses = computed(() => isClickable.value ? 'cursor-pointer' : 'pointer-events-none');
 
-    const sizeClasses = computed(() => {
-      if (props.size === 'sm') {
-        return 'h-10 px-4';
-      }
-
-      return 'h-12 px-8';
-    });
-
     return {
       colorClasses,
       is,
       isClickable,
       pointerClasses,
-      sizeClasses,
     };
   },
   components: {
