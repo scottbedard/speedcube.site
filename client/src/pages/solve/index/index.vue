@@ -14,7 +14,7 @@
           class="mr-3"
           name="box"
           size="6" />
-          Other Puzzles
+          Change Puzzles
       </router-link>
       <router-link
         class="flex items-center"
