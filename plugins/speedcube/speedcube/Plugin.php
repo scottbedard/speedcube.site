@@ -39,7 +39,11 @@ class Plugin extends PluginBase
     {
         // configure rainlab.user api
         Event::listen('bedard.rainlabuserapi.afterGetUser', function ($user) {
-            $user->load(['activeConfigs', 'keyboardConfigs']);
+            $user->load([
+                'activeConfigs',
+                'avatar',
+                'keyboardConfigs',
+            ]);
         });
 
         \Bedard\RainLabUserApi\Classes\ApiController::extend(function($controller) {

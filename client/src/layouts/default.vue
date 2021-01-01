@@ -33,7 +33,7 @@
           href="#"
           @click.prevent.stop="expandDropdown">
           <v-icon class="mr-1" name="chevron-down" size="5" stroke="2" />
-          <v-icon name="user" size="7" stroke="2" />
+          <v-avatar :file="currentUser.avatar" />
         </a>
         <v-card
           v-if="dropdownIsExpanded"
@@ -97,6 +97,7 @@ import { isAuthenticated } from '@/app/store/user/getters';
 import { useEventListener } from '@vueuse/core';
 import { useRoute } from 'vue-router';
 import VAlerts from '@/partials/alerts.vue';
+import VAvatar from '@/components/avatar.vue';
 import VButton from '@/components/button.vue';
 import VCard from '@/components/card.vue';
 import VCardNav from '@/components/card-nav.vue';
@@ -146,6 +147,7 @@ export default defineComponent({
   },
   components: {
     VAlerts,
+    VAvatar,
     VButton,
     VCard,
     VCardNav,

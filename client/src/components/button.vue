@@ -1,6 +1,6 @@
 <template>
   <component
-    class="border-none flex font-bold h-12 items-center px-6 rounded tracking-wide transition-colors focus:outline-none focus:shadow-outline hover:shadow"
+    class="border-none inline-flex font-bold h-12 items-center px-6 rounded tracking-wide transition-colors focus:outline-none focus:shadow-outline hover:shadow"
     :class="[colorClasses, pointerClasses]"
     :disabled="!isClickable"
     :is="is"

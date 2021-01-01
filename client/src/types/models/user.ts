@@ -1,9 +1,10 @@
 import { Config } from './config';
+import { File } from './file';
 import { KeyboardConfig } from './keyboard-config';
-
 export interface UserModel {
   activatedAt: string,
   activeConfigs: Config[],
+  avatar: null | File,
   createdAt: string,
   createdIpAddress: string,
   deletedAt: string | null,

@@ -1,5 +1,7 @@
 <template>
-  <v-button @click="onClick">
+  <v-button
+    :loading="loading"
+    @click="onClick">
     <input
       class="hidden"
       ref="input"
@@ -49,6 +51,10 @@ export default defineComponent({
     accept: {
       required: true,
       type: String,
+    },
+    loading: {
+      default: false,
+      type: Boolean,
     },
   },
 });

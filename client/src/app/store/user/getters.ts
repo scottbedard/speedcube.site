@@ -34,6 +34,11 @@ export const config = computed(() => {
 });
 
 /**
+ * Current user avatar
+ */
+export const currentUserAvatar = computed(() => currentUser.value?.avatar);
+
+/**
  * Test if the current user is authenticated.
  */
 export const isAuthenticated = computed(() => currentUser.value !== null);
