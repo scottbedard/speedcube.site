@@ -1,17 +1,19 @@
 import { currentUser, resetUserState } from '@/app/store/user/state';
-import { mount } from '@vue/test-utils';
+import { mountRoute } from '~/utils';
 import mockAxios from 'jest-mock-axios';
 import Signup from '@/pages/signup.vue';
 import userFixture from '~/fixtures/user';
 
-describe('signup', () => {
+describe('signup page', () => {
   afterEach(() => {
     resetUserState();
     mockAxios.reset();
   });
 
-  it('creates a user', () => {
-    const wrapper = mount(Signup);
+  it('creates a user', async () => {
+    const { router, wrapper } = await mountRoute(Signup);
+
+    router.replace = jest.fn();
 
     wrapper.find('input[name=username]').setValue('john');
     wrapper.find('input[name=email]').setValue('john@example.com');
@@ -32,5 +34,6 @@ describe('signup', () => {
     );
 
     expect(currentUser.value).toEqual(userFixture);
+    expect(router.replace).toHaveBeenCalled();
   });
 });
