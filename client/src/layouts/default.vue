@@ -1,91 +1,93 @@
 <template>
-  <div class="flex h-24 items-center justify-between px-6">
-    <div class="gap-6 flex items-center md:gap-12">
-      <!-- logo -->
-      <router-link class="flex font-bold items-center text-2xl" :to="{ name: 'home' }">
-        <v-icon class="mr-2" name="box" size="7" stroke="2" />
-        speedcube.site
-      </router-link>
+  <div class="max-w-screen-2xl mx-auto">
+    <div class="flex h-24 items-center justify-between px-6">
+      <div class="gap-6 flex items-center md:gap-12">
+        <!-- logo -->
+        <router-link class="flex font-bold items-center text-2xl" :to="{ name: 'home' }">
+          <v-icon class="mr-2" name="box" size="7" stroke="2" />
+          speedcube.site
+        </router-link>
 
-      <!-- desktop nav -->
-      <router-link
-        v-for="(link, index) in links"
-        v-text="link.text"
-        :class="{
-          'text-green-500': link.to.name === route.name,
-        }"
-        :key="index"
-        :to="link.to" />
-    </div>
-    
-    <!-- mobile nav -->
-    <div class="sm:hidden">
-      Mobile nav
-    </div>
+        <!-- desktop nav -->
+        <router-link
+          v-for="(link, index) in links"
+          v-text="link.text"
+          :class="{
+            'text-green-500': link.to.name === route.name,
+          }"
+          :key="index"
+          :to="link.to" />
+      </div>
+      
+      <!-- mobile nav -->
+      <div class="sm:hidden">
+        Mobile nav
+      </div>
 
-    <!-- user -->
-    <div
-      v-if="isAuthenticated"
-      class="flex gap-6 items-center">
-      <div class="relative">
-        <a
-          class="flex items-center"
-          href="#"
-          @click.prevent.stop="expandDropdown">
-          <v-icon class="mr-1" name="chevron-down" size="5" stroke="2" />
-          <v-avatar :file="currentUser.avatar" />
-        </a>
-        <v-card
-          v-if="dropdownIsExpanded"
-          class="absolute mt-6 right-0 top-full w-64 z-10">
-          <v-card-nav label="User navigation" :links="[
-            {
-              icon: 'user',
-              text: 'My Account',
-              to: {
-                name: 'account-profile',
-              },
-            },
-            {
-              icon: 'bar-chart-2',
-              text: 'Stats',
-              to: {
-                name: 'users-user',
-                params: {
-                  username: currentUser.username,
+      <!-- user -->
+      <div
+        v-if="isAuthenticated"
+        class="flex gap-6 items-center">
+        <div class="relative">
+          <a
+            class="flex items-center"
+            href="#"
+            @click.prevent.stop="expandDropdown">
+            <v-icon class="mr-1" name="chevron-down" size="5" stroke="2" />
+            <v-avatar :file="currentUser.avatar" />
+          </a>
+          <v-card
+            v-if="dropdownIsExpanded"
+            class="absolute mt-6 right-0 top-full w-64 z-10">
+            <v-card-nav label="User navigation" :links="[
+              {
+                icon: 'user',
+                text: 'My Account',
+                to: {
+                  name: 'account-profile',
                 },
               },
-            },
-            {
-              icon: 'log-out',
-              text: 'Sign Out',
-              to: {
-                name: 'logout',
+              {
+                icon: 'bar-chart-2',
+                text: 'Stats',
+                to: {
+                  name: 'users-user',
+                  params: {
+                    username: currentUser.username,
+                  },
+                },
               },
-            },
-          ]" />
-        </v-card>
+              {
+                icon: 'log-out',
+                text: 'Sign Out',
+                to: {
+                  name: 'logout',
+                },
+              },
+            ]" />
+          </v-card>
+        </div>
+      </div>
+
+      <!-- guest -->
+      <div v-else class="gap-6 flex items-center md:gap-12">
+        <router-link :to="{ name: 'login' }">
+          Sign in
+        </router-link>
+        <v-button
+          :to="{ name: 'signup' }">Create account</v-button>
       </div>
     </div>
 
-    <!-- guest -->
-    <div v-else class="gap-6 flex items-center md:gap-12">
-      <router-link :to="{ name: 'login' }">
-        Sign in
-      </router-link>
-      <v-button
-        :to="{ name: 'signup' }">Create account</v-button>
+    <div class="p-6">
+      <v-renderer>
+        <slot />
+      </v-renderer>
     </div>
-  </div>
 
-  <div class="p-6">
-    <v-renderer>
-      <slot />
-    </v-renderer>
-  </div>
-
-  <div class="bottom-0 fixed right-0 z-20">
-    <v-alerts />
+    <div class="bottom-0 fixed right-0 z-20">
+      <v-alerts />
+    </div>
   </div>
 </template>
 

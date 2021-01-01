@@ -1,36 +1,38 @@
 <template>
-  <v-card-header>
-    Profile Photo
-  </v-card-header>
-  <v-card padded>
-    <div class="max-w-lg mx-auto text-center">
-      <!-- display -->
-      <div class="mb-6">
-        <v-avatar size="xl" :file="currentUserAvatar" />
-      </div>
+  <div>
+    <v-card-header>
+      Profile Photo
+    </v-card-header>
+    <v-card padded>
+      <div class="max-w-lg mx-auto text-center">
+        <!-- display -->
+        <div class="mb-6">
+          <v-avatar size="xl" :file="currentUserAvatar" />
+        </div>
 
-      <!-- upload -->
-      <v-upload-button
-        accept="image/png,image/jpeg"
-        :loading="deleteAvatarIsLoading || uploadAvatarIsLoading"
-        @change="uploadAvatar">
-        Upload Photo
-      </v-upload-button>
+        <!-- upload -->
+        <v-upload-button
+          accept="image/png,image/jpeg"
+          :loading="deleteAvatarIsLoading || uploadAvatarIsLoading"
+          @change="uploadAvatar">
+          Upload Photo
+        </v-upload-button>
 
-      <!-- delete -->
-      <div
-        v-if="currentUserAvatar"
-        class="mt-6 text-sm">
-        <a
-          class="flex items-center justify-center hover:text-red-500"
-          href="#"
-          @click.prevent="deleteAvatar">
-          <v-icon class="mr-2" name="trash-2" />
-          Delete profile photo
-        </a>
+        <!-- delete -->
+        <div
+          v-if="currentUserAvatar"
+          class="mt-6 text-sm">
+          <a
+            class="flex items-center justify-center hover:text-red-500"
+            href="#"
+            @click.prevent="deleteAvatar">
+            <v-icon class="mr-2" name="trash-2" />
+            Delete profile photo
+          </a>
+        </div>
       </div>
-    </div>
-  </v-card>
+    </v-card>
+  </div>
 </template>
 
 <script lang="ts">

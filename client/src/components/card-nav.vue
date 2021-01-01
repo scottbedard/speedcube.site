@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="grid py-2"
+    class="grid py-3"
     :aria-label="label">
     <router-link
       v-for="(link, index) in links"

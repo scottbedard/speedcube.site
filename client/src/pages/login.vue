@@ -47,7 +47,6 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable */
 import { defineComponent, ref } from 'vue';
 import { useLogin } from '@/app/store/user/behaviors/login';
 import { useRoute, useRouter } from 'vue-router';
