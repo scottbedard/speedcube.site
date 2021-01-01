@@ -15,5 +15,5 @@ export default {
   "isGuest":0,
   "isSuperuser":0,
   "createdIpAddress":"192.168.10.1",
-  "lastIpAddress":"192.168.10.1"
+  "lastIpAddress":"192.168.10.1",
 }

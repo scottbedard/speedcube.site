@@ -1,5 +1,3 @@
-import { ComputedRef, Ref } from 'vue';
-
 /**
  * Vector coordinates
  */
