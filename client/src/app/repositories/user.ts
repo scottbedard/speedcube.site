@@ -1,10 +1,11 @@
+import { UserModel } from '@/types/models/user';
 import axios from 'axios';
 
 /**
  * Delete a user's profile photo.
  */
 export function deleteAvatar() {
-  return axios.delete('/api/rainlab/user/account/avatar');
+  return axios.delete<UserModel>('/api/rainlab/user/account/avatar');
 }
 
 /**
@@ -15,9 +16,21 @@ export function postAvatar(avatar: string | Blob) {
 
   data.append('avatar', avatar);
 
-  return axios.post('/api/rainlab/user/account', data, {
+  return axios.post<UserModel>('/api/rainlab/user/account', data, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   });
+}
+
+/**
+ * Update a user.
+ */
+export function postUser(payload: {
+  email?: string,
+  name?: string,
+  password?: string,
+  passwordConfirmation?: string,
+}) {
+  return axios.post<UserModel>('/api/rainlab/user/account', payload);
 }
