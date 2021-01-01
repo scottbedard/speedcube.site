@@ -14,7 +14,7 @@
         <v-upload-button
           accept="image/png,image/jpeg"
           :loading="deleteAvatarIsLoading || uploadAvatarIsLoading"
-          @change="uploadAvatar">
+          @change="onChange">
           Upload Photo
         </v-upload-button>
 
@@ -25,7 +25,7 @@
           <a
             class="flex items-center justify-center hover:text-red-500"
             href="#"
-            @click.prevent="deleteAvatar">
+            @click.prevent="onDelete">
             <v-icon class="mr-2" name="trash-2" />
             Delete profile photo
           </a>
@@ -38,6 +38,7 @@
 <script lang="ts">
 import { currentUserAvatar } from '@/app/store/user/getters';
 import { defineComponent } from 'vue';
+import { fireAlert } from '@/app/store/alert/actions';
 import { useDeleteAvatar } from '@/app/store/user/behaviors/delete-avatar';
 import { useUploadAvatar } from '@/app/store/user/behaviors/upload-avatar';
 import VAvatar from '@/components/avatar.vue';
@@ -58,11 +59,29 @@ export default defineComponent({
       uploadAvatarIsLoading,
     } = useUploadAvatar();
 
+    const onChange = (file: string | Blob) => {
+      uploadAvatar(file).then(() => {
+        fireAlert({
+          message: 'Profile photo updated',
+          type: 'success',
+        });
+      });
+    }
+
+    const onDelete = () => {
+      deleteAvatar().then(() => {
+        fireAlert({
+          message: 'Profile photo deleted',
+          type: 'success',
+        });
+      });
+    }
+
     return {
       currentUserAvatar,
-      deleteAvatar,
       deleteAvatarIsLoading,
-      uploadAvatar,
+      onChange,
+      onDelete,
       uploadAvatarIsLoading,
     };
   },
