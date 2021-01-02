@@ -1,4 +1,4 @@
-import { computed, ref, unref, watch } from 'vue';
+import { computed, nextTick, ref, unref, watch } from 'vue';
 import { identity as linear } from 'lodash-es';
 import { MaybeRef } from '@/types/vue';
 import { Cube, Dodecaminx } from '@bedard/twister';
@@ -31,21 +31,29 @@ const tempDuration = 80;
  */
 export function usePuzzleController(options: PuzzleControllerOptions) {
   // advance to the next turn
-  const advanceNextTurn = () => {
-    if (currentTurn.value) {
-      options.puzzle.turn(currentTurn.value.turn);
-    }
+  const advanceNextTurn = async () => {
+    const currentTurn = queue.value[0];
 
     isTurning.value = false;
 
-    queue.value.splice(0, 1);
+    await nextTick();
+
+    if (currentTurn.turn) {
+      options.puzzle.turn(currentTurn.turn);
+    }
+
+    await nextTick();
+  
+    if (queue.value.length > 0) {
+      queue.value.shift();
+    }
   }
 
   // turns awaiting execution
   const queue = ref<QueuedTurn[]>([]);
 
   // current turn being executed
-  const currentTurn = computed(() => queue.value.slice(0, 1).pop());
+  const currentTurn = computed(() => queue.value[0]);
 
   // tracks if the puzzle is currently turning
   const isTurning = ref(false);
@@ -67,7 +75,9 @@ export function usePuzzleController(options: PuzzleControllerOptions) {
 
   // current turn progress from 0 to 1
   const turnProgress = computed(() => {
-    return isTurning.value ? 1 - (turnCount.value - totalProgress.value) : 0;
+    return isTurning.value && currentTurn.value
+      ? 1 - (turnCount.value - totalProgress.value)
+      : 0;
   });
 
   // queue a turn for execution
@@ -77,8 +87,8 @@ export function usePuzzleController(options: PuzzleControllerOptions) {
     }
   }
 
-  watch(currentTurn, (turn) => {
-    if (turn) {
+  watch(queue.value, () => {
+    if (!isTurning.value && currentTurn.value) {
       isTurning.value = true;
       turnCount.value += 1;
     }

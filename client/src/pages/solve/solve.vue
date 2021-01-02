@@ -9,8 +9,8 @@
     v-if="model"
     class="max-w-md mb-6 mx-auto"
     :border="route.name === 'solve-config'"
-    :current-turn="currentTurn?.turn"
     :config="currentConfig"
+    :current-turn="currentTurn?.turn"
     :model="model"
     :turn-progress="turnProgress" />
   
