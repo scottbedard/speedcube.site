@@ -14,6 +14,7 @@ class Solve extends Model
      */
     public $attributes = [
         'config_id' => 0,
+        'puzzle_id' => 0,
         'user_id' => 0,
     ];
 
@@ -31,6 +32,7 @@ class Solve extends Model
     protected $casts = [
         'config_id' => 'integer',
         'id' => 'integer',
+        'puzzle_id' => 'integer',
         'user_id' => 'integer',
     ];
 
@@ -47,6 +49,7 @@ class Solve extends Model
      */
     protected $fillable = [
         'config_id',
+        'puzzle_id',
         'user_id',
     ];
 

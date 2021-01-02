@@ -14,6 +14,7 @@ class CreateSolvesTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('config_id')->unsigned()->index();
+            $table->tinyInteger('puzzle_id')->unsigned()->index();
             $table->integer('user_id')->unsigned()->index();
             $table->timestamps();
         });

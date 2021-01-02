@@ -2,6 +2,7 @@
 
 use Speedcube\Speedcube\Http\Controllers\ConfigsController;
 use Speedcube\Speedcube\Http\Controllers\KeyboardConfigsController;
+use Speedcube\Speedcube\Http\Controllers\SolvesController;
 use Speedcube\Speedcube\Http\Controllers\SpaController;
 
 Route::middleware('web')->group(function () {
@@ -12,9 +13,11 @@ Route::middleware('web')->group(function () {
         'middleware' => 'Speedcube\Speedcube\Http\Middleware\TransformKeys',
         'prefix' => 'api/speedcube/speedcube',
     ], function () {
+        // solves
+        Route::post('solves', [SolvesController::class, 'create']);
 
         //
-        // auth
+        // auth required
         //
         Route::group([
             'middleware' => 'RainLab\User\Classes\AuthMiddleware',
