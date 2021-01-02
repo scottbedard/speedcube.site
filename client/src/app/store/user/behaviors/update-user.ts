@@ -7,6 +7,8 @@ import { ValidationError } from '@/types/api';
 export type UpdateUserData = {
   email: string,
   name: string,
+  password: string,
+  passwordConfirmation: string,
 };
 
 /**
@@ -16,6 +18,8 @@ export function useUpdateUser() {
   const updateUserData = ref<UpdateUserData>({
     email: currentUser.value?.email ?? '',
     name: currentUser.value?.name ?? '',
+    password: '',
+    passwordConfirmation: '',
   });
 
   const updateUserFailed = ref(false);
@@ -31,6 +35,8 @@ export function useUpdateUser() {
     xhr.then((response) => {
       // success
       currentUser.value = response.data;
+      updateUserData.value.password = '';
+      updateUserData.value.passwordConfirmation = '';
       updateUserValidationErrors.value = {};
     }).catch((err) => {
       // failed

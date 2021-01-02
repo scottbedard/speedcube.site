@@ -24,6 +24,17 @@ export function postAvatar(avatar: string | Blob) {
 }
 
 /**
+ * Authenticate a user.
+ */
+export function postLogin(payload: {
+  username: string,
+  password: string,
+  remember: boolean,
+}) {
+  return axios.post<UserModel>('/api/rainlab/user/auth/login', payload);
+}
+
+/**
  * Update a user.
  */
 export function postUser(payload: {

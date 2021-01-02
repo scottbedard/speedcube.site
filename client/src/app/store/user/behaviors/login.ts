@@ -1,10 +1,8 @@
-/* eslint-disable */
 import { currentUser } from '@/app/store/user/state';
 import { isValidationError } from '@/app/utils/api';
+import { postLogin } from '@/app/repositories/user';
 import { ref } from 'vue';
-import { UserModel } from '@/types/models/user';
 import { ValidationError } from '@/types/api';
-import axios from 'axios';
 
 export type LoginData = {
   password: string,
@@ -26,21 +24,28 @@ export function useLogin() {
   const loginIsLoading = ref(false);
   const loginValidationErrors = ref<ValidationError<LoginData>>({});
 
-  const login = async () => {
+  const login = () => {
     loginFailed.value = false;
     loginIsLoading.value = true;
 
-    try {
-      const { data } = await axios.post<UserModel>('/api/rainlab/user/auth/login', loginData.value);
-      
-      currentUser.value = data;
-    } catch (err) {
+    const xhr = postLogin(loginData.value);
+
+    xhr.then((response) => {
+      // success
+      currentUser.value = response.data;
+    }).catch((err) => {
+      // failed
       if (isValidationError<LoginData>(err)) {
         loginValidationErrors.value = err.response.data;
       }
 
       loginFailed.value = true;
-    }
+    }).finally(() => {
+      // complete
+      loginIsLoading.value = false;
+    });
+
+    return xhr;
   };
 
   return {

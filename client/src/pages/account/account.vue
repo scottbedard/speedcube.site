@@ -5,22 +5,7 @@
       <v-card>
         <v-card-nav
           label="User navigation"
-          :links="[
-            {
-              icon: 'user',
-              text: 'Profile',
-              to: {
-                name: 'account-profile',
-              },
-            },
-            {
-              icon: 'lock',
-              text: 'Change Password',
-              to: {
-                name: 'account-security',
-              },
-            },
-          ]" />
+          :links="links" />
       </v-card>
     </div>
     <div class="md:col-span-3">
@@ -36,6 +21,28 @@ import VCardHeader from '@/components/card-header.vue';
 import VCardNav from '@/components/card-nav.vue';
 
 export default defineComponent({
+  setup() {
+    const links = [
+      {
+        icon: 'user',
+        text: 'Profile',
+        to: {
+          name: 'account-profile',
+        },
+      },
+      {
+        icon: 'lock',
+        text: 'Security',
+        to: {
+          name: 'account-security',
+        },
+      },
+    ];
+
+    return {
+      links,
+    };
+  },
   components: {
     VCard,
     VCardHeader,

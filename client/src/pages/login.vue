@@ -73,15 +73,8 @@ export default defineComponent({
     const onSubmit = async () => {
       const returnPath = route.query?.to as string ?? '';
 
-      if (returnPath) {
-        console.log({ returnPath });
-        return login().then(() => {
-          router.replace(returnPath);
-        });
-      }
-  
       return login().then(() => {
-        router.replace({
+        router.replace(returnPath || {
           name: 'solve',
           params: {
             puzzle: '3x3',
