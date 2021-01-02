@@ -1,6 +1,8 @@
 <?php namespace Speedcube\Speedcube\Models;
 
 use Model;
+use October\Rain\Database\Builder;
+use Speedcube\Speedcube\Classes\Puzzle;
 
 /**
  * Solve Model
@@ -75,4 +77,30 @@ class Solve extends Model
      * @var string The database table used by the model.
      */
     public $table = 'speedcube_speedcube_solves';
+
+    /**
+     * Get puzzle name.
+     *
+     * @return string
+     */
+    public function getPuzzleName()
+    {
+        return Puzzle::getName($this->puzzle_id);
+    }
+
+    /**
+     * Get puzzle filter options.
+     *
+     * @return array
+     */
+    public function getPuzzleFilterOptions()
+    {
+        $options = [];
+
+        foreach (Puzzle::IDS as $name => $id) {
+            $options[$id] = ucfirst($name);
+        }
+
+        return $options;
+    }
 }

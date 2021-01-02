@@ -12,6 +12,7 @@ fields:
         label: Puzzle
         path: $/speedcube/speedcube/models/config/_field_puzzle_id.htm
         required: false
+        span: left
         type: partial
 
     is_active:

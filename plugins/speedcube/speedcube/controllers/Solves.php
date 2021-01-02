@@ -4,6 +4,10 @@ namespace Speedcube\Speedcube\Controllers;
 
 use Backend\Classes\Controller;
 use BackendMenu;
+use DB;
+use October\Rain\Database\Builder;
+use Speedcube\Speedcube\Classes\Puzzle;
+use Speedcube\Speedcube\Models\Solve;
 
 /**
  * Solves Back-end Controller
@@ -45,5 +49,46 @@ class Solves extends Controller
         parent::__construct();
 
         BackendMenu::setContext('Speedcube.Speedcube', 'speedcube', 'solves');
+    }
+
+    /**
+     * Index.
+     */
+    public function index()
+    {
+        $this->loadScoreboard();
+
+        $this->asExtension('ListController')->index();
+    }
+
+    /**
+     * List extend query.
+     *
+     * @param October\Rain\Database\Builder $query
+     *
+     * @return October\Rain\Database\Builder
+     */
+    public function listExtendQuery(Builder $query): Builder
+    {
+        return $query->with('user:id,username');
+    }
+
+    /**
+     * Load scoreboard.
+     *
+     * @return void
+     */
+    protected function loadScoreboard()
+    {
+        $totals = [];
+
+        Solve::select('puzzle_id', DB::raw('count(*) as total'))
+            ->groupBy('puzzle_id')
+            ->get()
+            ->each(function ($result) use (&$totals) {
+                $totals[ucfirst(Puzzle::getName($result->puzzle_id))] = $result->total;
+            });
+
+        $this->vars['totals'] = $totals;
     }
 }
