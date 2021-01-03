@@ -19,7 +19,7 @@ class Solve extends Model
         'config_id' => 0,
         'puzzle_id' => 0,
         'scramble' => '',
-        'scrambled_state' => '',
+        'scrambled_state' => '{}',
         'user_id' => 0,
     ];
 
@@ -89,9 +89,18 @@ class Solve extends Model
     public $table = 'speedcube_speedcube_solves';
 
     /**
+     * Before create
+     */
+    public function beforeCreate()
+    {
+        $this->scramble();
+    }
+
+    /**
      * Before validate
      */
-    public function beforeValidate() {
+    public function beforeValidate()
+    {
         if (!$this->user_id) {
             $this->user_id = 0;
         }
@@ -121,6 +130,18 @@ class Solve extends Model
         }
 
         return $options;
+    }
+
+    /**
+     * Generate scramble
+     */
+    protected function scramble()
+    {
+        if ($this->puzzle_id) {
+            $scramble = Puzzle::scramble($this->puzzle_id);
+            $this->scramble = $scramble['scramble'];
+            $this->scrambled_state = $scramble['state'];
+        }
     }
 
     /**

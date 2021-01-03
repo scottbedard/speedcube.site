@@ -22,5 +22,7 @@ class SolvesTest extends PluginTestCase
         $this->assertEquals(0, $data['model']['configId']);
         $this->assertEquals(0, $data['model']['userId']);
         $this->assertEquals(1, $data['model']['puzzleId']);
+        $this->assertNotEmpty($data['model']['scramble']);
+        $this->assertNotEmpty($data['model']['scrambledState']);
     }
 }

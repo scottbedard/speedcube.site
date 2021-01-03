@@ -6,7 +6,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@bedard/twister": "^0.6.2",
+    "@bedard/twister": "^0.6.4",
     "@vueuse/core": "^4.0.2",
     "axios": "^0.20.0",
     "body-scroll-lock": "^3.1.5",

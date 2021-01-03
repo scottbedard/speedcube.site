@@ -32,4 +32,37 @@ class Puzzle
     {
         return array_search($id, self::IDS) ?: 'unknown';
     }
+
+    /**
+     * Get twister id from puzzle id
+     */
+    public static function getTwisterId(int $puzzleId)
+    {
+        switch ($puzzleId) {
+            case 1: return '2x2';
+            case 2: return '3x3';
+            case 3: return '4x4';
+            case 4: return '5x5';
+            case 5: return 'dodecaminx2';
+            case 6: return 'dodecaminx3';
+            case 7: return 'dodecaminx4';
+            case 8: return 'dodecaminx5';
+        }
+
+        return null;
+    }
+
+    /**
+     * Scramble a puzzle.
+     */
+    public static function scramble(int $puzzleId)
+    {
+        $twister = base_path('client/node_modules/.bin/twister');
+
+        $puzzle = self::getTwisterId($puzzleId);
+
+        $result = exec("node {$twister} scramble {$puzzle}");
+
+        return \json_decode($result, true);
+    }
 }
