@@ -4,6 +4,12 @@
 # ===================================
 
 scopes:
+    user:
+        conditions: user_id in (:filtered)
+        label: User
+        modelClass: RainLab\User\Models\User
+        nameFrom: username
+
     puzzle:
         label: Puzzle
         type: group
