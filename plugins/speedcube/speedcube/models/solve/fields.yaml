@@ -7,7 +7,6 @@ fields:
         context: update
         disabled: true
         label: ID
-        span: left
 
     user:
         emptyOption: Guest
@@ -28,7 +27,7 @@ fields:
             6: Megaminx
             7: Masterminx
             8: Gigaminx
-        span: left
+        span: right
         type: dropdown
 
     status:
@@ -45,5 +44,19 @@ fields:
     created_at:
         context: update
         label: Date
-        span: left
+        span: right
         type: datepicker
+
+    scramble:
+        context: update
+        label: Scramble
+        size: small
+        span: left
+        type: textarea
+
+    scrambled_state_json:
+        context: update
+        label: Scrambled State
+        language: javascript
+        span: right
+        type: codeeditor

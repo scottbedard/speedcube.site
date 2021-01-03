@@ -133,6 +133,16 @@ class Solve extends Model
     }
 
     /**
+     * Get scrambled state as string.
+     *
+     * @return string
+     */
+    public function getScrambledStateJsonAttribute()
+    {
+        return \json_encode((object) $this->scrambled_state, JSON_PRETTY_PRINT);
+    }
+
+    /**
      * Generate scramble
      */
     protected function scramble()
@@ -142,6 +152,22 @@ class Solve extends Model
             $this->scramble = $scramble['scramble'];
             $this->scrambled_state = $scramble['state'];
         }
+    }
+
+    /**
+     * Set configuration data from string.
+     *
+     * @param string $value
+     */
+    public function setScrambledStateJsonAttribute($value)
+    {
+        $data = \json_decode($value, true);
+        
+        if ($data === null) {
+            throw new \Exception('Invalid JSON');
+        }
+
+        $this->scrambled_state = $data;
     }
 
     /**
