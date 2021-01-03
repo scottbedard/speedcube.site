@@ -115,6 +115,14 @@ class Solve extends Model
     }
 
     /**
+     * Select by puzzles
+     */
+    public function scopePuzzles($query, array $puzzleIds)
+    {
+        return $query->whereIn('puzzle_id', $puzzleIds);
+    }
+
+    /**
      * Select user summary
      */
     public function scopeWithUserSummary($query)
