@@ -4,9 +4,16 @@
 
 fields:
     id:
+        context: update
         disabled: true
         label: ID
         span: left
+
+    user:
+        emptyOption: Guest
+        label: User
+        span: left
+        type: relation
 
     puzzle_id:
         default: 1

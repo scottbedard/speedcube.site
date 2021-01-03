@@ -38,8 +38,6 @@ export function refreshCurrentUser() {
  * Save a keyboard config.
  */
 export function saveKeyboardConfig(puzzleId: number, data: KeyboardConfig) {
-  const json = JSON.stringify(data);
-
-  return axios.post('/api/speedcube/speedcube/keyboardconfigs', { puzzleId, data: json })
+  return axios.post('/api/speedcube/speedcube/keyboardconfigs', { puzzleId, data })
     .then(refreshCurrentUser)
 }

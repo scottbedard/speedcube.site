@@ -3,7 +3,7 @@
  */
 export type KeyboardConfig = {
   createdAt: string,
-  data: string,
+  data: Record<string, any>,
   id: number,
   puzzleId: number,
 }

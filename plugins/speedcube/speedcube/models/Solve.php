@@ -79,6 +79,15 @@ class Solve extends Model
     public $table = 'speedcube_speedcube_solves';
 
     /**
+     * Before validate
+     */
+    public function beforeValidate() {
+        if (!$this->user_id) {
+            $this->user_id = 0;
+        }
+    }
+
+    /**
      * Get puzzle name.
      *
      * @return string

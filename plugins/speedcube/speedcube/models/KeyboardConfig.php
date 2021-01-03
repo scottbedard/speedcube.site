@@ -66,14 +66,33 @@ class KeyboardConfig extends Model
     ];
 
     /**
+     * @var array Jsonable fields
+     */
+    protected $jsonable = [
+        'data',
+    ];
+
+    /**
      * @var array Validation rules for attributes
      */
-    public $rules = [];
+    public $rules = [
+        'puzzle_id' => 'required|integer|min:0',
+        'user_id' => 'required|integer|min:0',
+    ];
 
     /**
      * @var string The database table used by the model.
      */
     public $table = 'speedcube_speedcube_keyboard_configs';
+
+    /**
+     * Before validate
+     */
+    public function beforeValidate() {
+        if (!$this->user_id) {
+            $this->user_id = 0;
+        }
+    }
 
     /**
      * Get configuration data as string.
@@ -82,7 +101,7 @@ class KeyboardConfig extends Model
      */
     public function getDataStringAttribute()
     {
-        return \json_encode(\json_decode($this->data), JSON_FORCE_OBJECT | JSON_PRETTY_PRINT);
+        return \json_encode((object) $this->data, JSON_PRETTY_PRINT);
     }
 
     /**
@@ -120,12 +139,12 @@ class KeyboardConfig extends Model
      */
     public function setDataStringAttribute($value)
     {
-        $data = \json_decode($value);
+        $data = \json_decode($value, true);
         
         if ($data === null) {
             throw new \Exception('Invalid JSON');
         }
 
-        $this->data = $value;
+        $this->data = $data;
     }
 }

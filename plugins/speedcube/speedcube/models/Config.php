@@ -91,7 +91,6 @@ class Config extends Model
      * @var array Validation rules
      */
     public $rules = [
-        'data' => 'array',
         'is_active' => 'boolean',
         'puzzle_id' => 'required|integer|min:0',
         'user_id' => 'required|integer|min:0',
@@ -108,6 +107,25 @@ class Config extends Model
     public function afterCreate()
     {
         $this->managePriorConfig();
+    }
+
+    /**
+     * Before validate
+     */
+    public function beforeValidate() {
+        if (!$this->user_id) {
+            $this->user_id = 0;
+        }
+    }
+
+    /**
+     * Get configuration data as string.
+     *
+     * @return string
+     */
+    public function getDataStringAttribute()
+    {
+        return \json_encode((object) $this->data, JSON_PRETTY_PRINT);
     }
 
     /**
@@ -181,5 +199,21 @@ class Config extends Model
     public function scopeIsActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
+    }
+
+    /**
+     * Set configuration data from string.
+     *
+     * @param string $value
+     */
+    public function setDataStringAttribute($value)
+    {
+        $data = \json_decode($value, true);
+        
+        if ($data === null) {
+            throw new \Exception('Invalid JSON');
+        }
+
+        $this->data = $data;
     }
 }

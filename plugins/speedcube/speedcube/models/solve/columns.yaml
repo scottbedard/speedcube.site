@@ -23,3 +23,7 @@ columns:
     created_at:
         label: Date
         type: timetense
+    
+    updated_at:
+        label: Updated
+        type: datetime

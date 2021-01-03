@@ -8,23 +8,35 @@ fields:
         label: ID
         span: left
 
-    puzzle_id:
-        label: Puzzle
-        path: $/speedcube/speedcube/models/config/_field_puzzle_id.htm
-        required: false
+    user:
+        emptyOption: Guest
+        label: User
         span: left
-        type: partial
+        type: relation
+
+    puzzle_id:
+        default: 1
+        label: Puzzle
+        options:
+            0: Unknown
+            1: 2x2
+            2: 3x3
+            3: 4x4
+            4: 5x5
+            5: Kilominx
+            6: Megaminx
+            7: Masterminx
+            8: Gigaminx
+        span: left
+        type: dropdown
+
+    data_string:
+        label: Configuration
+        language: javascript
+        span: left
+        type: codeeditor
 
     is_active:
         label: Active
         span: left
         type: checkbox
-
-    # blocked by https://github.com/octobercms/docs/pull/502
-    # data:
-    #     fontSize: 14
-    #     label: Data
-    #     language: javascript
-    #     size: giant
-    #     span: right
-    #     type: codeeditor

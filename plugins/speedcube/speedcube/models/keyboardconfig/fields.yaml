@@ -3,11 +3,11 @@
 # ===================================
 
 fields:
-    user_id:
-        label: User ID
-        min: 0
+    user:
+        emptyOption: Guest
+        label: User
         span: left
-        type: number
+        type: relation
 
     puzzle_id:
         default: 1
