@@ -1,0 +1,31 @@
+<?php
+$diff = '';
+
+if ($solvesThisMonth > $solvesLastMonth) {
+    $diff = 'positive';
+}
+?>
+
+<style>
+#solves-scoreboard [data-control="chart-pie"] tr:nth-child(n + 4) {
+    display: none;
+}
+</style>
+
+<div class="scoreboard" id="solves-scoreboard">
+    <div data-control="toolbar">
+        <div class="scoreboard-item control-chart" data-control="chart-pie">
+            <ul>
+                <?php foreach($totals as $puzzle => $total): ?>
+                    <li><?= $puzzle ?> <span><?= $total ?></span></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <div class="scoreboard-item title-value">
+            <h4>Solves This Month</h4>
+            <p class="<?= $diff ?>"><?= $solvesThisMonth ?></p>
+            <p class="description">last month: <?= $solvesLastMonth ?></p>
+        </div>
+    </div>
+</div>
+  

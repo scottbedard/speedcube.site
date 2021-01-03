@@ -9,7 +9,8 @@ use Speedcube\Speedcube\Classes\Puzzle;
  */
 class Solve extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use \October\Rain\Database\Traits\Validation,
+        \Speedcube\Speedcube\Traits\CarbonScopes;
 
     /**
      * @var array Default attributes

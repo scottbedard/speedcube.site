@@ -90,5 +90,7 @@ class Solves extends Controller
             });
 
         $this->vars['totals'] = $totals;
+        $this->vars['solvesLastMonth'] = Solve::lastMonth()->count();
+        $this->vars['solvesThisMonth'] = Solve::thisMonth()->count();
     }
 }
