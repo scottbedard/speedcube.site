@@ -80,6 +80,13 @@ class Solves extends Controller
      */
     protected function loadScoreboard()
     {
+        // solves last month
+        $this->vars['solvesLastMonth'] = Solve::lastMonth()->count();
+        
+        // solves this month
+        $this->vars['solvesThisMonth'] = Solve::thisMonth()->count();
+
+        // solves by puzzle
         $totals = [];
 
         Solve::select('puzzle_id', DB::raw('count(*) as total'))
@@ -90,7 +97,13 @@ class Solves extends Controller
             });
 
         $this->vars['totals'] = $totals;
-        $this->vars['solvesLastMonth'] = Solve::lastMonth()->count();
-        $this->vars['solvesThisMonth'] = Solve::thisMonth()->count();
+
+        // top user
+        $this->vars['topUser'] = Solve::thisMonth()
+            ->select('user_id', DB::raw('count(*) as total'))
+            ->groupBy('user_id')
+            ->orderBy('total', 'desc')
+            ->withUserSummary()
+            ->first();
     }
 }

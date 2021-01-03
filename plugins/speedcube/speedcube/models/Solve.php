@@ -113,4 +113,16 @@ class Solve extends Model
 
         return $options;
     }
+
+    /**
+     * Select user summary
+     */
+    public function scopeWithUserSummary($query)
+    {
+        return $query->with([
+            'user' => function ($user) {
+                $user->select(['id', 'name', 'username']);
+            },
+        ]);
+    }
 }

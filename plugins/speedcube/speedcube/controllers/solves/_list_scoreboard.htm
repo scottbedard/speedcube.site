@@ -4,6 +4,10 @@ $diff = '';
 if ($solvesThisMonth > $solvesLastMonth) {
     $diff = 'positive';
 }
+
+$username = $topUser && $topUser->user
+    ? $topUser->user->username
+    : 'Guest';
 ?>
 
 <style>
@@ -21,10 +25,17 @@ if ($solvesThisMonth > $solvesLastMonth) {
                 <?php endforeach; ?>
             </ul>
         </div>
+
         <div class="scoreboard-item title-value">
             <h4>Solves This Month</h4>
             <p class="<?= $diff ?>"><?= $solvesThisMonth ?></p>
             <p class="description">last month: <?= $solvesLastMonth ?></p>
+        </div>
+
+        <div class="scoreboard-item title-value">
+            <h4>Top User</h4>
+            <p class="oc-icon-star"><?= $username ?></p>
+            <p class="description">total solves: <?= $topUser ? $topUser->total : 0 ?></p>
         </div>
     </div>
 </div>
