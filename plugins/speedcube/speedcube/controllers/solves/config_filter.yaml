@@ -29,3 +29,13 @@ scopes:
         label: Date
         type: daterange
         conditions: created_at >= ':after' AND created_at <= ':before'
+    
+    status:
+        conditions: status in (:filtered)
+        label: Status
+        type: group
+        options:
+            complete: Complete
+            dnf: DNF
+            error: Error
+            pending: Pending

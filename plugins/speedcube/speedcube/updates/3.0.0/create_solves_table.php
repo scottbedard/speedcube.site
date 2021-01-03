@@ -16,6 +16,14 @@ class CreateSolvesTable extends Migration
             $table->integer('config_id')->unsigned()->index();
             $table->tinyInteger('puzzle_id')->unsigned()->index();
             $table->integer('user_id')->unsigned()->index();
+            $table->text('scramble');
+            $table->text('scrambled_state');
+            $table->enum('status', [
+                'complete',
+                'dnf',
+                'error',
+                'pending',
+            ])->default('pending')->index();
             $table->timestamps();
         });
     }

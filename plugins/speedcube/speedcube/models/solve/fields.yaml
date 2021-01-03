@@ -16,7 +16,7 @@ fields:
         type: relation
 
     puzzle_id:
-        default: 1
+        default: 0
         label: Puzzle
         options:
             0: Unknown
@@ -28,6 +28,17 @@ fields:
             6: Megaminx
             7: Masterminx
             8: Gigaminx
+        span: left
+        type: dropdown
+
+    status:
+        default: pending
+        label: Status
+        options:
+            complete: Complete
+            dnf: DNF
+            error: Error
+            pending: Pending
         span: left
         type: dropdown
 

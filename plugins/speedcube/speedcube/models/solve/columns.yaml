@@ -25,5 +25,12 @@ columns:
         type: timetense
     
     updated_at:
+        invisible: true
         label: Updated
         type: datetime
+
+    status:
+        label: Status
+        path: $/speedcube/speedcube/models/solve/_column_status.htm
+        sortable: false
+        type: partial

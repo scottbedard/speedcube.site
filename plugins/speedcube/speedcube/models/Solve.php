@@ -18,6 +18,8 @@ class Solve extends Model
     public $attributes = [
         'config_id' => 0,
         'puzzle_id' => 0,
+        'scramble' => '',
+        'scrambled_state' => '',
         'user_id' => 0,
     ];
 
@@ -65,6 +67,13 @@ class Solve extends Model
      * @var array Attributes to be removed from the API representation of the model (ex. toArray())
      */
     protected $hidden = [];
+    
+    /**
+     * @var array Jsonable fields
+     */
+    protected $jsonable = [
+        'scrambled_state',
+    ];
 
     /**
      * @var array Validation rules for attributes
