@@ -25,4 +25,19 @@ class SolvesTest extends PluginTestCase
         $this->assertNotEmpty($data['model']['scramble']);
         $this->assertNotEmpty($data['model']['scrambledState']);
     }
+
+    public function test_create_solve_user_success()
+    {
+        $user = Factory::authenticatedUser();
+
+        $response = $this->postJson('/api/speedcube/speedcube/solves', [
+            'puzzleId' => 1,
+        ]);
+
+        $response->assertStatus(200);
+
+        $data = json_decode($response->getContent(), true);
+
+        $this->assertEquals($user->id, $data['model']['userId']);
+    }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="gap-20 grid">
     <div class="flex justify-center">
-      <v-button>
+      <v-button @click="onScramble">
         Scramble
       </v-button>
     </div>
@@ -40,10 +40,20 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { scramble } from '@/pages/solve/actions';
 import VButton from '@/components/button.vue';
 import VIcon from '@/components/icon.vue';
 
 export default defineComponent({
+  setup() {
+    const onScramble = () => {
+      scramble();
+    }
+
+    return {
+      onScramble,
+    };
+  },
   components: {
     VButton,
     VIcon,
