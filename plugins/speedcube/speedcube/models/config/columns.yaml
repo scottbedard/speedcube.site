@@ -22,6 +22,10 @@ columns:
 
     created_at:
         label: Created
+        type: date
+
+    updated_at:
+        label: Last Updated
         type: timetense
 
     is_active:

@@ -22,8 +22,8 @@ columns:
 
     created_at:
         label: Created
-        type: datetime
-    
+        type: date
+
     updated_at:
-        label: Updated
-        type: datetime
+        label: Last Updated
+        type: timetense
