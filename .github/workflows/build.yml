@@ -25,6 +25,10 @@ jobs:
       run: |
         cd plugins/speedcube/speedcube
         composer install
+    - name: Install node dependencies
+      run: |
+        cd client
+        npm install
     - name: PHPUnit
       run: |
         cd plugins/speedcube/speedcube
