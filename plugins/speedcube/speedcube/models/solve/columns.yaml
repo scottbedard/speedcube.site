@@ -22,6 +22,8 @@ columns:
 
     duration:
         label: Duration
+        path: $/speedcube/speedcube/models/solve/_column_duration.htm
+        type: partial
     
     turns:
         label: Turns

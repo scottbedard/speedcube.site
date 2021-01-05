@@ -80,16 +80,26 @@ class Solves extends Controller
      */
     protected function loadScoreboard()
     {
-        // solves last month
-        $this->vars['solvesLastMonth'] = Solve::lastMonth()->count();
+        // solve totals
+        $this->vars['solvesLastMonth'] = Solve::lastMonth()
+            ->where('status', 'complete')
+            ->count();
         
-        // solves this month
-        $this->vars['solvesThisMonth'] = Solve::thisMonth()->count();
+        $this->vars['solvesThisMonth'] = Solve::thisMonth()
+            ->where('status', 'complete')
+            ->count();
+
+        $this->vars['totalLastMonth'] = Solve::lastMonth()
+            ->count();
+
+        $this->vars['totalThisMonth'] = Solve::thisMonth()
+            ->count();
 
         // solves by puzzle
         $totals = [];
 
         Solve::select('puzzle_id', DB::raw('count(*) as total'))
+            ->where('status', 'complete')
             ->groupBy('puzzle_id')
             ->get()
             ->each(function ($result) use (&$totals) {
@@ -101,6 +111,7 @@ class Solves extends Controller
         // top user
         $this->vars['topUser'] = Solve::thisMonth()
             ->select('user_id', DB::raw('count(*) as total'))
+            ->where('status', 'complete')
             ->groupBy('user_id')
             ->orderBy('total', 'desc')
             ->withUserSummary()

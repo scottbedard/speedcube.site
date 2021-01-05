@@ -21,6 +21,40 @@ class Util
     }
 
     /**
+     * Convert a number of milliseconds to a human-readable time format.
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    public static function formatTime($value)
+    {
+        $value = (int) $value;
+
+        $ms = str_pad(floor(($value % 1000) / 10), 2, '0', STR_PAD_LEFT);
+        $seconds = str_pad(floor(($value / 1000) % 60), 2, '0', STR_PAD_LEFT);
+        $minutes = floor($value / 60000);
+
+        return "{$minutes}:{$seconds}.{$ms}";
+    }
+
+    /**
+     * Format time and trim leading zeros.
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    public static function formatShortTime($value)
+    {
+        if ($value === 0) {
+            return '0.00';
+        }
+
+        return preg_replace('/^[0:]*/', '', self::formatTime($value));
+    }
+
+    /**
      * Test if a value is JSON
      *
      * @param any

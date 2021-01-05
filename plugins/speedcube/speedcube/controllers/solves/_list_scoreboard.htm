@@ -8,6 +8,14 @@ if ($solvesThisMonth > $solvesLastMonth) {
 $username = $topUser && $topUser->user
     ? $topUser->user->username
     : 'Guest';
+
+$completionRate = $totalThisMonth
+    ? round(($solvesThisMonth / $totalThisMonth) * 100)
+    : 0;
+
+$completionRateLastMonth = $totalLastMonth
+    ? round(($solvesLastMonth / $totalLastMonth) * 100)
+    : 0;
 ?>
 
 <style>
@@ -27,15 +35,21 @@ $username = $topUser && $topUser->user
         </div>
 
         <div class="scoreboard-item title-value">
-            <h4>Solves This Month</h4>
+            <h4>This Month</h4>
             <p class="<?= $diff ?>"><?= $solvesThisMonth ?></p>
             <p class="description">last month: <?= $solvesLastMonth ?></p>
+        </div>
+
+        <div class="scoreboard-item title-value" data-control="goal-meter" data-value="<?= $completionRate ?>">
+            <h4>Completion</h4>
+            <p><?= $completionRate ?>%</p>
+            <p class="description">last month: <?= $completionRateLastMonth ?>%</p>
         </div>
 
         <div class="scoreboard-item title-value">
             <h4>Top User</h4>
             <p class="oc-icon-star"><?= $username ?></p>
-            <p class="description">total solves: <?= $topUser ? $topUser->total : 0 ?></p>
+            <p class="description"><?= $topUser ? $topUser->total : 0 ?> completed solves</p>
         </div>
     </div>
 </div>
