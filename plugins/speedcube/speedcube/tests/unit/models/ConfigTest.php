@@ -1,6 +1,6 @@
 <?php
 
-namespace Speedcube\Speedcube\Tests\Unit\Http;
+namespace Speedcube\Speedcube\Tests\Unit\Models;
 
 use Speedcube\Speedcube\Models\Config;
 use Speedcube\Speedcube\Models\Solve;

@@ -1,5 +1,6 @@
 <?php namespace Speedcube\Speedcube\Models;
 
+use Carbon\Carbon;
 use Model;
 use October\Rain\Database\Builder;
 use Speedcube\Speedcube\Classes\Puzzle;
@@ -20,6 +21,7 @@ class Solve extends Model
         'puzzle_id' => 0,
         'scramble' => '',
         'scrambled_state' => '{}',
+        'status' => 'pending',
         'user_id' => 0,
     ];
 
@@ -45,6 +47,7 @@ class Solve extends Model
      * @var array Attributes to be cast to Argon (Carbon) instances
      */
     protected $dates = [
+        'closed_at',
         'created_at',
         'updated_at',
     ];
@@ -89,6 +92,14 @@ class Solve extends Model
     public $table = 'speedcube_speedcube_solves';
 
     /**
+     * After create
+     */
+    public function afterCreate()
+    {
+        $this->closeOutstanding('dnf');
+    }
+
+    /**
      * Before create
      */
     public function beforeCreate()
@@ -103,6 +114,32 @@ class Solve extends Model
     {
         if (!$this->user_id) {
             $this->user_id = 0;
+        }
+    }
+
+    /**
+     * Close.
+     */
+    protected function close($status)
+    {
+        $this->closed_at = Carbon::now();
+        $this->status = $status;
+        $this->save();
+    }
+
+    /**
+     * Close outstanding solves.
+     */
+    protected function closeOutstanding($status)
+    {
+        if ($this->user_id) {
+            self::where('user_id', $this->user_id)
+                ->where('status', 'pending')
+                ->where('id', '<>', $this->id)
+                ->get()
+                ->each(function ($solve) use ($status) {
+                    $solve->close($status);
+                });
         }
     }
 
@@ -155,22 +192,6 @@ class Solve extends Model
     }
 
     /**
-     * Set configuration data from string.
-     *
-     * @param string $value
-     */
-    public function setScrambledStateJsonAttribute($value)
-    {
-        $data = \json_decode($value, true);
-        
-        if ($data === null) {
-            throw new \Exception('Invalid JSON');
-        }
-
-        $this->scrambled_state = $data;
-    }
-
-    /**
      * Select by puzzles
      */
     public function scopePuzzles($query, array $puzzleIds)
@@ -188,5 +209,21 @@ class Solve extends Model
                 $user->select(['id', 'name', 'username']);
             },
         ]);
+    }
+
+    /**
+     * Set configuration data from string.
+     *
+     * @param string $value
+     */
+    public function setScrambledStateJsonAttribute($value)
+    {
+        $data = \json_decode($value, true);
+        
+        if ($data === null) {
+            throw new \Exception('Invalid JSON');
+        }
+
+        $this->scrambled_state = $data;
     }
 }

@@ -25,6 +25,7 @@ class CreateSolvesTable extends Migration
                 'pending',
             ])->default('pending')->index();
             $table->timestamps();
+            $table->dateTime('closed_at')->nullable()->index();
         });
     }
 
