@@ -60,3 +60,10 @@ fields:
         language: javascript
         span: right
         type: codeeditor
+
+    solution:
+        context: update
+        label: Solution
+        size: small
+        span: left
+        type: textarea

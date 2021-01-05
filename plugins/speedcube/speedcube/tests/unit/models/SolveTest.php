@@ -24,4 +24,24 @@ class SolveTest extends PluginTestCase
         $this->assertEquals('pending', $second->status);
         $this->assertEquals('pending', $third->status);
     }
+
+    public function test_solution_parsing()
+    {
+        $solve = Factory::create(new Solve, [
+            'solution' => '1000:R 2000#START',
+        ]);
+
+        $this->assertEquals([
+            [
+                'time' => 1000,
+                'type' => 'turn',
+                'value' => 'R',
+            ],
+            [
+                'time' => 2000,
+                'type' => 'event',
+                'value' => 'START',
+            ],
+        ], $solve->getNormalizedSolution());
+    }
 }

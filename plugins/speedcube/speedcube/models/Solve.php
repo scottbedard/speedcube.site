@@ -21,6 +21,7 @@ class Solve extends Model
         'puzzle_id' => 0,
         'scramble' => '',
         'scrambled_state' => '{}',
+        'solution' => '',
         'status' => 'pending',
         'user_id' => 0,
     ];
@@ -151,6 +152,33 @@ class Solve extends Model
                     $solve->close($status);
                 });
         }
+    }
+
+    /**
+     * Get normalized solution.
+     *
+     * @return array
+     */
+    public function getNormalizedSolution()
+    {
+        return collect(explode(' ', trim($this->solution)))
+            ->map(function ($step) {
+                $type = '';
+                $parts = preg_split('/[:#]/', $step);
+
+                if (strpos($step, ':')) {
+                    $type = 'turn';
+                } elseif (strpos($step, '#')) {
+                    $type = 'event';
+                }
+                
+                return [
+                    'time' => (int) $parts[0],
+                    'type' => $type,
+                    'value' => $parts[1],
+                ];
+            })
+            ->toArray();
     }
 
     /**
