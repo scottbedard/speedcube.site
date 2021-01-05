@@ -19,6 +19,12 @@ columns:
         path: $/speedcube/speedcube/models/solve/_column_puzzle_id.htm
         sortable: false
         type: partial
+
+    duration:
+        label: Duration
+    
+    turns:
+        label: Turns
     
     created_at:
         label: Date

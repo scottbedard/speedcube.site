@@ -18,11 +18,13 @@ class Solve extends Model
      */
     public $attributes = [
         'config_id' => 0,
+        'duration' => 0,
         'puzzle_id' => 0,
         'scramble' => '',
         'scrambled_state' => '{}',
         'solution' => '',
         'status' => 'pending',
+        'turns' => 0,
         'user_id' => 0,
     ];
 
@@ -39,8 +41,10 @@ class Solve extends Model
      */
     protected $casts = [
         'config_id' => 'integer',
+        'duration' => 'integer',
         'id' => 'integer',
         'puzzle_id' => 'integer',
+        'turns' => 'integer',
         'user_id' => 'integer',
     ];
 
@@ -84,6 +88,8 @@ class Solve extends Model
      */
     public $rules = [
         'config_id' => 'required|integer|min:0',
+        'duration' => 'required|integer|min:0',
+        'turns' => 'required|integer|min:0',
         'user_id' => 'required|integer|min:0',
     ];
 

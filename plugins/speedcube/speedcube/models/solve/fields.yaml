@@ -46,6 +46,16 @@ fields:
         label: Date
         span: right
         type: datepicker
+    
+    duration:
+        label: Duration
+        span: left
+        type: number
+    
+    turns:
+        label: Turns
+        span: right
+        type: number
 
     scramble:
         context: update

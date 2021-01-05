@@ -19,6 +19,8 @@ class CreateSolvesTable extends Migration
             $table->text('scramble');
             $table->text('scrambled_state');
             $table->text('solution');
+            $table->integer('duration')->unsigned()->index();
+            $table->integer('turns')->unsigned()->index();
             $table->enum('status', [
                 'complete',
                 'dnf',
