@@ -128,6 +128,16 @@ class Solve extends Model
     }
 
     /**
+     * Complete with solution.
+     */
+    public function complete($solution)
+    {
+        if ($this->puzzle_id) {
+            // $scramble = Puzzle::test($solution);
+        }
+    }
+
+    /**
      * Close outstanding solves.
      */
     protected function closeOutstanding($status)
