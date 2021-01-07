@@ -3,3 +3,4 @@
   - 3.0.0/create_configs_table.php
   - 3.0.0/create_keyboard_configs_table.php
   - 3.0.0/create_solves_table.php
+  - 3.0.0/create_guest_user.php
