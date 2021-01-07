@@ -11,6 +11,7 @@ fields:
     user:
         emptyOption: Guest
         label: User
+        nameFrom: username
         span: left
         type: relation
 
