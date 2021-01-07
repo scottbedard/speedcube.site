@@ -101,6 +101,7 @@ class Solves extends Controller
         Solve::select('puzzle_id', DB::raw('count(*) as total'))
             ->where('status', 'complete')
             ->groupBy('puzzle_id')
+            ->orderBy('total', 'desc')
             ->get()
             ->each(function ($result) use (&$totals) {
                 $totals[ucfirst(Puzzle::getName($result->puzzle_id))] = $result->total;
