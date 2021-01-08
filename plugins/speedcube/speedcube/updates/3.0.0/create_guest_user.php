@@ -18,8 +18,9 @@ class CreateGuestUser extends Migration
 
         $password = Str::random(40);
 
-        $user->name = 'Guest';
+        $user->email = 'guest@speedcube.site';
         $user->id = 0;
+        $user->name = 'Guest';
         $user->password = $password;
         $user->password_confirmation = $password;
 
