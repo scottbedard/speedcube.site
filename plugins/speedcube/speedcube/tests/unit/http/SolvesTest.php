@@ -19,10 +19,9 @@ class SolvesTest extends PluginTestCase
         $data = json_decode($response->getContent(), true);
 
         $this->assertEquals(1, Solve::count());
-        $this->assertEquals(0, $data['model']['configId']);
         $this->assertEquals(0, $data['model']['userId']);
+        $this->assertEquals(1, $data['model']['id']);
         $this->assertEquals(1, $data['model']['puzzleId']);
-        $this->assertNotEmpty($data['model']['scramble']);
         $this->assertNotEmpty($data['model']['scrambledState']);
     }
 

@@ -4,6 +4,7 @@ namespace Speedcube\Speedcube\Tests;
 
 use App;
 use Auth;
+use Config;
 use Illuminate\Foundation\AliasLoader;
 use PluginTestCase as BasePluginTestCase;
 use System\Classes\PluginManager;
@@ -39,6 +40,9 @@ abstract class PluginTestCase extends BasePluginTestCase
         App::singleton('user.auth', function() {
             return \RainLab\User\Classes\AuthManager::instance();
         });
+
+        // set rainlab.user min password length
+        Config::set('rainlab.user::minPasswordLength', 8);
 
         // always start from a logged out state
         Auth::logout();

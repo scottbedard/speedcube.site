@@ -3,6 +3,7 @@
 namespace Speedcube\Speedcube\Http\Controllers;
 
 use Auth;
+use Illuminate\Support\Arr;
 use Speedcube\Speedcube\Classes\ApiController;
 use Speedcube\Speedcube\Models\Solve;
 
@@ -26,7 +27,12 @@ class SolvesController extends ApiController
         ]);
 
         return $this->success([
-            'model' => $model,
+            'model' => Arr::only($model->toArray(), [
+                'id',
+                'puzzle_id',
+                'scrambled_state',
+                'user_id',
+            ]),
         ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Speedcube\Speedcube\Updates;
 
+use Config;
 use Illuminate\Support\Str;
 use October\Rain\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
@@ -12,6 +13,8 @@ class CreateGuestUser extends Migration
 {
     public function up()
     {
+        \Config::set('rainlab.user::minPasswordLength', 8);
+
         $user = User::firstOrNew([
             'username' => 'guest',
         ]);
