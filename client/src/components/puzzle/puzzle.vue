@@ -19,7 +19,7 @@
 import { config as userConfig } from '@/app/store/user/getters';
 import { Cube, Dodecaminx } from '@bedard/twister';
 import { computed, defineComponent, PropType } from 'vue';
-import { isNumber } from 'lodash-es';
+import { isArray, isNumber } from 'lodash-es';
 import VAmbientLight from '@/components/three/lights/ambient-light.vue';
 import VCube from '@/components/puzzle/cube/cube.vue';
 import VDodecaminx from '@/components/puzzle/dodecaminx/dodecaminx.vue';
@@ -47,7 +47,14 @@ export default defineComponent({
     });
 
     const normalizedConfig = computed<NormalizedConfig>(() => {
-      return props.config as NormalizedConfig || userConfig.value(props.type);
+      const config = props.config as NormalizedConfig || userConfig.value(props.type);
+
+      return {
+        ...config,
+        colors: (isArray(config.colors) && props.masked)
+          ? config.colors.map(() => '#6B7280')
+          : config.colors,
+      };
     });
 
     const puzzle = computed(() => {
@@ -79,6 +86,10 @@ export default defineComponent({
     currentTurn: {
       default: '',
       type: String,
+    },
+    masked: {
+      default: false,
+      type: Boolean,
     },
     model: {
       required: true,
