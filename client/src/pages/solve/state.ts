@@ -26,8 +26,14 @@ export const pendingKeyboardConfig = ref<KeyboardConfig | null>(null);
  */
 export function resetSolveState() {
   currentKeyspace.value = 'default';
+  isScrambleLoading.value = false;
   isTurningDisabled.value = false;
   pendingConfig.value = null;
   pendingConfig.value = null;
   pendingKeyboardConfig.value = null;
 }
+
+/**
+ * Scrambled loading.
+ */
+export const isScrambleLoading = ref(false);
