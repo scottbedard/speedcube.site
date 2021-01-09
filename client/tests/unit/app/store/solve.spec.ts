@@ -1,6 +1,7 @@
 import { Cube, Dodecaminx } from '@bedard/twister';
 
 import {
+  beginSolve,
   reset,
 } from '@/app/store/solve/actions';
 
@@ -15,8 +16,18 @@ import {
 describe('solve store', () => {
   beforeEach(reset);
 
+  describe('actions', () => {
+    it.skip('beginSolve', () => {
+      beginSolve();
+      // sets loading state
+      // fetches scramble for puzzle name
+      // applies scrambled state on success
+      // initiates inspection
+    });
+  });
+
   describe('computed', () => {
-    it('creates model when puzzle id changes', () => {
+    it('model', () => {
       puzzleName.value = '2x2';
       expect(model.value).toBeInstanceOf(Cube);
       expect(model.value?.options.size).toBe(2);
