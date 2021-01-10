@@ -1,7 +1,10 @@
 import { Cube, Dodecaminx } from '@bedard/twister';
+import { nextTick } from 'vue';
+import createSolveFixture from '~/fixtures/create-solve';
+import mockAxios from 'jest-mock-axios';
 
 import {
-  beginSolve,
+  createSolve,
   reset,
 } from '@/app/store/solve/actions';
 
@@ -11,18 +14,33 @@ import {
 
 import {
   puzzleName,
+  status,
 } from '@/app/store/solve/state';
 
 describe('solve store', () => {
-  beforeEach(reset);
+  beforeEach(() => {
+    reset();
+    mockAxios.reset();
+  });
 
   describe('actions', () => {
-    it.skip('beginSolve', () => {
-      beginSolve();
-      // sets loading state
-      // fetches scramble for puzzle name
-      // applies scrambled state on success
-      // initiates inspection
+    describe('createSolve', () => {
+      it('creates a solve and begins solving process', async () => {
+        expect(status.value).toBe('idle');
+
+        createSolve();
+
+        mockAxios.mockResponseFor(
+          { url: '/api/speedcube/speedcube/solves' },
+          { data: createSolveFixture },
+        );
+
+        await mockAxios.lastPromiseGet();
+        await nextTick();
+
+        expect(status.value).toBe('scramble');
+        expect(model.value?.isSolved()).toBe(false);
+      });
     });
   });
 

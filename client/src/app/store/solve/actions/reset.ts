@@ -2,6 +2,7 @@ import { defaultPuzzleName } from '../config';
 
 import {
   puzzleName,
+  status,
 } from '../state';
 
 /**
@@ -9,4 +10,5 @@ import {
  */
 export function reset() {
   puzzleName.value = defaultPuzzleName;
+  status.value = 'idle';
 }
