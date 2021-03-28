@@ -22,11 +22,11 @@ if ($local) {
     })->where('path', '.*');
 }
 
-Route::get('/', function () use ($local) {
+Route::get('/{path}', function () use ($local) {
     $manifest = json_decode(File::get(public_path('dist/manifest.json')), true);
 
     return view('index', [
         'local' => $local,
         'manifest' => $manifest,
     ]);
-});
+})->where('path', '.*');
