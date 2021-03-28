@@ -2,14 +2,10 @@
 .env.backup
 .phpunit.result.cache
 /node_modules
-/public/assets
-/public/favicon.ico
-/public/manifest.json
-/public/storage
+/public/dist
 /storage/*.key
 /vendor
 docker-compose.override.yml
 Homestead.json
 Homestead.yaml
 npm-debug.log
-yarn-error.log

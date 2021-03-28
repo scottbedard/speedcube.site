@@ -23,7 +23,7 @@ if ($local) {
 }
 
 Route::get('/', function () use ($local) {
-    $manifest = json_decode(File::get(public_path('manifest.json')), true);
+    $manifest = json_decode(File::get(public_path('dist/manifest.json')), true);
 
     return view('index', [
         'local' => $local,

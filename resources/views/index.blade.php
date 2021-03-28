@@ -7,7 +7,7 @@
     <title>Vite App</title>
     @unless ($local)
       @foreach ($manifest['src/main.ts']['css'] as $stylesheet)
-        <link href="/{{ $stylesheet }}" rel="stylesheet">
+        <link href="/dist/{{ $stylesheet }}" rel="stylesheet">
       @endforeach
     @endunless
   </head>
@@ -17,7 +17,7 @@
       <script type="module" src="http://localhost:3000/@vite/client"></script>
       <script type="module" src="http://localhost:3000/src/main.ts"></script>
     @else
-      <script type="module" src="/{{ $manifest['src/main.ts']['file'] }}"></script>
+      <script type="module" src="/dist/{{ $manifest['src/main.ts']['file'] }}"></script>
     @endif
   </body>
 </html>
