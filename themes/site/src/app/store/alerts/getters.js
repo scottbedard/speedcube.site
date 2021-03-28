@@ -1,6 +1,0 @@
-//
-// getters
-//
-export default {
-
-};
