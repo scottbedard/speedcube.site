@@ -5,6 +5,11 @@
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
+    @unless ($local)
+      @foreach ($manifest['src/main.ts']['css'] as $stylesheet)
+        <link href="/{{ $stylesheet }}" rel="stylesheet">
+      @endforeach
+    @endunless
   </head>
   <body>
     <div id="app"></div>
@@ -12,7 +17,7 @@
       <script type="module" src="http://localhost:3000/@vite/client"></script>
       <script type="module" src="http://localhost:3000/src/main.ts"></script>
     @else
-      production
+      <script type="module" src="/{{ $manifest['src/main.ts']['file'] }}"></script>
     @endif
   </body>
 </html>
