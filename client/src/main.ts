@@ -1,5 +1,5 @@
 import 'vite/dynamic-import-polyfill'
-import './index.css'
+import './index.scss'
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from './app/routes'

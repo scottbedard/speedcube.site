@@ -1,3 +1,4 @@
 {
+  "scss.validate": false,
   "volar.tsPlugin": true,
 }

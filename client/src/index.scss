@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind utilities;
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  @apply hover:text-green-500;
+}
+
+// for single elements, we'll avoid extracting vue components and
+// use a .tw-* naming convention to extract the common styles
+.tw-debug {
+  @apply border-4 border-dashed border-red-500;
+}
+
+.tw-margin {
+  @apply px-6;
+}

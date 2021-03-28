@@ -1,12 +1,15 @@
 <template>
-  <h1 class="p-6 text-4xl font-bold">Soon...</h1>
-  <RouterView />
+  <DefaultLayout />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import DefaultLayout from '@/layouts/DefaultLayout.vue'
 
 export default defineComponent({
+  components: {
+    DefaultLayout,
+  },
   name: 'App',
 })
 </script>
