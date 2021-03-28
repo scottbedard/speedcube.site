@@ -11,13 +11,23 @@
       speedcube.site
     </RouterLink>
 
-    <nav>
+    <nav class="flex gap-3">
       <a
         href="#"
         :title="`Click to toggle ${isDark ? 'light' : 'dark'} mode`"
         @click.prevent="toggleDarkMode">
         <Icon
           :name="isDark ? 'moon' : 'sun'"
+          :size="6"
+          :stroke="2" />
+      </a>
+
+      <a
+        href="https://github.com/scottbedard/speedcube.site"
+        target="_blank"
+        title="Participate on GitHub">
+        <Icon
+          name="github"
           :size="6"
           :stroke="2" />
       </a>
