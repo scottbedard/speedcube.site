@@ -1,5 +1,5 @@
 <template>
-  <img class="mx-auto" alt="Vue logo" src="./assets/logo.png" />
+  <h1 class="p-6 text-4xl font-bold">Soon...</h1>
 </template>
 
 <script lang="ts">
