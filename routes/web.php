@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// serve vite assets in development
+if (app()->environment('local')) {
+    Route::get('/src/{path}', function ($path) {
+        return File::get(base_path('client/src') . '/' . $path);
+    })->where('path', '.*');
+}
+
 Route::get('/', function () {
     return view('index');
 });
