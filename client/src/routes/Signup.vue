@@ -1,7 +1,7 @@
 <template>
   <h1 class="tw-page-title">Create an account</h1>
 
-  <Card class="mx-auto max-w-lg" padded>
+  <Card class="mb-6 mx-auto max-w-lg" padded>
     <form class="grid gap-6" @submit.prevent="submit">
       <Input
         autofocus
@@ -24,6 +24,10 @@
       </div>
     </form>
   </Card>
+
+  <p class="text-center">
+    Already have an account? <RouterLink :to="{ name: 'login' }">Click here to log in.</RouterLink>
+  </p>
 </template>
 
 <script lang="ts">
