@@ -9,11 +9,13 @@
   "dependencies": {
     "@vueuse/core": "^4.6.2",
     "feather-icons": "^4.28.0",
+    "lodash-es": "^4.17.21",
     "vue": "^3.0.5",
     "vue-router": "^4.0.5"
   },
   "devDependencies": {
     "@tailwindcss/jit": "^0.1.17",
+    "@types/lodash-es": "^4.17.4",
     "@vitejs/plugin-vue": "^1.1.5",
     "@vue/compiler-sfc": "^3.0.5",
     "autoprefixer": "^10.2.5",
