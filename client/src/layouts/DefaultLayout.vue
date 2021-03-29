@@ -11,8 +11,12 @@
       speedcube.site
     </RouterLink>
 
-    <nav class="flex items-center gap-6">
-      <RouterLink :to="{ name: 'signup' }">
+    <nav class="flex items-center gap-8">
+      <RouterLink :to="{ name: 'login' }">
+        Login
+      </RouterLink>
+
+      <RouterLink :to="{ name: 'create-account' }">
         Sign Up
       </RouterLink>
 

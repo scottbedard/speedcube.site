@@ -20,9 +20,9 @@ export const routes: RouteRecordRaw[] = [
     path: '/login',
   },
   {
-    component: () => import('@/routes/Signup.vue'),
-    name: 'signup',
-    path: '/signup',
+    component: () => import('@/routes/CreateAccount.vue'),
+    name: 'create-account',
+    path: '/create-account',
   },
   {
     component: () => import('@/routes/404.vue'),
