@@ -16,7 +16,7 @@
       @endforeach
     @endunless
   </head>
-  <body class="bg-gray-100 text-gray-800 min-h-screen dark:bg-gray-900 dark:text-gray-100">
+  <body class="bg-gray-100 min-h-screen text-gray-800 text-lg dark:bg-gray-900 dark:text-gray-100">
     <div
       class="font-sans"
       id="app"

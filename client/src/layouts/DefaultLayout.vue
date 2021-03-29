@@ -1,5 +1,5 @@
 <template>
-  <header class="flex h-16 items-center justify-between tw-margin">
+  <header class="flex h-20 items-center justify-between mb-6 tw-margin">
     <RouterLink
       class="flex font-bold items-center text-xl"
       :to="{ name: 'home' }">
@@ -46,12 +46,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useDark, useToggle } from '@vueuse/core'
-import Icon from '@/components/Icon.vue'
+import { Icon } from '@/components'
 
 export default defineComponent({
   setup() {
     const iconSize = 6
-    const iconStroke = 1.5
+    const iconStroke = 1.8
     const isDark = useDark()
     const toggleDarkMode = useToggle(isDark)
 

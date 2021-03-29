@@ -20,3 +20,7 @@ a {
 .tw-margin {
   @apply px-6;
 }
+
+.tw-page-title {
+  @apply font-bold mb-6 text-center text-3xl;
+}
