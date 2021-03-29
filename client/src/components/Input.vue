@@ -8,7 +8,7 @@
     </div>
 
     <input
-      class="appearance-none bg-gray-100 border border-gray-200 flex-1 placeholder-gray-400 px-4 py-2 rounded-md text-gray-700 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-800"
+      class="appearance-none bg-gray-100 border border-gray-200 placeholder-gray-400 px-4 py-2 rounded-md text-gray-700 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-800"
       ref="input"
       :id="id"
       :placeholder="placeholder"
