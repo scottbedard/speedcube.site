@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
@@ -9,8 +10,14 @@ class UsersController extends Controller
     /**
      * Store
      */
-    public function store()
+    public function store(Request $request)
     {
-        return 'create user';
+        $data = $request->post();
+
+        $user = User::create($data);
+    
+        return [
+            'user' => $user,
+        ];
     }
 }
