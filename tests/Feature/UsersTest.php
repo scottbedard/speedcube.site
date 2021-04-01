@@ -18,7 +18,7 @@ class UsersTest extends TestCase
             'username' => 'AwesomeCuber',
             'email' => 'awesome.cuber@example.com',
             'password' => '12345678',
-            'password_confirmation' => '12345678',
+            'passwordConfirmation' => '12345678',
         ]);
 
         $response->assertStatus(200);
