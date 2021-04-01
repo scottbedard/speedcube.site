@@ -20,6 +20,18 @@ class Utils
     }
 
     /**
+     * Test if a value is JSON
+     *
+     * @param any $val
+     *
+     * @return boolean
+     */
+    public static function isJson($val)
+    {
+        return is_string($val) && json_decode($val) !== null;
+    }
+
+    /**
      * Apply a function to array keys recursively.
      *
      * @param array $arr
