@@ -1,5 +1,7 @@
 <?php
 
+
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,10 +24,14 @@ if ($local) {
     })->where('path', '.*');
 }
 
+// catch-all route for single page application
 Route::get('/{path}', function () use ($local) {
     $manifest = json_decode(File::get(public_path('dist/manifest.json')), true);
 
     return view('index', [
+        'context' => json_encode([
+            'user' => Auth::user(),
+        ]),
         'local' => $local,
         'manifest' => $manifest,
     ]);

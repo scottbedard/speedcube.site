@@ -15,6 +15,10 @@
         <link href="/dist/{{ $stylesheet }}" rel="stylesheet">
       @endforeach
     @endunless
+
+    <script>
+      window.context = {!! $context !!}
+    </script>
   </head>
   <body class="bg-gray-100 min-h-screen text-gray-800 text-lg dark:bg-gray-900 dark:text-gray-100">
     <div
