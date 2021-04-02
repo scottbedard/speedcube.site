@@ -1,4 +1,7 @@
 {
+  "[php]": {
+    "editor.tabSize": 4
+  },
   "scss.validate": false,
   "volar.tsPlugin": true,
 }
