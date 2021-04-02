@@ -20,25 +20,36 @@
         Sign Up
       </RouterLink>
 
-      <a
-        href="#"
-        :title="`Click to toggle ${isDark ? 'light' : 'dark'} mode`"
-        @click.prevent="toggleDarkMode">
-        <Icon
-          :name="isDark ? 'moon' : 'sun'"
-          :size="iconSize"
-          :stroke="iconStroke" />
-      </a>
+      <div class="flex gap-4">
+        <a
+          href="#"
+          :title="`Click to toggle ${isDark ? 'light' : 'dark'} mode`"
+          @click.prevent="toggleDarkMode">
+          <Icon
+            :name="isDark ? 'moon' : 'sun'"
+            :size="iconSize"
+            :stroke="iconStroke" />
+        </a>
 
-      <a
-        href="https://github.com/scottbedard/speedcube.site"
-        target="_blank"
-        title="Participate on GitHub">
-        <Icon
-          name="github"
-          :size="iconSize"
-          :stroke="iconStroke" />
-      </a>
+        <a
+          href="https://discord.gg/V98D9r7J"
+          title="Join our Discord channel">
+          <Icon
+            name="message-square"
+            :size="iconSize"
+            :stroke="iconStroke" />
+        </a>
+
+        <a
+          href="https://github.com/scottbedard/speedcube.site"
+          target="_blank"
+          title="Participate on GitHub">
+          <Icon
+            name="github"
+            :size="iconSize"
+            :stroke="iconStroke" />
+        </a>  
+      </div>
     </nav>
   </header>
 
