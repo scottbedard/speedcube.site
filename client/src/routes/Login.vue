@@ -15,19 +15,23 @@
         type="password"
         required />
 
-      <Checkbox v-model="data.remember">
-        Remember me
-      </Checkbox>
-      
-      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 justify-end">
-        <RouterLink :to="{ name: 'forgot-password' }">Forgot password?</RouterLink>
-        <Button primary type="submit">Login</Button>
+      <div class="flex flex-wrap items-center gap-6 justify-between">
+        <Checkbox v-model="data.remember">
+          Remember me
+        </Checkbox>
+
+        <Button
+          class="w-full xs:w-auto"
+          primary
+          type="submit">
+          Login
+        </Button>
       </div>
     </form>
   </Card>
 
   <p class="flex flex-wrap justify-center gap-x-8 text-center">
-    <RouterLink :to="{ name: 'create-account' }">Click here to create an account.</RouterLink>
+    <RouterLink :to="{ name: 'forgot-password' }">Forgot password? Click here to reset it.</RouterLink>
   </p>
 </template>
 

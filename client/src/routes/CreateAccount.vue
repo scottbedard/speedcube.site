@@ -28,13 +28,18 @@
         required />
 
       <div class="flex justify-end">
-        <Button primary type="submit">Sign Up</Button>
+        <Button
+          class="w-full xs:w-auto"
+          primary
+          type="submit">
+          Sign Up
+        </Button>
       </div>
     </form>
   </Card>
 
   <p class="text-center">
-    Already have an account? <RouterLink :to="{ name: 'login' }">Click here to log in.</RouterLink>
+    <RouterLink :to="{ name: 'login' }">Have an account? Click here to log in.</RouterLink>
   </p>
 </template>
 
