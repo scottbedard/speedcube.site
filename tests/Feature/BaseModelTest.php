@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
@@ -109,5 +110,22 @@ class BaseModelTest extends TestCase
         $this->assertEquals([
             'field' => ['unique:models,field,1,id'],
         ], $model->validation());
+    }
+
+    public function test_hashable()
+    {
+        $model = new class extends TestModel
+        {
+            public $hashable = ['field'];
+        };
+        
+        $model->field = 'value';
+
+        $this->assertEquals('value', $model->field);
+
+        $model->save();
+
+        $this->assertEquals(60, strlen($model->field));
+        $this->assertTrue(Str::startsWith($model->field, '$2y$'));
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -10,7 +11,7 @@ use Illuminate\Validation\ValidationException;
 class BaseModel extends Model
 {
     /**
-     * Hashable fields.
+     * Hashable attributes.
      */
     public $hashable = [];
 
@@ -28,7 +29,22 @@ class BaseModel extends Model
     {
         static::saving(function ($model) {
             $model->validate();
+            $model->hash();
         });
+    }
+
+    /**
+     * Hash attributes.
+     *
+     * @return void
+     */
+    public function hash()
+    {
+        foreach ($this->hashable as $field) {
+            if ($this->isDirty($field)) {
+                $this->setAttribute($field, Hash::make($this->getAttribute($field)));
+            }
+        }
     }
 
     /**
