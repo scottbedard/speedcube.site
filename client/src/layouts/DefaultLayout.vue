@@ -12,13 +12,19 @@
     </RouterLink>
 
     <nav class="flex items-center gap-8">
-      <RouterLink :to="{ name: 'login' }">
-        Login
-      </RouterLink>
+      <template v-if="isAuthenticated">
+        You're authenticated!
+      </template>
 
-      <RouterLink :to="{ name: 'create-account' }">
-        Sign Up
-      </RouterLink>
+      <template v-else>
+        <RouterLink :to="{ name: 'login' }">
+          Login
+        </RouterLink>
+
+        <RouterLink :to="{ name: 'create-account' }">
+          Sign Up
+        </RouterLink>
+      </template>
 
       <div class="flex gap-4">
         <a
@@ -60,8 +66,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useDark, useToggle } from '@vueuse/core'
 import { Icon } from '@/components'
+import { isAuthenticated } from '@/app/store/computed'
+import { useDark, useToggle } from '@vueuse/core'
 
 export default defineComponent({
   setup() {
@@ -73,6 +80,7 @@ export default defineComponent({
     return {
       iconSize,
       iconStroke,
+      isAuthenticated,
       isDark,
       toggleDarkMode
     }

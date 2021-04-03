@@ -6,22 +6,26 @@
       <Input
         v-model="data.username"
         autofocus
-        label="Username" />
+        label="Username"
+        required />
 
       <Input
         v-model="data.email"
         label="Email Address"
-        type="email" />
+        type="email"
+        required />
 
       <Input
         v-model="data.password"
         label="Password"
-        type="password" />
+        type="password"
+        required />
 
       <Input
         v-model="data.passwordConfirmation"
         label="Confirm Password"
-        type="password" />
+        type="password"
+        required />
 
       <div class="flex justify-end">
         <Button primary type="submit">Sign Up</Button>
@@ -37,14 +41,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Button, Card, Input } from '@/components'
-import { useCreateAccount } from '@/app/behaviors/create-account'
+import { useCreateUser } from '@/app/behaviors/create-user'
 
 export default defineComponent({
   setup() {
-    const { createAccount, data } = useCreateAccount()
+    const { createUser, data } = useCreateUser()
 
     const submit = () => {
-      createAccount()
+      createUser()
     }
 
     return {

@@ -74,8 +74,8 @@ class User extends BaseModel implements
      * @var array
      */
     public $rules = [
-        'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        'email' => ['required', 'string', 'email', 'max:255', 'unique'],
         'password' => ['required:create', 'string', 'confirmed', 'min:8'],
-        'username' => ['required', 'string', 'between:2,255', 'unique:users'],
+        'username' => ['required', 'string', 'between:2,255', 'unique'],
     ];
 }

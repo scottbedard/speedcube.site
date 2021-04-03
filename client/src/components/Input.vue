@@ -5,6 +5,9 @@
         v-if="label"
         v-text="label"
         :for="id" />
+      <sup
+        v-if="required"
+        class="bg-green-500 h-1.5 inline-block mb-1 ml-0.5 rounded-full w-1.5" />
     </div>
 
     <input
@@ -12,6 +15,7 @@
       ref="input"
       :id="id"
       :placeholder="placeholder"
+      :required="required"
       :type="type"
       :value="modelValue"
       @input="onInput" />
@@ -63,6 +67,10 @@ export default defineComponent({
     },
     placeholder: {
       type: String
+    },
+    required: {
+      default: false,
+      type: Boolean,
     },
     type: {
       default: 'text',

@@ -1,10 +1,12 @@
+import { CreateUserResponse } from '@/app/types/api'
 import { reactive, ref } from 'vue'
+import { state } from '@/app/store/state'
 import axios from 'axios'
 
 /**
  * Create an account
  */
-export function useCreateAccount() {
+export function useCreateUser() {
   const data = reactive({
     username: '',
     email: '',
@@ -14,12 +16,12 @@ export function useCreateAccount() {
 
   const loading = ref(false)
 
-  const createAccount = () => {
+  const createUser = () => {
     loading.value = true
 
-    return axios.post('/api/users', data).then(() => {
+    return axios.post<CreateUserResponse>('/api/users', data).then((response) => {
       // success
-      console.log('success')
+      state.user = response.data.user
     }, (err) => {
       // failed
       console.log('failed', err)
@@ -29,7 +31,7 @@ export function useCreateAccount() {
   }
 
   return {
-    createAccount,
+    createUser,
     data,
     loading,
   }
