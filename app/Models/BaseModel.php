@@ -11,9 +11,14 @@ use Illuminate\Validation\ValidationException;
 class BaseModel extends Model
 {
     /**
-     * Hashable attributes.
+     * Attributes to hash if dirty before saving.
      */
     public $hashable = [];
+
+    /**
+     * Attributes to purge from the model before saving.
+     */
+    public $purgeable = [];
 
     /**
      * Validation rules.
@@ -29,6 +34,7 @@ class BaseModel extends Model
     {
         static::saving(function ($model) {
             $model->validate();
+            $model->purge();
             $model->hash();
         });
     }
@@ -45,6 +51,16 @@ class BaseModel extends Model
                 $this->setAttribute($field, Hash::make($this->getAttribute($field)));
             }
         }
+    }
+
+    /**
+     * Purge attributes.
+     *
+     * @return void
+     */
+    public function purge()
+    {
+        $this->attributes = array_diff_key($this->attributes, array_flip($this->purgeable));
     }
 
     /**

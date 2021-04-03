@@ -28,6 +28,45 @@ class BaseModelTest extends TestCase
         });
     }
 
+    public function test_hashable()
+    {
+        $model = new class extends TestModel
+        {
+            public $hashable = ['field'];
+        };
+        
+        $model->field = 'value';
+
+        $this->assertEquals('value', $model->field);
+
+        $model->save();
+
+        $this->assertEquals(60, strlen($model->field));
+        $this->assertTrue(Str::startsWith($model->field, '$2y$'));
+    }
+
+    public function test_purgeable()
+    {
+        $model = new class extends TestModel
+        {
+            public $attributes = [
+                'field' => 'value',
+                'password_confirmation' => '12345678',
+            ];
+
+            public $purgeable = [
+                'password_confirmation',
+            ];
+        };
+
+        $this->assertArrayHasKey('password_confirmation', $model->attributes);
+
+        $model->save();
+
+        $this->assertEquals('value', $model->field);
+        $this->assertArrayNotHasKey('password_confirmation', $model->attributes);
+    }
+
     public function test_validation_failure()
     {
         $model = new class extends TestModel
@@ -110,22 +149,5 @@ class BaseModelTest extends TestCase
         $this->assertEquals([
             'field' => ['unique:models,field,1,id'],
         ], $model->validation());
-    }
-
-    public function test_hashable()
-    {
-        $model = new class extends TestModel
-        {
-            public $hashable = ['field'];
-        };
-        
-        $model->field = 'value';
-
-        $this->assertEquals('value', $model->field);
-
-        $model->save();
-
-        $this->assertEquals(60, strlen($model->field));
-        $this->assertTrue(Str::startsWith($model->field, '$2y$'));
     }
 }
