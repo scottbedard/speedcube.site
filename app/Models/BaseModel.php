@@ -11,17 +11,23 @@ use Illuminate\Validation\ValidationException;
 class BaseModel extends Model
 {
     /**
-     * Attributes to hash if dirty before saving.
+     * Attributes to hash before saving.
+     *
+     * @var array
      */
     public $hashable = [];
 
     /**
-     * Attributes to purge from the model before saving.
+     * Attributes to remove before saving.
+     *
+     * @var array
      */
     public $purgeable = [];
 
     /**
      * Validation rules.
+     *
+     * @var array
      */
     public $rules = [];
 

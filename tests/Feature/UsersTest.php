@@ -3,9 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class UsersTest extends TestCase
@@ -14,8 +13,6 @@ class UsersTest extends TestCase
 
     public function test_create_user()
     {
-        Event::fake();
-
         $response = $this->json('POST', '/api/users', [
             'username' => 'AwesomeCuber',
             'email' => 'awesome.cuber@example.com',
@@ -31,6 +28,8 @@ class UsersTest extends TestCase
         $this->assertEquals('AwesomeCuber', $data['user']['username']);
         $this->assertEquals('awesome.cuber@example.com', $data['user']['email']);
 
-        Event::assertDispatched(Registered::class);
+        $user = Auth::user();
+
+        $this->assertEquals('AwesomeCuber', $user->username);
     }
 }
