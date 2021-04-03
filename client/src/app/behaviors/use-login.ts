@@ -5,8 +5,9 @@ import { reactive } from 'vue'
  */
 export function useLogin() {
   const data = reactive({
-    username: '',
     password: '',
+    remember: false,
+    username: '',
   })
 
   return {

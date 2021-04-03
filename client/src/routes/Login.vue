@@ -14,6 +14,10 @@
         label="Password"
         type="password"
         required />
+
+      <Checkbox v-model="data.remember">
+        Remember me
+      </Checkbox>
       
       <div class="flex flex-wrap items-center gap-x-4 gap-y-2 justify-end">
         <RouterLink :to="{ name: 'forgot-password' }">Forgot password?</RouterLink>
@@ -28,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { Button, Card, Input } from '@/components'
+import { Button, Card, Checkbox, Input } from '@/components'
 import { defineComponent } from 'vue'
 import { useLogin } from '@/app/behaviors'
 
@@ -48,6 +52,7 @@ export default defineComponent({
   components: {
     Button,
     Card,
+    Checkbox,
     Input,
   },
   name: 'Login',
