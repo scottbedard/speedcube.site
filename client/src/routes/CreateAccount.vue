@@ -41,7 +41,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Button, Card, Input } from '@/components'
-import { useCreateUser } from '@/app/behaviors/create-user'
+import { useCreateUser } from '@/app/behaviors/use-create-user'
 
 export default defineComponent({
   setup() {
