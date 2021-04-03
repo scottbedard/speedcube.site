@@ -1,37 +1,56 @@
 <?php
 
-namespace App\Models\Traits;
+namespace App\Models;
 
-use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-trait Validation
+class BaseModel extends Model
 {
     /**
-     * Boot the validation trait for this model.
+     * Hashable fields.
+     */
+    public $hashable = [];
+
+    /**
+     * Validation rules.
+     */
+    public $rules = [];
+
+    /**
+     * Boot.
      *
      * @return void
      */
-    public static function bootValidation()
+    protected static function booted()
     {
-        if (!property_exists(get_called_class(), 'rules')) {
-            throw new Exception(sprintf(
-                'You must define a $rules property in %s to use the Validation trait.',
-                get_called_class()
-            ));
-        }
-
         static::saving(function ($model) {
             $model->validate();
         });
     }
 
     /**
-     * Normalize validation rules
+     * Validate the model.
+     *
+     * @return void
      */
-    protected function processValidationRules()
+    public function validate()
+    {
+        $validator = Validator::make($this->attributes, $this->validation());
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+    }
+
+    /**
+     * Process validation rules.
+     *
+     * @return array
+     */
+    public function validation()
     {
         $processed = [];
 
@@ -50,8 +69,8 @@ trait Validation
                 }
 
                 // unique:table
-                elseif (Str::startsWith($rule, 'unique:')) {
-                    !$this->exists && array_push($processed[$field], $this->processValidationUniqueRule($rule, $field));
+                elseif (Str::startsWith($rule, 'unique')) {
+                    !$this->exists && array_push($processed[$field], $this->validationUnique($rule, $field));
                 }
 
                 // standard rules
@@ -65,14 +84,14 @@ trait Validation
     }
 
     /**
-     * Rebuilds the unique validation rule to force for the existing ID
+     * Process validation unique rule.
      *
      * @param string $definition
      * @param string $fieldName
      *
      * @return string
      */
-    protected function processValidationUniqueRule($definition, $fieldName)
+    protected function validationUnique($definition, $fieldName)
     {
         list($table, $column, $except, $idColumn) = array_pad(explode(',', $definition), 4, null);
 
@@ -82,20 +101,5 @@ trait Validation
         $idColumn = $idColumn ?: $this->getKeyName();
 
         return implode(',', [$table, $column, $except, $idColumn]);
-    }
-
-    /**
-     * Validate the model.
-     */
-    public function validate()
-    {
-        $validator = Validator::make(
-            $this->attributes,
-            $this->processValidationRules()
-        );
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
     }
 }
