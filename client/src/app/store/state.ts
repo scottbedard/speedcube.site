@@ -2,8 +2,8 @@ import { reactive } from 'vue'
 import { User } from '@/app/types/models'
 
 /**
- * Application state
+ * Global application state
  */
-export const state = reactive({
-  user: null as null | User,
+export const state = reactive<{ user: User | null }>({
+  user: window.context.user
 })
