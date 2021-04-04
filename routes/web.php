@@ -22,6 +22,7 @@ Route::prefix('api')->middleware(TransformKeys::class)->group(function () {
 
     // users
     Route::apiResource('users', UsersController::class);
+    Route::post('users/forgot-password', [UsersController::class, 'forgotPassword'])->middleware('guest');
 });
 
 /**
@@ -35,3 +36,7 @@ if (app()->environment('local')) {
  * Single page application
  */
 Route::get('/{path}', [ClientController::class, 'index'])->where('path', '.*');
+
+Route::get('/reset-password/{token}', [ClientController::class, 'index'])
+    ->middleware('guest')
+    ->name('password.reset');

@@ -32,4 +32,26 @@ class UsersTest extends TestCase
 
         $this->assertEquals('AwesomeCuber', $user->username);
     }
+
+    public function test_forgot_password()
+    {
+        $user = User::create([
+            'email' => 'awesome.cuber@example.com',
+            'password_confirmation' => '12345678',
+            'password' => '12345678',
+            'username' => 'AwesomeCuber',
+        ]);
+
+        $response = $this->json('POST', '/api/users/forgot-password', [
+            'email' => 'awesome.cuber@example.com',
+        ]);
+
+        $response->assertStatus(200);
+
+        $data = $response->json();
+
+        $this->assertEquals([
+            'status' => 'passwords.sent',
+        ], $data);
+    }
 }
