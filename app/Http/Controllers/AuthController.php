@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -14,17 +15,16 @@ class AuthController extends Controller
     {
         $credentials = $request->only('username', 'password');
 
-        if (Auth::attempt($credentials, $request->remember)) {
-            $request->session()->regenerate();
-            $user = Auth::user();
-
-            return [
-                'user' => $user,
-            ];
+        if (!Auth::attempt($credentials, $request->remember)) {
+            abort(401, 'Authentication failed');
         }
 
+        $request->session()->regenerate();
+
+        $user = Auth::user();
+
         return [
-            'user' => 'hello',
+            'user' => $user,
         ];
     }
 

@@ -37,6 +37,28 @@ class AuthTest extends TestCase
         $this->assertEquals('awesome.cuber@example.com', $data['user']['email']);
     }
 
+    public function test_login_failed()
+    {
+        $user = User::create([
+            'email' => 'awesome.cuber@example.com',
+            'password_confirmation' => '12345678',
+            'password' => '12345678',
+            'username' => 'AwesomeCuber',
+        ]);
+
+        $this->assertFalse(Auth::check());
+
+        $response = $this->json('POST', '/api/auth/login', [
+            'password' => 'wrong password',
+            'remember' => false,
+            'username' => 'AwesomeCuber',
+        ]);
+
+        $response->assertStatus(401);
+
+        $this->assertFalse(Auth::check());
+    }
+
     public function test_logout()
     {
         Auth::login(User::create([
