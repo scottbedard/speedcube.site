@@ -39,13 +39,17 @@
 import { Button, Card, Checkbox, Input } from '@/components'
 import { defineComponent } from 'vue'
 import { useLogin } from '@/app/behaviors'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   setup() {
     const { data, login } = useLogin()
+    const router = useRouter()
 
     const submit = () => {
-      login()
+      login().then(() => {
+        router.replace({ name: 'home' })
+      })
     }
 
     return {

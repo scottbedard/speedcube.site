@@ -1,4 +1,5 @@
 import { RouteRecordRaw } from 'vue-router'
+import { isAuthenticated } from '@/app/store/computed'
 
 /**
  * Application routes
@@ -15,11 +16,21 @@ export const routes: RouteRecordRaw[] = [
     path: '/components',
   },
   {
+    beforeEnter: () => {
+      if (isAuthenticated.value) {
+        return { name: 'home' }
+      }
+    },
     component: () => import('@/routes/ForgotPassword.vue'),
     name: 'forgot-password',
     path: '/forgot-password',
   },
   {
+    beforeEnter: () => {
+      if (isAuthenticated.value) {
+        return { name: 'home' }
+      }
+    },
     component: () => import('@/routes/Login.vue'),
     name: 'login',
     path: '/login',
@@ -30,6 +41,11 @@ export const routes: RouteRecordRaw[] = [
     path: '/logout',
   },
   {
+    beforeEnter: () => {
+      if (isAuthenticated.value) {
+        return { name: 'home' }
+      }
+    },
     component: () => import('@/routes/CreateAccount.vue'),
     name: 'create-account',
     path: '/create-account',
