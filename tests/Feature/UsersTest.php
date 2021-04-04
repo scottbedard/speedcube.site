@@ -3,8 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use DB;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Password;
 use Tests\TestCase;
 
 class UsersTest extends TestCase
@@ -14,10 +18,10 @@ class UsersTest extends TestCase
     public function test_create_user()
     {
         $response = $this->json('POST', '/api/users', [
-            'username' => 'AwesomeCuber',
             'email' => 'awesome.cuber@example.com',
             'password' => '12345678',
             'passwordConfirmation' => '12345678',
+            'username' => 'AwesomeCuber',
         ]);
 
         $response->assertStatus(200);
@@ -33,8 +37,10 @@ class UsersTest extends TestCase
         $this->assertEquals('AwesomeCuber', $user->username);
     }
 
-    public function test_forgot_password()
+    public function test_password_can_be_reset_with_valid_token()
     {
+        Notification::fake();
+
         $user = User::create([
             'email' => 'awesome.cuber@example.com',
             'password_confirmation' => '12345678',
@@ -42,16 +48,25 @@ class UsersTest extends TestCase
             'username' => 'AwesomeCuber',
         ]);
 
-        $response = $this->json('POST', '/api/users/forgot-password', [
-            'email' => 'awesome.cuber@example.com',
-        ]);
+        $this->post('/api/users/forgot-password', ['email' => $user->email]);
 
-        $response->assertStatus(200);
+        Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
+            $response = $this->post('/api/users/reset-password', [
+                'email' => $user->email,
+                'password_confirmation' => 'password',
+                'password' => 'password',
+                'token' => $notification->token,
+            ]);
 
-        $data = $response->json();
+            $response->assertSessionHasNoErrors();
 
-        $this->assertEquals([
-            'status' => 'passwords.sent',
-        ], $data);
+            $response->assertStatus(200);
+
+            $this->assertEquals([
+                'success' => true,
+            ], $response->json());
+            
+            return true;
+        });
     }
 }

@@ -23,6 +23,7 @@ Route::prefix('api')->middleware(TransformKeys::class)->group(function () {
     // users
     Route::apiResource('users', UsersController::class);
     Route::post('users/forgot-password', [UsersController::class, 'forgotPassword'])->middleware('guest');
+    Route::post('users/reset-password', [UsersController::class, 'resetPassword'])->middleware('guest');
 });
 
 /**
