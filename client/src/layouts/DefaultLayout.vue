@@ -13,7 +13,9 @@
 
     <nav class="flex items-center gap-8">
       <template v-if="isAuthenticated">
-        You're authenticated!
+        <RouterLink :to="{ name: 'logout' }">
+          Log out
+        </RouterLink>
       </template>
 
       <template v-else>
@@ -70,10 +72,11 @@ import { Icon } from '@/components'
 import { isAuthenticated } from '@/app/store/computed'
 import { useDark, useToggle } from '@vueuse/core'
 
+const iconSize = 6
+const iconStroke = 1.8
+
 export default defineComponent({
   setup() {
-    const iconSize = 6
-    const iconStroke = 1.8
     const isDark = useDark()
     const toggleDarkMode = useToggle(isDark)
 
@@ -82,7 +85,7 @@ export default defineComponent({
       iconStroke,
       isAuthenticated,
       isDark,
-      toggleDarkMode
+      toggleDarkMode,
     }
   },
   components: {
