@@ -13,19 +13,14 @@ class AuthTest extends TestCase
 
     public function test_login_success()
     {
-        $user = User::create([
-            'email' => 'awesome.cuber@example.com',
-            'password_confirmation' => '12345678',
-            'password' => '12345678',
-            'username' => 'AwesomeCuber',
-        ]);
+        $user = User::factory()->create();
 
         $this->assertFalse(Auth::check());
 
         $response = $this->json('POST', '/api/auth/login', [
-            'password' => '12345678',
+            'password' => 'password',
             'remember' => false,
-            'username' => 'AwesomeCuber',
+            'username' => $user->username,
         ]);
 
         $response->assertStatus(200);
@@ -33,25 +28,21 @@ class AuthTest extends TestCase
         $data = $response->json();
 
         $this->assertTrue(Auth::check());
-        $this->assertEquals('AwesomeCuber', $data['user']['username']);
-        $this->assertEquals('awesome.cuber@example.com', $data['user']['email']);
+        $this->assertEquals($user->email, $data['user']['email']);
+        $this->assertEquals($user->id, $data['user']['id']);
+        $this->assertEquals($user->username, $data['user']['username']);
     }
 
     public function test_login_failed()
     {
-        $user = User::create([
-            'email' => 'awesome.cuber@example.com',
-            'password_confirmation' => '12345678',
-            'password' => '12345678',
-            'username' => 'AwesomeCuber',
-        ]);
+        $user = User::factory()->create();
 
         $this->assertFalse(Auth::check());
 
         $response = $this->json('POST', '/api/auth/login', [
             'password' => 'wrong password',
             'remember' => false,
-            'username' => 'AwesomeCuber',
+            'username' => $user->username,
         ]);
 
         $response->assertStatus(401);

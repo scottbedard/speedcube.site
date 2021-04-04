@@ -26,27 +26,21 @@ class UsersTest extends TestCase
 
         $response->assertStatus(200);
 
+        $user = Auth::user();
+
         $data = $response->json();
 
         $this->assertEquals(1, User::count());
-        $this->assertEquals('AwesomeCuber', $data['user']['username']);
-        $this->assertEquals('awesome.cuber@example.com', $data['user']['email']);
-
-        $user = Auth::user();
-
-        $this->assertEquals('AwesomeCuber', $user->username);
+        $this->assertEquals($user->email, $data['user']['email']);
+        $this->assertEquals($user->id, $data['user']['id']);
+        $this->assertEquals($user->username, $data['user']['username']);
     }
 
     public function test_password_can_be_reset_with_valid_token()
     {
         Notification::fake();
 
-        $user = User::create([
-            'email' => 'awesome.cuber@example.com',
-            'password_confirmation' => '12345678',
-            'password' => '12345678',
-            'username' => 'AwesomeCuber',
-        ]);
+        $user = User::factory()->create();
 
         $this->post('/api/users/forgot-password', ['email' => $user->email]);
 
