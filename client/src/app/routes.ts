@@ -1,6 +1,11 @@
 import { RouteRecordRaw } from 'vue-router'
 import { isAuthenticated } from '@/app/store/computed'
 
+// guard for routes that are only visible to guests
+const guestsOnly = () => {
+  if (isAuthenticated.value) return { name: 'home' }
+}
+
 /**
  * Application routes
  */
@@ -16,21 +21,13 @@ export const routes: RouteRecordRaw[] = [
     path: '/components',
   },
   {
-    beforeEnter: () => {
-      if (isAuthenticated.value) {
-        return { name: 'home' }
-      }
-    },
+    beforeEnter: guestsOnly,
     component: () => import('@/routes/ForgotPassword.vue'),
     name: 'forgot-password',
     path: '/forgot-password',
   },
   {
-    beforeEnter: () => {
-      if (isAuthenticated.value) {
-        return { name: 'home' }
-      }
-    },
+    beforeEnter: guestsOnly,
     component: () => import('@/routes/Login.vue'),
     name: 'login',
     path: '/login',
@@ -41,14 +38,16 @@ export const routes: RouteRecordRaw[] = [
     path: '/logout',
   },
   {
-    beforeEnter: () => {
-      if (isAuthenticated.value) {
-        return { name: 'home' }
-      }
-    },
+    beforeEnter: guestsOnly,
     component: () => import('@/routes/CreateAccount.vue'),
     name: 'create-account',
     path: '/create-account',
+  },
+  {
+    beforeEnter: guestsOnly,
+    component: () => import('@/routes/ResetPassword.vue'),
+    name: 'reset-password',
+    path: '/reset-password/:token',
   },
   {
     component: () => import('@/routes/404.vue'),

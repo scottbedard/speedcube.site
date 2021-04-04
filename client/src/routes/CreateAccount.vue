@@ -11,7 +11,7 @@
 
       <Input
         v-model="data.email"
-        label="Email Address"
+        label="Email address"
         type="email"
         required />
 
@@ -23,7 +23,7 @@
 
       <Input
         v-model="data.passwordConfirmation"
-        label="Confirm Password"
+        label="Confirm password"
         type="password"
         required />
 
@@ -32,7 +32,7 @@
           class="w-full xs:w-auto"
           primary
           type="submit">
-          Sign Up
+          Sign up
         </Button>
       </div>
     </form>

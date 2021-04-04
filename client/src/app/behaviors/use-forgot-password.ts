@@ -1,7 +1,7 @@
 import { reactive, ref } from 'vue'
 
 /**
- * Reset a user's password
+ * Start the password reset process
  */
 export function useForgotPassword() {
   const data = reactive({
