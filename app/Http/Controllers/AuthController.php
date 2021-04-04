@@ -27,4 +27,16 @@ class AuthController extends Controller
             'user' => 'hello',
         ];
     }
+
+    /**
+     * Log the user out.
+     */
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+    }
 }

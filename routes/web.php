@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('api')->middleware(TransformKeys::class)->group(function () {
     // auth
     Route::prefix('auth')->group(function () {
+        Route::any('logout', [AuthController::class, 'logout']);
         Route::post('login', [AuthController::class, 'login']);
     });
 

@@ -11,12 +11,7 @@ class AuthTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function test_login()
+    public function test_login_success()
     {
         $user = User::create([
             'email' => 'awesome.cuber@example.com',
@@ -37,11 +32,26 @@ class AuthTest extends TestCase
 
         $data = $response->json();
 
+        $this->assertTrue(Auth::check());
         $this->assertEquals('AwesomeCuber', $data['user']['username']);
         $this->assertEquals('awesome.cuber@example.com', $data['user']['email']);
+    }
 
-        $user = Auth::user();
-        
-        $this->assertEquals('AwesomeCuber', $user->username);
+    public function test_logout()
+    {
+        Auth::login(User::create([
+            'email' => 'awesome.cuber@example.com',
+            'password_confirmation' => '12345678',
+            'password' => '12345678',
+            'username' => 'AwesomeCuber',
+        ]));
+
+        $this->assertTrue(Auth::check());
+
+        $response = $this->get('/api/auth/logout');
+
+        $response->assertStatus(200);
+
+        $this->assertFalse(Auth::check());
     }
 }
