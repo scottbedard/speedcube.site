@@ -68,5 +68,10 @@ class UsersTest extends TestCase
             
             return true;
         });
+
+        $this->assertTrue(Auth::attempt([
+            'username' => $user->username,
+            'password' => 'password',
+        ]));
     }
 }
