@@ -24,14 +24,14 @@
 <script lang="ts">
 import { Button, Card, Input } from '@/components'
 import { defineComponent } from 'vue'
-import { useResetPassword } from '@/app/behaviors'
+import { useForgotPassword } from '@/app/behaviors'
 
 export default defineComponent({
   setup() {
-    const { data, resetPassword } = useResetPassword()
+    const { data, forgotPassword } = useForgotPassword()
 
     const submit = () => {
-      resetPassword()
+      forgotPassword()
     }
 
     return {
