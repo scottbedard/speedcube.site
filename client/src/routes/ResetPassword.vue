@@ -8,25 +8,30 @@
         autofocus
         label="Email address"
         type="email"
-        required />
+        required
+        :disabled="loading" />
 
       <Input
         v-model="data.password"
         label="New password"
         type="password"
-        required />
+        required
+        :disabled="loading" />
 
       <Input
         v-model="data.passwordConfirmation"
         label="Confirm new password"
         type="password"
-        required />
+        required
+        :disabled="loading" />
 
       <div class="flex justify-end">
         <Button
           class="w-full xs:w-auto"
           primary
-          type="submit">
+          type="submit"
+          :disabled="loading"
+          :loading="loading">
           Reset password
         </Button>
       </div>
@@ -43,7 +48,7 @@ import { useRoute } from 'vue-router'
 export default defineComponent({
   setup() {
     const route = useRoute()
-    const { data, resetPassword } = useResetPassword()
+    const { data, loading, resetPassword } = useResetPassword()
 
     const submit = () => {
       resetPassword(route.params.token as string)
@@ -51,6 +56,7 @@ export default defineComponent({
 
     return {
       data,
+      loading,
       submit
     }
   },

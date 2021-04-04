@@ -7,31 +7,37 @@
         v-model="data.username"
         autofocus
         label="Username"
-        required />
+        required
+        :disabled="loading" />
 
       <Input
         v-model="data.email"
         label="Email address"
         type="email"
-        required />
+        required
+        :disabled="loading" />
 
       <Input
         v-model="data.password"
         label="Password"
         type="password"
-        required />
+        required
+        :disabled="loading" />
 
       <Input
         v-model="data.passwordConfirmation"
         label="Confirm password"
         type="password"
-        required />
+        required
+        :disabled="loading" />
 
       <div class="flex justify-end">
         <Button
           class="w-full xs:w-auto"
           primary
-          type="submit">
+          type="submit"
+          :disabled="loading"
+          :loading="loading">
           Sign up
         </Button>
       </div>
@@ -44,20 +50,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import { Button, Card, Input } from '@/components'
+import { defineComponent } from 'vue'
 import { useCreateUser } from '@/app/behaviors/use-create-user'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   setup() {
-    const { createUser, data } = useCreateUser()
+    const { createUser, data, loading } = useCreateUser()
+    const router = useRouter()
 
     const submit = () => {
-      createUser()
+      createUser().then(() => {
+        router.push({ name: 'home' })
+      })
     }
 
     return {
       data,
+      loading,
       submit
     }
   },

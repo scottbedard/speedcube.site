@@ -7,23 +7,27 @@
         v-model="data.username"
         autofocus
         label="Username"
-        required />
+        required
+        :disabled="loading" />
 
       <Input
         v-model="data.password"
         label="Password"
         type="password"
-        required />
+        required
+        :disabled="loading" />
 
       <div class="flex flex-wrap items-center gap-6 justify-between">
-        <Checkbox v-model="data.remember">
+        <Checkbox v-model="data.remember" :disabled="loading">
           Remember me
         </Checkbox>
 
         <Button
           class="w-full xs:w-auto"
           primary
-          type="submit">
+          type="submit"
+          :disabled="loading"
+          :loading="loading">
           Login
         </Button>
       </div>
@@ -43,7 +47,7 @@ import { useRouter } from 'vue-router'
 
 export default defineComponent({
   setup() {
-    const { data, login } = useLogin()
+    const { data, loading, login } = useLogin()
     const router = useRouter()
 
     const submit = () => {
@@ -54,6 +58,7 @@ export default defineComponent({
 
     return {
       data,
+      loading,
       submit
     }
   },

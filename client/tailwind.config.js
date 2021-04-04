@@ -15,6 +15,12 @@ module.exports = {
         sans: 'Quicksand, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
       },
     },
+    minHeight: {
+      '0': '0px',
+      '12': '3rem',
+      'full': '100%',
+      'screen': '100vh',
+    },
     screens: {
       'xs': '480px',
       'sm': '640px',

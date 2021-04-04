@@ -7,13 +7,16 @@
         v-model="data.email"
         label="Email address"
         type="email"
-        required />
+        required
+        :disabled="loading" />
 
       <div class="flex justify-end">
         <Button
           class="w-full xs:w-auto"
           primary
-          type="submit">
+          type="submit"
+          :disabled="loading"
+          :loading="loading">
           Submit
         </Button>
       </div>
@@ -28,7 +31,7 @@ import { useForgotPassword } from '@/app/behaviors'
 
 export default defineComponent({
   setup() {
-    const { data, forgotPassword } = useForgotPassword()
+    const { data, forgotPassword, loading } = useForgotPassword()
 
     const submit = () => {
       forgotPassword()
@@ -36,6 +39,7 @@ export default defineComponent({
 
     return {
       data,
+      loading,
       submit
     }
   },

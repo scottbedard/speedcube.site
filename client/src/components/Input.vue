@@ -11,8 +11,9 @@
     </div>
 
     <input
-      class="appearance-none bg-gray-100 border border-gray-200 placeholder-gray-400 px-4 py-2 rounded-md text-gray-700 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-800 dark:text-gray-100"
+      class="appearance-none block bg-gray-100 border border-gray-200 min-h-12 placeholder-gray-400 px-4 py-2 rounded-md text-gray-700 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-800 dark:text-gray-100"
       ref="input"
+      :disabled="disabled"
       :id="id"
       :placeholder="placeholder"
       :required="required"
@@ -51,6 +52,10 @@ export default defineComponent({
   name: 'Input',
   props: {
     autofocus: {
+      default: false,
+      type: Boolean,
+    },
+    disabled: {
       default: false,
       type: Boolean,
     },
