@@ -20,6 +20,15 @@ class User extends BaseModel implements
     use Authenticatable, Authorizable, CanResetPassword, HasFactory, MustVerifyEmail;
 
     /**
+     * Default attributes.
+     */
+    public $attributes = [
+        'email_verified_at' => null,
+        'email' => '',
+        'username' => '',
+    ];
+
+    /**
      * The attributes that should be cast to native types.
      *
      * @var array

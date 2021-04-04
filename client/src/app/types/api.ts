@@ -1,8 +1,11 @@
 import { User } from './models'
 
-/**
- * Create user
- */
+// post: /api/users
 export type CreateUserResponse = {
+  user: User
+}
+
+// post: /api/auth/login
+export type LoginResponse = {
   user: User
 }

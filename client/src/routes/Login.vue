@@ -42,10 +42,10 @@ import { useLogin } from '@/app/behaviors'
 
 export default defineComponent({
   setup() {
-    const { data } = useLogin()
+    const { data, login } = useLogin()
 
     const submit = () => {
-      console.log('submit')
+      login()
     }
 
     return {

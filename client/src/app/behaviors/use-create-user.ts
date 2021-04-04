@@ -22,10 +22,8 @@ export function useCreateUser() {
     return axios.post<CreateUserResponse>('/api/users', data).then((response) => {
       // success
       state.user = response.data.user
-    }, (err) => {
-      // failed
-      console.log('failed', err)
     }).finally(() => {
+      // complete
       loading.value = false
     })
   }
