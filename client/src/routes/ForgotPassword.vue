@@ -5,7 +5,7 @@
     <form class="grid gap-6" @submit.prevent="submit">
       <Input
         v-model="data.email"
-        label="Email Address"
+        label="Email address"
         type="email"
         required />
 

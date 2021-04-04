@@ -24,7 +24,7 @@
         </RouterLink>
 
         <RouterLink :to="{ name: 'create-account' }">
-          Sign Up
+          Sign up
         </RouterLink>
       </template>
 

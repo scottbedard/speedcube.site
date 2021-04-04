@@ -5,14 +5,15 @@ import { reactive, ref } from 'vue'
  */
 export function useResetPassword() {
   const data = reactive({
+    email: '',
     password: '',
     passwordConfirmation: '',
   })
 
   const loading = ref(false)
 
-  const resetPassword = () => {
-    console.log('resetPassword')
+  const resetPassword = (token: string) => {
+    console.log('resetPassword', token)
   }
 
   return {
