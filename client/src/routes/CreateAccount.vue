@@ -8,21 +8,24 @@
         autofocus
         label="Username"
         required
-        :disabled="loading" />
+        :disabled="loading"
+        :error="errors.username" />
 
       <Input
         v-model="data.email"
         label="Email address"
         type="email"
         required
-        :disabled="loading" />
+        :disabled="loading"
+        :error="errors.email" />
 
       <Input
         v-model="data.password"
         label="Password"
         type="password"
         required
-        :disabled="loading" />
+        :disabled="loading"
+        :error="errors.password" />
 
       <Input
         v-model="data.passwordConfirmation"
@@ -52,12 +55,12 @@
 <script lang="ts">
 import { Button, Card, Input } from '@/components'
 import { defineComponent } from 'vue'
-import { useCreateUser } from '@/app/behaviors/use-create-user'
+import { useCreateUser } from '@/app/api'
 import { useRouter } from 'vue-router'
 
 export default defineComponent({
   setup() {
-    const { createUser, data, loading } = useCreateUser()
+    const { createUser, data, errors, loading } = useCreateUser()
     const router = useRouter()
 
     const submit = () => {
@@ -68,6 +71,7 @@ export default defineComponent({
 
     return {
       data,
+      errors,
       loading,
       submit
     }

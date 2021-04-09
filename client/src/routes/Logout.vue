@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useLogout } from '@/app/behaviors'
+import { useLogout } from '@/app/api'
 import { useRouter } from 'vue-router'
 
 export default defineComponent({

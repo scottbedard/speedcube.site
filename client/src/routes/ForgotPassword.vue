@@ -27,7 +27,7 @@
 <script lang="ts">
 import { Button, Card, Input } from '@/components'
 import { defineComponent } from 'vue'
-import { useForgotPassword } from '@/app/behaviors'
+import { useForgotPassword } from '@/app/api'
 
 export default defineComponent({
   setup() {

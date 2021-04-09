@@ -42,7 +42,7 @@
 <script lang="ts">
 import { Button, Card, Checkbox, Input } from '@/components'
 import { defineComponent } from 'vue'
-import { useLogin } from '@/app/behaviors'
+import { useLogin } from '@/app/api'
 import { useRouter } from 'vue-router'
 
 export default defineComponent({

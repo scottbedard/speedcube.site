@@ -42,7 +42,7 @@
 <script lang="ts">
 import { Button, Card, Input } from '@/components'
 import { defineComponent } from 'vue'
-import { useResetPassword } from '@/app/behaviors'
+import { useResetPassword } from '@/app/api'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
