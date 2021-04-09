@@ -18,22 +18,22 @@ export function isValidationError(err: any): err is AxiosValidationErrorResponse
 /**
  * Create a reactive errors object for form data
  */
-export function useErrors() {
-  const errors = reactive<Record<string, string[]>>({});
+export function useFieldErrors() {
+  const fieldErrors = reactive<Record<string, string[]>>({});
 
-  const clearErrors = () => {
-    Object.keys(errors).forEach(key => {
-      delete errors[key]
+  const clearFieldErrors = () => {
+    Object.keys(fieldErrors).forEach(key => {
+      delete fieldErrors[key]
     })
   }
 
-  const setErrors = (err: AxiosValidationErrorResponse) => {
-    Object.assign(errors, err.response.data.errors);
+  const setFieldErrors = (err: AxiosValidationErrorResponse) => {
+    Object.assign(fieldErrors, err.response.data.errors);
   }
 
   return {
-    clearErrors,
-    errors,
-    setErrors,
+    clearFieldErrors,
+    fieldErrors,
+    setFieldErrors,
   }
 }

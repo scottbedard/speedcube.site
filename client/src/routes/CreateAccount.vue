@@ -9,7 +9,7 @@
         label="Username"
         required
         :disabled="loading"
-        :error="errors.username" />
+        :error="fieldErrors.username" />
 
       <Input
         v-model="data.email"
@@ -17,7 +17,7 @@
         type="email"
         required
         :disabled="loading"
-        :error="errors.email" />
+        :error="fieldErrors.email" />
 
       <Input
         v-model="data.password"
@@ -25,7 +25,7 @@
         type="password"
         required
         :disabled="loading"
-        :error="errors.password" />
+        :error="fieldErrors.password" />
 
       <Input
         v-model="data.passwordConfirmation"
@@ -60,7 +60,7 @@ import { useRouter } from 'vue-router'
 
 export default defineComponent({
   setup() {
-    const { createUser, data, errors, loading } = useCreateUser()
+    const { createUser, data, fieldErrors, loading } = useCreateUser()
     const router = useRouter()
 
     const submit = () => {
@@ -71,7 +71,7 @@ export default defineComponent({
 
     return {
       data,
-      errors,
+      fieldErrors,
       loading,
       submit
     }

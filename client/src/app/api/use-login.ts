@@ -1,4 +1,4 @@
-import { isErrorWithCode, isValidationError, useErrors } from '@/app/api'
+import { isErrorWithCode, isValidationError, useFieldErrors } from '@/app/api'
 import { LoginResponse } from '@/app/types/api'
 import { ref, reactive } from 'vue'
 import { state } from '@/app/store/state'
@@ -8,7 +8,7 @@ import axios from 'axios'
  * Login
  */
 export function useLogin() {
-  const { clearErrors, errors, setErrors } = useErrors();
+  const { clearFieldErrors, fieldErrors, setFieldErrors } = useFieldErrors();
 
   const data = reactive({
     password: '',
@@ -21,7 +21,7 @@ export function useLogin() {
   const unauthorized = ref(false)
 
   const login = () => {
-    clearErrors()
+    clearFieldErrors()
     failed.value = false
     loading.value = true
     unauthorized.value = false
@@ -37,7 +37,7 @@ export function useLogin() {
         failed.value = true
 
         if (isValidationError(err)) {
-          setErrors(err)
+          setFieldErrors(err)
         } else if (isErrorWithCode(err, 401)) {
           unauthorized.value = true
         } 
@@ -52,8 +52,8 @@ export function useLogin() {
 
   return {
     data,
-    errors,
     failed,
+    fieldErrors,
     loading,
     login,
     unauthorized,

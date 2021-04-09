@@ -1,5 +1,5 @@
 import { CreateUserResponse } from '@/app/types/api'
-import { isValidationError, useErrors } from '@/app/api'
+import { isValidationError, useFieldErrors } from '@/app/api'
 import { reactive, ref } from 'vue'
 import { state } from '@/app/store/state'
 import axios from 'axios'
@@ -8,7 +8,7 @@ import axios from 'axios'
  * Create an account
  */
 export function useCreateUser() {
-  const { clearErrors, errors, setErrors } = useErrors();
+  const { clearFieldErrors, fieldErrors, setFieldErrors } = useFieldErrors();
 
   const data = reactive({
     username: '',
@@ -21,7 +21,7 @@ export function useCreateUser() {
   const failed = ref(false)
 
   const createUser = () => {
-    clearErrors()
+    clearFieldErrors()
     loading.value = true
     failed.value = false
 
@@ -35,7 +35,7 @@ export function useCreateUser() {
         failed.value = true
 
         if (isValidationError(err)) {
-          setErrors(err)
+          setFieldErrors(err)
         }
 
         reject()
@@ -49,8 +49,8 @@ export function useCreateUser() {
   return {
     createUser,
     data,
-    errors,
     failed,
+    fieldErrors,
     loading,
   }
 }
