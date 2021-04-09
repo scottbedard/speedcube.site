@@ -1,11 +1,18 @@
-import { AxiosValidationErrorResponse } from '@/app/types/api'
+import { AxiosErrorResponse, AxiosValidationErrorResponse } from '@/app/types/api'
 import { reactive } from 'vue'
+
+/**
+ * Test for an error with a status code
+ */
+export function isErrorWithCode(err: any, statusCode: number): err is AxiosErrorResponse {
+  return err?.response?.status === statusCode
+}
 
 /**
  * Test if an error is a validation error
  */
-export function isValidationError<T>(err: any): err is AxiosValidationErrorResponse {
-  return err?.response?.status === 422
+export function isValidationError(err: any): err is AxiosValidationErrorResponse {
+  return isErrorWithCode(err, 422)
 }
 
 /**

@@ -1,6 +1,11 @@
 <template>
   <h1 class="tw-page-title">Welcome back</h1>
 
+  <div
+    v-if="errorMessage"
+    v-text="errorMessage"
+    class="mb-6 text-center text-red-500" />
+
   <Card class="mb-6 mx-auto max-w-lg" padded>
     <form class="grid gap-6" @submit.prevent="submit">
       <Input
@@ -41,14 +46,24 @@
 
 <script lang="ts">
 import { Button, Card, Checkbox, Input } from '@/components'
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { useLogin } from '@/app/api'
 import { useRouter } from 'vue-router'
 
 export default defineComponent({
   setup() {
-    const { data, loading, login } = useLogin()
+    const { data, failed, loading, login, unauthorized } = useLogin()
     const router = useRouter()
+
+    const errorMessage = computed(() => {
+      if (unauthorized.value) {
+        return 'Invalid username / password combination.'
+      }
+
+      if (failed.value) {
+        return 'An unknown error occured.'
+      }
+    })
 
     const submit = () => {
       login().then(() => {
@@ -58,8 +73,9 @@ export default defineComponent({
 
     return {
       data,
+      errorMessage,
       loading,
-      submit
+      submit,
     }
   },
   components: {

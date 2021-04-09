@@ -18,18 +18,22 @@ export function useCreateUser() {
   })
 
   const loading = ref(false)
+  const failed = ref(false)
 
   const createUser = () => {
+    clearErrors()
     loading.value = true
+    failed.value = false
 
     return new Promise<void>((resolve, reject) => {
-      clearErrors()
-
       axios.post<CreateUserResponse>('/api/users', data).then((response) => {
         // success
         state.user = response.data.user
         resolve()
       }, (err: number) => {
+        // failed
+        failed.value = true
+
         if (isValidationError(err)) {
           setErrors(err)
         }
@@ -46,6 +50,7 @@ export function useCreateUser() {
     createUser,
     data,
     errors,
+    failed,
     loading,
   }
 }
