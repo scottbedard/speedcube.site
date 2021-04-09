@@ -13,7 +13,7 @@
     }"
     @click="toggle">
     <div
-      class="bg-gray-100 border border-gray-200 flex items-center justify-center h-6 rounded-md w-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-800"
+      class="bg-gray-100 border border-gray-300 flex items-center justify-center h-6 rounded-md w-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-800"
       ref="target"
       role="checkbox"
       :aria-checked="modelValue ? 'true' : 'false'"
