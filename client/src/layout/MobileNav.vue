@@ -46,7 +46,8 @@
         v-for="(link, index) in links"
         class="flex items-center py-2"
         :key="index"
-        :is="link.to ? 'RouterLink' : 'a'">
+        :is="link.to ? 'RouterLink' : 'a'"
+        @click="close">
         <Icon
           :name="link.icon"
           class="mr-3"
@@ -59,13 +60,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, Ref, watch } from 'vue'
+import { computed, defineComponent, ref, unref, watch } from 'vue'
 import { Icon } from '@/components'
 import { isAuthenticated, isGuest } from '@/app/store/computed'
+import { MaybeRef } from '@vueuse/core'
 import { RouteLocationRaw, useRoute } from 'vue-router'
 
 type Link = {
-  condition?: Ref<boolean>
+  condition?: MaybeRef<boolean>
   href?: string
   icon: string
   text: string
@@ -80,8 +82,30 @@ export default defineComponent({
 
     const links = computed<Link[]>(() => [
       {
+        condition: true,
+        icon: 'clock',
+        text: 'Solve',
+        to: {
+          name: 'solve',
+          params: {
+            puzzle: '3x3',
+          },
+        },
+      },
+      {
+        condition: true,
+        icon: 'star',
+        text: 'Records',
+        to: {
+          name: 'records',
+          params: {
+            puzzle: '3x3',
+          },
+        },
+      },
+      {
         condition: isGuest,
-        icon: 'arrow-right',
+        icon: 'log-in',
         text: 'Login',
         to: {
           name: 'login',
@@ -109,13 +133,13 @@ export default defineComponent({
       },
       {
         condition: isAuthenticated,
-        icon: 'corner-down-right',
+        icon: 'log-out',
         text: 'Log out',
         to: {
           name: 'logout',
         },
       },
-    ].filter(obj => obj.condition.value))
+    ].filter(obj => unref(obj.condition)))
 
     const close = () => {
       expanded.value = false

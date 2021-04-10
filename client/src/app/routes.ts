@@ -50,6 +50,16 @@ export const routes: RouteRecordRaw[] = [
     path: '/reset-password/:token',
   },
   {
+    component: () => import('@/routes/Solve.vue'),
+    name: 'solve',
+    path: '/solve/:puzzle',
+  },
+  {
+    component: () => import('@/routes/Records.vue'),
+    name: 'records',
+    path: '/records/:puzzle',
+  },
+  {
     component: () => import('@/routes/404.vue'),
     name: '404',
     path: '/:pathMatch(.*)*',

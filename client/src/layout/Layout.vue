@@ -1,6 +1,6 @@
 <template>
   <header class="flex h-20 items-center justify-between tw-margin">
-    <div class="flex gap-6 items-center">
+    <div class="flex gap-12 items-center">
       <RouterLink
         class="flex font-bold items-center text-xl"
         :to="{ name: 'home' }">

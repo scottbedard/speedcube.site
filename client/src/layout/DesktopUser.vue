@@ -36,7 +36,7 @@
             text="Stats" />
 
           <CardLink
-            icon="corner-down-right"
+            icon="log-out"
             text="Log out"
             :to="{ name: 'logout' }" />
         </Card>
