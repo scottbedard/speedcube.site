@@ -30,3 +30,11 @@ export type LoginResponse = {
   user: User
 }
 
+/**
+ * Server response codes
+ */
+ export enum StatusCodes {
+  Success = 200,
+  Unauthorized = 401,
+  UnprocessableEntity = 422,
+}

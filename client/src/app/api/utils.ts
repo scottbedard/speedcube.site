@@ -1,10 +1,15 @@
-import { AxiosErrorResponse, AxiosValidationErrorResponse } from '@/app/types/api'
+import {
+  AxiosErrorResponse,
+  AxiosValidationErrorResponse,
+  StatusCodes,
+} from '@/app/types/api'
+
 import { reactive } from 'vue'
 
 /**
  * Test for an error with a status code
  */
-export function isErrorWithCode(err: any, statusCode: number): err is AxiosErrorResponse {
+export function isStatusCode(err: any, statusCode: StatusCodes): err is AxiosErrorResponse {
   return err?.response?.status === statusCode
 }
 
@@ -12,7 +17,7 @@ export function isErrorWithCode(err: any, statusCode: number): err is AxiosError
  * Test if an error is a validation error
  */
 export function isValidationError(err: any): err is AxiosValidationErrorResponse {
-  return isErrorWithCode(err, 422)
+  return isStatusCode(err, StatusCodes.UnprocessableEntity)
 }
 
 /**

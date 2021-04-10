@@ -1,5 +1,5 @@
-import { isErrorWithCode, isValidationError, useFieldErrors } from '@/app/api'
-import { LoginResponse } from '@/app/types/api'
+import { isStatusCode, isValidationError, useFieldErrors } from '@/app/api'
+import { LoginResponse, StatusCodes } from '@/app/types/api'
 import { ref, reactive } from 'vue'
 import { state } from '@/app/store/state'
 import axios from 'axios'
@@ -38,7 +38,7 @@ export function useLogin() {
 
         if (isValidationError(err)) {
           setFieldErrors(err)
-        } else if (isErrorWithCode(err, 401)) {
+        } else if (isStatusCode(err, StatusCodes.Unauthorized)) {
           unauthorized.value = true
         } 
 
