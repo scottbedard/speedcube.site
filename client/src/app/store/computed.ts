@@ -1,7 +1,7 @@
 import { computed } from 'vue'
-import { state } from './state'
+import { user } from './state'
 
 /**
  * Test if the user is authenticated.
  */
-export const isAuthenticated = computed(() => state.user !== null)
+export const isAuthenticated = computed(() => user.value !== null)

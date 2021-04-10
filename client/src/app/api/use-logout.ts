@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { state } from '@/app/store/state'
+import { user } from '@/app/store/state'
 import axios from 'axios'
 
 /**
@@ -11,7 +11,7 @@ export function useLogout() {
   const logout = () => {
     return axios.get<void>('/api/auth/logout').then(() => {
       // success
-      state.user = null
+      user.value = null
     }).finally(() => {
       // complete
       loading.value = false

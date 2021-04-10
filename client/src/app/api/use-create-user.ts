@@ -1,7 +1,7 @@
 import { CreateUserResponse } from '@/app/types/api'
 import { isValidationError, useFieldErrors } from '@/app/api'
 import { reactive, ref } from 'vue'
-import { state } from '@/app/store/state'
+import { user } from '@/app/store/state'
 import axios from 'axios'
 
 /**
@@ -28,7 +28,7 @@ export function useCreateUser() {
     return new Promise<void>((resolve, reject) => {
       axios.post<CreateUserResponse>('/api/users', data).then((response) => {
         // success
-        state.user = response.data.user
+        user.value = response.data.user
         resolve()
       }, (err: number) => {
         // failed

@@ -1,8 +1,6 @@
-import { reactive } from 'vue'
+import { ref } from 'vue'
 
 /**
- * Global application state
+ * User
  */
-export const state = reactive({
-  user: window.context.user
-})
+export const user = ref(window.context.user)

@@ -1,7 +1,7 @@
 import { isStatusCode, isValidationError, useFieldErrors } from '@/app/api'
 import { LoginResponse, StatusCodes } from '@/app/types/api'
 import { ref, reactive } from 'vue'
-import { state } from '@/app/store/state'
+import { user } from '@/app/store/state'
 import axios from 'axios'
 
 /**
@@ -29,7 +29,7 @@ export function useLogin() {
     return new Promise<void>((resolve, reject) => {
       axios.post<LoginResponse>('/api/auth/login', data).then(response => {
         // success
-        state.user = response.data.user
+        user.value = response.data.user
 
         resolve()
       }, (err) => {
