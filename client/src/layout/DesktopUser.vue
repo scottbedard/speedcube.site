@@ -9,7 +9,7 @@
         href="#"
         @click.prevent="open">
         <Icon
-          class="mr-1"
+          class="mr-px"
           name="chevron-down"
           :size="4"
           :stroke="2" />

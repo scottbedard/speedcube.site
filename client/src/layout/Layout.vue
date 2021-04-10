@@ -17,6 +17,10 @@
       </nav>
     </div>
 
+    <div class="md:hidden">
+      <MobileNav />
+    </div>
+
     <div class="hidden md:block">
       <DesktopUser />
     </div>
@@ -38,15 +42,11 @@ import { isAuthenticated } from '@/app/store/computed'
 import DesktopNav from './DesktopNav.vue'
 import DesktopUser from './DesktopUser.vue'
 import Footer from './Footer.vue'
-
-const iconSize = 6
-const iconStroke = 1.8
+import MobileNav from './MobileNav.vue'
 
 export default defineComponent({
   setup() {
     return {
-      iconSize,
-      iconStroke,
       isAuthenticated,
     }
   },
@@ -55,6 +55,7 @@ export default defineComponent({
     DesktopUser,
     Footer,
     Icon,
+    MobileNav,
   },
   name: 'Layout',
 })
