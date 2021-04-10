@@ -24,6 +24,13 @@ export type CreateUserResponse = {
 }
 
 /**
+ * POST: /api/users/forgot-password
+ */
+export type ForgotPasswordResponse = {
+  success: boolean
+}
+
+/**
  * POST: /api/auth/login
  */
 export type LoginResponse = {

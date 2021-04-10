@@ -1,6 +1,11 @@
 <template>
   <h1 class="tw-page-title">Password reset</h1>
 
+  <div
+    v-if="errorMessage"
+    v-text="errorMessage"
+    class="mb-6 text-center text-red-500" />
+
   <Card class="mx-auto max-w-lg" padded>
     <form class="grid gap-6" @submit.prevent="submit">
       <Input
@@ -8,7 +13,8 @@
         label="Email address"
         type="email"
         required
-        :disabled="loading" />
+        :disabled="loading"
+        :error="fieldErrors.email" />
 
       <div class="flex justify-end">
         <Button
@@ -26,12 +32,34 @@
 
 <script lang="ts">
 import { Button, Card, Input } from '@/components'
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { useForgotPassword } from '@/app/api'
 
 export default defineComponent({
   setup() {
-    const { data, forgotPassword, loading } = useForgotPassword()
+    const {
+      data,
+      failed,
+      fieldErrors,
+      forgotPassword,
+      invalid,
+      loading,
+      unauthorized,
+    } = useForgotPassword()
+
+    const errorMessage = computed(() => {
+      if (invalid.value) {
+        return
+      }
+
+      if (unauthorized.value) {
+        return 'No user exists with that email address.'
+      }
+
+      if (failed.value) {
+        return 'An unknown error occured.'
+      }
+    })
 
     const submit = () => {
       forgotPassword()
@@ -39,8 +67,10 @@ export default defineComponent({
 
     return {
       data,
+      errorMessage,
+      fieldErrors,
       loading,
-      submit
+      submit,
     }
   },
   components: {
