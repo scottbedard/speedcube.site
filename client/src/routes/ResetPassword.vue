@@ -5,17 +5,18 @@
     <form class="grid gap-6" @submit.prevent="submit">
       <Input
         v-model="data.email"
-        autofocus
         label="Email address"
         type="email"
         required
-        :disabled="loading" />
+        :autofocus="!Boolean(route.query.email)"
+        :disabled="loading || Boolean(route.query.email)" />
 
       <Input
         v-model="data.password"
         label="New password"
         type="password"
         required
+        :autofocus="Boolean(route.query.email)"
         :disabled="loading" />
 
       <Input
@@ -50,6 +51,8 @@ export default defineComponent({
     const route = useRoute()
     const { data, loading, resetPassword } = useResetPassword()
 
+    data.email = String(route.query.email)
+
     const submit = () => {
       resetPassword(route.params.token as string)
     }
@@ -57,6 +60,7 @@ export default defineComponent({
     return {
       data,
       loading,
+      route,
       submit
     }
   },
