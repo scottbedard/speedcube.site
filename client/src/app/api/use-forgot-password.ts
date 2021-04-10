@@ -12,12 +12,14 @@ export function useForgotPassword() {
   const failed = ref(false)
   const invalid = ref(false)
   const loading = ref(false)
+  const success = ref(false)
   const unauthorized = ref(false)
 
   const forgotPassword = () => {
     failed.value = false
     invalid.value = false
     loading.value = true
+    success.value = false
     unauthorized.value = false
   
     clearFieldErrors()
@@ -25,6 +27,7 @@ export function useForgotPassword() {
     return new Promise<void>((resolve, reject) => {
       axios.post<ForgotPasswordResponse>('/api/users/forgot-password', data).then(() => {
         // success
+        success.value = true
         resolve()
       }, (err) => {
         // failed
@@ -52,6 +55,7 @@ export function useForgotPassword() {
     forgotPassword,
     invalid,
     loading,
+    success,
     unauthorized,
   }
 }

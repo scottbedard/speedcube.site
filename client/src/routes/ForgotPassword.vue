@@ -7,7 +7,11 @@
     class="mb-6 text-center text-red-500" />
 
   <Card class="mx-auto max-w-lg" padded>
-    <form class="grid gap-6" @submit.prevent="submit">
+    <p v-if="success">
+      An email has been sent to {{ data.email }} with a link to reset your password.
+    </p>
+
+    <form v-else class="grid gap-6" @submit.prevent="submit">
       <Input
         v-model="data.email"
         label="Email address"
@@ -44,6 +48,7 @@ export default defineComponent({
       forgotPassword,
       invalid,
       loading,
+      success,
       unauthorized,
     } = useForgotPassword()
 
@@ -71,6 +76,7 @@ export default defineComponent({
       fieldErrors,
       loading,
       submit,
+      success,
     }
   },
   components: {
