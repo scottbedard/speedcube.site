@@ -1,6 +1,11 @@
 <template>
   <h1 class="tw-page-title">Reset your password</h1>
 
+  <div
+    v-if="errorMessage"
+    v-text="errorMessage"
+    class="mb-6 text-center text-red-500" />
+
   <Card class="mx-auto max-w-lg" padded>
     <form class="grid gap-6" @submit.prevent="submit">
       <Input
@@ -45,17 +50,27 @@
 
 <script lang="ts">
 import { Button, Card, Input } from '@/components'
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { useResetPassword } from '@/app/api'
 import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
   setup() {
+    const { data, failed, fieldErrors, invalid, loading, resetPassword } = useResetPassword()
     const route = useRoute()
     const router = useRouter()
-    const { data, fieldErrors, loading, resetPassword } = useResetPassword()
 
     data.email = String(route.query.email)
+
+    const errorMessage = computed(() => {
+      if (invalid.value) {
+        return
+      }
+
+      if (failed.value) {
+        return 'An unknown error occured.'
+      }
+    })
 
     const submit = () => {
       resetPassword(route.params.token as string).then(() => {
@@ -66,6 +81,7 @@ export default defineComponent({
     return {
       data,
       fieldErrors,
+      errorMessage,
       loading,
       route,
       submit,
