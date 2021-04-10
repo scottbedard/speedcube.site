@@ -9,7 +9,8 @@
         type="email"
         required
         :autofocus="!Boolean(route.query.email)"
-        :disabled="loading || Boolean(route.query.email)" />
+        :disabled="loading || Boolean(route.query.email)"
+        :error="fieldErrors.email" />
 
       <Input
         v-model="data.password"
@@ -17,14 +18,16 @@
         type="password"
         required
         :autofocus="Boolean(route.query.email)"
-        :disabled="loading" />
+        :disabled="loading"
+        :error="fieldErrors.password" />
 
       <Input
         v-model="data.passwordConfirmation"
         label="Confirm new password"
         type="password"
         required
-        :disabled="loading" />
+        :disabled="loading"
+        :error="fieldErrors.passwordConfirmation" />
 
       <div class="flex justify-end">
         <Button
@@ -44,24 +47,28 @@
 import { Button, Card, Input } from '@/components'
 import { defineComponent } from 'vue'
 import { useResetPassword } from '@/app/api'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
   setup() {
     const route = useRoute()
-    const { data, loading, resetPassword } = useResetPassword()
+    const router = useRouter()
+    const { data, fieldErrors, loading, resetPassword } = useResetPassword()
 
     data.email = String(route.query.email)
 
     const submit = () => {
-      resetPassword(route.params.token as string)
+      resetPassword(route.params.token as string).then(() => {
+        router.replace({ name: 'login' })
+      })
     }
 
     return {
       data,
+      fieldErrors,
       loading,
       route,
-      submit
+      submit,
     }
   },
   components: {
