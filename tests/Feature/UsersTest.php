@@ -47,7 +47,7 @@ class UsersTest extends TestCase
         Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
             $response = $this->post('/api/users/reset-password', [
                 'email' => $user->email,
-                'password_confirmation' => 'password',
+                'passwordConfirmation' => 'password',
                 'password' => 'password',
                 'token' => $notification->token,
             ]);
