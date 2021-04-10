@@ -53,13 +53,13 @@ import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   setup(props, { emit }) {
-    const target = ref<HTMLElement>();
+    const target = ref<HTMLElement>()
 
     const toggle = () => {
-      target.value?.focus();
+      target.value?.focus()
   
       if (!props.disabled) {
-        emit('update:modelValue', !props.modelValue);
+        emit('update:modelValue', !props.modelValue)
       }
     }
 
@@ -82,5 +82,5 @@ export default defineComponent({
       type: Boolean,
     },
   },
-});
+})
 </script>
