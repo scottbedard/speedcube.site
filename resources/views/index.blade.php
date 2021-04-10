@@ -20,9 +20,9 @@
       window.context = {!! $context !!}
     </script>
   </head>
-  <body class="bg-gray-100 min-h-screen text-gray-800 text-lg dark:bg-gray-900 dark:text-gray-100">
+  <body class="bg-gray-100 font-sans text-gray-800 text-lg dark:bg-gray-900 dark:text-gray-100">
     <div
-      class="font-sans"
+      class="flex flex-col min-h-screen"
       id="app"
     ></div>
 

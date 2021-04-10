@@ -29,10 +29,12 @@
             icon="user"
             href="#"
             text="My Account" />
+
           <CardLink
             icon="bar-chart-2"
             href="#"
             text="Stats" />
+
           <CardLink
             icon="corner-down-right"
             text="Log out"
@@ -55,23 +57,29 @@
 
 <script lang="ts">
 import { Card, CardLink, Icon } from '@/components'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { isAuthenticated } from '@/app/store/computed'
 import { onClickOutside } from '@vueuse/core'
 import { user } from '@/app/store/state'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   setup() {
     const dropdown = ref<HTMLElement>()
     const expanded = ref(false)
+    const route = useRoute()
+
+    const close = () => {
+      expanded.value = false
+    }
 
     const open = () => {
       expanded.value = true
     }
 
-    onClickOutside(dropdown, () => {
-      expanded.value = false
-    })
+    onClickOutside(dropdown, close)
+
+    watch(route, close)
 
     return {
       dropdown,
