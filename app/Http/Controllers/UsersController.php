@@ -21,8 +21,12 @@ class UsersController extends Controller
 
         $status = Password::sendResetLink($request->only('email'));
 
+        if ($status !== Password::RESET_LINK_SENT) {
+            abort(401, 'Unauthorized');
+        }
+
         return [
-            'success' => $status === Password::RESET_LINK_SENT,
+            'success' => true,
         ];
     }
 

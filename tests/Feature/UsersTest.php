@@ -68,4 +68,13 @@ class UsersTest extends TestCase
             'password' => 'password',
         ]));
     }
+
+    public function test_forgot_password_with_bad_email()
+    {
+        $response = $this->post('/api/users/forgot-password', [
+            'email' => 'foo@bar.com',
+        ]);
+
+        $response->assertStatus(401);
+    }
 }
