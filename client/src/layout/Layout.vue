@@ -1,17 +1,28 @@
 <template>
   <header class="flex h-20 items-center justify-between mb-6 tw-margin">
-    <RouterLink
-      class="flex font-bold items-center text-xl"
-      :to="{ name: 'home' }">
-      <Icon
-        class="mr-2"
-        name="box"
-        :size="7"
-        :stroke="2" />
-      speedcube.site
-    </RouterLink>
+    <div class="flex gap-6 items-center">
+      <RouterLink
+        class="flex font-bold items-center text-xl"
+        :to="{ name: 'home' }">
+        <Icon
+          class="mr-2"
+          name="box"
+          :size="7"
+          :stroke="2" />
+        speedcube.site
+      </RouterLink>
 
-    <nav class="flex items-center gap-8">
+      <nav class="hidden md:block">
+        <DesktopNav />
+      </nav>
+    </div>
+
+    <div class="hidden md:block">
+      <DesktopUser />
+    </div>
+
+    <!-- <nav class="flex items-center gap-8">
+
       <template v-if="isAuthenticated">
         <RouterLink :to="{ name: 'logout' }">
           Log out
@@ -58,7 +69,7 @@
             :stroke="iconStroke" />
         </a>  
       </div>
-    </nav>
+    </nav> -->
   </header>
 
   <div class="tw-margin">
@@ -71,6 +82,8 @@ import { defineComponent } from 'vue'
 import { Icon } from '@/components'
 import { isAuthenticated } from '@/app/store/computed'
 import { useDark, useToggle } from '@vueuse/core'
+import DesktopNav from './DesktopNav.vue'
+import DesktopUser from './DesktopUser.vue'
 
 const iconSize = 6
 const iconStroke = 1.8
@@ -89,8 +102,10 @@ export default defineComponent({
     }
   },
   components: {
+    DesktopNav,
+    DesktopUser,
     Icon,
   },
-  name: 'DefaultLayout',
+  name: 'Layout',
 })
 </script>

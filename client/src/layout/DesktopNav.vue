@@ -1,15 +1,13 @@
 <template>
-  <Layout />
+  <div>
+    Hello from the desktop nav
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Layout from '@/layout/Layout.vue'
 
 export default defineComponent({
-  components: {
-    Layout,
-  },
-  name: 'App',
+  name: 'DesktopNav'
 })
 </script>

@@ -1,0 +1,91 @@
+<template>
+  <div class="flex gap-6 items-center relative">
+    <template v-if="isAuthenticated">
+      <div
+        v-text="user?.username" />
+
+      <a
+        class="flex items-center"
+        href="#"
+        @click.prevent="open">
+        <Icon
+          class="mr-1"
+          name="chevron-down"
+          :size="4"
+          :stroke="2" />
+
+        <Icon
+          name="user"
+          :size="7"
+          :stroke="1.75" />
+      </a>
+
+      <div
+        v-if="expanded"
+        class="absolute pt-2 right-0 top-full"
+        ref="dropdown">
+        <Card class="w-60">
+          <CardLink
+            icon="user"
+            href="#"
+            text="My Account" />
+          <CardLink
+            icon="bar-chart-2"
+            href="#"
+            text="Stats" />
+          <CardLink
+            icon="corner-down-right"
+            text="Log out"
+            :to="{ name: 'logout' }" />
+        </Card>
+      </div>
+    </template>
+
+    <template v-else>
+      <RouterLink :to="{ name: 'login' }">
+        Login
+      </RouterLink>
+
+      <RouterLink :to="{ name: 'create-account' }">
+        Sign up
+      </RouterLink>
+    </template>
+  </div>
+</template>
+
+<script lang="ts">
+import { Card, CardLink, Icon } from '@/components'
+import { defineComponent, ref } from 'vue'
+import { isAuthenticated } from '@/app/store/computed'
+import { onClickOutside } from '@vueuse/core'
+import { user } from '@/app/store/state'
+
+export default defineComponent({
+  setup() {
+    const dropdown = ref<HTMLElement>()
+    const expanded = ref(false)
+
+    const open = () => {
+      expanded.value = true
+    }
+
+    onClickOutside(dropdown, () => {
+      expanded.value = false
+    })
+
+    return {
+      dropdown,
+      expanded,
+      isAuthenticated,
+      open,
+      user,
+    }
+  },
+  components: {
+    Card,
+    CardLink,
+    Icon,
+  },
+  name: 'DesktopUser'
+})
+</script>
