@@ -20,40 +20,6 @@
     <div class="hidden md:block">
       <DesktopUser />
     </div>
-
-    <!-- <nav class="flex items-center gap-8">
-
-      <div class="flex gap-4">
-        <a
-          href="#"
-          :title="`Click to toggle ${isDark ? 'light' : 'dark'} mode`"
-          @click.prevent="toggleDarkMode">
-          <Icon
-            :name="isDark ? 'moon' : 'sun'"
-            :size="iconSize"
-            :stroke="iconStroke" />
-        </a>
-
-        <a
-          href="https://discord.gg/V98D9r7J"
-          title="Join our Discord channel">
-          <Icon
-            name="message-square"
-            :size="iconSize"
-            :stroke="iconStroke" />
-        </a>
-
-        <a
-          href="https://github.com/scottbedard/speedcube.site"
-          target="_blank"
-          title="Participate on GitHub">
-          <Icon
-            name="github"
-            :size="iconSize"
-            :stroke="iconStroke" />
-        </a>  
-      </div>
-    </nav> -->
   </header>
 
   <div class="flex-1 tw-margin">
@@ -69,7 +35,6 @@
 import { defineComponent } from 'vue'
 import { Icon } from '@/components'
 import { isAuthenticated } from '@/app/store/computed'
-import { useDark, useToggle } from '@vueuse/core'
 import DesktopNav from './DesktopNav.vue'
 import DesktopUser from './DesktopUser.vue'
 import Footer from './Footer.vue'
@@ -79,15 +44,10 @@ const iconStroke = 1.8
 
 export default defineComponent({
   setup() {
-    const isDark = useDark()
-    const toggleDarkMode = useToggle(isDark)
-
     return {
       iconSize,
       iconStroke,
       isAuthenticated,
-      isDark,
-      toggleDarkMode,
     }
   },
   components: {
