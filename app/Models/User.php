@@ -122,7 +122,7 @@ class User extends BaseModel implements
     {
         if (!Hash::check($this->current_password, $this->getRawOriginal('password'))) {
             throw ValidationException::withMessages([
-                'current_password' => ['password'],
+                'current_password' => [__('validation.password')],
             ]);
         }
     }
