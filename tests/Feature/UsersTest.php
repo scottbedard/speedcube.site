@@ -127,6 +127,20 @@ class UsersTest extends TestCase
         $request->assertStatus(401);
     }
 
+    public function test_update_password_without_current_password()
+    {
+        $user = User::factory()->create();
+
+        $request = $this
+            ->actingAs($user)
+            ->json('POST', '/api/users/' . $user->id, [
+                'password' => '12345678',
+                'password_confirmation' => '12345678',
+            ]);
+
+        $request->assertStatus(422);
+    }
+
     public function test_update_password_as_wrong_user()
     {
         $john = User::factory()->create();
@@ -143,13 +157,14 @@ class UsersTest extends TestCase
         $response->assertStatus(401);
     }
 
-    public function test_update_password_without_current_password()
+    public function test_update_password_with_wrong_current_password()
     {
         $user = User::factory()->create();
 
         $request = $this
             ->actingAs($user)
             ->json('POST', '/api/users/' . $user->id, [
+                'current_password' => 'wrong password',
                 'password' => '12345678',
                 'password_confirmation' => '12345678',
             ]);

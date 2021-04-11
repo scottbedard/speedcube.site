@@ -12,6 +12,8 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class User extends BaseModel implements
     AuthenticatableContract,
@@ -98,4 +100,30 @@ class User extends BaseModel implements
         'password' => ['required_create', 'string', 'confirmed', 'min:8'],
         'username' => ['required', 'string', 'between:2,255', 'unique'],
     ];
+
+    /**
+     * Boot.
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            if ($model->current_password) {
+                $model->checkCurrentPassword();
+            }
+        });
+    }
+
+    /**
+     * Test the current password attribute.
+     */
+    protected function checkCurrentPassword()
+    {
+        if (!Hash::check($this->current_password, $this->getRawOriginal('password'))) {
+            throw ValidationException::withMessages([
+                'current_password' => ['password'],
+            ]);
+        }
+    }
 }
