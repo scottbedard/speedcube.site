@@ -2,6 +2,9 @@
   <component
     v-bind="attrs"
     class="flex items-center px-6 py-3 first:pt-6 last:pb-6"
+    :class="{
+      'text-green-500': highlight,
+    }"
     :is="is">
     <Icon
       class="mr-3"
@@ -37,6 +40,9 @@ export default defineComponent({
   },
   name: 'CardLink',
   props: {
+    highlight: {
+      type: Boolean,
+    },
     href: {
       type: String,
     },
