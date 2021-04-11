@@ -100,13 +100,13 @@ class BaseModelTest extends TestCase
 
         $this->assertEquals([
             'field' => ['required'],
-        ], $model->validation());
+        ], $model->validationRules());
 
         $model->save();
 
         $this->assertEquals([
             'field' => [],
-        ], $model->validation());
+        ], $model->validationRules());
     }
 
     public function test_validation_required_update()
@@ -124,13 +124,13 @@ class BaseModelTest extends TestCase
 
         $this->assertEquals([
             'field' => []
-        ], $model->validation());
+        ], $model->validationRules());
 
         $model->save();
 
         $this->assertEquals([
             'field' => ['required'],
-        ], $model->validation());
+        ], $model->validationRules());
     }
 
     public function test_validation_unique()
@@ -148,6 +148,36 @@ class BaseModelTest extends TestCase
 
         $this->assertEquals([
             'field' => ['unique:models,field,1,id'],
-        ], $model->validation());
+        ], $model->validationRules());
+    }
+
+    public function test_validation_hashable()
+    {
+        $model = new class extends TestModel
+        {
+            public $hashable = ['field'];
+
+            public $purgeable = ['field_confirmation'];
+
+            public $rules = [
+                'field' => ['confirmed'],
+            ];
+        };
+
+        // create should validate
+        $model->field = 'one';
+        $model->field_confirmation = 'one';
+        $this->assertArrayHasKey('field', $model->validationAttributes());
+        $model->save();
+
+        // non-dirty hashable fields should not re-validate
+        $this->assertArrayNotHasKey('field', $model->validationAttributes());
+        $model->save();
+
+        // dirty hashable fields should re-validate
+        $model->field = 'two';
+        $this->assertArrayHasKey('field', $model->validationAttributes());
+        $this->expectException(ValidationException::class);
+        $model->save();
     }
 }

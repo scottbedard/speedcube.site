@@ -76,7 +76,10 @@ class BaseModel extends Model
      */
     public function validate()
     {
-        $validator = Validator::make($this->attributes, $this->validation());
+        $validator = Validator::make(
+            $this->validationAttributes(),
+            $this->validationRules()
+        );
 
         if ($validator->fails()) {
             throw new ValidationException($validator);
@@ -84,11 +87,32 @@ class BaseModel extends Model
     }
 
     /**
+     * Process validation attributes.
+     *
+     * @return array
+     */
+    public function validationAttributes()
+    {
+        $attrs = [];
+        $dirty = array_keys($this->getDirty());
+
+        foreach ($this->attributes as $key => $value) {
+            if ($this->exists && in_array($key, $this->hashable) && !in_array($key, $dirty)) {
+                continue;
+            }
+
+            $attrs[$key] = $value;
+        }
+
+        return $attrs;
+    }
+
+    /**
      * Process validation rules.
      *
      * @return array
      */
-    public function validation()
+    public function validationRules()
     {
         $processed = [];
 
