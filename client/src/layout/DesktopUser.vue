@@ -28,8 +28,10 @@
         <Card class="w-60">
           <CardLink
             icon="user"
-            href="#"
-            text="My Account" />
+            text="My Account"
+            :to="{
+              name: 'account:profile',
+            }" />
 
           <CardLink
             icon="bar-chart-2"

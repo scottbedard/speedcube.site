@@ -121,9 +121,11 @@ export default defineComponent({
       },
       {
         condition: isAuthenticated,
-        href: '#',
         icon: 'user',
         text: 'My Account',
+        to: {
+          name: 'account:profile',
+        },
       },
       {
         condition: isAuthenticated,

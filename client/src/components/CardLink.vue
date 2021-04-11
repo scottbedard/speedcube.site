@@ -1,7 +1,7 @@
 <template>
   <component
     v-bind="attrs"
-    class="flex items-center px-4 py-2 first:pt-4 last:pb-4"
+    class="flex items-center px-6 py-3 first:pt-6 last:pb-6"
     :is="is">
     <Icon
       class="mr-3"
