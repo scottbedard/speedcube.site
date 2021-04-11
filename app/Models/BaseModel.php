@@ -121,14 +121,19 @@ class BaseModel extends Model
             $processed[$field] = [];
 
             foreach ($rules as $rule) {
-                // required:create
-                if ($rule === 'required:create') {
+                // required_create
+                if ($rule === 'required_create') {
                     !$this->exists && array_push($processed[$field], 'required');
                 }
 
-                // required:update
-                elseif ($rule === 'required:update') {
+                // required_update
+                elseif ($rule === 'required_update') {
                     $this->exists && array_push($processed[$field], 'required');
+                }
+
+                // required_with_update
+                elseif (Str::startsWith($rule, 'required_with_update:')) {
+                    $this->exists && array_push($processed[$field], str_replace('required_with_update:', 'required_with:', $rule));
                 }
 
                 // unique:table

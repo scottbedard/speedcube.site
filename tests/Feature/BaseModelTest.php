@@ -94,7 +94,7 @@ class BaseModelTest extends TestCase
             ];
 
             public $rules = [
-                'field' => ['required:create'],
+                'field' => ['required_create'],
             ];
         };
 
@@ -118,7 +118,7 @@ class BaseModelTest extends TestCase
             ];
 
             public $rules = [
-                'field' => ['required:update'],
+                'field' => ['required_update'],
             ];
         };
 
@@ -130,6 +130,30 @@ class BaseModelTest extends TestCase
 
         $this->assertEquals([
             'field' => ['required'],
+        ], $model->validationRules());
+    }
+
+    public function test_validation_required_with_update()
+    {
+        $model = new class extends TestModel
+        {
+            public $attributes = [
+                'field' => '',
+            ];
+
+            public $rules = [
+                'field' => ['required_with_update:foo,bar'],
+            ];
+        };
+
+        $this->assertEquals([
+            'field' => []
+        ], $model->validationRules());
+
+        $model->save();
+
+        $this->assertEquals([
+            'field' => ['required_with:foo,bar'],
         ], $model->validationRules());
     }
 
