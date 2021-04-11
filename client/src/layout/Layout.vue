@@ -33,12 +33,17 @@
   <div class="py-4 tw-margin">
     <Footer />
   </div>
+
+  <div class="bottom-0 fixed flex justify-end right-0">
+    <Alerts />
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Icon } from '@/components'
 import { isAuthenticated } from '@/app/store/computed'
+import Alerts from './Alerts.vue'
 import DesktopNav from './DesktopNav.vue'
 import DesktopUser from './DesktopUser.vue'
 import Footer from './Footer.vue'
@@ -51,6 +56,7 @@ export default defineComponent({
     }
   },
   components: {
+    Alerts,
     DesktopNav,
     DesktopUser,
     Footer,

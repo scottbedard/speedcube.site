@@ -45,44 +45,50 @@
 </template>
 
 <script lang="ts">
-  import { Button, Card, Input } from '@/components'
-  import { defineComponent } from 'vue'
-  import { useUpdateUser } from '@/app/api'
-  
-  export default defineComponent({
-    setup() {
-      const {
-        data,
-        fieldErrors,
-        loading,
-        updateUser,
-      } = useUpdateUser({
-        currentPassword: '',
-        password: '',
-        passwordConfirmation: '',
-      })
+import { alert } from '@/app/alerts'
+import { Button, Card, Input } from '@/components'
+import { defineComponent } from 'vue'
+import { useUpdateUser } from '@/app/api'
 
-      const submit = () => {
-        updateUser().then(() => {
-          data.password = ''
-          data.passwordConfirmation = ''
-          data.currentPassword = ''
+export default defineComponent({
+  setup() {
+    const {
+      data,
+      fieldErrors,
+      loading,
+      updateUser,
+    } = useUpdateUser({
+      currentPassword: '',
+      password: '',
+      passwordConfirmation: '',
+    })
+
+    const submit = () => {
+      updateUser().then(() => {
+        data.password = ''
+        data.passwordConfirmation = ''
+        data.currentPassword = ''
+
+        alert({
+          text: 'Successfully updated password.',
+          type: 'success',
         })
-      }
+      })
+    }
 
-      return {
-        data,
-        fieldErrors,
-        loading,
-        submit,
-      }
-    },
-    components: {
-      Button,
-      Card,
-      Input,
-    },
-    name: 'Security',
-  })
-  </script>
+    return {
+      data,
+      fieldErrors,
+      loading,
+      submit,
+    }
+  },
+  components: {
+    Button,
+    Card,
+    Input,
+  },
+  name: 'Security',
+})
+</script>
   
