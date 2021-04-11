@@ -45,3 +45,10 @@ export type LoginResponse = {
   Unauthorized = 401,
   UnprocessableEntity = 422,
 }
+
+/**
+ * POST: /api/users/{id}
+ */
+export type UpdateUserResponse = {
+  user: User
+}
