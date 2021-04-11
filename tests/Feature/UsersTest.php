@@ -43,7 +43,11 @@ class UsersTest extends TestCase
 
         $user = User::factory()->create();
 
-        $this->post('/api/users/forgot-password', ['email' => $user->email]);
+        $response = $this->json('POST', '/api/users/forgot-password', [
+            'email' => $user->email,
+        ]);
+
+        $response->assertStatus(200);
 
         Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
             $response = $this->json('POST', '/api/users/reset-password', [
@@ -64,10 +68,12 @@ class UsersTest extends TestCase
             return true;
         });
 
-        $this->assertTrue(Auth::attempt([
-            'username' => $user->username,
-            'password' => 'password',
-        ]));
+        $this->assertTrue(
+            Auth::attempt([
+                'username' => $user->username,
+                'password' => 'password',
+            ])
+        );
     }
 
     public function test_forgot_password_with_bad_email()

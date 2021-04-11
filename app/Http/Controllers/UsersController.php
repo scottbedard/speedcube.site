@@ -46,7 +46,7 @@ class UsersController extends Controller
             function ($user, $password) use ($request) {
                 $user->password = $password;
                 $user->password_confirmation = $password;
-                $user->save();
+                $user->forceSave();
 
                 event(new PasswordReset($user));
             }

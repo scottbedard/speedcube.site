@@ -21,14 +21,14 @@ Route::prefix('api')->middleware(TransformKeys::class)->group(function () {
     });
 
     // users
-    Route::middleware('auth')->group(function () {
-        Route::post('users/{id}', [UsersController::class, 'update']);
-    });
-
     Route::middleware('guest')->group(function () {
-        Route::post('users', [UsersController::class, 'store']);
         Route::post('users/forgot-password', [UsersController::class, 'forgotPassword']);
         Route::post('users/reset-password', [UsersController::class, 'resetPassword']);
+        Route::post('users', [UsersController::class, 'store']);
+    });
+
+    Route::middleware('auth')->group(function () {
+        Route::post('users/{id}', [UsersController::class, 'update']);
     });
 });
 

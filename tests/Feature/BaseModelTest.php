@@ -67,6 +67,24 @@ class BaseModelTest extends TestCase
         $this->assertArrayNotHasKey('password_confirmation', $model->attributes);
     }
 
+    public function test_force_save()
+    {
+        $model = new class extends TestModel
+        {
+            public $attributes = [
+                'field' => 'not an email',
+            ];
+
+            public $rules = [
+                'field' => ['email'],
+            ];
+        };
+
+        $model->forceSave();
+
+        $this->assertTrue($model->exists);
+    }
+
     public function test_validation_failure()
     {
         $model = new class extends TestModel

@@ -32,6 +32,13 @@ class BaseModel extends Model
     public $rules = [];
 
     /**
+     * Validate the model before saving.
+     *
+     * @var boolean
+     */
+    protected $validation = true;
+
+    /**
      * Boot.
      *
      * @return void
@@ -39,10 +46,25 @@ class BaseModel extends Model
     protected static function booted()
     {
         static::saving(function ($model) {
-            $model->validate();
+            if ($model->validation) {
+                $model->validate();
+            }
+
             $model->purge();
             $model->hash();
         });
+    }
+
+    /**
+     * Save model without validation.
+     */
+    public function forceSave()
+    {
+        $this->validation = false;
+
+        $this->save();
+
+        $this->validation = true;
     }
 
     /**
