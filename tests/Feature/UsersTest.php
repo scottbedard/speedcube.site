@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
 class UsersTest extends TestCase
@@ -45,7 +46,7 @@ class UsersTest extends TestCase
         $this->post('/api/users/forgot-password', ['email' => $user->email]);
 
         Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
-            $response = $this->post('/api/users/reset-password', [
+            $response = $this->json('POST', '/api/users/reset-password', [
                 'email' => $user->email,
                 'passwordConfirmation' => 'password',
                 'password' => 'password',
@@ -71,10 +72,82 @@ class UsersTest extends TestCase
 
     public function test_forgot_password_with_bad_email()
     {
-        $response = $this->post('/api/users/forgot-password', [
+        $response = $this->json('POST', '/api/users/forgot-password', [
             'email' => 'foo@bar.com',
         ]);
 
         $response->assertStatus(401);
+    }
+
+    public function test_update_password_success()
+    {
+        $user = User::factory()->create();
+
+        $request = $this
+            ->actingAs($user)
+            ->json('POST', '/api/users/' . $user->id, [
+                'current_password' => 'password',
+                'password' => '12345678',
+                'password_confirmation' => '12345678',
+            ]);
+
+        $request->assertStatus(200);
+
+        $this->assertFalse(
+            Auth::attempt([
+                'username' => $user->username,
+                'password' => 'password',
+            ])
+        );
+
+        $this->assertTrue(
+            Auth::attempt([
+                'username' => $user->username,
+                'password' => '12345678',
+            ])
+        );
+    }
+
+    public function test_update_password_as_guest()
+    {
+        $user = User::factory()->create();
+
+        $request = $this->json('POST', '/api/users/' . $user->id, [
+            'current_password' => 'password',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
+        ]);
+
+        $request->assertStatus(401);
+    }
+
+    public function test_update_password_as_wrong_user()
+    {
+        $john = User::factory()->create();
+        $sally = User::factory()->create();
+
+        $response = $this
+            ->actingAs($sally)
+            ->json('POST', '/api/users/' . $john->id, [
+                'current_password' => 'password',
+                'password' => '12345678',
+                'password_confirmation' => '12345678',
+            ]);
+
+        $response->assertStatus(401);
+    }
+
+    public function test_update_password_without_current_password()
+    {
+        $user = User::factory()->create();
+
+        $request = $this
+            ->actingAs($user)
+            ->json('POST', '/api/users/' . $user->id, [
+                'password' => '12345678',
+                'password_confirmation' => '12345678',
+            ]);
+
+        $request->assertStatus(422);
     }
 }

@@ -49,6 +49,7 @@ class User extends BaseModel implements
      * @var array
      */
     protected $fillable = [
+        'current_password',
         'email',
         'password_confirmation',
         'password',
@@ -70,6 +71,8 @@ class User extends BaseModel implements
      * @var array
      */
     protected $hidden = [
+        'current_password',
+        'password_confirmation',
         'password',
         'remember_token',
     ];
@@ -80,6 +83,7 @@ class User extends BaseModel implements
      * @var array
      */
     public $purgeable = [
+        'current_password',
         'password_confirmation',
     ];
 
@@ -89,8 +93,9 @@ class User extends BaseModel implements
      * @var array
      */
     public $rules = [
+        'current_password' => ['required_with_update:password'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique'],
-        'password' => ['required:create', 'string', 'confirmed', 'min:8'],
+        'password' => ['required_create', 'string', 'confirmed', 'min:8'],
         'username' => ['required', 'string', 'between:2,255', 'unique'],
     ];
 }

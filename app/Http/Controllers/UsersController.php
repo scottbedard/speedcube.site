@@ -76,4 +76,23 @@ class UsersController extends Controller
             'user' => $user,
         ];
     }
+
+    /**
+     * Update
+     */
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->id !== (int) $request->id) {
+            abort(401, 'Unauthorized');
+        }
+
+        $user->fill($request->input());
+        $user->save();
+
+        return [
+            'user' => $user,
+        ];
+    }
 }

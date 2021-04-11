@@ -21,9 +21,15 @@ Route::prefix('api')->middleware(TransformKeys::class)->group(function () {
     });
 
     // users
-    Route::apiResource('users', UsersController::class);
-    Route::post('users/forgot-password', [UsersController::class, 'forgotPassword'])->middleware('guest');
-    Route::post('users/reset-password', [UsersController::class, 'resetPassword'])->middleware('guest');
+    Route::middleware('auth')->group(function () {
+        Route::post('users/{id}', [UsersController::class, 'update']);
+    });
+
+    Route::middleware('guest')->group(function () {
+        Route::post('users', [UsersController::class, 'store']);
+        Route::post('users/forgot-password', [UsersController::class, 'forgotPassword']);
+        Route::post('users/reset-password', [UsersController::class, 'resetPassword']);
+    });
 });
 
 /**
