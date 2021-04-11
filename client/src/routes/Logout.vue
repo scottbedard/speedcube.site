@@ -12,7 +12,9 @@ export default defineComponent({
     const { logout } = useLogout()
     const router = useRouter()
 
-    logout().then(() => router.replace({ name: 'home' }))
+    logout().then(() => {
+      router.replace({ name: 'home' })
+    })
   },
 })
 </script>

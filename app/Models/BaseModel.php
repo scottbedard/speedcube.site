@@ -97,7 +97,8 @@ class BaseModel extends Model
         $dirty = array_keys($this->getDirty());
 
         foreach ($this->attributes as $key => $value) {
-            if ($this->exists && in_array($key, $this->hashable) && !in_array($key, $dirty)) {
+            // skip hashable fields that have not changed
+            if (in_array($key, $this->hashable) && !in_array($key, $dirty)) {
                 continue;
             }
 
