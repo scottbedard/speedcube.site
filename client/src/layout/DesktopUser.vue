@@ -1,13 +1,14 @@
 <template>
-  <div class="flex gap-6 items-center relative">
+  <div class="flex items-center relative">
     <template v-if="isAuthenticated">
-      <div
-        v-text="user?.username" />
-
       <a
         class="flex items-center"
         href="#"
         @click.prevent="open">
+        <div
+          class="mr-6"
+          v-text="user?.username" />
+
         <Icon
           class="mr-px"
           name="chevron-down"
