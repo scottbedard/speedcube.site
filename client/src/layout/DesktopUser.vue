@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center relative">
+  <div class="flex gap-6 items-center relative">
     <template v-if="isAuthenticated">
       <a
         class="flex items-center"
