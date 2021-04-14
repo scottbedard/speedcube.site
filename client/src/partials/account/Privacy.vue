@@ -15,7 +15,7 @@
           </Checkbox>
 
           <Checkbox>
-            Quiet mode
+            Safe mode
             <template #description>Comments and reactions will be disabled for your solves.</template>
           </Checkbox>
         </div>
