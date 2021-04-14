@@ -151,7 +151,7 @@ export default defineComponent({
       expanded.value = true
     }
 
-    watch(route, close)
+    watch(() => route.fullPath, close)
 
     return {
       close,

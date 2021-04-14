@@ -82,7 +82,7 @@ export default defineComponent({
 
     onClickOutside(dropdown, close)
 
-    watch(route, close)
+    watch(() => route.fullPath, close)
 
     return {
       dropdown,
