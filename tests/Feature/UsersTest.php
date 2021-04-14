@@ -186,4 +186,17 @@ class UsersTest extends TestCase
         
         $request->assertStatus(422);
     }
+
+    public function test_cannot_update_username()
+    {
+        $user = User::factory()->create();
+
+        $request = $this
+            ->actingAs($user)
+            ->json('POST', '/api/users/' . $user->id, [
+                'username' => 'foobar',
+            ]);
+        
+        $request->assertStatus(422);
+    }
 }

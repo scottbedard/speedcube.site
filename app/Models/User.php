@@ -119,6 +119,10 @@ class User extends BaseModel implements
                 $model->checkCurrentPassword();
             }
         });
+
+        static::updating(function ($model) {
+            $model->prohibitUsernameChanges();
+        });
     }
 
     /**
@@ -128,7 +132,23 @@ class User extends BaseModel implements
     {
         if (!Hash::check($this->current_password, $this->getRawOriginal('password'))) {
             throw ValidationException::withMessages([
-                'current_password' => [__('validation.password')],
+                'current_password' => [
+                    __('validation.password'),
+                ],
+            ]);
+        }
+    }
+
+    /**
+     * Prevent a user from modifying their username.
+     */
+    protected function prohibitUsernameChanges()
+    {
+        if ($this->isDirty('username')) {
+            throw ValidationException::withMessages([
+                'current_password' => [
+                    __('validation.prohibited', ['attribute' => 'username'])
+                ],
             ]);
         }
     }
