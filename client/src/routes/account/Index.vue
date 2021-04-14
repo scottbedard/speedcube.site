@@ -15,12 +15,6 @@
           text="Security"
           :highlight="route.name === 'account:security'"
           :to="{ name: 'account:security' }" />
-
-        <CardLink
-          icon="bell"
-          text="Notifications"
-          :highlight="route.name === 'account:notifications'"
-          :to="{ name: 'account:notifications' }" />
       </Card>
     </nav>
 

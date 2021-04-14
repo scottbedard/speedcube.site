@@ -35,13 +35,6 @@ export const routes: RouteRecordRaw[] = [
         },
       },
 
-      // notifications
-      {
-        component: () => import('@/routes/account/Notifications.vue'),
-        name: 'account:notifications',
-        path: 'notifications',
-      },
-
       // profile
       {
         component: () => import('@/routes/account/Profile.vue'),
