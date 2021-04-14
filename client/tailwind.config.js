@@ -14,6 +14,9 @@ module.exports = {
       fontFamily: {
         sans: 'Quicksand, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
       },
+      spacing: {
+        'full': '100%',
+      },
     },
     minHeight: {
       '0': '0px',
