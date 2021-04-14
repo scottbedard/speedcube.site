@@ -171,4 +171,19 @@ class UsersTest extends TestCase
 
         $request->assertStatus(422);
     }
+
+    public function test_email_must_by_unique()
+    {
+        User::factory()->create(['email' => 'foo@bar.com']);
+
+        $user = User::factory()->create();
+        
+        $request = $this
+            ->actingAs($user)
+            ->json('POST', '/api/users/' . $user->id, [
+                'email' => 'foo@bar.com',
+            ]);
+        
+        $request->assertStatus(422);
+    }
 }

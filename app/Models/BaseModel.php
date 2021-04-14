@@ -158,9 +158,9 @@ class BaseModel extends Model
                     $this->exists && array_push($processed[$field], str_replace('required_with_update:', 'required_with:', $rule));
                 }
 
-                // unique:table
+                // unique
                 elseif (Str::startsWith($rule, 'unique')) {
-                    !$this->exists && array_push($processed[$field], $this->validationUnique($rule, $field));
+                    array_push($processed[$field], $this->validationUnique($rule, $field));
                 }
 
                 // standard rules
