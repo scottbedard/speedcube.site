@@ -33,6 +33,8 @@ class User extends BaseModel implements
     public $attributes = [
         'email_verified_at' => null,
         'email' => '',
+        'private_mode' => false,
+        'safe_mode' => false,
         'username' => '',
     ];
 
@@ -43,6 +45,8 @@ class User extends BaseModel implements
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'private_mode' => 'boolean',
+        'safe_mode' => 'boolean',
     ];
 
     /**
@@ -55,6 +59,8 @@ class User extends BaseModel implements
         'email',
         'password_confirmation',
         'password',
+        'private_mode',
+        'safe_mode',
         'username',
     ];
 
