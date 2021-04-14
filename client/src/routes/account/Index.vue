@@ -1,7 +1,7 @@
 <template>
   <div class="gap-6 grid md:grid-cols-12">
     <nav class="md:col-span-4 lg:col-span-3">
-      <div class="mb-2 font-bold text-lg">Account</div>
+      <div class="mb-2 font-bold text-lg">Settings</div>
       
       <Card>
         <CardLink
