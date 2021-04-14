@@ -1,17 +1,20 @@
 <template>
-  <div class="max-w-lg mx-auto">
-    <Puzzle />
-  </div>
+  <Scene square>
+    Hello
+  </Scene>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { Puzzle } from '@/components'
+import { Scene } from '@/three'
 
 export default defineComponent({
-  components: {
-    Puzzle,
+  setup() {
+    
   },
-  name: 'Solve'
+  components: {
+    Scene,
+  },
+  name: 'Puzzle',
 })
 </script>
