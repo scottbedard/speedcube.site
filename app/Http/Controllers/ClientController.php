@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Utils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -13,7 +14,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $context = json_encode([
+        $context = Utils::camelKeysRecursive([
             'user' => Auth::user(),
         ]);
 
@@ -22,7 +23,7 @@ class ClientController extends Controller
         $manifest = json_decode(File::get(public_path('dist/manifest.json')), true);
 
         return view('index', [
-            'context' => $context,
+            'context' => json_encode($context),
             'local' => $local,
             'manifest' => $manifest,
         ]);

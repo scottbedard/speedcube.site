@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Classes;
+
 use Illuminate\Support\Str;
 
 class Utils
@@ -48,7 +49,7 @@ class Utils
             ->map(function ($item) use ($fn) {
                 if (is_array($item)) {
                     return self::keyByRecursive($item, $fn);
-                } elseif ($item instanceof Model) {
+                } elseif ($item instanceof \Illuminate\Database\Eloquent\Model) {
                     return self::keyByRecursive($item->toArray(), $fn);
                 }
 
