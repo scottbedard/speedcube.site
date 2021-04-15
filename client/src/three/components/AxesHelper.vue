@@ -1,9 +1,8 @@
 <script lang="ts">
   import { AxesHelper } from 'three'
-  import { defineComponent, PropType } from 'vue'
-  import { noop, stubObject } from 'lodash-es'
-  import { useNesting, usePosition } from '@/three/behaviors'
-  import { Vector } from '@/three/types'
+  import { defineComponent } from 'vue'
+  import { noop } from 'lodash-es'
+  import { useNesting, usePosition, positionProp } from '@/three/behaviors'
 
   export default defineComponent({
     setup(props) {
@@ -14,10 +13,7 @@
     },
     render: noop,
     props: {
-      position: {
-        default: stubObject,
-        type: Object as PropType<Partial<Vector>>
-      },
+      position: positionProp,
       size: {
         default: 1,
         type: Number,

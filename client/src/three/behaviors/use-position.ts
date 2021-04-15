@@ -1,6 +1,15 @@
 import { Object3D } from 'three'
-import { watchEffect } from 'vue'
+import { PropType, watchEffect } from 'vue'
+import { stubObject } from 'lodash-es'
 import { Vector } from '@/three/types'
+
+/**
+ * Prop for usePosition
+ */
+export const positionProp = {
+  default: stubObject,
+  type: Object as PropType<Partial<Vector>>
+}
 
 /**
  * Set an objects position from a vector
