@@ -25,7 +25,7 @@ import {
 import { clamp } from 'lodash-es'
 import { degreesToRadians } from '@/app/utils/math'
 import { RendererSymbol, SceneApi } from '@/three/types'
-import { useNesting } from '@/three'
+import { useNesting } from '@/three/behaviors'
 
 // @todo: figure out why Number.EPSILON doesn't work for this value
 const EPSILON = 0.0001;

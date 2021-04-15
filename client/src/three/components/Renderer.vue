@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, onUnmounted, provide, ref, watch } from 'vue'
-import { RendererSymbol, SceneFactory } from './types'
+import { RendererSymbol, SceneFactory } from '@/three/types'
 import { useRafFn, useWindowSize } from '@vueuse/core'
 import { WebGLRenderer } from 'three'
 
