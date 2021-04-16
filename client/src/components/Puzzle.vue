@@ -3,9 +3,10 @@
     :camera-angle="cameraAngle"
     :camera-distance="cameraDistance"
     square>
-    <AxesHelper :size="1" />
 
-    <SphereGeometry :color="0xff0000" :radius="2" />
+    <SphereGeometry :radius="1">
+      <AxesHelper :size="1" />
+    </SphereGeometry>
   </Scene>
 
   <div class="mt-6">

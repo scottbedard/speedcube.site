@@ -1,3 +1,7 @@
+<template>
+  <slot />
+</template>
+
 <script lang="ts">
 import { Mesh, MeshLambertMaterial, SphereGeometry } from 'three'
 import { defineComponent } from 'vue'
