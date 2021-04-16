@@ -37,24 +37,26 @@
     </div>
 
     <nav class="tw-margin">
-      <component
-        v-bind="
-          link.to
-            ? { to: link.to }
-            : { href: link.href }
-        "
+      <div
         v-for="(link, index) in links"
-        class="flex items-center py-2"
         :key="index"
-        :is="link.to ? 'RouterLink' : 'a'"
         @click="close">
-        <Icon
-          :name="link.icon"
-          class="mr-3"
-          size="6"
-          stroke="2" />
-        {{ link.text }}
-      </component>
+        <component
+          v-bind="
+            link.to
+              ? { to: link.to }
+              : { href: link.href }
+          "
+          class="flex items-center py-2"
+          :is="link.to ? 'RouterLink' : 'a'">
+          <Icon
+            :name="link.icon"
+            class="mr-3"
+            size="6"
+            stroke="2" />
+          {{ link.text }}
+        </component>
+      </div>
     </nav>
   </div>
 </template>
