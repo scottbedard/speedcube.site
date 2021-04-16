@@ -28,7 +28,7 @@ import { RendererSymbol, SceneApi } from '@/three/types'
 import { useNesting } from '@/three/behaviors'
 
 // @todo: figure out why Number.EPSILON doesn't work for this value
-const EPSILON = 0.0001;
+const EPSILON = 0.001;
 
 export default defineComponent({
   setup(props) {
