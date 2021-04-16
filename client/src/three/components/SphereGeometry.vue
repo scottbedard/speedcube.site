@@ -20,20 +20,20 @@ export default defineComponent({
       props.heightSegments,
     )
 
+    useDisposable(geometry)
+
     const material = new MeshLambertMaterial({
       wireframe: props.wireframe
     })
 
-    useDisposable(geometry)
-
     useColor(material, () => props.color);
-
     useDisposable(material)
 
     const sphere = new Mesh(geometry, material)
-    useNesting(sphere);
-    usePosition(sphere, () => props.position)
+
     useHidden(sphere, () => props.hidden)
+    useNesting(sphere)
+    usePosition(sphere, () => props.position)
   },
   name: 'SphereGeometry',
   props: {

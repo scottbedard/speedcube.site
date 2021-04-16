@@ -5,7 +5,7 @@
     square>
     <AxesHelper :size="1" />
 
-    <SphereGeometry :radius="1" />
+    <SphereGeometry :color="0xff0000" :radius="2" />
   </Scene>
 
   <div class="mt-6">
