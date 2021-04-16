@@ -23,7 +23,7 @@ import {
 } from 'three'
 
 import { clamp } from 'lodash-es'
-import { degreesToRadians } from '@/app/utils/math'
+import { degreesToRadians } from '@/app/utils'
 import { RendererSymbol, SceneApi } from '@/three/types'
 import { useNesting } from '@/three/behaviors'
 

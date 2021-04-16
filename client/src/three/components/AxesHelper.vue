@@ -11,6 +11,7 @@ export default defineComponent({
     useNesting(axesHelper)
     usePosition(axesHelper, () => props.position)
   },
+  name: 'AxesHelper',
   render: noop,
   props: {
     position: usePositionProp,

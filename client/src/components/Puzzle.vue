@@ -3,10 +3,9 @@
     :camera-angle="cameraAngle"
     :camera-distance="cameraDistance"
     square>
-
-    <SphereGeometry :radius="1">
+    <Group>
       <AxesHelper :size="1" />
-    </SphereGeometry>
+    </Group>
   </Scene>
 
   <div class="mt-6">
@@ -21,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { AxesHelper, Scene, SphereGeometry } from '@/three/components'
+import { AxesHelper, Group, Scene } from '@/three/components'
 import { defineComponent, ref } from 'vue'
 import RangeInput from './RangeInput.vue'
 
@@ -37,9 +36,9 @@ export default defineComponent({
   },
   components: {
     AxesHelper,
+    Group,
     RangeInput,
     Scene,
-    SphereGeometry,
   },
   name: 'Puzzle',
 })
