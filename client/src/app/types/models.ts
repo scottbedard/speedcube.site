@@ -2,12 +2,13 @@
  * User
  */
 export type User = {
+  allowComments: boolean
   createdAt: string
   email: string
   emailVerifiedAt: null | string
   id: number
-  privateMode: boolean
-  safeMode: boolean
+  publicSolves: boolean
+  publicStats: boolean
   updatedAt: string
   username: string
 }

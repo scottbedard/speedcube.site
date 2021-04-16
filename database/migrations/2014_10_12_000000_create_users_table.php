@@ -19,8 +19,9 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->boolean('private_mode')->default(false)->index();
-            $table->boolean('safe_mode')->default(false);
+            $table->boolean('public_solves')->default(true)->index();
+            $table->boolean('public_stats')->default(true);
+            $table->boolean('allow_comments')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -31,10 +31,11 @@ class User extends BaseModel implements
      * Default attributes.
      */
     public $attributes = [
+        'allow_comments' => true,
         'email_verified_at' => null,
         'email' => '',
-        'private_mode' => false,
-        'safe_mode' => false,
+        'public_solves' => true,
+        'public_stats' => true,
         'username' => '',
     ];
 
@@ -44,9 +45,10 @@ class User extends BaseModel implements
      * @var array
      */
     protected $casts = [
+        'allow_comments' => 'boolean',
         'email_verified_at' => 'datetime',
-        'private_mode' => 'boolean',
-        'safe_mode' => 'boolean',
+        'public_solves' => 'boolean',
+        'public_stats' => 'boolean',
     ];
 
     /**
@@ -55,12 +57,13 @@ class User extends BaseModel implements
      * @var array
      */
     protected $fillable = [
+        'allow_comments',
         'current_password',
         'email',
         'password_confirmation',
         'password',
-        'private_mode',
-        'safe_mode',
+        'public_solves',
+        'public_stats',
         'username',
     ];
 
