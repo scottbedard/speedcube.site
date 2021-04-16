@@ -3,9 +3,26 @@
     :camera-angle="cameraAngle"
     :camera-distance="cameraDistance"
     square>
-    <Group>
-      <AxesHelper :size="1" />
-    </Group>
+    <BoxGeometry :dimensions="1">
+      <template #up>
+        <AxesHelper :size="0.5" />
+      </template>
+      <template #left>
+        <AxesHelper :size="0.5" />
+      </template>
+      <template #front>
+        <AxesHelper :size="0.5" />
+      </template>
+      <template #right>
+        <AxesHelper :size="0.5" />
+      </template>
+      <template #back>
+        <AxesHelper :size="0.5" />
+      </template>
+      <template #down>
+        <AxesHelper :size="0.5" />
+      </template>
+    </BoxGeometry>
   </Scene>
 
   <div class="mt-6">
@@ -20,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { AxesHelper, Group, Scene } from '@/three/components'
+import { AxesHelper, BoxGeometry, Scene } from '@/three/components'
 import { defineComponent, ref } from 'vue'
 import RangeInput from './RangeInput.vue'
 
@@ -36,7 +53,7 @@ export default defineComponent({
   },
   components: {
     AxesHelper,
-    Group,
+    BoxGeometry,
     RangeInput,
     Scene,
   },
