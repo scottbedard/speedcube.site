@@ -1,18 +1,17 @@
 import { degreesToRadians } from '@/app/utils'
 import { Object3D, Quaternion, Vector3 } from 'three'
 import { PropType, watchEffect } from 'vue'
-
-type Rotation = [number, number, number, number]
+import { Vector4 } from '@/app/types/math'
 
 export const useRotationProp = {
   default: () => [0, 0, 0, 0],
-  type: [Array, Object] as PropType<Rotation | Quaternion>,
+  type: [Array, Object] as PropType<Vector4 | Quaternion>,
 }
 
 /**
  * Set object rotation by axis angle and degrees
  */
- export function useRotation(obj: Object3D, rotation: () => Rotation | Quaternion | undefined | null) {
+ export function useRotation(obj: Object3D, rotation: () => Vector4 | Quaternion | undefined | null) {
   watchEffect(() => {
     const r = rotation();
 
