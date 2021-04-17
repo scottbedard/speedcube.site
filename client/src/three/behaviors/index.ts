@@ -1,5 +1,6 @@
 export { useColor, useColorProp } from './use-color'
 export { useDisposable } from './use-disposable'
+export { useGeometry } from './use-geometry'
 export { useHidden, useHiddenProp } from './use-hidden'
 export { useNesting } from './use-nesting'
 export { usePosition, usePositionProp } from './use-position'
