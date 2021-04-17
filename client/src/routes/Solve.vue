@@ -2,7 +2,7 @@
   <div class="max-w-lg mx-auto">
     <Puzzle
       :config="{
-        ...defaultConfig,
+        ...cubeConfig,
         cameraAngle,
         cameraDistance,
       }"
@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { Cube } from '@bedard/twister'
-import { defaultConfig } from '@/components/puzzle/cube/constants'
+import { cubeConfig } from '@/components/puzzle/constants'
 import { defineComponent, ref } from 'vue'
 import { Puzzle, RangeInput } from '@/components'
 
@@ -35,7 +35,7 @@ export default defineComponent({
     return {
       cameraAngle,
       cameraDistance,
-      defaultConfig,
+      cubeConfig,
       model,
     }
   },

@@ -1,3 +1,5 @@
+import { CubeConfig } from '@/app/types/puzzle'
+
 /**
  * Default colors
  */
@@ -14,4 +16,25 @@ export const colors: Record<string, string> = {
   red: '#e53e3e',
   white: '#f7fafc',
   yellow: '#f6e05e',
+}
+
+/**
+ * Default cube configuration.
+ */
+export const cubeConfig: CubeConfig = {
+  cameraAngle: 50,
+  cameraDistance: 3,
+  colors: [
+    colors.yellow, // U
+    colors.orange, // L
+    colors.blue, // F
+    colors.red, // R
+    colors.green, // B
+    colors.white, // D
+  ],
+  innerBrightness: 0.9,
+  stickerElevation: 0.2,
+  stickerRadius: 0.2,
+  stickerSpacing: 0.2,
+  turnDuration: 65,
 }

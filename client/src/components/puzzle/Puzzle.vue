@@ -14,16 +14,10 @@
 
 <script lang="ts">
 import { AxesHelper, BoxGeometry, Scene } from '@/three/components'
+import { computed, defineComponent, PropType } from 'vue'
 import { Cube } from '@bedard/twister';
 import { isArray, isNumber } from 'lodash-es'
 import CubeComponent from './cube/Cube.vue'
-
-import {
-  computed,
-  defineComponent,
-  PropType,
-  ref,
-} from 'vue'
 
 type CameraConfig = {
   cameraAngle: number,

@@ -5,8 +5,8 @@
 <script lang="ts">
 import { attempt, isArray, isError, isNumber } from 'lodash-es'
 import { Cube } from '@bedard/twister'
+import { cubeConfig } from '../constants'
 import { CubeConfig } from '@/app/types/puzzle'
-import { defaultConfig } from './constants'
 import { mapColumns, mapRows } from '@/app/utils'
 import { useGeometry } from '@/three/behaviors'
 import { Vector4 } from '@/app/types/math'
@@ -95,11 +95,11 @@ const getTurnRotation = (model: Cube, currentTurn: string, turnProgress: number)
 export default defineComponent({
   setup(props) {
     // normalize configuration
-    const colors = computed(() => isArray(props.config.colors) ? props.config.colors : defaultConfig.colors)
-    const innerBrightness = computed(() => isNumber(props.config.innerBrightness) ? props.config.innerBrightness : defaultConfig.innerBrightness)
-    const stickerRadius = computed(() => isNumber(props.config.stickerRadius) ? props.config.stickerRadius : defaultConfig.stickerRadius)
-    const stickerSpacing = computed(() => isNumber(props.config.stickerSpacing) ? props.config.stickerSpacing : defaultConfig.stickerSpacing)
-    const stickerElevation = computed(() => isNumber(props.config.stickerElevation) ? props.config.stickerElevation : defaultConfig.stickerElevation)
+    const colors = computed(() => isArray(props.config.colors) ? props.config.colors : cubeConfig.colors)
+    const innerBrightness = computed(() => isNumber(props.config.innerBrightness) ? props.config.innerBrightness : cubeConfig.innerBrightness)
+    const stickerRadius = computed(() => isNumber(props.config.stickerRadius) ? props.config.stickerRadius : cubeConfig.stickerRadius)
+    const stickerSpacing = computed(() => isNumber(props.config.stickerSpacing) ? props.config.stickerSpacing : cubeConfig.stickerSpacing)
+    const stickerElevation = computed(() => isNumber(props.config.stickerElevation) ? props.config.stickerElevation : cubeConfig.stickerElevation)
   
     // cube values
     const colMap = computed(() => mapColumns(props.model.options.size))
@@ -151,7 +151,7 @@ export default defineComponent({
 
     // sticker materials
     const materials = computed(() => createMaterials(colors.value, innerBrightness.value))
-    
+
     watch(materials, (current, prev) => disposeMaterials(prev))
 
     onUnmounted(() => disposeMaterials(materials.value))

@@ -1,5 +1,4 @@
 <template>
-  Hello world
   <BoxGeometry :dimensions="1">
     <template #up>
       <AxesHelper :size="0.5" />
