@@ -46,14 +46,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Icon } from '@/components'
-import { useDark, useToggle } from '@vueuse/core'
+import { isDark } from '@/app/store/state'
+import { useToggle } from '@vueuse/core'
 
 const iconSize = 6
 const iconStroke = 1.8
 
 export default defineComponent({
   setup() {
-    const isDark = useDark()
     const toggleDarkMode = useToggle(isDark)
 
     return {
