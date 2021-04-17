@@ -1,6 +1,7 @@
 <template>
   <Core
     :edge-length="edgeLength"
+    :edges-geometry="edgesGeometry"
     :geometry="geometry"
     :materials="materials"
     :model="model"
@@ -14,7 +15,7 @@ import { Cube } from '@bedard/twister'
 import { cubeConfig } from '../constants'
 import { CubeConfig } from '@/app/types/puzzle'
 import { mapColumns, mapRows } from '@/app/utils'
-import { useGeometry } from '@/three/behaviors'
+import { useEdgesGeometry, useGeometry } from '@/three/behaviors'
 import { Vector4 } from '@/app/types/math'
 import Core from './Core.vue'
 
@@ -155,6 +156,9 @@ export default defineComponent({
       [stickerLength.value, 0],
     ], stickerRadius)
 
+    // sticker edges geometry
+    const edgesGeometry = useEdgesGeometry(geometry)
+
     // sticker materials
     const materials = computed(() => createMaterials(colors.value, innerBrightness.value))
 
@@ -164,6 +168,7 @@ export default defineComponent({
 
     return {
       edgeLength,
+      edgesGeometry,
       geometry,
       idleStickers,
       materials,

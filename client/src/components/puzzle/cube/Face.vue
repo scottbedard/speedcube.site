@@ -1,6 +1,7 @@
 <template>
   <Shape
     v-for="(sticker, index) in stickers"
+    :edges-geometry="edgesGeometry"
     :geometry="geometry"
     :hidden="isHidden(sticker)"
     :key="index"
@@ -12,7 +13,7 @@
 <script lang="ts">
 import { CubeSticker } from '@bedard/twister'
 import { defineComponent, PropType } from 'vue'
-import { Material, ShapeBufferGeometry } from 'three'
+import { EdgesGeometry, Material, ShapeBufferGeometry } from 'three'
 import { Shape } from '@/three/components'
 import { XYZ } from '@/three/types'
 
@@ -33,6 +34,10 @@ export default defineComponent({
   },
   name: 'CubeFace',
   props: {
+    edgesGeometry: {
+      required: true,
+      type: EdgesGeometry,
+    },
     geometry: {
       required: true,
       type: Object as PropType<ShapeBufferGeometry>,

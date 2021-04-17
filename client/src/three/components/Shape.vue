@@ -1,9 +1,13 @@
 <script lang="ts">
-import { defineComponent, watchEffect } from 'vue'
+import { computed, defineComponent, watch, watchEffect } from 'vue'
+import { isDark } from '@/app/store/state'
 import { noop } from 'lodash-es'
 
 import {
+  EdgesGeometry,
   Group,
+  LineBasicMaterial,
+  LineSegments,
   Material,
   Mesh,
   ShapeBufferGeometry,
@@ -21,11 +25,16 @@ export default defineComponent({
   setup(props) {
     const group = new Group
 
+    const outline = computed(() => {
+      const material = new LineBasicMaterial({
+        color: isDark.value ? 0x374151 : 0x6B7280
+      })
+
+      return new LineSegments(props.edgesGeometry, material)
+    })
+
     watchEffect(() => {
       group.remove(...group.children)
-
-      // @todo: outline mesh
-      // http://stemkoski.github.io/Three.js/Outline.html
 
       if (props.geometry) {
         if (props.innerMaterial) {
@@ -36,6 +45,8 @@ export default defineComponent({
           group.add(new Mesh(props.geometry, props.outerMaterial))
         }
       }
+
+      group.add(outline.value)
     })
 
     useHidden(group, () => props.hidden)
@@ -44,6 +55,7 @@ export default defineComponent({
   },
   name: 'Shape',
   props: {
+    edgesGeometry: EdgesGeometry,
     geometry: ShapeBufferGeometry,
     hidden: useHiddenProp,
     innerMaterial: Material,

@@ -1,5 +1,6 @@
 export { useColor, useColorProp } from './use-color'
 export { useDisposable } from './use-disposable'
+export { useEdgesGeometry } from './use-edges-geometry'
 export { useGeometry } from './use-geometry'
 export { useHidden, useHiddenProp } from './use-hidden'
 export { useNesting } from './use-nesting'

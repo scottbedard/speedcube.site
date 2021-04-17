@@ -5,6 +5,7 @@
     :rotation="rotation">
     <template #up>
       <Face
+        :edges-geometry="edgesGeometry"
         :geometry="geometry"
         :materials="materials"
         :sticker-position="stickerPosition"
@@ -13,6 +14,7 @@
     </template>
     <template #left>
       <Face
+        :edges-geometry="edgesGeometry"
         :geometry="geometry"
         :materials="materials"
         :sticker-position="stickerPosition"
@@ -21,6 +23,7 @@
     </template>
     <template #front>
       <Face
+        :edges-geometry="edgesGeometry"
         :geometry="geometry"
         :materials="materials"
         :sticker-position="stickerPosition"
@@ -29,6 +32,7 @@
     </template>
     <template #right>
       <Face
+        :edges-geometry="edgesGeometry"
         :geometry="geometry"
         :materials="materials"
         :sticker-position="stickerPosition"
@@ -37,6 +41,7 @@
     </template>
     <template #back>
       <Face
+        :edges-geometry="edgesGeometry"
         :geometry="geometry"
         :materials="materials"
         :sticker-position="stickerPosition"
@@ -45,6 +50,7 @@
     </template>
     <template #down>
       <Face
+        :edges-geometry="edgesGeometry"
         :geometry="geometry"
         :materials="materials"
         :sticker-position="stickerPosition"
@@ -58,7 +64,7 @@
 import { BoxGeometry } from '@/three/components'
 import { Cube, CubeSticker } from '@bedard/twister'
 import { defineComponent, PropType } from 'vue'
-import { Material, ShapeBufferGeometry } from 'three'
+import { EdgesGeometry, Material, ShapeBufferGeometry } from 'three'
 import { useRotationProp } from '@/three/behaviors'
 import { XYZ } from '@/three/types'
 import Face from './Face.vue'
@@ -75,6 +81,10 @@ export default defineComponent({
     edgeLength: {
       required: true,
       type: Number,
+    },
+    edgesGeometry: {
+      required: true,
+      type: EdgesGeometry
     },
     geometry: {
       required: true,
