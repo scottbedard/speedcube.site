@@ -29,9 +29,9 @@ export type SceneApi = {
 export type SceneFactory = () => SceneApi
 
 /**
- * Vector coordinates
+ * X, Y, Z coordinates
  */
- export type Vector = {
+ export type XYZ = {
   x: number,
   y: number,
   z: number,

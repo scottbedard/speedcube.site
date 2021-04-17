@@ -1,5 +1,11 @@
 <template>
-  <Core />
+  <Core
+    :edge-length="edgeLength"
+    :geometry="geometry"
+    :materials="materials"
+    :model="model"
+    :sticker-position="stickerPosition"
+    :visible-stickers="idleStickers" />
 </template>
 
 <script lang="ts">
