@@ -1,5 +1,6 @@
 <template>
   <BoxGeometry
+    hidden
     :dimensions="edgeLength"
     :rotation="rotation">
     <template #up>
@@ -11,25 +12,50 @@
         :visible-stickers="visibleStickers" />
     </template>
     <template #left>
-      <AxesHelper :size="0.5" />
+      <Face
+        :geometry="geometry"
+        :materials="materials"
+        :sticker-position="stickerPosition"
+        :stickers="model.state.l"
+        :visible-stickers="visibleStickers" />
     </template>
     <template #front>
-      <AxesHelper :size="0.5" />
+      <Face
+        :geometry="geometry"
+        :materials="materials"
+        :sticker-position="stickerPosition"
+        :stickers="model.state.f"
+        :visible-stickers="visibleStickers" />
     </template>
     <template #right>
-      <AxesHelper :size="0.5" />
+      <Face
+        :geometry="geometry"
+        :materials="materials"
+        :sticker-position="stickerPosition"
+        :stickers="model.state.r"
+        :visible-stickers="visibleStickers" />
     </template>
     <template #back>
-      <AxesHelper :size="0.5" />
+      <Face
+        :geometry="geometry"
+        :materials="materials"
+        :sticker-position="stickerPosition"
+        :stickers="model.state.b"
+        :visible-stickers="visibleStickers" />
     </template>
     <template #down>
-      <AxesHelper :size="0.5" />
+      <Face
+        :geometry="geometry"
+        :materials="materials"
+        :sticker-position="stickerPosition"
+        :stickers="model.state.d"
+        :visible-stickers="visibleStickers" />
     </template>
   </BoxGeometry>
 </template>
 
 <script lang="ts">
-import { AxesHelper, BoxGeometry } from '@/three/components'
+import { BoxGeometry } from '@/three/components'
 import { Cube, CubeSticker } from '@bedard/twister'
 import { defineComponent, PropType } from 'vue'
 import { Material, ShapeBufferGeometry } from 'three'
@@ -41,7 +67,6 @@ type StickerData = Record<string, unknown>;
 
 export default defineComponent({
   components: {
-    AxesHelper,
     BoxGeometry,
     Face,
   },
