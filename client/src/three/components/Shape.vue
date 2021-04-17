@@ -24,6 +24,9 @@ export default defineComponent({
     watchEffect(() => {
       group.remove(...group.children)
 
+      // @todo: outline mesh
+      // http://stemkoski.github.io/Three.js/Outline.html
+
       if (props.geometry) {
         if (props.innerMaterial) {
           group.add(new Mesh(props.geometry, props.innerMaterial))
