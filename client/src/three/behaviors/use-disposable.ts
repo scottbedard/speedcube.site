@@ -1,4 +1,5 @@
-import { onUnmounted, Ref, unref } from 'vue'
+import { onUnmounted, unref } from 'vue'
+import { MaybeRef } from '@vueuse/core'
 
 interface Disposable {
   dispose: Function,
@@ -7,6 +8,6 @@ interface Disposable {
 /**
  * Disposable
  */
-export function useDisposable(obj: Disposable | Ref<Disposable>) {
+export function useDisposable(obj: MaybeRef<Disposable>) {
   onUnmounted(() => unref(obj).dispose())
 }
