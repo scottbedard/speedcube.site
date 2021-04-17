@@ -3,43 +3,102 @@
     :camera-angle="cameraAngle"
     :camera-distance="cameraDistance"
     square>
-    <Cube />
+    <component
+      :config="normalizedConfig"
+      :current-turn="currentTurn"
+      :is="puzzle"
+      :model="model"
+      :turn-progress="turnProgress" />
   </Scene>
-
-  <div class="mt-6">
-    <div>Camera Angle: {{ cameraAngle }}</div>
-    <RangeInput v-model="cameraAngle" />
-  </div>
-
-  <div class="mt-6">
-    <div>Camera Distance: {{ cameraDistance }}</div>
-    <RangeInput v-model="cameraDistance" />
-  </div>
 </template>
 
 <script lang="ts">
 import { AxesHelper, BoxGeometry, Scene } from '@/three/components'
-import { defineComponent, ref } from 'vue'
-import Cube from './cube/Cube.vue'
-import RangeInput from '../RangeInput.vue'
+import { Cube } from '@bedard/twister';
+import { isArray, isNumber } from 'lodash-es'
+import CubeComponent from './cube/Cube.vue'
+
+import {
+  computed,
+  defineComponent,
+  PropType,
+  ref,
+} from 'vue'
+
+type CameraConfig = {
+  cameraAngle: number,
+  cameraDistance: number,
+}
+
+type NormalizedConfig = CameraConfig & {
+  [key: string]: unknown,
+}
 
 export default defineComponent({
-  setup() {
-    const cameraAngle = ref(25)
-    const cameraDistance = ref(3)
+  setup(props) {
+    // scene props
+    const cameraAngle = computed(() => {
+      const cameraAngle = normalizedConfig.value.cameraAngle
+      return isNumber(cameraAngle) ? cameraAngle : 25
+    })
+
+    const cameraDistance = computed(() => {
+      const cameraDistance = normalizedConfig.value.cameraDistance
+      return isNumber(cameraDistance) ? cameraDistance : 3
+    })
+
+    // configuration
+    const normalizedConfig = computed<NormalizedConfig>(() => {
+      const config = props.config as NormalizedConfig// || userConfig.value(props.type);
+      
+      return {
+        ...config,
+        colors: (isArray(config.colors) && props.masked)
+          ? config.colors.map(() => '#6B7280')
+          : config.colors,
+      }
+    })
+
+    // puzzle component
+    const puzzle = computed(() => {
+      if (props.model instanceof Cube) return CubeComponent
+
+      throw 'Puzzle not implemented'
+    })
 
     return {
       cameraAngle,
       cameraDistance,
+      normalizedConfig,
+      puzzle,
     }
   },
   components: {
     AxesHelper,
     BoxGeometry,
-    Cube,
-    RangeInput,
     Scene,
   },
   name: 'Puzzle',
+  props: {
+    config: {
+      type: Object as PropType<CameraConfig>,
+    },
+    currentTurn: {
+      default: '',
+      type: String,
+    },
+    masked: {
+      default: false,
+      type: Boolean,
+    },
+    model: {
+      required: true,
+      type: Object as PropType<Cube>,
+    },
+    turnProgress: {
+      default: 0,
+      type: Number,
+    },
+  }
 })
 </script>
