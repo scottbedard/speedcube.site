@@ -1,3 +1,4 @@
+export { default as AmbientLight } from './AmbientLight.vue'
 export { default as AxesHelper } from './AxesHelper.vue'
 export { default as BoxGeometry } from './BoxGeometry.vue'
 export { default as Group } from './Group.vue'

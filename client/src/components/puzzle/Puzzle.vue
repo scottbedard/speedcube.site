@@ -3,6 +3,8 @@
     :camera-angle="cameraAngle"
     :camera-distance="cameraDistance"
     square>
+    <AmbientLight />
+
     <component
       :config="normalizedConfig"
       :current-turn="currentTurn"
@@ -13,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { AxesHelper, BoxGeometry, Scene } from '@/three/components'
+import { AmbientLight, AxesHelper, BoxGeometry, Scene } from '@/three/components'
 import { computed, defineComponent, PropType } from 'vue'
 import { Cube } from '@bedard/twister';
 import { isArray, isNumber } from 'lodash-es'
@@ -68,6 +70,7 @@ export default defineComponent({
     }
   },
   components: {
+    AmbientLight,
     AxesHelper,
     BoxGeometry,
     Scene,
