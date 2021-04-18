@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\PuzzleConfigsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Middleware\TransformKeys;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,11 @@ Route::prefix('api')->middleware(TransformKeys::class)->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('login', [AuthController::class, 'login']);
         Route::any('logout', [AuthController::class, 'logout']);
+    });
+
+    // puzzle configs
+    Route::middleware('auth')->group(function () {
+        Route::post('puzzle-configs', [PuzzleConfigsController::class, 'store']);
     });
 
     // users

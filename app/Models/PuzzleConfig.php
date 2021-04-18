@@ -16,6 +16,7 @@ class PuzzleConfig extends BaseModel
     public $attributes = [
         'config' => '{}',
         'is_active' => true,
+        'puzzle' => '',
         'user_id' => 0,
     ];
 
@@ -37,6 +38,7 @@ class PuzzleConfig extends BaseModel
     protected $fillable = [
         'config',
         'is_active',
+        'puzzle',
         'user_id',
     ];
 

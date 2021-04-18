@@ -18,6 +18,7 @@ class CreatePuzzleConfigsTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->json('config');
             $table->boolean('is_active')->default(false)->index();
+            $table->string('puzzle', 24)->index();
             $table->timestamps();
         });
     }
