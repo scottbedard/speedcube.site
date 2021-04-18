@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Model;
 
 use App\Models\BaseModel;
 use Illuminate\Database\Schema\Blueprint;
