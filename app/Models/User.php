@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use App\Models\PuzzleConfig;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -154,5 +155,13 @@ class User extends BaseModel implements
                 ],
             ]);
         }
+    }
+
+    /**
+     * Active puzzle configs.
+     */
+    public function puzzleConfigs()
+    {
+        return $this->hasMany(PuzzleConfig::class)->isActive();
     }
 }
