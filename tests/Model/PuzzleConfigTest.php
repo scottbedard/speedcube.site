@@ -22,4 +22,39 @@ class PuzzleConfigTest extends TestCase
 
         $this->assertEquals($user->id, $config->user->id);
     }
+
+    public function test_creation_deactivates_old_configs()
+    {
+        $john = User::factory()->create();
+        $sally = User::factory()->create();
+    
+        $cube1 = PuzzleConfig::factory()->create([
+            'puzzle' => '3x3',
+            'user_id' => $john->id,
+        ]);
+
+        $cube2 = PuzzleConfig::factory()->create([
+            'puzzle' => '3x3',
+            'user_id' => $sally->id,
+        ]);
+
+        $megaminx = $config1 = PuzzleConfig::factory()->create([
+            'puzzle' => 'dodecaminx3',
+            'user_id' => $john->id,
+        ]);
+
+        $this->assertTrue(PuzzleConfig::find($cube1->id)->is_active);
+        $this->assertTrue(PuzzleConfig::find($cube2->id)->is_active);
+        $this->assertTrue(PuzzleConfig::find($megaminx->id)->is_active);
+
+        $cube3 = PuzzleConfig::factory()->create([
+            'puzzle' => '3x3',
+            'user_id' => $john->id,
+        ]);
+
+        $this->assertFalse(PuzzleConfig::find($cube1->id)->is_active);
+        $this->assertTrue(PuzzleConfig::find($cube2->id)->is_active);
+        $this->assertTrue(PuzzleConfig::find($megaminx->id)->is_active);
+        $this->assertTrue(PuzzleConfig::find($cube3->id)->is_active);
+    }
 }

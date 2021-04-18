@@ -43,6 +43,33 @@ class PuzzleConfig extends BaseModel
     ];
 
     /**
+     * Boot
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            if ($model->is_active) {
+                $model->deactivateOtherConfigs();
+            }
+        });
+    }
+
+    /**
+     * Deactivate old puzzles.
+     */
+    public function deactivateOtherConfigs()
+    {
+        self::isActive()
+            ->where('puzzle', $this->puzzle)
+            ->where('user_id', $this->user_id)
+            ->update([
+                'is_active' => false,
+            ]);
+    }
+
+    /**
      * Select active puzzle configs.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
