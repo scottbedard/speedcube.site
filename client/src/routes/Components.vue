@@ -26,6 +26,7 @@
 <script lang="ts">
 import { Component, computed, defineAsyncComponent, defineComponent } from 'vue'
 import { Input } from '@/components'
+import { sortBy } from 'lodash-es'
 import { useRoute, useRouter } from 'vue-router'
 
 type Example = {
@@ -41,7 +42,11 @@ const examples: Example[] = [
   {
     component: defineAsyncComponent(() => import('@/partials/components/RangeInputExample.vue')),
     header: '<RangeInput>',
-  }
+  },
+  {
+    component: defineAsyncComponent(() => import('@/partials/components/CardExample.vue')),
+    header: '<Card>',
+  },
 ]
 
 export default defineComponent({
@@ -66,7 +71,11 @@ export default defineComponent({
 
     const filteredExamples = computed(() => {
       const filter = search.value.toLowerCase()
-      return examples.filter(obj => obj.header.toLowerCase().includes(filter))
+  
+      return sortBy(
+        examples.filter(obj => obj.header.toLowerCase().includes(filter)),
+        obj => obj.header
+      )
     })
 
     return {
