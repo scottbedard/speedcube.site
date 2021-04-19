@@ -2,11 +2,11 @@
   <Input
     v-model="search"
     autofocus
-    class="mb-6"
     placeholder="Search components" />
 
   <div
     v-for="(example, index) in filteredExamples"
+    class="border-b border-gray-300 py-6 dark:border-gray-700 last:border-b-0"
     :key="index">
     <h2 class="font-bold font-mono mb-4 text-lg">
       <RouterLink
@@ -36,7 +36,11 @@ type Example = {
 const examples: Example[] = [
   {
     component: defineAsyncComponent(() => import('@/partials/components/ButtonExample.vue')),
-    header: '<button>',
+    header: '<Button>',
+  },
+  {
+    component: defineAsyncComponent(() => import('@/partials/components/RangeInputExample.vue')),
+    header: '<RangeInput>',
   }
 ]
 
@@ -61,7 +65,8 @@ export default defineComponent({
     })
 
     const filteredExamples = computed(() => {
-      return examples.filter(obj => obj.header.includes(search.value))
+      const filter = search.value.toLowerCase()
+      return examples.filter(obj => obj.header.toLowerCase().includes(filter))
     })
 
     return {
