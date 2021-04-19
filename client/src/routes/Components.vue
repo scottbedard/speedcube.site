@@ -40,12 +40,16 @@ const examples: Example[] = [
     header: '<Button>',
   },
   {
-    component: defineAsyncComponent(() => import('@/partials/components/RangeInputExample.vue')),
-    header: '<RangeInput>',
-  },
-  {
     component: defineAsyncComponent(() => import('@/partials/components/CardExample.vue')),
     header: '<Card>',
+  },
+  {
+    component: defineAsyncComponent(() => import('@/partials/components/CheckboxExample.vue')),
+    header: '<Checkbox>',
+  },
+  {
+    component: defineAsyncComponent(() => import('@/partials/components/RangeInputExample.vue')),
+    header: '<RangeInput>',
   },
 ]
 
