@@ -48,8 +48,16 @@ const examples: Example[] = [
     header: '<Checkbox>',
   },
   {
+    component: defineAsyncComponent(() => import('@/partials/components/IconExample.vue')),
+    header: '<Icon>',
+  },
+  {
     component: defineAsyncComponent(() => import('@/partials/components/RangeInputExample.vue')),
     header: '<RangeInput>',
+  },
+  {
+    component: defineAsyncComponent(() => import('@/partials/components/SpinnerExample.vue')),
+    header: '<Spinner>',
   },
 ]
 
