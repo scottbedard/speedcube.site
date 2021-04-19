@@ -1,8 +1,14 @@
 <template>
+  <Input
+    v-model="search"
+    autofocus
+    class="mb-6"
+    placeholder="Search components" />
+
   <div
-    v-for="(example, index) in examples"
+    v-for="(example, index) in filteredExamples"
     :key="index">
-    <h2 class="font-bold font-mono mb-6 text-lg">
+    <h2 class="font-bold font-mono mb-4 text-lg">
       <RouterLink
         v-text="example.header"
         :to="{
@@ -18,7 +24,9 @@
 </template>
 
 <script lang="ts">
-import { Component, defineAsyncComponent, defineComponent } from 'vue'
+import { Component, computed, defineAsyncComponent, defineComponent } from 'vue'
+import { Input } from '@/components'
+import { useRoute, useRouter } from 'vue-router'
 
 type Example = {
   component: Component
@@ -34,10 +42,36 @@ const examples: Example[] = [
 
 export default defineComponent({
   setup() {
+    const route = useRoute()
+
+    const router = useRouter()
+
+    const search = computed({
+      get() {
+        return String(route.query.filter ?? '')
+      },
+      set(value: string) {
+        router.replace({
+          name: 'components',
+          query: value
+            ? { filter: value }
+            : {}
+        })
+      }
+    })
+
+    const filteredExamples = computed(() => {
+      return examples.filter(obj => obj.header.includes(search.value))
+    })
+
     return {
-      examples,
+      filteredExamples,
+      search,
     }
   },
+  components: {
+    Input
+  }
 })
 </script>
 
