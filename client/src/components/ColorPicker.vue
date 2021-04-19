@@ -13,9 +13,11 @@
       leave-to-class="opacity-0 -translate-x-6">
       <div
         v-if="isExpanded"
-        class="absolute left-0 ml-12 overflow-hidden top-0 w-64 z-10"
+        class="absolute left-0 ml-12 top-0 w-64 z-10"
         @click.stop>
-        <Card :class="[activeElement ? 'cursor-grabbing' : 'cursor-default']">
+        <Card
+          class="overflow-hidden"
+          :class="[activeElement ? 'cursor-grabbing' : 'cursor-default']">
           <!-- color box -->
           <div
             class="h-32 relative"
