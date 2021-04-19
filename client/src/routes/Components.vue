@@ -48,6 +48,10 @@ const examples: Example[] = [
     header: '<Checkbox>',
   },
   {
+    component: defineAsyncComponent(() => import('@/partials/components/ColorPickerExample.vue')),
+    header: '<ColorPicker>',
+  },
+  {
     component: defineAsyncComponent(() => import('@/partials/components/IconExample.vue')),
     header: '<Icon>',
   },
