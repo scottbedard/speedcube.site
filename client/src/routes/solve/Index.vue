@@ -1,0 +1,62 @@
+<template>
+  <div class="max-w-sm mb-6 mx-auto">
+    <Puzzle
+      :config="{
+        ...cubeConfig,
+        cameraAngle,
+        cameraDistance,
+      }"
+      :model="model" />
+  </div>
+
+  <div
+    v-if="isIndex"
+    class="gap-x-10 gap-y-2 flex flex-wrap justify-center">
+    <RouterLink
+      class="flex items-center"
+      :to="{ name: 'solve:config' }">
+      <Icon class="mr-1 transform rotate-90" name="sliders" />
+      Customize Appearance
+    </RouterLink>
+
+    <RouterLink
+      class="flex items-center"
+      :to="{ name: 'solve:controls' }">
+      <Icon class="mr-1" name="hash" />
+      Edit Key Bindings
+    </RouterLink>
+  </div>
+
+  <RouterView v-else/>
+</template>
+
+<script lang="ts">
+import { computed, defineComponent, ref } from 'vue'
+import { Cube } from '@bedard/twister'
+import { cubeConfig } from '@/components/puzzle/constants'
+import { Icon, Puzzle } from '@/components'
+import { useRoute } from 'vue-router';
+
+export default defineComponent({
+  setup() {
+    const cameraAngle = ref(25)
+    const cameraDistance = ref(3)
+    const model = new Cube({ size: 3 })
+    const route = useRoute();
+    const isIndex = computed(() => route.name === 'solve');
+
+    return {
+      cameraAngle,
+      cameraDistance,
+      cubeConfig,
+      isIndex,
+      model,
+    }
+  },
+  components: {
+    Icon,
+    Puzzle,
+  },
+  name: 'SolveIndex'
+})
+</script>

@@ -1,0 +1,3 @@
+<template>
+  Customize appearance
+</template>

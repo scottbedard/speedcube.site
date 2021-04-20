@@ -101,7 +101,22 @@ export const routes: RouteRecordRaw[] = [
 
   // solve
   {
-    component: () => import('@/routes/Solve.vue'),
+    children: [
+      // config
+      {
+        component: () => import('@/routes/solve/Config.vue'),
+        name: 'solve:config',
+        path: 'config',
+      },
+
+      // controls
+      {
+        component: () => import('@/routes/solve/Controls.vue'),
+        name: 'solve:controls',
+        path: 'controls',
+      },
+    ],
+    component: () => import('@/routes/solve/Index.vue'),
     name: 'solve',
     path: '/solve/:puzzle',
   },
