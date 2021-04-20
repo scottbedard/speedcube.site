@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-lg mx-auto">
+  <div class="max-w-sm mx-auto">
     <Puzzle
       :config="{
         ...cubeConfig,
@@ -7,16 +7,6 @@
         cameraDistance,
       }"
       :model="model" />
-
-    <div class="mt-6">
-      <div>Camera Angle: {{ cameraAngle }}</div>
-      <RangeInput v-model="cameraAngle" />
-    </div>
-
-    <div class="mt-6">
-      <div>Camera Distance: {{ cameraDistance }}</div>
-      <RangeInput v-model="cameraDistance" />
-    </div>
   </div>
 </template>
 
@@ -24,7 +14,7 @@
 import { Cube } from '@bedard/twister'
 import { cubeConfig } from '@/components/puzzle/constants'
 import { defineComponent, ref } from 'vue'
-import { Puzzle, RangeInput } from '@/components'
+import { Puzzle } from '@/components'
 
 export default defineComponent({
   setup() {
@@ -41,7 +31,6 @@ export default defineComponent({
   },
   components: {
     Puzzle,
-    RangeInput,
   },
   name: 'Solve'
 })
