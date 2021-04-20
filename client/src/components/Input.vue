@@ -1,14 +1,11 @@
 <template>
   <div>
-    <div class="mb-px">
-      <label
-        v-if="label"
-        v-text="label"
-        :for="id" />
-      <sup
-        v-if="required"
-        class="bg-green-500 h-1.5 inline-block mb-1 ml-0.5 rounded-full w-1.5" />
-    </div>
+    <Label
+      v-if="label"
+      class="mb-px"
+      :for="id"
+      :text="String(label)"
+      :required="required" />
 
     <input
       class="appearance-none block bg-gray-100 border border-gray-300 min-h-12 placeholder-gray-400 px-4 py-2 rounded-md text-gray-700 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-800 dark:text-gray-100"
@@ -31,6 +28,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, PropType, ref } from 'vue'
 import { uniqueId } from 'lodash-es'
+import Label from './Label.vue'
 
 export default defineComponent({
   setup(props, { emit }) {
@@ -61,6 +59,9 @@ export default defineComponent({
       input,
       onInput
     }
+  },
+  components: {
+    Label,
   },
   emits: [
     'update:modelValue',
