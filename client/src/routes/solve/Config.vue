@@ -1,5 +1,7 @@
 <template>
-  <div class="gap-6 grid max-w-4xl mx-auto">
+  <form
+    class="gap-6 grid max-w-4xl mx-auto"
+    @submit.prevent="submit">
     <div class="gap-6 grid grid-cols-12">
       <div
         v-for="(field, index) in fields"
@@ -41,9 +43,11 @@
         Cancel
       </RouterLink>
 
-      <Button primary>Save</Button>
+      <Button primary type="submit">
+        Save
+      </Button>
     </div>
-  </div>
+  </form>
 </template>
 
 <script lang="ts">
@@ -171,9 +175,14 @@ export default defineComponent({
       return []
     })
 
+    const submit = () => {
+      console.log('submit')
+    }
+
     return {
       fields,
       route,
+      submit,
     }
   },
   components: {
