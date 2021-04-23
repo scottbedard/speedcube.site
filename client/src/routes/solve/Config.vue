@@ -1,31 +1,47 @@
 <template>
-  <div class="gap-6 grid grid-cols-12 max-w-4xl mx-auto">
-    <div
-      v-for="(field, index) in fields"
-      class="col-span-12"
-      :class="field.span"
-      :key="index">
-      <!-- colors -->
+  <div class="gap-6 grid max-w-4xl mx-auto">
+    <div class="gap-6 grid grid-cols-12">
       <div
-        v-if="field.type === 'colors'">
-        <Label
-          class="mb-1"
-          :text="field.label" />
+        v-for="(field, index) in fields"
+        class="col-span-12"
+        :class="field.span"
+        :key="index">
+        <!-- colors -->
+        <div
+          v-if="field.type === 'colors'">
+          <Label
+            class="mb-1"
+            :text="field.label" />
 
-        <div class="gap-3 flex flex-wrap">
-          <ColorPicker
-            v-for="n in field.options.count"
-            :key="n" />
+          <div class="gap-3 flex flex-wrap">
+            <ColorPicker
+              v-for="n in field.options.count"
+              :key="n" />
+          </div>
         </div>
-      </div>
 
-      <!-- number -->
-      <RangeInput
-        v-else-if="field.type === 'number'"
-        :label="field.label"
-        :max="field.options.max"
-        :min="field.options.min"
-        :step="field.options.step" />
+        <!-- number -->
+        <RangeInput
+          v-else-if="field.type === 'number'"
+          :label="field.label"
+          :max="field.options.max"
+          :min="field.options.min"
+          :step="field.options.step" />
+      </div>
+    </div>
+
+    <div class="gap-6 flex items-center justify-end">
+      <RouterLink
+        :to="{
+          name: 'solve',
+          params: {
+            puzzle: route.params.puzzle
+          }
+        }">
+        Cancel
+      </RouterLink>
+
+      <Button primary>Save</Button>
     </div>
   </div>
 </template>
@@ -33,7 +49,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { isCube } from '@/app/utils'
-import { ColorPicker, Label, RangeInput } from '@/components'
+import { Button, ColorPicker, Label, RangeInput } from '@/components'
 import { useRoute } from 'vue-router'
 
 type FieldType<T extends string, U extends object> = {
@@ -156,10 +172,12 @@ export default defineComponent({
     })
 
     return {
-      fields
+      fields,
+      route,
     }
   },
   components: {
+    Button,
     ColorPicker,
     Label,
     RangeInput,

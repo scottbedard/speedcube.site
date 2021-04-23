@@ -26,7 +26,7 @@
     </div>
   </header>
 
-  <div class="flex-1 tw-margin">
+  <div class="flex-1 mb-6 tw-margin">
     <RouterView />
   </div>
     
