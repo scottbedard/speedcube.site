@@ -14,15 +14,27 @@
     class="gap-x-10 gap-y-2 flex flex-wrap justify-center">
     <RouterLink
       class="flex items-center"
-      :to="{ name: 'solve:config' }">
+      :to="{
+        name: 'solve:config',
+        params: {
+          puzzle: route.params.puzzle,
+        },
+      }">
       <Icon class="mr-1 transform rotate-90" name="sliders" />
+
       Customize Appearance
     </RouterLink>
 
     <RouterLink
       class="flex items-center"
-      :to="{ name: 'solve:controls' }">
+      :to="{
+        name: 'solve:controls',
+        params: {
+          puzzle: route.params.puzzle,
+        },
+      }">
       <Icon class="mr-1" name="hash" />
+
       Edit Key Bindings
     </RouterLink>
   </div>
@@ -51,6 +63,7 @@ export default defineComponent({
       cubeConfig,
       isIndex,
       model,
+      route,
     }
   },
   components: {
