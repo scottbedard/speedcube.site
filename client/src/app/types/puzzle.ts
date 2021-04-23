@@ -43,6 +43,15 @@ export type CubeConfig = PuzzleConfig & {
 }
 
 /**
+ * Cube identifiers
+ */
+export type CubeName =
+ | '2x2'
+ | '3x3'
+ | '4x4'
+ | '5x5'
+
+/**
  * Puzzle config
  */
 export type PuzzleConfig = {

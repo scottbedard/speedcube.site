@@ -1,4 +1,4 @@
-import { CubeConfig } from '@/app/types/puzzle'
+import { CubeConfig, CubeName } from '@/app/types/puzzle'
 
 /**
  * Default colors
@@ -38,3 +38,13 @@ export const cubeConfig: CubeConfig = {
   stickerSpacing: 0.2,
   turnDuration: 65,
 }
+
+/**
+ * Cube identifiers
+ */
+export const cubeNames: CubeName[] = [
+  '2x2',
+  '3x3',
+  '4x4',
+  '5x5',
+]
