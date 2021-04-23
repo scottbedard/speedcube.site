@@ -140,17 +140,27 @@ $ie-bottom-track-color: darken($track-color, $contrast);
 </style>
 
 <template>
-  <input
-    type="range"
-    :max="max"
-    :min="min"
-    :step="step"
-    :value="modelValue"
-    @input="onInput" />
+  <div>
+    <Label
+      v-if="label"
+      class="mb-1"
+      :for="id"
+      :text="label" />
+    <input
+      type="range"
+      :id="id"
+      :max="max"
+      :min="min"
+      :step="step"
+      :value="modelValue"
+      @input="onInput" />
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { uniqueId } from 'lodash-es'
+import Label from './Label.vue'
 
 export default defineComponent({
   setup(props, { emit }) {
@@ -162,7 +172,15 @@ export default defineComponent({
       onInput
     }
   },
+  components: {
+    Label,
+  },
   props: {
+    id: {
+      default: () => `range-input-${uniqueId()}`,
+      type: String,
+    },
+    label: String,
     max: Number,
     min: Number,
     modelValue: Number,
