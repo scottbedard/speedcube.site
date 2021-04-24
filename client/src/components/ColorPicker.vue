@@ -1,7 +1,10 @@
 <template>
   <div
-    class="cursor-pointer h-8 inline-block relative rounded-full shadow w-8"
+    class="h-8 inline-block relative rounded-full shadow w-8"
     ref="container"
+    :class="{
+      'cursor-pointer': !disabled,
+    }"
     :style="{ background: modelValue }"
     @click.prevent="expand">
     <Transition
@@ -170,6 +173,10 @@ export default defineComponent({
 
     // expand the color picker
     const expand = () => {
+      if (props.disabled) {
+        return
+      }
+
       setFromHex(props.modelValue)
       isExpanded.value = true
       hexInput.value = currentValue.value
@@ -259,6 +266,9 @@ export default defineComponent({
     Icon,
   },
   props: {
+    disabled: {
+      type: Boolean,
+    },
     modelValue: {
       default: '#000000',
       type: String,

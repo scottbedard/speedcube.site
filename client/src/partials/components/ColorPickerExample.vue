@@ -1,25 +1,34 @@
 <template>
-  <ColorPicker v-model="color" />
+  <ColorPicker
+    v-model="color"
+    :disabled="disabled" />
 
   <div class="gap-6 flex mt-6">
     Color: {{ color }}
+  </div>
+
+  <div class="gap-6 flex mt-6">
+    <Checkbox v-model="disabled">Disabled</Checkbox>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { ColorPicker } from '@/components'
+import { Checkbox, ColorPicker } from '@/components'
 
 export default defineComponent({
   setup() {
     const color = ref('#10B981')
+    const disabled = ref(false)
 
     return {
-      color
+      color,
+      disabled,
     }
   },
   components: {
-    ColorPicker
+    Checkbox,
+    ColorPicker,
   },
   name: 'ColorPickerExample',
 })
