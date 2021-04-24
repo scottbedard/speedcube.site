@@ -1,7 +1,8 @@
-import { cloneDeep } from 'lodash-es'
+import { cloneDeep, reject } from 'lodash-es'
 import { cubeConfig } from '@/components/puzzle/constants'
 import { isCube, normalizePuzzleName } from '@/app/utils'
 import { ref } from 'vue'
+import axios from 'axios'
 
 /**
  * The user's puzzle config
@@ -23,12 +24,21 @@ export function usePuzzleConfig(rawPuzzleName: string) {
 
     console.log('saving', config.value)
 
-    return new Promise<void>(resolve => {
-      setTimeout(() => {
-        loading.value = false
-
+    return new Promise<void>((resolve, reject) => {
+      axios.post('/api/puzzle-configs', {
+        config: config.value,
+        puzzle,
+      }).then(() => {
+        // success
         resolve()
-      }, 1000)
+      }, () => {
+        // failed
+        failed.value = true
+        reject()
+      }).finally(() => {
+        // complete
+        loading.value = false
+      })
     })
   }
 
