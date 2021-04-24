@@ -1,5 +1,5 @@
-import { RouteRecordRaw } from 'vue-router'
 import { isAuthenticated, isGuest } from '@/app/store/computed'
+import { RouteRecordRaw } from 'vue-router'
 
 /**
  * Route guards
@@ -118,7 +118,7 @@ export const routes: RouteRecordRaw[] = [
     ],
     component: () => import('@/routes/solve/Index.vue'),
     name: 'solve',
-    path: '/solve/:puzzle',
+    path: '/solve/:puzzle(2x2|3x3|4x4|5x5)',
   },
 
   // records
