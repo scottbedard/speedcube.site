@@ -1,5 +1,5 @@
 <template>
-  <button
+  <component
     :class="[
       'inline-flex items-center justify-center min-h-12 px-6 py-2 rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
       {
@@ -8,18 +8,20 @@
         'bg-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600': !primary,
       }
     ]"
-    :disabled="disabled">
+    :disabled="disabled"
+    :is="to ? 'RouterLink' : 'button'"
+    :to="to">
     <Spinner v-if="loading" />
     <slot v-else />
-  </button>
+  </component>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
+import { RouteLocationRaw } from 'vue-router'
 import Spinner from './Spinner.vue'
 
 export default defineComponent({
-  name: 'Button',
   components: {
     Spinner,
   },
@@ -35,6 +37,10 @@ export default defineComponent({
     primary: {
       default: false,
       type: Boolean,
+    },
+    to: {
+      default: null,
+      type: Object as PropType<RouteLocationRaw>,
     },
   },
 })
