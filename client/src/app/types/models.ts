@@ -1,3 +1,13 @@
+import { PuzzleName } from './puzzle'
+
+/**
+ * Puzzle config
+ */
+export type PuzzleConfig = {
+  config: Record<string, unknown>
+  puzzle: PuzzleName
+}
+
 /**
  * User
  */

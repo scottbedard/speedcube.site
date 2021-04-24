@@ -43,6 +43,19 @@ class PuzzleConfig extends BaseModel
     ];
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'created_at',
+        'id',
+        'is_active',
+        'updated_at',
+        'user_id',
+    ];
+
+    /**
      * Boot
      */
     public static function boot()

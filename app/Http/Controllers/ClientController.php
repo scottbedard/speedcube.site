@@ -14,8 +14,13 @@ class ClientController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+
         $context = Utils::camelKeysRecursive([
-            'user' => Auth::user(),
+            'puzzle_configs' => $user
+                ? $user->puzzleConfigs()->get()
+                : [],
+            'user' => $user,
         ]);
 
         $local = app()->environment('local');
