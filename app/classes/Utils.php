@@ -49,7 +49,7 @@ class Utils
             ->map(function ($item) use ($fn) {
                 if (is_array($item)) {
                     return self::keyByRecursive($item, $fn);
-                } elseif ($item instanceof \Illuminate\Database\Eloquent\Model) {
+                } elseif ($item instanceof \Illuminate\Contracts\Support\Arrayable) {
                     return self::keyByRecursive($item->toArray(), $fn);
                 }
 
