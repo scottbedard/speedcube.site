@@ -1,10 +1,12 @@
 <template>
-  <svg
-    v-bind="icon.attrs"
-    v-html="icon.contents"
-    :height="height || sizePx"
-    :stroke-width="stroke"
-    :width="width || sizePx" />
+  <span>
+    <svg
+      v-bind="icon.attrs"
+      v-html="icon.contents"
+      :height="height || sizePx"
+      :stroke-width="stroke"
+      :width="width" />
+  </span>
 </template>
 
 <script lang="ts">
@@ -32,7 +34,7 @@ export default defineComponent({
       type: String,
     },
     size: {
-      default: 4,
+      default: 5,
       type: [Number, String],
     },
     stroke: {

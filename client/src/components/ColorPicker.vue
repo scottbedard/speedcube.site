@@ -70,7 +70,10 @@
                 href="#"
                 title="Discard changes"
                 @click.prevent="discard">
-                <Icon name="trash-2" stroke="2" />
+                <Icon
+                  name="trash-2"
+                  size="4"
+                  stroke="2" />
               </a>
             </div>
           </div>
