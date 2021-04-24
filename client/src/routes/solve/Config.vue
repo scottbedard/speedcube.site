@@ -18,6 +18,8 @@
           <div class="gap-3 flex flex-wrap">
             <ColorPicker
               v-for="n in field.options.count"
+              v-model="config[field.key][n - 1]"
+              :disabled="loading"
               :key="n" />
           </div>
         </div>
@@ -25,6 +27,8 @@
         <!-- number -->
         <RangeInput
           v-else-if="field.type === 'number'"
+          v-model="config[field.key]"
+          :disabled="loading"
           :label="field.label"
           :max="field.options.max"
           :min="field.options.min"
@@ -43,7 +47,11 @@
         Cancel
       </RouterLink>
 
-      <Button primary type="submit">
+      <Button
+        primary
+        type="submit"
+        :disabled="loading"
+        :loading="loading">
         Save
       </Button>
     </div>
@@ -51,9 +59,10 @@
 </template>
 
 <script lang="ts">
+import { Button, ColorPicker, Label, RangeInput } from '@/components'
 import { computed, defineComponent } from 'vue'
 import { isCube } from '@/app/utils'
-import { Button, ColorPicker, Label, RangeInput } from '@/components'
+import { usePuzzleConfig } from '@/app/api'
 import { useRoute } from 'vue-router'
 
 type FieldType<T extends string, U extends object> = {
@@ -72,6 +81,7 @@ type NumberField = FieldType<'number', {
 }>
 
 type ConfigForm = Array<{
+  key: string
   label: string
   span?: string
 } & (
@@ -83,6 +93,7 @@ type ConfigForm = Array<{
 //
 const cubeConfigForm: ConfigForm = [
   {
+    key: 'colors',
     label: 'Colors',
     options: {
       count: 6,
@@ -90,6 +101,7 @@ const cubeConfigForm: ConfigForm = [
     type: 'colors',
   },
   {
+    key: 'cameraAngle',
     label: 'Camera angle',
     options: {
       max: 90,
@@ -100,9 +112,10 @@ const cubeConfigForm: ConfigForm = [
     type: 'number',
   },
   {
+    key: 'cameraDistance',
     label: 'Camera distance',
     options: {
-      max: 3,
+      max: 5,
       min: 0,
       step: 0.01,
     },
@@ -110,6 +123,7 @@ const cubeConfigForm: ConfigForm = [
     type: 'number',
   },
   {
+    key: 'turnDuration',
     label: 'Turn duration',
     options: {
       max: 500,
@@ -120,6 +134,7 @@ const cubeConfigForm: ConfigForm = [
     type: 'number',
   },
   {
+    key: 'stickerSpacing',
     label: 'Sticker spacing',
     options: {
       max: 1,
@@ -130,6 +145,7 @@ const cubeConfigForm: ConfigForm = [
     type: 'number',
   },
   {
+    key: 'stickerElevation',
     label: 'Sticker elevation',
     options: {
       max: 1,
@@ -140,6 +156,7 @@ const cubeConfigForm: ConfigForm = [
     type: 'number',
   },
   {
+    key: 'stickerRadius',
     label: 'Sticker radius',
     options: {
       max: 1,
@@ -150,6 +167,7 @@ const cubeConfigForm: ConfigForm = [
     type: 'number',
   },
   {
+    key: 'innerBrightness',
     label: 'Inner brightness',
     options: {
       max: 1,
@@ -175,12 +193,26 @@ export default defineComponent({
       return []
     })
 
+    const {
+      config,
+      loading,
+      save,
+    } = usePuzzleConfig(route.params?.puzzle as string)
+
     const submit = () => {
-      console.log('submit')
+      save().then(() => {
+        // success
+        console.log('success')
+      }, () => {
+        // failed
+        console.log('failed')
+      })
     }
 
     return {
+      config,
       fields,
+      loading,
       route,
       submit,
     }

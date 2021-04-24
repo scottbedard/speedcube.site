@@ -75,3 +75,8 @@ export type PuzzleConfig = {
    */
   turnDuration: number,
 }
+
+/**
+ * Puzzle name
+ */
+export type PuzzleName = CubeName;
