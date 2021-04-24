@@ -36,7 +36,9 @@
       </div>
     </div>
 
-    <div class="gap-6 flex items-center justify-end">
+    <div
+      v-if="isAuthenticated"
+      class="gap-6 flex items-center justify-end">
       <RouterLink
         :to="{
           name: 'solve',
@@ -55,12 +57,33 @@
         Save
       </Button>
     </div>
+
+    <div
+      v-else
+      class="flex flex-wrap gap-6 items-center justify-between">
+      <div class="flex items-center">
+        <Icon
+          class="mr-2"
+          name="alert-octagon" />
+        
+        You must be signed in to save puzzle settings.
+      </div>
+
+      <div class="flex flex-wrap gap-6 items-center justify-end w-full md:w-auto">
+        <RouterLink :to="{ name: 'login' }">Sign in</RouterLink>
+
+        <Button primary :to="{ name: 'create-account' }">
+          Create account
+        </Button>
+      </div>
+    </div>
   </form>
 </template>
 
 <script lang="ts">
-import { Button, ColorPicker, Label, RangeInput } from '@/components'
+import { Button, ColorPicker, Icon, Label, RangeInput } from '@/components'
 import { computed, defineComponent } from 'vue'
+import { isAuthenticated } from '@/app/store/computed'
 import { isCube } from '@/app/utils'
 import { usePuzzleConfig } from '@/app/api'
 import { useRoute } from 'vue-router'
@@ -212,6 +235,7 @@ export default defineComponent({
     return {
       config,
       fields,
+      isAuthenticated,
       loading,
       route,
       submit,
@@ -220,6 +244,7 @@ export default defineComponent({
   components: {
     Button,
     ColorPicker,
+    Icon,
     Label,
     RangeInput,
   },
