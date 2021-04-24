@@ -9,7 +9,12 @@ export const isDark = useDark()
 /**
  * Puzzle configs
  */
-export const puzzleConfigs = ref([])
+export const puzzleConfigs = ref(window.context.puzzleConfigs)
+
+/**
+ * Preview puzzle config
+ */
+export const previewPuzzleConfig = ref<Record<string, unknown> | null>(null)
 
 /**
  * User

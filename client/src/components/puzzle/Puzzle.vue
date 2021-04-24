@@ -21,15 +21,6 @@ import { Cube } from '@bedard/twister';
 import { isArray, isNumber } from 'lodash-es'
 import CubeComponent from './cube/Cube.vue'
 
-type CameraConfig = {
-  cameraAngle: number,
-  cameraDistance: number,
-}
-
-type NormalizedConfig = CameraConfig & {
-  [key: string]: unknown,
-}
-
 export default defineComponent({
   setup(props) {
     // scene props
@@ -44,14 +35,14 @@ export default defineComponent({
     })
 
     // configuration
-    const normalizedConfig = computed<NormalizedConfig>(() => {
-      const config = props.config as NormalizedConfig// || userConfig.value(props.type);
+    const normalizedConfig = computed(() => {
+      const config = props.config // || userConfig.value(props.type);
       
       return {
         ...config,
-        colors: (isArray(config.colors) && props.masked)
-          ? config.colors.map(() => '#6B7280')
-          : config.colors,
+        colors: (isArray(config?.colors) && props.masked)
+          ? config?.colors.map(() => '#6B7280')
+          : config?.colors,
       }
     })
 
@@ -78,7 +69,7 @@ export default defineComponent({
   name: 'Puzzle',
   props: {
     config: {
-      type: Object as PropType<CameraConfig>,
+      type: Object as PropType<Record<string, unknown>>,
     },
     currentTurn: {
       default: '',

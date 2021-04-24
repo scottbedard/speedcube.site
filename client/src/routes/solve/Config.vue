@@ -86,7 +86,7 @@ import { computed, defineComponent } from 'vue'
 import { isAuthenticated } from '@/app/store/computed'
 import { isCube } from '@/app/utils'
 import { usePuzzleConfig } from '@/app/api'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 type FieldType<T extends string, U extends object> = {
   options: U
@@ -205,10 +205,10 @@ const cubeConfigForm: ConfigForm = [
 export default defineComponent({
   setup() {
     const route = useRoute()
+    const router = useRouter()
+    const puzzle = route.params?.puzzle as string
 
     const fields = computed(() => {
-      const puzzle = route.params?.puzzle as string
-
       if (isCube(puzzle)) {
         return cubeConfigForm
       }
@@ -220,12 +220,15 @@ export default defineComponent({
       config,
       loading,
       save,
-    } = usePuzzleConfig(route.params?.puzzle as string)
+    } = usePuzzleConfig(puzzle)
 
     const submit = () => {
       save().then(() => {
         // success
-        console.log('success')
+        router.push({
+          name: 'solve',
+          params: { puzzle },
+        })
       }, () => {
         // failed
         console.log('failed')

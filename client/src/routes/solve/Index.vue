@@ -1,11 +1,7 @@
 <template>
   <div class="max-w-sm mb-6 mx-auto">
     <Puzzle
-      :config="{
-        ...cubeConfig,
-        cameraAngle,
-        cameraDistance,
-      }"
+      :config="config"
       :model="model" />
   </div>
 
@@ -47,19 +43,33 @@ import { computed, defineComponent, ref } from 'vue'
 import { Cube } from '@bedard/twister'
 import { cubeConfig } from '@/components/puzzle/constants'
 import { Icon, Puzzle } from '@/components'
-import { useRoute } from 'vue-router';
+import { normalizePuzzleName } from '@/app/utils'
+import { previewPuzzleConfig } from '@/app/store/state'
+import { puzzleConfig } from '@/app/store/computed'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   setup() {
     const cameraAngle = ref(25)
     const cameraDistance = ref(3)
     const model = new Cube({ size: 3 })
-    const route = useRoute();
-    const isIndex = computed(() => route.name === 'solve');
+    const route = useRoute()
+    const isIndex = computed(() => route.name === 'solve')
+
+    const puzzle = normalizePuzzleName(route.params?.puzzle as string)
+
+    const config = computed(() => {
+      if (previewPuzzleConfig.value) {
+        return previewPuzzleConfig.value
+      }
+      
+      return puzzleConfig.value(puzzle)
+    })
 
     return {
       cameraAngle,
       cameraDistance,
+      config,
       cubeConfig,
       isIndex,
       model,

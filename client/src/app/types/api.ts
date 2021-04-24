@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios'
+import { PuzzleConfig } from '@/app/types/models'
 import { User } from './models'
 
 /**
@@ -44,6 +45,13 @@ export type LoginResponse = {
   Success = 200,
   Unauthorized = 401,
   UnprocessableEntity = 422,
+}
+
+/**
+ * POST: /api/puzzle-configs
+ */
+export type UpdatePuzzleConfigResponse = {
+  puzzleConfigs: PuzzleConfig[]
 }
 
 /**
