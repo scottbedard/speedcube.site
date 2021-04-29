@@ -35,7 +35,7 @@
     </RouterLink>
   </div>
 
-  <RouterView v-else/>
+  <RouterView v-else />
 </template>
 
 <script lang="ts">
