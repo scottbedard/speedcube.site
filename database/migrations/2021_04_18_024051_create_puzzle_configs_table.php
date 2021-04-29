@@ -16,9 +16,9 @@ class CreatePuzzleConfigsTable extends Migration
         Schema::create('puzzle_configs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
+            $table->string('puzzle', 24)->index();
             $table->json('config');
             $table->boolean('is_active')->default(false)->index();
-            $table->string('puzzle', 24)->index();
             $table->timestamps();
         });
     }

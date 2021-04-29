@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use App\Models\KeyboardConfig;
 use App\Models\PuzzleConfig;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
@@ -141,6 +142,14 @@ class User extends BaseModel implements
                 ],
             ]);
         }
+    }
+
+    /**
+     * Keyboard configs.
+     */
+    public function keyboardConfigs()
+    {
+        return $this->hasMany(KeyboardConfig::class);
     }
 
     /**
