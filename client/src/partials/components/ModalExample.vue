@@ -1,12 +1,12 @@
 <template>
-  <Button primary @click="show">
-    Show modal
+  <Button primary @click="open">
+    open modal
   </Button>
 
   <Modal
     v-if="expanded"
     padded
-    @dismiss="hide">
+    @close="close">
     <h3 class="mb-6 text-3xl">
       Be aware of the focus behavior
     </h3>
@@ -26,7 +26,7 @@
       </div>
 
       <div class="flex justify-end sm:col-span-2">
-        <Button primary @click="hide">Close</Button>
+        <Button primary @click="close">Close</Button>
       </div>
     </div>
   </Modal>
@@ -40,18 +40,18 @@ export default defineComponent({
   setup() {
     const expanded = ref(false)
 
-    const hide = () => {
+    const close = () => {
       expanded.value = false
     }
 
-    const show = () => {
+    const open = () => {
       expanded.value = true
     }
 
     return {
+      close,
       expanded,
-      hide,
-      show
+      open
     }
   },
   components: {

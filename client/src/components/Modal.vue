@@ -1,16 +1,16 @@
 <template>
   <teleport to="body">
     <div
-      class="bg-darken-50 fixed grid h-full items-center justify-center left-0 overflow-y-auto top-0 w-full z-10 focus:outline-none"
+      class="bg-darken-50 fixed flex h-full items-center justify-center left-0 overflow-y-auto top-0 w-full z-10 focus:outline-none"
       ref="container"
       role="dialog"
       tabindex="-1"
-      @click="dismiss">
-      <div class="p-8">
-        <div class="mx-auto" @click.stop>
-          <Card
-            :class="[sizeClass]"
-            :padded="padded">
+      @click="close">
+      <div class="p-6 w-full">
+        <div
+          :class="['mx-auto', sizeClass]"
+          @click.stop>
+          <Card :padded="padded">
             <slot />
           </Card>
         </div>
@@ -41,11 +41,11 @@ export default defineComponent({
       return 'max-w-2xl'
     })
 
-    // listen for dismiss events
-    const dismiss = () => emit('dismiss')
+    // emit close events
+    const close = () => emit('close')
     
     useEventListener(document, 'keyup', (e) => {
-      if (e.key === 'Escape') dismiss()
+      if (e.key === 'Escape') close()
     })
 
     // disable background scrolling, and trap focus within the modal
@@ -68,8 +68,8 @@ export default defineComponent({
     });
 
     return {
+      close,
       container,
-      dismiss,
       sizeClass,
     };
   },
@@ -77,7 +77,7 @@ export default defineComponent({
     Card,
   },
   emits: [
-    'dismiss',
+    'close',
   ],
   props: {
     padded: {

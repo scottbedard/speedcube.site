@@ -13,11 +13,36 @@
       {{ link.text }}
     </a>
   </div>
+
+  <KeybindingModal
+    v-if="keybindingModalIsVisible"
+    @close="closeModals" />
+
+  <KeyspaceModal
+    v-if="keyspaceModalIsVisible"
+    @close="closeModals" />
+
+  <JsonModal
+    v-if="jsonModalIsVisible"
+    @close="closeModals" />
+
+  <ResetModal
+    v-if="resetModalIsVisible"
+    @close="closeModals" />
+
+  <ClearAllModal
+    v-if="clearAllModalIsVisible"
+    @close="closeModals" />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, Ref, ref } from 'vue'
 import { Icon } from '@/components'
+import ClearAllModal from '@/partials/solve/ClearAllModal.vue'
+import JsonModal from '@/partials/solve/JsonModal.vue'
+import KeybindingModal from '@/partials/solve/KeybindingModal.vue'
+import KeyspaceModal from '@/partials/solve/KeyspaceModal.vue'
+import ResetModal from '@/partials/solve/ResetModal.vue'
 
 type ToolbarItem = {
   icon: string
@@ -27,50 +52,70 @@ type ToolbarItem = {
 
 export default defineComponent({
   setup() {
+    const clearAllModalIsVisible = ref(false)
+    const jsonModalIsVisible = ref(false)
+    const keybindingModalIsVisible = ref(false)
+    const keyspaceModalIsVisible = ref(false)
+    const resetModalIsVisible = ref(false)
+
+    const closeModals = () => {
+      clearAllModalIsVisible.value = false
+      jsonModalIsVisible.value = false
+      keybindingModalIsVisible.value = false
+      keyspaceModalIsVisible.value = false
+      resetModalIsVisible.value = false
+    }
+
+    const openModal = (isVisible: Ref<boolean>) => {
+      closeModals()
+      isVisible.value = true
+    }
+
     const toolbar: ToolbarItem[] = [
       {
         icon: 'plus',
         text: 'Add key binding',
-        onClick: () => {
-          console.log('key binding')
-        }
+        onClick: () => openModal(keybindingModalIsVisible),
       },
       {
         icon: 'command',
         text: 'Add keyspace',
-        onClick: () => {
-          console.log('keyspace')
-        }
+        onClick: () => openModal(keyspaceModalIsVisible),
       },
       {
         icon: 'tool',
         text: 'Edit JSON',
-        onClick: () => {
-          console.log('json')
-        }
+        onClick: () => openModal(jsonModalIsVisible),
       },
       {
         icon: 'refresh-ccw',
         text: 'Reset default',
-        onClick: () => {
-          console.log('reset default')
-        }
+        onClick: () => openModal(resetModalIsVisible),
       },
       {
         icon: 'trash',
         text: 'Clear all',
-        onClick: () => {
-          console.log('clear all')
-        }
+        onClick: () => openModal(clearAllModalIsVisible)
       },
     ]
 
     return {
-      toolbar
+      clearAllModalIsVisible,
+      closeModals,
+      jsonModalIsVisible,
+      keybindingModalIsVisible,
+      keyspaceModalIsVisible,
+      resetModalIsVisible,
+      toolbar,
     }
   },
   components: {
+    ClearAllModal,
     Icon,
+    JsonModal,
+    KeybindingModal,
+    KeyspaceModal,
+    ResetModal,
   },
 })
 </script>
