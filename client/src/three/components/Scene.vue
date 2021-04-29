@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="border-4 border-dashed"
-    ref="el">
+  <div ref="el">
     <div v-if="square" class="pb-full" />
     <slot />
   </div>
