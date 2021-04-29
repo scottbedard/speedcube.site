@@ -7,6 +7,11 @@ import { useDark } from '@vueuse/core'
 export const isDark = useDark()
 
 /**
+ * Keyboard configs
+ */
+export const keyboardConfigs = ref(window.context.keyboardConfigs)
+
+/**
  * Puzzle configs
  */
 export const puzzleConfigs = ref(window.context.puzzleConfigs)

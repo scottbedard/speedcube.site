@@ -17,6 +17,9 @@ class ClientController extends Controller
         $user = Auth::user();
 
         $context = Utils::camelKeysRecursive([
+            'keyboard_configs' => $user
+                ? $user->keyboardConfigs()->get()
+                : [],
             'puzzle_configs' => $user
                 ? $user->puzzleConfigs()->get()
                 : [],
