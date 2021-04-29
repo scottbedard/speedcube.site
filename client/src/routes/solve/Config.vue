@@ -70,7 +70,15 @@
       </div>
 
       <div class="flex flex-wrap gap-6 items-center justify-end w-full md:w-auto">
-        <RouterLink :to="{ name: 'login' }">Sign in</RouterLink>
+        <RouterLink
+          :to="{
+            name: 'login',
+            query: {
+              returnTo: route.fullPath,
+            }
+          }">
+          Sign in
+        </RouterLink>
 
         <Button primary :to="{ name: 'create-account' }">
           Create account

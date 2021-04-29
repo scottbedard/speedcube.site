@@ -47,12 +47,14 @@
 <script lang="ts">
 import { Button, Card, Checkbox, Input } from '@/components'
 import { computed, defineComponent } from 'vue'
+import { isString } from 'lodash-es'
 import { useLogin } from '@/app/api'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
   setup() {
     const { data, failed, loading, login, unauthorized } = useLogin()
+    const route = useRoute()
     const router = useRouter()
 
     const errorMessage = computed(() => {
@@ -67,7 +69,11 @@ export default defineComponent({
 
     const submit = () => {
       login().then(() => {
-        router.replace({ name: 'home' })
+        if (isString(route.query.returnTo)) {
+          router.replace(route.query.returnTo)
+        } else {
+          router.replace({ name: 'home' })
+        }
       })
     }
 
