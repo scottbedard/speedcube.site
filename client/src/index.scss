@@ -18,7 +18,8 @@ a {
 }
 
 .tw-margin {
-  @apply px-6;
+  @apply mx-auto px-6 w-full;
+  max-width: 100rem;
 }
 
 .tw-page-title {
