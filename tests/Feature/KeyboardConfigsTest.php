@@ -34,4 +34,37 @@ class KeyboardConfigsTest extends TestCase
             'foo' => 'bar',
         ], $data['keyboardConfigs'][0]['config']);
     }
+
+    public function test_update_keyboard_config()
+    {
+        $user = User::factory()->create();
+
+        $keyboardConfig = $user
+            ->keyboardConfigs()
+            ->create([
+                'config' => [
+                    'foo' => 'bar',
+                ],
+                'puzzle' => '3x3',
+            ]);
+
+        $this->assertEquals(1, $user->keyboardConfigs()->count());
+
+        $request = $this
+            ->actingAs($user)
+            ->json('POST', '/api/keyboard-configs', [
+                'config' => [
+                    'hello' => 'world',
+                ],
+                'puzzle' => '3x3',
+            ]);
+
+        $this->assertEquals(1, $user->keyboardConfigs()->count());
+
+        $data = $request->json();
+
+        $this->assertEquals([
+            'hello' => 'world',
+        ], $data['keyboardConfigs'][0]['config']);
+    }
 }

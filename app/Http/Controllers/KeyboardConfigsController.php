@@ -15,11 +15,21 @@ class KeyboardConfigsController extends Controller
     {
         $user = Auth::user();
 
-        KeyboardConfig::create([
-            'config' => $request->config,
-            'puzzle' => $request->puzzle,
-            'user_id' => $user->id,
-        ]);
+        $model = $user
+            ->keyboardConfigs()
+            ->where('puzzle', $request->puzzle)
+            ->first();
+
+        if ($model) {
+            $model->config = $request->config;
+            $model->save();
+        } else {
+            KeyboardConfig::create([
+                'config' => $request->config,
+                'puzzle' => $request->puzzle,
+                'user_id' => $user->id,
+            ]); 
+        }
 
         return [
             'keyboard_configs' => $user->keyboardConfigs()->get(),
