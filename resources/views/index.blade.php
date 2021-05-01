@@ -27,8 +27,8 @@
     ></div>
 
     @if ($local)
-      <script type="module" src="http://localhost:3000/@vite/client"></script>
-      <script type="module" src="http://localhost:3000/src/main.ts"></script>
+      <script type="module" src="http://192.168.10.1:3000/@vite/client"></script>
+      <script type="module" src="http://192.168.10.1:3000/src/main.ts"></script>
     @else
       <script type="module" src="/dist/{{ $manifest['src/main.ts']['file'] }}"></script>
     @endif
