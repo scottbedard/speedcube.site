@@ -1,5 +1,5 @@
 <template>
-  <Modal padded>
+  <Modal padded :visible="visible">
     <h3>Edit JSON</h3>
 
     <div class="flex flex-wrap gap-6 items-center justify-end">
@@ -37,6 +37,9 @@ export default defineComponent({
   components: {
     Button,
     Modal,
+  },
+  props: {
+    visible: Boolean,
   },
 })
 </script>

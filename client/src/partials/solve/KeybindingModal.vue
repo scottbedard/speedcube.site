@@ -1,5 +1,5 @@
 <template>
-  <Modal padded>
+  <Modal padded :visible="visible">
     <form
       class="gap-6 grid xs:grid-cols-2"
       @submit.prevent="submit">
@@ -58,6 +58,9 @@ export default defineComponent({
     Button,
     Input,
     Modal,
+  },
+  props: {
+    visible: Boolean,
   },
 })
 </script>

@@ -1,21 +1,31 @@
 <template>
   <teleport to="body">
-    <div
-      class="bg-darken-50 fixed flex h-full items-center justify-center left-0 overflow-y-auto top-0 w-full z-10 focus:outline-none"
-      ref="container"
-      role="dialog"
-      tabindex="-1"
-      @click="close">
-      <div class="p-6 w-full">
-        <div
-          :class="['mx-auto', sizeClass]"
-          @click.stop>
-          <Card :padded="padded">
-            <slot />
-          </Card>
+    <transition
+      enter-active-class="ease-out transition"
+      enter-from-class="opacity-0 transform -translate-y-6"
+      enter-to-class="opacity-100 transform translate-y-0"
+      leave-active-class="ease-out transition"
+      leave-to-class="opacity-0 transform -translate-y-6"
+      leave-from-class="opacity-100 transform translate-y-0"
+      @before-leave="onBeforeLeave"
+      @enter="onEnter">
+      <div
+        v-if="visible"
+        class="bg-darken-50 fixed flex h-full items-center justify-center left-0 overflow-y-auto top-0 w-full z-10 focus:outline-none"
+        role="dialog"
+        tabindex="-1"
+        @click="close">
+        <div class="p-6 w-full">
+          <div
+            :class="['mx-auto', sizeClass]"
+            @click.stop>
+            <Card :padded="padded">
+              <slot />
+            </Card>
+          </div>
         </div>
       </div>
-    </div>
+    </transition>
   </teleport>
 </template>
 
@@ -29,8 +39,6 @@ import Card from './Card.vue'
 export default defineComponent({
   setup(props, { emit }) {
     let trap: FocusTrap | undefined
-
-    const container = ref<HTMLElement>()
 
     // size class
     const sizeClass = computed(() => {
@@ -49,27 +57,28 @@ export default defineComponent({
     })
 
     // disable background scrolling, and trap focus within the modal
-    onMounted(() => {
-      disableBodyScroll(container.value as HTMLElement, {
+    const onEnter = (el: Element) => {
+      disableBodyScroll(el, {
         reserveScrollBarGap: true,
       })
 
-      trap = createFocusTrap(container.value as HTMLElement)
+      trap = createFocusTrap(el as HTMLElement)
       trap.activate()
-    });
+    }
 
     // clean up body scrolling and focus traps
-    onBeforeUnmount(() => {
-      enableBodyScroll(container.value as HTMLElement)
+    const onBeforeLeave = (el: Element) => {
+      enableBodyScroll(el)
 
       if (trap) {
         trap.deactivate()
       }
-    });
+    }
 
     return {
       close,
-      container,
+      onBeforeLeave,
+      onEnter,
       sizeClass,
     };
   },
@@ -81,12 +90,14 @@ export default defineComponent({
   ],
   props: {
     padded: {
-      default: false,
       type: Boolean,
     },
     size: {
       default: '2xl',
       type: String as PropType<'sm'|'md'|'lg'|'xl'|'2xl'>,
+    },
+    visible: {
+      type: Boolean,
     },
   },
 })

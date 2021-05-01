@@ -1,11 +1,11 @@
 <template>
   <Button primary @click="open">
-    open modal
+    Open modal
   </Button>
 
   <Modal
-    v-if="expanded"
     padded
+    :visible="visible"
     @close="close">
     <h3 class="mb-6 text-3xl">
       Be aware of the focus behavior
@@ -38,19 +38,19 @@ import { Button, Input, Modal } from '@/components'
 
 export default defineComponent({
   setup() {
-    const expanded = ref(false)
+    const visible = ref(false)
 
     const close = () => {
-      expanded.value = false
+      visible.value = false
     }
 
     const open = () => {
-      expanded.value = true
+      visible.value = true
     }
 
     return {
       close,
-      expanded,
+      visible,
       open
     }
   },

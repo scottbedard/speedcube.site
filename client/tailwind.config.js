@@ -9,6 +9,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        darken: {
+          '50': 'rgba(0, 0, 0, 0.5)',
+        },
         primary: colors.emerald,
       },
       cursor: {

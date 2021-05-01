@@ -15,23 +15,23 @@
   </div>
 
   <KeybindingModal
-    v-if="keybindingModalIsVisible"
+    :visible="keybindingModalIsVisible"
     @close="closeModals" />
 
   <KeyspaceModal
-    v-if="keyspaceModalIsVisible"
+    :visible="keyspaceModalIsVisible"
     @close="closeModals" />
 
   <JsonModal
-    v-if="jsonModalIsVisible"
+    :visible="jsonModalIsVisible"
     @close="closeModals" />
 
   <ResetModal
-    v-if="resetModalIsVisible"
+    :visible="resetModalIsVisible"
     @close="closeModals" />
 
   <ClearAllModal
-    v-if="clearAllModalIsVisible"
+    :visible="clearAllModalIsVisible"
     @close="closeModals" />
 </template>
 
