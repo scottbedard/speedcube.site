@@ -1,4 +1,4 @@
-import { CubeConfig, CubeName } from '@/app/types/puzzle'
+import { CubeConfig, CubeName, KeyboardConfig } from '@/app/types/puzzle'
 
 /**
  * Default colors
@@ -48,3 +48,11 @@ export const cubeNames: CubeName[] = [
   '4x4',
   '5x5',
 ]
+
+/**
+ * Default cube keyboard configuration.
+ */
+export const cubeKeyboardConfig: KeyboardConfig = {
+  default: {},
+  keyspaces: {},
+}

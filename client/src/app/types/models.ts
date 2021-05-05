@@ -1,10 +1,10 @@
-import { PuzzleName } from './puzzle'
+import { KeyboardConfig as KeyboardConfigObj, PuzzleName } from './puzzle'
 
 /**
  * Keyboard config
  */
  export type KeyboardConfig = {
-  config: Record<string, unknown>
+  config: KeyboardConfigObj
   puzzle: PuzzleName
 }
 

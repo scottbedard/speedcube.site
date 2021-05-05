@@ -4,6 +4,7 @@
       class="gap-6 grid xs:grid-cols-2"
       @submit.prevent="submit">
       <Input
+        v-model="char"
         autofocus
         class
         label="Key"
@@ -11,6 +12,7 @@
         required />
 
       <Input
+        v-model="turn"
         label="Turn"
         placeholder="Enter puzzle turn"
         required />
@@ -27,7 +29,7 @@
           class="w-full xs:w-auto"
           primary
           type="submit">
-          Add
+          Save
         </Button>
       </div>
     </form>
@@ -35,23 +37,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { Button, Input, Modal } from '@/components'
 
 export default defineComponent({
   setup(props, { emit }) {
+    const char = ref('')
+    const turn = ref('')
+
     const close = () => emit('close')
 
     const submit = () => {
-      console.log('submit')
+      emit('save', { char: char.value, turn: turn.value })
     }
 
     return {
+      char,
       close,
       submit,
+      turn,
     }
   },
   emits: [
+    'save',
     'close',
   ],
   components: {

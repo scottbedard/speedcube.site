@@ -52,6 +52,21 @@ export type CubeName =
  | '5x5'
 
 /**
+ * Keyboard config
+ */
+export type KeyboardConfig = {
+  /**
+   * Default keyspace
+   */
+  default: Record<string, string>,
+
+  /**
+   * Custom keyspaces
+   */
+  keyspaces: Record<string, Record<string, string>>,
+}
+
+/**
  * Puzzle config
  */
 export type PuzzleConfig = {

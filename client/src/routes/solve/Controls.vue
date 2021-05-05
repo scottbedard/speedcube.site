@@ -14,9 +14,12 @@
     </a>
   </div>
 
+  <pre>{{ config }}</pre>
+
   <KeybindingModal
     :visible="keybindingModalIsVisible"
-    @close="closeModals" />
+    @close="closeModals"
+    @save="saveBinding" />
 
   <KeyspaceModal
     :visible="keyspaceModalIsVisible"
@@ -38,6 +41,8 @@
 <script lang="ts">
 import { defineComponent, Ref, ref } from 'vue'
 import { Icon } from '@/components'
+import { useKeyboardConfig } from '@/app/api'
+import { useRoute } from 'vue-router'
 import ClearAllModal from '@/partials/solve/ClearAllModal.vue'
 import JsonModal from '@/partials/solve/JsonModal.vue'
 import KeybindingModal from '@/partials/solve/KeybindingModal.vue'
@@ -52,12 +57,22 @@ type ToolbarItem = {
 
 export default defineComponent({
   setup() {
+    const route = useRoute()
+    const puzzle = route.params?.puzzle as string
+
     const clearAllModalIsVisible = ref(false)
     const jsonModalIsVisible = ref(false)
     const keybindingModalIsVisible = ref(false)
     const keyspaceModalIsVisible = ref(false)
     const resetModalIsVisible = ref(false)
 
+    const {
+      config,
+      loading,
+      save,
+    } = useKeyboardConfig(puzzle)
+
+    // close all modals
     const closeModals = () => {
       clearAllModalIsVisible.value = false
       jsonModalIsVisible.value = false
@@ -66,11 +81,21 @@ export default defineComponent({
       resetModalIsVisible.value = false
     }
 
+    // set a modal visibility ref to true
     const openModal = (isVisible: Ref<boolean>) => {
       closeModals()
+
       isVisible.value = true
     }
 
+    // save a key binding
+    const saveBinding = (binding: { char: string, turn: string }) => {
+      keybindingModalIsVisible.value = false
+
+      config.value.default[binding.char] = binding.turn
+    }
+
+    // toolbar links
     const toolbar: ToolbarItem[] = [
       {
         icon: 'plus',
@@ -102,10 +127,14 @@ export default defineComponent({
     return {
       clearAllModalIsVisible,
       closeModals,
+      config,
       jsonModalIsVisible,
       keybindingModalIsVisible,
       keyspaceModalIsVisible,
+      loading,
       resetModalIsVisible,
+      save,
+      saveBinding,
       toolbar,
     }
   },
