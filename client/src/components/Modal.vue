@@ -7,8 +7,10 @@
       leave-active-class="ease-out transition"
       leave-to-class="opacity-0 transform -translate-y-6"
       leave-from-class="opacity-100 transform translate-y-0"
+      @before-enter="onBeforeEnter"
       @before-leave="onBeforeLeave"
-      @enter="onEnter">
+      @enter="onEnter"
+      @leave="onLeave">
       <div
         v-if="visible"
         class="bg-darken-50 fixed flex h-full items-center justify-center left-0 overflow-y-auto top-0 w-full z-10 focus:outline-none"
@@ -56,14 +58,8 @@ export default defineComponent({
       if (e.key === 'Escape') close()
     })
 
-    // disable background scrolling, and trap focus within the modal
-    const onEnter = (el: Element) => {
-      disableBodyScroll(el, {
-        reserveScrollBarGap: true,
-      })
-
-      trap = createFocusTrap(el as HTMLElement)
-      trap.activate()
+    const onBeforeEnter = () => {
+      emit('before-enter')
     }
 
     // clean up body scrolling and focus traps
@@ -73,12 +69,33 @@ export default defineComponent({
       if (trap) {
         trap.deactivate()
       }
+
+      emit('before-leave')
+    }
+
+    // disable background scrolling, and trap focus within the modal
+    const onEnter = (el: Element) => {
+      disableBodyScroll(el, {
+        reserveScrollBarGap: true,
+      })
+
+      trap = createFocusTrap(el as HTMLElement)
+      trap.activate()
+
+      emit('enter')
+    }
+
+    
+    const onLeave = () => {
+      emit('leave')
     }
 
     return {
       close,
+      onBeforeEnter,
       onBeforeLeave,
       onEnter,
+      onLeave,
       sizeClass,
     };
   },
@@ -86,7 +103,11 @@ export default defineComponent({
     Card,
   },
   emits: [
+    'before-enter',
+    'before-leave',
     'close',
+    'enter',
+    'leave',
   ],
   props: {
     padded: {

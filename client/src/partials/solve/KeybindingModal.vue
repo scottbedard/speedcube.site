@@ -1,5 +1,8 @@
 <template>
-  <Modal padded :visible="visible">
+  <Modal
+    padded
+    :visible="visible"
+    @before-enter="reset">
     <form
       class="gap-6 grid xs:grid-cols-2"
       @submit.prevent="submit">
@@ -37,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { Button, Input, Modal } from '@/components'
 
 export default defineComponent({
@@ -47,6 +50,11 @@ export default defineComponent({
 
     const close = () => emit('close')
 
+    const reset = () => {
+      char.value = ''
+      turn.value = ''
+    }
+
     const submit = () => {
       emit('save', { char: char.value, turn: turn.value })
     }
@@ -54,6 +62,7 @@ export default defineComponent({
     return {
       char,
       close,
+      reset,
       submit,
       turn,
     }
