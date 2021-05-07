@@ -1,5 +1,5 @@
 <template>
-  <div class="gap-x-10 gap-y-3 flex flex-wrap justify-center">
+  <div class="gap-x-10 gap-y-3 flex flex-wrap justify-center mb-6">
     <a
       v-for="(link, index) in toolbar"
       class="flex items-center justify-center w-full sm:w-auto"
@@ -14,11 +14,17 @@
     </a>
   </div>
 
-  <div class="flex flex-wrap">
-
+  <div class="flex flex-wrap gap-x-6 gap-y-3 justify-center">
+    <a
+      v-for="(turn, key) in keyspaceBindings"
+      class="bg-gray-50 flex gap-2 px-3 py-1 rounded-md shadow-md text-sm dark:bg-gray-700 hover:shadow-lg"
+      href="#"
+      :key="key">
+      <span v-text="key" />
+      &bull;
+      <span v-text="turn" />
+    </a>
   </div>
-
-  <pre>{{ config }}</pre>
 
   <KeybindingModal
     :visible="keybindingModalIsVisible"
@@ -82,6 +88,7 @@ export default defineComponent({
     // current keyboard
     const {
       keyspace,
+      keyspaceBindings,
     } = useKeyboard(config)
 
     // add a keybinding
@@ -159,6 +166,7 @@ export default defineComponent({
       config,
       jsonModalIsVisible,
       keybindingModalIsVisible,
+      keyspaceBindings,
       keyspaceModalIsVisible,
       loading,
       resetModalIsVisible,
