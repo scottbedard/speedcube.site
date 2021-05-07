@@ -26,10 +26,29 @@
       </a>
     </div>
 
-    <div>
+    <div class="flex flex-wrap gap-6 items-center justify-between">
       <IconText name="alert-octagon">
         You must be signed in to save keyboard configuration.
       </IconText>
+
+      <div class="flex flex-wrap gap-6 items-center justify-center w-full xs:justify-end lg:w-auto">
+        <RouterLink
+          :to="{
+            name: 'login',
+            query: {
+              returnTo: route.fullPath,
+            }
+          }">
+          Sign in
+        </RouterLink>
+
+        <Button
+          class="w-full xs:w-auto"
+          primary
+          :to="{ name: 'create-account' }">
+          Create account
+        </Button>
+      </div>
     </div>
   </div>
 
@@ -60,7 +79,7 @@
 
 <script lang="ts">
 import { defineComponent, Ref, ref } from 'vue'
-import { IconText } from '@/components'
+import { Button, IconText } from '@/components'
 import { useKeyboard } from '@/components/puzzle/use-keyboard'
 import { useKeyboardConfig } from '@/app/api'
 import { useRoute } from 'vue-router'
@@ -211,11 +230,13 @@ export default defineComponent({
       loading,
       removeActiveBinding,
       resetModalIsVisible,
+      route,
       save,
       toolbar,
     }
   },
   components: {
+    Button,
     ClearAllModal,
     IconText,
     JsonModal,

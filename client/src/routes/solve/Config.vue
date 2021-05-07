@@ -65,7 +65,7 @@
         You must be signed in to save puzzle settings.
       </IconText>
 
-      <div class="flex flex-wrap gap-6 items-center justify-end w-full md:w-auto">
+      <div class="flex flex-wrap gap-6 items-center justify-center w-full xs:justify-end lg:w-auto">
         <RouterLink
           :to="{
             name: 'login',
@@ -76,7 +76,10 @@
           Sign in
         </RouterLink>
 
-        <Button primary :to="{ name: 'create-account' }">
+        <Button
+          class="w-full xs:w-auto"
+          primary
+          :to="{ name: 'create-account' }">
           Create account
         </Button>
       </div>
