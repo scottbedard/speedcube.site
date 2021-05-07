@@ -16,20 +16,23 @@
 
   <div class="flex flex-wrap gap-x-6 gap-y-3 justify-center">
     <a
-      v-for="(turn, key) in keyspaceBindings"
+      v-for="(turn, char) in keyspaceBindings"
       class="bg-gray-50 flex gap-2 px-3 py-1 rounded-md shadow-md text-sm dark:bg-gray-700 hover:shadow-lg"
       href="#"
-      :key="key">
-      <span v-text="key" />
+      :key="char"
+      @click.prevent="editBinding({ char, turn })">
+      <span v-text="char" />
       &bull;
       <span v-text="turn" />
     </a>
   </div>
 
   <KeybindingModal
+    :active-binding="activeBinding"
     :visible="keybindingModalIsVisible"
-    @add="addKeybinding"
-    @close="closeModals" />
+    @add="addBinding"
+    @close="closeModals"
+    @remove="removeActiveBinding" />
 
   <KeyspaceModal
     :visible="keyspaceModalIsVisible"
@@ -78,6 +81,8 @@ export default defineComponent({
     const keyspaceModalIsVisible = ref(false)
     const resetModalIsVisible = ref(false)
 
+    const activeBinding = ref<{ char: string, turn: string } | null>(null)
+
     // model management
     const {
       config,
@@ -91,9 +96,9 @@ export default defineComponent({
       keyspaceBindings,
     } = useKeyboard(config)
 
-    // add a keybinding
-    const addKeybinding = (binding: { char: string, turn: string }) => {
-      closeModals()
+    // add a key binding
+    const addBinding = (binding: { char: string, turn: string }) => {
+      removeActiveBinding()
 
       if (keyspace.value) {
         if (!config.value.keyspaces[keyspace.value]) {
@@ -104,6 +109,8 @@ export default defineComponent({
       } else {
         config.value.default[binding.char] = binding.turn
       }
+
+      activeBinding.value = null
     }
 
     // add a keyspace
@@ -122,6 +129,14 @@ export default defineComponent({
       resetModalIsVisible.value = false
     }
 
+    // edit a key binding
+    const editBinding = (binding: { char: string, turn: string }) => {
+      activeBinding.value = binding
+
+      openModal(keybindingModalIsVisible)
+    }
+
+
     // set a modal visibility ref to true
     const openModal = (isVisible: Ref<boolean>) => {
       closeModals()
@@ -129,12 +144,29 @@ export default defineComponent({
       isVisible.value = true
     }
 
+    // remove the active binding
+    const removeActiveBinding = () => {
+      closeModals()
+
+      if (activeBinding.value) {
+        if (keyspace.value) {
+          delete config.value.keyspaces[activeBinding.value.char]
+        } else {
+          delete config.value.default[activeBinding.value.char]
+        }
+      }
+    }
+
     // toolbar links
     const toolbar: ToolbarItem[] = [
       {
         icon: 'plus',
         text: 'Add key binding',
-        onClick: () => openModal(keybindingModalIsVisible),
+        onClick: () => {
+          activeBinding.value = null
+
+          openModal(keybindingModalIsVisible)
+        },
       },
       {
         icon: 'chevron-up',
@@ -159,16 +191,19 @@ export default defineComponent({
     ]
 
     return {
-      addKeybinding,
+      activeBinding,
+      addBinding,
       addKeyspace,
       clearAllModalIsVisible,
       closeModals,
       config,
+      editBinding,
       jsonModalIsVisible,
       keybindingModalIsVisible,
       keyspaceBindings,
       keyspaceModalIsVisible,
       loading,
+      removeActiveBinding,
       resetModalIsVisible,
       save,
       toolbar,
