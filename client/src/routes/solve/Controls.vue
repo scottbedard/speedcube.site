@@ -6,25 +6,31 @@
       href="#"
       :key="index"
       @click.prevent="link.onClick">
-      <Icon
-        class="mr-2"
-        :name="link.icon" />
-      
-      {{ link.text }}
+      <IconText :name="link.icon">
+        {{ link.text }}
+      </IconText>
     </a>
   </div>
 
-  <div class="flex flex-wrap gap-x-6 gap-y-3 justify-center">
-    <a
-      v-for="(turn, char) in keyspaceBindings"
-      class="bg-gray-50 flex gap-2 px-3 py-1 rounded-md shadow-md text-sm dark:bg-gray-700 hover:shadow-lg"
-      href="#"
-      :key="char"
-      @click.prevent="editBinding({ char, turn })">
-      <span v-text="char" />
-      &bull;
-      <span v-text="turn" />
-    </a>
+  <div class="grid gap-6 max-w-6xl mx-auto">
+    <div class="flex flex-wrap gap-x-6 gap-y-3 justify-center">
+      <a
+        v-for="(turn, char) in keyspaceBindings"
+        class="bg-gray-50 flex gap-2 px-3 py-1 rounded-md shadow-md text-sm dark:bg-gray-700 hover:shadow-lg"
+        href="#"
+        :key="char"
+        @click.prevent="editBinding({ char: String(char), turn })">
+        <span v-text="char" />
+        &bull;
+        <span v-text="turn" />
+      </a>
+    </div>
+
+    <div>
+      <IconText name="alert-octagon">
+        You must be signed in to save keyboard configuration.
+      </IconText>
+    </div>
   </div>
 
   <KeybindingModal
@@ -54,7 +60,7 @@
 
 <script lang="ts">
 import { defineComponent, Ref, ref } from 'vue'
-import { Icon } from '@/components'
+import { IconText } from '@/components'
 import { useKeyboard } from '@/components/puzzle/use-keyboard'
 import { useKeyboardConfig } from '@/app/api'
 import { useRoute } from 'vue-router'
@@ -211,7 +217,7 @@ export default defineComponent({
   },
   components: {
     ClearAllModal,
-    Icon,
+    IconText,
     JsonModal,
     KeybindingModal,
     KeyspaceModal,

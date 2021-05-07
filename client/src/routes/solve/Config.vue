@@ -61,13 +61,9 @@
     <div
       v-else
       class="flex flex-wrap gap-6 items-center justify-between">
-      <div class="flex items-center">
-        <Icon
-          class="mr-2"
-          name="alert-octagon" />
-        
+      <IconText name="alert-octagon">
         You must be signed in to save puzzle settings.
-      </div>
+      </IconText>
 
       <div class="flex flex-wrap gap-6 items-center justify-end w-full md:w-auto">
         <RouterLink
@@ -89,7 +85,7 @@
 </template>
 
 <script lang="ts">
-import { Button, ColorPicker, Icon, Label, RangeInput } from '@/components'
+import { Button, ColorPicker, IconText, Label, RangeInput } from '@/components'
 import { computed, defineComponent } from 'vue'
 import { isAuthenticated } from '@/app/store/computed'
 import { isCube } from '@/app/utils'
@@ -255,7 +251,7 @@ export default defineComponent({
   components: {
     Button,
     ColorPicker,
-    Icon,
+    IconText,
     Label,
     RangeInput,
   },
