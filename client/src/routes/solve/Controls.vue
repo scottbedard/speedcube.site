@@ -14,15 +14,20 @@
     </a>
   </div>
 
+  <div class="flex flex-wrap">
+
+  </div>
+
   <pre>{{ config }}</pre>
 
   <KeybindingModal
     :visible="keybindingModalIsVisible"
-    @close="closeModals"
-    @save="saveBinding" />
+    @add="addKeybinding"
+    @close="closeModals" />
 
   <KeyspaceModal
     :visible="keyspaceModalIsVisible"
+    @add="addKeyspace"
     @close="closeModals" />
 
   <JsonModal
@@ -41,6 +46,7 @@
 <script lang="ts">
 import { defineComponent, Ref, ref } from 'vue'
 import { Icon } from '@/components'
+import { useKeyboard } from '@/components/puzzle/use-keyboard'
 import { useKeyboardConfig } from '@/app/api'
 import { useRoute } from 'vue-router'
 import ClearAllModal from '@/partials/solve/ClearAllModal.vue'
@@ -66,11 +72,39 @@ export default defineComponent({
     const keyspaceModalIsVisible = ref(false)
     const resetModalIsVisible = ref(false)
 
+    // model management
     const {
       config,
       loading,
       save,
     } = useKeyboardConfig(puzzle)
+
+    // current keyboard
+    const {
+      keyspace,
+    } = useKeyboard(config)
+
+    // add a keybinding
+    const addKeybinding = (binding: { char: string, turn: string }) => {
+      closeModals()
+
+      if (keyspace.value) {
+        if (!config.value.keyspaces[keyspace.value]) {
+          config.value.keyspaces[keyspace.value] = {}
+        }
+
+        config.value.keyspaces[keyspace.value][binding.char] = binding.turn
+      } else {
+        config.value.default[binding.char] = binding.turn
+      }
+    }
+
+    // add a keyspace
+    const addKeyspace = (char: string) => {
+      closeModals()
+      
+      keyspace.value = char
+    }
 
     // close all modals
     const closeModals = () => {
@@ -88,13 +122,6 @@ export default defineComponent({
       isVisible.value = true
     }
 
-    // save a key binding
-    const saveBinding = (binding: { char: string, turn: string }) => {
-      keybindingModalIsVisible.value = false
-
-      config.value.default[binding.char] = binding.turn
-    }
-
     // toolbar links
     const toolbar: ToolbarItem[] = [
       {
@@ -103,7 +130,7 @@ export default defineComponent({
         onClick: () => openModal(keybindingModalIsVisible),
       },
       {
-        icon: 'command',
+        icon: 'chevron-up',
         text: 'Add keyspace',
         onClick: () => openModal(keyspaceModalIsVisible),
       },
@@ -125,6 +152,8 @@ export default defineComponent({
     ]
 
     return {
+      addKeybinding,
+      addKeyspace,
       clearAllModalIsVisible,
       closeModals,
       config,
@@ -134,7 +163,6 @@ export default defineComponent({
       loading,
       resetModalIsVisible,
       save,
-      saveBinding,
       toolbar,
     }
   },

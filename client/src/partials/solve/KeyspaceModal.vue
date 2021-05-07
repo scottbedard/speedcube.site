@@ -1,41 +1,74 @@
 <template>
-  <Modal padded :visible="visible">
-    <h3>Add keyspace</h3>
+  <Modal
+    padded
+    :visible="visible"
+    @before-enter="reset">
+    <form
+      class="gap-6 grid"
+      @submit.prevent="submit">
+      <Input
+        v-model="char"
+        autofocus
+        class
+        label="Keyspace"
+        maxlength="1"
+        placeholder="Enter keyspace character"
+        required />
 
-    <div class="flex flex-wrap gap-6 items-center justify-end">
-      <a
-        class="text-center w-full xs:w-auto"
-        href="#"
-        @click.prevent="close">
-        Cancel
-      </a>
+      <p>
+        Keyspaces enable multiple keyboard layouts. To change keyspaces while solving, press control and the assigned character.
+      </p>
 
-      <Button
-        class="w-full xs:w-auto"
-        primary>
-        Add
-      </Button>
-    </div>
+      <div class="flex flex-wrap gap-6 items-center justify-end">
+        <a
+          class="text-center w-full xs:w-auto"
+          href="#"
+          @click.prevent="close">
+          Cancel
+        </a>
+
+        <Button
+          class="w-full xs:w-auto"
+          primary>
+          Add
+        </Button>
+      </div>
+    </form>
   </Modal>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { Button, Modal } from '@/components'
+import { defineComponent, ref } from 'vue'
+import { Button, Input, Modal } from '@/components'
 
 export default defineComponent({
   setup(props, { emit }) {
+    const char = ref('')
+
     const close = () => emit('close')
 
+    const reset = () => {
+      char.value = ''
+    }
+
+    const submit = () => {
+      emit('add', char.value)
+    }
+
     return {
-      close
+      char,
+      close,
+      reset,
+      submit,
     }
   },
   emits: [
+    'add',
     'close',
   ],
   components: {
     Button,
+    Input,
     Modal,
   },
   props: {

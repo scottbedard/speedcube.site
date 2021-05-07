@@ -11,6 +11,7 @@
         autofocus
         class
         label="Key"
+        maxlength="1"
         placeholder="Enter character"
         required />
 
@@ -40,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { Button, Input, Modal } from '@/components'
 
 export default defineComponent({
@@ -56,7 +57,7 @@ export default defineComponent({
     }
 
     const submit = () => {
-      emit('save', { char: char.value, turn: turn.value })
+      emit('add', { char: char.value, turn: turn.value })
     }
 
     return {
@@ -68,7 +69,7 @@ export default defineComponent({
     }
   },
   emits: [
-    'save',
+    'add',
     'close',
   ],
   components: {

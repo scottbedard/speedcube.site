@@ -12,6 +12,7 @@
       ref="input"
       :disabled="disabled"
       :id="id"
+      :maxlength="typeof maxlength === 'undefined' ? undefined : Number(maxlength)"
       :placeholder="placeholder"
       :required="required"
       :type="type"
@@ -86,6 +87,9 @@ export default defineComponent({
     },
     label: {
       type: String,
+    },
+    maxlength: {
+      type: [Number, String],
     },
     modelValue: {
       default: '',
