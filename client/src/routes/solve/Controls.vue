@@ -26,7 +26,31 @@
       </a>
     </div>
 
-    <div class="flex flex-wrap gap-6 items-center justify-between">
+    <div
+      v-if="isAuthenticated"
+      class="flex flex-wrap gap-6 items-center justify-center xs:justify-end">
+      <RouterLink
+        :to="{
+          name: 'solve',
+          params: {
+            puzzle: route.params.puzzle,
+          },
+        }">
+        Cancel
+      </RouterLink>
+
+      <Button
+        class="w-full xs:w-auto"
+        primary
+        :disabled="loading"
+        @click="save">
+        Save
+      </Button>
+    </div>
+
+    <div
+      v-else
+      class="flex flex-wrap gap-6 items-center justify-between">
       <IconText name="alert-octagon">
         You must be signed in to save keyboard configuration.
       </IconText>
@@ -78,8 +102,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref } from 'vue'
 import { Button, IconText } from '@/components'
+import { defineComponent, Ref, ref } from 'vue'
+import { isAuthenticated } from '@/app/store/computed'
 import { useKeyboard } from '@/components/puzzle/use-keyboard'
 import { useKeyboardConfig } from '@/app/api'
 import { useRoute } from 'vue-router'
@@ -223,6 +248,7 @@ export default defineComponent({
       closeModals,
       config,
       editBinding,
+      isAuthenticated,
       jsonModalIsVisible,
       keybindingModalIsVisible,
       keyspaceBindings,
