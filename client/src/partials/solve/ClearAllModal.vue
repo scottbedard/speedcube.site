@@ -1,6 +1,8 @@
 <template>
   <Modal padded :visible="visible">
-    <h3>Clear all bindings</h3>
+    <h3 class="font-bold mb-6 text-2xl">You're about to clear all key bindings</h3>
+
+    <p class="mb-6">Doing this removes all key bindings and keyspaces. Your current setup could still be recovered by discarding changes, but any unsaved changes would be lost.</p>
 
     <div class="flex flex-wrap gap-6 items-center justify-end">
       <a
@@ -12,8 +14,9 @@
 
       <Button
         class="w-full xs:w-auto"
-        primary>
-        Add
+        danger
+        @click="confirm">
+        Clear all
       </Button>
     </div>
   </Modal>
@@ -27,12 +30,16 @@ export default defineComponent({
   setup(props, { emit }) {
     const close = () => emit('close')
 
+    const confirm = () => emit('confirm')
+
     return {
-      close
+      close,
+      confirm,
     }
   },
   emits: [
     'close',
+    'confirm',
   ],
   components: {
     Button,

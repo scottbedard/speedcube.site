@@ -5,7 +5,8 @@
       {
         'pointer-events-none': disabled,
         'bg-green-500 text-gray-50 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-500 dark:hover:text-white': primary,
-        'bg-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600': !primary,
+        'bg-red-500 text-gray-50 hover:bg-red-600': !primary && danger,
+        'bg-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600': !primary && !danger,
       }
     ]"
     :disabled="disabled"
@@ -26,6 +27,10 @@ export default defineComponent({
     Spinner,
   },
   props: {
+    danger: {
+      default: false,
+      type: Boolean,
+    },
     disabled: {
       default: false,
       type: Boolean,

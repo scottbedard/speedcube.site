@@ -98,7 +98,8 @@
 
   <ClearAllModal
     :visible="clearAllModalIsVisible"
-    @close="closeModals" />
+    @close="closeModals"
+    @confirm="clearAll" />
 </template>
 
 <script lang="ts">
@@ -168,6 +169,16 @@ export default defineComponent({
       closeModals()
       
       keyspace.value = char
+    }
+
+    // clear all bindings and keyspaces
+    const clearAll = () => {
+      config.value = {
+        default: {},
+        keyspaces: {},
+      }
+
+      closeModals()
     }
 
     // close all modals
@@ -244,6 +255,7 @@ export default defineComponent({
       activeBinding,
       addBinding,
       addKeyspace,
+      clearAll,
       clearAllModalIsVisible,
       closeModals,
       config,
