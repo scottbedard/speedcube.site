@@ -1,5 +1,7 @@
 import { cloneDeep } from 'lodash-es'
 import { keyboardConfig } from '@/app/store/computed'
+import { KeyboardConfig } from '@/app/types/models'
+import { keyboardConfigs } from '@/app/store/state'
 import { normalizePuzzleName } from '@/app/utils'
 import { ref } from 'vue'
 import axios from 'axios';
@@ -14,17 +16,22 @@ export function useKeyboardConfig(rawPuzzleName: string) {
   const config = ref(cloneDeep(keyboardConfig.value(puzzle)))
 
   const save = () => {
+    failed.value = false
     loading.value = true
 
     return new Promise<void>((resolve, reject) => {
-      axios.post('/api/keyboard-configs', {
+      axios.post<KeyboardConfig[]>('/api/keyboard-configs', {
         config: config.value,
         puzzle,
-      }).then(() => {
+      }).then(response => {
         // success
+        keyboardConfigs.value = response.data
+
         resolve()
       }, () => {
         // failure
+        failed.value = true
+  
         reject()
       }).finally(() => {
         // complete
