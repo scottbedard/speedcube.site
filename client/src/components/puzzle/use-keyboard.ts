@@ -1,27 +1,33 @@
-// eslint-disable
+import { computed, ref, unref } from 'vue'
 import { KeyboardConfig } from '@/app/types/puzzle'
 import { MaybeRef } from '@vueuse/core'
-import { computed, ref, unref } from 'vue'
 
 /**
- * Keyboard bindings for a puzzle.
+ * Use a keyboard config.
  */
-export function useKeyboard(config: MaybeRef<KeyboardConfig>) {
-  const keyspace = ref<string | null>(null)
+export function useKeyboard(rawKeyboardConfig: MaybeRef<KeyboardConfig | null>) {
+  /**
+   * Currently selected keyspace
+   */
+  const activeKeyspace = ref<string | null>(null)
 
-  const defaultBindings = computed(() => {
-    return unref(config).default || {}
-  })
+  /**
+   * Key bindings that are part of the active keyspace
+   */
+  const currentBindings = computed(() => {
+    const keyboardConfig = unref(rawKeyboardConfig) ?? {
+      default: {},
+      keyspaces: {},
+    }
 
-  const keyspaceBindings = computed(() => {
     return {
-      ...defaultBindings.value,
-      ...(keyspace.value && unref(config).keyspaces[keyspace.value])
+      ...keyboardConfig.default,
+      ...(activeKeyspace.value ? keyboardConfig.keyspaces[activeKeyspace.value] : {})
     }
   })
-  
+
   return {
-    keyspace,
-    keyspaceBindings,
+    activeKeyspace,
+    currentBindings,
   }
 }

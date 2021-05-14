@@ -1,6 +1,8 @@
+import { arrayToObject } from '@/app/utils'
 import { computed, ref } from 'vue'
+import { KeyboardConfig as KeyboardConfigModel } from '@/app/types/models'
+import { KeyboardConfig } from '@/app/types/puzzle'
 import { useDark } from '@vueuse/core'
-import { KeyboardConfig } from '@/app/types/models'
 
 /**
  * Dark mode
@@ -8,35 +10,37 @@ import { KeyboardConfig } from '@/app/types/models'
 export const isDark = useDark()
 
 /**
- * Keyboard configs
+ * Keyboard config models
  */
-const _keyboardConfigs = ref(window.context.keyboardConfigs)
+const rawKeyboardConfigs = ref(window.context.keyboardConfigs)
 
-export const keyboardConfigs = computed<KeyboardConfig[]>({
-  // laravel casts empty objects to an array. rather than solve this with
-  // complicated model serialization logic, we'll just apply a getter on
-  // the client side to revert the associative arrays to an empty object.
-  get: () => _keyboardConfigs.value.map(obj => ({
+export const keyboardConfigs = computed<KeyboardConfigModel[]>({
+  get: () => rawKeyboardConfigs.value.map(obj => ({
     config: {
-      default: Array.isArray(obj.config.default) ? {} : obj.config.default,
-      keyspaces: Array.isArray(obj.config.keyspaces) ? {} : obj.config.keyspaces,
+      default: arrayToObject(obj.config.default),
+      keyspaces: arrayToObject(obj.config.keyspaces),
     },
     puzzle: obj.puzzle,
   })),
-  set: (keyboardConfigs: KeyboardConfig[]) => {
-    _keyboardConfigs.value = keyboardConfigs
+  set: (keyboardConfigs: KeyboardConfigModel[]) => {
+    rawKeyboardConfigs.value = keyboardConfigs
   }
 })
 
 /**
- * Puzzle configs
+ * Preview keyboard config
  */
-export const puzzleConfigs = ref(window.context.puzzleConfigs)
+export const previewKeyboardConfig = ref<KeyboardConfig | null>(null)
 
 /**
  * Preview puzzle config
  */
 export const previewPuzzleConfig = ref<Record<string, unknown> | null>(null)
+
+/**
+ * Puzzle configs
+ */
+export const puzzleConfigs = ref(window.context.puzzleConfigs)
 
 /**
  * User

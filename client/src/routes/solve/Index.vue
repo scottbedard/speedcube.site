@@ -5,6 +5,8 @@
       :model="model" />
   </div>
 
+  <pre class="text-xs">{{ previewKeyboardConfig }}</pre>
+
   <div
     v-if="isIndex"
     class="gap-x-10 gap-y-2 flex flex-wrap justify-center">
@@ -44,7 +46,7 @@ import { Cube } from '@bedard/twister'
 import { cubeConfig } from '@/components/puzzle/constants'
 import { Icon, Puzzle } from '@/components'
 import { normalizePuzzleName } from '@/app/utils'
-import { previewPuzzleConfig } from '@/app/store/state'
+import { previewKeyboardConfig, previewPuzzleConfig } from '@/app/store/state'
 import { puzzleConfig } from '@/app/store/computed'
 import { useRoute } from 'vue-router'
 
@@ -73,6 +75,7 @@ export default defineComponent({
       cubeConfig,
       isIndex,
       model,
+      previewKeyboardConfig,
       route,
     }
   },

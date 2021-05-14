@@ -13,9 +13,9 @@
   </div>
 
   <div class="grid gap-6 max-w-6xl mx-auto">
-    <div class="flex flex-wrap gap-x-6 gap-y-3 justify-center">
+    <div class="flex flex-wrap font-mono gap-4 justify-center">
       <a
-        v-for="(turn, char) in keyspaceBindings"
+        v-for="(turn, char) in currentBindings"
         class="bg-gray-50 flex gap-2 px-3 py-1 rounded-md shadow-md text-sm dark:bg-gray-700 hover:shadow-lg"
         href="#"
         :key="char"
@@ -43,6 +43,7 @@
         class="w-full xs:w-auto"
         primary
         :disabled="loading"
+        :loading="loading"
         @click="save">
         Save
       </Button>
@@ -104,8 +105,9 @@
 
 <script lang="ts">
 import { Button, IconText } from '@/components'
-import { defineComponent, Ref, ref } from 'vue'
-import { isAuthenticated } from '@/app/store/computed'
+import { computed, defineComponent, onMounted, onUnmounted, Ref, ref } from 'vue'
+import { isAuthenticated, keyboardConfig } from '@/app/store/computed'
+import { previewKeyboardConfig } from '@/app/store/state'
 import { useKeyboard } from '@/components/puzzle/use-keyboard'
 import { useKeyboardConfig } from '@/app/api'
 import { useRoute } from 'vue-router'
@@ -134,31 +136,33 @@ export default defineComponent({
 
     const activeBinding = ref<{ char: string, turn: string } | null>(null)
 
+    const {
+      activeKeyspace,
+      currentBindings,
+    } = useKeyboard(previewKeyboardConfig)
+
     // model management
     const {
-      config,
       loading,
       save,
     } = useKeyboardConfig(puzzle)
-
-    // current keyboard
-    const {
-      keyspace,
-      keyspaceBindings,
-    } = useKeyboard(config)
 
     // add a key binding
     const addBinding = (binding: { char: string, turn: string }) => {
       removeActiveBinding()
 
-      if (keyspace.value) {
-        if (!config.value.keyspaces[keyspace.value]) {
-          config.value.keyspaces[keyspace.value] = {}
+      if (!previewKeyboardConfig.value) {
+        return
+      }
+
+      if (activeKeyspace.value) {
+        if (!previewKeyboardConfig.value.keyspaces[activeKeyspace.value]) {
+          previewKeyboardConfig.value.keyspaces[activeKeyspace.value] = {}
         }
 
-        config.value.keyspaces[keyspace.value][binding.char] = binding.turn
+        previewKeyboardConfig.value.keyspaces[activeKeyspace.value][binding.char] = binding.turn
       } else {
-        config.value.default[binding.char] = binding.turn
+        previewKeyboardConfig.value.default[binding.char] = binding.turn
       }
 
       activeBinding.value = null
@@ -168,12 +172,12 @@ export default defineComponent({
     const addKeyspace = (char: string) => {
       closeModals()
       
-      keyspace.value = char
+      activeKeyspace.value = char
     }
 
     // clear all bindings and keyspaces
     const clearAll = () => {
-      config.value = {
+      previewKeyboardConfig.value = {
         default: {},
         keyspaces: {},
       }
@@ -209,11 +213,11 @@ export default defineComponent({
     const removeActiveBinding = () => {
       closeModals()
 
-      if (activeBinding.value) {
-        if (keyspace.value) {
-          delete config.value.keyspaces[activeBinding.value.char]
+      if (previewKeyboardConfig.value && activeBinding.value) {
+        if (activeKeyspace.value) {
+          delete previewKeyboardConfig.value.keyspaces[activeBinding.value.char]
         } else {
-          delete config.value.default[activeBinding.value.char]
+          delete previewKeyboardConfig.value.default[activeBinding.value.char]
         }
       }
     }
@@ -225,7 +229,6 @@ export default defineComponent({
         text: 'Add key binding',
         onClick: () => {
           activeBinding.value = null
-
           openModal(keybindingModalIsVisible)
         },
       },
@@ -251,6 +254,18 @@ export default defineComponent({
       },
     ]
 
+    // mounted
+    onMounted(() => {
+      const config = keyboardConfig.value(puzzle)
+      
+      previewKeyboardConfig.value = config
+    })
+
+    // unmounted
+    onUnmounted(() => {
+      previewKeyboardConfig.value = null
+    })
+
     return {
       activeBinding,
       addBinding,
@@ -258,12 +273,11 @@ export default defineComponent({
       clearAll,
       clearAllModalIsVisible,
       closeModals,
-      config,
+      currentBindings,
       editBinding,
       isAuthenticated,
       jsonModalIsVisible,
       keybindingModalIsVisible,
-      keyspaceBindings,
       keyspaceModalIsVisible,
       loading,
       removeActiveBinding,

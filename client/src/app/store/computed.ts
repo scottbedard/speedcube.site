@@ -1,8 +1,8 @@
 import { cloneDeep } from 'lodash-es'
 import { computed } from 'vue'
 import { cubeConfig, cubeKeyboardConfig } from '@/components/puzzle/constants'
-import { isCube } from '@/app/utils'
-import { keyboardConfigs, puzzleConfigs, user } from './state'
+import { isCube, normalizePuzzleName } from '@/app/utils'
+import { keyboardConfigs, previewKeyboardConfig, puzzleConfigs, user } from './state'
 import { KeyboardConfig, PuzzleName } from '@/app/types/puzzle'
 
 /**
@@ -18,18 +18,28 @@ export const isGuest = computed(() => !isAuthenticated.value)
 /**
  * Keyboard config for a particular puzzle.
  */
-export const keyboardConfig = computed<(puzzle: PuzzleName) => KeyboardConfig>(() => {
-  return (puzzle: PuzzleName) => {
+export const keyboardConfig = computed<(rawPuzzleName: string) => KeyboardConfig>(() => {
+  return (rawPuzzleName: string) => {
+    // preview keyboard config
+    if (previewKeyboardConfig.value) {
+      return previewKeyboardConfig.value
+    }
+
+    // user config for puzzle
+    const puzzle = normalizePuzzleName(rawPuzzleName)
+
     const model = keyboardConfigs.value.find(obj => obj.puzzle === puzzle)
 
     if (model) {
       return model.config
     }
 
+    // default config for puzzle
     if (isCube(puzzle)) {
       return cloneDeep(cubeKeyboardConfig)
     }
 
+    // empty config
     return {
       default: {},
       keyspaces: {},
