@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { cubeConfig, cubeKeyboardConfig } from '@/components/puzzle/constants'
 import { isCube, normalizePuzzleName } from '@/app/utils'
 import { keyboardConfigs, previewKeyboardConfig, puzzleConfigs, user } from './state'
-import { KeyboardConfig, PuzzleName } from '@/app/types/puzzle'
+import { PuzzleName } from '@/app/types/puzzle'
 
 /**
  * Test if the user is authenticated.
@@ -40,10 +40,7 @@ export const keyboardConfig = computed<(rawPuzzleName: string) => KeyboardConfig
     }
 
     // empty config
-    return {
-      default: {},
-      keyspaces: {},
-    }
+    return {}
   }
 })
 

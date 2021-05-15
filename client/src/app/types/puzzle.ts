@@ -43,6 +43,14 @@ export type CubeConfig = PuzzleConfig & {
 }
 
 /**
+ * An individual keybinding
+ */
+export type Keybinding = {
+  key: string
+  turn: string
+}
+
+/**
  * Cube identifiers
  */
 export type CubeName =
@@ -50,21 +58,6 @@ export type CubeName =
  | '3x3'
  | '4x4'
  | '5x5'
-
-/**
- * Keyboard config
- */
-export type KeyboardConfig = {
-  /**
-   * Default keyspace
-   */
-  default: Record<string, string>,
-
-  /**
-   * Custom keyspaces
-   */
-  keyspaces: Record<string, Record<string, string>>,
-}
 
 /**
  * Puzzle config

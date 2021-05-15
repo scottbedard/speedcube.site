@@ -7,7 +7,7 @@
       class="gap-6 grid xs:grid-cols-2"
       @submit.prevent="submit">
       <Input
-        v-model="char"
+        v-model="binding.key"
         autofocus
         label="Key"
         maxlength="1"
@@ -15,7 +15,7 @@
         required />
 
       <Input
-        v-model="turn"
+        v-model="binding.turn"
         label="Turn"
         placeholder="Enter puzzle turn"
         required />
@@ -55,36 +55,37 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue'
 import { Button, Icon, Input, Modal } from '@/components'
+import { defineComponent, PropType, reactive } from 'vue'
+import { Keybinding } from '@/app/types/puzzle'
 
 export default defineComponent({
   setup(props, { emit }) {
-    const char = ref('')
-    const turn = ref('')
+    const binding = reactive<Keybinding>({ key: '', turn: '' })
 
-    const close = () => emit('close')
+    const close = () => {
+      emit('close')
+    }
 
     const remove = () => {
       emit('remove')
     }
 
     const reset = () => {
-      char.value = props.activeBinding?.char ?? ''
-      turn.value = props.activeBinding?.turn ?? ''
+      binding.key = props.activeBinding?.key ?? ''
+      binding.turn = props.activeBinding?.turn ?? ''
     }
 
     const submit = () => {
-      emit('add', { char: char.value, turn: turn.value })
+      emit('add', binding)
     }
 
     return {
-      char,
+      binding,
       close,
       remove,
       reset,
       submit,
-      turn,
     }
   },
   emits: [
@@ -99,8 +100,13 @@ export default defineComponent({
     Modal,
   },
   props: {
-    activeBinding: Object as PropType<null | { char: string, turn: string }>,
-    visible: Boolean,
+    activeBinding: {
+      type: Object as PropType<Keybinding | null>,
+    },
+    visible: {
+      required: true,
+      type: Boolean,
+    },
   },
 })
 </script>

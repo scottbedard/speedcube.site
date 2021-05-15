@@ -5,8 +5,6 @@
       :model="model" />
   </div>
 
-  <pre class="text-xs">{{ previewKeyboardConfig }}</pre>
-
   <div
     v-if="isIndex"
     class="gap-x-10 gap-y-2 flex flex-wrap justify-center">

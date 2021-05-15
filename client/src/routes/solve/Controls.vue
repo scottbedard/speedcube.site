@@ -15,12 +15,12 @@
   <div class="grid gap-6 max-w-6xl mx-auto">
     <div class="flex flex-wrap font-mono gap-4 justify-center">
       <a
-        v-for="(turn, char) in currentBindings"
+        v-for="(turn, key) in previewKeyboardConfig"
         class="bg-gray-50 flex gap-2 px-3 py-1 rounded-md shadow-md text-sm dark:bg-gray-700 hover:shadow-lg"
         href="#"
-        :key="char"
-        @click.prevent="editBinding({ char: String(char), turn })">
-        <span v-text="char" />
+        :key="String(key)"
+        @click.prevent="editBinding(String(key))">
+        <span v-text="key" />
         &bull;
         <span v-text="turn" />
       </a>
@@ -80,14 +80,9 @@
   <KeybindingModal
     :active-binding="activeBinding"
     :visible="keybindingModalIsVisible"
-    @add="addBinding"
+    @add="setBinding"
     @close="closeModals"
     @remove="removeActiveBinding" />
-
-  <KeyspaceModal
-    :visible="keyspaceModalIsVisible"
-    @add="addKeyspace"
-    @close="closeModals" />
 
   <JsonModal
     :visible="jsonModalIsVisible"
@@ -105,16 +100,15 @@
 
 <script lang="ts">
 import { Button, IconText } from '@/components'
-import { computed, defineComponent, onMounted, onUnmounted, Ref, ref } from 'vue'
+import { defineComponent, onMounted, onUnmounted, Ref, ref } from 'vue'
 import { isAuthenticated, keyboardConfig } from '@/app/store/computed'
+import { Keybinding } from '@/app/types/puzzle'
 import { previewKeyboardConfig } from '@/app/store/state'
-import { useKeyboard } from '@/components/puzzle/use-keyboard'
 import { useKeyboardConfig } from '@/app/api'
 import { useRoute } from 'vue-router'
 import ClearAllModal from '@/partials/solve/ClearAllModal.vue'
 import JsonModal from '@/partials/solve/JsonModal.vue'
 import KeybindingModal from '@/partials/solve/KeybindingModal.vue'
-import KeyspaceModal from '@/partials/solve/KeyspaceModal.vue'
 import ResetModal from '@/partials/solve/ResetModal.vue'
 
 type ToolbarItem = {
@@ -128,18 +122,11 @@ export default defineComponent({
     const route = useRoute()
     const puzzle = route.params?.puzzle as string
 
+    const activeBinding = ref<Keybinding | null>(null)
     const clearAllModalIsVisible = ref(false)
     const jsonModalIsVisible = ref(false)
     const keybindingModalIsVisible = ref(false)
-    const keyspaceModalIsVisible = ref(false)
     const resetModalIsVisible = ref(false)
-
-    const activeBinding = ref<{ char: string, turn: string } | null>(null)
-
-    const {
-      activeKeyspace,
-      currentBindings,
-    } = useKeyboard(previewKeyboardConfig)
 
     // model management
     const {
@@ -147,40 +134,9 @@ export default defineComponent({
       save,
     } = useKeyboardConfig(puzzle)
 
-    // add a key binding
-    const addBinding = (binding: { char: string, turn: string }) => {
-      removeActiveBinding()
-
-      if (!previewKeyboardConfig.value) {
-        return
-      }
-
-      if (activeKeyspace.value) {
-        if (!previewKeyboardConfig.value.keyspaces[activeKeyspace.value]) {
-          previewKeyboardConfig.value.keyspaces[activeKeyspace.value] = {}
-        }
-
-        previewKeyboardConfig.value.keyspaces[activeKeyspace.value][binding.char] = binding.turn
-      } else {
-        previewKeyboardConfig.value.default[binding.char] = binding.turn
-      }
-
-      activeBinding.value = null
-    }
-
-    // add a keyspace
-    const addKeyspace = (char: string) => {
-      closeModals()
-      
-      activeKeyspace.value = char
-    }
-
-    // clear all bindings and keyspaces
+    // clear all bindings
     const clearAll = () => {
-      previewKeyboardConfig.value = {
-        default: {},
-        keyspaces: {},
-      }
+      previewKeyboardConfig.value = {}
 
       closeModals()
     }
@@ -190,17 +146,18 @@ export default defineComponent({
       clearAllModalIsVisible.value = false
       jsonModalIsVisible.value = false
       keybindingModalIsVisible.value = false
-      keyspaceModalIsVisible.value = false
       resetModalIsVisible.value = false
     }
 
-    // edit a key binding
-    const editBinding = (binding: { char: string, turn: string }) => {
-      activeBinding.value = binding
+    // show edit binding modal
+    const editBinding = (key: string) => {
+      activeBinding.value = {
+        key,
+        turn: previewKeyboardConfig.value[key] ?? '',
+      }
 
       openModal(keybindingModalIsVisible)
     }
-
 
     // set a modal visibility ref to true
     const openModal = (isVisible: Ref<boolean>) => {
@@ -213,13 +170,24 @@ export default defineComponent({
     const removeActiveBinding = () => {
       closeModals()
 
-      if (previewKeyboardConfig.value && activeBinding.value) {
-        if (activeKeyspace.value) {
-          delete previewKeyboardConfig.value.keyspaces[activeBinding.value.char]
-        } else {
-          delete previewKeyboardConfig.value.default[activeBinding.value.char]
-        }
+      if (!previewKeyboardConfig.value || !activeBinding.value?.key) {
+        return
       }
+
+      delete previewKeyboardConfig.value[activeBinding.value.key]
+    }
+
+    // set a key binding
+    const setBinding = (binding: Keybinding) => {
+      closeModals()
+      
+      if (!previewKeyboardConfig.value) {
+        return
+      }
+
+      previewKeyboardConfig.value[binding.key] = binding.turn
+
+      activeBinding.value = null
     }
 
     // toolbar links
@@ -231,11 +199,6 @@ export default defineComponent({
           activeBinding.value = null
           openModal(keybindingModalIsVisible)
         },
-      },
-      {
-        icon: 'chevron-up',
-        text: 'Add keyspace',
-        onClick: () => openModal(keyspaceModalIsVisible),
       },
       {
         icon: 'tool',
@@ -268,22 +231,20 @@ export default defineComponent({
 
     return {
       activeBinding,
-      addBinding,
-      addKeyspace,
       clearAll,
       clearAllModalIsVisible,
       closeModals,
-      currentBindings,
       editBinding,
       isAuthenticated,
       jsonModalIsVisible,
       keybindingModalIsVisible,
-      keyspaceModalIsVisible,
       loading,
+      previewKeyboardConfig,
       removeActiveBinding,
       resetModalIsVisible,
       route,
       save,
+      setBinding,
       toolbar,
     }
   },
@@ -293,7 +254,6 @@ export default defineComponent({
     IconText,
     JsonModal,
     KeybindingModal,
-    KeyspaceModal,
     ResetModal,
   },
 })
