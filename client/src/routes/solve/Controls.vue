@@ -14,16 +14,13 @@
 
   <div class="grid gap-6 max-w-6xl mx-auto">
     <div class="flex flex-wrap font-mono gap-4 justify-center">
-      <a
+      <button
         v-for="(turn, key) in previewKeyboardConfig"
-        class="bg-gray-50 flex gap-2 px-3 py-1 rounded-md shadow-md text-sm dark:bg-gray-700 hover:shadow-lg"
-        href="#"
-        :key="String(key)"
-        @click.prevent="editBinding(String(key))">
-        <span v-text="key" />
-        &bull;
-        <span v-text="turn" />
-      </a>
+        class="bg-gray-50 flex px-3 py-1 rounded shadow-md text-sm hover:bg-white dark:bg-gray-700 dark:hover:bg-gray-600"
+        :key="key"
+        @click="editBinding(key)">
+        {{ key }} &bull; {{ turn }}
+      </button>
     </div>
 
     <div
