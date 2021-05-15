@@ -36,6 +36,10 @@ type Example = {
 
 const examples: Example[] = [
   {
+    component: defineAsyncComponent(() => import('@/partials/components/ActionBarExample.vue')),
+    header: '<ActionBar>',
+  },
+  {
     component: defineAsyncComponent(() => import('@/partials/components/ButtonExample.vue')),
     header: '<Button>',
   },

@@ -1,3 +1,4 @@
+export { default as ActionBar } from './ActionBar.vue'
 export { default as Button } from './Button.vue'
 export { default as Card } from './Card.vue'
 export { default as CardLink } from './CardLink.vue'

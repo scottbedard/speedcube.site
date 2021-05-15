@@ -16,8 +16,12 @@ const alerts = ref<Alert[]>([])
 /**
  * Dispatch an alert
  */
-export function alert(obj: Alert) {
-  alerts.value.push(obj)
+export function alert(obj: Partial<Alert>) {
+  alerts.value.push({
+    text: '',
+    type: 'success',
+    ...obj,
+  })
 
   setTimeout(() => {
     alerts.value.splice(alerts.value.indexOf(obj), 1)
