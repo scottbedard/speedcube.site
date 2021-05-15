@@ -1,5 +1,8 @@
 <template>
-  <Modal padded :visible="visible">
+  <Modal
+    padded
+    :visible="visible"
+    @close="close">
     <h3>Reset default bindings</h3>
 
     <ActionBar

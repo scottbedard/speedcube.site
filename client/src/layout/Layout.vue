@@ -34,7 +34,7 @@
     <Footer />
   </div>
 
-  <div class="bottom-0 fixed flex justify-end right-0">
+  <div class="bottom-0 fixed flex justify-end right-0 z-20">
     <Alerts />
   </div>
 </template>

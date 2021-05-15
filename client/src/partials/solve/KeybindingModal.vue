@@ -2,7 +2,8 @@
   <Modal
     padded
     :visible="visible"
-    @before-enter="reset">
+    @before-enter="reset"
+    @close="close">
     <form
       class="gap-6 flex flex-wrap"
       @submit.prevent="submit">

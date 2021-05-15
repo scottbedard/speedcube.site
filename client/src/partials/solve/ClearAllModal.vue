@@ -1,5 +1,8 @@
 <template>
-  <Modal padded :visible="visible">
+  <Modal
+    padded
+    :visible="visible"
+    @close="close">
     <h3 class="font-bold mb-6 text-2xl">You're about to clear all key bindings</h3>
 
     <p class="mb-6">Doing this removes all key bindings. Your current setup could still be recovered by discarding changes, but any unsaved changes would be lost.</p>

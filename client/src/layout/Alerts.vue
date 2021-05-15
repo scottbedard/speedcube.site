@@ -12,7 +12,7 @@
       <Icon
         class="mr-1"
         :class="{
-          'text-red-500': alert.type === 'danger',
+          'text-red-500': alert.type === 'failed',
           'text-green-500': alert.type === 'success',
         }"
         :name="icon(alert.type)"
@@ -37,7 +37,7 @@ export default defineComponent({
         return 'check'
       }
 
-      if (type === 'danger') {
+      if (type === 'failed') {
         return 'x'
       }
 

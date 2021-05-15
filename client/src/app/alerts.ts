@@ -5,7 +5,7 @@ import { ref } from 'vue'
  */
 export type Alert = {
   text: string
-  type: 'danger' | 'success'
+  type: 'failed' | 'success'
 }
 
 /**

@@ -10,6 +10,7 @@
     <input
       class="appearance-none block bg-gray-100 border border-gray-300 min-h-12 placeholder-gray-400 px-4 py-2 rounded-md text-gray-700 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-800 dark:text-gray-100"
       ref="input"
+      :class="inputClass"
       :disabled="disabled"
       :id="id"
       :maxlength="typeof maxlength === 'undefined' ? undefined : Number(maxlength)"
@@ -83,6 +84,9 @@ export default defineComponent({
     },
     id: {
       default: () => `input-${uniqueId()}`,
+      type: String,
+    },
+    inputClass: {
       type: String,
     },
     label: {
