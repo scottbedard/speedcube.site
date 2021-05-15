@@ -2,30 +2,22 @@
   <Modal padded :visible="visible">
     <h3>Edit JSON</h3>
 
-    <div class="flex flex-wrap gap-6 items-center justify-end">
-      <a
-        class="text-center w-full xs:w-auto"
-        href="#"
-        @click.prevent="close">
-        Cancel
-      </a>
-
-      <Button
-        class="w-full xs:w-auto"
-        primary>
-        Add
-      </Button>
-    </div>
+    <ActionBar
+      button-text="Apply"
+      primary-link-text="Cancel"
+      @primary-link-click="close" />
   </Modal>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { Button, Modal } from '@/components'
+import { ActionBar, Modal } from '@/components'
 
 export default defineComponent({
   setup(props, { emit }) {
-    const close = () => emit('close')
+    const close = () => {
+      emit('close')
+    }
 
     return {
       close
@@ -35,7 +27,7 @@ export default defineComponent({
     'close',
   ],
   components: {
-    Button,
+    ActionBar,
     Modal,
   },
   props: {

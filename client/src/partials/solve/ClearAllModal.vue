@@ -4,27 +4,18 @@
 
     <p class="mb-6">Doing this removes all key bindings. Your current setup could still be recovered by discarding changes, but any unsaved changes would be lost.</p>
 
-    <div class="flex flex-wrap gap-6 items-center justify-end">
-      <a
-        class="text-center w-full xs:w-auto"
-        href="#"
-        @click.prevent="close">
-        Cancel
-      </a>
-
-      <Button
-        class="w-full xs:w-auto"
-        danger
-        @click="confirm">
-        Clear all
-      </Button>
-    </div>
+    <ActionBar
+      button-text="Clear all"
+      button-theme="danger"
+      primary-link-text="Cancel"
+      @button-click="confirm"
+      @primary-link-click="close" />
   </Modal>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { Button, Modal } from '@/components'
+import { ActionBar, Modal } from '@/components'
 
 export default defineComponent({
   setup(props, { emit }) {
@@ -42,7 +33,7 @@ export default defineComponent({
     'confirm',
   ],
   components: {
-    Button,
+    ActionBar,
     Modal,
   },
   props: {

@@ -34,6 +34,7 @@
         class="w-full"
         :danger="buttonTheme === 'danger'"
         :primary="buttonTheme === 'primary'"
+        :type="buttonType"
         @click="onButtonClick" />
     </div>
   </div>
@@ -75,21 +76,25 @@ export default defineComponent({
   ],
   name: 'ActionBar',
   props: {
+    buttonText: {
+      type: String as PropType<null | undefined | string>,
+    },
     buttonTheme: {
       default: 'primary',
       type: String as PropType<'danger' | 'primary'>
     },
-    buttonText: {
-      type: String,
+    buttonType: {
+      default: 'button',
+      type: String as PropType<'button' | 'submit'>
     },
     primaryLinkText: {
-      type: String,
+      type: String as PropType<null | undefined | string>,
     },
     secondaryLinkIcon: {
       type: String,
     },
     secondaryLinkText: {
-      type: String,
+      type: String as PropType<null | undefined | string>,
     },
     secondaryLinkTheme: {
       default: null,

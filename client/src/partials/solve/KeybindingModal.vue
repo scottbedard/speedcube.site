@@ -4,58 +4,40 @@
     :visible="visible"
     @before-enter="reset">
     <form
-      class="gap-6 grid xs:grid-cols-2"
+      class="gap-6 flex flex-wrap"
       @submit.prevent="submit">
-      <Input
-        v-model="binding.key"
-        autofocus
-        label="Key"
-        maxlength="1"
-        placeholder="Enter character"
-        required />
+      <div class="gap-6 grid w-full xs:grid-cols-2">
+        <Input
+          v-model="binding.key"
+          autofocus
+          label="Key"
+          maxlength="1"
+          placeholder="Enter character"
+          required />
 
-      <Input
-        v-model="binding.turn"
-        label="Turn"
-        placeholder="Enter puzzle turn"
-        required />
-
-      <div class="flex flex-wrap gap-6 justify-end xs:col-span-2 xs:flex-nowrap">
-        <div class="flex flex-1 items-center justify-center w-full xs:justify-start">
-          <a
-            v-if="activeBinding"
-            class="flex items-center hover:text-red-500"
-            href="#"
-            @click.prevent="remove">
-            <Icon
-              class="mr-2"
-              name="trash" />
-            
-            Remove binding
-          </a>
-        </div>
-
-        <div class="flex flex-wrap gap-6 items-center justify-end w-full xs:w-auto">
-          <div class="text-center w-full xs:w-auto">
-            <a href="#" @click.prevent="close">
-              Cancel
-            </a>
-          </div>
-
-          <Button
-            class="w-full xs:w-auto"
-            primary
-            type="submit">
-            Save
-          </Button>
-        </div>
+        <Input
+          v-model="binding.turn"
+          label="Turn"
+          placeholder="Enter puzzle turn"
+          required />
       </div>
+
+      <ActionBar
+        button-text="Save"
+        button-type="submit"
+        class="w-full"
+        primary-link-text="Cancel"
+        secondary-link-icon="trash"
+        secondary-link-theme="danger"
+        :secondary-link-text="activeBinding && 'Remove binding'"
+        @primary-link-click="close"
+        @secondary-link-click="remove" />
     </form>
   </Modal>
 </template>
 
 <script lang="ts">
-import { Button, Icon, Input, Modal } from '@/components'
+import { ActionBar, Input, Modal } from '@/components'
 import { defineComponent, PropType, reactive } from 'vue'
 import { Keybinding } from '@/app/types/puzzle'
 
@@ -94,8 +76,7 @@ export default defineComponent({
     'remove',
   ],
   components: {
-    Button,
-    Icon,
+    ActionBar,
     Input,
     Modal,
   },
