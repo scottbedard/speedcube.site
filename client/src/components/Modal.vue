@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { createFocusTrap, FocusTrap } from 'focus-trap'
-import { computed, defineComponent, onBeforeUnmount, onMounted, PropType, ref } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 import { useEventListener } from '@vueuse/core'
 import Card from './Card.vue'
