@@ -3,7 +3,6 @@ import { cloneDeep } from 'lodash-es'
 import { computed } from 'vue'
 import { cubeConfig } from '@/components/puzzle/constants'
 import { defaultKeyboardConfig, isCube, normalizePuzzleName } from '@/app/utils'
-import { PuzzleName } from '@/app/types/puzzle'
 import { KeyboardConfig, PuzzleConfig } from '@/app/types/models'
 import { rawKeyboardConfigs, previewKeyboardConfig, rawPuzzleConfigs, user } from './state'
 
