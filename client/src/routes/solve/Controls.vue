@@ -41,7 +41,7 @@
         primary
         :disabled="loading"
         :loading="loading"
-        @click="save">
+        @click="submit">
         Save
       </Button>
     </div>
@@ -95,13 +95,14 @@
 </template>
 
 <script lang="ts">
+import { alert } from '@/app/alerts'
 import { Button, IconText } from '@/components'
 import { defineComponent, onMounted, onUnmounted, Ref, ref } from 'vue'
 import { isAuthenticated, keyboardConfig } from '@/app/store/computed'
 import { Keybinding } from '@/app/types/puzzle'
 import { previewKeyboardConfig } from '@/app/store/state'
 import { useKeyboardConfig } from '@/app/api'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import ClearAllModal from '@/partials/solve/ClearAllModal.vue'
 import JsonModal from '@/partials/solve/JsonModal.vue'
 import KeybindingModal from '@/partials/solve/KeybindingModal.vue'
@@ -116,6 +117,7 @@ type ToolbarItem = {
 export default defineComponent({
   setup() {
     const route = useRoute()
+    const router = useRouter()
     const puzzle = route.params?.puzzle as string
 
     const activeBinding = ref<Keybinding | null>(null)
@@ -179,6 +181,28 @@ export default defineComponent({
       activeBinding.value = null
     }
 
+    // save keyboard config
+    const submit = () => {
+      save().then(() => {
+        // success
+        alert({
+          text: 'Keyboard configuration saved',
+          type: 'success',
+        })
+
+        router.push({
+          name: 'solve',
+          params: { puzzle },
+        })
+      }, () => {
+        // failed
+        alert({
+          text: 'An unknown error occured, please try again',
+          type: 'failed',
+        })
+      })
+    }
+
     // toolbar links
     const toolbar: ToolbarItem[] = [
       {
@@ -231,8 +255,8 @@ export default defineComponent({
       removeActiveBinding,
       resetModalIsVisible,
       route,
-      save,
       setBinding,
+      submit,
       toolbar,
     }
   },

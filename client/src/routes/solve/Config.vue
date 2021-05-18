@@ -90,6 +90,7 @@
 </template>
 
 <script lang="ts">
+import { alert } from '@/app/alerts'
 import { Button, ColorPicker, IconText, Label, RangeInput } from '@/components'
 import { computed, defineComponent, onMounted, onUnmounted } from 'vue'
 import { isAuthenticated, puzzleConfig } from '@/app/store/computed'
@@ -234,13 +235,21 @@ export default defineComponent({
     const submit = () => {
       save().then(() => {
         // success
+        alert({
+          text: 'Puzzle configuration saved',
+          type: 'success',
+        })
+
         router.push({
           name: 'solve',
           params: { puzzle },
         })
       }, () => {
         // failed
-        console.log('failed')
+        alert({
+          text: 'An unknown error occured, please try again',
+          type: 'failed',
+        })
       })
     }
 
