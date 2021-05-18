@@ -260,7 +260,7 @@ export default defineComponent({
       fields,
       isAuthenticated,
       loading,
-      previewPuzzleConfig,
+      previewPuzzleConfig: previewPuzzleConfig as any,
       route,
       submit,
     }

@@ -142,7 +142,7 @@ export default defineComponent({
     const editBinding = (key: string) => {
       activeBinding.value = {
         key,
-        turn: previewKeyboardConfig.value[key] ?? '',
+        turn: previewKeyboardConfig.value?.[key] ?? '',
       }
 
       openModal(keybindingModalIsVisible)

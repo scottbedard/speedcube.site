@@ -35,8 +35,8 @@ export default defineComponent({
     })
 
     // configuration
-    const normalizedConfig = computed(() => {
-      const config = props.config // || userConfig.value(props.type);
+    const normalizedConfig = computed<Record<string, unknown>>(() => {
+      const config = props.config
       
       return {
         ...config,
