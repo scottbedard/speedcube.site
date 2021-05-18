@@ -24,6 +24,8 @@ class AuthController extends Controller
         $user = Auth::user();
 
         return [
+            'keyboard_configs' => $user->keyboardConfigs()->get(),
+            'puzzle_configs' => $user->puzzleConfigs()->get(),
             'user' => $user,
         ];
     }

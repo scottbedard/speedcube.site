@@ -35,6 +35,8 @@ export type ForgotPasswordResponse = {
  * POST: /api/auth/login
  */
 export type LoginResponse = {
+  keyboardConfigs: RawKeyboardConfig[]
+  puzzleConfigs: RawPuzzleConfig[]
   user: User
 }
 

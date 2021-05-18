@@ -28,6 +28,8 @@ class AuthTest extends TestCase
         $data = $response->json();
 
         $this->assertTrue(Auth::check());
+        $this->assertEquals([], $data['keyboardConfigs']);
+        $this->assertEquals([], $data['puzzleConfigs']);
         $this->assertEquals($user->email, $data['user']['email']);
         $this->assertEquals($user->id, $data['user']['id']);
         $this->assertEquals($user->username, $data['user']['username']);
