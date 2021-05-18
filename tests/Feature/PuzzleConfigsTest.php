@@ -18,9 +18,7 @@ class PuzzleConfigsTest extends TestCase
         $request = $this
             ->actingAs($user)
             ->json('POST', '/api/puzzle-configs', [
-                'config' => [
-                    'foo' => 'bar',
-                ],
+                'config' => '{"foo":"bar"}',
                 'puzzle' => '3x3',
             ]);
 
@@ -30,8 +28,6 @@ class PuzzleConfigsTest extends TestCase
 
         $data = $request->json();
 
-        $this->assertEquals([
-            'foo' => 'bar',
-        ], $data['puzzleConfigs'][0]['config']);
+        $this->assertEquals('{"foo":"bar"}', $data['puzzleConfigs'][0]['config']);
     }
 }

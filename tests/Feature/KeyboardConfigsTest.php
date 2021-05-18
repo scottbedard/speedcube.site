@@ -18,9 +18,7 @@ class KeyboardConfigsTest extends TestCase
         $request = $this
             ->actingAs($user)
             ->json('POST', '/api/keyboard-configs', [
-                'config' => [
-                    'foo' => 'bar',
-                ],
+                'config' => '{"foo":"bar"}',
                 'puzzle' => '3x3',
             ]);
 
@@ -30,9 +28,7 @@ class KeyboardConfigsTest extends TestCase
 
         $data = $request->json();
 
-        $this->assertEquals([
-            'foo' => 'bar',
-        ], $data['keyboardConfigs'][0]['config']);
+        $this->assertEquals('{"foo":"bar"}', $data['keyboardConfigs'][0]['config']);
     }
 
     public function test_update_keyboard_config()
@@ -42,9 +38,7 @@ class KeyboardConfigsTest extends TestCase
         $keyboardConfig = $user
             ->keyboardConfigs()
             ->create([
-                'config' => [
-                    'foo' => 'bar',
-                ],
+                'config' => '{"foo":"bar"}',
                 'puzzle' => '3x3',
             ]);
 
@@ -53,9 +47,7 @@ class KeyboardConfigsTest extends TestCase
         $request = $this
             ->actingAs($user)
             ->json('POST', '/api/keyboard-configs', [
-                'config' => [
-                    'hello' => 'world',
-                ],
+                'config' => '{"hello":"world"}',
                 'puzzle' => '3x3',
             ]);
 
@@ -63,8 +55,6 @@ class KeyboardConfigsTest extends TestCase
 
         $data = $request->json();
 
-        $this->assertEquals([
-            'hello' => 'world',
-        ], $data['keyboardConfigs'][0]['config']);
+        $this->assertEquals('{"hello":"world"}', $data['keyboardConfigs'][0]['config']);
     }
 }

@@ -2,7 +2,9 @@
   <form
     class="gap-6 grid max-w-4xl mx-auto"
     @submit.prevent="submit">
-    <div class="gap-6 grid grid-cols-12">
+    <div
+      v-if="previewPuzzleConfig"
+      class="gap-6 grid grid-cols-12">
       <div
         v-for="(field, index) in fields"
         class="col-span-12"
@@ -18,7 +20,7 @@
           <div class="gap-3 flex flex-wrap">
             <ColorPicker
               v-for="n in field.options.count"
-              v-model="config[field.key][n - 1]"
+              v-model="previewPuzzleConfig[field.key][n - 1]"
               :disabled="loading"
               :key="n" />
           </div>
@@ -27,7 +29,7 @@
         <!-- number -->
         <RangeInput
           v-else-if="field.type === 'number'"
-          v-model="config[field.key]"
+          v-model="previewPuzzleConfig[field.key]"
           :disabled="loading"
           :label="field.label"
           :max="field.options.max"
@@ -89,9 +91,10 @@
 
 <script lang="ts">
 import { Button, ColorPicker, IconText, Label, RangeInput } from '@/components'
-import { computed, defineComponent } from 'vue'
-import { isAuthenticated } from '@/app/store/computed'
+import { computed, defineComponent, onMounted, onUnmounted } from 'vue'
+import { isAuthenticated, puzzleConfig } from '@/app/store/computed'
 import { isCube } from '@/app/utils'
+import { previewPuzzleConfig } from '@/app/store/state'
 import { usePuzzleConfig } from '@/app/api'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -224,7 +227,6 @@ export default defineComponent({
     })
 
     const {
-      config,
       loading,
       save,
     } = usePuzzleConfig(puzzle)
@@ -242,11 +244,23 @@ export default defineComponent({
       })
     }
 
+    // mounted
+    onMounted(() => {
+      const config = puzzleConfig.value(puzzle)
+      
+      previewPuzzleConfig.value = config
+    })
+
+    // unmounted
+    onUnmounted(() => {
+      previewPuzzleConfig.value = null
+    })
+
     return {
-      config,
       fields,
       isAuthenticated,
       loading,
+      previewPuzzleConfig,
       route,
       submit,
     }

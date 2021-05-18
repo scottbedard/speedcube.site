@@ -1,10 +1,26 @@
 import { PuzzleName } from './puzzle'
 
 /**
+ * Raw keyboard config
+ */
+export type RawKeyboardConfig = {
+  config: string
+  puzzle: PuzzleName
+}
+
+/**
  * Keyboard config
  */
- export type KeyboardConfig = {
+export type KeyboardConfig = {
   config: Record<string, string>
+  puzzle: PuzzleName
+}
+
+/**
+ * Raw puzzle config
+ */
+export type RawPuzzleConfig = {
+  config: string
   puzzle: PuzzleName
 }
 

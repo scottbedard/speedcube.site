@@ -24,9 +24,7 @@ class KeyboardConfig extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
-        'config' => 'array',
-    ];
+    protected $casts = [];
 
     /**
      * The attributes that are mass assignable.

@@ -22,7 +22,7 @@ class PuzzleConfigFactory extends Factory
     public function definition()
     {
         return [
-            'config' => [],
+            'config' => '{}',
         ];
     }
 }

@@ -26,7 +26,6 @@ class PuzzleConfig extends BaseModel
      * @var array
      */
     protected $casts = [
-        'config' => 'array',
         'is_active' => 'boolean',
     ];
 

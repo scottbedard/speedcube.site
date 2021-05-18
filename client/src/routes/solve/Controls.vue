@@ -91,8 +91,7 @@
 
   <ClearAllModal
     :visible="clearAllModalIsVisible"
-    @close="closeModals"
-    @confirm="clearAll" />
+    @close="closeModals" />
 </template>
 
 <script lang="ts">
@@ -130,13 +129,6 @@ export default defineComponent({
       loading,
       save,
     } = useKeyboardConfig(puzzle)
-
-    // clear all bindings
-    const clearAll = () => {
-      previewKeyboardConfig.value = {}
-
-      closeModals()
-    }
 
     // close all modals
     const closeModals = () => {
@@ -228,7 +220,6 @@ export default defineComponent({
 
     return {
       activeBinding,
-      clearAll,
       clearAllModalIsVisible,
       closeModals,
       editBinding,

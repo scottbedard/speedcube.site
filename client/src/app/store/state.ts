@@ -1,6 +1,4 @@
-import { arrayToObject } from '@/app/utils'
-import { computed, ref } from 'vue'
-import { KeyboardConfig } from '@/app/types/models'
+import { ref } from 'vue'
 import { useDark } from '@vueuse/core'
 
 /**
@@ -9,21 +7,9 @@ import { useDark } from '@vueuse/core'
 export const isDark = useDark()
 
 /**
- * Keyboard config models
+ * Raw keyboard config models
  */
-const rawKeyboardConfigs = ref(window.context.keyboardConfigs)
-
-export const keyboardConfigs = computed<KeyboardConfig[]>({
-  get: () => rawKeyboardConfigs.value.map(obj => {
-    return {
-      config: arrayToObject(obj.config),
-      puzzle: obj.puzzle,
-    }
-  }),
-  set: (value) => {
-    rawKeyboardConfigs.value = value
-  }
-})
+export const rawKeyboardConfigs = ref(window.context.keyboardConfigs)
 
 /**
  * Preview keyboard config
@@ -38,7 +24,7 @@ export const previewPuzzleConfig = ref<Record<string, unknown> | null>(null)
 /**
  * Puzzle configs
  */
-export const puzzleConfigs = ref(window.context.puzzleConfigs)
+export const rawPuzzleConfigs = ref(window.context.puzzleConfigs)
 
 /**
  * User

@@ -1,8 +1,8 @@
 import { keyboardConfig } from '@/app/store/computed'
-import { KeyboardConfig } from '@/app/types/models'
-import { keyboardConfigs } from '@/app/store/state'
 import { normalizePuzzleName } from '@/app/utils'
+import { rawKeyboardConfigs } from '@/app/store/state'
 import { ref } from 'vue'
+import { UpdateKeyboardConfigResponse } from '@/app/types/api'
 import axios from 'axios';
 
 /**
@@ -18,12 +18,12 @@ export function useKeyboardConfig(rawPuzzleName: string) {
     loading.value = true
 
     return new Promise<void>((resolve, reject) => {
-      axios.post<KeyboardConfig[]>('/api/keyboard-configs', {
-        config: keyboardConfig.value(puzzle),
+      axios.post<UpdateKeyboardConfigResponse>('/api/keyboard-configs', {
+        config: JSON.stringify(keyboardConfig.value(puzzle)),
         puzzle,
       }).then(response => {
         // success
-        keyboardConfigs.value = response.data
+        rawKeyboardConfigs.value = response.data.keyboardConfigs
 
         resolve()
       }, () => {

@@ -22,7 +22,7 @@ class KeyboardConfigFactory extends Factory
     public function definition()
     {
         return [
-            'config' => [],
+            'config' => '{}',
         ];
     }
 }

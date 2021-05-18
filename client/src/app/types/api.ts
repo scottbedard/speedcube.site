@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { PuzzleConfig } from '@/app/types/models'
+import { RawKeyboardConfig, RawPuzzleConfig } from '@/app/types/models'
 import { User } from './models'
 
 /**
@@ -48,10 +48,17 @@ export type LoginResponse = {
 }
 
 /**
+ * POST: /api/keyboard-configs
+ */
+export type UpdateKeyboardConfigResponse = {
+  keyboardConfigs: RawKeyboardConfig[],
+}
+
+/**
  * POST: /api/puzzle-configs
  */
 export type UpdatePuzzleConfigResponse = {
-  puzzleConfigs: PuzzleConfig[]
+  puzzleConfigs: RawPuzzleConfig[]
 }
 
 /**
