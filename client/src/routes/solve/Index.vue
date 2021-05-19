@@ -40,10 +40,9 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
-import { Cube } from '@bedard/twister'
 import { cubeConfig } from '@/components/puzzle/constants'
 import { Icon, Puzzle } from '@/components'
-import { normalizePuzzleName } from '@/app/utils'
+import { createModel, normalizePuzzleName } from '@/app/utils'
 import { previewKeyboardConfig, previewPuzzleConfig } from '@/app/store/state'
 import { puzzleConfig } from '@/app/store/computed'
 import { useRoute } from 'vue-router'
@@ -51,12 +50,16 @@ import { useRoute } from 'vue-router'
 export default defineComponent({
   setup() {
     const cameraAngle = ref(25)
+    
     const cameraDistance = ref(3)
-    const model = new Cube({ size: 3 })
+    
     const route = useRoute()
+    
     const isIndex = computed(() => route.name === 'solve')
 
     const puzzle = normalizePuzzleName(route.params?.puzzle as string)
+
+    const model = createModel(puzzle)
 
     const config = computed(() => {
       if (previewPuzzleConfig.value) {
