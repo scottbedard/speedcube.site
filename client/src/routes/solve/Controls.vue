@@ -61,7 +61,7 @@
               returnTo: route.fullPath,
             }
           }">
-          Sign in
+          Login
         </RouterLink>
 
         <Button
