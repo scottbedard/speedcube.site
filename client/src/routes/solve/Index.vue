@@ -1,6 +1,9 @@
 <template>
   <div class="max-w-sm mb-6 mx-auto">
     <Puzzle
+      :class="{
+        'border-2 border-dashed border-gray-400 dark:border-gray-700': route.name === 'solve:config'
+      }"
       :config="config"
       :model="model" />
   </div>
@@ -50,11 +53,11 @@ import { useRoute } from 'vue-router'
 export default defineComponent({
   setup() {
     const cameraAngle = ref(25)
-    
+
     const cameraDistance = ref(3)
-    
+
     const route = useRoute()
-    
+
     const isIndex = computed(() => route.name === 'solve')
 
     const puzzle = normalizePuzzleName(route.params?.puzzle as string)
