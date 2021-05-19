@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-8 inline-block relative rounded-full shadow w-8"
+    class="h-8 inline-block relative rounded-md shadow-md w-8"
     ref="container"
     :class="{
       'cursor-pointer': !disabled,
@@ -60,21 +60,34 @@
             <div class="flex items-center justify-between">
               <input
                 v-model="hexInput"
-                class="bg-transparent border-b-1 border-transparent outline-none text-sm w-16"
+                class="bg-transparent border-b-1 border-transparent font-mono outline-none text-sm w-16"
                 ref="hexElement"
                 spellcheck="false"
                 :class="[isInvalid ? 'text-red-500' : 'text-gray-800 dark:text-gray-200']"
                 :maxlength="7" />
-              <a
-                class="flex items-center hover:no-underline text-gray-500 text-sm hover:text-red-500"
-                href="#"
-                title="Discard changes"
-                @click.prevent="discard">
-                <Icon
-                  name="trash-2"
-                  size="4"
-                  stroke="2" />
-              </a>
+              <div class="flex gap-2">
+                <a
+                  class="flex items-center hover:no-underline text-gray-500 text-sm hover:text-red-500"
+                  href="#"
+                  title="Reset"
+                  @click.prevent="reset">
+                  <Icon
+                    name="refresh-cw"
+                    size="3.2"
+                    stroke="2" />
+                </a>
+
+                <a
+                  class="flex items-center hover:no-underline text-gray-500 text-sm hover:text-red-500"
+                  href="#"
+                  title="Discard changes"
+                  @click.prevent="discard">
+                  <Icon
+                    name="x"
+                    size="4.5"
+                    stroke="2" />
+                </a>
+              </div>
             </div>
           </div>
         </Card>
@@ -132,8 +145,13 @@ export default defineComponent({
 
     // discard the current value
     const discard = () => {
-      emit('update:modelValue', originalValue)
+      reset()
       collapse()
+    }
+
+    // reset to the original value
+    const reset = () => {
+      setFromHex(originalValue)
     }
 
     // set the active element
@@ -255,12 +273,13 @@ export default defineComponent({
       currentValue,
       discard,
       expand,
-      isExpanded,
       hexElement,
       hexInput,
       hueElement,
       hueSelector,
+      isExpanded,
       isInvalid,
+      reset,
       setActiveElement,
     }
   },
