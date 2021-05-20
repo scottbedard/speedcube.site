@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSolvesTable extends Migration
+class CreateScramblesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateSolvesTable extends Migration
      */
     public function up()
     {
-        Schema::create('solves', function (Blueprint $table) {
+        Schema::create('scrambles', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->nullable()->unsigned()->index();
-            $table->integer('puzzle_config_id')->nullable()->unsigned()->index();
-            $table->integer('scramble_id')->unsigned()->index();
-            $table->text('solution');
             $table->timestamps();
         });
     }
@@ -30,6 +26,6 @@ class CreateSolvesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('solves');
+        Schema::dropIfExists('scrambles');
     }
 }
