@@ -15,7 +15,7 @@ class CreateKeyboardConfigsTable extends Migration
     {
         Schema::create('keyboard_configs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->nullable()->unsigned()->index();
             $table->string('puzzle', 24)->index();
             $table->text('config');
             $table->timestamps();

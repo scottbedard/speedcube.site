@@ -15,6 +15,9 @@ class CreateSolvesTable extends Migration
     {
         Schema::create('solves', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id')->nullable()->unsigned()->index();
+            $table->integer('puzzle_config_id')->nullable()->unsigned()->index();
+            $table->text('solution');
             $table->timestamps();
         });
     }

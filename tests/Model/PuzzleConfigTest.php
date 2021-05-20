@@ -11,7 +11,7 @@ class PuzzleConfigTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_belongs_to_user()
+    public function test_puzzle_config_belongs_to_user()
     {
         $user = User::factory()->create();
     
@@ -23,7 +23,7 @@ class PuzzleConfigTest extends TestCase
         $this->assertEquals($user->id, $config->user->id);
     }
 
-    public function test_creation_deactivates_old_configs()
+    public function test_puzzle_config_creation_deactivates_old_configs()
     {
         $john = User::factory()->create();
         $sally = User::factory()->create();

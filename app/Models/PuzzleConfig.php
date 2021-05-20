@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use App\Models\Solve;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -90,6 +91,14 @@ class PuzzleConfig extends BaseModel
     public function scopeIsActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    /**
+     * Solves.
+     */
+    public function solves()
+    {
+        return $this->hasMany(Solve::class);
     }
 
     /**

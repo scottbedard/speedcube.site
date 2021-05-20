@@ -28,7 +28,7 @@ class BaseModelTest extends TestCase
         });
     }
 
-    public function test_hashable()
+    public function test_base_model_hashable()
     {
         $model = new class extends TestModel
         {
@@ -45,7 +45,7 @@ class BaseModelTest extends TestCase
         $this->assertTrue(Str::startsWith($model->field, '$2y$'));
     }
 
-    public function test_purgeable()
+    public function test_base_model_purgeable()
     {
         $model = new class extends TestModel
         {
@@ -67,7 +67,7 @@ class BaseModelTest extends TestCase
         $this->assertArrayNotHasKey('password_confirmation', $model->attributes);
     }
 
-    public function test_force_save()
+    public function test_base_model_force_save()
     {
         $model = new class extends TestModel
         {
@@ -85,7 +85,7 @@ class BaseModelTest extends TestCase
         $this->assertTrue($model->exists);
     }
 
-    public function test_validation_failure()
+    public function test_base_model_validation_failure()
     {
         $model = new class extends TestModel
         {
@@ -103,7 +103,7 @@ class BaseModelTest extends TestCase
         $model->save();
     }
 
-    public function test_validation_required_create()
+    public function test_base_model_validation_required_create()
     {
         $model = new class extends TestModel
         {
@@ -127,7 +127,7 @@ class BaseModelTest extends TestCase
         ], $model->validationRules());
     }
 
-    public function test_validation_required_update()
+    public function test_base_model_validation_required_update()
     {
         $model = new class extends TestModel
         {
@@ -151,7 +151,7 @@ class BaseModelTest extends TestCase
         ], $model->validationRules());
     }
 
-    public function test_validation_required_with_update()
+    public function test_base_model_validation_required_with_update()
     {
         $model = new class extends TestModel
         {
@@ -175,7 +175,7 @@ class BaseModelTest extends TestCase
         ], $model->validationRules());
     }
 
-    public function test_validation_unique()
+    public function test_base_model_validation_unique()
     {
         $model = new class extends TestModel
         {
@@ -193,7 +193,7 @@ class BaseModelTest extends TestCase
         ], $model->validationRules());
     }
 
-    public function test_validation_hashable()
+    public function test_base_model_validation_hashable()
     {
         $model = new class extends TestModel
         {

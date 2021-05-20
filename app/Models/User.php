@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\BaseModel;
 use App\Models\KeyboardConfig;
 use App\Models\PuzzleConfig;
+use App\Models\Solve;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -172,5 +173,13 @@ class User extends BaseModel implements
     public function puzzleConfigs()
     {
         return $this->hasMany(PuzzleConfig::class)->isActive();
+    }
+
+    /**
+     * Solves.
+     */
+    public function solves()
+    {
+        return $this->hasMany(Solve::class);
     }
 }
