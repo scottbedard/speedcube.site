@@ -1,10 +1,8 @@
 import { arrayToObject } from '@/app/utils'
-import { cloneDeep } from 'lodash-es'
 import { computed } from 'vue'
-import { cubeConfig } from '@/components/puzzle/constants'
-import { defaultKeyboardConfig, isCube, normalizePuzzleName } from '@/app/utils'
+import { defaultKeyboardConfig, defaultPuzzleConfig, isCube, normalizePuzzleName } from '@/app/utils'
 import { KeyboardConfig, PuzzleConfig } from '@/app/types/models'
-import { rawKeyboardConfigs, previewKeyboardConfig, rawPuzzleConfigs, user } from './state'
+import { rawKeyboardConfigs, previewKeyboardConfig, rawPuzzleConfigs, user, previewPuzzleConfig } from './state'
 
 /**
  * Test if the user is authenticated.
@@ -26,7 +24,7 @@ export const keyboardConfig = computed<(rawPuzzleName: string) => Record<string,
       return previewKeyboardConfig.value
     }
 
-    // user config for puzzle
+    // user's keyboard config for puzzle
     const puzzle = normalizePuzzleName(rawPuzzleName)
 
     const model = keyboardConfigs.value.find(obj => obj.puzzle === puzzle)
@@ -35,7 +33,7 @@ export const keyboardConfig = computed<(rawPuzzleName: string) => Record<string,
       return model.config
     }
 
-    // default config for puzzle
+    // default keyboard config for puzzle
     return defaultKeyboardConfig(puzzle)
   }
 })
@@ -57,17 +55,20 @@ export const keyboardConfig = computed<(rawPuzzleName: string) => Record<string,
  */
 export const puzzleConfig = computed(() => {
   return (puzzle: string) => {
+    // preview puzzle config
+    if (previewPuzzleConfig.value) {
+      return previewPuzzleConfig.value
+    }
+
+    // user's puzzle config for puzzle
     const model = puzzleConfigs.value.find(obj => obj.puzzle === puzzle)
 
     if (model) {
       return model.config
     }
 
-    if (isCube(puzzle)) {
-      return cloneDeep(cubeConfig)
-    }
-
-    return {}
+    // default puzzle config or puzzle
+    return defaultPuzzleConfig(puzzle)
   }
 })
 

@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash-es'
 import { Cube } from '@bedard/twister'
 import { CubeName, PuzzleName } from '@/app/types/puzzle'
-import { cubeNames, cubeKeyboardConfig } from '@/components/puzzle/constants'
+import { cubeConfig, cubeNames, cubeKeyboardConfig } from '@/components/puzzle/constants'
 
 /**
  * Create a twister model
@@ -22,7 +22,7 @@ export function cubeSize(cubeName: CubeName) {
 }
 
 /**
- * Default keyboard configuration for a puzzle
+ * Default keyboard config for a puzzle
  */
 export function defaultKeyboardConfig(rawPuzzleName: string) {
   try {
@@ -31,9 +31,22 @@ export function defaultKeyboardConfig(rawPuzzleName: string) {
     if (isCube(puzzle)) {
       return cloneDeep(cubeKeyboardConfig)
     }
-  } catch {
-    // ...
-  }
+  } catch {}
+
+  return {}
+}
+
+/**
+ * Default puzzle config for a puzzle
+ */
+export function defaultPuzzleConfig(rawPuzzleName: string) {
+  try {
+    const puzzle = normalizePuzzleName(rawPuzzleName)
+
+    if (isCube(puzzle)) {
+      return cloneDeep(cubeConfig)
+    }
+  } catch {}
 
   return {}
 }
