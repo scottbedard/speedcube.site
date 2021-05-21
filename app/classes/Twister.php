@@ -43,4 +43,18 @@ class Twister
             ? $names[$id]
             : 'unknown';
     }
+
+    /**
+     * Scramble a puzzle to a specific depth.
+     */
+    public static function scramble(string $puzzle, int $turns = 0)
+    {
+        $bin = base_path('client/node_modules/.bin/twister');
+
+        $json = $turns
+            ? exec("node {$bin} scramble {$puzzle} -t {$turns}")
+            : exec("node {$bin} scramble {$puzzle}");
+
+        return json_decode($json, true);
+    }
 }

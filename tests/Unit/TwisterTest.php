@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\Classes\Twister;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class TwisterTest extends TestCase
 {
@@ -23,5 +23,13 @@ class TwisterTest extends TestCase
         $this->assertEquals('3x3', Twister::getName(3));
         $this->assertEquals('4x4', Twister::getName(4));
         $this->assertEquals('5x5', Twister::getName(5));
+    }
+
+    public function test_twister_scramble()
+    {
+        $data = Twister::scramble('2x2', 5);
+
+        $this->assertEquals('2x2', $data['puzzle']);
+        $this->assertEquals(5, $data['turns']);
     }
 }
