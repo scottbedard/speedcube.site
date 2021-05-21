@@ -4,11 +4,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build --base=/dist",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "twister": "node ./node_modules/@bedard/twister/bin"
   },
   "dependencies": {
-    "@bedard/twister": "^0.6.5",
-    "@vueuse/core": "^4.9.1",
+    "@bedard/twister": "^0.6.6",
+    "@vueuse/core": "^4.11.0",
     "axios": "^0.21.1",
     "body-scroll-lock": "^3.1.5",
     "feather-icons": "^4.28.0",
@@ -16,7 +17,7 @@
     "lodash-es": "^4.17.21",
     "three": "^0.127.0",
     "vue": "^3.0.11",
-    "vue-router": "^4.0.6"
+    "vue-router": "^4.0.8"
   },
   "devDependencies": {
     "@tailwindcss/jit": "^0.1.18",
@@ -26,11 +27,11 @@
     "@vitejs/plugin-vue": "^1.2.2",
     "@vue/compiler-sfc": "^3.0.11",
     "autoprefixer": "^10.2.5",
-    "postcss": "^8.2.13",
-    "sass": "^1.32.12",
+    "postcss": "^8.3.0",
+    "sass": "^1.33.0",
     "tailwindcss": "^2.1.2",
     "typescript": "^4.2.4",
-    "vite": "^2.2.3",
+    "vite": "^2.3.3",
     "vue-tsc": "^0.0.8"
   }
 }
