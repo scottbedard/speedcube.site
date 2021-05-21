@@ -15,6 +15,16 @@ class Twister
     ];
 
     /**
+     * Execute a command
+     */
+    public static function exec(string $cmd)
+    {
+        $twister = base_path('client/node_modules/.bin/twister');
+
+        return exec("node {$twister} {$cmd}");
+    }
+
+    /**
      * Get puzzle ID from name.
      *
      * @param string $name
@@ -49,12 +59,24 @@ class Twister
      */
     public static function scramble(string $puzzle, int $turns = 0)
     {
-        $bin = base_path('client/node_modules/.bin/twister');
+        $output = $turns
+            ? self::exec("scramble {$puzzle} -t {$turns}")
+            : self::exec("scramble {$puzzle}");
 
-        $json = $turns
-            ? exec("node {$bin} scramble {$puzzle} -t {$turns}")
-            : exec("node {$bin} scramble {$puzzle}");
+        return json_decode($output, true);
+    }
 
-        return json_decode($json, true);
+    /**
+     * Test a solution.
+     */
+    public static function test(string $puzzle, array $state, string $solution)
+    {
+        $json = json_encode($state);
+
+        $output = self::exec("test {$puzzle} '{$json}' '{$solution}'");
+
+        $data = json_decode($output, true);
+
+        return $data['solved'];
     }
 }

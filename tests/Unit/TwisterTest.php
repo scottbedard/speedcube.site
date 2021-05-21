@@ -32,4 +32,23 @@ class TwisterTest extends TestCase
         $this->assertEquals('2x2', $data['puzzle']);
         $this->assertEquals(5, $data['turns']);
     }
+
+    public function test_twister_test()
+    {
+        // 2x2 after 'R'
+        $state = [
+            'u' => [0, 2, 0, 2],
+            'l' => [1, 1, 1, 1],
+            'f' => [2, 5, 2, 5],
+            'r' => [3, 3, 3, 3],
+            'b' => [0, 4, 0, 4],
+            'd' => [5, 4, 5, 4],
+        ];
+        
+        // R- solves the puzzle
+        $this->assertTrue(Twister::test('2x2', $state, 'R-'));
+
+        // L does not
+        $this->assertFalse(Twister::test('2x2', $state, 'L'));
+    }
 }
