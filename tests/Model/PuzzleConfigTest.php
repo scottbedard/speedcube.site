@@ -29,17 +29,17 @@ class PuzzleConfigTest extends TestCase
         $sally = User::factory()->create();
     
         $cube1 = PuzzleConfig::factory()->create([
-            'puzzle' => '3x3',
+            'puzzle_id' => 3,
             'user_id' => $john->id,
         ]);
 
         $cube2 = PuzzleConfig::factory()->create([
-            'puzzle' => '3x3',
+            'puzzle_id' => 3,
             'user_id' => $sally->id,
         ]);
 
         $megaminx = $config1 = PuzzleConfig::factory()->create([
-            'puzzle' => 'dodecaminx3',
+            'puzzle_id' => 4,
             'user_id' => $john->id,
         ]);
 
@@ -48,7 +48,7 @@ class PuzzleConfigTest extends TestCase
         $this->assertTrue(PuzzleConfig::find($megaminx->id)->is_active);
 
         $cube3 = PuzzleConfig::factory()->create([
-            'puzzle' => '3x3',
+            'puzzle_id' => 3,
             'user_id' => $john->id,
         ]);
 

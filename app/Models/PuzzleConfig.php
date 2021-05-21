@@ -4,12 +4,14 @@ namespace App\Models;
 
 use App\Models\BaseModel;
 use App\Models\Solve;
+use App\Models\Traits\PuzzleAlias;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PuzzleConfig extends BaseModel
 {
-    use HasFactory;
+    use HasFactory,
+        PuzzleAlias;
 
     /**
      * Default attributes.
@@ -17,7 +19,7 @@ class PuzzleConfig extends BaseModel
     public $attributes = [
         'config' => '{}',
         'is_active' => true,
-        'puzzle' => '',
+        'puzzle_id' => 0,
         'user_id' => 0,
     ];
 
@@ -38,6 +40,7 @@ class PuzzleConfig extends BaseModel
     protected $fillable = [
         'config',
         'is_active',
+        'puzzle_id',
         'puzzle',
         'user_id',
     ];
@@ -51,6 +54,7 @@ class PuzzleConfig extends BaseModel
         'created_at',
         'id',
         'is_active',
+        'puzzle_id',
         'updated_at',
         'user_id',
     ];
@@ -75,7 +79,7 @@ class PuzzleConfig extends BaseModel
     public function deactivateOtherConfigs()
     {
         self::isActive()
-            ->where('puzzle', $this->puzzle)
+            ->puzzle($this->puzzle)
             ->where('user_id', $this->user_id)
             ->update([
                 'is_active' => false,

@@ -29,6 +29,7 @@ class KeyboardConfigsTest extends TestCase
         $data = $request->json();
 
         $this->assertEquals('{"foo":"bar"}', $data['keyboardConfigs'][0]['config']);
+        $this->assertEquals('3x3', $data['keyboardConfigs'][0]['puzzle']);
     }
 
     public function test_update_keyboard_config()

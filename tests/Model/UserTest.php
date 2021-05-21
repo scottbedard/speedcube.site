@@ -17,13 +17,15 @@ class UserTest extends TestCase
         $user = User::factory()->create();
     
         PuzzleConfig::factory()->create([
-            'user_id' => $user->id,
             'is_active' => true,
+            'puzzle_id' => 3,
+            'user_id' => $user->id,
         ]);
 
         PuzzleConfig::factory()->create([
-            'user_id' => $user->id,
             'is_active' => false,
+            'puzzle_id' => 3,
+            'user_id' => $user->id,
         ]);
         
         $configs = $user->puzzleConfigs()->get();

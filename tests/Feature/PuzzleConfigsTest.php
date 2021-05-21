@@ -29,5 +29,6 @@ class PuzzleConfigsTest extends TestCase
         $data = $request->json();
 
         $this->assertEquals('{"foo":"bar"}', $data['puzzleConfigs'][0]['config']);
+        $this->assertEquals('3x3', $data['puzzleConfigs'][0]['puzzle']);
     }
 }

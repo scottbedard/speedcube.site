@@ -17,7 +17,7 @@ class KeyboardConfigsController extends Controller
 
         $model = $user
             ->keyboardConfigs()
-            ->where('puzzle', $request->puzzle)
+            ->puzzle($request->puzzle)
             ->first();
 
         if ($model) {

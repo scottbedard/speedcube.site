@@ -3,19 +3,21 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use App\Models\Traits\PuzzleAlias;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class KeyboardConfig extends BaseModel
 {
-    use HasFactory;
+    use HasFactory,
+        PuzzleAlias;
 
     /**
      * Default attributes.
      */
     public $attributes = [
         'config' => '{}',
-        'puzzle' => '',
+        'puzzle_id' => 0,
         'user_id' => 0,
     ];
 
@@ -33,6 +35,7 @@ class KeyboardConfig extends BaseModel
      */
     protected $fillable = [
         'config',
+        'puzzle_id',
         'puzzle',
         'user_id',
     ];
@@ -45,6 +48,7 @@ class KeyboardConfig extends BaseModel
     protected $hidden = [
         'created_at',
         'id',
+        'puzzle_id',
         'updated_at',
         'user_id',
     ];

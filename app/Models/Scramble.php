@@ -16,6 +16,16 @@ class Scramble extends BaseModel
     public $attributes = [];
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'puzzle_id',
+        'updated_at',
+    ];
+
+    /**
      * Solves.
      */
     public function solves()
