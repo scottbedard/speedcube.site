@@ -17,8 +17,8 @@ class CreateSolvesTable extends Migration
             $table->id();
             $table->integer('user_id')->nullable()->unsigned()->index();
             $table->integer('puzzle_config_id')->nullable()->unsigned()->index();
-            $table->integer('scramble_id')->unsigned()->index();
             $table->tinyInteger('puzzle_id')->unsigned()->index();
+            $table->text('scramble');
             $table->text('solution');
             $table->timestamps();
         });

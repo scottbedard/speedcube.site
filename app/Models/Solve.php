@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\BaseModel;
 use App\Models\PuzzleConfig;
-use App\Models\Scramble;
 use App\Models\Traits\PuzzleAlias;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +18,7 @@ class Solve extends BaseModel
      */
     public $attributes = [
         'puzzle_id' => 0,
-        'scramble_id' => 0,
+        'scramble' => '',
         'solution' => '',
     ];
 
@@ -31,6 +30,7 @@ class Solve extends BaseModel
     protected $fillable = [
         'puzzle_id',
         'puzzle',
+        'scramble',
     ];
 
     /**
@@ -49,14 +49,6 @@ class Solve extends BaseModel
     public function puzzleConfig()
     {
         return $this->belongsTo(PuzzleConfig::class);
-    }
-
-    /**
-     * Scramble.
-     */
-    public function scramble()
-    {
-        return $this->belongsTo(Scramble::class);
     }
 
     /**
