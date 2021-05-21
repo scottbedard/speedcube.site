@@ -20,6 +20,7 @@ class Solve extends BaseModel
         'puzzle_id' => 0,
         'scramble' => '',
         'solution' => '',
+        'user_id' => null,
     ];
 
     /**
@@ -31,6 +32,7 @@ class Solve extends BaseModel
         'puzzle_id',
         'puzzle',
         'scramble',
+        'user_id',
     ];
 
     /**
