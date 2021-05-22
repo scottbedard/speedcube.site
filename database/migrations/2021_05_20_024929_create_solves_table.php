@@ -17,9 +17,12 @@ class CreateSolvesTable extends Migration
             $table->id();
             $table->integer('user_id')->nullable()->unsigned()->index();
             $table->integer('puzzle_config_id')->nullable()->unsigned()->index();
-            $table->tinyInteger('puzzle_id')->unsigned()->index();
+            $table->tinyInteger('puzzle_id')->default(0)->unsigned()->index();
             $table->text('scramble');
             $table->text('solution');
+            $table->integer('time')->default(0)->unsigned()->index();
+            $table->smallInteger('turns')->default(0)->unsigned()->index();
+            $table->enum('status', ['pending', 'complete', 'dnf'])->default('pending')->index();
             $table->timestamps();
         });
     }

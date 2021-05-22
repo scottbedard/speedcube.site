@@ -6,6 +6,7 @@ use App\Models\BaseModel;
 use App\Models\PuzzleConfig;
 use App\Models\Traits\PuzzleAlias;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Solve extends BaseModel
@@ -20,6 +21,9 @@ class Solve extends BaseModel
         'puzzle_id' => 0,
         'scramble' => '',
         'solution' => '',
+        'status' => 'pending',
+        'time' => 0,
+        'turns' => 0,
         'user_id' => null,
     ];
 
@@ -44,6 +48,14 @@ class Solve extends BaseModel
         'puzzle_id',
         'updated_at',
     ];
+
+    /**
+     * Select status 'pending'
+     */
+    public function scopePending(Builder $query)
+    {
+        return $query->where('status', 'pending');
+    }
 
     /**
      * Puzzle config.
