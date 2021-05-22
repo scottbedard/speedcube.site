@@ -4,11 +4,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build --base=/dist",
-    "serve": "vite preview",
-    "twister": "node ./node_modules/@bedard/twister/bin"
+    "serve": "vite preview"
   },
   "dependencies": {
-    "@bedard/twister": "^0.6.6",
+    "@bedard/twister": "^0.7.0",
     "@vueuse/core": "^4.11.0",
     "axios": "^0.21.1",
     "body-scroll-lock": "^3.1.5",
