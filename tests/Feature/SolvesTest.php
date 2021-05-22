@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\PuzzleConfig;
 use App\Models\Solve;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -35,7 +36,18 @@ class SolvesTest extends TestCase
     public function test_create_solve_as_user()
     {
         $john = User::factory()->create();
+
         $mary = User::factory()->create();
+
+        PuzzleConfig::factory()->create([
+            'user_id' => $john->id,
+            'puzzle' => '2x2', // <- a different puzzle
+        ]);
+
+        $puzzleConfig = PuzzleConfig::factory()->create([
+            'user_id' => $john->id,
+            'puzzle' => '3x3',
+        ]);
 
         $req1 = $this
             ->actingAs($john)
@@ -44,8 +56,10 @@ class SolvesTest extends TestCase
             ]);
             
         $solve1 = Solve::find($req1->json()['solveId']);
-        $this->assertEquals('pending', $solve1->status);
+
         $this->assertEquals('3x3', $solve1->puzzle);
+        $this->assertEquals('pending', $solve1->status);
+        $this->assertEquals($puzzleConfig->id, $solve1->puzzle_config_id);
 
         $req2 = $this
             ->actingAs($mary)
@@ -53,7 +67,12 @@ class SolvesTest extends TestCase
                 'puzzle' => '3x3',
             ]);
 
-        $req3 = $this
+        // mary's solve should have no puzzle config id
+        $solve2 = Solve::find($req2->json()['solveId']);
+        $this->assertEquals(null, $solve2->puzzle_config_id);
+
+        // creating a new solve for john should close the first one
+        $this
             ->actingAs($john)
             ->json('POST', '/api/solves', [
                 'puzzle' => '3x3',
@@ -64,7 +83,7 @@ class SolvesTest extends TestCase
         $this->assertEquals('dnf', $solve1->status);
 
         // mary's solve should be pending
-        $solve2 = Solve::find($req2->json()['solveId']);
+        $solve2->refresh();
         $this->assertEquals('pending', $solve2->status);
     }
 }

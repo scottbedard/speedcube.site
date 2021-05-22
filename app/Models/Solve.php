@@ -18,6 +18,7 @@ class Solve extends BaseModel
      * Default attributes.
      */
     public $attributes = [
+        'puzzle_config_id' => null,
         'puzzle_id' => 0,
         'scramble' => '',
         'solution' => '',
@@ -33,6 +34,7 @@ class Solve extends BaseModel
      * @var array
      */
     protected $fillable = [
+        'puzzle_config_id',
         'puzzle_id',
         'puzzle',
         'scramble',
