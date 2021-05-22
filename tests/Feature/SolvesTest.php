@@ -23,7 +23,11 @@ class SolvesTest extends TestCase
 
         $data = $request->json();
 
+        $solve = Solve::first();
+
         $this->assertEquals(1, Solve::count());
-        $this->assertEquals('3x3', $data['solve']['puzzle']);
+        $this->assertEquals($solve->id, $data['solveId']);
+        $this->assertNull($solve->user_id);
+        $this->assertTrue(is_array($data['state']));
     }
 }
