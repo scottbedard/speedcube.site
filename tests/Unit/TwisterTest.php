@@ -34,21 +34,11 @@ class TwisterTest extends TestCase
     }
 
     public function test_twister_test()
-    {
-        // 2x2 after 'R'
-        $state = [
-            'u' => [0, 2, 0, 2],
-            'l' => [1, 1, 1, 1],
-            'f' => [2, 5, 2, 5],
-            'r' => [3, 3, 3, 3],
-            'b' => [0, 4, 0, 4],
-            'd' => [5, 4, 5, 4],
-        ];
-        
-        // R- solves the puzzle
-        $this->assertTrue(Twister::test('2x2', $state, 'R-'));
+    {        
+        // R is solved by R-
+        $this->assertTrue(Twister::test('2x2', 'R', 'R-'));
 
-        // L does not
-        $this->assertFalse(Twister::test('2x2', $state, 'L'));
+        // R is not solved by L
+        $this->assertFalse(Twister::test('2x2', 'R', 'L'));
     }
 }

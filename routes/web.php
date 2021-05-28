@@ -35,6 +35,7 @@ Route::prefix('api')->middleware(TransformKeys::class)->group(function () {
 
     // solves
     Route::post('solves', [SolvesController::class, 'store']);
+    Route::post('solves/complete', [SolvesController::class, 'complete']);
 
     // users
     Route::middleware('guest')->group(function () {
