@@ -59,21 +59,25 @@ class Twister
      */
     public static function scramble(string $puzzle, int $turns = 0)
     {
+        $puzzleArg = escapeshellarg($puzzle);
+        $turnsArg = escapeshellarg($turns);
+
         $output = $turns
-            ? self::exec("scramble {$puzzle} -t {$turns}")
-            : self::exec("scramble {$puzzle}");
+            ? self::exec("scramble {$puzzleArg} -t {$turnsArg}")
+            : self::exec("scramble {$puzzleArg}");
 
         return json_decode($output, true);
     }
 
     /**
-     * Test a solution.
+     * Test that a scramble is solved by a solution.
      */
-    public static function test(string $puzzle, array $state, string $solution)
+    public static function test(string $puzzle, string $scramble, string $solution)
     {
-        $json = json_encode($state);
-
-        $output = self::exec("test {$puzzle} '{$json}' '{$solution}'");
+        $puzzleArg = escapeshellarg($puzzle);
+        $algorithmArg = escapeshellarg("{$scramble} {$solution}");
+        
+        $output = self::exec("apply {$puzzleArg} {$algorithmArg}");
 
         $data = json_decode($output, true);
 
