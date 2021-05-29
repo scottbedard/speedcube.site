@@ -1,4 +1,6 @@
 <style lang="scss" scoped>
+@use "sass:math";
+
 $contrast: 5%;
 $thumb-border-color: #eceff1;
 $thumb-border-width: 0px;
@@ -49,7 +51,7 @@ $ie-bottom-track-color: darken($track-color, $contrast);
 [type="range"] {
   -webkit-appearance: none;
   background: transparent;
-  margin: $thumb-height / 2 0;
+  margin: math.div($thumb-height, 2) 0;
   width: $track-width;
 
   &::-moz-focus-outer {
@@ -83,7 +85,7 @@ $ie-bottom-track-color: darken($track-color, $contrast);
   &::-webkit-slider-thumb {
     @include thumb;
     -webkit-appearance: none;
-    margin-top: ((-$track-border-width * 2 + $track-height) / 2 - $thumb-height / 2);
+    margin-top: math.div((-$track-border-width * 2 + $track-height), 2) - math.div($thumb-height, 2);
   }
 
   &::-moz-range-track {
@@ -92,7 +94,7 @@ $ie-bottom-track-color: darken($track-color, $contrast);
     background: $track-color;
     border: $track-border-width solid $track-border-color;
     border-radius: $track-radius;
-    height: $track-height / 2;
+    height: math.div($track-height, 2);
   }
 
   &::-moz-range-thumb {
@@ -103,7 +105,7 @@ $ie-bottom-track-color: darken($track-color, $contrast);
     @include track;
     background: transparent;
     border-color: transparent;
-    border-width: ($thumb-height / 2) 0;
+    border-width: math.div($thumb-height, 2) 0;
     color: transparent;
   }
 
@@ -111,19 +113,19 @@ $ie-bottom-track-color: darken($track-color, $contrast);
     @include shadow($track-shadow-size, $track-shadow-blur, $track-shadow-color);
     background: $ie-bottom-track-color;
     border: $track-border-width solid $track-border-color;
-    border-radius: ($track-radius * 2);
+    border-radius: $track-radius * 2;
   }
 
   &::-ms-fill-upper {
     @include shadow($track-shadow-size, $track-shadow-blur, $track-shadow-color);
     background: $track-color;
     border: $track-border-width solid $track-border-color;
-    border-radius: ($track-radius * 2);
+    border-radius: $track-radius * 2;
   }
 
   &::-ms-thumb {
     @include thumb;
-    margin-top: $track-height / 4;
+    margin-top: math.div($track-height, 4);
   }
 
   &:disabled {
