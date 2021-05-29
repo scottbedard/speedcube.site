@@ -6,6 +6,14 @@
     :model="model"
     :sticker-position="stickerPosition"
     :visible-stickers="idleStickers" />
+  <Core
+    :edge-length="edgeLength"
+    :geometry="geometry"
+    :materials="materials"
+    :model="model"
+    :rotation="turnRotation"
+    :sticker-position="stickerPosition"
+    :visible-stickers="turningStickers" />
 </template>
 
 <script lang="ts">
