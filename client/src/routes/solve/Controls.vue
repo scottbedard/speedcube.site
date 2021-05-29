@@ -24,7 +24,12 @@
       class="flex flex-wrap font-mono gap-4 justify-center">
       <button
         v-for="(turn, key) in previewKeyboardConfig"
-        class="bg-gray-50 flex px-3 py-1 rounded shadow-md text-sm hover:bg-white dark:bg-gray-700 dark:hover:bg-gray-600"
+        class="flex px-3 py-1 rounded shadow-md text-sm"
+        :class="[
+          isHighlighted(key)
+            ? 'bg-blue-500 text-white'
+            : 'bg-gray-50 hover:bg-white dark:bg-gray-700 dark:hover:bg-gray-600'
+        ]"
         :key="key"
         @click="editBinding(key)">
         {{ key }} &bull; {{ turn }}
@@ -82,6 +87,10 @@
     </div>
   </div>
 
+  <Keyboard
+    :config="previewKeyboardConfig"
+    @turn="highlight" />
+
   <KeybindingModal
     :active-binding="activeBinding"
     :visible="keybindingModalIsVisible"
@@ -104,11 +113,12 @@
 
 <script lang="ts">
 import { alert } from '@/app/alerts'
-import { Button, IconText } from '@/components'
+import { Button, IconText, Keyboard } from '@/components'
 import { computed, defineComponent, onMounted, onUnmounted, Ref, ref } from 'vue'
 import { isAuthenticated, keyboardConfig } from '@/app/store/computed'
 import { Keybinding } from '@/app/types/puzzle'
 import { previewKeyboardConfig } from '@/app/store/state'
+import { useComponentTimeout } from '@/app/behaviors'
 import { useKeyboardConfig } from '@/app/api'
 import { useRoute, useRouter } from 'vue-router'
 import ClearAllModal from '@/partials/solve/ClearAllModal.vue'
@@ -124,18 +134,26 @@ type ToolbarItem = {
 
 export default defineComponent({
   setup() {
+    const { setComponentTimeout } = useComponentTimeout()
+
     const route = useRoute()
     const router = useRouter()
     const puzzle = route.params?.puzzle as string
 
     const activeBinding = ref<Keybinding | null>(null)
     const clearAllModalIsVisible = ref(false)
+    const highlightedBindings = ref<Keybinding[]>([])
     const jsonModalIsVisible = ref(false)
     const keybindingModalIsVisible = ref(false)
     const resetModalIsVisible = ref(false)
 
     const empty = computed(() => {
       return !previewKeyboardConfig.value || Object.keys(previewKeyboardConfig.value).length === 0
+    })
+
+    // test if a key is highlighted
+    const isHighlighted = computed(() => {
+      return (key: string) => highlightedBindings.value.some(keybinding => keybinding.key === key)
     })
 
     // model management
@@ -160,6 +178,19 @@ export default defineComponent({
       }
 
       openModal(keybindingModalIsVisible)
+    }
+
+    // temporarily highlight a keybinding
+    const highlight = (keybinding: Keybinding) => {
+      highlightedBindings.value.push(keybinding)
+
+      setComponentTimeout(() => {
+        const index = highlightedBindings.value.indexOf(keybinding)
+
+        if (index > -1) {
+          highlightedBindings.value.splice(index, 1)
+        }
+      }, 200)
     }
 
     // set a modal visibility ref to true
@@ -264,7 +295,10 @@ export default defineComponent({
       closeModals,
       editBinding,
       empty,
+      highlight,
+      highlightedBindings,
       isAuthenticated,
+      isHighlighted,
       jsonModalIsVisible,
       keybindingModalIsVisible,
       loading,
@@ -284,6 +318,7 @@ export default defineComponent({
     IconText,
     JsonModal,
     KeybindingModal,
+    Keyboard,
     ResetModal,
   },
 })
