@@ -4,8 +4,10 @@
       <Puzzle
         class="border-4 border-dashed border-gray-300 dark:border-gray-700"
         :config="config"
+        :current-turn="currentTurn"
         :key="size"
-        :model="model" />
+        :model="model"
+        :turn-progress="turnProgress" />
     </div>
     <div>
       <div class="gap-6 grid xs:grid-cols-2">
@@ -15,6 +17,17 @@
           label="Puzzle size"
           :max="10"
           :min="2" />
+        
+        <Input
+          v-model="currentTurn"
+          label="Current turn" />
+
+        <RangeInput
+          v-model="turnProgress"
+          label="turnProgress"
+          :max="1"
+          :min="0"
+          :step="0.01" />
 
         <RangeInput
           v-model="config.cameraAngle"
@@ -69,15 +82,21 @@ import { colors } from '@/app/utils'
 import { computed, defineComponent, ref, watch } from 'vue'
 import { Cube } from '@bedard/twister'
 import { cubeConfig } from '@/components/puzzle/constants'
-import { Puzzle, RangeInput } from '@/components'
+import { Input, Puzzle, RangeInput } from '@/components'
 import { useRoute, useRouter } from 'vue-router'
+
+const defaultCurrentTurn = ''
+const defaultSize = 3
+const defaultTurnProgress = 0
 
 export default defineComponent({
   setup() {
     const route = useRoute()
     const router = useRouter()
-    const size = ref(route.query.size ? Number(route.query.size) : 3)
+    const size = ref(route.query.size ? Number(route.query.size) : defaultSize)
     const model = computed(() => new Cube({ size: size.value }))
+    const currentTurn = ref(route.query.currentTurn ?? defaultCurrentTurn)
+    const turnProgress = ref(route.query.turnProgress ? Number(route.query.turnProgress) : defaultTurnProgress)
 
     const config = ref({
       cameraAngle: route.query.cameraAngle ? Number(route.query.cameraAngle) : cubeConfig.cameraAngle,
@@ -99,7 +118,7 @@ export default defineComponent({
 
     let ignoreRouteChange = false;
 
-    watch([config, size], () => {
+    watch([config, currentTurn, size, turnProgress], () => {
       ignoreRouteChange = true
 
       router.replace({
@@ -107,12 +126,14 @@ export default defineComponent({
         query: {
           cameraAngle: config.value.cameraAngle != cubeConfig.cameraAngle ? config.value.cameraAngle : undefined,
           cameraDistance: config.value.cameraDistance != cubeConfig.cameraDistance ? config.value.cameraDistance : undefined,
+          currentTurn: currentTurn.value != defaultCurrentTurn ? currentTurn.value : undefined,
           filter: route.query.filter,
           innerBrightness: config.value.innerBrightness != cubeConfig.innerBrightness ? config.value.innerBrightness : undefined,
-          size: size.value != 3 ? size.value : undefined,
+          size: size.value != defaultSize ? size.value : undefined,
           stickerElevation: config.value.stickerElevation != cubeConfig.stickerElevation ? config.value.stickerElevation : undefined,
           stickerRadius: config.value.stickerRadius != cubeConfig.stickerRadius ? config.value.stickerRadius : undefined,
           stickerSpacing: config.value.stickerSpacing != cubeConfig.stickerSpacing ? config.value.stickerSpacing : undefined,
+          turnProgress: turnProgress.value != defaultTurnProgress ? turnProgress.value : undefined,
         },
       })
     }, { deep: true })
@@ -129,16 +150,21 @@ export default defineComponent({
       config.value.stickerElevation = route.query.stickerElevation ? Number(route.query.stickerElevation) : cubeConfig.stickerElevation
       config.value.stickerRadius = route.query.stickerRadius ? Number(route.query.stickerRadius) : cubeConfig.stickerRadius
       config.value.stickerSpacing = route.query.stickerSpacing ? Number(route.query.stickerSpacing) : cubeConfig.stickerSpacing
-      size.value = route.query.size ? Number(route.query.size) : 3
+      currentTurn.value = route.query.currentTurn ?? defaultCurrentTurn
+      size.value = route.query.size ? Number(route.query.size) : defaultSize
+      turnProgress.value = route.query.turnProgress ? Number(route.query.turnProgress) : defaultTurnProgress
     })
 
     return {
       config,
+      currentTurn,
       model,
       size,
+      turnProgress,
     }
   },
   components: {
+    Input,
     Puzzle,
     RangeInput,
   },
