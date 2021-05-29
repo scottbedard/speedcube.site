@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash-es'
 import { Cube } from '@bedard/twister'
-import { CubeName, PuzzleName } from '@/app/types/puzzle'
 import { cubeConfig, cubeNames, cubeKeyboardConfig } from '@/components/puzzle/constants'
+import { CubeName, PuzzleName } from '@/app/types/puzzle'
 
 /**
  * Create a twister model

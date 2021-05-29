@@ -87,10 +87,6 @@
     </div>
   </div>
 
-  <Keyboard
-    :config="previewKeyboardConfig"
-    @turn="highlight" />
-
   <KeybindingModal
     :active-binding="activeBinding"
     :visible="keybindingModalIsVisible"
@@ -113,12 +109,12 @@
 
 <script lang="ts">
 import { alert } from '@/app/alerts'
-import { Button, IconText, Keyboard } from '@/components'
+import { Button, IconText } from '@/components'
 import { computed, defineComponent, onMounted, onUnmounted, Ref, ref } from 'vue'
 import { isAuthenticated, keyboardConfig } from '@/app/store/computed'
 import { Keybinding } from '@/app/types/puzzle'
 import { previewKeyboardConfig } from '@/app/store/state'
-import { useComponentTimeout } from '@/app/behaviors'
+import { useComponentTimeout, useKeybindings } from '@/app/behaviors'
 import { useKeyboardConfig } from '@/app/api'
 import { useRoute, useRouter } from 'vue-router'
 import ClearAllModal from '@/partials/solve/ClearAllModal.vue'
@@ -135,7 +131,6 @@ type ToolbarItem = {
 export default defineComponent({
   setup() {
     const { setComponentTimeout } = useComponentTimeout()
-
     const route = useRoute()
     const router = useRouter()
     const puzzle = route.params?.puzzle as string
@@ -146,7 +141,8 @@ export default defineComponent({
     const jsonModalIsVisible = ref(false)
     const keybindingModalIsVisible = ref(false)
     const resetModalIsVisible = ref(false)
-
+    
+    // empty state for keyboard config
     const empty = computed(() => {
       return !previewKeyboardConfig.value || Object.keys(previewKeyboardConfig.value).length === 0
     })
@@ -161,6 +157,19 @@ export default defineComponent({
       loading,
       save,
     } = useKeyboardConfig(puzzle)
+
+    // highlight pressed keybindings
+    useKeybindings(previewKeyboardConfig, keybinding => {
+      highlightedBindings.value.push(keybinding)
+
+      setComponentTimeout(() => {
+        const index = highlightedBindings.value.indexOf(keybinding)
+
+        if (index > -1) {
+          highlightedBindings.value.splice(index, 1)
+        }
+      }, 200)
+    })
 
     // close all modals
     const closeModals = () => {
@@ -178,19 +187,6 @@ export default defineComponent({
       }
 
       openModal(keybindingModalIsVisible)
-    }
-
-    // temporarily highlight a keybinding
-    const highlight = (keybinding: Keybinding) => {
-      highlightedBindings.value.push(keybinding)
-
-      setComponentTimeout(() => {
-        const index = highlightedBindings.value.indexOf(keybinding)
-
-        if (index > -1) {
-          highlightedBindings.value.splice(index, 1)
-        }
-      }, 200)
     }
 
     // set a modal visibility ref to true
@@ -295,7 +291,6 @@ export default defineComponent({
       closeModals,
       editBinding,
       empty,
-      highlight,
       highlightedBindings,
       isAuthenticated,
       isHighlighted,
@@ -318,7 +313,6 @@ export default defineComponent({
     IconText,
     JsonModal,
     KeybindingModal,
-    Keyboard,
     ResetModal,
   },
 })
