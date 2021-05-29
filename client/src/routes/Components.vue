@@ -68,6 +68,10 @@ const examples: Example[] = [
     header: '<Modal>',
   },
   {
+    component: defineAsyncComponent(() => import('@/partials/components/PuzzleCubeExample.vue')),
+    header: '<Puzzle> (cube)',
+  },
+  {
     component: defineAsyncComponent(() => import('@/partials/components/RangeInputExample.vue')),
     header: '<RangeInput>',
   },
