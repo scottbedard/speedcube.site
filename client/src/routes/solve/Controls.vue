@@ -277,7 +277,7 @@ export default defineComponent({
     onMounted(() => {
       const config = keyboardConfig.value(puzzle)
       
-      previewKeyboardConfig.value = config
+      previewKeyboardConfig.value = { ...config }
     })
 
     // unmounted

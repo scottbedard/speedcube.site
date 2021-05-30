@@ -257,7 +257,7 @@ export default defineComponent({
     onMounted(() => {
       const config = puzzleConfig.value(puzzle)
       
-      previewPuzzleConfig.value = config
+      previewPuzzleConfig.value = { ...config }
     })
 
     // unmounted
