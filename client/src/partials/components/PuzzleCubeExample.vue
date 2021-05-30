@@ -95,7 +95,7 @@ export default defineComponent({
     const router = useRouter()
     const size = ref(route.query.size ? Number(route.query.size) : defaultSize)
     const model = computed(() => new Cube({ size: size.value }))
-    const currentTurn = ref(route.query.currentTurn ?? defaultCurrentTurn)
+    const currentTurn = ref(route.query.currentTurn as string ?? defaultCurrentTurn)
     const turnProgress = ref(route.query.turnProgress ? Number(route.query.turnProgress) : defaultTurnProgress)
 
     const config = ref({
@@ -150,7 +150,7 @@ export default defineComponent({
       config.value.stickerElevation = route.query.stickerElevation ? Number(route.query.stickerElevation) : cubeConfig.stickerElevation
       config.value.stickerRadius = route.query.stickerRadius ? Number(route.query.stickerRadius) : cubeConfig.stickerRadius
       config.value.stickerSpacing = route.query.stickerSpacing ? Number(route.query.stickerSpacing) : cubeConfig.stickerSpacing
-      currentTurn.value = route.query.currentTurn ?? defaultCurrentTurn
+      currentTurn.value = route.query.currentTurn as string ?? defaultCurrentTurn
       size.value = route.query.size ? Number(route.query.size) : defaultSize
       turnProgress.value = route.query.turnProgress ? Number(route.query.turnProgress) : defaultTurnProgress
     })
