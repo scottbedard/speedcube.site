@@ -5,7 +5,9 @@
         'border-2 border-dashed border-gray-400 dark:border-gray-700': route.name === 'solve:config'
       }"
       :config="config"
-      :model="model" />
+      :current-turn="currentTurn"
+      :model="model"
+      :turn-progress="turnProgress" />
   </div>
 
   <div
@@ -43,11 +45,11 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
+import { createModel, normalizePuzzleName } from '@/app/utils'
 import { cubeConfig } from '@/components/puzzle/constants'
 import { Icon, Puzzle } from '@/components'
-import { createModel, normalizePuzzleName } from '@/app/utils'
-import { previewKeyboardConfig, previewPuzzleConfig } from '@/app/store/state'
-import { puzzleConfig } from '@/app/store/computed'
+import { keyboardConfig, puzzleConfig } from '@/app/store/computed'
+import { usePuzzleTurning } from '@/app/behaviors'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
@@ -64,23 +66,25 @@ export default defineComponent({
 
     const model = createModel(puzzle)
 
-    const config = computed(() => {
-      if (previewPuzzleConfig.value) {
-        return previewPuzzleConfig.value
-      }
-      
-      return puzzleConfig.value(puzzle)
-    })
+    const config = computed(() => puzzleConfig.value(puzzle))
+
+    const keybindings = computed(() => keyboardConfig.value(puzzle))
+
+    const {
+      currentTurn,
+      turnProgress,
+    } = usePuzzleTurning(model, keybindings)
 
     return {
       cameraAngle,
       cameraDistance,
       config,
       cubeConfig,
+      currentTurn,
       isIndex,
       model,
-      previewKeyboardConfig,
       route,
+      turnProgress,
     }
   },
   components: {
