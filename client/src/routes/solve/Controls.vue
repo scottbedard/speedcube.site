@@ -111,6 +111,7 @@
 import { alert } from '@/app/alerts'
 import { Button, IconText } from '@/components'
 import { computed, defineComponent, onMounted, onUnmounted, Ref, ref } from 'vue'
+import { disableKeybindingListener, enableKeybindingListener } from '@/app/behaviors/use-keybindings'
 import { isAuthenticated, keyboardConfig } from '@/app/store/computed'
 import { Keybinding } from '@/app/types/puzzle'
 import { previewKeyboardConfig } from '@/app/store/state'
@@ -173,6 +174,8 @@ export default defineComponent({
 
     // close all modals
     const closeModals = () => {
+      enableKeybindingListener()
+
       clearAllModalIsVisible.value = false
       jsonModalIsVisible.value = false
       keybindingModalIsVisible.value = false
@@ -192,6 +195,7 @@ export default defineComponent({
     // set a modal visibility ref to true
     const openModal = (isVisible: Ref<boolean>) => {
       closeModals()
+      disableKeybindingListener()
 
       isVisible.value = true
     }
@@ -282,6 +286,8 @@ export default defineComponent({
 
     // unmounted
     onUnmounted(() => {
+      enableKeybindingListener()
+    
       previewKeyboardConfig.value = null
     })
 
