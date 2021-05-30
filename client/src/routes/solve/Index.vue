@@ -73,7 +73,7 @@ export default defineComponent({
     const {
       currentTurn,
       turnProgress,
-    } = usePuzzleTurning(model, keybindings)
+    } = usePuzzleTurning(model, config, keybindings)
 
     return {
       cameraAngle,

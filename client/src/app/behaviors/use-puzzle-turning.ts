@@ -1,23 +1,28 @@
 import { clamp } from 'lodash-es'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, unref, watch } from 'vue'
 import { Cube } from '@bedard/twister'
 import { Keybinding } from '@/app/types/puzzle'
 import { MaybeRef, useTransition } from '@vueuse/core'
 import { useKeybindings } from './use-keybindings'
+
+const defaultTurnDuration = 150
 
 /**
  * Turning logic for puzzle component
  */
 export function usePuzzleTurning(
   model: Cube,
+  config: MaybeRef<Record<string, unknown> | null>,
   keybindings: MaybeRef<Record<string, string> | null>
 ) {
   const queue = ref<Keybinding[]>([])
 
   const turnIndex = ref(0)
 
+  const turnDuration = computed(() => Number(unref(config)?.turnDuration ?? defaultTurnDuration))
+
   const turnTransition = useTransition(turnIndex, {
-    duration: 100,
+    duration: turnDuration,
     onFinished: () => {
       model.turn(currentTurn.value)
       queue.value.shift()
