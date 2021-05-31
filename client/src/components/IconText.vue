@@ -2,8 +2,9 @@
   <div class="flex">
     <Icon
       class="mr-2 mt-1"
-      :name="name" />
-      <slot />
+      :name="name"
+      :svg-class="svgClass" />
+    <slot />
   </div>
 </template>
 
@@ -19,6 +20,9 @@ export default defineComponent({
   props: {
     name: {
       required: true,
+      type: String,
+    },
+    svgClass: {
       type: String,
     },
   },

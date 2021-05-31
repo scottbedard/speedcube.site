@@ -3,6 +3,7 @@
     <svg
       v-bind="icon.attrs"
       v-html="icon.contents"
+      :class="svgClass"
       :height="height || sizePx"
       :stroke-width="stroke"
       :width="width" />
@@ -40,6 +41,10 @@ export default defineComponent({
     stroke: {
       default: 2,
       type: [Number, String],
+    },
+    svgClass: {
+      default: '',
+      type: String,
     },
     width: {
       type: Number,
