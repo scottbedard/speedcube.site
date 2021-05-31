@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios'
+import { PuzzleName } from './puzzle'
 import { RawKeyboardConfig, RawPuzzleConfig } from '@/app/types/models'
-import { User } from './models'
+import { Solve, User } from './models'
 
 /**
  * Axios error responses
@@ -16,6 +17,21 @@ export type AxiosValidationErrorResponse = AxiosErrorResponse<{
   errors: Record<string, string[]>
   message: string
 }>
+
+/**
+ * POST: /api/solves
+ */
+export type CreateSolvePayload = {
+  puzzle: PuzzleName,
+}
+
+/**
+ * POST: /api/solves
+ */
+export type CreateSolveResponse = {
+  solveId: number,
+  state: Record<string, unknown>,
+}
 
 /**
  * POST: /api/users

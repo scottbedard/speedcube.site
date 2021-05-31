@@ -1,5 +1,11 @@
 <template>
   <div>
+    <div class="mb-12 text-center">
+      <Button primary @click="scramble">
+        Scramble
+      </Button>
+    </div>
+  
     <div class="gap-x-12 gap-y-2 flex flex-wrap justify-center">
       <RouterLink
         class="flex items-center"
@@ -9,7 +15,7 @@
             puzzle: route.params.puzzle,
           },
         }">
-        <IconText svg-class="transform rotate-90" name="sliders">
+        <IconText name="sliders" svg-class="transform rotate-90">
           Customize Appearance
         </IconText>
       </RouterLink>
@@ -36,16 +42,24 @@ import { defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
-  setup() {
+  setup(props, { emit }) {
     const route = useRoute()
+
+    const scramble = () => {
+      emit('scramble')
+    }
 
     return {
       route,
+      scramble,
     }
   },
   components: {
     Button,
     IconText,
   },
+  emits: [
+    'scramble',
+  ],
 })
 </script>

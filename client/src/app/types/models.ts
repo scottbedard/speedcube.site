@@ -33,6 +33,13 @@ export type PuzzleConfig = {
 }
 
 /**
+ * Solve
+ */
+export type Solve = {
+  id: number
+}
+
+/**
  * User
  */
 export type User = {
