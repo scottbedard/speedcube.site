@@ -6,6 +6,7 @@
         :config="config"
         :current-turn="currentTurn"
         :key="size"
+        :masked="masked"
         :model="model"
         :turn-progress="turnProgress" />
     </div>
@@ -71,8 +72,12 @@
           :min="0"
           :step="0.01" />
 
-        <pre class="text-xs">{{ config }}</pre>
+        <Checkbox v-model="masked">
+          Masked
+        </Checkbox>
       </div>
+
+      <pre class="mt-6 text-xs">{{ config }}</pre>
     </div>
   </div>
 </template>
@@ -82,7 +87,7 @@ import { colors } from '@/app/utils'
 import { computed, defineComponent, ref, watch } from 'vue'
 import { Cube } from '@bedard/twister'
 import { cubeConfig } from '@/components/puzzle/constants'
-import { Input, Puzzle, RangeInput } from '@/components'
+import { Checkbox, Input, Puzzle, RangeInput } from '@/components'
 import { useRoute, useRouter } from 'vue-router'
 
 const defaultCurrentTurn = ''
@@ -93,6 +98,7 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const router = useRouter()
+    const masked = ref(Boolean(route.query.masked))
     const size = ref(route.query.size ? Number(route.query.size) : defaultSize)
     const model = computed(() => new Cube({ size: size.value }))
     const currentTurn = ref(route.query.currentTurn as string ?? defaultCurrentTurn)
@@ -118,7 +124,7 @@ export default defineComponent({
 
     let ignoreRouteChange = false;
 
-    watch([config, currentTurn, size, turnProgress], () => {
+    watch([config, currentTurn, masked, size, turnProgress], () => {
       ignoreRouteChange = true
 
       router.replace({
@@ -129,6 +135,7 @@ export default defineComponent({
           currentTurn: currentTurn.value != defaultCurrentTurn ? currentTurn.value : undefined,
           filter: route.query.filter,
           innerBrightness: config.value.innerBrightness != cubeConfig.innerBrightness ? config.value.innerBrightness : undefined,
+          masked: masked.value ? 1 : undefined,
           size: size.value != defaultSize ? size.value : undefined,
           stickerElevation: config.value.stickerElevation != cubeConfig.stickerElevation ? config.value.stickerElevation : undefined,
           stickerRadius: config.value.stickerRadius != cubeConfig.stickerRadius ? config.value.stickerRadius : undefined,
@@ -151,6 +158,7 @@ export default defineComponent({
       config.value.stickerRadius = route.query.stickerRadius ? Number(route.query.stickerRadius) : cubeConfig.stickerRadius
       config.value.stickerSpacing = route.query.stickerSpacing ? Number(route.query.stickerSpacing) : cubeConfig.stickerSpacing
       currentTurn.value = route.query.currentTurn as string ?? defaultCurrentTurn
+      masked.value = Boolean(route.query.masked)
       size.value = route.query.size ? Number(route.query.size) : defaultSize
       turnProgress.value = route.query.turnProgress ? Number(route.query.turnProgress) : defaultTurnProgress
     })
@@ -158,12 +166,14 @@ export default defineComponent({
     return {
       config,
       currentTurn,
+      masked,
       model,
       size,
       turnProgress,
     }
   },
   components: {
+    Checkbox,
     Input,
     Puzzle,
     RangeInput,
