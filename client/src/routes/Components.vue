@@ -56,6 +56,10 @@ const examples: Example[] = [
     header: '<ColorPicker>',
   },
   {
+    component: defineAsyncComponent(() => import('@/partials/components/CountdownExample.vue')),
+    header: '<Countdown>',
+  },
+  {
     component: defineAsyncComponent(() => import('@/partials/components/IconExample.vue')),
     header: '<Icon>',
   },
