@@ -10,54 +10,23 @@
       :turn-progress="turnProgress" />
   </div>
 
-  <div
-    v-if="isIndex"
-    class="gap-x-10 gap-y-2 flex flex-wrap justify-center">
-    <RouterLink
-      class="flex items-center"
-      :to="{
-        name: 'solve:config',
-        params: {
-          puzzle: route.params.puzzle,
-        },
-      }">
-      <Icon class="mr-1 transform rotate-90" name="sliders" />
-
-      Customize Appearance
-    </RouterLink>
-
-    <RouterLink
-      class="flex items-center"
-      :to="{
-        name: 'solve:controls',
-        params: {
-          puzzle: route.params.puzzle,
-        },
-      }">
-      <Icon class="mr-1" name="hash" />
-
-      Edit Key Bindings
-    </RouterLink>
-  </div>
+  <Gameplay v-if="isIndex" />
 
   <RouterView v-else />
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { Puzzle } from '@/components'
+import { computed, defineComponent } from 'vue'
 import { createModel, normalizePuzzleName } from '@/app/utils'
 import { cubeConfig } from '@/components/puzzle/constants'
-import { Icon, Puzzle } from '@/components'
 import { keyboardConfig, puzzleConfig } from '@/app/store/computed'
 import { usePuzzleTurning } from '@/app/behaviors'
 import { useRoute } from 'vue-router'
+import Gameplay from '@/partials/solve/Gameplay.vue'
 
 export default defineComponent({
   setup() {
-    const cameraAngle = ref(25)
-
-    const cameraDistance = ref(3)
-
     const route = useRoute()
 
     const isIndex = computed(() => route.name === 'solve')
@@ -76,8 +45,6 @@ export default defineComponent({
     } = usePuzzleTurning(model, config, keybindings)
 
     return {
-      cameraAngle,
-      cameraDistance,
       config,
       cubeConfig,
       currentTurn,
@@ -88,7 +55,7 @@ export default defineComponent({
     }
   },
   components: {
-    Icon,
+    Gameplay,
     Puzzle,
   },
   name: 'SolveIndex'
