@@ -29,7 +29,8 @@ class TwisterTest extends TestCase
     {
         $data = Twister::scramble('2x2', 5);
 
-        $this->assertEquals('2x2', $data['puzzle']);
+        $this->assertEquals('cube', $data['puzzle']);
+        $this->assertEquals(2, $data['options']['size']);
         $this->assertEquals(5, $data['turns']);
     }
 
