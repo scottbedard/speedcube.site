@@ -1,15 +1,16 @@
 <template>
   <div class="max-w-sm mb-6 mx-auto">
-    <pre>{{ { currentTurn } }}</pre>
     <Puzzle
       :class="{
         'border-2 border-dashed border-gray-400 dark:border-gray-700': route.name === 'solve:config'
       }"
       :config="config"
       :current-turn="currentTurn"
-      :masked="scrambling"
+      :masked="masked"
       :model="model"
       :turn-progress="turnProgress" />
+
+    <pre class="text-sm">{{ { currentTurn, scrambling, turnIndex, turnProgress } }}</pre>
   </div>
 
   <Gameplay
@@ -21,7 +22,7 @@
 
 <script lang="ts">
 /* eslint-disable */
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { keyboardConfig, puzzleConfig } from '@/app/store/computed'
 import { Puzzle } from '@/components'
 import { timeout } from '@/app/utils'
@@ -44,6 +45,8 @@ export default defineComponent({
     // puzzle config
     const config = computed(() => puzzleConfig.value(puzzle))
 
+    const masked = ref(false)
+
     // keyboard config
     const keybindings = computed(() => keyboardConfig.value(puzzle))
 
@@ -52,36 +55,42 @@ export default defineComponent({
       currentTurn,
       model,
       puzzleName,
-      queue,
       scrambling,
+      turnIndex,
       turnProgress,
+      turns,
     } = usePuzzle({
       config,
       keybindings,
+      onScramblingEnd,
       puzzle,
     })
 
+    // unmask the puzzle when scrambling ends
+    function onScramblingEnd() {
+      masked.value = false
+    }
+
     // scramble the puzzle
-    const scramble = () => {
-      if (scrambling.value) {
-        return
+    function scramble() {
+      if (!scrambling.value) {
+        masked.value = true
+        scrambling.value = true
+
+        Promise.all([
+          createSolve({ puzzle: puzzleName.value }),
+          timeout(2000),
+        ]).then(() => {
+          model.value.apply(pendingSolve.value.state)
+
+          scrambling.value = false
+        })
       }
-
-      scrambling.value = true
-
-      Promise.all([
-        createSolve({ puzzle: puzzleName.value }),
-        timeout(2000),
-      ]).then(() => {
-        model.value.apply(pendingSolve.value.state)
-
-        scrambling.value = false
-      })
     }
 
     useKeybindings(keybindings, keybinding => {
       if (!scrambling.value) {
-        queue.value.push(keybinding.turn)
+        turns.value.push(keybinding.turn)
       }
     })
 
@@ -89,12 +98,14 @@ export default defineComponent({
       config,
       currentTurn,
       isIndex,
+      masked,
       model,
-      queue,
       route,
       scramble,
       scrambling,
+      turnIndex,
       turnProgress,
+      turns,
     }
   },
   components: {

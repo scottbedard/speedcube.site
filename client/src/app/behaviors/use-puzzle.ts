@@ -7,7 +7,7 @@ import {
   watch,
 } from 'vue'
 
-import { clamp, isNumber } from 'lodash-es'
+import { clamp, isNumber, noop } from 'lodash-es'
 import { createModel, normalizePuzzleName } from '@/app/utils'
 import { Cube } from '@bedard/twister'
 import { defaultTurnDuration } from '@/components/puzzle/constants'
@@ -17,33 +17,22 @@ import { PuzzleName } from '@/app/types/puzzle'
 export type UsePuzzleOptions = {
   config?: MaybeRef<Record<string, unknown>>,
   keybindings?: MaybeRef<Record<string, string>>,
+  onScramblingEnd?: () => void,
   puzzle: MaybeRef<string>,
-}
-
-type UsePuzzleData = {
-  clearQueuePending: Ref<boolean>,
-  currentTurn: ComputedRef<string>,
-  model: ComputedRef<Cube>,
-  puzzleName: ComputedRef<PuzzleName>,
-  queue: Ref<string[]>,
-  scrambling: Ref<boolean>,
-  turn: Ref<number>,
-  turnProgress: ComputedRef<number>,
-  turnTransition: Ref<number>,
 }
 
 /**
  * Controls needed to interact with the puzzle component.
  */
-export function usePuzzle({ config, puzzle }: UsePuzzleOptions): UsePuzzleData {
+export function usePuzzle(options: UsePuzzleOptions) {
+  const {
+    config,
+    puzzle,
+    onScramblingEnd = noop
+  } = options
+
   // normalized puzzle name
   const puzzleName = computed(() => normalizePuzzleName(unref(puzzle)))
-
-  // puzzle turn duration
-  const turnDuration = computed(() => {
-    const value = unref(config ?? {})?.turnDuration;
-    return isNumber(value) ? value : defaultTurnDuration;
-  });
 
   // twister instance
   const model = computed(() => createModel(puzzleName.value))
@@ -51,103 +40,106 @@ export function usePuzzle({ config, puzzle }: UsePuzzleOptions): UsePuzzleData {
   // flag to toggle scrambling logic
   const scrambling = ref(false)
 
-  // turn queue, and the turn being animated
-  const queue = ref<string[]>([])
+  const turns = ref<string[]>([])
 
-  const currentTurn = computed(() => queue.value[0] || '')
+  const turnIndex = ref(-1)
 
-  // flag to clear the queue when current turn finishes
-  const clearQueuePending = ref(false)
+  const turning = ref(false)
 
-  // turn counter and transitioned state that follows it
-  const turn = ref(0)
+  const turnTransition = useTransition(turnIndex, {
+    duration: computed(() => {
+      const n = unref(config ?? {})?.turnDuration;
+      return isNumber(n) ? n : defaultTurnDuration;
+    }),
+    onFinished() {
+      onTurnComplete(data)
 
-  const turnTransition = useTransition(turn, {
-    duration: turnDuration,
-    onFinished: () => onTurnComplete(data),
+      if (!scrambling.value) {
+        onScramblingEnd()
+      }
+    }
   })
 
-  // current turn progress from 0 to 1
-  const turnProgress = computed(() => 1 - clamp(currentTurn.value ? turn.value - turnTransition.value : 1, 0, 1))
+  // the current turn being animated
+  const currentTurn = computed(() => turning.value && turns.value[turnIndex.value] || '')
 
-  // collection of behavior data that can be safely destructured
-  const data: UsePuzzleData = {
-    clearQueuePending,
+  // current turn progress
+  const turnProgress = computed(() => turning.value ? 1 - clamp(turnIndex.value - turnTransition.value, 0, 1) : 0)
+
+  // group behavior data together so it can be safely destructured
+  const data = {
     currentTurn,
     model,
     puzzleName,
-    queue,
     scrambling,
-    turn,
+    turnIndex,
+    turning,
     turnProgress,
-    turnTransition,
+    turns,
   }
 
-  watch(() => queue.value.length, () => {
-    onCurrentTurnChange(data)
-  })
-
-  watch(scrambling, () => {
-    onScramblingChange(data)
-  })
+  watch(scrambling, () => onScramblingChanged(data))
+  watch(turns, () => onTurnsChanged(data), { deep: true })
 
   return data;
 }
 
 /**
+ * Advance to the next turn
+ */
+function advanceNextTurn(data: ReturnType<typeof usePuzzle>) {
+  const { turning, turnIndex } = data
+
+  turning.value = true
+  turnIndex.value += 1
+}
+
+/**
  * Handle change of scrambling flag
  */
-function onScramblingChange(data: UsePuzzleData) {
-  const { clearQueuePending, scrambling } = data
+function onScramblingChanged(data: ReturnType<typeof usePuzzle>) {
+  const { scrambling } = data
 
-  // clear the queue if we are no longer scrambling, otherwise
-  // set to true indicating that it will need to be cleared
-  clearQueuePending.value = !scrambling.value
-
-  // if scrambling, queue random turns to act as a loading state
   if (scrambling.value) {
-    queueRandomTurn(data)
+    generateRandomTurn(data)
   }
 }
 
 /**
- * Handle change of current turn value
+ * Handle change of turns array
  */
-function onCurrentTurnChange({ currentTurn, model, turn }: UsePuzzleData) {
-  if (currentTurn.value) {
-    console.log('turn', currentTurn.value)
-    
-    model.value.turn(currentTurn.value)
-    turn.value += 1
+function onTurnsChanged(data: ReturnType<typeof usePuzzle>) {
+  const { turning } = data
+  
+  if (!turning.value) {
+    advanceNextTurn(data)
   }
 }
 
 /**
  * Handle completion of a turn
  */
-function onTurnComplete(data: UsePuzzleData) {
-  const { clearQueuePending, currentTurn, queue, scrambling } = data
+function onTurnComplete(data: ReturnType<typeof usePuzzle>) {
+  const { currentTurn, model, scrambling, turning, turns, turnIndex } = data
 
-  // cache the turn that was currently made. this lets us generate
-  // another random turn that compliments it if still scrambling
-  const prevTurn = currentTurn.value;
-
-  // clear the queue if necessary, otherwise advance it by one
-  if (clearQueuePending.value) {
-    queue.value = queue.value.splice(0, queue.value.length)
+  if (scrambling.value) {
+    generateRandomTurn(data)
   } else {
-    queue.value.shift()
+    model.value.turn(currentTurn.value)
   }
 
-  // queue a random turn if still scrambling
-  if (queue.value.length === 0 && scrambling.value) {
-    queueRandomTurn(data, prevTurn)
+  if (turnIndex.value < turns.value.length - 1) {
+    advanceNextTurn(data)
+  } else {
+    turning.value = false
   }
 }
 
 /**
  * Queue a random turn to simulate scrambling.
  */
-function queueRandomTurn({ model, queue }: UsePuzzleData, prevTurn?: string) {
-  queue.value.splice(0, queue.value.length, model.value.generateScramble(1, prevTurn))
+function generateRandomTurn(data: ReturnType<typeof usePuzzle>) {
+  const { currentTurn, model, turns } = data
+
+  turns.value.push(model.value.generateScramble(1, currentTurn.value))
 }
