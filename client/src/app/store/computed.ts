@@ -1,7 +1,8 @@
 import { arrayToObject } from '@/app/utils'
-import { computed } from 'vue'
+import { computed, unref } from 'vue'
 import { defaultKeyboardConfig, defaultPuzzleConfig, isCube, normalizePuzzleName } from '@/app/utils'
 import { KeyboardConfig, PuzzleConfig } from '@/app/types/models'
+import { MaybeRef } from '@vueuse/core'
 import { rawKeyboardConfigs, previewKeyboardConfig, rawPuzzleConfigs, user, previewPuzzleConfig } from './state'
 
 /**
@@ -17,15 +18,15 @@ export const isGuest = computed(() => !isAuthenticated.value)
 /**
  * Keyboard config for a particular puzzle.
  */
-export const keyboardConfig = computed<(rawPuzzleName: string) => Record<string, string>>(() => {
-  return (rawPuzzleName: string) => {
+export const keyboardConfig = computed(() => {
+  return (rawPuzzleName: MaybeRef<string>) => {
     // preview keyboard config
     if (previewKeyboardConfig.value) {
       return previewKeyboardConfig.value
     }
 
     // user's keyboard config for puzzle
-    const puzzle = normalizePuzzleName(rawPuzzleName)
+    const puzzle = normalizePuzzleName(unref(rawPuzzleName))
 
     const model = keyboardConfigs.value.find(obj => obj.puzzle === puzzle)
 
@@ -54,21 +55,23 @@ export const keyboardConfig = computed<(rawPuzzleName: string) => Record<string,
  * Config for a particular puzzle.
  */
 export const puzzleConfig = computed(() => {
-  return (puzzle: string) => {
+  return (rawPuzzleName: MaybeRef<string>) => {
     // preview puzzle config
     if (previewPuzzleConfig.value) {
       return previewPuzzleConfig.value
     }
 
     // user's puzzle config for puzzle
-    const model = puzzleConfigs.value.find(obj => obj.puzzle === puzzle)
+    const puzzleName = normalizePuzzleName(unref(rawPuzzleName))
+
+    const model = puzzleConfigs.value.find(obj => obj.puzzle === puzzleName)
 
     if (model) {
       return model.config
     }
 
     // default puzzle config or puzzle
-    return defaultPuzzleConfig(puzzle)
+    return defaultPuzzleConfig(puzzleName)
   }
 })
 

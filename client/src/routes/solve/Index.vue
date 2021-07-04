@@ -1,12 +1,13 @@
 <template>
   <div class="max-w-sm mb-6 mx-auto">
+    <pre>{{ { currentTurn } }}</pre>
     <Puzzle
       :class="{
         'border-2 border-dashed border-gray-400 dark:border-gray-700': route.name === 'solve:config'
       }"
       :config="config"
       :current-turn="currentTurn"
-      :masked="masked"
+      :masked="scrambling"
       :model="model"
       :turn-progress="turnProgress" />
   </div>
@@ -19,63 +20,80 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
-import { createModel, normalizePuzzleName } from '@/app/utils'
-import { cubeConfig } from '@/components/puzzle/constants'
+/* eslint-disable */
+import { computed, defineComponent } from 'vue'
 import { keyboardConfig, puzzleConfig } from '@/app/store/computed'
 import { Puzzle } from '@/components'
+import { timeout } from '@/app/utils'
 import { useCreateSolve } from '@/app/api'
-import { usePuzzleTurning } from '@/app/behaviors'
+import { useKeybindings, usePuzzle } from '@/app/behaviors'
 import { useRoute } from 'vue-router'
 import Gameplay from '@/partials/solve/Gameplay.vue'
 
 export default defineComponent({
   setup() {
+    const { createSolve, pendingSolve } = useCreateSolve()
+
     const route = useRoute()
 
     const isIndex = computed(() => route.name === 'solve')
 
-    const puzzle = normalizePuzzleName(route.params?.puzzle as string)
+    // raw puzzle name
+    const puzzle = computed(() => route.params.puzzle as string)
 
-    const model = createModel(puzzle)
-
+    // puzzle config
     const config = computed(() => puzzleConfig.value(puzzle))
 
+    // keyboard config
     const keybindings = computed(() => keyboardConfig.value(puzzle))
-    
-    const masked = ref(false)
 
-    const {
-      createSolve,
-      pendingSolve,
-    } = useCreateSolve()
-
+    // twister controls
     const {
       currentTurn,
+      model,
+      puzzleName,
+      queue,
+      scrambling,
       turnProgress,
-    } = usePuzzleTurning(model, config, keybindings)
-    
+    } = usePuzzle({
+      config,
+      keybindings,
+      puzzle,
+    })
+
     // scramble the puzzle
     const scramble = () => {
-      masked.value = true
+      if (scrambling.value) {
+        return
+      }
 
-      createSolve({ puzzle }).then(() => {
-        model.apply(pendingSolve.value.state as any) // @todo
-      }).finally(() => {
-        masked.value = false
+      scrambling.value = true
+
+      Promise.all([
+        createSolve({ puzzle: puzzleName.value }),
+        timeout(2000),
+      ]).then(() => {
+        model.value.apply(pendingSolve.value.state)
+
+        scrambling.value = false
       })
     }
 
+    useKeybindings(keybindings, keybinding => {
+      if (!scrambling.value) {
+        queue.value.push(keybinding.turn)
+      }
+    })
+
     return {
       config,
-      cubeConfig,
       currentTurn,
       isIndex,
-      masked,
       model,
-      puzzle,
+      queue,
       route,
       scramble,
+      scrambling,
       turnProgress,
     }
   },

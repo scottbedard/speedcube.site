@@ -1,5 +1,5 @@
 import { clamp } from 'lodash-es'
-import { computed, ref, unref, watch } from 'vue'
+import { computed, Ref, ref, unref, watch } from 'vue'
 import { Cube } from '@bedard/twister'
 import { Keybinding } from '@/app/types/puzzle'
 import { MaybeRef, useTransition } from '@vueuse/core'
@@ -7,14 +7,22 @@ import { useKeybindings } from './use-keybindings'
 
 const defaultTurnDuration = 150
 
+type PuzzleTurningParams = {
+  config: MaybeRef<Record<string, unknown> | null>
+  keybindings: MaybeRef<Record<string, string>>
+  model: Cube
+  scrambling: Ref<boolean>
+}
+
 /**
  * Turning logic for puzzle component
  */
-export function usePuzzleTurning(
-  model: Cube,
-  config: MaybeRef<Record<string, unknown> | null>,
-  keybindings: MaybeRef<Record<string, string> | null>
-) {
+export function usePuzzleTurning({ 
+  config, 
+  keybindings,
+  model,
+  scrambling,
+}: PuzzleTurningParams) {
   const queue = ref<Keybinding[]>([])
 
   const turnIndex = ref(0)
@@ -45,17 +53,11 @@ export function usePuzzleTurning(
    * Listen for turn events and execute turn
    */
   useKeybindings(keybindings, keybinding => {
-    let valid = true
-
     try {
       model.parse(keybinding.turn)
-    } catch {
-      valid = false
-    }
 
-    if (valid) {
       queue.value.push(keybinding)
-    }
+    } catch {}
   })
 
   /**
@@ -64,6 +66,17 @@ export function usePuzzleTurning(
   watch(currentKeybinding, () => {
     if (currentTurn.value) {
       turnIndex.value++
+    }
+  })
+
+  /**
+   * Execute random turns while scrambling
+   */
+  watch(scrambling, () => {
+    if (scrambling.value) {
+      console.log('scrambling')
+    } else {
+      console.log('done scrambling')
     }
   })
 

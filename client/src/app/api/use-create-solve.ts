@@ -1,6 +1,5 @@
 import { CreateSolvePayload, CreateSolveResponse } from '@/app/types/api'
 import { ref } from 'vue'
-import { timeout } from '@/app/utils'
 import axios from 'axios'
 
 /**
@@ -11,12 +10,9 @@ export function useCreateSolve() {
 
   const loading = ref(false)
   
-  const pendingSolve = ref<{
-    solveId: number,
-    state: Record<string, unknown>,
-  }>({
+  const pendingSolve = ref({
     solveId: 0,
-    state: {},
+    state: {} as Record<string, unknown>,
   })
 
   /**
@@ -27,23 +23,19 @@ export function useCreateSolve() {
     failed.value = false
 
     return new Promise<void>((resolve, reject) => {
-      let solveId = 0
-      let state: Record<string, unknown> = {}
-
-      const xhr = axios.post<CreateSolveResponse>('/api/solves', payload)
+      axios.post<CreateSolveResponse>('/api/solves', payload)
         .then(response => {
           // success
           pendingSolve.value.solveId = response.data.solveId
           pendingSolve.value.state = response.data.state
+
+          resolve()
         }, () => {
           // failed
           failed.value = true
-        })
 
-      Promise.all([xhr, timeout(3000)])
-        .then(() => resolve())
-        .catch(() => reject())
-        .finally(() => {
+          reject()
+        }).finally(() => {
           // complete
           loading.value = false
         })

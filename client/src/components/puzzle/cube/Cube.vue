@@ -136,7 +136,7 @@ export default defineComponent({
     ))
 
     const turningStickers = computed(() => {
-      const stickers = attempt(() => props.model.getStickersForTurn(props.currentTurn))
+      const stickers = attempt(() => props.model.stickers(props.currentTurn))
       return !isError(stickers) ? stickers : []
     })
 

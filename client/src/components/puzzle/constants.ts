@@ -2,6 +2,11 @@ import { colors } from '@/app/utils'
 import { CubeConfig, CubeName } from '@/app/types/puzzle'
 
 /**
+ * Default turn duration.
+ */
+ export const defaultTurnDuration = 100;
+
+/**
  * Default cube configuration.
  */
 export const cubeConfig: CubeConfig = {
@@ -19,7 +24,7 @@ export const cubeConfig: CubeConfig = {
   stickerElevation: 0.2,
   stickerRadius: 0.2,
   stickerSpacing: 0.2,
-  turnDuration: 65,
+  turnDuration: defaultTurnDuration,
 }
 
 /**
