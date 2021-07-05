@@ -19,6 +19,7 @@ export default defineComponent({
 
       if (timeRemaining.value <= 0) {
         emit('complete')
+        pause()
       }
     })
 

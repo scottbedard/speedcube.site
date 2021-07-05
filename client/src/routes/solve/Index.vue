@@ -6,7 +6,7 @@
       }"
       :config="config"
       :current-turn="currentTurn"
-      :masked="masked"
+      :masked="status === 'scrambling'"
       :model="model"
       :turn-progress="turnProgress" />
   </div>
@@ -15,7 +15,9 @@
     v-if="isIndex"
     :puzzle="puzzle"
     :scrambling="scrambling"
+    :status="status"
     @scramble="scramble"
+    @start="start"
     @turn="turn" />
 
   <RouterView v-else />
@@ -32,6 +34,8 @@ import { usePuzzle } from '@/app/behaviors'
 import { useRoute } from 'vue-router'
 import Gameplay from '@/partials/solve/Gameplay.vue'
 
+export type Status = 'idle' | 'scrambling' | 'inspecting' | 'solving'
+
 export default defineComponent({
   setup() {
     const { createSolve, pendingSolve } = useCreateSolve()
@@ -46,7 +50,8 @@ export default defineComponent({
     // puzzle config
     const config = computed(() => puzzleConfig.value(puzzle))
 
-    const masked = ref(false)
+    // solve status
+    const status = ref<Status>('idle')
 
     // twister controls
     const {
@@ -65,14 +70,14 @@ export default defineComponent({
 
     // unmask the puzzle when scrambling ends
     function onScramblingEnd() {
-      masked.value = false
+      status.value = 'inspecting'
     }
 
     // scramble the puzzle
     function scramble() {
       if (!scrambling.value) {
-        masked.value = true
         scrambling.value = true
+        status.value = 'scrambling'
 
         Promise.all([
           createSolve({ puzzle: puzzleName.value }),
@@ -85,6 +90,10 @@ export default defineComponent({
       }
     }
 
+    function start() {
+      console.log('start')
+    }
+
     // turn
     function turn(turn: string) {
       turns.value.push(turn)
@@ -94,12 +103,13 @@ export default defineComponent({
       config,
       currentTurn,
       isIndex,
-      masked,
       model,
       puzzle,
       route,
       scramble,
       scrambling,
+      start,
+      status,
       turn,
       turnIndex,
       turnProgress,
