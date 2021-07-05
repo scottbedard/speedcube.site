@@ -9,13 +9,14 @@
       :masked="masked"
       :model="model"
       :turn-progress="turnProgress" />
-
-    <pre class="text-sm">{{ { currentTurn, scrambling, turnIndex, turnProgress } }}</pre>
   </div>
 
   <Gameplay
     v-if="isIndex"
-    @scramble="scramble" />
+    :puzzle="puzzle"
+    :scrambling="scrambling"
+    @scramble="scramble"
+    @turn="turn" />
 
   <RouterView v-else />
 </template>
@@ -23,11 +24,11 @@
 <script lang="ts">
 /* eslint-disable */
 import { computed, defineComponent, ref } from 'vue'
-import { keyboardConfig, puzzleConfig } from '@/app/store/computed'
 import { Puzzle } from '@/components'
+import { puzzleConfig } from '@/app/store/computed'
 import { timeout } from '@/app/utils'
 import { useCreateSolve } from '@/app/api'
-import { useKeybindings, usePuzzle } from '@/app/behaviors'
+import { usePuzzle } from '@/app/behaviors'
 import { useRoute } from 'vue-router'
 import Gameplay from '@/partials/solve/Gameplay.vue'
 
@@ -47,9 +48,6 @@ export default defineComponent({
 
     const masked = ref(false)
 
-    // keyboard config
-    const keybindings = computed(() => keyboardConfig.value(puzzle))
-
     // twister controls
     const {
       currentTurn,
@@ -61,7 +59,6 @@ export default defineComponent({
       turns,
     } = usePuzzle({
       config,
-      keybindings,
       onScramblingEnd,
       puzzle,
     })
@@ -88,11 +85,10 @@ export default defineComponent({
       }
     }
 
-    useKeybindings(keybindings, keybinding => {
-      if (!scrambling.value) {
-        turns.value.push(keybinding.turn)
-      }
-    })
+    // turn
+    function turn(turn: string) {
+      turns.value.push(turn)
+    }
 
     return {
       config,
@@ -100,9 +96,11 @@ export default defineComponent({
       isIndex,
       masked,
       model,
+      puzzle,
       route,
       scramble,
       scrambling,
+      turn,
       turnIndex,
       turnProgress,
       turns,

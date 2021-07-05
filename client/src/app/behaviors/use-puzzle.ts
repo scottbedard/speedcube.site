@@ -1,22 +1,11 @@
-import { 
-  computed,
-  ComputedRef,
-  ref,
-  Ref,
-  unref,
-  watch,
-} from 'vue'
-
 import { clamp, isNumber, noop } from 'lodash-es'
+import { computed, ref, unref, watch } from 'vue'
 import { createModel, normalizePuzzleName } from '@/app/utils'
-import { Cube } from '@bedard/twister'
 import { defaultTurnDuration } from '@/components/puzzle/constants'
 import { MaybeRef, useTransition } from '@vueuse/core'
-import { PuzzleName } from '@/app/types/puzzle'
 
 export type UsePuzzleOptions = {
   config?: MaybeRef<Record<string, unknown>>,
-  keybindings?: MaybeRef<Record<string, string>>,
   onScramblingEnd?: () => void,
   puzzle: MaybeRef<string>,
 }
@@ -79,6 +68,7 @@ export function usePuzzle(options: UsePuzzleOptions) {
   }
 
   watch(scrambling, () => onScramblingChanged(data))
+
   watch(turns, () => onTurnsChanged(data), { deep: true })
 
   return data;

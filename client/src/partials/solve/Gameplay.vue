@@ -38,16 +38,26 @@
 
 <script lang="ts">
 import { Button, IconText } from '@/components'
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
+import { keyboardConfig } from '@/app/store/computed'
+import { useKeybindings } from '@/app/behaviors'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
   setup(props, { emit }) {
     const route = useRoute()
 
+    const keybindings = computed(() => keyboardConfig.value(props.puzzle))
+
     const scramble = () => {
       emit('scramble')
     }
+
+    useKeybindings(keybindings, keybinding => {
+      if (!props.scrambling) {
+        emit('turn', keybinding.turn)
+      }
+    })
 
     return {
       route,
@@ -60,6 +70,17 @@ export default defineComponent({
   },
   emits: [
     'scramble',
+    'turn',
   ],
+  props: {
+    puzzle: {
+      required: true,
+      type: String,
+    },
+    scrambling: {
+      required: true,
+      type: Boolean,
+    },
+  },
 })
 </script>
