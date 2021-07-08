@@ -6,7 +6,7 @@
       v-for="(alert, index) in alerts"
       class="flex items-center p-4 rounded-lg shadow-xl"
       :class="{
-        'bg-gray-50 dark:bg-gray-800': true
+        'bg-gray-50 dark:bg-gray-700': true
       }"
       :key="index">
       <Icon

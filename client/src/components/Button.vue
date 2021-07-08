@@ -6,7 +6,7 @@
         'pointer-events-none': disabled,
         'bg-green-500 text-gray-50 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-500 dark:hover:text-white': primary,
         'bg-red-500 text-gray-50 hover:bg-red-600': !primary && danger,
-        'bg-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600': !primary && !danger,
+        'bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600': !primary && !danger,
       }
     ]"
     :disabled="disabled"
