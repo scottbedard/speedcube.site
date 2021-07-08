@@ -2,6 +2,11 @@ import { CreateSolvePayload, CreateSolveResponse } from '@/app/types/api'
 import { ref } from 'vue'
 import axios from 'axios'
 
+type PendingSolve = {
+  solveId: number,
+  state: Record<string, unknown>,
+}
+
 /**
  * Create solve
  */
@@ -9,11 +14,6 @@ export function useCreateSolve() {
   const failed = ref(false)
 
   const loading = ref(false)
-  
-  const pendingSolve = ref({
-    solveId: 0,
-    state: {} as Record<string, unknown>,
-  })
 
   /**
    * Create a solve model
@@ -22,14 +22,11 @@ export function useCreateSolve() {
     loading.value = true
     failed.value = false
 
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<PendingSolve>((resolve, reject) => {
       axios.post<CreateSolveResponse>('/api/solves', payload)
         .then(response => {
           // success
-          pendingSolve.value.solveId = response.data.solveId
-          pendingSolve.value.state = response.data.state
-
-          resolve()
+          resolve(response.data)
         }, () => {
           // failed
           failed.value = true
@@ -46,6 +43,5 @@ export function useCreateSolve() {
     createSolve,
     failed,
     loading,
-    pendingSolve,
   }
 }

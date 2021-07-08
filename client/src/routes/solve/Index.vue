@@ -6,13 +6,15 @@
       }"
       :config="config"
       :current-turn="currentTurn"
+      :masked="status === 'scrambling'"
       :model="model"
       :turn-progress="turnProgress" />
   </div>
 
   <Gameplay
     v-if="index"
-    :puzzle="puzzle" />
+    :status="status"
+    @scramble="scramble" />
 
   <RouterView v-else />
 </template>
@@ -41,6 +43,8 @@ export default defineComponent({
     const {
       currentTurn,
       model,
+      scramble,
+      status,
       turnProgress,
     } = useSolving({
       config,
@@ -53,8 +57,9 @@ export default defineComponent({
       currentTurn,
       index,
       model,
-      puzzle,
       route,
+      scramble,
+      status,
       turnProgress,
     }
   },

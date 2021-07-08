@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="mb-12 text-center">
-      <Button primary>
+    <div class="mb-6 text-center">
+      <Button primary @click="scramble">
         Scramble
       </Button>
     </div>
@@ -38,15 +38,19 @@
 
 <script lang="ts">
 import { Button, IconText } from '@/components'
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
+import { SolvingStatus } from '@/app/behaviors/use-solving'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
-  setup() {
+  setup(props, { emit }) {
     const route = useRoute()
+
+    const scramble = () => emit('scramble')
 
     return {
       route,
+      scramble,
     }
   },
   components: {
@@ -54,10 +58,13 @@ export default defineComponent({
     IconText,
   },
   emits: [
-    // ...
+    'scramble',
   ],
   props: {
-    // ...
+    status: {
+      required: true,
+      type: String as PropType<SolvingStatus>,
+    },
   },
 })
 </script>

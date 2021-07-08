@@ -1,4 +1,5 @@
-import { Ref } from 'vue'
+import { ref, Ref } from 'vue'
+import { timeout } from '@/app/utils'
 import { useCreateSolve } from '@/app/api'
 import { usePuzzle } from './use-puzzle'
 
@@ -40,26 +41,55 @@ export function useSolving({
   puzzle,
 }: UseSolvingOptions) {
   // utils to create a solve model
-  const { createSolve, pendingSolve } = useCreateSolve()
+  const { createSolve } = useCreateSolve()
+
+  // gameplay status
+  const status = ref<SolvingStatus>('idle')
 
   // twister controls
   const {
     currentTurn,
     model,
+    puzzleName,
+    scrambling,
     turnProgress,
-  } = usePuzzle({ config, puzzle })
+  } = usePuzzle({
+    config,
+    puzzle,
+    onScramblingEnd: () => {
+      status.value = 'inspection'
+    },
+  })
 
   /**
    * Start the solve process
    */
-  const start = () => {
-    console.log('start')
+  const scramble = () => {
+    // do nothing if we're not ready to begin a solve
+    if (status.value !== 'idle' && status.value !== 'complete') {
+      return
+    }
+
+    // begin scrambling and create our solve model
+    scrambling.value = true
+    status.value = 'scrambling'
+
+    Promise.all([
+      createSolve({ puzzle: puzzleName.value }),
+      timeout(2000),
+    ]).then(([pendingSolve]) => {
+      // stop scrambling and apply scrambled state
+      scrambling.value = false
+      model.value.apply(pendingSolve.state)
+    })
   }
 
   return {
     currentTurn,
     model,
-    start,
+    scramble,
+    scrambling,
+    status,
     turnProgress,
   }
 }

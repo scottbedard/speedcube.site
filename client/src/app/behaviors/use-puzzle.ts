@@ -24,7 +24,7 @@ export function usePuzzle(options: UsePuzzleOptions) {
   const puzzleName = computed(() => normalizePuzzleName(unref(puzzle)))
 
   // twister instance
-  const model = computed(() => createModel(puzzleName.value))
+  const model = ref(createModel(puzzleName.value))
 
   // flag to toggle scrambling logic
   const scrambling = ref(false)
