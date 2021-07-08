@@ -1,21 +1,12 @@
 <template>
   <div>
     <div class="mb-12 text-center">
-      <Button
-        v-if="status === 'idle'"
-        primary
-        @click="scramble">
+      <Button primary>
         Scramble
       </Button>
-      
-      <div v-if="status === 'inspecting'">
-        inspecting...
-      </div>
     </div>
   
-    <div
-      v-if="status === 'idle'"
-      class="gap-x-12 gap-y-2 flex flex-wrap justify-center">
+    <div class="gap-x-12 gap-y-2 flex flex-wrap justify-center">
       <RouterLink
         class="flex items-center"
         :to="{
@@ -47,44 +38,16 @@
 
 <script lang="ts">
 import { Button, Countdown, IconText } from '@/components'
-import { computed, defineComponent, PropType, watch } from 'vue'
-import { keyboardConfig } from '@/app/store/computed'
+import { defineComponent, PropType } from 'vue'
 import { Status } from '@/routes/solve/Index.vue'
-import { useCountdown, useKeybindings } from '@/app/behaviors'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
-  setup(props, { emit }) {
+  setup() {
     const route = useRoute()
-
-    const keybindings = computed(() => keyboardConfig.value(props.puzzle))
-
-    const {
-      reset: resetInspection,
-      resume: startInspection,
-      timeRemaining: inspectionTimeRemaining,
-    } = useCountdown(15000, () => {
-      console.log('inspection done!')
-    })
-
-    const scramble = () => {
-      emit('scramble')
-    }
-
-    const start = () => {
-      emit('start')
-    }
-
-    useKeybindings(keybindings, keybinding => {
-      if (!props.scrambling) {
-        emit('turn', keybinding.turn)
-      }
-    })
 
     return {
       route,
-      scramble,
-      start,
     }
   },
   components: {

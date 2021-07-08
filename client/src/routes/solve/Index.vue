@@ -27,10 +27,10 @@
 /* eslint-disable */
 import { computed, defineComponent, ref } from 'vue'
 import { Puzzle } from '@/components'
-import { puzzleConfig } from '@/app/store/computed'
+import { keyboardConfig, puzzleConfig } from '@/app/store/computed'
 import { timeout } from '@/app/utils'
 import { useCreateSolve } from '@/app/api'
-import { usePuzzle } from '@/app/behaviors'
+import { usePuzzle, useSolving } from '@/app/behaviors'
 import { useRoute } from 'vue-router'
 import Gameplay from '@/partials/solve/Gameplay.vue'
 
@@ -38,29 +38,43 @@ export type Status = 'idle' | 'scrambling' | 'inspecting' | 'solving'
 
 export default defineComponent({
   setup() {
-    const { createSolve, pendingSolve } = useCreateSolve()
-
+    // route info, only permit gameplay on index
     const route = useRoute()
-
     const isIndex = computed(() => route.name === 'solve')
 
-    // raw puzzle name
+    // puzzle and keybinding configs
     const puzzle = computed(() => route.params.puzzle as string)
-
-    // puzzle config
     const config = computed(() => puzzleConfig.value(puzzle))
+    const keybindings = computed(() => keyboardConfig.value(puzzle))
+
+    // solving behavior
+    const {
+      currentTurn,
+      model,
+      turnProgress,
+    } = useSolving({
+      config,
+      keybindings,
+      puzzle,
+    })
+
+    //
+    // EVERYTHING BELOW THIS LINE IS OBSOLETE AND IS BEING
+    // ABSTRACTED TO SOLVING BEHAVIOR.
+    //
+    const { createSolve, pendingSolve } = useCreateSolve()
 
     // solve status
     const status = ref<Status>('idle')
 
     // twister controls
     const {
-      currentTurn,
-      model,
+      // currentTurn,
+      // model,
       puzzleName,
       scrambling,
       turnIndex,
-      turnProgress,
+      // turnProgress,
       turns,
     } = usePuzzle({
       config,
