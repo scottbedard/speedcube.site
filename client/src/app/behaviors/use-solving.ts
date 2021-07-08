@@ -64,21 +64,23 @@ export function useSolving({
   /**
    * Start the solve process
    */
-  const scramble = () => {
+  const scramble = async () => {
     // do nothing if we're not ready to begin a solve
     if (status.value !== 'idle' && status.value !== 'complete') {
       return
     }
 
-    // begin scrambling and create our solve model
-    scrambling.value = true
+    // begin the scrambling process, and start the animated loading state
+    // status controls gameplay logic, scrambling controls the animation
     status.value = 'scrambling'
+    scrambling.value = true
 
-    slow(createSolve({ puzzle: puzzleName.value }), 3000).then(pendingSolve => {
-      // stop scrambling and apply scrambled state
-      scrambling.value = false
-      model.value.apply(pendingSolve.state)
-    })
+    // create solve model
+    const solve = await slow(createSolve({ puzzle: puzzleName.value }), 3000)
+    
+    // stop the animation and apply scrambled state
+    scrambling.value = false
+    model.value.apply(solve.state)
   }
 
   return {
