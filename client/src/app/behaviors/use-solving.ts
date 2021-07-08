@@ -1,5 +1,5 @@
 import { ref, Ref } from 'vue'
-import { timeout } from '@/app/utils'
+import { slow } from '@/app/utils'
 import { useCreateSolve } from '@/app/api'
 import { usePuzzle } from './use-puzzle'
 
@@ -74,10 +74,7 @@ export function useSolving({
     scrambling.value = true
     status.value = 'scrambling'
 
-    Promise.all([
-      createSolve({ puzzle: puzzleName.value }),
-      timeout(2000),
-    ]).then(([pendingSolve]) => {
+    slow(createSolve({ puzzle: puzzleName.value }), 3000).then(pendingSolve => {
       // stop scrambling and apply scrambled state
       scrambling.value = false
       model.value.apply(pendingSolve.state)
