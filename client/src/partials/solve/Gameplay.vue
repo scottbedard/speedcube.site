@@ -7,12 +7,10 @@
         @click="scramble">
         Scramble
       </Button>
-
-      <Countdown
-        v-if="status === 'inspecting'"
-        class="text-4xl"
-        :duration="15000"
-        @complete="start" />
+      
+      <div v-if="status === 'inspecting'">
+        inspecting...
+      </div>
     </div>
   
     <div
@@ -49,10 +47,10 @@
 
 <script lang="ts">
 import { Button, Countdown, IconText } from '@/components'
-import { computed, defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType, watch } from 'vue'
 import { keyboardConfig } from '@/app/store/computed'
 import { Status } from '@/routes/solve/Index.vue'
-import { useKeybindings } from '@/app/behaviors'
+import { useCountdown, useKeybindings } from '@/app/behaviors'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
@@ -60,6 +58,14 @@ export default defineComponent({
     const route = useRoute()
 
     const keybindings = computed(() => keyboardConfig.value(props.puzzle))
+
+    const {
+      reset: resetInspection,
+      resume: startInspection,
+      timeRemaining: inspectionTimeRemaining,
+    } = useCountdown(15000, () => {
+      console.log('inspection done!')
+    })
 
     const scramble = () => {
       emit('scramble')
