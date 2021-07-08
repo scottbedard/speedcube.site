@@ -37,9 +37,8 @@
 </template>
 
 <script lang="ts">
-import { Button, Countdown, IconText } from '@/components'
-import { defineComponent, PropType } from 'vue'
-import { Status } from '@/routes/solve/Index.vue'
+import { Button, IconText } from '@/components'
+import { defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
@@ -52,27 +51,13 @@ export default defineComponent({
   },
   components: {
     Button,
-    Countdown,
     IconText,
   },
   emits: [
-    'scramble',
-    'start',
-    'turn',
+    // ...
   ],
   props: {
-    puzzle: {
-      required: true,
-      type: String,
-    },
-    scrambling: {
-      required: true,
-      type: Boolean,
-    },
-    status: {
-      required: true,
-      type: String as PropType<Status>
-    },
+    // ...
   },
 })
 </script>
