@@ -134,4 +134,50 @@ class SolvesTest extends TestCase
 
         $this->assertEquals('complete', $solve->status);
     }
+
+    public function test_abort_solve_as_guest()
+    {
+        $solve = Solve::factory()->create([
+            'puzzle' => '3x3',
+            'scramble' => 'R-',
+        ]);
+
+        $request = $this
+            ->json('POST', '/api/solves/abort', [
+                'solution' => '1000#START 2000:F 3000#ABORT',
+                'solveId' => $solve->id,
+            ]);
+
+        $request->assertStatus(200);
+
+        $data = $request->json();
+        
+        $solve->refresh();
+
+        $this->assertEquals('dnf', $solve->status);
+    }
+
+    public function test_abort_solve_as_user()
+    {
+        $user = User::factory()->create();
+
+        $solve = Solve::factory()->create([
+            'user_id' => $user->id,
+            'puzzle' => '3x3',
+            'scramble' => 'R-',
+        ]);
+
+        $request = $this
+            ->actingAs($user)
+            ->json('POST', '/api/solves/abort', [
+                'solution' => '1000#START 2000:F 3000#ABORT',
+                'solveId' => $solve->id,
+            ]);
+
+        $data = $request->json();
+
+        $solve->refresh();
+
+        $this->assertEquals('dnf', $solve->status);
+    }
 }

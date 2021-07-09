@@ -11,6 +11,27 @@ use Illuminate\Support\Facades\Auth;
 class SolvesController extends Controller
 {
     /**
+     * Abort a solve.
+     */
+    public function abort(Request $request)
+    {
+        $userId = Auth::id();
+
+        $solve = Solve::pending()
+            ->where('user_id', $userId)
+            ->findOrFail($request->solve_id);
+
+        $solve->solution = $request->solution;
+        $solve->status = 'dnf';
+
+        $solve->save();
+
+        return [
+            'solve' => $solve,
+        ];
+    }
+
+    /**
      * Complete a solve.
      */
     public function complete(Request $request)
