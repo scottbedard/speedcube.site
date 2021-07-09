@@ -1,23 +1,24 @@
 <template>
   <div
-    v-text="displayTime"
+    v-text="stopwatch"
     class="font-mono text-4xl" />
 </template>
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
+import { formatTime } from '@/app/utils'
 
 export default defineComponent({
   setup(props) {
-    const displayTime = computed(() => Math.ceil(props.inspectionTime / 1000))
+    const stopwatch = computed(() => formatTime(props.solveTime))
 
     return {
-      displayTime,
+      stopwatch,
     }
   },
-  name: 'GameplayInspection',
+  name: 'GameplaySolving',
   props: {
-    inspectionTime: {
+    solveTime: {
       required: true,
       type: Number,
     },

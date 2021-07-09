@@ -20,7 +20,11 @@
 
     <GameplayInspection
       v-else-if="status === 'inspection'"
-      :inspection-countdown="inspectionCountdown" />
+      :inspection-time="inspectionTime" />
+
+    <GameplaySolving
+      v-else-if="status === 'solving'"
+      :solve-time="solveTime" />
   </div>
 
   <RouterView v-else />
@@ -34,6 +38,7 @@ import { useRoute } from 'vue-router'
 import { useSolving } from '@/app/behaviors'
 import GameplayIdle from '@/partials/solve/GameplayIdle.vue'
 import GameplayInspection from '@/partials/solve/GameplayInspection.vue'
+import GameplaySolving from '@/partials/solve/GameplaySolving.vue'
 
 export default defineComponent({
   setup() {
@@ -49,9 +54,10 @@ export default defineComponent({
     // solving behavior
     const {
       currentTurn,
-      inspectionCountdown,
+      inspectionTime,
       model,
       scramble,
+      solveTime,
       status,
       turnProgress,
     } = useSolving({
@@ -64,10 +70,11 @@ export default defineComponent({
       config,
       currentTurn,
       index,
-      inspectionCountdown,
+      inspectionTime,
       model,
       route,
       scramble,
+      solveTime,
       status,
       turnProgress,
     }
@@ -75,6 +82,7 @@ export default defineComponent({
   components: {
     GameplayIdle,
     GameplayInspection,
+    GameplaySolving,
     Puzzle,
   },
   name: 'SolveIndex'
