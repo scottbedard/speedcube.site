@@ -180,4 +180,24 @@ class SolvesTest extends TestCase
 
         $this->assertEquals('dnf', $solve->status);
     }
+
+    public function test_cannot_abort_a_completed_solve()
+    {
+        $user = User::factory()->create();
+
+        $solve = Solve::factory()->complete()->create([
+            'user_id' => $user->id,
+        ]);
+        
+        $request = $this
+            ->actingAs($user)
+            ->json('POST', '/api/solves/abort', [
+                'solution' => '1000#START 2000:F 3000#ABORT',
+                'solveId' => $solve->id,
+            ]);
+
+        $solve->refresh();
+        
+        $this->assertEquals('complete', $solve->status);
+    }
 }
