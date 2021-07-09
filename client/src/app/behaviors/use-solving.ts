@@ -60,6 +60,8 @@ export function useSolving({
     onScramblingEnd: () => {
       // begin inspection when scrambling animation ends
       status.value = 'inspection'
+
+      resetInspection()
       beginInspection()
     },
   })
