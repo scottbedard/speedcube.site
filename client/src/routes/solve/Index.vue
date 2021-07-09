@@ -11,22 +11,29 @@
       :turn-progress="turnProgress" />
   </div>
 
-  <Gameplay
+  <div
     v-if="index"
-    :status="status"
-    @scramble="scramble" />
+    class="flex justify-center">
+    <GameplayIdle
+      v-if="status === 'idle'"
+      @scramble="scramble" />
+
+    <GameplayInspection
+      v-else-if="status === 'inspection'"
+      :inspection-countdown="inspectionCountdown" />
+  </div>
 
   <RouterView v-else />
 </template>
 
 <script lang="ts">
-/* eslint-disable */
 import { computed, defineComponent } from 'vue'
 import { keyboardConfig, puzzleConfig } from '@/app/store/computed'
 import { Puzzle } from '@/components'
 import { useRoute } from 'vue-router'
 import { useSolving } from '@/app/behaviors'
-import Gameplay from '@/partials/solve/Gameplay.vue'
+import GameplayIdle from '@/partials/solve/GameplayIdle.vue'
+import GameplayInspection from '@/partials/solve/GameplayInspection.vue'
 
 export default defineComponent({
   setup() {
@@ -42,6 +49,7 @@ export default defineComponent({
     // solving behavior
     const {
       currentTurn,
+      inspectionCountdown,
       model,
       scramble,
       status,
@@ -56,6 +64,7 @@ export default defineComponent({
       config,
       currentTurn,
       index,
+      inspectionCountdown,
       model,
       route,
       scramble,
@@ -64,7 +73,8 @@ export default defineComponent({
     }
   },
   components: {
-    Gameplay,
+    GameplayIdle,
+    GameplayInspection,
     Puzzle,
   },
   name: 'SolveIndex'

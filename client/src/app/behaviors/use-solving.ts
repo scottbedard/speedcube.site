@@ -1,5 +1,6 @@
 import { ref, Ref } from 'vue'
 import { slow } from '@/app/utils'
+import { useCountdown } from '@/app/behaviors'
 import { useCreateSolve } from '@/app/api'
 import { usePuzzle } from './use-puzzle'
 
@@ -57,8 +58,19 @@ export function useSolving({
     config,
     puzzle,
     onScramblingEnd: () => {
+      // begin inspection when scrambling animation ends
       status.value = 'inspection'
+      beginInspection()
     },
+  })
+
+  // inspection countdown
+  const {
+    reset: resetInspection,
+    resume: beginInspection,
+    timeRemaining: inspectionCountdown,
+  } = useCountdown(15000, () => {
+    console.log('inspection done')
   })
 
   /**
@@ -85,6 +97,7 @@ export function useSolving({
 
   return {
     currentTurn,
+    inspectionCountdown,
     model,
     scramble,
     scrambling,

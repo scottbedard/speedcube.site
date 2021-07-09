@@ -38,8 +38,7 @@
 
 <script lang="ts">
 import { Button, IconText } from '@/components'
-import { defineComponent, PropType } from 'vue'
-import { SolvingStatus } from '@/app/behaviors/use-solving'
+import { defineComponent } from 'vue'
 import { useRoute } from 'vue-router'
 
 export default defineComponent({
@@ -60,11 +59,5 @@ export default defineComponent({
   emits: [
     'scramble',
   ],
-  props: {
-    status: {
-      required: true,
-      type: String as PropType<SolvingStatus>,
-    },
-  },
 })
 </script>
