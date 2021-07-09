@@ -56,10 +56,6 @@ const examples: Example[] = [
     header: '<ColorPicker>',
   },
   {
-    component: defineAsyncComponent(() => import('@/partials/components/UseCountdownExample.vue')),
-    header: 'useCountdown',
-  },
-  {
     component: defineAsyncComponent(() => import('@/partials/components/IconExample.vue')),
     header: '<Icon>',
   },
@@ -82,6 +78,14 @@ const examples: Example[] = [
   {
     component: defineAsyncComponent(() => import('@/partials/components/SpinnerExample.vue')),
     header: '<Spinner>',
+  },
+  {
+    component: defineAsyncComponent(() => import('@/partials/components/UseCountdownExample.vue')),
+    header: 'useCountdown',
+  },
+  {
+    component: defineAsyncComponent(() => import('@/partials/components/UseTimerExample.vue')),
+    header: 'useTimer',
   },
 ]
 

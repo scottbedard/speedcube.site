@@ -15,41 +15,35 @@
     </div>
 
     <div>
-      Time remaining: <span class="font-mono">{{ timeRemaining }}</span>
+      Time: <span class="font-mono">{{ time }}</span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { alert } from '@/app/alerts'
 import { Button } from '@/components'
 import { defineComponent } from 'vue'
-import { useCountdown } from '@/app/behaviors'
+import { useTimer } from '@/app/behaviors'
 
 export default defineComponent({
   setup() {
-    const { 
+    const {
       pause,
       reset,
       resume,
-      timeRemaining,
-    } = useCountdown(15000, () => {
-      alert({
-        text: 'Countdown finished',
-        type: 'success',
-      });
-    })
+      time,
+    } = useTimer()
 
     return {
       pause,
       reset,
       resume,
-      timeRemaining,
+      time,
     }
   },
   components: {
     Button,
   },
-  name: 'UseCountdownExample',
+  name: 'UseTimerExample',
 })
 </script>
