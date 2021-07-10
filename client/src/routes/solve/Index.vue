@@ -9,6 +9,8 @@
       :masked="scrambling"
       :model="model"
       :turn-progress="turnProgress" />
+
+    <pre>{{ solution.toString() }}</pre>
   </div>
 
   <div
@@ -63,6 +65,7 @@ export default defineComponent({
       scramble,
       scrambling,
       solveTime,
+      solution,
       status,
       turnProgress,
     } = useSolving({
@@ -79,6 +82,7 @@ export default defineComponent({
       inspectionTime,
       model,
       route,
+      solution,
       scramble,
       scrambling,
       solveTime,

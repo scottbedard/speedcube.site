@@ -114,6 +114,14 @@ export function useSolving({
     if (status.value !== 'scrambling') {
       turns.value.push(binding.turn)
     }
+
+    if (status.value === 'inspection') {
+      solution.value.addTurn(binding.turn, inspectionTime.value);
+    }
+
+    if (status.value === 'solving') {
+      solution.value.addTurn(binding.turn, solveTime.value);
+    }
   })
 
   /**
@@ -190,6 +198,7 @@ export function useSolving({
     model,
     scramble,
     scrambling,
+    solution,
     solveTime,
     status,
     turnProgress,
