@@ -19,6 +19,23 @@ export type AxiosValidationErrorResponse = AxiosErrorResponse<{
 }>
 
 /**
+ * Server response codes
+ */
+ export enum StatusCodes {
+  Success = 200,
+  Unauthorized = 401,
+  UnprocessableEntity = 422,
+}
+
+/**
+ * POST: /api/solves/abort
+ */
+export type AbortSolvePayload = {
+  solution: string,
+  solveId: number,
+}
+
+/**
  * POST: /api/solves
  */
 export type CreateSolvePayload = {
@@ -54,15 +71,6 @@ export type LoginResponse = {
   keyboardConfigs: RawKeyboardConfig[]
   puzzleConfigs: RawPuzzleConfig[]
   user: User
-}
-
-/**
- * Server response codes
- */
- export enum StatusCodes {
-  Success = 200,
-  Unauthorized = 401,
-  UnprocessableEntity = 422,
 }
 
 /**

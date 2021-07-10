@@ -25,6 +25,9 @@
     <GameplaySolving
       v-else-if="status === 'solving'"
       :solve-time="solveTime" />
+
+    <GameplayDnf
+      v-else-if="status === 'dnf'" />
   </div>
 
   <RouterView v-else />
@@ -36,6 +39,7 @@ import { keyboardConfig, puzzleConfig } from '@/app/store/computed'
 import { Puzzle } from '@/components'
 import { useRoute } from 'vue-router'
 import { useSolving } from '@/app/behaviors'
+import GameplayDnf from '@/partials/solve/GameplayDnf.vue'
 import GameplayIdle from '@/partials/solve/GameplayIdle.vue'
 import GameplayInspection from '@/partials/solve/GameplayInspection.vue'
 import GameplaySolving from '@/partials/solve/GameplaySolving.vue'
@@ -80,6 +84,7 @@ export default defineComponent({
     }
   },
   components: {
+    GameplayDnf,
     GameplayIdle,
     GameplayInspection,
     GameplaySolving,
