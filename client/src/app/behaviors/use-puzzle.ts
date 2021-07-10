@@ -7,6 +7,8 @@ import { MaybeRef, useTransition } from '@vueuse/core'
 export type UsePuzzleOptions = {
   config?: MaybeRef<Record<string, unknown>>,
   onScramblingEnd?: () => void,
+  onTurnEnd?: () => void,
+  onTurnStart?: () => void,
   puzzle: MaybeRef<string>,
 }
 
@@ -16,8 +18,10 @@ export type UsePuzzleOptions = {
 export function usePuzzle(options: UsePuzzleOptions) {
   const {
     config,
+    onScramblingEnd = noop,
+    onTurnEnd = noop,
+    onTurnStart = noop,
     puzzle,
-    onScramblingEnd = noop
   } = options
 
   // normalized puzzle name
@@ -41,7 +45,8 @@ export function usePuzzle(options: UsePuzzleOptions) {
       return isNumber(n) ? n : defaultTurnDuration;
     }),
     onFinished() {
-      onTurnComplete(data)
+      onTurnEnd()
+      onTurnComplete(data, onTurnStart)
 
       if (!scrambling.value) {
         onScramblingEnd()
@@ -69,7 +74,7 @@ export function usePuzzle(options: UsePuzzleOptions) {
 
   watch(scrambling, () => onScramblingChanged(data))
 
-  watch(turns, () => onTurnsChanged(data), { deep: true })
+  watch(turns, () => onTurnsChanged(data, onTurnStart), { deep: true })
 
   return data;
 }
@@ -77,11 +82,13 @@ export function usePuzzle(options: UsePuzzleOptions) {
 /**
  * Advance to the next turn
  */
-function advanceNextTurn(data: ReturnType<typeof usePuzzle>) {
+function advanceNextTurn(data: ReturnType<typeof usePuzzle>, onTurnStart: () => void) {
   const { turning, turnIndex } = data
 
   turning.value = true
   turnIndex.value += 1
+
+  onTurnStart()
 }
 
 /**
@@ -98,18 +105,18 @@ function onScramblingChanged(data: ReturnType<typeof usePuzzle>) {
 /**
  * Handle change of turns array
  */
-function onTurnsChanged(data: ReturnType<typeof usePuzzle>) {
+function onTurnsChanged(data: ReturnType<typeof usePuzzle>, onTurnStart: () => void) {
   const { turning } = data
   
   if (!turning.value) {
-    advanceNextTurn(data)
+    advanceNextTurn(data, onTurnStart)
   }
 }
 
 /**
  * Handle completion of a turn
  */
-function onTurnComplete(data: ReturnType<typeof usePuzzle>) {
+function onTurnComplete(data: ReturnType<typeof usePuzzle>, onTurnStart: () => void) {
   const { currentTurn, model, scrambling, turning, turns, turnIndex } = data
 
   if (scrambling.value) {
@@ -119,7 +126,7 @@ function onTurnComplete(data: ReturnType<typeof usePuzzle>) {
   }
 
   if (turnIndex.value < turns.value.length - 1) {
-    advanceNextTurn(data)
+    advanceNextTurn(data, onTurnStart)
   } else {
     turning.value = false
   }

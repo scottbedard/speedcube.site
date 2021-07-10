@@ -49,6 +49,12 @@ export type SolvingStatus =
 const inspectionDuration = 5000;
 
 /**
+ * Helper to test for statuses
+ */
+const isStatus = (status: SolvingStatus, arr: SolvingStatus[]) => arr.includes(status)
+
+
+/**
  * Standard puzzle solving.
  */
 export function useSolving({
@@ -81,12 +87,6 @@ export function useSolving({
     return clamp(inspectionDuration - time.value, 0, inspectionDuration)
   })
 
-  const solveInProgress = computed(() => {
-    return status.value === 'scrambling'
-      || status.value === 'inspection'
-      || status.value === 'solving'
-  })
-
   const solveTime = computed(() => time.value - startTime.value)
 
   // twister controls
@@ -108,6 +108,11 @@ export function useSolving({
         model.value.reset()
       }
     },
+    onTurnStart() {
+      if (isStatus(status.value, ['inspection', 'solving'])) {
+        solution.value.addTurn(currentTurn.value, time.value);
+      }
+    }
   })
 
   // keybinding listener
@@ -118,10 +123,6 @@ export function useSolving({
 
     if (status.value !== 'scrambling') {
       turns.value.push(binding.turn)
-    }
-
-    if (solveInProgress.value) {
-      solution.value.addTurn(binding.turn, time.value);
     }
   })
 
@@ -137,7 +138,7 @@ export function useSolving({
    */
   const abort = async () => {
     pauseTimer()
-    
+
     status.value = 'dnf'
 
     // kill outstanding scrambling animation. this must be
@@ -158,7 +159,7 @@ export function useSolving({
    */
   const scramble = async () => {
     // do nothing if a we aren't ready to start a new solve
-    if (!ready.value || solveInProgress.value) {
+    if (!ready.value || isStatus(status.value, ['scrambling', 'inspection', 'solving'])) {
       return
     }
 
@@ -208,7 +209,7 @@ export function useSolving({
    */
   useEventListener(document, 'keyup', (e) => {
     if (e.code === 'Escape') {
-      if (solveInProgress.value) {
+      if (isStatus(status.value, ['scrambling', 'inspection', 'solving'])) {
         abort()
       } else {
         model.value.reset()
