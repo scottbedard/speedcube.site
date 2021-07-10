@@ -21,7 +21,7 @@ class SolvesController extends Controller
             ->where('user_id', $userId)
             ->findOrFail($request->solve_id);
 
-        $solve->solution = $request->solution;
+        $solve->solution = $request->solution ?: '';
         $solve->status = 'dnf';
 
         $solve->save();
