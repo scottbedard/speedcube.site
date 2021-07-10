@@ -62,6 +62,7 @@ export function useSolving({
 
   // timer
   const {
+    pause: pauseTimer,
     reset: resetTimer,
     resume: resumeTimer,
     time
@@ -135,14 +136,16 @@ export function useSolving({
    * Abort a solve
    */
   const abort = async () => {
+    pauseTimer()
+    
     status.value = 'dnf'
 
     // kill outstanding scrambling animation. this must be
     // done after setting status to 'dnf', otherwise when the
     // animation completes it would advance to 'inspection'
     scrambling.value = false
-
-    resetTimer()
+    
+    solution.value.addEvent('ABORT', time.value)
 
     await abortSolve({ 
       solution: solution.value.toString(),
