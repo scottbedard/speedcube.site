@@ -2,7 +2,7 @@
 import { computed, ref, Ref } from 'vue'
 import { slow, Solution } from '@/app/utils'
 import { useAbortSolve, useCreateSolve } from '@/app/api'
-import { useCountdown, useTimer } from '@/app/behaviors'
+import { useCountdown, useKeybindings, useTimer } from '@/app/behaviors'
 import { useEventListener } from '@vueuse/core'
 import { usePuzzle } from './use-puzzle'
 
@@ -42,6 +42,7 @@ export type SolvingStatus =
  */
 export function useSolving({
   config,
+  keybindings,
   puzzle,
 }: UseSolvingOptions) {
   const { abortSolve } = useAbortSolve()
@@ -65,14 +66,17 @@ export function useSolving({
     puzzleName,
     scrambling,
     turnProgress,
+    turns,
   } = usePuzzle({
     config,
     puzzle,
     onScramblingEnd: () => {
       // begin inspection when scrambling animation ends
-      status.value = 'inspection'
+      if (status.value === 'scrambling') {
+        status.value = 'inspection'
 
-      beginInspectionTimer()
+        beginInspectionTimer()
+      }
     },
   })
 
@@ -93,6 +97,13 @@ export function useSolving({
     status.value = 'solving'
 
     beginSolveTimer()
+  })
+
+  // keybinding listener
+  useKeybindings(keybindings, (binding) => {
+    if (status.value !== 'scrambling') {
+      turns.value.push(binding.turn)
+    }
   })
 
   /**
