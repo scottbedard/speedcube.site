@@ -10,7 +10,12 @@
       :model="model"
       :turn-progress="turnProgress" />
 
-    <pre>{{ solution.toString() }}</pre>
+    <pre>{{
+      {
+        solveTime,
+        solution: solution.toString()
+      }
+    }}</pre>
   </div>
 
   <div

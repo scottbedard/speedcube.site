@@ -1,7 +1,8 @@
-import { computed, ref, Ref } from 'vue'
+import { clamp } from 'lodash-es'
+import { computed, ref, Ref, watch } from 'vue'
 import { slow, Solution } from '@/app/utils'
 import { useAbortSolve, useCreateSolve } from '@/app/api'
-import { useCountdown, useKeybindings, useTimer } from '@/app/behaviors'
+import { useKeybindings, useTimer } from '@/app/behaviors'
 import { useEventListener } from '@vueuse/core'
 import { usePuzzle } from './use-puzzle'
 
@@ -43,6 +44,11 @@ export type SolvingStatus =
   | 'dnf'
 
 /**
+ * Inspection duration
+ */
+const inspectionDuration = 5000;
+
+/**
  * Standard puzzle solving.
  */
 export function useSolving({
@@ -54,6 +60,13 @@ export function useSolving({
   const { abortSolve } = useAbortSolve()
   const { createSolve } = useCreateSolve()
 
+  // timer
+  const {
+    reset: resetTimer,
+    resume: resumeTimer,
+    time
+  } = useTimer()
+
   // solve state
   const solution = ref<Solution>(new Solution)
   
@@ -61,11 +74,19 @@ export function useSolving({
   
   const status = ref<SolvingStatus>('idle')
 
+  const startTime = ref(0)
+
+  const inspectionTime = computed(() => {
+    return clamp(inspectionDuration - time.value, 0, inspectionDuration)
+  })
+
   const solveInProgress = computed(() => {
     return status.value === 'scrambling'
       || status.value === 'inspection'
       || status.value === 'solving'
   })
+
+  const solveTime = computed(() => time.value - startTime.value)
 
   // twister controls
   const {
@@ -81,32 +102,11 @@ export function useSolving({
     onScramblingEnd: () => {
       // begin inspection when scrambling animation ends
       if (status.value === 'scrambling') {
-        status.value = 'inspection'
-
-        beginInspectionTimer()
+        startInspection()
       } else if (status.value === 'dnf') {
         model.value.reset()
       }
     },
-  })
-
-  // timer
-  const {
-    reset: resetSolveTimer,
-    resume: beginSolveTimer,
-    time: solveTime,
-  } = useTimer()
-
-  // inspection countdown
-  const {
-    reset: resetInspectionTimer,
-    resume: beginInspectionTimer,
-    timeRemaining: inspectionTime,
-  } = useCountdown(3000, () => {
-    // begin the solve
-    status.value = 'solving'
-
-    beginSolveTimer()
   })
 
   // keybinding listener
@@ -116,11 +116,18 @@ export function useSolving({
     }
 
     if (status.value === 'inspection') {
-      solution.value.addTurn(binding.turn, inspectionTime.value);
+      // @todo: make sure turn does not effect a solved puzzle
     }
 
-    if (status.value === 'solving') {
-      solution.value.addTurn(binding.turn, solveTime.value);
+    if (solveInProgress.value) {
+      solution.value.addTurn(binding.turn, time.value);
+    }
+  })
+
+  // transition to solving when inspection hits zero
+  watch(inspectionTime, (value) => {
+    if (status.value === 'inspection' && value === 0) {
+      startSolve()
     }
   })
 
@@ -135,8 +142,7 @@ export function useSolving({
     // animation completes it would advance to 'inspection'
     scrambling.value = false
 
-    resetInspectionTimer()
-    resetSolveTimer()
+    resetTimer()
 
     await abortSolve({ 
       solution: solution.value.toString(),
@@ -158,11 +164,6 @@ export function useSolving({
     status.value = 'scrambling'
     scrambling.value = true
 
-    // reset everything
-    solution.value.reset()
-    resetInspectionTimer()
-    resetSolveTimer()
-
     // create solve model
     const pendingSolve = await slow(createSolve({ puzzle: puzzleName.value }), 3000)
 
@@ -177,6 +178,29 @@ export function useSolving({
   }
 
   /**
+   * Start inspection
+   */
+  const startInspection = () => {
+    status.value = 'inspection'
+
+    solution.value.reset()
+
+    resetTimer()
+    resumeTimer()
+  }
+
+  /**
+   * Start the solve
+   */
+   const startSolve = () => {
+    status.value = 'solving'
+
+    startTime.value = clamp(time.value, 0, inspectionDuration)
+
+    solution.value.addEvent('START', startTime.value)
+  }
+
+  /**
    * Keyup listener
    */
   useEventListener(document, 'keyup', (e) => {
@@ -188,7 +212,11 @@ export function useSolving({
         status.value = 'idle'
       }
     } else if (e.code === 'Space') {
-      scramble()
+      if (status.value === 'inspection') {
+        startSolve()
+      } else {
+        scramble()
+      }
     }
   })
 
