@@ -36,6 +36,14 @@ export type AbortSolvePayload = {
 }
 
 /**
+ * POST: /api/solves/complete
+ */
+export type CompleteSolvePayload = {
+  solution: string,
+  solveId: number,
+}
+
+/**
  * POST: /api/solves
  */
 export type CreateSolvePayload = {

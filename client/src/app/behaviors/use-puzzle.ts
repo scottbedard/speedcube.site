@@ -45,8 +45,7 @@ export function usePuzzle(options: UsePuzzleOptions) {
       return isNumber(n) ? n : defaultTurnDuration;
     }),
     onFinished() {
-      onTurnEnd()
-      onTurnComplete(data, onTurnStart)
+      onTurnComplete(data, onTurnStart, onTurnEnd)
 
       if (!scrambling.value) {
         onScramblingEnd()
@@ -83,12 +82,14 @@ export function usePuzzle(options: UsePuzzleOptions) {
  * Advance to the next turn
  */
 function advanceNextTurn(data: ReturnType<typeof usePuzzle>, onTurnStart: () => void) {
-  const { turning, turnIndex } = data
+  const { scrambling, turning, turnIndex } = data
 
   turning.value = true
   turnIndex.value += 1
 
-  onTurnStart()
+  if (!scrambling.value) {
+    onTurnStart()
+  }
 }
 
 /**
@@ -116,13 +117,15 @@ function onTurnsChanged(data: ReturnType<typeof usePuzzle>, onTurnStart: () => v
 /**
  * Handle completion of a turn
  */
-function onTurnComplete(data: ReturnType<typeof usePuzzle>, onTurnStart: () => void) {
+function onTurnComplete(data: ReturnType<typeof usePuzzle>, onTurnStart: () => void, onTurnEnd: () => void) {
   const { currentTurn, model, scrambling, turning, turns, turnIndex } = data
 
   if (scrambling.value) {
     generateRandomTurn(data)
   } else {
     model.value.turn(currentTurn.value)
+
+    onTurnEnd()
   }
 
   if (turnIndex.value < turns.value.length - 1) {

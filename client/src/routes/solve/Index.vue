@@ -9,13 +9,6 @@
       :masked="scrambling"
       :model="model"
       :turn-progress="turnProgress" />
-
-    <pre>{{
-      {
-        solveTime,
-        solution: solution.toString()
-      }
-    }}</pre>
   </div>
 
   <div
@@ -29,12 +22,13 @@
       v-else-if="status === 'inspection'"
       :inspection-time="inspectionTime" />
 
-    <GameplaySolving
-      v-else-if="status === 'solving'"
-      :solve-time="solveTime" />
-
     <GameplayDnf
       v-else-if="status === 'dnf'" />
+
+    <GameplaySolving
+      v-else-if="status === 'solving' || status === 'complete'"
+      :solve-time="solveTime"
+      :status="status" />
   </div>
 
   <RouterView v-else />
@@ -70,7 +64,6 @@ export default defineComponent({
       scramble,
       scrambling,
       solveTime,
-      solution,
       status,
       turnProgress,
     } = useSolving({
@@ -87,7 +80,6 @@ export default defineComponent({
       inspectionTime,
       model,
       route,
-      solution,
       scramble,
       scrambling,
       solveTime,

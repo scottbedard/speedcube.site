@@ -1,7 +1,7 @@
 import { clamp } from 'lodash-es'
 import { computed, ref, Ref, watch } from 'vue'
 import { isInspectionTurn, slow, Solution } from '@/app/utils'
-import { useAbortSolve, useCreateSolve } from '@/app/api'
+import { useAbortSolve, useCompleteSolve, useCreateSolve } from '@/app/api'
 import { useKeybindings, useTimer } from '@/app/behaviors'
 import { useEventListener } from '@vueuse/core'
 import { usePuzzle } from './use-puzzle'
@@ -65,6 +65,7 @@ export function useSolving({
 }: UseSolvingOptions) {
   const { abortSolve } = useAbortSolve()
   const { createSolve } = useCreateSolve()
+  const { completeSolve } = useCompleteSolve()
 
   // timer
   const {
@@ -108,6 +109,11 @@ export function useSolving({
         model.value.reset()
       }
     },
+    onTurnEnd() {
+      if (status.value === 'solving' && model.value.test()) {
+        complete()
+      }
+    },
     onTurnStart() {
       if (isStatus(status.value, ['inspection', 'solving'])) {
         solution.value.addTurn(currentTurn.value, time.value);
@@ -149,6 +155,22 @@ export function useSolving({
     solution.value.addEvent('ABORT', time.value)
 
     await abortSolve({ 
+      solution: solution.value.toString(),
+      solveId: solveId.value, 
+    })
+  }
+
+  /**
+   * Complete a solve
+   */
+  const complete = async () => {
+    pauseTimer()
+
+    status.value = 'complete'
+
+    solution.value.addEvent('END', time.value)
+
+    await completeSolve({ 
       solution: solution.value.toString(),
       solveId: solveId.value, 
     })
@@ -230,7 +252,6 @@ export function useSolving({
     model,
     scramble,
     scrambling,
-    solution,
     solveTime,
     status,
     turnProgress,
