@@ -12,6 +12,11 @@ export type UsePuzzleOptions = {
   puzzle: MaybeRef<string>,
 }
 
+type Turn = {
+  apply: boolean,
+  notation: string,
+}
+
 /**
  * Controls needed to interact with the puzzle component.
  */
@@ -33,7 +38,7 @@ export function usePuzzle(options: UsePuzzleOptions) {
   // flag to toggle scrambling logic
   const scrambling = ref(false)
 
-  const turns = ref<string[]>([])
+  const turns = ref<Turn[]>([])
 
   const turnIndex = ref(-1)
 
@@ -54,10 +59,21 @@ export function usePuzzle(options: UsePuzzleOptions) {
   })
 
   // the current turn being animated
-  const currentTurn = computed(() => turning.value && turns.value[turnIndex.value] || '')
+  const currentTurn = computed(() => {
+    return turning.value && turns.value[turnIndex.value] 
+      ? turns.value[turnIndex.value]
+      : { apply: false, notation: '' }
+  })
 
   // current turn progress
   const turnProgress = computed(() => turning.value ? 1 - clamp(turnIndex.value - turnTransition.value, 0, 1) : 0)
+
+  /**
+   * Queue a turn for execution.
+   */
+  const turn = (notation: string, apply: boolean = true) => {
+    turns.value.push({ notation, apply })
+  }
 
   // group behavior data together so it can be safely destructured
   const data = {
@@ -65,6 +81,7 @@ export function usePuzzle(options: UsePuzzleOptions) {
     model,
     puzzleName,
     scrambling,
+    turn,
     turnIndex,
     turning,
     turnProgress,
@@ -123,8 +140,12 @@ function onTurnComplete(data: ReturnType<typeof usePuzzle>, onTurnStart: () => v
   if (scrambling.value) {
     generateRandomTurn(data)
   } else {
-    model.value.turn(currentTurn.value)
+    const { apply, notation } = currentTurn.value
 
+    if (apply) {
+      model.value.turn(notation)
+    }
++
     onTurnEnd()
   }
 
@@ -139,7 +160,7 @@ function onTurnComplete(data: ReturnType<typeof usePuzzle>, onTurnStart: () => v
  * Queue a random turn to simulate scrambling.
  */
 function generateRandomTurn(data: ReturnType<typeof usePuzzle>) {
-  const { currentTurn, model, turns } = data
+  const { currentTurn, model, turn } = data
 
-  turns.value.push(model.value.generateScramble(1, currentTurn.value))
+  turn(model.value.generateScramble(1, currentTurn.value.notation), false)
 }

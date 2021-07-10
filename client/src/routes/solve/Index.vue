@@ -5,7 +5,7 @@
         'border-2 border-dashed border-gray-400 dark:border-gray-700': route.name === 'solve:config'
       }"
       :config="config"
-      :current-turn="currentTurn"
+      :current-turn="currentTurn.notation"
       :masked="scrambling"
       :model="model"
       :turn-progress="turnProgress" />

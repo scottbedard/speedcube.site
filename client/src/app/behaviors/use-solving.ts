@@ -96,8 +96,8 @@ export function useSolving({
     model,
     puzzleName,
     scrambling,
+    turn,
     turnProgress,
-    turns,
   } = usePuzzle({
     config,
     puzzle,
@@ -116,7 +116,7 @@ export function useSolving({
     },
     onTurnStart() {
       if (isStatus(status.value, ['inspection', 'solving'])) {
-        solution.value.addTurn(currentTurn.value, time.value);
+        solution.value.addTurn(currentTurn.value.notation, time.value);
       }
     }
   })
@@ -128,7 +128,7 @@ export function useSolving({
     }
 
     if (status.value !== 'scrambling') {
-      turns.value.push(binding.turn)
+      turn(binding.turn)
     }
   })
 
