@@ -6,7 +6,7 @@
       }"
       :config="config"
       :current-turn="currentTurn"
-      :masked="status === 'scrambling'"
+      :masked="scrambling"
       :model="model"
       :turn-progress="turnProgress" />
   </div>
@@ -61,6 +61,7 @@ export default defineComponent({
       inspectionTime,
       model,
       scramble,
+      scrambling,
       solveTime,
       status,
       turnProgress,
@@ -68,6 +69,7 @@ export default defineComponent({
       config,
       keybindings,
       puzzle,
+      ready: index,
     })
 
     return {
@@ -78,6 +80,7 @@ export default defineComponent({
       model,
       route,
       scramble,
+      scrambling,
       solveTime,
       status,
       turnProgress,

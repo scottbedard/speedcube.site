@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { computed, ref, Ref } from 'vue'
 import { slow, Solution } from '@/app/utils'
 import { useAbortSolve, useCreateSolve } from '@/app/api'
@@ -13,17 +12,23 @@ type UseSolvingOptions = {
   /**
    * Puzzle configuration
    */
-  config: Ref<Record<string, unknown>>;
+  config: Ref<Record<string, unknown>>
 
   /**
    * Keybinding configuration
    */
-  keybindings: Ref<Record<string, string>>;
+  keybindings: Ref<Record<string, string>>
 
   /**
    * Non-normalized puzzle name
    */
-  puzzle: Ref<string>;
+  puzzle: Ref<string>
+
+  /**
+   * Controls if we're ready for gameplay. This is false when the
+   * user is customizing settings, editing keybindings, etc...
+   */
+  ready: Ref<boolean>
 }
 
 /**
@@ -44,6 +49,7 @@ export function useSolving({
   config,
   keybindings,
   puzzle,
+  ready,
 }: UseSolvingOptions) {
   const { abortSolve } = useAbortSolve()
   const { createSolve } = useCreateSolve()
@@ -56,7 +62,9 @@ export function useSolving({
   const status = ref<SolvingStatus>('idle')
 
   const solveInProgress = computed(() => {
-    return status.value === 'inspection' || status.value === 'solving'
+    return status.value === 'scrambling'
+      || status.value === 'inspection'
+      || status.value === 'solving'
   })
 
   // twister controls
@@ -76,6 +84,8 @@ export function useSolving({
         status.value = 'inspection'
 
         beginInspectionTimer()
+      } else if (status.value === 'dnf') {
+        model.value.reset()
       }
     },
   })
@@ -112,7 +122,13 @@ export function useSolving({
   const abort = async () => {
     status.value = 'dnf'
 
+    // kill outstanding scrambling animation. this must be
+    // done after setting status to 'dnf', otherwise when the
+    // animation completes it would advance to 'inspection'
+    scrambling.value = false
+
     resetInspectionTimer()
+    resetSolveTimer()
 
     await abortSolve({ 
       solution: solution.value.toString(),
@@ -121,21 +137,11 @@ export function useSolving({
   }
 
   /**
-   * Reset solving behavior
-   */
-  const reset = () => {
-    model.value.reset()
-    solution.value.reset()
-    solveId.value = 0
-    status.value = 'idle'
-  }
-
-  /**
    * Start the solve process
    */
   const scramble = async () => {
-    // do nothing if a solve is in progress
-    if (solveInProgress.value) {
+    // do nothing if a we aren't ready to start a new solve
+    if (!ready.value || solveInProgress.value) {
       return
     }
 
@@ -145,19 +151,21 @@ export function useSolving({
     scrambling.value = true
 
     // reset everything
+    solution.value.reset()
     resetInspectionTimer()
     resetSolveTimer()
-    solution.value.reset()
 
     // create solve model
     const pendingSolve = await slow(createSolve({ puzzle: puzzleName.value }), 3000)
 
-    solveId.value = pendingSolve.solveId
-    
     // stop the animation and apply scrambled state
-    scrambling.value = false
+    if (status.value === 'scrambling') {
+      solveId.value = pendingSolve.solveId
+      
+      scrambling.value = false
 
-    model.value.apply(pendingSolve.state)
+      model.value.apply(pendingSolve.state)
+    }
   }
 
   /**
@@ -168,7 +176,8 @@ export function useSolving({
       if (solveInProgress.value) {
         abort()
       } else {
-        reset()
+        model.value.reset()
+        status.value = 'idle'
       }
     } else if (e.code === 'Space') {
       scramble()
@@ -181,7 +190,6 @@ export function useSolving({
     model,
     scramble,
     scrambling,
-    solveInProgress,
     solveTime,
     status,
     turnProgress,
