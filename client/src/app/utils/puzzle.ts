@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash-es'
-import { Cube } from '@bedard/twister'
+import { Cube, Puzzle } from '@bedard/twister'
 import { cubeConfig, cubeNames, cubeKeyboardConfig } from '@/components/puzzle/constants'
 import { CubeName, PuzzleName } from '@/app/types/puzzle'
 
@@ -56,6 +56,21 @@ export function defaultPuzzleConfig(rawPuzzleName: string) {
  */
 export function isCube(str: string): str is CubeName {
   return (cubeNames as string[]).includes(str);
+}
+
+/**
+ * Test if a turn is permitted during inspection
+ */
+export function isInspectionTurn(model: Cube, notation: string) {
+  const turn = model.parse(notation)
+
+  if (model instanceof Cube) {
+    return ['x', 'y', 'z'].includes(turn.target) || (
+      turn.wide && turn.depth >= model.options.size
+    )
+  }
+
+  return false
 }
 
 /**

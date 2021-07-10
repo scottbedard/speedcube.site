@@ -1,6 +1,6 @@
 import { clamp } from 'lodash-es'
 import { computed, ref, Ref, watch } from 'vue'
-import { slow, Solution } from '@/app/utils'
+import { isInspectionTurn, slow, Solution } from '@/app/utils'
 import { useAbortSolve, useCreateSolve } from '@/app/api'
 import { useKeybindings, useTimer } from '@/app/behaviors'
 import { useEventListener } from '@vueuse/core'
@@ -111,12 +111,12 @@ export function useSolving({
 
   // keybinding listener
   useKeybindings(keybindings, (binding) => {
-    if (status.value !== 'scrambling') {
-      turns.value.push(binding.turn)
+    if (status.value === 'inspection' && !isInspectionTurn(model.value, binding.turn)) {
+      return
     }
 
-    if (status.value === 'inspection') {
-      // @todo: make sure turn does not effect a solved puzzle
+    if (status.value !== 'scrambling') {
+      turns.value.push(binding.turn)
     }
 
     if (solveInProgress.value) {
