@@ -64,6 +64,36 @@ class Solution
     }
 
     /**
+     * Get turns between two events.
+     *
+     * @param string $firstEvent
+     * @param string $secondEvent
+     *
+     * @return array
+     */
+    public function getTurnsBetweenEvents(string $firstEvent, string $secondEvent)
+    {
+        $firstEventFound = false;
+        $turns = [];
+
+        foreach ($this->nodes as $node) {
+            if ($node['type'] === 'event') {
+                if ($node['value'] === $firstEvent) {
+                    $firstEventFound = true;
+                }
+
+                if ($node['value'] === $secondEvent) {
+                    break;
+                }
+            } elseif ($firstEventFound && $node['type'] === 'turn') {
+                array_push($turns, $node);
+            }
+        }
+
+        return $turns;
+    }
+
+    /**
      * Parse a solution string.
      *
      * @param string $solution
