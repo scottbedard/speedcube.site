@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Classes\Solution;
 use App\Classes\Twister;
 use App\Models\BaseModel;
 use App\Models\PuzzleConfig;
@@ -57,13 +58,13 @@ class Solve extends BaseModel
     /**
      * Set solution and puzzle status.
      */
-    public function applySolution(string $solution)
+    public function applySolution(string $solutionStr)
     {
-        $parsedSolution = self::parseSolution($solution);
+        $solution = new Solution($solutionStr);
 
-        $algorithm = $this->getTurns($parsedSolution);
+        $algorithm = $solution->getAlgorithm();
         
-        $this->solution = $solution;
+        $this->solution = $solutionStr;
         $this->status = 'dnf';
         $this->time = 0;
         $this->turns = array_reduce(
@@ -81,84 +82,9 @@ class Solve extends BaseModel
         );
 
         if ($solved) {
-            $startAt = $this->getEventTimestamp('START', $parsedSolution);
-            $endAt = $this->getEventTimestamp('END', $parsedSolution);
-
-            if ($startAt > -1 && $endAt > -1) {
-                $this->status = 'complete';
-                $this->time = $endAt - $startAt;
-            }
+            $this->status = 'complete';
+            $this->time = $solution->getTimeBetweenEvents('START', 'END');
         }
-    }
-
-    /**
-     * Get solution event timestamp, or -1 if not found.
-     */
-    public function getEventTimestamp(string $event, array $parsedSolution = null)
-    {
-        $parsedSolution = $parsedSolution ?: self::parseSolution($this->solution);
-
-        $event = Arr::first($parsedSolution, function ($part) use ($event) {
-            return $part['type'] === 'event' && $part['value'] === $event;
-        });
-
-        if ($event) {
-            return $event['offset'];
-        }
-
-        return -1;
-    }
-
-    /**
-     * Get solution turns as a string
-     */
-    public function getTurns(array $parsedSolution = null)
-    {
-        $parsedSolution = $parsedSolution ?: self::parseSolution($this->solution);
-
-        $turns = array_filter($parsedSolution, function ($part) {
-            return $part['type'] === 'turn';
-        });
-
-        return implode(' ', array_column($turns, 'value'));
-    }
-
-    /**
-     * Convert a solution string to array.
-     */
-    public static function parseSolution(string $solution)
-    {
-        $parts = array_filter(explode(' ', $solution));
-
-        return array_map(function ($part) {
-            $offset = 0;
-            $type = 'unknown';
-            $value = '';
-
-            // turns = timestamp:value
-            $turnDelimeter = strpos($part, ':');
-
-            if ($turnDelimeter) {
-                $offset = (int) substr($part, 0, $turnDelimeter);
-                $type = 'turn';
-                $value = substr($part, $turnDelimeter + 1);
-            }
-
-            // events = timestamp#value
-            $eventDelimeter = strpos($part, '#');
-
-            if ($eventDelimeter) {
-                $offset = (int) substr($part, 0, $eventDelimeter);
-                $type = 'event';
-                $value = substr($part, $eventDelimeter + 1);
-            }
-            
-            return [
-                'offset' => $offset,
-                'type' => $type,
-                'value' => $value,
-            ];
-        }, $parts);
     }
 
     /**
