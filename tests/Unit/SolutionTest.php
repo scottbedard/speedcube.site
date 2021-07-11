@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Classes\Solution;
+use Exception;
 use Tests\TestCase;
 
 class SolutionTest extends TestCase
@@ -44,8 +45,16 @@ class SolutionTest extends TestCase
     {
         $solution = new Solution('1000:A 2000#START 3000:B 4000#END');
 
-        $this->assertEquals(-1, $solution->getEventTimestamp('NOT-FOUND'));
         $this->assertEquals(2000, $solution->getEventTimestamp('START'));
+    }
+
+    public function test_getting_missing_event_timestamp()
+    {
+        $solution = new Solution('1000:A 2000#START 3000:B 4000#END');
+
+        $this->expectException(Exception::class);
+
+        $solution->getEventTimestamp('NOT-FOUND');
     }
 
     public function test_get_turns_by_event()
@@ -94,5 +103,12 @@ class SolutionTest extends TestCase
                 'value' => 'D',
             ],
         ], $solution->getTurnsByEvent('START', 'END'));
+    }
+
+    public function test_get_time_between_events()
+    {
+        $solution = new Solution('1000:A 2000#START 3000:B 4000:C 5000:D 6000#END 7000:E');
+
+        $this->assertEquals(4000, $solution->getTimeBetweenEvents('START', 'END'));
     }
 }

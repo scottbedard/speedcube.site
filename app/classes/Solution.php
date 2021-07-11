@@ -2,6 +2,8 @@
 
 namespace App\Classes;
 
+use Exception;
+
 class Solution
 {
     /**
@@ -50,7 +52,7 @@ class Solution
             }
         }
 
-        return -1;
+        throw new Exception("Event {$event} not found in solution");
     }
 
     /**
@@ -61,6 +63,19 @@ class Solution
     public function getNodes()
     {
         return $this->nodes;
+    }
+
+    /**
+     * Get the amount of time between two events.
+     *
+     * @param string $first
+     * @param string $second
+     *
+     * @return int
+     */
+    public function getTimeBetweenEvents(string $first, string $second)
+    {
+        return $this->getEventTimestamp($second) - $this->getEventTimestamp($first);
     }
 
     /**
