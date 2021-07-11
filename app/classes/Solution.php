@@ -36,6 +36,24 @@ class Solution
     }
 
     /**
+     * Get timestamp for the first occurrence of an event.
+     *
+     * @param string $event
+     *
+     * @return int
+     */
+    public function getEventTimestamp(string $event)
+    {
+        foreach ($this->nodes as $node) {
+            if ($node['type'] === 'event' && $node['value'] === $event) {
+                return $node['time'];
+            }
+        }
+
+        return -1;
+    }
+
+    /**
      * Get solution nodes.
      *
      * @return array

@@ -40,8 +40,11 @@ class SolutionTest extends TestCase
         ], $solution->getNodes());
     }
 
-    // public function test_getting_event_timestamp()
-    // {
+    public function test_getting_event_timestamp()
+    {
+        $solution = new Solution('1000:A 2000#FOO 3000:B 4000#BAR');
 
-    // }
+        $this->assertEquals(-1, $solution->getEventTimestamp('NOT-FOUND'));
+        $this->assertEquals(2000, $solution->getEventTimestamp('FOO'));
+    }
 }
