@@ -18,15 +18,14 @@
       v-if="status === 'idle'"
       @scramble="scramble" />
 
-    <GameplayInspection
-      v-else-if="status === 'inspection'"
-      :inspection-time="inspectionTime" />
-
-    <GameplayDnf
-      v-else-if="status === 'dnf'" />
-
     <GameplaySolving
-      v-else-if="status === 'solving' || status === 'complete'"
+      v-else-if="
+        status === 'inspection' ||
+        status === 'solving' ||
+        status === 'dnf' ||
+        status === 'complete'
+      "
+      :inspection-time="inspectionTime"
       :solve-time="solveTime"
       :status="status" />
   </div>
@@ -40,9 +39,7 @@ import { keyboardConfig, puzzleConfig } from '@/app/store/computed'
 import { Puzzle } from '@/components'
 import { useRoute } from 'vue-router'
 import { useSolving } from '@/app/behaviors'
-import GameplayDnf from '@/partials/solve/GameplayDnf.vue'
 import GameplayIdle from '@/partials/solve/GameplayIdle.vue'
-import GameplayInspection from '@/partials/solve/GameplayInspection.vue'
 import GameplaySolving from '@/partials/solve/GameplaySolving.vue'
 
 export default defineComponent({
@@ -88,9 +85,7 @@ export default defineComponent({
     }
   },
   components: {
-    GameplayDnf,
     GameplayIdle,
-    GameplayInspection,
     GameplaySolving,
     Puzzle,
   },

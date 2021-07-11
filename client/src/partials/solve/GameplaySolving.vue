@@ -1,8 +1,15 @@
 <template>
   <div>
-    <div
-      v-text="stopwatch"
-      class="font-mono text-4xl" />
+    <div class="text-4xl">
+      <div v-if="status === 'dnf'">
+        DNF
+      </div>
+
+      <div
+        v-else
+        v-text="timerText"
+        class="font-mono" />
+    </div>
 
     <div v-if="status === 'complete'">
       Complete!
@@ -17,14 +24,22 @@ import { SolvingStatus } from '@/app/behaviors/use-solving'
 
 export default defineComponent({
   setup(props) {
-    const stopwatch = computed(() => formatTime(props.solveTime))
+    const timerText = computed(() => {
+      return props.status === 'inspection'
+        ? Math.ceil(props.inspectionTime / 1000)
+        : formatTime(props.solveTime)
+    })
 
     return {
-      stopwatch,
+      timerText,
     }
   },
   name: 'GameplaySolving',
   props: {
+    inspectionTime: {
+      required: true,
+      type: Number,
+    },
     solveTime: {
       required: true,
       type: Number,
