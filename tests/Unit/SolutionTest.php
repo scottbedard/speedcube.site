@@ -111,4 +111,12 @@ class SolutionTest extends TestCase
 
         $this->assertEquals(4000, $solution->getTimeBetweenEvents('START', 'END'));
     }
+
+    public function test_get_idle_time_by_event()
+    {
+        $solution = new Solution('1000#START 2000:A 3000:B 4000#END', 250);
+
+        // 3000ms between events, - 500ms of turning time
+        $this->assertEquals(2500, $solution->getIdleTimeByEvent('START', 'END'));
+    }
 }

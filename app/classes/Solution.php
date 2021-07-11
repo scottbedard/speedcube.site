@@ -56,6 +56,22 @@ class Solution
     }
 
     /**
+     * Calculate the idle time by events.
+     *
+     * @param string $first
+     * @param string $second
+     *
+     * @return int
+     */
+    public function getIdleTimeByEvent(string $first, string $second = '')
+    {
+        $time = $this->getTimeBetweenEvents($first, $second);
+        $turns = $this->getTurnsByEvent($first, $second);
+
+        return $time - (count($turns) * $this->turnDuration);
+    }
+
+    /**
      * Get solution nodes.
      *
      * @return array
