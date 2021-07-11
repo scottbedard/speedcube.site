@@ -64,28 +64,29 @@ class Solution
     }
 
     /**
-     * Get turns between two events.
+     * Get turns between two events. If the second event is not
+     * found, all turns after the first will be returned.
      *
-     * @param string $firstEvent
-     * @param string $secondEvent
+     * @param string $first
+     * @param string $second
      *
      * @return array
      */
-    public function getTurnsBetweenEvents(string $firstEvent, string $secondEvent)
+    public function getTurnsByEvent(string $first, string $second = '')
     {
-        $firstEventFound = false;
+        $firstFound = false;
         $turns = [];
 
         foreach ($this->nodes as $node) {
             if ($node['type'] === 'event') {
-                if ($node['value'] === $firstEvent) {
-                    $firstEventFound = true;
+                if ($node['value'] === $first) {
+                    $firstFound = true;
                 }
 
-                if ($node['value'] === $secondEvent) {
+                if ($node['value'] === $second) {
                     break;
                 }
-            } elseif ($firstEventFound && $node['type'] === 'turn') {
+            } elseif ($firstFound && $node['type'] === 'turn') {
                 array_push($turns, $node);
             }
         }

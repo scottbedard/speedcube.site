@@ -48,10 +48,11 @@ class SolutionTest extends TestCase
         $this->assertEquals(2000, $solution->getEventTimestamp('START'));
     }
 
-    public function test_get_turns_between_events()
+    public function test_get_turns_by_event()
     {
         $solution = new Solution('1000:A 2000#START 3000:B 4000:C 5000:D 6000#END 7000:E');
 
+        // all turns after an event
         $this->assertEquals([
             [
                 'time' => 3000,
@@ -68,6 +69,30 @@ class SolutionTest extends TestCase
                 'type' => 'turn',
                 'value' => 'D',
             ],
-        ], $solution->getTurnsBetweenEvents('START', 'END'));
+            [
+                'time' => 7000,
+                'type' => 'turn',
+                'value' => 'E',
+            ],
+        ], $solution->getTurnsByEvent('START'));
+
+        // turns between two events
+        $this->assertEquals([
+            [
+                'time' => 3000,
+                'type' => 'turn',
+                'value' => 'B',
+            ],
+            [
+                'time' => 4000,
+                'type' => 'turn',
+                'value' => 'C',
+            ],
+            [
+                'time' => 5000,
+                'type' => 'turn',
+                'value' => 'D',
+            ],
+        ], $solution->getTurnsByEvent('START', 'END'));
     }
 }
