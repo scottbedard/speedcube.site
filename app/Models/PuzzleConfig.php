@@ -4,13 +4,15 @@ namespace App\Models;
 
 use App\Models\BaseModel;
 use App\Models\Solve;
+use App\Models\Traits\GetJsonValue;
 use App\Models\Traits\PuzzleAlias;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PuzzleConfig extends BaseModel
 {
-    use HasFactory,
+    use GetJsonValue,
+        HasFactory,
         PuzzleAlias;
 
     /**

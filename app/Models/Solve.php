@@ -22,12 +22,14 @@ class Solve extends BaseModel
      * Default attributes.
      */
     public $attributes = [
+        'idle_time' => 0,
         'puzzle_config_id' => null,
         'puzzle_id' => 0,
         'scramble' => '',
         'solution' => '',
         'status' => 'pending',
         'time' => 0,
+        'turn_speed' => 0,
         'turns' => 0,
         'user_id' => null,
     ];
@@ -60,20 +62,18 @@ class Solve extends BaseModel
      */
     public function applySolution(string $solutionStr)
     {
-        $solution = new Solution($solutionStr);
+        $config = $this->puzzleConfig;
+
+        $turnDuration = $config ? $config->getJsonValue('config', 'turnDuration', 0) : 0;
+
+        $solution = new Solution($solutionStr, $turnDuration);
 
         $algorithm = $solution->getAlgorithm();
         
         $this->solution = $solutionStr;
         $this->status = 'dnf';
         $this->time = 0;
-        $this->turns = array_reduce(
-            Arr::pluck(Twister::parseAlgorithm($this->puzzle, $algorithm)['turns'], 'whole'),
-            function ($acc, $whole) {
-                return $acc + ($whole ? 0 : 1);
-            },
-            0
-        );
+        $this->turns = 0;
 
         $solved = Twister::test(
             $this->puzzle,
@@ -82,8 +82,11 @@ class Solve extends BaseModel
         );
 
         if ($solved) {
+            $this->idle_time = $solution->getIdleTimeByEvent('START', 'END');
             $this->status = 'complete';
             $this->time = $solution->getTimeBetweenEvents('START', 'END');
+            $this->turn_speed = $solution->getTurnSpeedByEvent('START', 'END');
+            $this->turns = count($solution->getTurnsByEvent('START', 'END'));
         }
     }
 

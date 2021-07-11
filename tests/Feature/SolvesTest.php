@@ -113,16 +113,23 @@ class SolvesTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $solve = Solve::factory()->create([
-            'user_id' => $user->id,
+        $puzzleConfig = PuzzleConfig::factory()->create([
+            'config' => '{"turnDuration":100}',
             'puzzle' => '3x3',
-            'scramble' => 'R-',
+            'user_id' => $user->id,
+        ]);
+
+        $solve = Solve::factory()->create([
+            'puzzle_config_id' => $puzzleConfig->id,
+            'puzzle' => '3x3',
+            'scramble' => 'R',
+            'user_id' => $user->id,
         ]);
 
         $request = $this
             ->actingAs($user)
             ->json('POST', '/api/solves/complete', [
-                'solution' => '500:X 600:X- 1000#START 1500:Y 1600:Y- 2000:R 3000#END',
+                'solution' => '500:X 600:X- 1000#START 1250:R 1500:R 1750:R 2000#END',
                 'solveId' => $solve->id,
             ]);
 
@@ -133,7 +140,9 @@ class SolvesTest extends TestCase
         $solve->refresh();
 
         $this->assertEquals('complete', $solve->status);
-        $this->assertEquals(1, $solve->turns);
+        $this->assertEquals(3, $solve->turns);
+        $this->assertEquals(333, $solve->turn_speed);
+        $this->assertEquals(700, $solve->idle_time);
     }
 
     public function test_abort_solve_as_guest()
