@@ -149,4 +149,11 @@ class SolutionTest extends TestCase
             ],
         ], $solution->getTurns());
     }
+
+    public function test_get_algorithm()
+    {
+        $solution = new Solution('1000:A 2000#START 3000:B 4000#END');
+
+        $this->assertEquals('A B', $solution->getAlgorithm());
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Classes;
 
 use Exception;
+use Illuminate\Support\Arr;
 
 class Solution
 {
@@ -35,6 +36,16 @@ class Solution
         $this->setSolution($solution);
 
         $this->turnDuration = $turnDuration;
+    }
+
+    /**
+     * Get all turns as a spece-delimited string.
+     *
+     * @return string
+     */
+    public function getAlgorithm()
+    {
+        return implode(' ', Arr::pluck($this->getTurns(), 'value'));
     }
 
     /**
