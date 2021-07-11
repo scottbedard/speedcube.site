@@ -119,4 +119,16 @@ class SolutionTest extends TestCase
         // 3000ms between events, - 500ms of turning time
         $this->assertEquals(2500, $solution->getIdleTimeByEvent('START', 'END'));
     }
+
+    public function test_get_turn_speed_by_event()
+    {
+        // 1 turn, 1000ms = 1000ms per turn
+        $this->assertEquals(1000, (new Solution('1000#START 1500:A 2000#END'))->getTurnSpeedByEvent('START', 'END'));
+
+        // 2 turns, 1000ms = 500ms per turn
+        $this->assertEquals(500, (new Solution('1000#START 1250:A 1500:B 2000#END'))->getTurnSpeedByEvent('START', 'END'));
+
+        // 3 turns, 2000ms = 667ms per turn
+        $this->assertEquals(667, (new Solution('1000#START 1500:A 2000:B 2500:C 3000#END'))->getTurnSpeedByEvent('START', 'END'));
+    }
 }

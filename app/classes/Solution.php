@@ -126,6 +126,22 @@ class Solution
     }
 
     /**
+     * Calculate the average turn speed.
+     *
+     * @param string $first
+     * @param string $second
+     *
+     * @return int
+     */
+    public function getTurnSpeedByEvent(string $first, string $second = '')
+    {
+        $time = $this->getTimeBetweenEvents($first, $second);
+        $turns = $this->getTurnsByEvent($first, $second);
+
+        return (int) round($time / count($turns));
+    }
+
+    /**
      * Parse a solution string.
      *
      * @param string $solution
