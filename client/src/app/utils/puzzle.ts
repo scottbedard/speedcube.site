@@ -62,15 +62,7 @@ export function isCube(str: string): str is CubeName {
  * Test if a turn is permitted during inspection
  */
 export function isInspectionTurn(model: Cube, notation: string) {
-  const turn = model.parse(notation)
-
-  if (model instanceof Cube) {
-    return ['x', 'y', 'z'].includes(turn.target) || (
-      turn.wide && turn.depth >= model.options.size
-    )
-  }
-
-  return false
+  return model.parse(notation)?.whole ?? false
 }
 
 /**
