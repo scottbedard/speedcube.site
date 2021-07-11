@@ -95,6 +95,24 @@ class Solution
     }
 
     /**
+     * Get all turns.
+     *
+     * @return array
+     */
+    public function getTurns()
+    {
+        $turns = [];
+
+        foreach ($this->nodes as $node) {
+            if ($node['type'] === 'turn') {
+                array_push($turns, $node);
+            }
+        }
+
+        return $turns;
+    }
+
+    /**
      * Get turns between two events. If the second event is not
      * found, all turns after the first will be returned.
      *

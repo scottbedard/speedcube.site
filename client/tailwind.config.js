@@ -2,7 +2,6 @@ const colors = require('tailwindcss/colors')
 
 module.exports = {
   darkMode: 'class',
-  mode: 'jit',
   purge: [
     '../resources/views/**/*.blade.php',
     './src/**/*.{js,jsx,ts,tsx,vue}',

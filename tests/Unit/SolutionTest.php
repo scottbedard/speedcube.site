@@ -131,4 +131,22 @@ class SolutionTest extends TestCase
         // 3 turns, 2000ms = 667ms per turn
         $this->assertEquals(667, (new Solution('1000#START 1500:A 2000:B 2500:C 3000#END'))->getTurnSpeedByEvent('START', 'END'));
     }
+
+    public function test_get_turns()
+    {
+        $solution = new Solution('1000:A 2000#START 3000:B 4000#END');
+
+        $this->assertEquals([
+            [
+                'time' => 1000,
+                'type' => 'turn',
+                'value' => 'A',
+            ],
+            [
+                'time' => 3000,
+                'type' => 'turn',
+                'value' => 'B',
+            ],
+        ], $solution->getTurns());
+    }
 }
