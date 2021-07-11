@@ -127,6 +127,38 @@ class Twister
     }
 
     /**
+     * Parse a single turn.
+     */
+    public static function parse(string $puzzle, string $turn)
+    {
+        $id = self::getId($puzzle);
+        $puzzleArg = self::getPuzzleArg($id);
+        $optionsArg = self::getOptionsArg($id);
+
+        $turnArg = escapeshellarg($turn);
+
+        $output = self::exec("parse {$puzzleArg} {$turnArg} --options={$optionsArg}");
+
+        return json_decode($output, true);
+    }
+
+    /**
+     * Parse multiple turns.
+     */
+    public static function parseAlgorithm(string $puzzle, string $algorithm)
+    {
+        $id = self::getId($puzzle);
+        $puzzleArg = self::getPuzzleArg($id);
+        $optionsArg = self::getOptionsArg($id);
+
+        $algorithmArg = escapeshellarg($algorithm);
+
+        $output = self::exec("parseAlgorithm {$puzzleArg} {$algorithmArg} --options={$optionsArg}");
+
+        return json_decode($output, true);
+    }
+
+    /**
      * Scramble a puzzle.
      */
     public static function scramble(string $puzzle, int $turns = 0)

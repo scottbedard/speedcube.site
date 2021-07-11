@@ -25,6 +25,25 @@ class TwisterTest extends TestCase
         $this->assertEquals('5x5', Twister::getName(5));
     }
 
+    public function test_twister_parse()
+    {
+        $data = Twister::parse('3x3', 'R');
+
+        $this->assertEquals('cube', $data['puzzle']);
+        $this->assertEquals('r', $data['turn']['target']);
+    }
+
+    public function test_twister_parseAlgorithm()
+    {
+        $data = Twister::parseAlgorithm('3x3', 'R U R-');
+
+        $this->assertEquals('cube', $data['puzzle']);
+        $this->assertEquals(3, count($data['turns']));
+        $this->assertEquals('r', $data['turns'][0]['target']);
+        $this->assertEquals('u', $data['turns'][1]['target']);
+        $this->assertEquals('r', $data['turns'][2]['target']);
+    }
+
     public function test_twister_scramble()
     {
         $data = Twister::scramble('2x2', 5);
