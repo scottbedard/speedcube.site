@@ -122,7 +122,7 @@ class SolvesTest extends TestCase
         $request = $this
             ->actingAs($user)
             ->json('POST', '/api/solves/complete', [
-                'solution' => '1000#START 2000:R 3000#END',
+                'solution' => '500:X 600:X- 1000#START 1500:Y 1600:Y- 2000:R 3000#END',
                 'solveId' => $solve->id,
             ]);
 
@@ -133,6 +133,7 @@ class SolvesTest extends TestCase
         $solve->refresh();
 
         $this->assertEquals('complete', $solve->status);
+        $this->assertEquals(1, $solve->turns);
     }
 
     public function test_abort_solve_as_guest()

@@ -61,14 +61,23 @@ class Solve extends BaseModel
     {
         $parsedSolution = self::parseSolution($solution);
 
+        $algorithm = $this->getTurns($parsedSolution);
+        
         $this->solution = $solution;
         $this->status = 'dnf';
         $this->time = 0;
+        $this->turns = array_reduce(
+            Arr::pluck(Twister::parseAlgorithm($this->puzzle, $algorithm)['turns'], 'whole'),
+            function ($acc, $whole) {
+                return $acc + ($whole ? 0 : 1);
+            },
+            0
+        );
 
         $solved = Twister::test(
             $this->puzzle,
             $this->scramble,
-            $this->getTurns($parsedSolution)
+            $algorithm,
         );
 
         if ($solved) {
