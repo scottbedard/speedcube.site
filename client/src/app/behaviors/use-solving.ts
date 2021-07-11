@@ -46,13 +46,17 @@ export type SolvingStatus =
 /**
  * Inspection duration
  */
-const inspectionDuration = 5000;
+const inspectionDuration = 15000
+
+/**
+ * Scramble duration
+ */
+const scrambleDuration = 2000
 
 /**
  * Helper to test for statuses
  */
 const isStatus = (status: SolvingStatus, arr: SolvingStatus[]) => arr.includes(status)
-
 
 /**
  * Standard puzzle solving.
@@ -67,30 +71,51 @@ export function useSolving({
   const { createSolve } = useCreateSolve()
   const { completeSolve } = useCompleteSolve()
 
-  // timer
+  /**
+   * Timer controls
+   */
   const {
     pause: pauseTimer,
     reset: resetTimer,
     resume: resumeTimer,
-    time
+    time,
   } = useTimer()
 
-  // solve state
+  /**
+   * Solution
+   */
   const solution = ref<Solution>(new Solution)
   
+  /**
+   * Solve ID
+   */
   const solveId = ref(0)
   
+  /**
+   * Current solving status
+   */
   const status = ref<SolvingStatus>('idle')
 
+  /**
+   * Timestamp that the transition from 'inspection' to 'solving' happened
+   */
   const startTime = ref(0)
 
+  /**
+   * Countdown timer
+   */
   const inspectionTime = computed(() => {
     return clamp(inspectionDuration - time.value, 0, inspectionDuration)
   })
 
+  /**
+   * Solve timer
+   */
   const solveTime = computed(() => time.value - startTime.value)
 
-  // twister controls
+  /**
+   * Twister controls
+   */
   const {
     currentTurn,
     model,
@@ -105,35 +130,43 @@ export function useSolving({
       // begin inspection when scrambling animation ends
       if (status.value === 'scrambling') {
         startInspection()
-      } else if (status.value === 'dnf') {
-        model.value.reset()
       }
     },
     onTurnEnd() {
+      // check if the puzzle has been solved
       if (status.value === 'solving' && model.value.test()) {
         complete()
       }
     },
     onTurnStart() {
+      // only record turns that occur during the solve
       if (isStatus(status.value, ['inspection', 'solving'])) {
-        solution.value.addTurn(currentTurn.value.notation, time.value);
+        solution.value.addTurn(currentTurn.value.notation, time.value)
       }
     }
   })
 
-  // keybinding listener
+  /**
+   * Keybinding listener
+   */
   useKeybindings(keybindings, (binding) => {
-    if (status.value === 'inspection' && !isInspectionTurn(model.value, binding.turn)) {
+    // do nothing if we're currently scrambling, or if the turn violates inspection rules
+    if (
+      status.value === 'scrambling' ||
+      (status.value === 'inspection' && !isInspectionTurn(model.value, binding.turn))
+    ) {
       return
     }
 
-    if (status.value !== 'scrambling') {
-      turn(binding.turn)
-    }
+    // otherwise queue the turn for execution
+    turn(binding.turn)
   })
 
-  // transition to solving when inspection hits zero
+  /**
+   * Watch inspection time
+   */
   watch(inspectionTime, (value) => {
+    // start the solve when inspection hits zero
     if (status.value === 'inspection' && value === 0) {
       startSolve()
     }
@@ -191,7 +224,7 @@ export function useSolving({
     scrambling.value = true
 
     // create solve model
-    const pendingSolve = await slow(createSolve({ puzzle: puzzleName.value }), 3000)
+    const pendingSolve = await slow(createSolve({ puzzle: puzzleName.value }), scrambleDuration)
 
     // stop the animation and apply scrambled state
     if (status.value === 'scrambling') {
