@@ -15,12 +15,11 @@
     v-if="index"
     class="flex justify-center">
     <GameplayIdle
-      v-if="false && status === 'idle'"
+      v-if="status === 'idle'"
       @scramble="scramble" />
 
     <GameplaySolving
       v-else-if="
-        true ||
         status === 'inspection' ||
         status === 'solving' ||
         status === 'dnf' ||

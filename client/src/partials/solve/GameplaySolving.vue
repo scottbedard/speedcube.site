@@ -11,25 +11,27 @@
         class="font-mono" />
     </div>
 
-    <div class="gap-8 grid max-w-2xl mx-auto w-full sm:grid-cols-2">
+    <div
+      v-if="status === 'complete' || status === 'dnf'"
+      class="gap-8 grid max-w-4xl mx-auto w-full sm:grid-cols-2">
       <div>
-        <h3  class="mb-1 font-bold text-lg">Solve stats</h3>
+        <h3  class="mb-1 font-bold text-lg">This solve</h3>
 
         <Card padded>
           <div class="gap-4 grid">
-            <div>
+            <div class="flex flex-wrap justify-between">
               <div>Total turns</div>
-              <div>24 <span class="text-sm">(average 31)</span></div>
+              <div>24</div>
             </div>
 
-            <div>
-              <div>Average speed</div>
-              <div>6.2 <span class="text-sm">turns per sec</span></div>
+            <div class="flex flex-wrap justify-between">
+              <div>Turns per second</div>
+              <div>4.2</div>
             </div>
 
-            <div>
+            <div class="flex flex-wrap justify-between">
               <div>Idle time</div>
-              <div>4.8 <span class="text-sm">seconds</span></div>
+              <div v-text="dummyTime" />
             </div>
           </div>
         </Card>
@@ -39,7 +41,31 @@
         <h3  class="mb-1 font-bold text-lg">Recent solves</h3>
 
         <Card padded>
-          Hello
+          <div class="gap-4 grid">
+            <div class="border-b border-gray-200 flex flex-wrap gap-x-6 pb-4 dark:border-gray-700">
+              <a
+                v-for="n in 5"
+                v-text="dummyTime"
+                href="#"
+                :key="n" 
+                @click.prevent />
+            </div>
+
+            <div class="flex flex-wrap justify-between">
+              <div>Average of 5</div>
+              <div v-text="dummyTime" />
+            </div>
+
+            <div class="flex flex-wrap justify-between">
+              <div>Average of 50</div>
+              <div v-text="dummyTime" />
+            </div>
+
+            <div class="flex flex-wrap justify-between">
+              <div>Average of 100</div>
+              <div v-text="dummyTime" />
+            </div>
+          </div>
         </Card>
       </div>
     </div>
@@ -60,7 +86,10 @@ export default defineComponent({
         : formatTime(props.solveTime)
     })
 
+    const dummyTime = formatTime(12345)
+
     return {
+      dummyTime,
       timerText,
     }
   },
