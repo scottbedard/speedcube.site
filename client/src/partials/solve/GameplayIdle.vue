@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mb-6 text-center">
+    <div class="mb-12 text-center">
       <Button primary @click="scramble">
         Scramble
       </Button>

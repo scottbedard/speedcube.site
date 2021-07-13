@@ -1,5 +1,5 @@
 <template>
-  <div class="gap-6 grid w-full">
+  <div class="gap-12 grid w-full">
     <div class="text-center text-4xl w-full">
       <div v-if="status === 'dnf'">
         DNF
@@ -9,13 +9,19 @@
         v-else
         v-text="timerText"
         class="font-mono" />
+
+      <p
+        v-if="status === 'complete' || status === 'dnf'"
+        class="mt-2 text-center text-gray-500 text-sm dark:text-gray-300">
+        Press escape to clear, spacebar to scramble
+      </p>
     </div>
 
     <div
       v-if="status === 'complete' || status === 'dnf'"
       class="gap-8 grid max-w-4xl mx-auto w-full sm:grid-cols-2">
       <div>
-        <h3  class="mb-1 font-bold text-lg">This solve</h3>
+        <h3  class="mb-2 font-bold text-lg">Solve info</h3>
 
         <Card padded>
           <div class="gap-4 grid">
@@ -38,7 +44,7 @@
       </div>
 
       <div>
-        <h3  class="mb-1 font-bold text-lg">Recent solves</h3>
+        <h3  class="mb-2 font-bold text-lg">Recent solves</h3>
 
         <Card padded>
           <div class="gap-4 grid">

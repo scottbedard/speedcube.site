@@ -2,7 +2,7 @@
   <div class="max-w-sm mb-6 mx-auto">
     <Puzzle
       :class="{
-        'border-2 border-dashed border-gray-400 dark:border-gray-700': true || route.name === 'solve:config'
+        'border-2 border-dashed border-gray-400 dark:border-gray-700': route.name === 'solve:config'
       }"
       :config="config"
       :current-turn="currentTurn.notation"
