@@ -46,7 +46,7 @@
 
               <div class="flex flex-wrap justify-between">
                 <div>Idle time</div>
-                <div v-text="dummyTime" />
+                <div v-text="idleText" />
               </div>
             </div>
           </Card>
@@ -93,12 +93,13 @@
 import { Card, Spinner } from '@/components'
 import { computed, defineComponent, PropType } from 'vue'
 import { formatTime, turnsPerSecond } from '@/app/utils'
-import { round } from 'lodash-es'
 import { Solve } from '@/app/types/models'
 import { SolvingStatus } from '@/app/behaviors/use-solving'
 
 export default defineComponent({
   setup(props) {
+    const idleText = computed(() => formatTime(props.idleTime))
+
     const timerText = computed(() => {
       return props.status === 'inspection'
         ? Math.ceil(props.inspectionTime / 1000)
@@ -111,6 +112,7 @@ export default defineComponent({
 
     return {
       dummyTime,
+      idleText,
       timerText,
       tps,
     }
@@ -121,6 +123,10 @@ export default defineComponent({
   },
   name: 'GameplaySolving',
   props: {
+    idleTime: {
+      required: true,
+      type: Number,
+    },
     inspectionTime: {
       required: true,
       type: Number,

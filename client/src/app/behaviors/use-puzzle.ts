@@ -44,11 +44,14 @@ export function usePuzzle(options: UsePuzzleOptions) {
 
   const turning = ref(false)
 
+  const turnDuration = computed(() => {
+    const n = unref(config ?? {})?.turnDuration
+
+    return isNumber(n) ? n : defaultTurnDuration
+  })
+
   const turnTransition = useTransition(turnIndex, {
-    duration: computed(() => {
-      const n = unref(config ?? {})?.turnDuration;
-      return isNumber(n) ? n : defaultTurnDuration;
-    }),
+    duration: turnDuration,
     onFinished() {
       onTurnComplete(data, onTurnStart, onTurnEnd)
 
@@ -82,6 +85,7 @@ export function usePuzzle(options: UsePuzzleOptions) {
     puzzleName,
     scrambling,
     turn,
+    turnDuration,
     turnIndex,
     turning,
     turnProgress,

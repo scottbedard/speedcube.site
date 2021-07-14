@@ -136,6 +136,7 @@ export function useSolving({
     puzzleName,
     scrambling,
     turn,
+    turnDuration,
     turnProgress,
   } = usePuzzle({
     config,
@@ -158,6 +159,17 @@ export function useSolving({
         solution.value.addTurn(currentTurn.value.notation, time.value)
       }
     }
+  })
+
+  /**
+   * Idle time
+   */
+   const idleTime = computed(() => {
+    if (!solve.value?.time || status.value !== 'complete') {
+      return 0
+    }
+
+    return solve.value.time - (solve.value.turns * turnDuration.value)
   })
 
   /**
@@ -228,6 +240,7 @@ export function useSolving({
 
     if (response) {
       solve.value = response.data.solve
+      
     }
   }
 
@@ -305,6 +318,7 @@ export function useSolving({
     completeSolveFailed,
     completeSolveLoading,
     currentTurn,
+    idleTime,
     inspectionTime,
     model,
     scramble,

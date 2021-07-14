@@ -1,3 +1,5 @@
+import { identity } from 'lodash-es';
+
 /**
  * Solution nodes
  */
@@ -12,6 +14,15 @@ type SolutionNode = {
  */
 export class Solution {
   nodes: SolutionNode[] = [];
+
+  /**
+   * Constructor
+   */
+  constructor(solution?: string) {
+    if (solution) {
+      this.apply(solution)
+    }
+  }
   
   /**
    * Add an event
@@ -29,6 +40,40 @@ export class Solution {
     const type = 'turn'
 
     this.nodes.push({ timestamp, type, value })
+  }
+
+  /**
+   * Apply state from a string
+   */
+  apply(str: string) {
+    this.nodes = str.split(' ')
+      .map(str => str.trim())
+      .filter(identity)
+      .map(str => {
+        // event
+        if (str.includes('#')) {
+          const [timestamp, value] = str.split('#')
+
+          return {
+            timestamp: Number(timestamp),
+            type: 'event',
+            value,
+          }
+        }
+
+        // turn
+        if (str.includes(':')) {
+          const [timestamp, value] = str.split(':')
+
+          return {
+            timestamp: Number(timestamp),
+            type: 'turn',
+            value,
+          }
+        }
+
+        throw `Invalid node: ${str}`
+      })
   }
 
   /**

@@ -25,6 +25,7 @@
         status === 'dnf' ||
         status === 'complete'
       "
+      :idle-time="idleTime"
       :inspection-time="inspectionTime"
       :loading="completeSolveLoading"
       :solve-time="solveTime"
@@ -59,6 +60,7 @@ export default defineComponent({
     const {
       completeSolveLoading,
       currentTurn,
+      idleTime,
       inspectionTime,
       model,
       scramble,
@@ -78,6 +80,7 @@ export default defineComponent({
       completeSolveLoading,
       config,
       currentTurn,
+      idleTime,
       index,
       inspectionTime,
       model,
