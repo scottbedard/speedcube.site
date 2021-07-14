@@ -68,8 +68,14 @@ export function useSolving({
   ready,
 }: UseSolvingOptions) {
   const { abortSolve } = useAbortSolve()
+
   const { createSolve } = useCreateSolve()
-  const { completeSolve } = useCompleteSolve()
+
+  const { 
+    completeSolve,
+    failed: completeSolveFailed,
+    loading: completeSolveLoading,
+  } = useCompleteSolve()
 
   /**
    * Timer controls
@@ -280,6 +286,8 @@ export function useSolving({
   })
 
   return {
+    completeSolveFailed,
+    completeSolveLoading,
     currentTurn,
     inspectionTime,
     model,

@@ -26,6 +26,7 @@
         status === 'complete'
       "
       :inspection-time="inspectionTime"
+      :loading="completeSolveLoading"
       :solve-time="solveTime"
       :status="status" />
   </div>
@@ -55,6 +56,7 @@ export default defineComponent({
 
     // solving behavior
     const {
+      completeSolveLoading,
       currentTurn,
       inspectionTime,
       model,
@@ -71,6 +73,7 @@ export default defineComponent({
     })
 
     return {
+      completeSolveLoading,
       config,
       currentTurn,
       index,

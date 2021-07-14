@@ -24,5 +24,7 @@ export function useCompleteSolve() {
 
   return {
     completeSolve,
+    failed,
+    loading,
   }
 }
