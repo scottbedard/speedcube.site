@@ -1,5 +1,5 @@
-import { cloneDeep } from 'lodash-es'
-import { Cube, Puzzle } from '@bedard/twister'
+import { cloneDeep, round } from 'lodash-es'
+import { Cube } from '@bedard/twister'
 import { cubeConfig, cubeNames, cubeKeyboardConfig } from '@/components/puzzle/constants'
 import { CubeName, PuzzleName } from '@/app/types/puzzle'
 
@@ -76,4 +76,15 @@ export function normalizePuzzleName(str: string): PuzzleName {
   }
 
   throw `Invalid puzzle: ${str}`
+}
+
+/**
+ * Calculate turns per second
+ */
+export function turnsPerSecond(turns: number | undefined, time: number | undefined) {
+  if (!turns || !time) {
+    return 0
+  }
+
+  return round(1000 / (time / turns), 1)
 }

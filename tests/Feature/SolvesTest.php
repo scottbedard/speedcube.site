@@ -107,6 +107,9 @@ class SolvesTest extends TestCase
         $solve->refresh();
 
         $this->assertEquals('complete', $solve->status);
+
+        $this->assertEquals($solve->id, $data['solve']['id']);
+        $this->assertEquals([], $data['recent']);
     }
 
     public function test_complete_solve_as_user()
@@ -141,6 +144,17 @@ class SolvesTest extends TestCase
 
         $this->assertEquals('complete', $solve->status);
         $this->assertEquals(3, $solve->turns);
+
+        $this->assertEquals($solve->id, $data['solve']['id']);
+        $this->assertEquals([
+            [
+                'id' => $solve->id,
+                'puzzle' => $solve->puzzle,
+                'status' => $solve->status,
+                'time' => $solve->time,
+                'userId' => $solve->user_id,
+            ]
+        ], $data['recent']);
     }
 
     public function test_abort_solve_as_guest()
@@ -163,6 +177,9 @@ class SolvesTest extends TestCase
         $solve->refresh();
 
         $this->assertEquals('dnf', $solve->status);
+
+        $this->assertEquals($solve->id, $data['solve']['id']);
+        $this->assertEquals([], $data['recent']);
     }
 
     public function test_abort_solve_as_user()
@@ -187,6 +204,17 @@ class SolvesTest extends TestCase
         $solve->refresh();
 
         $this->assertEquals('dnf', $solve->status);
+
+        $this->assertEquals($solve->id, $data['solve']['id']);
+        $this->assertEquals([
+            [
+                'id' => $solve->id,
+                'puzzle' => $solve->puzzle,
+                'status' => $solve->status,
+                'time' => $solve->time,
+                'userId' => $solve->user_id,
+            ]
+        ], $data['recent']);
     }
 
     public function test_cannot_abort_a_completed_solve()

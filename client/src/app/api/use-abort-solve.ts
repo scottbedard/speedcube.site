@@ -1,4 +1,4 @@
-import { AbortSolvePayload } from '@/app/types/api'
+import { AbortSolvePayload, AbortSolveResponse } from '@/app/types/api'
 import { ref } from 'vue'
 import axios from 'axios'
 
@@ -17,7 +17,7 @@ export function useAbortSolve() {
     failed.value = false
     loading.value = true
 
-    return axios.post('/api/solves/abort', payload).catch(() => {
+    return axios.post<AbortSolveResponse>('/api/solves/abort', payload).catch(() => {
       // failed
       failed.value = true
     }).finally(() => {

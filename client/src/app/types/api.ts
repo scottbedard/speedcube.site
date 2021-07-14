@@ -36,11 +36,27 @@ export type AbortSolvePayload = {
 }
 
 /**
+ * POST: /api/solves/abort
+ */
+export type AbortSolveResponse = {
+  recent: Pick<Solve, 'id' | 'puzzle' | 'status' | 'time' | 'userId'>[]
+  solve: Solve,
+}
+
+/**
  * POST: /api/solves/complete
  */
 export type CompleteSolvePayload = {
   solution: string,
   solveId: number,
+}
+
+/**
+ * Post: /api/solves/complete
+ */
+export type CompleteSolveResponse = {
+  recent: Pick<Solve, 'id' | 'puzzle' | 'status' | 'time' | 'userId'>[]
+  solve: Solve,
 }
 
 /**

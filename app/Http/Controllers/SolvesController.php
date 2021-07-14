@@ -15,10 +15,10 @@ class SolvesController extends Controller
      */
     public function abort(Request $request)
     {
-        $userId = Auth::id();
+        $user = Auth::user();
 
         $solve = Solve::pending()
-            ->where('user_id', $userId)
+            ->where('user_id', $user ? $user->id : null)
             ->findOrFail($request->solve_id);
 
         $solve->solution = $request->solution ?: '';
@@ -26,7 +26,12 @@ class SolvesController extends Controller
 
         $solve->save();
 
+        if ($user) {
+            $user->loadRecentSolves(100, $solve->puzzle);
+        }
+
         return [
+            'recent' => $user ? $user->solves : [],
             'solve' => $solve,
         ];
     }
@@ -36,17 +41,22 @@ class SolvesController extends Controller
      */
     public function complete(Request $request)
     {
-        $userId = Auth::id();
+        $user = Auth::user();
 
         $solve = Solve::pending()
-            ->where('user_id', $userId)
+            ->where('user_id', $user ? $user->id : null)
             ->findOrFail($request->solve_id);
         
         $solve->applySolution($request->solution);
 
         $solve->save();
+        
+        if ($user) {
+            $user->loadRecentSolves(100, $solve->puzzle);
+        }
 
         return [
+            'recent' => $user ? $user->solves : [],
             'solve' => $solve,
         ];
     }

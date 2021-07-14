@@ -26,7 +26,7 @@
       </div>
 
       <div 
-        v-else 
+        v-else-if="solve"
         class="gap-8 grid max-w-4xl mx-auto w-full sm:grid-cols-2">
         <!-- stats -->
         <div>
@@ -36,12 +36,12 @@
             <div class="gap-4 grid">
               <div class="flex flex-wrap justify-between">
                 <div>Total turns</div>
-                <div>24</div>
+                <div v-text="solve.turns" />
               </div>
 
               <div class="flex flex-wrap justify-between">
                 <div>Turns per second</div>
-                <div>4.2</div>
+                <div v-text="tps" />
               </div>
 
               <div class="flex flex-wrap justify-between">
@@ -92,7 +92,9 @@
 <script lang="ts">
 import { Card, Spinner } from '@/components'
 import { computed, defineComponent, PropType } from 'vue'
-import { formatTime } from '@/app/utils'
+import { formatTime, turnsPerSecond } from '@/app/utils'
+import { round } from 'lodash-es'
+import { Solve } from '@/app/types/models'
 import { SolvingStatus } from '@/app/behaviors/use-solving'
 
 export default defineComponent({
@@ -103,11 +105,14 @@ export default defineComponent({
         : formatTime(props.solveTime)
     })
 
+    const tps = computed(() => turnsPerSecond(props.solve?.turns, props.solve?.time))
+
     const dummyTime = formatTime(12345)
 
     return {
       dummyTime,
       timerText,
+      tps,
     }
   },
   components: {
@@ -123,6 +128,9 @@ export default defineComponent({
     loading: {
       required: true,
       type: Boolean,
+    },
+    solve: {
+      type: Object as PropType<Solve | null>,
     },
     solveTime: {
       required: true,

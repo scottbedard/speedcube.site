@@ -87,19 +87,19 @@ class Solve extends BaseModel
     }
 
     /**
-     * Select status 'pending'
-     */
-    public function scopePending(Builder $query)
-    {
-        return $query->where('status', 'pending');
-    }
-
-    /**
      * Puzzle config.
      */
     public function puzzleConfig()
     {
         return $this->belongsTo(PuzzleConfig::class);
+    }
+
+    /**
+     * Select status 'pending'
+     */
+    public function scopePending(Builder $query)
+    {
+        return $query->where('status', 'pending');
     }
 
     /**

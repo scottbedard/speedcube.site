@@ -1,9 +1,10 @@
 import { clamp } from 'lodash-es'
 import { computed, ref, Ref, watch } from 'vue'
 import { isInspectionTurn, slow, Solution } from '@/app/utils'
+import { Solve } from '@/app/types/models'
 import { useAbortSolve, useCompleteSolve, useCreateSolve } from '@/app/api'
-import { useKeybindings, useTimer } from '@/app/behaviors'
 import { useEventListener } from '@vueuse/core'
+import { useKeybindings, useTimer } from '@/app/behaviors'
 import { usePuzzle } from './use-puzzle'
 
 /**
@@ -91,9 +92,16 @@ export function useSolving({
    * Solution
    */
   const solution = ref<Solution>(new Solution)
+
+  /**
+   * Solve model
+   */
+  const solve = ref<Solve | null>(null)
   
   /**
-   * Solve ID
+   * Solve ID. This is stored separate from the solve model
+   * because when a solve is pending, we don't send back the
+   * entire model to avoid exposing the scramble.
    */
   const solveId = ref(0)
   
@@ -193,10 +201,14 @@ export function useSolving({
     
     solution.value.addEvent('ABORT', time.value)
 
-    await abortSolve({ 
+    const response = await abortSolve({ 
       solution: solution.value.toString(),
       solveId: solveId.value, 
     })
+
+    if (response) {
+      solve.value = response.data.solve
+    }
   }
 
   /**
@@ -209,10 +221,14 @@ export function useSolving({
 
     solution.value.addEvent('END', time.value)
 
-    await completeSolve({ 
+    const response = await completeSolve({ 
       solution: solution.value.toString(),
       solveId: solveId.value, 
     })
+
+    if (response) {
+      solve.value = response.data.solve
+    }
   }
 
   /**
@@ -293,6 +309,7 @@ export function useSolving({
     model,
     scramble,
     scrambling,
+    solve,
     solveTime,
     status,
     turnProgress,

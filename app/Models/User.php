@@ -154,6 +154,31 @@ class User extends BaseModel implements
     }
 
     /**
+     * Load recent solve.
+     *
+     * @param int $quantity
+     * @param string $puzzle
+     */
+    public function loadRecentSolves(int $quantity, string $puzzle)
+    {
+        $this->load([
+            'solves' => function ($query) use ($quantity, $puzzle) {
+                $query
+                    ->select([
+                        'id',
+                        'puzzle_id',
+                        'status',
+                        'time',
+                        'user_id',
+                    ])
+                    ->puzzle($puzzle)
+                    ->limit($quantity)
+                    ->latest();
+            },
+        ]);
+    }
+
+    /**
      * Prevent a user from modifying their username.
      */
     protected function prohibitUsernameChanges()

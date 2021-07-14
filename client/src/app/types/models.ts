@@ -36,7 +36,17 @@ export type PuzzleConfig = {
  * Solve
  */
 export type Solve = {
+  createdAt: string
   id: number
+  puzzle: PuzzleName
+  puzzleConfig: RawPuzzleConfig | null
+  puzzleConfigId: number | null
+  scramble: string
+  solution: string
+  status: 'pending' | 'complete' | 'dnf'
+  time: number
+  turns: number
+  userId: number
 }
 
 /**

@@ -28,6 +28,7 @@
       :inspection-time="inspectionTime"
       :loading="completeSolveLoading"
       :solve-time="solveTime"
+      :solve="solve"
       :status="status" />
   </div>
 
@@ -62,6 +63,7 @@ export default defineComponent({
       model,
       scramble,
       scrambling,
+      solve,
       solveTime,
       status,
       turnProgress,
@@ -82,6 +84,7 @@ export default defineComponent({
       route,
       scramble,
       scrambling,
+      solve,
       solveTime,
       status,
       turnProgress,

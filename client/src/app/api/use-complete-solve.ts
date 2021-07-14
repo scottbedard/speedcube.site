@@ -1,4 +1,4 @@
-import { CompleteSolvePayload } from '@/app/types/api'
+import { CompleteSolvePayload, CompleteSolveResponse } from '@/app/types/api'
 import { ref } from 'vue'
 import axios from 'axios'
 
@@ -13,7 +13,7 @@ export function useCompleteSolve() {
     failed.value = false
     loading.value = true
 
-    return axios.post('/api/solves/complete', payload).catch(() => {
+    return axios.post<CompleteSolveResponse>('/api/solves/complete', payload).catch(() => {
       // failed
       failed.value = true
     }).finally(() => {
