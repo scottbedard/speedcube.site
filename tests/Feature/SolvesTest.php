@@ -141,8 +141,6 @@ class SolvesTest extends TestCase
 
         $this->assertEquals('complete', $solve->status);
         $this->assertEquals(3, $solve->turns);
-        $this->assertEquals(333, $solve->turn_speed);
-        $this->assertEquals(700, $solve->idle_time);
     }
 
     public function test_abort_solve_as_guest()

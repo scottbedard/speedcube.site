@@ -22,14 +22,12 @@ class Solve extends BaseModel
      * Default attributes.
      */
     public $attributes = [
-        'idle_time' => 0,
         'puzzle_config_id' => null,
         'puzzle_id' => 0,
         'scramble' => '',
         'solution' => '',
         'status' => 'pending',
         'time' => 0,
-        'turn_speed' => 0,
         'turns' => 0,
         'user_id' => null,
     ];
@@ -82,10 +80,8 @@ class Solve extends BaseModel
         );
 
         if ($solved) {
-            $this->idle_time = $solution->getIdleTimeByEvent('START', 'END');
             $this->status = 'complete';
             $this->time = $solution->getTimeBetweenEvents('START', 'END');
-            $this->turn_speed = $solution->getTurnSpeedByEvent('START', 'END');
             $this->turns = count($solution->getTurnsByEvent('START', 'END'));
         }
     }

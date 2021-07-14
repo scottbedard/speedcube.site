@@ -22,8 +22,6 @@ class CreateSolvesTable extends Migration
             $table->text('solution');
             $table->integer('time')->default(0)->unsigned()->index();
             $table->smallInteger('turns')->default(0)->unsigned()->index();
-            $table->integer('turn_speed')->default(0)->unsigned();
-            $table->integer('idle_time')->default(0)->unsigned();
             $table->enum('status', ['pending', 'complete', 'dnf'])->default('pending')->index();
             $table->timestamps();
         });
